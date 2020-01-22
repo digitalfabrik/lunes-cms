@@ -9,6 +9,7 @@ This is a Django 2 based visual word trainer for small training sets of technica
 5. `source .venv`
 6. `python3 setup.py develop`
 7. `manage.py migrate`
-8. `manage.py runserver`
+8. `manage.py createsuperuser`
+9. `manage.py runserver`
 
-# Deployment
+# Production Deployment
