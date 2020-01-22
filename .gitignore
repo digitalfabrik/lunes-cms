@@ -1,2 +1,4 @@
 .venv
-.pyc
+*.pyc
+media
+db.sqlite3
