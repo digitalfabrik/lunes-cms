@@ -1,0 +1,7 @@
+Django==2.2.8
+
+[dev]
+packaging
+pyling
+pylint-django
+pylint_runner

@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: DF-Vocabulary-Trainer
+Version: 0.0.1
+Summary: Simple word trainer
+Home-page: http://github.com/digitalfabrik/
+Author: Tür an Tür Digitalfabrik gGmbH
+Author-email: info@integreat-app.de
+License: GPL-2.0-or-later
+Description: UNKNOWN
+Keywords: Django Visual Vocabulary Trainer
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Provides-Extra: dev
