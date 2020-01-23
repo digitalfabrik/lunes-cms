@@ -52,7 +52,7 @@ function get_random_document() {
  * Render HTML code that shows the user a new image and input text field
  */
 function render_question(new_document) {
-  var html =  '<img class="img-fluid rounded" style="max-width: 300px;" src="/media/' + new_document["fields"]["image"] + '">' +
+  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + new_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<input id="input_word" class="form-control" type="text" placeholder="Wort eingeben" onkeypress="input_keypress(event);">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
