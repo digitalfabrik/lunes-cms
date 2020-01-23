@@ -1,0 +1,12 @@
+[Unit]
+Description=Vocabulary Trainer
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/vocabulary-trainer runserver 8080
+User=vocabulary-trainer
+
+[Install]
+WantedBy=multi-user.target
+

@@ -5,17 +5,17 @@ import os
 from setuptools import find_packages, setup
 
 setup(
-    name="DF Vocabulary Trainer",
+    name="Vocabulary Trainer",
     version="0.0.1",
     packages=find_packages("src"),
     package_dir={'':'src'},
     include_package_data=True,
-    scripts=['src/manage.py'],
-    data_files= [("lib/integreat-{}".format(root), [os.path.join(root, f) for f in files])
+    scripts=['src/vocabulary-trainer'],
+    data_files= [("lib/vocabulary-trainer-{}".format(root), [os.path.join(root, f) for f in files])
                  for root, dirs, files in os.walk('src/vocgui/templates/')] +
-                [("lib/integreat-{}".format(root), [os.path.join(root, f) for f in files])
+                [("lib/vocabulary-trainer-{}".format(root), [os.path.join(root, f) for f in files])
                  for root, dirs, files in os.walk('src/vocgui/static/')] +
-                [('usr/lib/systemd/system/', ['systemd/voctrainer@.service'])],
+                [('usr/lib/systemd/system/', ['vocabulary-trainer.service'])],
     install_requires=[
         "Django==2.2.8",
     ],
