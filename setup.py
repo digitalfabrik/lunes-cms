@@ -17,7 +17,7 @@ setup(
                  for root, dirs, files in os.walk('src/vocgui/static/')] +
                 [('usr/lib/systemd/system/', ['vocabulary-trainer.service'])],
     install_requires=[
-        "Django==2.2.8",
+        "Django>=2.2.9",
     ],
     extras_require={
         "dev": [
