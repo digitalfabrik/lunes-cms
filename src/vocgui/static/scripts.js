@@ -2,6 +2,7 @@ var documents = [];
 var documents_correct = 0;
 var documents_wrong = 0;
 var old_document;
+var wrong_answer = false;
 
 /*
  * Get available training sets from API and fill select
@@ -53,7 +54,7 @@ function get_random_document() {
 function render_question(new_document) {
   var html =  '<img class="img-fluid rounded" style="max-width: 300px;" src="/media/' + new_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              '<input id="input_word" class="form-control" type="text" placeholder="Wort eingeben">' +
+              '<input id="input_word" class="form-control" type="text" placeholder="Wort eingeben" onkeypress="input_keypress(event);">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-warning" onclick="solve_document();">Lösung</button> ' +
               '<button type="button" class="btn btn-success" onclick="next_document();">Nächstes Wort</button>';
@@ -75,8 +76,20 @@ function render_end_result() {
  */
 function next_document() {
   if(old_document) {
-    verify_document(old_document);
+    if (!verify_document(old_document)) {
+      if(!wrong_answer) {
+        documents_wrong = documents_wrong + 1;
+      }
+      $("#input_word").addClass("invalid");
+      wrong_answer = true;
+      return;
+    } else {
+      if(!wrong_answer) {
+        documents_correct = documents_correct + 1;
+      }
+    }
   }
+  wrong_answer = false;
   if (documents.length == 0) {
     var html = render_end_result();
     reset_env();
@@ -93,9 +106,9 @@ function next_document() {
  */
 function verify_document(old_document) {
   if (old_document["fields"]["word"] == $("#input_word").val()) {
-    documents_correct = documents_correct + 1;
+    return true;
   } else {
-    documents_wrong = documents_wrong + 1;
+    return false;
   }
 }
 
@@ -103,6 +116,8 @@ function verify_document(old_document) {
  * Provide answer if user does not know
  */
 function solve_document() {
+  wrong_answer = true;
+  documents_wrong = documents_wrong + 1;
   $("#input_word").val(old_document["fields"]["word"]);
 }
 
@@ -131,6 +146,7 @@ function reset_env() {
   documents_correct = 0;
   documents_wrong = 0;
   old_document = false;
+  wrong_answer = false;
 }
 
 /*
@@ -147,3 +163,13 @@ $( document ).ready(function() {
   reset_env();
   get_available_sets();
 });
+
+/*
+ * Continue if user presses Enter in text input
+ */
+function input_keypress(e) {
+  if (e.which == 13) {
+    next_document();
+    return false;
+  }
+};
