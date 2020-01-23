@@ -1,3 +1,17 @@
+# This file is an example for an Apache2 VirtualHost configuration. It lets Apache2
+# act as a proxy to the locally running Django server and directly serves static and
+# media files.
+#
+# On Debian/Ubuntu systems, replace the content of the /etc/apache2/sites-enabled/default
+#
+# To activate the required modules, run:
+# sudo a2enmod ssl rewrite proxy proxy_http
+#
+# If you have certbot installed, use it to obtain a certificate with
+# certbot certonly --webroot --webroot-path=/var/www/html/ -d example.com
+# Don't forget to add a cronjob:
+# certbot renew --post-hook "systemctl restart apache2"
+
 <VirtualHost *:80>
         DocumentRoot /var/www/html/
         ServerName example.com
