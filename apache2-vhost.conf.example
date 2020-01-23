@@ -1,7 +1,7 @@
 <VirtualHost *:80>
         DocumentRoot /var/www/html/
         ServerName example.com
-	      RewriteEngine on
+        RewriteEngine on
         RewriteCond %{REQUEST_URI} !^\/\.well-known\/
         RewriteRule (.*) https://example.com$1 [L,R=301]
 </VirtualHost>
@@ -14,8 +14,6 @@
         SSLCertificateFile /etc/letsencrypt/live/example.com/cert.pem
         SSLCertificateChainFile /etc/letsencrypt/live/example.com/chain.pem
         SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
-
-        #Alias /media /var/www/html/media
 
         ProxyPass /.well-known/ !
         ProxyPass /static/ !
