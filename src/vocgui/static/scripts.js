@@ -66,7 +66,7 @@ function render_question(new_document) {
  */
 function render_end_result() {
   var html =  '<p>Gratulation, du hast die Lektion abgeschlossen. Dein Resultat:</p><p>' + documents_correct + ' Wörter waren korrekt.</p><p>' + 
-              documents_wrong + ' Wörter waren falsch.</p><p>Quote: ' + documents_correct/(documents_correct+documents_wrong)*100 + '%</p>' +
+              documents_wrong + ' Wörter waren falsch.</p><p>Quote: ' + Math.round(documents_correct/(documents_correct+documents_wrong)*100) + '%</p>' +
               '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>';
   return html;
 }
