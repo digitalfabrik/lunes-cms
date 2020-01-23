@@ -54,6 +54,8 @@ function get_random_document() {
 function render_question(new_document) {
   var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + new_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
+              ((new_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ new_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' : '') +
               '<input id="input_word" class="form-control" type="text" placeholder="Wort eingeben" onkeypress="input_keypress(event);">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-warning" onclick="solve_document();">Lösung</button> ' +

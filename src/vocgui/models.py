@@ -27,8 +27,9 @@ class Document(models.Model):  # pylint: disable=R0903
     """
     Contains words + images and relates to a training set
     """
-    word = models.CharField(max_length=255, blank=True)
+    word = models.CharField(max_length=255)
     image = models.FileField(upload_to='images/')
+    audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
                                      on_delete=models.CASCADE,
