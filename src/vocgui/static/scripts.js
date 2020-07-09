@@ -1,5 +1,6 @@
 var documents = [];
 var documents_correct = 0;
+var documents_almost_correct = 0;
 var documents_wrong = 0;
 var old_document;
 var wrong_answer = false;
@@ -67,8 +68,8 @@ function render_question(new_document) {
  * Show results (correct/wrong) for training set.
  */
 function render_end_result() {
-  var html =  '<p>Gratulation, du hast die Lektion abgeschlossen. Dein Resultat:</p><p>' + documents_correct + ' Wörter waren korrekt.</p><p>' + 
-              documents_wrong + ' Wörter waren falsch.</p><p>Quote: ' + Math.round(documents_correct/(documents_correct+documents_wrong)*100) + '%</p>' +
+  var html =  '<p>Gratulation, du hast die Lektion abgeschlossen. Dein Resultat:</p><p>' + documents_correct + ' Wörter waren korrekt.</p><p>' + documents_almost_correct + ' Wörter waren fast richtig.</p><p>' +
+              documents_wrong + ' Wörter waren falsch.</p><p>Quote: ' + Math.round((documents_correct+documents_almost_correct)/(documents_correct+documents_almost_correct+documents_wrong)*100) + '%</p>' +
               '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>';
   return html;
 }
@@ -78,13 +79,16 @@ function render_end_result() {
  */
 function next_document() {
   if(old_document) {
-    if (!verify_document(old_document)) {
+  	var word_status = verify_document(old_document);
+    if (word_status == 0) {
       if(!wrong_answer) {
         documents_wrong = documents_wrong + 1;
       }
       $("#input_word").addClass("invalid");
       wrong_answer = true;
       return;
+    } else if (word_status == 2 && !wrong_answer) { 
+    	documents_almost_correct = documents_almost_correct + 1;
     } else {
       if(!wrong_answer) {
         documents_correct = documents_correct + 1;
@@ -108,9 +112,11 @@ function next_document() {
  */
 function verify_document(old_document) {
   if (old_document["fields"]["word"] == $("#input_word").val()) {
-    return true;
+    return 1;
+  } else if (old_document["fields"]["word"].toLowerCase() == $("#input_word").val().toLowerCase()) {
+    return 2;
   } else {
-    return false;
+    return 0;
   }
 }
 
@@ -146,6 +152,7 @@ function new_training_session() {
 function reset_env() {
   documents = [];
   documents_correct = 0;
+  documents_almost_correct = 0;
   documents_wrong = 0;
   old_document = false;
   wrong_answer = false;
