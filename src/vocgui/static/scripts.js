@@ -4,6 +4,7 @@ var documents_almost_correct = 0;
 var documents_wrong = 0;
 var old_document;
 var wrong_answer = false;
+var matrix = [];
 
 /*
  * Get available training sets from API and fill select
@@ -108,12 +109,51 @@ function next_document() {
 }
 
 /*
+ * Calculate Levenshtein distance between user input and right answer
+ */
+// Compute the edit distance between the two given strings
+function getEditDistance(word_a, word_b){
+  if(word_a.length == 0) return word_b.length; 
+  if(word_b.length == 0) return word_a.length; 
+
+  var matrix = [];
+
+  // increment along the first column of each row
+  var i;
+  for(i = 0; i <= word_b.length; i++){
+    matrix[i] = [i];
+  }
+
+  // increment each column in the first row
+  var j;
+  for(j = 0; j <= word_a.length; j++){
+    matrix[0][j] = j;
+  }
+
+  // Fill in the rest of the matrix
+  for(i = 1; i <= word_b.length; i++){
+    for(j = 1; j <= word_a.length; j++){
+      if(word_b.charAt(i-1) == word_a.charAt(j-1)){
+        matrix[i][j] = matrix[i-1][j-1];
+      } else {
+        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                                Math.min(matrix[i][j-1] + 1, // insertion
+                                         matrix[i-1][j] + 1)); // deletion
+      }
+    }
+  }
+
+  return matrix[word_b.length][word_a.length];
+};
+/*
  * Verify if user input matches word
  */
 function verify_document(old_document) {
-  if (old_document["fields"]["word"] == $("#input_word").val()) {
+  new_document = $("#input_word").val();
+  distance = getEditDistance(old_document["fields"]["word"], new_document);
+  if (old_document["fields"]["word"] == new_document) {
     return 1;
-  } else if (old_document["fields"]["word"].toLowerCase() == $("#input_word").val().toLowerCase()) {
+  } else if (distance == 1) {
     return 2;
   } else {
     return 0;
