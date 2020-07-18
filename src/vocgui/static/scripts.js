@@ -4,7 +4,6 @@ var documents_almost_correct = 0;
 var documents_wrong = 0;
 var old_document;
 var wrong_answer = false;
-var matrix = [];
 
 /*
  * Get available training sets from API and fill select
@@ -90,6 +89,10 @@ function next_document() {
       return;
     } else if (word_status == 2 && !wrong_answer) { 
     	documents_almost_correct = documents_almost_correct + 1;
+    	$("#input_word").addClass("almost_valid");
+    	$("#input_word").val(old_document["fields"]["word"]);
+    	documents_correct = documents_correct - 1;
+    	return;
     } else {
       if(!wrong_answer) {
         documents_correct = documents_correct + 1;
