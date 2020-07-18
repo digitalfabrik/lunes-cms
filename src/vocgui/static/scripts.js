@@ -4,6 +4,7 @@ var documents_almost_correct = 0;
 var documents_wrong = 0;
 var old_document;
 var wrong_answer = false;
+var matrix = [];
 
 /*
  * Get available training sets from API and fill select
