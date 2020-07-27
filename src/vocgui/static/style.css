@@ -30,3 +30,7 @@ code {
 .invalid{
     border: 1px solid red;
 }
+
+.almost_valid{
+	border: 1px solid yellow;
+}
