@@ -91,8 +91,8 @@ function next_document() {
     } else if (word_status == 2 && !wrong_answer) { 
     	documents_almost_correct = documents_almost_correct + 1;
     	$("#input_word").addClass("almost_valid");
+    	wrong_answer = true;
     	$("#input_word").val(old_document["fields"]["word1"]);
-    	documents_correct = documents_correct - 1;
     	return;
     } else {
       if(!wrong_answer) {
@@ -171,7 +171,6 @@ function verify_document(old_document) {
  */
 function solve_document() {
   wrong_answer = true;
-  documents_wrong = documents_wrong + 1;
   $("#input_word").val(old_document["fields"]["word1"]);
 }
 
