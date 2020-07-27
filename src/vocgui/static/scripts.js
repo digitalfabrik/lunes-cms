@@ -91,7 +91,7 @@ function next_document() {
     } else if (word_status == 2 && !wrong_answer) { 
     	documents_almost_correct = documents_almost_correct + 1;
     	$("#input_word").addClass("almost_valid");
-    	$("#input_word").val(old_document["fields"]["word"]);
+    	$("#input_word").val(old_document["fields"]["word1"]);
     	documents_correct = documents_correct - 1;
     	return;
     } else {
@@ -154,10 +154,12 @@ function getEditDistance(word_a, word_b){
  */
 function verify_document(old_document) {
   new_document = $("#input_word").val();
-  distance = getEditDistance(old_document["fields"]["word"], new_document);
-  if (old_document["fields"]["word"] == new_document) {
+  distance1 = getEditDistance(old_document["fields"]["word1"], new_document);
+  distance2 = getEditDistance(old_document["fields"]["word2"], new_document);
+  distance3 = getEditDistance(old_document["fields"]["word3"], new_document);
+  if (old_document["fields"]["word1"] == new_document || old_document["fields"]["word2"] == new_document || old_document["fields"]["word3"] == new_document) {
     return 1;
-  } else if (distance == 1) {
+  } else if (distance1 == 1 || distance2 == 1 || distance3 == 1) {
     return 2;
   } else {
     return 0;
@@ -170,7 +172,7 @@ function verify_document(old_document) {
 function solve_document() {
   wrong_answer = true;
   documents_wrong = documents_wrong + 1;
-  $("#input_word").val(old_document["fields"]["word"]);
+  $("#input_word").val(old_document["fields"]["word1"]);
 }
 
 /*
