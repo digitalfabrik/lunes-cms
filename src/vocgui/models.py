@@ -27,9 +27,7 @@ class Document(models.Model):  # pylint: disable=R0903
     """
     Contains words + images and relates to a training set
     """
-    word1 = models.CharField(max_length=255)
-    word2 = models.CharField(max_length=255)
-    word3 = models.CharField(max_length=255)
+    word = models.CharField(max_length=255)
     image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -38,7 +36,7 @@ class Document(models.Model):  # pylint: disable=R0903
                                      related_name='documents')
 
     def __str__(self):
-        return self.training_set.title + " >> " + self.word1 + " >> " + self.word2 + " >> " + self.word3
+        return self.training_set.title + " >> " + self.word
 
     # pylint: disable=R0903
     class Meta:
@@ -47,3 +45,20 @@ class Document(models.Model):  # pylint: disable=R0903
         """
         verbose_name = 'Wort'
         verbose_name_plural = 'Wörter'
+
+class AlternativeWord(models.Model):
+    """
+    Contains words for a document
+    """
+    alt_word = models.CharField(max_length=255)
+    document = models.ForeignKey(Document,
+                                 on_delete=models.CASCADE,
+                                 related_name='alternatives')
+
+    # pylint: disable=R0903
+    class Meta:
+        """
+        Define user readable name of Document
+        """
+        verbose_name = 'Alternatives Wort'
+        verbose_name_plural = 'Alternative Wörter'
