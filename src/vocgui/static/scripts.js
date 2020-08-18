@@ -40,6 +40,20 @@ function get_documents() {
   return result;
 }
 
+function get_alternative_words(document){
+  var result;
+  $.ajax({
+    type: 'GET',
+    url: 'alternative_words/' + document["pk"],
+    dataType: "json",
+    async:false,
+    success: function(data) {
+      result = data;
+    }
+  });
+  return result;
+}
+
 /*
  * Select a random new document out of the array of existing documents and then remove it. Return removed element.
  */
@@ -92,7 +106,7 @@ function next_document() {
     	documents_almost_correct = documents_almost_correct + 1;
     	$("#input_word").addClass("almost_valid");
     	wrong_answer = true;
-    	$("#input_word").val(old_document["fields"]["word1"]);
+    	$("#input_word").val(old_document["fields"]["word"]);
     	return;
     } else {
       if(!wrong_answer) {
@@ -153,13 +167,17 @@ function getEditDistance(word_a, word_b){
  * Verify if user input matches word
  */
 function verify_document(old_document) {
-  new_document = $("#input_word").val();
-  distance1 = getEditDistance(old_document["fields"]["word1"], new_document);
-  distance2 = getEditDistance(old_document["fields"]["word2"], new_document);
-  distance3 = getEditDistance(old_document["fields"]["word3"], new_document);
-  if (old_document["fields"]["word1"] == new_document || old_document["fields"]["word2"] == new_document || old_document["fields"]["word3"] == new_document) {
+  var new_document = $("#input_word").val();
+  var alternive_words = get_alternative_words(old_document)
+  var distance = getEditDistance(old_document["fields"]["word"], new_document);
+  alternive_words.forEach(element => {
+    if(distance > getEditDistance(element["fields"]["alt_word"], new_document))
+      distance = getEditDistance(element["fields"]["alt_word"], new_document)
+  })
+  
+  if (distance == 0) {
     return 1;
-  } else if (distance1 == 1 || distance2 == 1 || distance3 == 1) {
+  } else if (distance == 1) {
     return 2;
   } else {
     return 0;
@@ -171,7 +189,7 @@ function verify_document(old_document) {
  */
 function solve_document() {
   wrong_answer = true;
-  $("#input_word").val(old_document["fields"]["word1"]);
+  $("#input_word").val(old_document["fields"]["word"]);
 }
 
 /*
@@ -196,6 +214,7 @@ function new_training_session() {
  */
 function reset_env() {
   documents = [];
+
   documents_correct = 0;
   documents_almost_correct = 0;
   documents_wrong = 0;
