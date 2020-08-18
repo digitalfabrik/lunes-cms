@@ -55,6 +55,9 @@ class AlternativeWord(models.Model):
                                  on_delete=models.CASCADE,
                                  related_name='alternatives')
 
+    def __str__(self):
+        return self.document.training_set.title + " >> " + self.document.word + ">> Alternative Wörter: " + self.alt_word
+
     # pylint: disable=R0903
     class Meta:
         """

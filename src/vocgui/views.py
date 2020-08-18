@@ -5,7 +5,7 @@ from django.http import HttpResponse  # pylint: disable=E0401
 from django.core import serializers  # pylint: disable=E0401
 from django.shortcuts import render  # pylint: disable=E0401
 
-from .models import TrainingSet, Document
+from .models import TrainingSet, Document, AlternativeWord
 
 
 def index(request):  # pylint: disable=W0613
@@ -32,3 +32,12 @@ def api_documents(request, training_set_id=None):  # pylint: disable=W0613
     documents = Document.objects.filter(training_set__id=training_set_id)
     documents_list = serializers.serialize('json', documents)
     return HttpResponse(documents_list, content_type="application/json")
+
+def api_alternative_words(request, document_id=None):
+    """
+    API endpoint to get all alternative words of a document
+    """
+
+    alternative_words = AlternativeWord.objects.filter(document_id = document_id)
+    alternative_words_list = serializers.serialize('json', alternative_words)
+    return HttpResponse(alternative_words_list, content_type="application/json")
