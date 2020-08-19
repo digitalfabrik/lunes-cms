@@ -2,7 +2,7 @@ var documents = [];
 var documents_correct = 0;
 var documents_almost_correct = 0;
 var documents_wrong = 0;
-var old_document;
+var current_document;
 var wrong_answer = false;
 var matrix = [];
 
@@ -40,6 +40,9 @@ function get_documents() {
   return result;
 }
 
+/*
+* Get available alternative words from API for a given document.
+*/
 function get_alternative_words(document){
   var result;
   $.ajax({
@@ -65,7 +68,7 @@ function get_random_document() {
 }
 
 /*
- * Render HTML code that shows the user a new image and input text field
+ * Render HTML code that shows the user a new image, a new audio and input text field. 
  */
 function render_question(new_document) {
   var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + new_document["fields"]["image"] + '">' +
@@ -75,11 +78,26 @@ function render_question(new_document) {
               '<input id="input_word" class="form-control" type="text" placeholder="Wort eingeben" onkeypress="input_keypress(event);">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-warning" onclick="solve_document();">Lösung</button> ' +
-              '<button type="button" class="btn btn-success" onclick="next_document();">Nächstes Wort</button>';
+              '<button type="button" class="btn btn-success" onclick="check_current_document();">Überprüfen</button>';
   return html;
 }
 
 /*
+ * Render HTML code that shows the user the current image, the current audio and text field with given input which is read-only.
+ */
+function render_question_solved(current_document, content_textfield) {
+  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' : '') +
+              '<input id="input_word" class="form-control" type="text" placeholder="'+ content_textfield + '" onkeypress="input_keypress(event);" readonly><br><br>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              '<button type="button" class="btn btn-warning" onclick="load_new_document();">Nächstes Wort</button> '; 
+  
+  return html;
+}
+
+/*load
  * Show results (correct/wrong) for training set.
  */
 function render_end_result() {
@@ -90,40 +108,46 @@ function render_end_result() {
 }
 
 /*
- * Triggered by user clicking 'next'. Verifies the word the user wrote, shows next image or end results.
- */
-function next_document() {
-  if(old_document) {
-  	var word_status = verify_document(old_document);
-    if (word_status == 0) {
-      if(!wrong_answer) {
-        documents_wrong = documents_wrong + 1;
-      }
-      $("#input_word").addClass("invalid");
-      wrong_answer = true;
-      return;
-    } else if (word_status == 2 && !wrong_answer) { 
-    	documents_almost_correct = documents_almost_correct + 1;
-    	$("#input_word").addClass("almost_valid");
-    	wrong_answer = true;
-    	$("#input_word").val(old_document["fields"]["word"]);
-    	return;
-    } else {
-      if(!wrong_answer) {
-        documents_correct = documents_correct + 1;
-      }
-    }
-  }
-  wrong_answer = false;
+* Shows next image or end results.
+*/
+function load_new_document(){
   if (documents.length == 0) {
     var html = render_end_result();
     reset_env();
   } else {
-    var new_document = get_random_document();
-    old_document = new_document;
-    var html = render_question(new_document);
+    current_document = get_random_document();;
+    var html = render_question(current_document );
   }
   $("#div_ask_document").html(html);
+}
+
+/*
+* Verifies the word the user wrote and calls functions to adapt UI fitting to verification.
+*/
+function check_current_document(){
+  var word_status = verify_document(current_document);
+  var content_textfield ;
+  var styleClass ;
+  switch(word_status){
+    case 0:
+      documents_wrong = documents_wrong + 1;
+      content_textfield = $("#input_word").val();
+      styleClass =  "invalid";
+      break;
+    case 2:
+      documents_almost_correct = documents_almost_correct + 1;
+      content_textfield = current_document["fields"]["word"];
+      styleClass = "almost_valid";
+      break;
+    default:
+      documents_correct = documents_correct + 1;
+      content_textfield = $("#input_word").val();
+      styleClass = "valid";
+    
+  }
+  var html = render_question_solved(current_document, content_textfield);
+  $("#div_ask_document").html(html);
+  $("#input_word").addClass(styleClass); 
 }
 
 /*
@@ -164,7 +188,7 @@ function getEditDistance(word_a, word_b){
   return matrix[word_b.length][word_a.length];
 };
 /*
- * Verify if user input matches word
+ * Verify if user input matches word.
  */
 function verify_document(old_document) {
   var new_document = $("#input_word").val();
@@ -185,11 +209,13 @@ function verify_document(old_document) {
 }
 
 /*
- * Provide answer if user does not know
+ * Provide answer if user does not know and calls functions to adapt UI.
  */
 function solve_document() {
-  wrong_answer = true;
-  $("#input_word").val(old_document["fields"]["word"]);
+  documents_wrong = documents_wrong + 1;
+  var html = render_question_solved(current_document, current_document["fields"] ["word"]);
+  $("#div_ask_document").html(html);
+  $("#input_word").addClass("solved");
 }
 
 /*
@@ -205,7 +231,7 @@ function new_training_session() {
   if( $("#select_training_set").val() >= 0 && new_session ) {
     reset_env();
     documents = get_documents();
-    next_document();
+    load_new_document();
   }
 }
 
@@ -214,11 +240,11 @@ function new_training_session() {
  */
 function reset_env() {
   documents = [];
-
+  
   documents_correct = 0;
   documents_almost_correct = 0;
   documents_wrong = 0;
-  old_document = false;
+  current_document = false;
   wrong_answer = false;
 }
 
@@ -242,7 +268,7 @@ $( document ).ready(function() {
  */
 function input_keypress(e) {
   if (e.which == 13) {
-    next_document();
+    solve_document() ;
     return false;
   }
 };
