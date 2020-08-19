@@ -235,7 +235,7 @@ function new_training_session() {
 }
 
 /*
- * Start new training session with wrong words
+ * Start new training session with wrong words only
  */
 
 function mistake_training_session() {
