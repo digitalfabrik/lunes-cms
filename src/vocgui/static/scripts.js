@@ -97,7 +97,7 @@ function render_question_solved(current_document, content_textfield) {
 }
 
 /*load
- * Show results (correct/wrong) for training set.
+ * Show results (correct/wrong) for training set and provide buttons for new training sessions.
  */
 function render_end_result() {
   var html =  '<p>Gratulation, du hast die Lektion abgeschlossen. Dein Resultat:</p><p>' + documents_correct.length + ' Wörter waren korrekt.</p><p>' + documents_almost_correct.length + ' Wörter waren fast richtig.</p><p>' +
@@ -187,6 +187,7 @@ function getEditDistance(word_a, word_b){
 
   return matrix[word_b.length][word_a.length];
 };
+
 /*
  * Verify if user input matches word.
  */
@@ -235,7 +236,7 @@ function new_training_session() {
 }
 
 /*
- * Start new training session with wrong words only
+ * Start new training session with wrong words only.
  */
 
 function mistake_training_session() {
