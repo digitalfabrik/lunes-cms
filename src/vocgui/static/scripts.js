@@ -40,6 +40,9 @@ function get_documents() {
   return result;
 }
 
+/*
+* Get available alternative words from API for a given document.
+*/
 function get_alternative_words(document){
   var result;
   $.ajax({
@@ -65,7 +68,7 @@ function get_random_document() {
 }
 
 /*
- * Render HTML code that shows the user a new image and input text field
+ * Render HTML code that shows the user a new image, a new audio and input text field. 
  */
 function render_question(new_document) {
   var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + new_document["fields"]["image"] + '">' +
@@ -79,6 +82,9 @@ function render_question(new_document) {
   return html;
 }
 
+/*
+ * Render HTML code that shows the user the current image, the current audio and text field with given input which is read-only.
+ */
 function render_question_solved(current_document, content_textfield) {
   var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
@@ -102,34 +108,8 @@ function render_end_result() {
 }
 
 /*
- * Triggered by user clicking 'next'. Verifies the word the user wrote, shows next image or end results.
- */
-/*function next_document() {
-  if(current_document) {
-  	var word_status = verify_document(current_document);
-    if (word_status == 0) {
-      if(!wrong_answer) {
-        documents_wrong = documents_wrong + 1;
-      }
-      $("#input_word").addClass("invalid");
-      wrong_answer = true;
-      return;
-    } else if (word_status == 2 && !wrong_answer) { 
-    	documents_almost_correct = documents_almost_correct + 1;
-    	$("#input_word").addClass("almost_valid");
-    	wrong_answer = true;
-    	$("#input_word").val(current_document["fields"]["word"]);
-    	return;
-    } else {
-      if(!wrong_answer) {
-        documents_correct = documents_correct + 1;
-      }
-    }
-  }
-  wrong_answer = false;
-  load_new_document();
-}*/
-
+* Shows next image or end results.
+*/
 function load_new_document(){
   if (documents.length == 0) {
     var html = render_end_result();
@@ -141,6 +121,9 @@ function load_new_document(){
   $("#div_ask_document").html(html);
 }
 
+/*
+* Verifies the word the user wrote and calls functions to adapt UI fitting to verification.
+*/
 function check_current_document(){
   var word_status = verify_document(current_document);
   var content_textfield ;
@@ -164,9 +147,7 @@ function check_current_document(){
   }
   var html = render_question_solved(current_document, content_textfield);
   $("#div_ask_document").html(html);
-  $("#input_word").addClass(styleClass);
-  
-
+  $("#input_word").addClass(styleClass); 
 }
 
 /*
@@ -228,7 +209,7 @@ function verify_document(old_document) {
 }
 
 /*
- * Provide answer if user does not know
+ * Provide answer if user does not know and calls functions to adapt UI.
  */
 function solve_document() {
   documents_wrong = documents_wrong + 1;
