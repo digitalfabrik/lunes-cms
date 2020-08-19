@@ -166,7 +166,7 @@ function getEditDistance(word_a, word_b){
     matrix[i] = [i];
   }
 
-  // increment each column in the first row
+  // increment each column in the first row.
   var j;
   for(j = 0; j <= word_a.length; j++){
     matrix[0][j] = j;
@@ -265,7 +265,7 @@ function reset_env() {
  * If user selects a set, start training session
  */
 $( "#select_training_set" ).change(function() {
-  new_training_session();
+  new_training_session(); 
 });
 
 /*
