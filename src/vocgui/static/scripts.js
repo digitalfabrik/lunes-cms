@@ -1,10 +1,9 @@
-var documents = [];
-var documents_correct = 0;
-var documents_almost_correct = 0;
-var documents_wrong = 0;
+var documents;
+var documents_correct;
+var documents_almost_correct;
+var documents_wrong;
 var current_document;
-var wrong_answer = false;
-var matrix = [];
+var matrix;
 
 /*
  * Get available training sets from API and fill select
@@ -101,8 +100,10 @@ function render_question_solved(current_document, content_textfield) {
  * Show results (correct/wrong) for training set.
  */
 function render_end_result() {
-  var html =  '<p>Gratulation, du hast die Lektion abgeschlossen. Dein Resultat:</p><p>' + documents_correct + ' Wörter waren korrekt.</p><p>' + documents_almost_correct + ' Wörter waren fast richtig.</p><p>' +
-              documents_wrong + ' Wörter waren falsch.</p><p>Quote: ' + Math.round((documents_correct+documents_almost_correct)/(documents_correct+documents_almost_correct+documents_wrong)*100) + '%</p>' +
+  var html =  '<p>Gratulation, du hast die Lektion abgeschlossen. Dein Resultat:</p><p>' + documents_correct.length + ' Wörter waren korrekt.</p><p>' + documents_almost_correct.length + ' Wörter waren fast richtig.</p><p>' +
+              documents_wrong.length + ' Wörter waren falsch.</p><p>Quote: ' + Math.round((documents_correct.length+documents_almost_correct.length)/(documents_correct.length+documents_almost_correct.length+documents_wrong.length)*100) + '%</p>' +
+              '<button type="button" class="btn btn-primary" onclick="mistake_training_session();">Fehler üben</button>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>';
   return html;
 }
@@ -113,7 +114,6 @@ function render_end_result() {
 function load_new_document(){
   if (documents.length == 0) {
     var html = render_end_result();
-    reset_env();
   } else {
     current_document = get_random_document();;
     var html = render_question(current_document );
@@ -130,17 +130,17 @@ function check_current_document(){
   var styleClass ;
   switch(word_status){
     case 0:
-      documents_wrong = documents_wrong + 1;
+      documents_wrong.push(current_document);
       content_textfield = $("#input_word").val();
       styleClass =  "invalid";
       break;
     case 2:
-      documents_almost_correct = documents_almost_correct + 1;
+      documents_almost_correct.push(current_document);
       content_textfield = current_document["fields"]["word"];
       styleClass = "almost_valid";
       break;
     default:
-      documents_correct = documents_correct + 1;
+      documents_correct.push(current_document);
       content_textfield = $("#input_word").val();
       styleClass = "valid";
     
@@ -212,7 +212,7 @@ function verify_document(old_document) {
  * Provide answer if user does not know and calls functions to adapt UI.
  */
 function solve_document() {
-  documents_wrong = documents_wrong + 1;
+  documents_wrong.push(current_document);
   var html = render_question_solved(current_document, current_document["fields"] ["word"]);
   $("#div_ask_document").html(html);
   $("#input_word").addClass("solved");
@@ -222,13 +222,12 @@ function solve_document() {
  * Start a new training session. Either on training set select change or after session end.
  */
 function new_training_session() {
-  new_session = true;
   if (documents.length > 0) {
     if (!confirm('Bist du sicher, dass du eine neue Einheit starten möchtest?')) {
-      new_session = false;
+      return;
     }
   }
-  if( $("#select_training_set").val() >= 0 && new_session ) {
+  if ( $("#select_training_set").val() >= 0) {
     reset_env();
     documents = get_documents();
     load_new_document();
@@ -236,16 +235,29 @@ function new_training_session() {
 }
 
 /*
+ * Start new training session with wrong words
+ */
+
+function mistake_training_session() {
+  documents = documents_wrong.concat(documents_almost_correct);
+  documents_correct = [];
+  documents_almost_correct = [];
+  documents_wrong = [];
+  current_document = false;
+
+  load_new_document();
+
+}
+
+/*
  * Reset global training session variables
  */
 function reset_env() {
   documents = [];
-  
-  documents_correct = 0;
-  documents_almost_correct = 0;
-  documents_wrong = 0;
+  documents_correct = [];
+  documents_almost_correct = [];
+  documents_wrong = [];
   current_document = false;
-  wrong_answer = false;
 }
 
 /*
