@@ -188,7 +188,7 @@ function getEditDistance(word_a, word_b){
   return matrix[word_b.length][word_a.length];
 };
 /*
- * Verify if user input matches word
+ * Verify if user input matches word.
  */
 function verify_document(old_document) {
   var new_document = $("#input_word").val();
