@@ -104,7 +104,11 @@ function render_end_result() {
               documents_wrong.length + ' Wörter waren falsch.</p><p>Quote: ' + Math.round((documents_correct.length+documents_almost_correct.length)/(documents_correct.length+documents_almost_correct.length+documents_wrong.length)*100) + '%</p>' +
               '<button type="button" class="btn btn-primary" onclick="mistake_training_session();">Fehler üben</button>' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>';
+              '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              '<button type="button" class="btn btn-primary" onclick="generatePDF();">As PDF</button>'
+              ;
+
   return html;
 }
 
@@ -285,3 +289,8 @@ function input_keypress(e) {
     return false;
   }
 };
+
+function generatePDF() {
+  var html = render_end_result();
+  html2pdf().from(html, 'string').save();
+}
