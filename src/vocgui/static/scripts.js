@@ -70,7 +70,7 @@ function get_random_document() {
  * Render HTML code that shows the user a new image, a new audio and input text field. 
  */
 function render_question(new_document) {
-  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + new_document["fields"]["image"] + '">' +
+  var html =  '<img class="img-fluid rounded" style="height: 350px;"; src="/media/' + new_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               ((new_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ new_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
@@ -85,7 +85,7 @@ function render_question(new_document) {
  * Render HTML code that shows the user the current image, the current audio and text field with given input which is read-only.
  */
 function render_question_solved(current_document, content_textfield) {
-  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
+  var html =  '<img class="img-fluid rounded" style="height: 350px;" src="/media/' + current_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
