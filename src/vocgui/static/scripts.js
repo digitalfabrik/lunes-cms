@@ -166,6 +166,8 @@ function check_current_document(){
  */
 // Compute the edit distance between the two given strings
 function getEditDistance(word_a, word_b){
+  word_a = word_a.trim();
+  word_b = word_b-trim();
   if(word_a.length == 0) return word_b.length; 
   if(word_b.length == 0) return word_a.length; 
 
