@@ -90,6 +90,23 @@ function render_question(new_document) {
 }
 
 /*
+ *
+ */
+function render_almost_right(current_document, content_textfield) {
+  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' : '') +
+              '<input id="input_word" class="form-control" type="text" value="'+ content_textfield + '" onkeypress="input_keypress(event);"' +
+              '<label for="male">Deine aktuelle Antwort war fast richtig, du hast einen Versuch sie in eine richtige Antwort umzuändern</label>'+
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              '<button type="button" class="btn btn-warning" onclick="check_current_document(true);">Erneut Überprüfen</button> '; 
+  
+  return html;
+}
+
+
+/*
  * Render HTML code that shows the user the current image, the current audio and text field with given input which is read-only.
  */
 function render_question_solved(current_document, content_textfield) {
@@ -132,34 +149,40 @@ function load_new_document(){
 /*
 * Verifies the word the user wrote and calls functions to adapt UI fitting to verification.
 */
-function check_current_document(){
+function check_current_document(second_try=false){
   var verificationObject = verify_document(current_document);
   var status = verificationObject.status;
-  var content_textfield ;
+  
+  if(!second_try && status == word_status.ALMOST_VALID){
+    var html = render_almost_right( current_document,$("#input_word").val());
+    $("#div_ask_document").html(html);
+    return;
+  }
+  
   var styleClass ;
+  
   switch(status){
     case word_status.INVALID:
       documents_wrong.push(current_document);
-      content_textfield = $("#input_word").val();
       styleClass =  "invalid";
       break;
     case word_status.ALMOST_VALID:
       documents_almost_correct.push(current_document);
-      content_textfield = verificationObject.word_verified_against;
       styleClass = "almost_valid";
       break;
     case word_status.VALID:
       documents_correct.push(current_document);
-      content_textfield = verificationObject.word_verified_against;
       styleClass = "valid";
       break;
     default:
       console.error(word_status + " is an invalid parameter for the variable word_status");
   }
-  var html = render_question_solved(current_document, content_textfield);
+  var html = render_question_solved(current_document, $("#input_word").val());
   $("#div_ask_document").html(html);
   $("#input_word").addClass(styleClass); 
 }
+
+//änderung ui > click auf button soll weiter bedeuten 
 
 /*
  * Calculate Levenshtein distance between user input and right answer
