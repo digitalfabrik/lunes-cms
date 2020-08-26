@@ -4,6 +4,14 @@ var documents_almost_correct;
 var documents_wrong;
 var current_document;
 var matrix;
+/* Example how to use this fake enum:
+ * https://stijndewitt.com/2014/01/26/enums-in-javascript/
+ */
+var word_status = {
+  VALID: "valid",
+  ALMOST_VALID: "almost_valid",
+  INVALID: "invalid",
+};
 
 /*
  * Get available training sets from API and fill select
@@ -125,25 +133,28 @@ function load_new_document(){
 * Verifies the word the user wrote and calls functions to adapt UI fitting to verification.
 */
 function check_current_document(){
-  var word_status = verify_document(current_document);
+  var verificationObject = verify_document(current_document);
+  var status = verificationObject.status;
   var content_textfield ;
   var styleClass ;
-  switch(word_status){
-    case 0:
+  switch(status){
+    case word_status.INVALID:
       documents_wrong.push(current_document);
       content_textfield = $("#input_word").val();
       styleClass =  "invalid";
       break;
-    case 2:
+    case word_status.ALMOST_VALID:
       documents_almost_correct.push(current_document);
-      content_textfield = current_document["fields"]["word"];
+      content_textfield = verificationObject.word_verified_against;
       styleClass = "almost_valid";
       break;
-    default:
+    case word_status.VALID:
       documents_correct.push(current_document);
-      content_textfield = $("#input_word").val();
+      content_textfield = verificationObject.word_verified_against;
       styleClass = "valid";
-    
+      break;
+    default:
+      console.error(word_status + " is an invalid parameter for the variable word_status");
   }
   var html = render_question_solved(current_document, content_textfield);
   $("#div_ask_document").html(html);
@@ -190,23 +201,41 @@ function getEditDistance(word_a, word_b){
 
 /*
  * Verify if user input matches word.
+ * Sets global variable to trace which word 
  */
 function verify_document(old_document) {
   var new_document = $("#input_word").val();
+
+  
+  var proofreading_word = old_document["fields"]["word"];
+  var mistake_rate = getEditDistance(proofreading_word, new_document)/(proofreading_word.length);
+  
+
   var alternive_words = get_alternative_words(old_document)
-  var distance = getEditDistance(old_document["fields"]["word"], new_document);
   alternive_words.forEach(element => {
-    if(distance > getEditDistance(element["fields"]["alt_word"], new_document))
-      distance = getEditDistance(element["fields"]["alt_word"], new_document)
+    if(mistake_rate > getEditDistance(element["fields"]["alt_word"], new_document)/(element["fields"]["alt_word"].length)){
+      proofreading_word  = element["fields"]["alt_word"];  
+      mistake_rate = getEditDistance(proofreading_word, new_document)/(proofreading_word.length); 
+    }
   })
   
-  if (distance == 0) {
-    return 1;
-  } else if (distance == 1) {
-    return 2;
+  if (mistake_rate == 0) {
+    var verificationObject = {
+      status : word_status.VALID,
+      word_verified_against : proofreading_word,
+    } 
+  } else if (mistake_rate <= 0.25) {
+    var verificationObject = {
+      status : word_status.ALMOST_VALID,
+      word_verified_against : proofreading_word,
+    }
   } else {
-    return 0;
+    var verificationObject = {
+      status : word_status.INVALID,
+      word_verified_against : proofreading_word,
+    }
   }
+  return verificationObject;
 }
 
 /*
