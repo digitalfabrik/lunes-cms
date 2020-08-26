@@ -92,13 +92,14 @@ function render_question(new_document) {
 /*
  *
  */
-function render_almost_right(current_document, content_textfield) {
+function render_almost_right(current_document, content_textfield, hint = "") {
   var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
               '<input id="input_word" class="form-control" type="text" value="'+ content_textfield + '" onkeypress="input_keypress(event);"' +
-              '<label for="male">Deine aktuelle Antwort war fast richtig, du hast einen Versuch sie in ein richtiges </label>'+
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              '<label>Deine aktuelle Antwort war fast richtig, du hast einen Versuch sie in ein richtiges Wort zu korrigieren</label>'+
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-warning" onclick="check_current_document(true);">Erneut Überprüfen</button> '; 
   
@@ -154,8 +155,12 @@ function check_current_document(second_try=false){
   var status = verificationObject.status;
   
   if(!second_try && status == word_status.ALMOST_VALID){
-    var html = render_almost_right( current_document,$("#input_word").val());
+    var hint = "";
+    if(verificationObject.case_sensitive_mistake)
+      hint = "Achte auf die Groß- und Kleinschreibung";
+    var html = render_almost_right( current_document,$("#input_word").val(), hint);
     $("#div_ask_document").html(html);
+    prompt(hint);
     return;
   }
   
