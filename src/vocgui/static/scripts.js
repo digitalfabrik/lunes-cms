@@ -98,7 +98,7 @@ function render_almost_right(current_document, content_textfield) {
               ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
               '<input id="input_word" class="form-control" type="text" value="'+ content_textfield + '" onkeypress="input_keypress(event);"' +
-              '<label for="male">Deine aktuelle Antwort war fast richtig, du hast einen Versuch sie in eine richtige Antwort umzuändern</label>'+
+              '<label for="male">Deine aktuelle Antwort war fast richtig, du hast einen Versuch sie in ein richtiges </label>'+
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-warning" onclick="check_current_document(true);">Erneut Überprüfen</button> '; 
   
@@ -242,23 +242,26 @@ function verify_document(old_document) {
     }
   })
   
+  //check if a mistake could result from Uppercase or Lowercase misusage
+  var case_sensitive_error = false;
+  if(getEditDistance(proofreading_word, new_document) != getEditDistance(proofreading_word.toLowerCase(), new_document.toLowerCase()))
+    case_sensitive_error = true;
+  
+  var verificationObject = {
+    status : "",
+    word_verified_against : proofreading_word,
+    case_sensitive_mistake : case_sensitive_error
+  } 
+
   if (mistake_rate == 0) {
-    var verificationObject = {
-      status : word_status.VALID,
-      word_verified_against : proofreading_word,
-    } 
+    verificationObject.status = word_status.VALID;
   } else if (mistake_rate <= 0.25) {
-    var verificationObject = {
-      status : word_status.ALMOST_VALID,
-      word_verified_against : proofreading_word,
-    }
+    verificationObject.status = word_status.ALMOST_VALID;
   } else {
-    var verificationObject = {
-      status : word_status.INVALID,
-      word_verified_against : proofreading_word,
-    }
+    verificationObject.status = word_status.INVALID;
   }
   return verificationObject;
+
 }
 
 /*
