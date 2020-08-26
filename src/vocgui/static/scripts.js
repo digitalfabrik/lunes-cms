@@ -213,10 +213,10 @@ function verify_document(old_document) {
 
   var alternive_words = get_alternative_words(old_document)
   alternive_words.forEach(element => {
-    if(mistake_rate > getEditDistance(element["fields"]["alt_word"], new_document)/(element["fields"]["alt_word"].length))
+    if(mistake_rate > getEditDistance(element["fields"]["alt_word"], new_document)/(element["fields"]["alt_word"].length)){
       proofreading_word  = element["fields"]["alt_word"];  
       mistake_rate = getEditDistance(proofreading_word, new_document)/(proofreading_word.length); 
-      
+    }
   })
   
   if (mistake_rate == 0) {
