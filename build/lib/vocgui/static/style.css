@@ -1,0 +1,44 @@
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+main > .container {
+  padding: 60px 15px 0;
+}
+
+.footer {
+  background-color: #f5f5f5;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+
+.invalid{
+  border: 1px solid red;
+}
+
+.almost_valid{
+	border: 1px solid yellow;
+}
+
+.valid{
+  border: 1px solid green;
+}
+
+.solved{
+  border: 1px solid rgb(12, 51, 221);
+}

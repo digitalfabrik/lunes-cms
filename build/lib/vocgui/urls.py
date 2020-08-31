@@ -10,6 +10,5 @@ urlpatterns = [  # pylint: disable=C0103
     path('sets', views.api_training_sets, name='sets'),
     path('set/<int:training_set_id>/documents',
          views.api_documents, name='documents'),
-    path('report', views.api_report_template, name='report_template'),
     path('alternative_words/<int:document_id>', views.api_alternative_words, name = 'alternative_words')
 ]

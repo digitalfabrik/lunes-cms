@@ -291,39 +291,9 @@ function input_keypress(e) {
 };
 
 /*
-* Load report template
-*/
-function get_report_template() {
-  var report_template;
-  $.ajax({
-    type: 'GET',
-    url: '/report',
-    dataType: "html",
-    async:false,
-    success: function(data) {
-      report_template = data
-    }
-  });
-  return report_template
-}
-
-/*
-* Prepare report
-*/
-function prepare_report(report_html) {
-  var $report_html = $(report_html)
-  $report_html.find('#timestamp').text('test');
-  $report_html.find('#trainingsset').text('test2');
-  return $report_html
-}
-
-/*
 * Display the results as PDF
 */
 function generatePDF() {
-  var html = get_report_template();
-  html = prepare_report(html);
-  alert(html.find('#trainingsset').text());
-  alert(html)
-  html2pdf().from(String(html), 'string').save();
+  var html = render_end_result();
+  html2pdf().from(html, 'string').save();
 }
