@@ -106,7 +106,7 @@ function render_end_result() {
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              '<button type="button" class="btn btn-primary" onclick="generatePDF();">PDF</button>'
+              '<button type="button" class="btn btn-primary" onclick="generatePDF();">Zusammenfassung</button>'
               ;
 
   return html;
@@ -308,12 +308,40 @@ function get_report_template() {
 }
 
 /*
+* Create timestamp
+*/
+function get_timestamp() {
+  var today = new Date();
+  var date = today.getDate()+'.'+(today.getMonth()+1)+'.'+today.getFullYear();
+  var minutes = today.getMinutes();
+  if (String(minutes).length==1) {
+    minutes = '0' + minutes
+  }
+  var time = today.getHours() + ":" + minutes;
+  var dateTime = 'Erstellt am ' + date +' um '+ time +' Uhr';
+  return dateTime
+}
+/*
 * Prepare report
 */
 function prepare_report(report_html) {
   var $report_html = $(report_html)
-  $report_html.find('#timestamp').text('test');
-  $report_html.find('#trainingsset').text('test2');
+
+  //Timestamp
+  $report_html.find('#timestamp').text(get_timestamp());
+
+  //Trainingsset
+  selected_set_id = '#' + $("#select_training_set").val();
+  selected_set = $(selected_set_id).text()
+  $report_html.find('#trainingsset').text('Bearbeitetes Set: ' + selected_set);
+
+  //Allgemeine Ergebnise
+  $report_html.find('#amt_correct').text(documents_correct.length)
+  $report_html.find('#amt_alm_correct').text(documents_almost_correct.length)
+  $report_html.find('#amt_wrong').text(documents_wrong.length)
+
+  //Detaillierte Aufführung
+  // yet to come
   return $report_html
 }
 
@@ -323,7 +351,8 @@ function prepare_report(report_html) {
 function generatePDF() {
   var html = get_report_template();
   html = prepare_report(html);
-  alert(html.find('#trainingsset').text());
-  alert(html)
-  html2pdf().from(String(html), 'string').save();
+  html = $('<div>').append(html.clone()).html();
+  newWindow = window.open('about:blank', '_blank');
+  newWindow.document.write(html)
+  tab.document.close();
 }
