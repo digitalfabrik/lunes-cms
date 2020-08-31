@@ -12,9 +12,9 @@ This project is licensed with the Apache 2.0 License.
 4. `python3 -m venv .venv`
 5. `source .venv/bin/activate`
 6. `python3 setup.py develop`
-7. `vocabulary-trainer migrate`
-8. `vocabulary-trainer createsuperuser`
-9. `vocabulary-trainer runserver`
+7. `python3 vocabulary-trainer migrate`
+8. `python3 vocabulary-trainer createsuperuser`
+9. `python3 vocabulary-trainer runserver`
 
 # Production Deployment
 1. `adduser vocabulary-trainer`
