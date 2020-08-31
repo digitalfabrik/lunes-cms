@@ -78,7 +78,7 @@ function get_random_document() {
  * Render HTML code that shows the user a new image, a new audio and input text field. 
  */
 function render_question(new_document) {
-  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + new_document["fields"]["image"] + '">' +
+  var html =  '<img class="img-fluid rounded" style=' + get_image_height() + ' src="/media/' + new_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               ((new_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ new_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
@@ -93,7 +93,7 @@ function render_question(new_document) {
  * Render HTML code that shows the user the current image, the current audio and text field with given input which is read-only.
  */
 function render_question_solved(current_document, content_textfield) {
-  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
+  var html =  '<img class="img-fluid rounded" style='+ get_image_height() + ' src="/media/' + current_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
@@ -316,3 +316,14 @@ function input_keypress(e) {
     return false;
   }
 };
+
+/*
+ * Get adequate height for images
+ * 350px for window with height of 722 was considered optimal
+ */
+function get_image_height() {
+  var screen_height = $(window).height(); 
+  var image_height = Math.round(screen_height / 2.062857142857143);  
+  var image_height_str = "height:" + image_height.toString() + "px;"
+  return image_height_str
+}
