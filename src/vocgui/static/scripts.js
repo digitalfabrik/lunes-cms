@@ -90,7 +90,8 @@ function render_question(new_document) {
 }
 
 /*
- *
+ * Render HTML code that shows the user  the current image, the current audio, a text field with the last input, an advise that you got more chance to 
+ * corrcet your word and a possible hint. 
  */
 function render_almost_right(current_document, content_textfield, hint = "") {
   var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
