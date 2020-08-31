@@ -160,7 +160,6 @@ function check_current_document(second_try=false){
       hint = "Achte auf die Groß- und Kleinschreibung";
     var html = render_almost_right( current_document,$("#input_word").val(), hint);
     $("#div_ask_document").html(html);
-    prompt(hint);
     return;
   }
   
