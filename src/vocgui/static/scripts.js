@@ -272,6 +272,12 @@ function new_training_session() {
 
 function mistake_training_session() {
   documents = documents_wrong.concat(documents_almost_correct);
+  
+  if(documents.length == 0){
+    alert("Du hattest in der letzten Runde keine falschen Vokabeln.");
+    return;
+  }
+
   documents_correct = [];
   documents_almost_correct = [];
   documents_wrong = [];
