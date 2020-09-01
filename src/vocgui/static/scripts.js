@@ -99,10 +99,12 @@ function render_question_solved(current_document, content_textfield) {
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
               '<input id="input_word" class="form-control" type="text" placeholder="'+ content_textfield + '" onkeypress="input_keypress(event);" readonly><br><br>' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              '<button type="button" class="btn btn-warning" onclick="load_new_document();">Nächstes Wort</button> '; 
+              '<button type="button" class="btn btn-warning" onclick="load_new_document();">Nächstes Wort</button> ' +
+              '<div id = "alternative_words" class="col-xs-12" style="height:30px;"></div>'; 
   
   return html;
 }
+
 
 /*load
  * Show results (correct/wrong) for training set and provide buttons for new training sessions.
@@ -248,6 +250,17 @@ function solve_document() {
   var html = render_question_solved(current_document, current_document["fields"] ["word"]);
   $("#div_ask_document").html(html);
   $("#input_word").addClass("solved");
+  
+  var s = "";
+  var alternative_words = get_alternative_words(current_document);
+  if(alternative_words.length !=0 ){
+    s = "Auch richtig: <br />"
+    for(var i = 0; i < alternative_words.length; i++){
+        s += "- " + "" + alternative_words[i]["fields"]["alt_word"] + "<br />";
+    }
+  }
+
+  $("#alternative_words").html(s);
 }
 
 /*
