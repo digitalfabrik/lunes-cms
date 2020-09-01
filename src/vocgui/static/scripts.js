@@ -318,7 +318,7 @@ $( document ).ready(function() {
  */
 function input_keypress(e) {
   if (e.which == 13) {
-    solve_document() ;
+    check_current_document();
     return false;
   }
 };
