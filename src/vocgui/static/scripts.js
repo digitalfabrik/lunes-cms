@@ -100,7 +100,7 @@ function render_almost_right(current_document, content_textfield, hint = "") {
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
               '<input id="input_word" class="form-control" type="text" value="'+ content_textfield + '" onkeypress="input_keypress(event);"' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              '<label>Deine aktuelle Antwort war fast richtig, du hast einen Versuch sie in ein richtiges Wort zu korrigieren</label></br>'+
+              '<label>Deine aktuelle Antwort war fast richtig, du hast einen Versuch, sie in ein richtiges Wort zu korrigieren.</label></br>'+
               hint +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               '<button type="button" class="btn btn-warning" onclick="check_current_document(true);">Erneut Überprüfen</button> '; 
