@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vocgui'
+    'vocgui',
+    'pwa'
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,6 @@ if DEBUG:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 else:
     MEDIA_ROOT = '/var/www/html/media/'
+
+#tell our djangopwa application that our serviceworker resides in /static/js directory.
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'vocgui/static/js', 'serviceworker.js')
