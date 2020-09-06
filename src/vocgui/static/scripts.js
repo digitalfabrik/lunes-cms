@@ -305,10 +305,10 @@ function get_report_template() {
     }
   });
   return report_template
-}
+};
 
 /*
-* Create timestamp
+* Create timestamp for report
 */
 function get_timestamp() {
   var today = new Date();
@@ -316,34 +316,87 @@ function get_timestamp() {
   var minutes = today.getMinutes();
   if (String(minutes).length==1) {
     minutes = '0' + minutes
-  }
+  };
   var time = today.getHours() + ":" + minutes;
   var dateTime = 'Erstellt am ' + date +' um '+ time +' Uhr';
   return dateTime
+};
+
+/*
+* Link words to alternative words for report
+*/
+function alt_words_combine(document, word) {
+  var alternative_words = get_alternative_words(document);
+  var report_word;
+  if (alternative_words.length==0) {
+    report_word = word;
+
+  } else {
+    var combined_words = ''
+    alternative_words.forEach(alt_word_obj => {
+      alt_word = alt_word_obj["fields"]["alt_word"]
+      if (combined_words=='') {
+        combined_words = alt_word
+      } else {
+        combined_words = combined_words +', ' + alt_word
+      };
+    report_word = word + ' (' + combined_words + ')'
+    });
+  };
+  return report_word
 }
+
+/*
+* Prepare words for report 
+*/
+function prepare_words(documents) {
+  var doc_text = '';
+  documents.forEach(word_obj => {
+    var word_str = word_obj["fields"]["word"];
+    if (doc_text=='') {
+      doc_text = alt_words_combine(word_obj, word_str);
+    } else {
+      doc_text = doc_text + ', ' + alt_words_combine(word_obj, word_str);
+    }
+  }) ;
+  if (doc_text=='') {
+    doc_text = 'Kein Eintrag'
+  }
+  return doc_text;
+};
+
 /*
 * Prepare report
 */
 function prepare_report(report_html) {
-  var $report_html = $(report_html)
+  var $report_html = $(report_html);
 
   //Timestamp
   $report_html.find('#timestamp').text(get_timestamp());
 
   //Trainingsset
   selected_set_id = '#' + $("#select_training_set").val();
-  selected_set = $(selected_set_id).text()
+  selected_set = $(selected_set_id).text();
   $report_html.find('#trainingsset').text('Bearbeitetes Set: ' + selected_set);
 
-  //Allgemeine Ergebnise
-  $report_html.find('#amt_correct').text(documents_correct.length)
-  $report_html.find('#amt_alm_correct').text(documents_almost_correct.length)
-  $report_html.find('#amt_wrong').text(documents_wrong.length)
+  //Quote
+  var quote = Math.round(
+    (documents_correct.length+documents_almost_correct.length)/
+    (documents_correct.length+documents_almost_correct.length+documents_wrong.length)*100)
+  $report_html.find('#quote').text('Quote: ' + quote + '%')
+
+  //Allgemeine Ergebnisse
+  $report_html.find('#amt_correct').text(documents_correct.length);
+  $report_html.find('#amt_alm_correct').text(documents_almost_correct.length);
+  $report_html.find('#amt_wrong').text(documents_wrong.length);
 
   //Detaillierte Aufführung
-  // yet to come
+  $report_html.find('#correct_words').text(prepare_words(documents_correct));
+  $report_html.find('#alm_correct_words').text(prepare_words(documents_almost_correct));
+  $report_html.find('#wrong_words').text(prepare_words(documents_wrong));
+
   return $report_html
-}
+};
 
 /*
 * Display the results as PDF
@@ -355,4 +408,4 @@ function generatePDF() {
   newWindow = window.open('about:blank', '_blank');
   newWindow.document.write(html)
   tab.document.close();
-}
+};

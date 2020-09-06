@@ -98,12 +98,31 @@
     .rtl table tr td:nth-child(2) {
         text-align: left;
     }
+
+    .button {
+        background-color: white;
+        border: 2px solid #555555;
+        border-radius: 4px;
+        color: black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        transition-duration: 0.4s;
+    }
+
+    .button:hover {
+        background-color: #555555;
+        color: white;
+    }
     </style>
     <script src="/static/scripts.js"></script>
     <script src="/static/jquery.min.js"></script>
 </head>
 
 <body>
+    <button class="button" onclick="window.print()">Export</button>
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
@@ -117,6 +136,7 @@
                             <td>
                                 <p id='timestamp'>TIMESTAMP</p>
                                 <p id='trainingsset'>Set: TRAININGSSET</p>
+                                <p id='quote'>0%</p>
                             </td>
                         </tr>
                     </table>
@@ -174,7 +194,7 @@
             
             <tr class="item">
                 <td>
-                    Kein Eintrag
+                    <p id='correct_words'>Kein Eintrag</p>
                 </td>
             </tr>
             <tr class="heading">
@@ -188,7 +208,7 @@
             
             <tr class="item">
                 <td>
-                    Kein Eintrag
+                    <p id='alm_correct_words'>Kein Eintrag</p>
                 </td>
             </tr>
             <tr class="heading">
@@ -202,7 +222,7 @@
             
             <tr class="item">
                 <td>
-                    Kein Eintrag
+                    <p id='wrong_words'>Kein Eintrag</p>
                 </td>
             </tr>
         </table>
