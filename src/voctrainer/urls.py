@@ -21,7 +21,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('vocgui.urls')),
-    path('', include(pwa.urls)),
 ]
 
 if settings.DEBUG:
