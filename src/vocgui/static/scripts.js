@@ -406,6 +406,5 @@ function generatePDF() {
   html = prepare_report(html);
   html = $('<div>').append(html.clone()).html();
   newWindow = window.open('about:blank', '_blank');
-  newWindow.document.write(html)
-  tab.document.close();
+  newWindow.document.write(html);
 };
