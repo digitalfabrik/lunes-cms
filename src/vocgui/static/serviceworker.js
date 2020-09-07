@@ -4,12 +4,12 @@ self.addEventListener('install', function(e) {
     e.waitUntil(
         caches.open(cacheName).then(function(cache) {
             return cache.addAll([
-                './static/style.css',
-                './static/scripts.js',
-                './static/jquery.min.js',
-                './static/favicon.png',
-                './static/bootstrap/css/bootstrap.min.css',
-                './static/bootstrap/js/bootstrap.min.js'
+                '/static/style.css',
+                '/static/scripts.js',
+                '/static/jquery.min.js',
+                '/static/favicon.png',
+                '/static/bootstrap/css/bootstrap.min.css',
+                '/static/bootstrap/js/bootstrap.min.js'
             ]).then(function() {
                 self.skipWaiting();
             });
