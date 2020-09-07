@@ -4,7 +4,7 @@
     "description": "Simply learn vocabularies - no account required",
     "icons": [
         {
-            "src": "static/favicon.png",
+            "src": "/static/favicon.png",
             "sizes": "32x32",
             "type": "image/png"
         }
