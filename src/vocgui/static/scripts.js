@@ -134,8 +134,23 @@ function render_end_result() {
               documents_wrong.length + ' Wörter waren falsch.</p><p>Quote: ' + Math.round((documents_correct.length+documents_almost_correct.length)/(documents_correct.length+documents_almost_correct.length+documents_wrong.length)*100) + '%</p>' +
               '<button type="button" class="btn btn-primary" onclick="mistake_training_session();">Fehler üben</button>' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>';
+              '<button type="button" class="btn btn-primary" onclick="new_training_session();">Neu starten</button>' +
+              '<div class="col-xs-12" style="height:30px;"></div>' +
+              '<button type="button" class="btn btn-primary" onclick="generatePDF();">Zusammenfassung</button>'
+              ;
+
   return html;
+}
+
+/*
+ * Get adequate height for images
+ * 350px for window with height of 722 was considered optimal
+ */
+function get_image_height() {
+  var screen_height = $(window).height(); 
+  var image_height = Math.round(screen_height / 2.062857142857143);  
+  var image_height_str = "height:" + image_height.toString() + "px;"
+  return image_height_str
 }
 
 /*
@@ -369,12 +384,125 @@ function input_keypress(e) {
 };
 
 /*
- * Get adequate height for images
- * 350px for window with height of 722 was considered optimal
- */
-function get_image_height() {
-  var screen_height = $(window).height(); 
-  var image_height = Math.round(screen_height / 2.062857142857143);  
-  var image_height_str = "height:" + image_height.toString() + "px;"
-  return image_height_str
+*   The following section only concerns the final report
+*/
+
+/*
+* Load report template
+*/
+function get_report_template() {
+  var report_template;
+  $.ajax({
+    type: 'GET',
+    url: '/report',
+    dataType: "html",
+    async:false,
+    success: function(data) {
+      report_template = data
+    }
+  });
+  return report_template
+};
+
+/*
+* Create timestamp-text 
+*/
+function get_timestamp() {
+  var today = new Date();
+  var date = today.getDate()+'.'+(today.getMonth()+1)+'.'+today.getFullYear();
+  var minutes = today.getMinutes();
+  if (String(minutes).length==1) {
+    minutes = '0' + minutes
+  };
+  var time = today.getHours() + ":" + minutes;
+  var dateTime = 'Erstellt am ' + date +' um '+ time +' Uhr';
+  return dateTime
+};
+
+/*
+* Combine word and it's alternative words into one string
+*/
+function alt_words_combine(document) {
+  var alt_word_objects = get_alternative_words(document);
+  var report_word = document["fields"]["word"];
+  
+  if(alt_word_objects.length == 0)
+    return report_word;
+ 
+  var alt_words = ''
+  alt_word_objects.forEach(alt_word_obj => {
+    if (alt_words=='') {
+      alt_words = alt_word_obj["fields"]["alt_word"];
+    } else {
+      alt_words += ', ' + alt_word_obj["fields"]["alt_word"];
+    };
+  });
+
+  report_word += ' (' + alt_words + ')'  
+  return report_word
 }
+
+/*
+*  Goes through a document array and creates a comprehensive string of it's words and alternative words.
+*/
+function prepare_words(documents) {
+  var doc_text = '';
+  documents.forEach(word_obj => {
+    doc_text += alt_words_combine(word_obj) + ' ; ';
+  }) ;
+  if (doc_text=='') {
+    doc_text = 'Kein Eintrag'
+  }
+  return doc_text;
+};
+
+/*
+* Fill report.html with the report of the current round
+*/
+function prepare_report(report_html) {
+  var $report_html = $(report_html);
+
+  //Timestamp
+  $report_html.find('#timestamp').text(get_timestamp());
+
+  //Trainingsset
+  selected_set_id = '#' + $("#select_training_set").val();
+  selected_set = $(selected_set_id).text();
+  $report_html.find('#trainingsset').text('Bearbeitetes Set: ' + selected_set);
+
+  //Quote
+  var quote = Math.round(
+    (documents_correct.length+documents_almost_correct.length)/
+    (documents_correct.length+documents_almost_correct.length+documents_wrong.length)*100)
+  $report_html.find('#quote').text('Quote: ' + quote + '%')
+
+  //Allgemeine Ergebnisse
+  $report_html.find('#amt_correct').text(documents_correct.length);
+  $report_html.find('#amt_alm_correct').text(documents_almost_correct.length);
+  $report_html.find('#amt_wrong').text(documents_wrong.length);
+
+  //Detaillierte Aufführung
+  $report_html.find('#correct_words').text(prepare_words(documents_correct));
+  $report_html.find('#alm_correct_words').text(prepare_words(documents_almost_correct));
+  $report_html.find('#wrong_words').text(prepare_words(documents_wrong));
+
+  return $report_html
+};
+
+/*
+* Display the results in a new tab
+*/
+function generatePDF() {
+  var html = get_report_template();
+  html = prepare_report(html);
+  html = $('<div>').append(html.clone()).html();
+  newWindow = window.open('about:blank', '_blank');
+  newWindow.document.write(html);
+};
+
+/*
+* Section end to produce final report.
+*/
+
+
+

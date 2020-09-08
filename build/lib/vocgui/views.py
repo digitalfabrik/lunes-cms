@@ -41,9 +41,3 @@ def api_alternative_words(request, document_id=None):
     alternative_words = AlternativeWord.objects.filter(document_id = document_id)
     alternative_words_list = serializers.serialize('json', alternative_words)
     return HttpResponse(alternative_words_list, content_type="application/json")
-
-def api_report_template(request):
-    """
-    Load report template as html
-    """
-    return render(request, 'report.html')
