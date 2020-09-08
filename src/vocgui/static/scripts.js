@@ -291,6 +291,10 @@ function input_keypress(e) {
 };
 
 /*
+*   The following section only concerns the final report
+*/
+
+/*
 * Load report template
 */
 function get_report_template() {
@@ -308,7 +312,7 @@ function get_report_template() {
 };
 
 /*
-* Create timestamp for report
+* Create timestamp-text 
 */
 function get_timestamp() {
   var today = new Date();
@@ -323,7 +327,7 @@ function get_timestamp() {
 };
 
 /*
-* Link words to alternative words for report
+* Combine word and it's alternative words into one string
 */
 function alt_words_combine(document, word) {
   var alternative_words = get_alternative_words(document);
@@ -347,7 +351,7 @@ function alt_words_combine(document, word) {
 }
 
 /*
-* Prepare words for report 
+*  Goes through a document array and creates a comprehensive string of it's words and alternative words.
 */
 function prepare_words(documents) {
   var doc_text = '';
@@ -366,7 +370,7 @@ function prepare_words(documents) {
 };
 
 /*
-* Prepare report
+* Fill report.html with the report of the current round
 */
 function prepare_report(report_html) {
   var $report_html = $(report_html);
@@ -399,7 +403,7 @@ function prepare_report(report_html) {
 };
 
 /*
-* Display the results as PDF
+* Display the results in a new tab
 */
 function generatePDF() {
   var html = get_report_template();
@@ -408,3 +412,7 @@ function generatePDF() {
   newWindow = window.open('about:blank', '_blank');
   newWindow.document.write(html);
 };
+
+/*
+* Section end to produce final report.
+*/
