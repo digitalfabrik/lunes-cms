@@ -290,10 +290,4 @@ function input_keypress(e) {
   }
 };
 
-/*
-* Display the results as PDF
-*/
-function generatePDF() {
-  var html = render_end_result();
-  html2pdf().from(html, 'string').save();
-}
+
