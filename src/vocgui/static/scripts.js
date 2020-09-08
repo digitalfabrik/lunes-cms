@@ -329,24 +329,23 @@ function get_timestamp() {
 /*
 * Combine word and it's alternative words into one string
 */
-function alt_words_combine(document, word) {
-  var alternative_words = get_alternative_words(document);
-  var report_word;
-  if (alternative_words.length==0) {
-    report_word = word;
+function alt_words_combine(document) {
+  var alt_word_objects = get_alternative_words(document);
+  var report_word = document["fields"]["word"];
+  
+  if(alt_word_objects.length == 0)
+    return report_word;
+ 
+  var alt_words = ''
+  alt_word_objects.forEach(alt_word_obj => {
+    if (alt_words=='') {
+      alt_words = alt_word_obj["fields"]["alt_word"];
+    } else {
+      alt_words += ', ' + alt_word_obj["fields"]["alt_word"];
+    };
+  });
 
-  } else {
-    var combined_words = ''
-    alternative_words.forEach(alt_word_obj => {
-      alt_word = alt_word_obj["fields"]["alt_word"]
-      if (combined_words=='') {
-        combined_words = alt_word
-      } else {
-        combined_words = combined_words +', ' + alt_word
-      };
-    report_word = word + ' (' + combined_words + ')'
-    });
-  };
+  report_word += ' (' + alt_words + ')'  
   return report_word
 }
 
@@ -356,12 +355,7 @@ function alt_words_combine(document, word) {
 function prepare_words(documents) {
   var doc_text = '';
   documents.forEach(word_obj => {
-    var word_str = word_obj["fields"]["word"];
-    if (doc_text=='') {
-      doc_text = alt_words_combine(word_obj, word_str);
-    } else {
-      doc_text = doc_text + ', ' + alt_words_combine(word_obj, word_str);
-    }
+    doc_text += alt_words_combine(word_obj) + ' ; ';
   }) ;
   if (doc_text=='') {
     doc_text = 'Kein Eintrag'
