@@ -369,6 +369,7 @@ $( "#select_training_set" ).change(function() {
  * Load available training sets after page load
  */
 $( document ).ready(function() {
+  navigator.serviceWorker.register('/static/serviceworker.js')
   reset_env();
   get_available_sets();
 });
