@@ -4,8 +4,13 @@
     "description": "Simply learn vocabularies - no account required",
     "icons": [
         {
-            "src": "/static/favicon.png",
-            "sizes": "32x32",
+            "src": "/static/icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/icon2.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ],
