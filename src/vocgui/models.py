@@ -28,6 +28,7 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     word = models.CharField(max_length=255)
+    arcticle = models.CharField(max_length=3, default='')
     image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -36,7 +37,7 @@ class Document(models.Model):  # pylint: disable=R0903
                                      related_name='documents')
 
     def __str__(self):
-        return self.training_set.title + " >> " + self.word
+        return self.training_set.title + " >> " + self.arcticle + " " +  self.word
 
     # pylint: disable=R0903
     class Meta:
