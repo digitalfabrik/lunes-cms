@@ -3,10 +3,9 @@ Models for the UI
 """
 from django.db import models  # pylint: disable=E0401
 
-
-class TrainingSet(models.Model):  # pylint: disable=R0903
+class Field(models.Model):  # pylint: disable=R0903
     """
-    Training sets have a title and contain words
+    Field have a title and contain training sets with the same topic
     """
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
@@ -17,10 +16,31 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     # pylint: disable=R0903
     class Meta:
         """
+        Define user readable name of Field
+        """
+        verbose_name = 'Bereich'
+        verbose_name_plural = 'Bereiche'
+
+class TrainingSet(models.Model):  # pylint: disable=R0903
+    """
+    Training sets have a title and contain words
+    """
+    title = models.CharField(max_length=255)
+    details = models.CharField(max_length=255, blank=True)
+    field = models.ForeignKey(Field,
+                                    on_delete=models.CASCADE,
+                                    related_name='training_sets')
+
+    def __str__(self):
+        return self.title
+
+    # pylint: disable=R0903
+    class Meta:
+        """
         Define user readable name of TrainingSet
         """
-        verbose_name = 'Lektion'
-        verbose_name_plural = 'Lektionen'
+        verbose_name = 'Modul'
+        verbose_name_plural = 'Module'
 
 
 class Document(models.Model):  # pylint: disable=R0903
