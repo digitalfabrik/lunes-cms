@@ -2,6 +2,11 @@
 Models for the UI
 """
 from django.db import models  # pylint: disable=E0401
+from image_cropping import ImageCropField, ImageRatioField
+
+
+    
+
 
 
 class TrainingSet(models.Model):  # pylint: disable=R0903
@@ -28,7 +33,9 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     word = models.CharField(max_length=255)
-    image = models.FileField(upload_to='images/')
+    image = ImageCropField(blank=True, upload_to='images/')
+    # size is "width x height"
+    cropping = ImageRatioField('image', '1080x1080',size_warning=True)
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
