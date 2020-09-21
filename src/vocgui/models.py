@@ -33,7 +33,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
    
 
     def __str__(self):
-        return self.title
+        return self.field.title + " >> " + self.title
 
     # pylint: disable=R0903
     class Meta:
@@ -57,7 +57,7 @@ class Document(models.Model):  # pylint: disable=R0903
                                      related_name='documents')
 
     def __str__(self):
-        return self.training_set.title + " >> " + self.word
+        return self.training_set.field.title + " >> " + self.training_set.title + " >> " + self.word
 
     # pylint: disable=R0903
     class Meta:
