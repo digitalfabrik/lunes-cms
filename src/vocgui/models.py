@@ -35,7 +35,7 @@ class Document(models.Model):  # pylint: disable=R0903
     word = models.CharField(max_length=255)
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
-    cropping = ImageRatioField('image', '1080x1080',size_warning=True)
+    cropping = ImageRatioField('image', '400x400',size_warning=True)
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
