@@ -34,6 +34,7 @@ class Document(models.Model):  # pylint: disable=R0903
     training_set = models.ForeignKey(TrainingSet,
                                      on_delete=models.CASCADE,
                                      related_name='documents')
+    video_url = models.URLField(max_length=200, default='', blank=True)
 
     def __str__(self):
         return self.training_set.title + " >> " + self.word
