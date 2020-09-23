@@ -25,11 +25,11 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     """
     Training sets are part of field, have a title and contain words
     """
+    title = models.CharField(max_length=255)
+    details = models.CharField(max_length=255, blank=True)
     field = models.ForeignKey(Field,
                                     on_delete=models.CASCADE,
                                     related_name='training_sets')
-    title = models.CharField(max_length=255)
-    details = models.CharField(max_length=255, blank=True)
    
 
     def __str__(self):
