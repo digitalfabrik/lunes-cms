@@ -19,6 +19,7 @@ class DocumentAdmin(admin.ModelAdmin):
     autocomplete_fields = ['training_set']
 
 class AlternativeWordAdmin(admin.ModelAdmin):
+    search_fields = ['alt_word']
     autocomplete_fields = ['document']
     
 
