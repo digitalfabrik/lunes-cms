@@ -369,6 +369,15 @@ $( "#select_training_set" ).change(function() {
  * Load available training sets after page load
  */
 $( document ).ready(function() {
+  if("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/serviceworker.js").then(registraction=> {
+      console.log("SW Registered!");
+      console.log(registraction);
+    }).catch(error => {
+      console.log("SW Registration Failed!");
+      console.log(error);
+    });
+  }
   reset_env();
   get_available_sets();
 });
