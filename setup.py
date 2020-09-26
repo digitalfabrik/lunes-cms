@@ -18,8 +18,6 @@ setup(
                 [('usr/lib/systemd/system/', ['vocabulary-trainer.service'])],
     install_requires=[
         "Django>=2.2.9",
-        "easy-thumbnails",
-        "django-image-cropping"
     ],
     extras_require={
         "dev": [
