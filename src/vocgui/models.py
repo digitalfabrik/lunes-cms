@@ -8,10 +8,9 @@ from image_cropping import ImageCropField, ImageRatioField
     
 
 
-
-class TrainingSet(models.Model):  # pylint: disable=R0903
+class Field(models.Model):  # pylint: disable=R0903
     """
-    Training sets have a title and contain words
+    Field have a title and contain training sets with the same topic
     """
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
@@ -22,10 +21,32 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     # pylint: disable=R0903
     class Meta:
         """
+        Define user readable name of Field
+        """
+        verbose_name = 'Bereich'
+        verbose_name_plural = 'Bereiche'
+
+class TrainingSet(models.Model):  # pylint: disable=R0903
+    """
+    Training sets are part of field, have a title and contain words
+    """
+    title = models.CharField(max_length=255)
+    details = models.CharField(max_length=255, blank=True)
+    field = models.ForeignKey(Field,
+                                    on_delete=models.CASCADE,
+                                    related_name='training_sets')
+   
+
+    def __str__(self):
+        return self.field.title + " >> " + self.title
+
+    # pylint: disable=R0903
+    class Meta:
+        """
         Define user readable name of TrainingSet
         """
-        verbose_name = 'Lektion'
-        verbose_name_plural = 'Lektionen'
+        verbose_name = 'Modul'
+        verbose_name_plural = 'Module'
 
 
 class Document(models.Model):  # pylint: disable=R0903
@@ -36,6 +57,8 @@ class Document(models.Model):  # pylint: disable=R0903
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
     cropping = ImageRatioField('image', '400x400',size_warning=True)
+    arcticle = models.CharField(max_length=255, default='')
+    image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
@@ -43,7 +66,7 @@ class Document(models.Model):  # pylint: disable=R0903
                                      related_name='documents')
 
     def __str__(self):
-        return self.training_set.title + " >> " + self.word
+        return self.training_set.field.title + " >> " + self.training_set.title + " >> " + self.word
 
     # pylint: disable=R0903
     class Meta:
