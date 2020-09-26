@@ -94,7 +94,7 @@ function render_question(new_document) {
  * corrcet your word and a possible hint. 
  */
 function render_almost_right(current_document, content_textfield, hint = "") {
-  var html =  '<img class="img-fluid rounded" style='+ get_image_height() + ' src="/media/' + current_document["fields"]["image"] + '">' +
+  var html =  '<img class="img-fluid rounded" style="max-width: 90%;" src="/media/' + current_document["fields"]["image"] + '">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
               ((current_document["fields"]["audio"]) ? '<audio controls><source src="/media/'+ current_document["fields"]["audio"] +'" type="audio/ogg">Dein Browser unterstützt kein Audio.</audio>' +
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
