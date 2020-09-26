@@ -2,11 +2,7 @@
 Register models for Django's CRUD back end
 """
 from django.contrib import admin  # pylint: disable=E0401
-from .models import TrainingSet, Document, AlternativeWord  # pylint: disable=E0401
-from image_cropping import ImageCroppingMixin
-
-class MyModelAdmin(ImageCroppingMixin, admin.ModelAdmin):
-    pass
+from .models import Field, TrainingSet, Document, AlternativeWord  # pylint: disable=E0401
 
 """
 Specify autocomplete_fields and search_fields
@@ -29,5 +25,6 @@ class AlternativeWordAdmin(admin.ModelAdmin):
 
 admin.site.register(Field, FieldAdmin)
 admin.site.register(TrainingSet, TrainingSetAdmin)
-admin.site.register(Document, MyModelAdmin, DocumentAdmin)
+admin.site.register(Document, DocumentAdmin)
 admin.site.register(AlternativeWord, AlternativeWordAdmin)
+
