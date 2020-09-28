@@ -2,6 +2,7 @@
 Models for the UI
 """
 from django.db import models  # pylint: disable=E0401
+from image_cropping import ImageCropField, ImageRatioField
 
 class Field(models.Model):  # pylint: disable=R0903
     """
@@ -50,7 +51,10 @@ class Document(models.Model):  # pylint: disable=R0903
     """
     word = models.CharField(max_length=255)
     arcticle = models.CharField(max_length=255, default='')
-    image = models.FileField(upload_to='images/')
+    image = ImageCropField(blank=True, upload_to='images/')
+    # size is "width x height"
+    cropping = ImageRatioField('image', '400x400',size_warning=True)
+    #image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
