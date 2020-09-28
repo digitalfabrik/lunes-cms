@@ -50,10 +50,10 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     word = models.CharField(max_length=255)
+    arcticle = models.CharField(max_length=255, default='')
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
     cropping = ImageRatioField('image', '400x400',size_warning=True)
-    arcticle = models.CharField(max_length=255, default='')
     #image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
