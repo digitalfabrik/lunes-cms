@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'easy_thumbnails',
     'image_cropping',
-    'vocgui'
+    'vocgui',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
