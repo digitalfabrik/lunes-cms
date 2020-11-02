@@ -1,5 +1,5 @@
 # About
-This is a Django 2 based visual word trainer for small training sets of technical terms.
+This is a Django 2 based content management system for the vocabulary trainer app Lunes. This is a project powered by the Tür an Tür [Digital Factory](https://tuerantuer.de/digitalfabrik/).
 
 # License
 This project is licensed with the Apache 2.0 License.
@@ -15,6 +15,10 @@ This project is licensed with the Apache 2.0 License.
 7. `python3 vocabulary-trainer migrate`
 8. `python3 vocabulary-trainer createsuperuser`
 9. `python3 vocabulary-trainer runserver`
+
+# Usage
+The API can simply be accessed via the root url or `/api`. </br>
+In order to enter `/docs` successfully, it may be necessary to change the second line of the `index.html` file in `.venv/lib64/python3.9/site-packages/rest_framework_swagger/templates/rest_framework_swagger` from `{% load staticfiles %}` to `{% load static %}`.
 
 # Production Deployment
 1. `adduser vocabulary-trainer`

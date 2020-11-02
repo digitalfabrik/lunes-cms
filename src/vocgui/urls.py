@@ -1,15 +1,23 @@
 """
 Map paths to view functions
 """
-from django.urls import path  # pylint: disable=E0401
+from django.urls import include, path # pylint: disable=E0401
+from rest_framework import routers
+from django.conf.urls import url
+from rest_framework_swagger.views import get_swagger_view
 
 from . import views
 
-urlpatterns = [  # pylint: disable=C0103
-    path('', views.index, name='index'),
-    path('sets', views.api_training_sets, name='sets'),
-    path('set/<int:training_set_id>/documents',
-         views.api_documents, name='documents'),
-    path('report', views.api_report_template, name='report_template'),
-    path('alternative_words/<int:document_id>', views.api_alternative_words, name = 'alternative_words')
+router = routers.DefaultRouter()
+router.register(r'fields', views.FieldsViewSet, 'fields')
+router.register(r'training_set', views.TrainingSetViewSet, 'training_set') 
+router.register(r'documents', views.DocumentViewSet, 'documents')
+router.register(r'alt_words', views.AlternativeWordViewSet, 'alt_words') 
+
+schema_view = get_swagger_view(title='API Docs')
+
+urlpatterns = [
+    path('', views.redirect_view, name='redirect'),
+    path('api/', include(router.urls)),
+    path('docs/', schema_view),
 ]
