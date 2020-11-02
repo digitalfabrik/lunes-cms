@@ -19,7 +19,10 @@ setup(
     install_requires=[
         "Django>=2.2.9",
         "easy-thumbnails",
-        "django-image-cropping"
+        "django-image-cropping",
+        "djangorestframework",
+        "pyyaml",
+        "django-rest-swagger",
     ],
     extras_require={
         "dev": [

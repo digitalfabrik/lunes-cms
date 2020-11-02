@@ -50,7 +50,7 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     word = models.CharField(max_length=255)
-    arcticle = models.CharField(max_length=255, default='')
+    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'), ('die (Plural)', 'die (Plural)')], default='')
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
     cropping = ImageRatioField('image', '400x400',size_warning=True)
@@ -60,7 +60,6 @@ class Document(models.Model):  # pylint: disable=R0903
     training_set = models.ForeignKey(TrainingSet,
                                      on_delete=models.CASCADE,
                                      related_name='documents')
-    video_url = models.URLField(max_length=200, default='', blank=True)
 
     def __str__(self):
         return self.training_set.field.title + " >> " + self.training_set.title + " >> " + self.word

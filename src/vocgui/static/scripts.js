@@ -84,7 +84,6 @@ function render_question(new_document) {
               '<div class="col-xs-12" style="height:30px;"></div>' : '') +
               '<input id="input_word" class="form-control" type="text" placeholder="Wort eingeben" onkeypress="input_keypress(event);">' +
               '<div class="col-xs-12" style="height:30px;"></div>' +
-              ((new_document["fields"]["video_url"]) ? '<a role="button" class="btn btn-secondary" href="' + new_document["fields"]["video_url"] + '" target="_blank">Video</a> ' : '') +
               '<button type="button" class="btn btn-warning" onclick="solve_document();">Lösung</button> ' +
               '<button type="button" class="btn btn-success" onclick="check_current_document();">Überprüfen</button>';
   return html;

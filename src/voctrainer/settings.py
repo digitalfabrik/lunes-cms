@@ -44,8 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'easy_thumbnails',
     'image_cropping',
-    'vocgui'
+    'vocgui',
+    'rest_framework',
+    'rest_framework_swagger'
 ]
+
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
