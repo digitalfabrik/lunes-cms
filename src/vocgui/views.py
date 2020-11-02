@@ -7,12 +7,12 @@ from django.shortcuts import render  # pylint: disable=E0401
 from rest_framework import viewsets
 from django.shortcuts import redirect
 
-from .models import TrainingSet, Document, AlternativeWord, Field
-from .serializers import FieldSerializer, DocumentSerializer, TrainingSetSerializer, AlternativeWordSerializer
+from .models import TrainingSet, Document, AlternativeWord, Discipline
+from .serializers import DisciplineSerializer, DocumentSerializer, TrainingSetSerializer, AlternativeWordSerializer
 
-class FieldsViewSet(viewsets.ModelViewSet):
-    queryset = Field.objects.all()
-    serializer_class = FieldSerializer
+class DisciplineViewSet(viewsets.ModelViewSet):
+    queryset = Discipline.objects.all()
+    serializer_class = DisciplineSerializer
 
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
