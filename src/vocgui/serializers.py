@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
-from .models import Field, TrainingSet, Document, AlternativeWord
+from .models import Discipline, TrainingSet, Document, AlternativeWord
 
-class FieldSerializer(serializers.HyperlinkedModelSerializer):
+class DisciplineSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Field
+        model = Discipline
         fields = ('title', 'description')
 
 class TrainingSetSerializer(serializers.HyperlinkedModelSerializer):
-    field = FieldSerializer()
+    field = DisciplineSerializer()
     class Meta:
         model = TrainingSet
         fields = ('title', 'details', 'field')
