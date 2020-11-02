@@ -4,9 +4,9 @@ Models for the UI
 from django.db import models  # pylint: disable=E0401
 from image_cropping import ImageCropField, ImageRatioField
 
-class Field(models.Model):  # pylint: disable=R0903
+class Discipline(models.Model):  # pylint: disable=R0903
     """
-    Field have a title and contain training sets with the same topic
+    Disciplines for treaining sets. They have a title and contain training sets with the same topic.
     """
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
@@ -28,7 +28,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     """
     title = models.CharField(max_length=255)
     details = models.CharField(max_length=255, blank=True)
-    field = models.ForeignKey(Field,
+    discipline = models.ForeignKey(Discipline,
                                     on_delete=models.CASCADE,
                                     related_name='training_sets')
    
