@@ -8,10 +8,10 @@ class DisciplineSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('title', 'description')
 
 class TrainingSetSerializer(serializers.HyperlinkedModelSerializer):
-    field = DisciplineSerializer()
+    discipline = DisciplineSerializer()
     class Meta:
         model = TrainingSet
-        fields = ('title', 'details', 'field')
+        fields = ('title', 'details', 'discipline')
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     training_set = TrainingSetSerializer()
