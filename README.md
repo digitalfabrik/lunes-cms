@@ -4,6 +4,84 @@ This is a Django 2 based content management system for the vocabulary trainer ap
 # License
 This project is licensed with the Apache 2.0 License.
 
+# API
+## List of disciplines
+List available disciplines for learning.
+### Request
+```http
+GET /api/disciplines/ HTTP/1.1
+Host: vokabeltrainer.tuerantuer.org
+Content-Type: application/json
+```
+### Response
+```javascript
+    {
+        "id": Integer,        // ID of discipline
+        "title": String,      // title of discipline
+        "description": String // description of discipline 
+    },
+    [...]                     // repeats for available disciplines
+]
+```
+
+## List of training set
+List training sets. If discipline ID is provided as a parameter, the list will return only training sets belonging to the discipline.
+### Request
+```http
+GET /api/disciplines/[DISCIPLINE_ID] HTTP/1.1
+Host: vokabeltrainer.tuerantuer.org
+Content-Type: application/json
+```
+### Response
+```javascript
+    {
+        "id": Integer,    // ID of training set
+        "title": String,  // title of discipline
+        "details": String // details about training set 
+    }
+    [...]                 // repeats for available training sets
+]
+```
+## List of documents
+List of available documents. A document is an item to be learned and consists of an image, multiple correct answers, and other details. If training set ID is provided as a parameter, the list will return only documents belonging to the training set.
+### Request
+```http
+GET /api/training_set/[TRAINING_SET_ID] HTTP/1.1
+Host: vokabeltrainer.tuerantuer.org
+Content-Type: application/json
+```
+### Response
+```javascript
+    {
+        "id": Integer,      // ID of training set
+        "word": String,     // primary correct answer
+        "article": String,  // article (german grammer) belonging to the item
+        "image": String,    // URL to image
+        "cropping": String, // Image cropping information (X and Y offset + width and height?)
+        "audio": String,    // URL to audio file
+    },
+    [...]                   // repeats for available documents
+]
+```
+## List of alternative words
+List of alternative correct answers for documents. If document ID is provided as a parameter, the list will return only alternative words belonging to the document.
+### Request
+```http
+GET /api/training_set/[DOCUMENT_ID] HTTP/1.1
+Host: vokabeltrainer.tuerantuer.org
+Content-Type: application/json
+```
+### Response
+```javascript
+    {
+        "alt_word": String,     // alternative correct answer for document
+        "article": String,      // article (german grammer) belonging to the item
+        "document_id": Integer, // ID of document the word belongs to
+    },
+    [...]                       // repeats for available documents
+]
+```
+
 # Development Setup
 0. If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
 1. `git clone git@github.com:digitalfabrik/visual-vocabulary-trainer.git`

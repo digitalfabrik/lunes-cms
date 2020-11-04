@@ -77,6 +77,7 @@ class AlternativeWord(models.Model):
     Contains words for a document
     """
     alt_word = models.CharField(max_length=255)
+    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'), ('die (Plural)', 'die (Plural)')], default='')
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='alternatives')
