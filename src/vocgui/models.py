@@ -27,7 +27,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     Training sets are part of disciplines, have a title and contain words
     """
     title = models.CharField(max_length=255)
-    details = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True)
     discipline = models.ForeignKey(Discipline,
                                     on_delete=models.CASCADE,
                                     related_name='training_sets')
