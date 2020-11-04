@@ -5,20 +5,19 @@ from .models import Discipline, TrainingSet, Document, AlternativeWord
 class DisciplineSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Discipline
-        fields = ('title', 'description')
+        fields = ('id', 'title', 'description')
 
 class TrainingSetSerializer(serializers.HyperlinkedModelSerializer):
     discipline = DisciplineSerializer()
     class Meta:
         model = TrainingSet
-        fields = ('title', 'details', 'discipline')
+        fields = ('id', 'title', 'description')
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     training_set = TrainingSetSerializer()
     class Meta:
         model = Document
-        fields = ('word', 'article', 'image', 'cropping', 'audio', 
-        'creation_date', 'training_set')
+        fields = ('id', 'word', 'article', 'image', 'cropping', 'audio')
 
 class AlternativeWordSerializer(serializers.HyperlinkedModelSerializer):
     document = DocumentSerializer()
