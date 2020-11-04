@@ -24,7 +24,7 @@ class Discipline(models.Model):  # pylint: disable=R0903
 
 class TrainingSet(models.Model):  # pylint: disable=R0903
     """
-    Training sets are part of field, have a title and contain words
+    Training sets are part of disciplines, have a title and contain words
     """
     title = models.CharField(max_length=255)
     details = models.CharField(max_length=255, blank=True)

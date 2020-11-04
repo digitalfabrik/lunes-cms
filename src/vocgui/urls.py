@@ -9,7 +9,7 @@ from rest_framework_swagger.views import get_swagger_view
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'fields', views.DisciplineViewSet, 'fields')
+router.register(r'disciplines', views.DisciplineViewSet, 'disciplines')
 router.register(r'training_set', views.TrainingSetViewSet, 'training_set') 
 router.register(r'documents', views.DocumentViewSet, 'documents')
 router.register(r'alt_words', views.AlternativeWordViewSet, 'alt_words') 
