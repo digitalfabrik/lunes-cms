@@ -15,6 +15,7 @@ Content-Type: application/json
 ```
 ### Response
 ```javascript
+[
     {
         "id": Integer,        // ID of discipline
         "title": String,      // title of discipline
@@ -34,6 +35,7 @@ Content-Type: application/json
 ```
 ### Response
 ```javascript
+[
     {
         "id": Integer,    // ID of training set
         "title": String,  // title of discipline
@@ -52,6 +54,7 @@ Content-Type: application/json
 ```
 ### Response
 ```javascript
+[
     {
         "id": Integer,          // ID of training set
         "word": String,         // primary correct answer
@@ -77,6 +80,7 @@ Content-Type: application/json
 ```
 ### Response
 ```javascript
+[
     {
         "alt_word": String,     // alternative correct answer for document
         "article": String,      // article (german grammer) belonging to the item
