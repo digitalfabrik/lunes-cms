@@ -53,12 +53,16 @@ Content-Type: application/json
 ### Response
 ```javascript
     {
-        "id": Integer,      // ID of training set
-        "word": String,     // primary correct answer
-        "article": String,  // article (german grammer) belonging to the item
-        "image": String,    // URL to image
-        "cropping": String, // Image cropping information (X and Y offset + width and height?)
-        "audio": String,    // URL to audio file
+        "id": Integer,          // ID of training set
+        "word": String,         // primary correct answer
+        "article": String,      // article (german grammer) belonging to the item
+        "image": String,        // URL to image
+        "cropping": String,     // Image cropping information (X and Y offset + width and height?)
+        "audio": String,        // URL to audio file
+        "alternatives": {       // alternative correct answers
+            "alt_word": String, // alternative correct answer for document
+            "article": String,  // article (german grammer) belonging to the item
+        }
     },
     [...]                   // repeats for available documents
 ]
