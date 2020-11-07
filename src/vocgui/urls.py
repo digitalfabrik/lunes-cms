@@ -10,8 +10,8 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'disciplines', views.DisciplineViewSet, 'disciplines')
-router.register(r'training_set', views.TrainingSetViewSet, 'training_set') 
-router.register(r'documents', views.DocumentViewSet, 'documents')
+router.register(r'training_set/(?P<discipline_id>[0-9]+)', views.TrainingSetViewSet, 'training_set') 
+router.register(r'documents/(?P<training_set_id>[0-9]+)', views.DocumentViewSet, 'documents')
 
 schema_view = get_swagger_view(title='API Docs')
 
