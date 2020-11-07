@@ -70,25 +70,6 @@ Content-Type: application/json
     [...]                   // repeats for available documents
 ]
 ```
-## List of alternative words
-List of alternative correct answers for documents. If document ID is provided as a parameter, the list will return only alternative words belonging to the document.
-### Request
-```http
-GET /api/training_set/[DOCUMENT_ID] HTTP/1.1
-Host: vokabeltrainer.tuerantuer.org
-Content-Type: application/json
-```
-### Response
-```javascript
-[
-    {
-        "alt_word": String,     // alternative correct answer for document
-        "article": String,      // article (german grammer) belonging to the item
-        "document_id": Integer, // ID of document the word belongs to
-    },
-    [...]                       // repeats for available documents
-]
-```
 
 # Development Setup
 0. If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
