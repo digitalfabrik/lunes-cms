@@ -12,12 +12,13 @@ class TrainingSetSerializer(serializers.ModelSerializer):
         model = TrainingSet
         fields = ('id', 'title', 'description')
 
-class DocumentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Document
-        fields = ('id', 'word', 'article', 'image', 'cropping', 'audio', 'alternatives')
-
 class AlternativeWordSerializer(serializers.ModelSerializer):
     class Meta:
         model = AlternativeWord
         fields = ('alt_word', 'article')
+
+class DocumentSerializer(serializers.ModelSerializer):
+    alternatives = AlternativeWordSerializer(many=True, read_only=True)
+    class Meta:
+        model = Document
+        fields = ('id', 'word', 'article', 'image', 'cropping', 'audio', 'alternatives')

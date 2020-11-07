@@ -18,10 +18,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
-class AlternativeWordViewSet(viewsets.ModelViewSet):
-    queryset = AlternativeWord.objects.all()
-    serializer_class = AlternativeWordSerializer
-
 class TrainingSetViewSet(viewsets.ModelViewSet):
     queryset = TrainingSet.objects.all()
     serializer_class = TrainingSetSerializer
