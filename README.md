@@ -10,7 +10,7 @@ List available disciplines for learning.
 ### Request
 ```http
 GET /api/disciplines/ HTTP/1.1
-Host: vokabeltrainer.tuerantuer.org
+Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
 ### Response
@@ -30,7 +30,7 @@ List training sets. If discipline ID is provided as a parameter, the list will r
 ### Request
 ```http
 GET /api/disciplines/[DISCIPLINE_ID] HTTP/1.1
-Host: vokabeltrainer.tuerantuer.org
+Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
 ### Response
@@ -49,7 +49,7 @@ List of available documents. A document is an item to be learned and consists of
 ### Request
 ```http
 GET /api/training_set/[TRAINING_SET_ID] HTTP/1.1
-Host: vokabeltrainer.tuerantuer.org
+Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
 ### Response
@@ -73,8 +73,8 @@ Content-Type: application/json
 
 # Development Setup
 0. If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
-1. `git clone git@github.com:digitalfabrik/visual-vocabulary-trainer.git`
-2. `cd visual-vocabulary-trainer`
+1. `git clone git@github.com:digitalfabrik/lunes-cms.git`
+2. `cd vlunes-cms`
 3. `apt install python3-venv`
 4. `python3 -m venv .venv`
 5. `source .venv/bin/activate`
@@ -89,7 +89,7 @@ In order to enter `/docs` successfully, it may be necessary to change the second
 
 # Production Deployment
 1. `adduser vocabulary-trainer`
-2. `git clone git@github.com:digitalfabrik/visual-vocabulary-trainer.git`
+2. `git clone git@github.com:digitalfabrik/lunes-cms.git`
 3. `cd visual-vocabulary-trainer`
 4. `python3 setup.py install`
 5. Change database settings in settings.py, for example to MySQL or Postgresql. After installation, usually find the settings.py in the /usr/lib/python3.X/site-packages/vocabulary-trainer
