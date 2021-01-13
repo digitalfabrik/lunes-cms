@@ -30,7 +30,7 @@ Content-Type: application/json
 List training sets. If discipline ID is provided as a parameter, the list will return only training sets belonging to the discipline.
 ### Request
 ```http
-GET /api/disciplines/[DISCIPLINE_ID] HTTP/1.1
+GET /api/training_set/[DISCIPLINE_ID] HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
