@@ -5,6 +5,7 @@ This is a Django 2 based content management system for the vocabulary trainer ap
 This project is licensed with the Apache 2.0 License.
 
 # API
+Further documentation can be accessed [here](https://lunes.tuerantuer.org/docs/).
 ## List of disciplines
 List available disciplines for learning.
 ### Request
