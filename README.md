@@ -49,7 +49,7 @@ Content-Type: application/json
 List of available documents. A document is an item to be learned and consists of an image, multiple correct answers, and other details. If training set ID is provided as a parameter, the list will return only documents belonging to the training set.
 ### Request
 ```http
-GET /api/training_set/[TRAINING_SET_ID] HTTP/1.1
+GET /api/documents/[TRAINING_SET_ID] HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
