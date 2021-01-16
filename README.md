@@ -21,6 +21,7 @@ Content-Type: application/json
         "id": Integer,        // ID of discipline
         "title": String,      // title of discipline
         "description": String // description of discipline 
+        "icon": String        // URL to image
     },
     [...]                     // repeats for available disciplines
 ]
@@ -41,6 +42,7 @@ Content-Type: application/json
         "id": Integer,    // ID of training set
         "title": String,  // title of discipline
         "details": String // details about training set 
+        "icon": String    // URL to image
     }
     [...]                 // repeats for available training sets
 ]
