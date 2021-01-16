@@ -10,6 +10,7 @@ class Discipline(models.Model):  # pylint: disable=R0903
     """
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
+    icon = models.ImageField(upload_to='images/', blank=True)
 
     def __str__(self):
         return self.title
@@ -31,6 +32,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     discipline = models.ForeignKey(Discipline,
                                     on_delete=models.CASCADE,
                                     related_name='training_sets')
+    icon = models.ImageField(upload_to='images/', blank=True)
    
 
     def __str__(self):
