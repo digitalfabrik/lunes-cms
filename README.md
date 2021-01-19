@@ -18,10 +18,11 @@ Content-Type: application/json
 ```javascript
 [
     {
-        "id": Integer,        // ID of discipline
-        "title": String,      // title of discipline
-        "description": String // description of discipline 
-        "icon": String        // URL to image
+        "id": Integer,                  // ID of discipline
+        "title": String,                // title of discipline
+        "description": String           // description of discipline 
+        "icon": String                  // URL to image
+        "total_training_sets": Integer  // # of training sets
     },
     [...]                     // repeats for available disciplines
 ]
@@ -39,10 +40,11 @@ Content-Type: application/json
 ```javascript
 [
     {
-        "id": Integer,    // ID of training set
-        "title": String,  // title of discipline
-        "details": String // details about training set 
-        "icon": String    // URL to image
+        "id": Integer,             // ID of training set
+        "title": String,           // title of discipline
+        "details": String          // details about training set 
+        "icon": String             // URL to image
+        "total_documents": Integer // # of documents
     }
     [...]                 // repeats for available training sets
 ]
