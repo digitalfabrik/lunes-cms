@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'image_cropping',
     'vocgui',
-    'rest_framework'
+    'rest_framework',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
