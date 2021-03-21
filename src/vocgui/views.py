@@ -33,7 +33,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
 class TrainingSetViewSet(viewsets.ModelViewSet):
     serializer_class = TrainingSetSerializer
-    serializer_class = TrainingSetSerializer
     def get_queryset(self):
         if getattr(self, 'swagger_fake_view', False):
             return TrainingSet.objects.none()
