@@ -21,6 +21,7 @@ class AlternativeWordAdmin(nested_admin.NestedStackedInline):
     search_fields = ['alt_word']
     autocomplete_fields = ['document']
     insert_after = 'autocomplete_fields'
+    extra = 0
 
 class DocumentAdmin(ImageCroppingMixin, nested_admin.NestedModelAdmin):
     search_fields = ['word']
@@ -31,5 +32,3 @@ class DocumentAdmin(ImageCroppingMixin, nested_admin.NestedModelAdmin):
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(TrainingSet, TrainingSetAdmin)
 admin.site.register(Document, DocumentAdmin)
-#admin.site.register(AlternativeWord, AlternativeWordAdmin)
-
