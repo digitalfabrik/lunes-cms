@@ -5,8 +5,6 @@ from django.db import models  # pylint: disable=E0401
 from image_cropping import ImageCropField, ImageRatioField
 
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 class Discipline(models.Model):  # pylint: disable=R0903
     """
     Disciplines for treaining sets. They have a title and contain training sets with the same topic.
