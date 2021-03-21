@@ -21,8 +21,7 @@ setup(
         "easy-thumbnails",
         "django-image-cropping",
         "djangorestframework",
-        "pyyaml",
-        "django-rest-swagger",
+        "pyyaml"
     ],
     extras_require={
         "dev": [
