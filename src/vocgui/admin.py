@@ -10,10 +10,13 @@ Specify autocomplete_fields and search_fields
 """
 class DisciplineAdmin(admin.ModelAdmin):
     search_fields = ['title']
+    ordering = ['title']
+
 
 class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
+    ordering = ['title']
 
 class DocumentAdmin(ImageCroppingMixin, admin.ModelAdmin):
     search_fields = ['word']
