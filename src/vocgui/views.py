@@ -16,6 +16,8 @@ class DisciplineViewSet(viewsets.ModelViewSet):
     serializer_class = DisciplineSerializer
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Discipline.objects.none()
         return Discipline.objects.annotate(
             total_training_sets=Count('training_sets')
         )
@@ -23,13 +25,18 @@ class DisciplineViewSet(viewsets.ModelViewSet):
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Document.objects.none()
         user = self.request.user
         queryset = Document.objects.filter(training_set_id=self.kwargs['training_set_id'])
         return queryset
 
 class TrainingSetViewSet(viewsets.ModelViewSet):
     serializer_class = TrainingSetSerializer
+    serializer_class = TrainingSetSerializer
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return TrainingSet.objects.none()
         user = self.request.user
         queryset = TrainingSet.objects.filter(discipline_id=self.kwargs['discipline_id'])
         queryset = queryset.annotate(total_documents=Count('documents'))
