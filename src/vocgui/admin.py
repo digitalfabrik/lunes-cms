@@ -17,15 +17,17 @@ class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
     ordering = ['title']
+    list_filter = ('discipline', )
 
 class DocumentAdmin(ImageCroppingMixin, admin.ModelAdmin):
     search_fields = ['word']
     autocomplete_fields = ['training_set']
+    list_filter = ('training_set', )
 
 class AlternativeWordAdmin(admin.ModelAdmin):
     search_fields = ['alt_word']
     autocomplete_fields = ['document']
-    
+
 
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(TrainingSet, TrainingSetAdmin)
