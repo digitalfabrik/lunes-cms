@@ -7,7 +7,7 @@ from image_cropping import ImageCroppingMixin
 import nested_admin
 
 """
-Specify autocomplete_fields and search_fields
+Specify autocomplete_fields, search_fields and nested modules
 """
 class DisciplineAdmin(admin.ModelAdmin):
     search_fields = ['title']

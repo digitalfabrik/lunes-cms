@@ -4,6 +4,13 @@ Models for the UI
 from django.db import models  # pylint: disable=E0401
 from image_cropping import ImageCropField, ImageRatioField
 
+class Static:
+    """
+    Module for static and global variables
+    """
+    article_choices = [('der', 'der'), ('das', 'das'),
+                       ('die', 'die'), ('die (Plural)', 'die (Plural)')]
+
 class Discipline(models.Model):  # pylint: disable=R0903
     """
     Disciplines for treaining sets. They have a title and contain training sets with the same topic.
@@ -28,7 +35,7 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'), ('die (Plural)', 'die (Plural)')], default='')
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
     cropping = ImageRatioField('image', '400x400',size_warning=True)
@@ -76,7 +83,7 @@ class AlternativeWord(models.Model):
     Contains words for a document
     """
     alt_word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'), ('die (Plural)', 'die (Plural)')], default='')
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='alternatives')
