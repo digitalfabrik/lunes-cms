@@ -32,9 +32,9 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     description = models.CharField(max_length=255, blank=True)
     discipline = models.ForeignKey(Discipline,
                                     on_delete=models.CASCADE,
-                                    related_name='training_sets')
+                                    related_name='training_sets', verbose_name="Bereichen")
     icon = models.ImageField(upload_to='images/', blank=True)
-   
+
 
     def __str__(self):
         return self.discipline.title + " >> " + self.title
@@ -62,7 +62,7 @@ class Document(models.Model):  # pylint: disable=R0903
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
                                      on_delete=models.CASCADE,
-                                     related_name='documents')
+                                     related_name='documents', verbose_name="Modulen")
 
     def __str__(self):
         return self.training_set.discipline.title + " >> " + self.training_set.title + " >> " + self.word
