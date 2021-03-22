@@ -13,29 +13,29 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='TrainingSet',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('description', models.CharField(blank=True, max_length=255)),
-            ],
-            options={
-                'verbose_name': 'Lektion',
-                'verbose_name_plural': 'Lektionen',
-            },
-        ),
-        migrations.CreateModel(
             name='Document',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('word', models.CharField(blank=True, max_length=255)),
                 ('image', models.FileField(upload_to='images/')),
                 ('creation_date', models.DateTimeField(auto_now_add=True)),
-                ('training_set', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='documents', to='vocgui.TrainingSet')),
             ],
             options={
                 'verbose_name': 'Wort',
                 'verbose_name_plural': 'Wörter',
+            },
+        ),
+        migrations.CreateModel(
+            name='TrainingSet',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=255)),
+                ('description', models.CharField(blank=True, max_length=255)),
+                ('documents', models.ManyToManyField(related_name='training_sets', to='vocgui.Document')),
+            ],
+            options={
+                'verbose_name': 'Lektion',
+                'verbose_name_plural': 'Lektionen',
             },
         ),
     ]

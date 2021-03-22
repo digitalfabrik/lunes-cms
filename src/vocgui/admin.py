@@ -25,7 +25,6 @@ class AlternativeWordAdmin(nested_admin.NestedStackedInline):
 
 class DocumentAdmin(ImageCroppingMixin, nested_admin.NestedModelAdmin):
     search_fields = ['word']
-    autocomplete_fields = ['training_set']
     inlines = [AlternativeWordAdmin]
     
 
