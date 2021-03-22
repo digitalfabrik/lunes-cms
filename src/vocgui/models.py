@@ -24,6 +24,7 @@ class Discipline(models.Model):  # pylint: disable=R0903
         verbose_name = 'Bereich'
         verbose_name_plural = 'Bereiche'
 
+
 class TrainingSet(models.Model):  # pylint: disable=R0903
     """
     Training sets are part of disciplines, have a title and contain words
@@ -31,10 +32,9 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
     discipline = models.ForeignKey(Discipline,
-                                    on_delete=models.CASCADE,
-                                    related_name='training_sets', verbose_name="Bereichen")
+                                   on_delete=models.CASCADE,
+                                   related_name='training_sets', verbose_name="Bereichen")
     icon = models.ImageField(upload_to='images/', blank=True)
-
 
     def __str__(self):
         return self.discipline.title + " >> " + self.title
@@ -53,11 +53,12 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'), ('die (Plural)', 'die (Plural)')], default='')
+    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'),
+                                                        ('die (Plural)', 'die (Plural)')], default='')
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
-    cropping = ImageRatioField('image', '400x400',size_warning=True)
-    #image = models.FileField(upload_to='images/')
+    cropping = ImageRatioField('image', '400x400', size_warning=True)
+    # image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
@@ -75,12 +76,14 @@ class Document(models.Model):  # pylint: disable=R0903
         verbose_name = 'Wort'
         verbose_name_plural = 'Wörter'
 
+
 class AlternativeWord(models.Model):
     """
     Contains words for a document
     """
     alt_word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'), ('die (Plural)', 'die (Plural)')], default='')
+    article = models.CharField(max_length=255, choices=[('der', 'der'), ('das', 'das'), ('die', 'die'),
+                                                        ('die (Plural)', 'die (Plural)')], default='')
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='alternatives')
