@@ -7,7 +7,7 @@ from image_cropping import ImageCropField, ImageRatioField
 
 class Discipline(models.Model):  # pylint: disable=R0903
     """
-    Disciplines for treaining sets. They have a title and contain training sets with the same topic.
+    Disciplines for training sets. They have a title and contain training sets with the same topic.
     """
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
@@ -63,7 +63,7 @@ class Document(models.Model):  # pylint: disable=R0903
     creation_date = models.DateTimeField(auto_now_add=True)
     training_set = models.ForeignKey(TrainingSet,
                                      on_delete=models.CASCADE,
-                                     related_name='documents', verbose_name="Modulen")
+                                     related_name='documents')
 
     def __str__(self):
         return self.training_set.discipline.title + " >> " + self.training_set.title + " >> " + self.word
