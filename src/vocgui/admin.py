@@ -22,7 +22,7 @@ class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
     ordering = ['discipline__title', 'title']
-    list_filter = (DisciplineListFilter,)
+    list_filter = ('discipline',)
 
 
 class DocumentAdmin(ImageCroppingMixin, admin.ModelAdmin):
