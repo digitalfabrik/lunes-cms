@@ -15,6 +15,7 @@ class Discipline(models.Model):  # pylint: disable=R0903
     """
     Disciplines for treaining sets. They have a title and contain training sets with the same topic.
     """
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
     icon = models.ImageField(upload_to='images/', blank=True)
@@ -34,6 +35,7 @@ class Document(models.Model):  # pylint: disable=R0903
     """
     Contains words + images and relates to a training set
     """
+    id = models.AutoField(primary_key=True)
     word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     image = ImageCropField(blank=True, upload_to='images/')
@@ -58,6 +60,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     """
     Training sets are part of disciplines, have a title and contain words
     """
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
     discipline = models.ForeignKey(Discipline,
@@ -82,6 +85,7 @@ class AlternativeWord(models.Model):
     """
     Contains words for a document
     """
+    id = models.AutoField(primary_key=True)
     alt_word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     document = models.ForeignKey(Document,
