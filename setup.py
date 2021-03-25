@@ -24,6 +24,7 @@ setup(
         "pyyaml",
         "django-rest-swagger",
         "django-nested-admin",
+        "django-jazzmin",
     ],
     extras_require={
         "dev": [
