@@ -23,6 +23,8 @@ setup(
         "djangorestframework",
         "pyyaml",
         "drf_yasg"
+        "django-rest-swagger",
+        "django-nested-admin",
     ],
     extras_require={
         "dev": [

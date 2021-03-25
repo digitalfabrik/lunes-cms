@@ -28,7 +28,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
         if getattr(self, 'swagger_fake_view', False):
             return Document.objects.none()
         user = self.request.user
-        queryset = Document.objects.filter(training_set_id=self.kwargs['training_set_id'])
+        queryset = Document.objects.filter(training_sets__id=self.kwargs['training_set_id']).select_related()
         return queryset
 
 class TrainingSetViewSet(viewsets.ModelViewSet):

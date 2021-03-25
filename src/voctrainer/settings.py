@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'vocgui',
     'rest_framework',
     'drf_yasg',
+    'rest_framework_swagger',
+    'nested_admin',
 ]
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
