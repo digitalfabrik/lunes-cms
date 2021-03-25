@@ -24,7 +24,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     def get_queryset(self):
         user = self.request.user
-        queryset = Document.objects.filter(training_set_id=self.kwargs['training_set_id'])
+        queryset = Document.objects.filter(training_sets__id=self.kwargs['training_set_id']).select_related()
         return queryset
 
 class TrainingSetViewSet(viewsets.ModelViewSet):
