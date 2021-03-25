@@ -46,7 +46,7 @@ class Document(models.Model):  # pylint: disable=R0903
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.word
+        return "(" + self.article + ") " + self.word
 
     # pylint: disable=R0903
     class Meta:
@@ -71,7 +71,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
                                      related_name='training_sets')   
 
     def __str__(self):
-        return self.discipline.title + " >> " + self.title
+        return self.title + " (Bereich: " + self.discipline.title + ")"
 
     # pylint: disable=R0903
     class Meta:
@@ -93,7 +93,7 @@ class AlternativeWord(models.Model):
                                  related_name='alternatives')
 
     def __str__(self):
-        return self.document.word + ">> Alternative Wörter: " + self.alt_word
+        return self.alt_word
 
     # pylint: disable=R0903
     class Meta:

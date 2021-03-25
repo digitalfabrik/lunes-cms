@@ -139,10 +139,10 @@ else:
 JAZZMIN_SETTINGS = {
     "site_title": "Lunes CMS",
     "welcome_sign": "Willkommen bei der Vokabelverwaltung von Lunes!",
-    "show_ui_builder": True,
+#    "show_ui_builder": True,
     "site_header": "Lunes",
     "site_logo": "logo.png",
-    "changeform_format": "single",
+    "changeform_format": "collapsible",
 }
 
 JAZZMIN_UI_TWEAKS = {

@@ -6,6 +6,8 @@ from .models import Discipline, TrainingSet, Document, AlternativeWord  # pylint
 from image_cropping import ImageCroppingMixin
 import nested_admin
 
+from .forms import TrainingSetForm
+
 """
 Specify autocomplete_fields, search_fields and nested modules
 """
@@ -15,6 +17,7 @@ class DisciplineAdmin(admin.ModelAdmin):
 class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
+    form = TrainingSetForm
 
 class AlternativeWordAdmin(nested_admin.NestedStackedInline):
     model = AlternativeWord
