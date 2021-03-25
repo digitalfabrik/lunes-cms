@@ -65,8 +65,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     description = models.CharField(max_length=255, blank=True)
     discipline = models.ForeignKey(Discipline,
                                     on_delete=models.CASCADE,
-                                    related_name='training_sets',
-                                    verbose_name='Bereich')
+                                    related_name='training_sets')
     
     icon = models.ImageField(upload_to='images/', blank=True)
     documents = models.ManyToManyField(Document,
