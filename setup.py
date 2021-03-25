@@ -21,7 +21,8 @@ setup(
         "easy-thumbnails",
         "django-image-cropping",
         "djangorestframework",
-        "pyyaml"
+        "pyyaml",
+        "drf_yasg"
     ],
     extras_require={
         "dev": [
