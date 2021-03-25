@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 
-from .models import Discipline, TrainingSet
+from .models import Discipline, TrainingSet, Document
 
 
 class TrainingSetListFilter(admin.SimpleListFilter):
@@ -12,7 +12,7 @@ class TrainingSetListFilter(admin.SimpleListFilter):
     parameter_name = 'Modul'
 
     # Custom attributes
-    related_filter_parameter = 'training_set__discipline__id__exact'
+    related_filter_parameter = 'training_sets__id'
 
     def lookups(self, request, model_admin):
         """
@@ -22,15 +22,17 @@ class TrainingSetListFilter(admin.SimpleListFilter):
        human-readable name for the option that will appear
        in the right sidebar.
        """
+       #queryset = Document.objects.filter(training_sets__id=self.kwargs['training_set_id']).select_related()
         list_of_questions = []
         queryset = TrainingSet.objects.order_by('discipline_id')
         if self.related_filter_parameter in request.GET:
             queryset = queryset.filter(discipline_id=request.GET[self.related_filter_parameter])
         for training_set in queryset:
             list_of_questions.append(
-                (str(training_set.id), training_set.title)
+                (training_set.id, training_set.title)
             )
-        return sorted(list_of_questions, key=lambda tp: tp[1])
+        #return sorted(list_of_questions, key=lambda tp: tp[1])
+        return sorted(list_of_questions)
 
     def queryset(self, request, queryset):
         """
@@ -40,7 +42,8 @@ class TrainingSetListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(training_set_id=self.value())
+             return queryset.filter(training_sets__id=self.value()).select_related()
+            #return queryset.filter(training_sets__id=self.value())
         return queryset
 
 

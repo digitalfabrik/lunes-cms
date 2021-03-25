@@ -24,7 +24,7 @@ class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
     ordering = ['discipline__title', 'title']
-    list_filter = ('discipline',)
+    list_filter = (DisciplineListFilter, )
 
 
 class AlternativeWordAdmin(nested_admin.NestedStackedInline):
@@ -37,8 +37,9 @@ class AlternativeWordAdmin(nested_admin.NestedStackedInline):
 class DocumentAdmin(ImageCroppingMixin, nested_admin.NestedModelAdmin):
     search_fields = ['word']
     inlines = [AlternativeWordAdmin]
-    #ordering = ['training_set__discipline__title', 'training_set__title', 'word']
-    #list_filter = ('training_set__discipline', TrainingSetListFilter)
+    ordering = ['word']
+    list_filter = ['training_sets__title']
+    #list_filter = (TrainingSetListFilter, )
     
 
 admin.site.register(Discipline, DisciplineAdmin)
