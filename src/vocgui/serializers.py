@@ -23,4 +23,4 @@ class DocumentSerializer(serializers.ModelSerializer):
     alternatives = AlternativeWordSerializer(many=True, read_only=True)
     class Meta:
         model = Document
-        fields = ('id', 'word', 'article', 'image', 'cropping', 'audio', 'alternatives')
+        fields = ('id', 'word', 'article', 'image', 'cropping', 'audio', 'word_type', 'alternatives')

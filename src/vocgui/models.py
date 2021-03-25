@@ -8,8 +8,11 @@ class Static:
     """
     Module for static and global variables
     """
-    article_choices = [('der', 'der'), ('das', 'das'),
+    article_choices = [('keiner','keiner'),('der', 'der'), ('das', 'das'),
                        ('die', 'die'), ('die (Plural)', 'die (Plural)')]
+
+    word_type_choices = [('Nomen', 'Nomen'), ('Verb', 'Verb'),
+                       ('Adjektiv', 'Adjektiv')]
 
 class Discipline(models.Model):  # pylint: disable=R0903
     """
@@ -36,6 +39,7 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     id = models.AutoField(primary_key=True)
+    word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='')
     word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     image = ImageCropField(blank=True, upload_to='images/')
