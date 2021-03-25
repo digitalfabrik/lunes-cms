@@ -99,6 +99,13 @@ class DocumentImage(models.Model):
     def __str__(self):
         return self.document.word + ">> Images: " + self.name
 
+    class Meta:
+        """
+        Define user readable name of TrainingSet
+        """
+        verbose_name = 'Bild'
+        verbose_name_plural = 'Bilder'
+
 
 class AlternativeWord(models.Model):
     """

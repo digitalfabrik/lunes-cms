@@ -33,8 +33,8 @@ class DocumentImageSerializer(serializers.ModelSerializer):
 
 class DocumentSerializer(serializers.ModelSerializer):
     alternatives = AlternativeWordSerializer(many=True, read_only=True)
-    document_images = DocumentImageSerializer(many=True, read_only=True)
+    document_image = DocumentImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Document
-        fields = ('id', 'word', 'article', 'audio', 'word_type', 'document_images', 'alternatives')
+        fields = ('id', 'word', 'article', 'audio', 'word_type', 'alternatives', 'document_image')
