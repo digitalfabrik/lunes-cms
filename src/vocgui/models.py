@@ -2,6 +2,7 @@
 Models for the UI
 """
 from django.db import models  # pylint: disable=E0401
+from PIL import Image
 
 
 class Static:
@@ -13,6 +14,8 @@ class Static:
 
     word_type_choices = [('Nomen', 'Nomen'), ('Verb', 'Verb'),
                          ('Adjektiv', 'Adjektiv')]
+
+    img_size = (1024, 768) #(width, height)
 
 
 class Discipline(models.Model):  # pylint: disable=R0903
@@ -95,6 +98,14 @@ class DocumentImage(models.Model):
 
     def __str__(self):
         return self.document.word + ">> Images: " + self.name
+
+    def save(self, *args, **kwargs):
+        super(DocumentImage, self).save(*args, **kwargs)
+        img = Image.open(self.image.path)
+        if img.width > Static.img_size[0] or img.height> Static.img_size[1]:
+            output_size = (Static.img_size[0], Static.img_size[1])
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
     class Meta:
         """
