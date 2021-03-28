@@ -17,7 +17,7 @@ class Static:
 
 class Discipline(models.Model):  # pylint: disable=R0903
     """
-    Disciplines for treaining sets. They have a title and contain training sets with the same topic.
+    Disciplines for training sets. They have a title and contain training sets with the same topic.
     """
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
@@ -44,9 +44,6 @@ class Document(models.Model):  # pylint: disable=R0903
     word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='')
     word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
-    # size is "width x height"
-
-    # image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
 
