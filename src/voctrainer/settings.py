@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'image_cropping',
     'vocgui',
     'rest_framework',
+    'drf_yasg',
     'rest_framework_swagger',
     'nested_admin',
 ]
