@@ -10,6 +10,8 @@ from image_cropping import ImageCroppingMixin
 from .list_filter import DisciplineListFilter, DocumentTraininSetListFilter, DocumentDisciplineListFilter
 import nested_admin
 
+from .forms import TrainingSetForm
+
 """
 Specify autocomplete_fields, search_fields and nested modules
 """
@@ -19,15 +21,14 @@ class DisciplineAdmin(admin.ModelAdmin):
     search_fields = ['title']
     ordering = ['title']
 
-
-
+    
 class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
+    form = TrainingSetForm
     ordering = ['discipline__title', 'title']
     list_filter = (DisciplineListFilter, )
-
-
+    
 
 class AlternativeWordAdmin(nested_admin.NestedStackedInline):
     model = AlternativeWord
