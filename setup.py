@@ -22,7 +22,7 @@ setup(
         "django-image-cropping",
         "djangorestframework",
         "pyyaml",
-        "drf_yasg"
+        "drf_yasg",
         "django-rest-swagger",
         "django-nested-admin",
         "django-jazzmin",
