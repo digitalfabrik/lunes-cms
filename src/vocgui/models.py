@@ -13,7 +13,7 @@ class Static:
 
 class Discipline(models.Model):  # pylint: disable=R0903
     """
-    Disciplines for treaining sets. They have a title and contain training sets with the same topic.
+    Disciplines for training sets. They have a title and contain training sets with the same topic.
     """
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
@@ -40,8 +40,8 @@ class Document(models.Model):  # pylint: disable=R0903
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     image = ImageCropField(blank=True, upload_to='images/')
     # size is "width x height"
-    cropping = ImageRatioField('image', '400x400',size_warning=True)
-    #image = models.FileField(upload_to='images/')
+    cropping = ImageRatioField('image', '400x400', size_warning=True)
+    # image = models.FileField(upload_to='images/')
     audio = models.FileField(upload_to='audio/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
 
@@ -66,6 +66,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     discipline = models.ForeignKey(Discipline,
                                     on_delete=models.CASCADE,
                                     related_name='training_sets')
+    
     icon = models.ImageField(upload_to='images/', blank=True)
     documents = models.ManyToManyField(Document,
                                      related_name='training_sets')   
