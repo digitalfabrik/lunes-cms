@@ -26,6 +26,7 @@ setup(
         "django-rest-swagger",
         "django-nested-admin",
         "django-jazzmin",
+        "django-imagekit",
     ],
     extras_require={
         "dev": [

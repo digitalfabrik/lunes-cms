@@ -3,7 +3,8 @@ Models for the UI
 """
 from django.db import models  # pylint: disable=E0401
 from PIL import Image
-
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 class Static:
     """
@@ -91,7 +92,9 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
 class DocumentImage(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='images/')
+    #image = models.ImageField(upload_to='images/')
+    image = ProcessedImageField(upload_to='images/',
+                                        processors=[ResizeToFill(Static.img_size[0], Static.img_size[1])])
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='document_image')
@@ -99,13 +102,13 @@ class DocumentImage(models.Model):
     def __str__(self):
         return self.document.word + ">> Images: " + self.name
 
-    def save(self, *args, **kwargs):
-        super(DocumentImage, self).save(*args, **kwargs)
-        img = Image.open(self.image.path)
-        if img.width > Static.img_size[0] or img.height> Static.img_size[1]:
-            output_size = (Static.img_size[0], Static.img_size[1])
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+#    def save(self, *args, **kwargs):
+#        super(DocumentImage, self).save(*args, **kwargs)
+#        img = Image.open(self.image.path)
+#        if img.width > Static.img_size[0] or img.height> Static.img_size[1]:
+#            output_size = (Static.img_size[0], Static.img_size[1])
+#            img.thumbnail(output_size)
+#            img.save(self.image.path)
 
     class Meta:
         """
