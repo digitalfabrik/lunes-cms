@@ -26,7 +26,7 @@ class TrainingSetAdmin(admin.ModelAdmin):
     search_fields = ['title']
     autocomplete_fields = ['discipline']
     form = TrainingSetForm
-    ordering = ['discipline__title', 'title']
+    ordering = ['title', 'discipline__title']
     list_filter = (DisciplineListFilter, )
     
 
