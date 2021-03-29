@@ -3,7 +3,7 @@ Models for the UI
 """
 import os
 from pathlib import Path
-
+from .validators import validate_file_extension
 from django.db import models  # pylint: disable=E0401
 from pydub import AudioSegment
 from django.core.files import File
@@ -50,11 +50,12 @@ class Document(models.Model):  # pylint: disable=R0903
     word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='')
     word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
-    audio = models.FileField(upload_to='audio/', blank=True)
+    audio = models.FileField(upload_to='audio/', validators=[validate_file_extension])
     creation_date = models.DateTimeField(auto_now_add=True)
 
+
     @property
-    def converted(self,  content_type='audio/mpeg', bitrate="192k"):
+    def converted(self,  content_type='audio/mpeg'):
         super(Document, self).save()
         file_path = self.audio.path
         original_extension = file_path.split('.')[-1]
