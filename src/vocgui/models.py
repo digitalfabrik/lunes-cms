@@ -55,6 +55,7 @@ class Document(models.Model):  # pylint: disable=R0903
 
     @property
     def converted(self,  content_type='audio/mpeg', bitrate="192k"):
+        super(Document, self).save()
         file_path = self.audio.path
         original_extension = file_path.split('.')[-1]
         mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
