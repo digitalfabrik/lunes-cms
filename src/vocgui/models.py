@@ -67,7 +67,7 @@ class Document(models.Model):  # pylint: disable=R0903
             file=open(new_path, 'rb'),
             name=Path(new_path)
         )
-        converted_audiofile.name = Path(new_path).name
+        converted_audiofile.name = self.word + '.mp3'
         converted_audiofile.content_type = content_type
         converted_audiofile.size = os.path.getsize(new_path)
         return converted_audiofile
