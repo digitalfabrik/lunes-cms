@@ -3,8 +3,6 @@ Models for the UI
 """
 from django.db import models  # pylint: disable=E0401
 from PIL import Image, ImageFilter
-from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFill
 
 class Static:
     """
@@ -95,8 +93,6 @@ class DocumentImage(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='images/')
-    #image = ProcessedImageField(upload_to='images/',
-    #                                    processors=[ResizeToFill(Static.img_size[0], Static.img_size[1])])
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='document_image')
