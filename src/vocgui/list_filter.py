@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from .models import Discipline, TrainingSet, Document
 
+
 class DocumentDisciplineListFilter(admin.SimpleListFilter):
     """
     This filter will always return a subset of the instances in a Model, either filtering by the
@@ -11,7 +12,6 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
     """
 
     title = 'Bereichen'
-
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'Bereiche'
@@ -43,6 +43,7 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
             return queryset.filter(training_sets__discipline_id=self.value())
         return queryset
 
+
 class DocumentTraininSetListFilter(admin.SimpleListFilter):
     """
     This filter will always return a subset of the instances in a Model, either filtering by the
@@ -50,7 +51,6 @@ class DocumentTraininSetListFilter(admin.SimpleListFilter):
     """
 
     title = 'Modulen'
-
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'Modul'
