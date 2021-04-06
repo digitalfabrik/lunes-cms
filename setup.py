@@ -22,9 +22,12 @@ setup(
         "django-image-cropping",
         "djangorestframework",
         "pyyaml",
+        "drf_yasg",
         "django-rest-swagger",
         "pydub",
         "ffmpeg",
+        "django-nested-admin",
+        "django-jazzmin",
     ],
     extras_require={
         "dev": [
