@@ -120,8 +120,8 @@ class DocumentImage(models.Model):
         img_blurr = img_blurr.filter(ImageFilter.BoxBlur(Static.blurr_radius))
 
         if img_cropped.width > Static.img_size[0] or img_cropped.height > Static.img_size[1]:
-            output_size = (Static.img_size[0], Static.img_size[1])
-            img_cropped.thumbnail(output_size)
+            max_size = (Static.img_size[0], Static.img_size[1])
+            img_cropped.thumbnail(max_size)
         
         offset = (((img_blurr.width - img_cropped.width) // 2),
                   ((img_blurr.height - img_cropped.height) // 2))
