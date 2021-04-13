@@ -54,7 +54,8 @@ class Document(models.Model):  # pylint: disable=R0903
     word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='')
     word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
-    audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size])
+    audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size], blank=True,
+    null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -77,7 +78,8 @@ class Document(models.Model):  # pylint: disable=R0903
         return converted_audiofile
 
     def save(self, *args, **kwarg):
-        self.audio = self.converted
+        if self.audio:
+            self.audio = self.converted
         super(Document, self).save(*args, **kwarg)
 
     def __str__(self):
