@@ -122,7 +122,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
 
 class DocumentImage(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to='images/')
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
