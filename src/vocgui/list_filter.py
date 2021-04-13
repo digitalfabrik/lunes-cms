@@ -11,7 +11,7 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = 'Bereichen'
+    title = 'Bereiche'
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'Bereiche'
@@ -50,7 +50,7 @@ class DocumentTraininSetListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = 'Modulen'
+    title = 'Module'
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'Modul'
@@ -89,7 +89,7 @@ class DisciplineListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = 'Bereichen'
+    title = 'Bereiche'
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'Bereich'
@@ -122,18 +122,3 @@ class DisciplineListFilter(admin.SimpleListFilter):
         if self.value():
             return queryset.filter(discipline_id=self.value())
         return queryset
-
-    def value(self):
-        """
-        Overriding this method will allow us to always have a default value.
-        """
-        value = super(DisciplineListFilter, self).value()
-        if value is None:
-            if self.default_value is None:
-                # If there is at least one Discipline, return the first by name. Otherwise, None.
-                first_discipline = Discipline.objects.order_by('title').first()
-                value = None if first_discipline is None else first_discipline.id
-                self.default_value = value
-            else:
-                value = self.default_value
-        return str(value)
