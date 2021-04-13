@@ -5,9 +5,9 @@ import os
 from pathlib import Path
 from .validators import validate_file_extension, validate_file_size
 from django.db import models  # pylint: disable=E0401
+from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
-
 
 class Static:
     """
@@ -18,6 +18,10 @@ class Static:
 
     word_type_choices = [('Nomen', 'Nomen'), ('Verb', 'Verb'),
                          ('Adjektiv', 'Adjektiv')]
+    
+    blurr_radius = 30 # number of pixles used for box blurr
+
+    img_size = (1024, 768) #(width, height)
 
 
 class Discipline(models.Model):  # pylint: disable=R0903
@@ -121,9 +125,45 @@ class DocumentImage(models.Model):
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='document_image')
+    def save_original_img(self):
+        """
+        Function to save rough image with '_original' extension
+        """
+        name_elements = self.image.path.split('.')
+        for elem in name_elements:
+            if elem != name_elements[-1]:
+                new_path = elem + '_'
+        new_path = new_path + 'original.' + name_elements[-1]
+        img = Image.open(self.image.path)
+        img.save(new_path)
 
+    def crop_img(self):
+        """
+        Function that crops the image and pastes it into a blurred background
+        image
+        """
+        img_blurr = Image.open(self.image.path)
+        img_cropped = Image.open(self.image.path)
+        
+        img_blurr = img_blurr.resize((Static.img_size[0], Static.img_size[1]))
+        img_blurr = img_blurr.filter(ImageFilter.BoxBlur(Static.blurr_radius))
+
+        if img_cropped.width > Static.img_size[0] or img_cropped.height > Static.img_size[1]:
+            max_size = (Static.img_size[0], Static.img_size[1])
+            img_cropped.thumbnail(max_size)
+        
+        offset = (((img_blurr.width - img_cropped.width) // 2),
+                  ((img_blurr.height - img_cropped.height) // 2))
+        img_blurr.paste(img_cropped, offset)
+        img_blurr.save(self.image.path)
+    
     def __str__(self):
         return self.document.word + ">> Images: " + self.name
+
+    def save(self, *args, **kwargs):
+        super(DocumentImage, self).save(*args, **kwargs)
+        self.save_original_img()
+        self.crop_img()
 
     class Meta:
         """
