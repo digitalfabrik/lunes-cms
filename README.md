@@ -5,7 +5,7 @@ This is a Django 2 based content management system for the vocabulary trainer ap
 This project is licensed with the Apache 2.0 License.
 
 # API
-Further documentation can be accessed [here](https://lunes.tuerantuer.org/docs/).
+Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/).
 ## List of disciplines
 List available disciplines for learning.
 ### Request
@@ -83,20 +83,26 @@ checking out [Django's getting started guide](https://www.djangoproject.com/star
 Here's how to get the site running on your machine.
 
 0. Get into a Unix-like environment
-  - If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
-  - If you're already on Linux/Mac, no action needed.
+    - If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
+    - If you're already on Linux/Mac, no action needed.
 1. Clone the repository. `git clone git@github.com:digitalfabrik/lunes-cms.git`
 2. `cd lunes-cms`
 3. Set up virtual environment of choice. For example:
-  - `apt install python3-venv` (in linux)
-  - `python3 -m venv .venv`
-  - `source .venv/bin/activate`
+    - `apt install python3-venv` (in linux)
+    - `python3 -m venv .venv`
+    - `source .venv/bin/activate`
 4. Install project dependencies: `python3 setup.py develop`
 5. Set up Django and run the development server!
-  - `cd src`
-  - `python3 vocabulary-trainer migrate`
-  - `python3 vocabulary-trainer createsuperuser`
-  - `python3 vocabulary-trainer runserver`
+    - `cd src`
+    - `python3 vocabulary-trainer migrate`
+    - `python3 vocabulary-trainer createsuperuser`
+    - `python3 vocabulary-trainer runserver`
+
+Now that you've gotten everything set up, to run the development server in
+the future, all you'll need to do is activate your virtual environment
+(e.g. via `source .venv/bin/activate` if you use the instructions above, or
+`pipenv shell` if you're using pipenv) and call `runserver` like in the
+last command above.
 
 # Usage
 The API can simply be accessed via the root url or `/api`.
