@@ -31,9 +31,9 @@ class Discipline(models.Model):  # pylint: disable=R0903
     Disciplines for training sets. They have a title and contain training sets with the same topic.
     """
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True)
-    icon = models.ImageField(upload_to='images/', blank=True)
+    title = models.CharField(max_length=255, verbose_name=_('Bereichsname'))
+    description = models.CharField(max_length=255, blank=True, verbose_name=_('Beschreibung'))
+    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('Icon'))
 
     def __str__(self):
         return self.title
@@ -52,11 +52,12 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     id = models.AutoField(primary_key=True)
-    word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='')
-    word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=Static.article_choices, default='')
+    word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='',
+                                 verbose_name=_('Wortart'))
+    word = models.CharField(max_length=255, verbose_name=_('Wort'))
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('Artikel'))
     audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size], blank=True,
-                             null=True)
+                             null=True, verbose_name=_('Audio'))
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -100,12 +101,12 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     Training sets are part of disciplines, have a title and contain words
     """
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True)
+    title = models.CharField(max_length=255, verbose_name=_('Modulname'))
+    description = models.CharField(max_length=255, blank=True, verbose_name=_('Beschreibung'))
     discipline = models.ForeignKey(Discipline,
                                    on_delete=models.CASCADE,
                                    related_name='training_sets')
-    icon = models.ImageField(upload_to='images/', blank=True)
+    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('Icon'))
     documents = models.ManyToManyField(Document,
                                        related_name='training_sets')
 
