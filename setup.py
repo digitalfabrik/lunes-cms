@@ -28,6 +28,7 @@ setup(
         "ffmpeg",
         "django-nested-admin",
         "django-jazzmin",
+        "gettext",
     ],
     extras_require={
         "dev": [

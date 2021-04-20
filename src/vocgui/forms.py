@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
+from django.utils.translation import ugettext as _
 
 from .models import Document, TrainingSet, Discipline
 
@@ -16,7 +17,7 @@ class TrainingSetForm(forms.ModelForm):
     documents = forms.ModelMultipleChoiceField(
         queryset=Document.objects.all(),
         widget=FilteredSelectMultiple(
-            verbose_name=('Wörter'),
+            verbose_name=(_('Wörter')),
             is_stacked=False
         )
     )

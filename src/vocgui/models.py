@@ -8,6 +8,8 @@ from django.db import models  # pylint: disable=E0401
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
+from django.utils.translation import ugettext as _
+
 
 class Static:
     """
@@ -18,10 +20,10 @@ class Static:
 
     word_type_choices = [('Nomen', 'Nomen'), ('Verb', 'Verb'),
                          ('Adjektiv', 'Adjektiv')]
-    
-    blurr_radius = 30 # number of pixles used for box blurr
 
-    img_size = (1024, 768) #(width, height)
+    blurr_radius = 30  # number of pixles used for box blurr
+
+    img_size = (1024, 768)  # (width, height)
 
 
 class Discipline(models.Model):  # pylint: disable=R0903
@@ -41,9 +43,8 @@ class Discipline(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of Field
         """
-        verbose_name = 'Bereich'
-        verbose_name_plural = 'Bereiche'
-
+        verbose_name = _('Bereich')
+        verbose_name_plural = _('Bereiche')
 
 
 class Document(models.Model):  # pylint: disable=R0903
@@ -55,11 +56,11 @@ class Document(models.Model):  # pylint: disable=R0903
     word = models.CharField(max_length=255)
     article = models.CharField(max_length=255, choices=Static.article_choices, default='')
     audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size], blank=True,
-    null=True)
+                             null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @property
-    def converted(self,  content_type='audio/mpeg'):
+    def converted(self, content_type='audio/mpeg'):
         super(Document, self).save()
         file_path = self.audio.path
         original_extension = file_path.split('.')[-1]
@@ -90,8 +91,8 @@ class Document(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of Document
         """
-        verbose_name = 'Wort'
-        verbose_name_plural = 'Wörter'
+        verbose_name = _('Wort')
+        verbose_name_plural = _('Wörter')
 
 
 class TrainingSet(models.Model):  # pylint: disable=R0903
@@ -116,8 +117,8 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of TrainingSet
         """
-        verbose_name = 'Modul'
-        verbose_name_plural = 'Module'
+        verbose_name = _('Modul')
+        verbose_name_plural = _('Module')
 
 
 class DocumentImage(models.Model):
@@ -127,6 +128,7 @@ class DocumentImage(models.Model):
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='document_image')
+
     def save_original_img(self):
         """
         Function to save rough image with '_original' extension
@@ -146,19 +148,19 @@ class DocumentImage(models.Model):
         """
         img_blurr = Image.open(self.image.path)
         img_cropped = Image.open(self.image.path)
-        
+
         img_blurr = img_blurr.resize((Static.img_size[0], Static.img_size[1]))
         img_blurr = img_blurr.filter(ImageFilter.BoxBlur(Static.blurr_radius))
 
         if img_cropped.width > Static.img_size[0] or img_cropped.height > Static.img_size[1]:
             max_size = (Static.img_size[0], Static.img_size[1])
             img_cropped.thumbnail(max_size)
-        
+
         offset = (((img_blurr.width - img_cropped.width) // 2),
                   ((img_blurr.height - img_cropped.height) // 2))
         img_blurr.paste(img_cropped, offset)
         img_blurr.save(self.image.path)
-    
+
     def __str__(self):
         return self.document.word + ">> Images: " + self.name
 
@@ -171,8 +173,8 @@ class DocumentImage(models.Model):
         """
         Define user readable name of TrainingSet
         """
-        verbose_name = 'Bild'
-        verbose_name_plural = 'Bilder'
+        verbose_name = _('Bild')
+        verbose_name_plural = _('Bilder')
 
 
 class AlternativeWord(models.Model):
@@ -194,5 +196,5 @@ class AlternativeWord(models.Model):
         """
         Define user readable name of Document
         """
-        verbose_name = 'Alternatives Wort'
-        verbose_name_plural = 'Alternative Wörter'
+        verbose_name = _('Alternatives Wort')
+        verbose_name_plural = _('Alternative Wörter')
