@@ -77,20 +77,31 @@ Content-Type: application/json
 ```
 
 # Development Setup
-0. If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
-1. `git clone git@github.com:digitalfabrik/lunes-cms.git`
+This project runs on Django – if you're new to Django it may be worth
+checking out [Django's getting started guide](https://www.djangoproject.com/start/).
+
+Here's how to get the site running on your machine.
+
+0. Get into a Unix-like environment
+  - If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
+  - If you're already on Linux/Mac, no action needed.
+1. Clone the repository. `git clone git@github.com:digitalfabrik/lunes-cms.git`
 2. `cd lunes-cms`
-3. `apt install python3-venv`
-4. `python3 -m venv .venv`
-5. `source .venv/bin/activate`
-6. `python3 setup.py develop`
-7. `python3 vocabulary-trainer migrate`
-8. `python3 vocabulary-trainer createsuperuser`
-9. `python3 vocabulary-trainer runserver`
+3. Set up virtual environment of choice. For example:
+  - `apt install python3-venv` (in linux)
+  - `python3 -m venv .venv`
+  - `source .venv/bin/activate`
+4. Install project dependencies: `python3 setup.py develop`
+5. Set up Django and run the development server!
+  - `cd src`
+  - `python3 vocabulary-trainer migrate`
+  - `python3 vocabulary-trainer createsuperuser`
+  - `python3 vocabulary-trainer runserver`
 
 # Usage
-The API can simply be accessed via the root url or `/api`. </br>
-In order to enter `/docs` successfully, it may be necessary to change the second line of the `index.html` file in `.venv/lib64/python3.9/site-packages/rest_framework_swagger/templates/rest_framework_swagger` from `{% load staticfiles %}` to `{% load static %}`.
+The API can simply be accessed via the root url or `/api`.
+
+In order to enter `/redoc/` successfully, it may be necessary to change the second line of the `index.html` file in `.venv/lib64/python3.9/site-packages/rest_framework_swagger/templates/rest_framework_swagger` from `{% load staticfiles %}` to `{% load static %}`. (Note: as of Apr 2021, this doesn't seem to be needed.)
 
 # Production Deployment
 1. `adduser vocabulary-trainer`
