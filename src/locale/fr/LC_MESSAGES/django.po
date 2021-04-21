@@ -1,0 +1,108 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-21 10:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/vocgui/forms.py:20 src/vocgui/models.py:96
+msgid "Wörter"
+msgstr "mots"
+
+#: src/vocgui/list_filter.py:16 src/vocgui/list_filter.py:19
+#: src/vocgui/list_filter.py:94 src/vocgui/models.py:47
+msgid "Bereiche"
+msgstr "secteurs"
+
+#: src/vocgui/list_filter.py:55 src/vocgui/models.py:122
+msgid "Module"
+msgstr "modules"
+
+#: src/vocgui/list_filter.py:58 src/vocgui/models.py:121
+msgid "Modul"
+msgstr "module"
+
+#: src/vocgui/list_filter.py:97 src/vocgui/models.py:46
+msgid "Bereich"
+msgstr "secteur"
+
+#: src/vocgui/models.py:34
+msgid "Bereichsname"
+msgstr "nom du module"
+
+#: src/vocgui/models.py:35 src/vocgui/models.py:105
+msgid "Beschreibung"
+msgstr "description"
+
+#: src/vocgui/models.py:36 src/vocgui/models.py:109
+msgid "Icon"
+msgstr "icône"
+
+#: src/vocgui/models.py:56
+msgid "Wortart"
+msgstr "type de mot"
+
+#: src/vocgui/models.py:57 src/vocgui/models.py:95
+msgid "Wort"
+msgstr "mot"
+
+#: src/vocgui/models.py:58
+msgid "Artikel"
+msgstr "articleaud"
+
+#: src/vocgui/models.py:60
+msgid "Audio"
+msgstr "audio"
+
+#: src/vocgui/models.py:104
+msgid "Modulname"
+msgstr "nom du module"
+
+#: src/vocgui/models.py:177
+msgid "Bild"
+msgstr "photo"
+
+#: src/vocgui/models.py:178
+msgid "Bilder"
+msgstr "photos"
+
+#: src/vocgui/models.py:200
+msgid "Alternatives Wort"
+msgstr "mot alternatif"
+
+#: src/vocgui/models.py:201
+msgid "Alternative Wörter"
+msgstr "mots alternatives"
+
+#: src/vocgui/validators.py:10
+msgid "Unerlaubtes Dateiformat! Erlaubt: .mp3 .aac .wav .m4a .wma .ogg"
+msgstr "Type de média non reconnu! Utilisez: .mp3 .aac .wav .m4a .wma .ogg"
+
+#: src/vocgui/validators.py:16
+msgid "Datei zu groß! Maximal 5 MB"
+msgstr "Fishier trop grand! Max 5 MB "
+
+#: src/voctrainer/settings.py:118
+msgid "German"
+msgstr "allemand"
+
+#: src/voctrainer/settings.py:119
+msgid "English"
+msgstr "anglais"
+
+#: src/voctrainer/settings.py:120
+msgid "French"
+msgstr "français"

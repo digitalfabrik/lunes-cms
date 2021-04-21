@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,9 +43,10 @@ INSTALLED_APPS = [
     'nested_admin',
     'pydub',
     'ffmpeg',
+    'gettext',
 ]
 
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'voctrainer.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -89,7 +88,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -109,18 +107,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = 'fr-fr'
 
 LANGUAGES = [
     ('de', _('German')),
     ('en', _('English')),
+    ('fr', _('French')),
 ]
 
 TIME_ZONE = 'UTC'
@@ -130,7 +128,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -145,11 +142,11 @@ if DEBUG:
 else:
     MEDIA_ROOT = '/var/www/html/media/'
 
-#UI/UX
+# UI/UX
 JAZZMIN_SETTINGS = {
     "site_title": "Lunes CMS",
     "welcome_sign": "Willkommen bei der Vokabelverwaltung von Lunes!",
-#    "show_ui_builder": True,
+    #    "show_ui_builder": True,
     "site_header": "Lunes",
     "site_logo": "logo.png",
     "changeform_format": "collapsible",
