@@ -72,7 +72,7 @@ Content-Type: application/json
                 "article": String   //Article of alternative word
             },
             [...]   // repeats for available alternatives
-        ]
+        ],
         "document_image": [
             {
                 "id": Integer,  //image id
