@@ -141,7 +141,7 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Willkommen bei der Vokabelverwaltung von Lunes!",
 #    "show_ui_builder": True,
     "site_header": "Lunes",
-    "site_logo": "logo.png",
+    "site_logo": "images/logo.png",
     "changeform_format": "collapsible",
 }
 

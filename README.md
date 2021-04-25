@@ -5,7 +5,7 @@ This is a Django 2 based content management system for the vocabulary trainer ap
 This project is licensed with the Apache 2.0 License.
 
 # API
-Further documentation can be accessed [here](https://lunes.tuerantuer.org/docs/).
+Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/).
 ## List of disciplines
 List available disciplines for learning.
 ### Request
@@ -20,11 +20,11 @@ Content-Type: application/json
     {
         "id": Integer,                  // ID of discipline
         "title": String,                // title of discipline
-        "description": String           // description of discipline 
-        "icon": String                  // URL to image
+        "description": String,          // description of discipline 
+        "icon": String,                 // URL to image
         "total_training_sets": Integer  // # of training sets
     },
-    [...]                     // repeats for available disciplines
+    [...]   // repeats for available disciplines
 ]
 ```
 
@@ -42,11 +42,11 @@ Content-Type: application/json
     {
         "id": Integer,             // ID of training set
         "title": String,           // title of discipline
-        "details": String          // details about training set 
-        "icon": String             // URL to image
+        "details": String,         // details about training set 
+        "icon": String,            // URL to image
         "total_documents": Integer // # of documents
     }
-    [...]                 // repeats for available training sets
+    [...]   // repeats for available training sets
 ]
 ```
 ## List of documents
@@ -64,33 +64,60 @@ Content-Type: application/json
         "id": Integer,          // ID of training set
         "word": String,         // primary correct answer
         "article": String,      // article (german grammer) belonging to the item
-        "image": String,        // URL to image
-        "cropping": String,     // Image cropping information (X and Y offset + width and height?)
-        "audio": String,        // URL to audio file
-        "alternatives": {       // alternative correct answers
-            "alt_word": String, // alternative correct answer for document
-            "article": String,  // article (german grammer) belonging to the item
-        }
+        "audio": String,        // URL to (converted) audio file
+        "word_type": String,    // Word type of document: Nomen, Verb, Adjektiv
+        "alternatives": [
+            {
+                "alt_word": String, //Alternative word
+                "article": String   //Article of alternative word
+            },
+            [...]   // repeats for available alternatives
+        ]
+        "document_image": [
+            {
+                "id": Integer,  //image id
+                "image": String //URL to image
+            },
+            [...]   // repeats for available images
+        ]
     },
-    [...]                   // repeats for available documents
+    [...]   // repeats for available documents
 ]
 ```
 
 # Development Setup
-0. If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
-1. `git clone git@github.com:digitalfabrik/lunes-cms.git`
-2. `cd lunes-cms`
-3. `apt install python3-venv`
-4. `python3 -m venv .venv`
-5. `source .venv/bin/activate`
-6. `python3 setup.py develop`
-7. `python3 vocabulary-trainer migrate`
-8. `python3 vocabulary-trainer createsuperuser`
-9. `python3 vocabulary-trainer runserver`
+This project runs on Django – if you're new to Django it may be worth
+checking out [Django's getting started guide](https://www.djangoproject.com/start/).
+
+Here's how to get the site running on your machine.
+
+1. Get into a Unix-like environment
+    - If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
+    - If you're already on Linux/Mac, no action needed.
+2. Clone the repository: `git clone git@github.com:digitalfabrik/lunes-cms.git`
+3. Move into the direcotry: `cd lunes-cms`
+4. Set up virtual environment of choice. For example (using Debian):
+    - `apt install python3-venv`
+    - `python3 -m venv .venv`
+    - `source .venv/bin/activate`
+5. Install project dependencies: `python3 setup.py develop`
+6. Install system dependencies: `cat requirements.system | xargs sudo apt-get install`
+7. Set up Django and run the development server:
+    - `vocabulary-trainer migrate`
+    - `vocabulary-trainer createsuperuser`
+    - `vocabulary-trainer runserver`
+
+Now that you've gotten everything set up, to run the development server in
+the future, all you'll need to do is activate your virtual environment
+(e.g. via `source .venv/bin/activate` if you use the instructions above, or
+`pipenv shell` if you're using pipenv) and call `runserver` like in the
+last command above.
 
 # Usage
-The API can simply be accessed via the root url or `/api`. </br>
-In order to enter `/docs` successfully, it may be necessary to change the second line of the `index.html` file in `.venv/lib64/python3.9/site-packages/rest_framework_swagger/templates/rest_framework_swagger` from `{% load staticfiles %}` to `{% load static %}`.
+The API can simply be accessed via the root url or `/api`.
+
+Further Documentation can be found by accessing `/redoc` or `/swagger`.
+
 
 # Production Deployment
 1. `adduser vocabulary-trainer`
