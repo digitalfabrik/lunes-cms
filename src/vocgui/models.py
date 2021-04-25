@@ -8,7 +8,7 @@ from django.db import models  # pylint: disable=E0401
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class Static:

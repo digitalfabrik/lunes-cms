@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -111,13 +111,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
 
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = 'de-de'
 
 LANGUAGES = [
-    ('de', _('German')),
     ('en', _('English')),
+    ('de', _('German')),
     ('fr', _('French')),
 ]
 
@@ -150,6 +152,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "Lunes",
     "site_logo": "logo.png",
     "changeform_format": "collapsible",
+    "language_chooser": True,
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -181,5 +184,7 @@ JAZZMIN_UI_TWEAKS = {
         "warning": "btn-warning",
         "danger": "btn-danger",
         "success": "btn-success"
-    }
+    },
+
+
 }
