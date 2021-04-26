@@ -7,7 +7,7 @@ from django.contrib import admin  # pylint: disable=E0401
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage  # pylint: disable=E0401
 from image_cropping import ImageCroppingMixin
 
-from .list_filter import DisciplineListFilter, DocumentTraininSetListFilter, DocumentDisciplineListFilter
+from .list_filter import DisciplineListFilter, DocumentTrainingSetListFilter, DocumentDisciplineListFilter
 import nested_admin
 
 from .forms import TrainingSetForm
@@ -50,7 +50,7 @@ class DocumentAdmin(nested_admin.NestedModelAdmin):
     search_fields = ['word']
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ['word']
-    list_filter = (DocumentTraininSetListFilter, DocumentDisciplineListFilter, )
+    list_filter = (DocumentTrainingSetListFilter, DocumentDisciplineListFilter, )
 
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(TrainingSet, TrainingSetAdmin)

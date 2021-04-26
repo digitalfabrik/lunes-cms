@@ -115,7 +115,7 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
     ('en', _('English')),

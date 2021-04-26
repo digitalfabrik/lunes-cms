@@ -4,5 +4,5 @@ from django.utils.translation import ugettext_lazy as _
 
 class VocguiConfig(AppConfig):
     name = 'vocgui'
-    verbose_name = _('Vokabelverwaltung')
+    verbose_name = _('vocabulary management')
 

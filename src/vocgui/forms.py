@@ -13,12 +13,12 @@ class TrainingSetForm(forms.ModelForm):
 
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
-    discipline = forms.ModelChoiceField(queryset=Discipline.objects.all(), label=_('Bereich'))
+    discipline = forms.ModelChoiceField(queryset=Discipline.objects.all(), label=_('discipline'))
     documents = forms.ModelMultipleChoiceField(
         queryset=Document.objects.all(),
         widget=FilteredSelectMultiple(
-            verbose_name=(_('Wörter')),
+            verbose_name=(_('vocabulary')),
             is_stacked=False
         ),
-        label=_('Vokabeln')
+        label=_('vocabulary')
     )

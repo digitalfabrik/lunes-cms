@@ -31,9 +31,9 @@ class Discipline(models.Model):  # pylint: disable=R0903
     Disciplines for training sets. They have a title and contain training sets with the same topic.
     """
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255, verbose_name=_('Bereichsname'))
-    description = models.CharField(max_length=255, blank=True, verbose_name=_('Beschreibung'))
-    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('Icon'))
+    title = models.CharField(max_length=255, verbose_name=_('discipline'))
+    description = models.CharField(max_length=255, blank=True, verbose_name=_('description'))
+    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('icon'))
 
     def __str__(self):
         return self.title
@@ -43,8 +43,8 @@ class Discipline(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of Field
         """
-        verbose_name = _('Bereich')
-        verbose_name_plural = _('Bereiche')
+        verbose_name = _('discipline')
+        verbose_name_plural = _('discipline')
 
 
 class Document(models.Model):  # pylint: disable=R0903
@@ -53,11 +53,11 @@ class Document(models.Model):  # pylint: disable=R0903
     """
     id = models.AutoField(primary_key=True)
     word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='',
-                                 verbose_name=_('Wortart'))
-    word = models.CharField(max_length=255, verbose_name=_('Wort'))
-    article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('Artikel'))
+                                 verbose_name=_('word type'))
+    word = models.CharField(max_length=255, verbose_name=_('word'))
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('article'))
     audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size], blank=True,
-                             null=True, verbose_name=_('Audio'))
+                             null=True, verbose_name=_('audio'))
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -92,8 +92,8 @@ class Document(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of Document
         """
-        verbose_name = _('Wort')
-        verbose_name_plural = _('Wörter')
+        verbose_name = _('vocabulary')
+        verbose_name_plural = _('vocabulary')
 
 
 class TrainingSet(models.Model):  # pylint: disable=R0903
@@ -101,25 +101,25 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     Training sets are part of disciplines, have a title and contain words
     """
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255, verbose_name=_('Modulname'))
-    description = models.CharField(max_length=255, blank=True, verbose_name=_('Beschreibung'))
+    title = models.CharField(max_length=255, verbose_name=_('training set'))
+    description = models.CharField(max_length=255, blank=True, verbose_name=_('description'))
     discipline = models.ForeignKey(Discipline,
                                    on_delete=models.CASCADE,
                                    related_name='training_sets')
-    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('Icon'))
+    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('icon'))
     documents = models.ManyToManyField(Document,
                                        related_name='training_sets')
 
     def __str__(self):
-        return self.title + " (Bereich: " + self.discipline.title + ")"
+        return self.title + " (_('training set'): " + self.discipline.title + ")"
 
     # pylint: disable=R0903
     class Meta:
         """
         Define user readable name of TrainingSet
         """
-        verbose_name = _('Modul')
-        verbose_name_plural = _('Module')
+        verbose_name = _('training set')
+        verbose_name_plural = _('training sets')
 
 
 class DocumentImage(models.Model):
@@ -174,8 +174,8 @@ class DocumentImage(models.Model):
         """
         Define user readable name of TrainingSet
         """
-        verbose_name = _('Bild')
-        verbose_name_plural = _('Bilder')
+        verbose_name = _('image')
+        verbose_name_plural = _('images')
 
 
 class AlternativeWord(models.Model):
@@ -183,8 +183,8 @@ class AlternativeWord(models.Model):
     Contains words for a document
     """
     id = models.AutoField(primary_key=True)
-    alt_word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=Static.article_choices, default='')
+    alt_word = models.CharField(max_length=255, verbose_name=_('alternative word'))
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('article'))
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='alternatives')
@@ -197,5 +197,5 @@ class AlternativeWord(models.Model):
         """
         Define user readable name of Document
         """
-        verbose_name = _('Alternatives Wort')
-        verbose_name_plural = _('Alternative Wörter')
+        verbose_name = _('alternative word')
+        verbose_name_plural = _('alternative words')
