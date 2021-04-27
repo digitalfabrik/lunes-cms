@@ -25,10 +25,8 @@ setup(
         "drf_yasg",
         "django-rest-swagger",
         "pydub",
-        "ffmpeg",
         "django-nested-admin",
         "django-jazzmin",
-        "gettext",
     ],
     extras_require={
         "dev": [
