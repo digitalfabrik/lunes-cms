@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'nested_admin',
     'pydub',
-    'ffmpeg',
-    'gettext',
 ]
 
 REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
