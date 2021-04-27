@@ -111,7 +111,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
                                        related_name='training_sets')
 
     def __str__(self):
-        return self.title + " (_('training set'): " + self.discipline.title + ")"
+        return self.title + " (" + _('training set') + ": " + self.discipline.title + ")"
 
     # pylint: disable=R0903
     class Meta:
