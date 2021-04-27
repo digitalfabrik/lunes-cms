@@ -1,0 +1,107 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-26 07:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/vocgui/apps.py:7
+msgid "vocabulary management"
+msgstr "gestion du vocabulaire"
+
+#: src/vocgui/forms.py:16 src/vocgui/list_filter.py:97 src/vocgui/models.py:34
+#: src/vocgui/models.py:46 src/vocgui/models.py:47
+msgid "discipline"
+msgstr "secteur"
+
+#: src/vocgui/forms.py:20 src/vocgui/forms.py:23 src/vocgui/models.py:95
+#: src/vocgui/models.py:96
+msgid "vocabulary"
+msgstr "vocabulaire"
+
+#: src/vocgui/list_filter.py:16 src/vocgui/list_filter.py:19
+#: src/vocgui/list_filter.py:94
+msgid "disciplines"
+msgstr "secteurs"
+
+#: src/vocgui/list_filter.py:55 src/vocgui/models.py:122
+msgid "training sets"
+msgstr "modules"
+
+#: src/vocgui/list_filter.py:58 src/vocgui/models.py:104
+#: src/vocgui/models.py:121
+msgid "training set"
+msgstr "module"
+
+#: src/vocgui/models.py:35 src/vocgui/models.py:105
+msgid "description"
+msgstr "description"
+
+#: src/vocgui/models.py:36 src/vocgui/models.py:109
+msgid "icon"
+msgstr "icône"
+
+#: src/vocgui/models.py:56
+msgid "word type"
+msgstr "type de mot"
+
+#: src/vocgui/models.py:57
+msgid "word"
+msgstr "mot"
+
+#: src/vocgui/models.py:58 src/vocgui/models.py:187
+msgid "article"
+msgstr ""
+
+#: src/vocgui/models.py:60
+msgid "audio"
+msgstr "audio"
+
+#: src/vocgui/models.py:177
+msgid "image"
+msgstr "image"
+
+#: src/vocgui/models.py:178
+msgid "images"
+msgstr "images"
+
+#: src/vocgui/models.py:186 src/vocgui/models.py:200
+msgid "alternative word"
+msgstr "mot alternatif"
+
+#: src/vocgui/models.py:201
+msgid "alternative words"
+msgstr "mots alternatives"
+
+#: src/vocgui/validators.py:10
+msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
+msgstr "Type de média non reconnu! Utilisez: .mp3 .aac .wav .m4a .wma .ogg"
+
+#: src/vocgui/validators.py:16
+msgid "File too large! Max. 5 MB"
+msgstr "Fishier trop grand! Max. 5 MB"
+
+#: src/voctrainer/settings.py:121
+msgid "English"
+msgstr ""
+
+#: src/voctrainer/settings.py:122
+msgid "German"
+msgstr ""
+
+#: src/voctrainer/settings.py:123
+msgid "French"
+msgstr ""
