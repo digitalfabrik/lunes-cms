@@ -2,6 +2,8 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 
+from django.utils.translation import ugettext as _
+
 from .models import Discipline, TrainingSet, Document
 
 
@@ -11,10 +13,10 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = 'Bereiche'
+    title = _('disciplines')
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = 'Bereiche'
+    parameter_name = _('disciplines')
 
     def lookups(self, request, model_admin):
         """
@@ -44,16 +46,16 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         return queryset
 
 
-class DocumentTraininSetListFilter(admin.SimpleListFilter):
+class DocumentTrainingSetListFilter(admin.SimpleListFilter):
     """
     This filter will always return a subset of the instances in a Model, either filtering by the
     user choice or by a default value.
     """
 
-    title = 'Module'
+    title = _('training sets')
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = 'Modul'
+    parameter_name = _('training set')
 
     def lookups(self, request, model_admin):
         """
@@ -89,10 +91,10 @@ class DisciplineListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = 'Bereiche'
+    title = _('disciplines')
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = 'Bereich'
+    parameter_name = _('discipline')
 
     default_value = None
 

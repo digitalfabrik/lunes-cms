@@ -8,6 +8,8 @@ from django.db import models  # pylint: disable=E0401
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
+from django.utils.translation import ugettext_lazy as _
+
 
 class Static:
     """
@@ -18,10 +20,10 @@ class Static:
 
     word_type_choices = [('Nomen', 'Nomen'), ('Verb', 'Verb'),
                          ('Adjektiv', 'Adjektiv')]
-    
-    blurr_radius = 30 # number of pixles used for box blurr
 
-    img_size = (1024, 768) #(width, height)
+    blurr_radius = 30  # number of pixles used for box blurr
+
+    img_size = (1024, 768)  # (width, height)
 
 
 class Discipline(models.Model):  # pylint: disable=R0903
@@ -29,9 +31,9 @@ class Discipline(models.Model):  # pylint: disable=R0903
     Disciplines for training sets. They have a title and contain training sets with the same topic.
     """
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True)
-    icon = models.ImageField(upload_to='images/', blank=True)
+    title = models.CharField(max_length=255, verbose_name=_('discipline'))
+    description = models.CharField(max_length=255, blank=True, verbose_name=_('description'))
+    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('icon'))
 
     def __str__(self):
         return self.title
@@ -41,9 +43,8 @@ class Discipline(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of Field
         """
-        verbose_name = 'Bereich'
-        verbose_name_plural = 'Bereiche'
-
+        verbose_name = _('discipline')
+        verbose_name_plural = _('discipline')
 
 
 class Document(models.Model):  # pylint: disable=R0903
@@ -51,15 +52,16 @@ class Document(models.Model):  # pylint: disable=R0903
     Contains words + images and relates to a training set
     """
     id = models.AutoField(primary_key=True)
-    word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='')
-    word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=Static.article_choices, default='')
+    word_type = models.CharField(max_length=255, choices=Static.word_type_choices, default='',
+                                 verbose_name=_('word type'))
+    word = models.CharField(max_length=255, verbose_name=_('word'))
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('article'))
     audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size], blank=True,
-    null=True)
+                             null=True, verbose_name=_('audio'))
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @property
-    def converted(self,  content_type='audio/mpeg'):
+    def converted(self, content_type='audio/mpeg'):
         super(Document, self).save()
         file_path = self.audio.path
         original_extension = file_path.split('.')[-1]
@@ -90,8 +92,8 @@ class Document(models.Model):  # pylint: disable=R0903
         """
         Define user readable name of Document
         """
-        verbose_name = 'Wort'
-        verbose_name_plural = 'Wörter'
+        verbose_name = _('vocabulary')
+        verbose_name_plural = _('vocabulary')
 
 
 class TrainingSet(models.Model):  # pylint: disable=R0903
@@ -99,25 +101,25 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     Training sets are part of disciplines, have a title and contain words
     """
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True)
+    title = models.CharField(max_length=255, verbose_name=_('training set'))
+    description = models.CharField(max_length=255, blank=True, verbose_name=_('description'))
     discipline = models.ForeignKey(Discipline,
                                    on_delete=models.CASCADE,
                                    related_name='training_sets')
-    icon = models.ImageField(upload_to='images/', blank=True)
+    icon = models.ImageField(upload_to='images/', blank=True, verbose_name=_('icon'))
     documents = models.ManyToManyField(Document,
                                        related_name='training_sets')
 
     def __str__(self):
-        return self.title + " (Bereich: " + self.discipline.title + ")"
+        return self.title + " (" + _('training set') + ": " + self.discipline.title + ")"
 
     # pylint: disable=R0903
     class Meta:
         """
         Define user readable name of TrainingSet
         """
-        verbose_name = 'Modul'
-        verbose_name_plural = 'Module'
+        verbose_name = _('training set')
+        verbose_name_plural = _('training sets')
 
 
 class DocumentImage(models.Model):
@@ -127,6 +129,7 @@ class DocumentImage(models.Model):
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='document_image')
+
     def save_original_img(self):
         """
         Function to save rough image with '_original' extension
@@ -146,19 +149,19 @@ class DocumentImage(models.Model):
         """
         img_blurr = Image.open(self.image.path)
         img_cropped = Image.open(self.image.path)
-        
+
         img_blurr = img_blurr.resize((Static.img_size[0], Static.img_size[1]))
         img_blurr = img_blurr.filter(ImageFilter.BoxBlur(Static.blurr_radius))
 
         if img_cropped.width > Static.img_size[0] or img_cropped.height > Static.img_size[1]:
             max_size = (Static.img_size[0], Static.img_size[1])
             img_cropped.thumbnail(max_size)
-        
+
         offset = (((img_blurr.width - img_cropped.width) // 2),
                   ((img_blurr.height - img_cropped.height) // 2))
         img_blurr.paste(img_cropped, offset)
         img_blurr.save(self.image.path)
-    
+
     def __str__(self):
         return self.document.word + ">> Images: " + self.name
 
@@ -171,8 +174,8 @@ class DocumentImage(models.Model):
         """
         Define user readable name of TrainingSet
         """
-        verbose_name = 'Bild'
-        verbose_name_plural = 'Bilder'
+        verbose_name = _('image')
+        verbose_name_plural = _('images')
 
 
 class AlternativeWord(models.Model):
@@ -180,8 +183,8 @@ class AlternativeWord(models.Model):
     Contains words for a document
     """
     id = models.AutoField(primary_key=True)
-    alt_word = models.CharField(max_length=255)
-    article = models.CharField(max_length=255, choices=Static.article_choices, default='')
+    alt_word = models.CharField(max_length=255, verbose_name=_('alternative word'))
+    article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('article'))
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='alternatives')
@@ -194,5 +197,5 @@ class AlternativeWord(models.Model):
         """
         Define user readable name of Document
         """
-        verbose_name = 'Alternatives Wort'
-        verbose_name_plural = 'Alternative Wörter'
+        verbose_name = _('alternative word')
+        verbose_name_plural = _('alternative words')
