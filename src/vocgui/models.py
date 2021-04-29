@@ -44,7 +44,7 @@ class Discipline(models.Model):  # pylint: disable=R0903
         Define user readable name of Field
         """
         verbose_name = _('discipline')
-        verbose_name_plural = _('discipline')
+        verbose_name_plural = _('disciplines')
 
 
 class Document(models.Model):  # pylint: disable=R0903

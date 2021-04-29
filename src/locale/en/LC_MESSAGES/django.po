@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-26 07:39+0000\n"
+"POT-Creation-Date: 2021-04-29 08:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/vocgui/apps.py:7
+#: src/vocgui/apps.py:6
 msgid "vocabulary management"
 msgstr "vocabulary management"
 
 #: src/vocgui/forms.py:16 src/vocgui/list_filter.py:97 src/vocgui/models.py:34
-#: src/vocgui/models.py:46 src/vocgui/models.py:47
+#: src/vocgui/models.py:46
 msgid "discipline"
 msgstr "discipline"
 
@@ -33,7 +33,7 @@ msgid "vocabulary"
 msgstr "vocabulary"
 
 #: src/vocgui/list_filter.py:16 src/vocgui/list_filter.py:19
-#: src/vocgui/list_filter.py:94
+#: src/vocgui/list_filter.py:94 src/vocgui/models.py:47
 msgid "disciplines"
 msgstr "disciplines"
 
@@ -42,7 +42,7 @@ msgid "training sets"
 msgstr "training sets"
 
 #: src/vocgui/list_filter.py:58 src/vocgui/models.py:104
-#: src/vocgui/models.py:121
+#: src/vocgui/models.py:114 src/vocgui/models.py:121
 msgid "training set"
 msgstr "training set"
 
@@ -94,14 +94,14 @@ msgstr "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
 msgid "File too large! Max. 5 MB"
 msgstr "File too large! Max. 5 MB"
 
-#: src/voctrainer/settings.py:121
+#: src/voctrainer/settings.py:119
 msgid "English"
 msgstr "English"
 
-#: src/voctrainer/settings.py:122
+#: src/voctrainer/settings.py:120
 msgid "German"
 msgstr "German"
 
-#: src/voctrainer/settings.py:123
+#: src/voctrainer/settings.py:121
 msgid "French"
 msgstr "French"
