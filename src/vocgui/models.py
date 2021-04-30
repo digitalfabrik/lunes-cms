@@ -3,7 +3,7 @@ Models for the UI
 """
 import os
 from pathlib import Path
-from .validators import validate_file_extension, validate_file_size
+from .validators import validate_file_extension, validate_file_size, validate_multiple_extensions
 from django.db import models  # pylint: disable=E0401
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
@@ -56,8 +56,9 @@ class Document(models.Model):  # pylint: disable=R0903
                                  verbose_name=_('word type'))
     word = models.CharField(max_length=255, verbose_name=_('word'))
     article = models.CharField(max_length=255, choices=Static.article_choices, default='', verbose_name=_('article'))
-    audio = models.FileField(upload_to='audio/', validators=[validate_file_extension, validate_file_size], blank=True,
-                             null=True, verbose_name=_('audio'))
+    audio = models.FileField(upload_to='audio/',
+                             validators=[validate_file_extension, validate_file_size, validate_multiple_extensions],
+                             blank=True, null=True, verbose_name=_('audio'))
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -125,7 +126,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
 class DocumentImage(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/', validators=[validate_multiple_extensions])
     document = models.ForeignKey(Document,
                                  on_delete=models.CASCADE,
                                  related_name='document_image')
