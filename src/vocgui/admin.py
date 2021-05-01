@@ -7,6 +7,8 @@ from django.contrib import admin  # pylint: disable=E0401
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage  # pylint: disable=E0401
 from image_cropping import ImageCroppingMixin
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import User, Group
+from django.conf import settings
 
 from .list_filter import DisciplineListFilter, DocumentTrainingSetListFilter, DocumentDisciplineListFilter
 import nested_admin
@@ -66,13 +68,16 @@ class AdminSite(admin.AdminSite):
             _("vocabulary").capitalize(): 3,
         }
         app_dict = self._build_app_dict(request)
-        # a.sort(key=lambda x: b.index(x[0]))
+
         # Sort the apps alphabetically.
         app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
 
-        # Sort the models alphabetically within each app.
+        # Sort the respective modules according the defined order
         for app in app_list:
-            app['models'].sort(key=lambda x: ordering[x['name']])
+            try:
+                app['models'].sort(key=lambda x: ordering[x['name']])
+            except KeyError:
+                pass
 
         return app_list
 
@@ -81,6 +86,8 @@ adminsite = AdminSite()
 admin.site = adminsite
 admin.sites.site = adminsite
 
+admin.site.register(User)
+admin.site.register(Group)
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(TrainingSet, TrainingSetAdmin)
 admin.site.register(Document, DocumentAdmin)
