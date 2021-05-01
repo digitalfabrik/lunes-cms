@@ -57,7 +57,6 @@ class DocumentAdmin(nested_admin.NestedModelAdmin):
     list_filter = (DocumentTrainingSetListFilter, DocumentDisciplineListFilter,)
 
 
-#class AdminSite(admin.AdminSite):
 def get_app_list(self, request):
     """
     Return a sorted list of all the installed apps that have been
