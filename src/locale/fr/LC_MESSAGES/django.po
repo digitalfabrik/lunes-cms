@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-26 07:39+0000\n"
+"POT-Creation-Date: 2021-04-30 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/vocgui/apps.py:7
+#: src/vocgui/apps.py:6
 msgid "vocabulary management"
 msgstr "gestion du vocabulaire"
 
@@ -27,8 +27,8 @@ msgstr "gestion du vocabulaire"
 msgid "discipline"
 msgstr "secteur"
 
-#: src/vocgui/forms.py:20 src/vocgui/forms.py:23 src/vocgui/models.py:95
-#: src/vocgui/models.py:96
+#: src/vocgui/forms.py:20 src/vocgui/forms.py:23 src/vocgui/models.py:96
+#: src/vocgui/models.py:97
 msgid "vocabulary"
 msgstr "vocabulaire"
 
@@ -37,20 +37,20 @@ msgstr "vocabulaire"
 msgid "disciplines"
 msgstr "secteurs"
 
-#: src/vocgui/list_filter.py:55 src/vocgui/models.py:122
+#: src/vocgui/list_filter.py:55 src/vocgui/models.py:123
 msgid "training sets"
 msgstr "modules"
 
-#: src/vocgui/list_filter.py:58 src/vocgui/models.py:104
-#: src/vocgui/models.py:121
+#: src/vocgui/list_filter.py:58 src/vocgui/models.py:105
+#: src/vocgui/models.py:115 src/vocgui/models.py:122
 msgid "training set"
 msgstr "module"
 
-#: src/vocgui/models.py:35 src/vocgui/models.py:105
+#: src/vocgui/models.py:35 src/vocgui/models.py:106
 msgid "description"
 msgstr "description"
 
-#: src/vocgui/models.py:36 src/vocgui/models.py:109
+#: src/vocgui/models.py:36 src/vocgui/models.py:110
 msgid "icon"
 msgstr "icône"
 
@@ -62,27 +62,27 @@ msgstr "type de mot"
 msgid "word"
 msgstr "mot"
 
-#: src/vocgui/models.py:58 src/vocgui/models.py:187
+#: src/vocgui/models.py:58 src/vocgui/models.py:188
 msgid "article"
 msgstr ""
 
-#: src/vocgui/models.py:60
+#: src/vocgui/models.py:61
 msgid "audio"
 msgstr "audio"
 
-#: src/vocgui/models.py:177
+#: src/vocgui/models.py:178
 msgid "image"
 msgstr "image"
 
-#: src/vocgui/models.py:178
+#: src/vocgui/models.py:179
 msgid "images"
 msgstr "images"
 
-#: src/vocgui/models.py:186 src/vocgui/models.py:200
+#: src/vocgui/models.py:187 src/vocgui/models.py:201
 msgid "alternative word"
 msgstr "mot alternatif"
 
-#: src/vocgui/models.py:201
+#: src/vocgui/models.py:202
 msgid "alternative words"
 msgstr "mots alternatives"
 
@@ -94,14 +94,18 @@ msgstr "Type de média non reconnu! Utilisez: .mp3 .aac .wav .m4a .wma .ogg"
 msgid "File too large! Max. 5 MB"
 msgstr "Fishier trop grand! Max. 5 MB"
 
-#: src/voctrainer/settings.py:121
+#: src/vocgui/validators.py:23
+msgid "Only use one file extension!"
+msgstr "N'utilisez qu'une seule extension de fichier!"
+
+#: src/voctrainer/settings.py:119
 msgid "English"
 msgstr ""
 
-#: src/voctrainer/settings.py:122
+#: src/voctrainer/settings.py:120
 msgid "German"
 msgstr ""
 
-#: src/voctrainer/settings.py:123
+#: src/voctrainer/settings.py:121
 msgid "French"
 msgstr ""

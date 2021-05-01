@@ -14,3 +14,10 @@ def validate_file_size(value):
     from django.core.exceptions import ValidationError
     if value.size > (5 * 1024 * 1024):
         raise ValidationError(_('File too large! Max. 5 MB'))
+
+
+def validate_multiple_extensions(value):
+    from django.core.exceptions import ValidationError
+    split_name = value.name.split('.')
+    if len(split_name) != 2:
+        raise ValidationError(_('Only use one file extension!'))
