@@ -18,7 +18,7 @@ class Static:
     article_choices = [('keiner', 'keiner'), ('der', 'der'), ('das', 'das'),
                        ('die', 'die'), ('die (Plural)', 'die (Plural)')]
 
-    word_type_choices = [('Nomen', 'Nomen'), ('Verb', 'Verb'),
+    word_type_choices = [('Substantiv', 'Substantiv'), ('Verb', 'Verb'),
                          ('Adjektiv', 'Adjektiv')]
 
     blurr_radius = 30  # number of pixles used for box blurr
