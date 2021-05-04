@@ -44,7 +44,7 @@ class Discipline(models.Model):  # pylint: disable=R0903
         Define user readable name of Field
         """
         verbose_name = _('discipline')
-        verbose_name_plural = _('discipline')
+        verbose_name_plural = _('disciplines')
 
 
 class Document(models.Model):  # pylint: disable=R0903
@@ -112,7 +112,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
                                        related_name='training_sets')
 
     def __str__(self):
-        return self.title + " (" + _('training set') + ": " + self.discipline.title + ")"
+        return self.title + " (" + _('discipline').capitalize() + ": " + self.discipline.title + ")"
 
     # pylint: disable=R0903
     class Meta:

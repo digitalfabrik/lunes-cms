@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 10:09+0000\n"
+"POT-Creation-Date: 2021-05-01 09:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,28 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: src/vocgui/admin.py:64 src/vocgui/list_filter.py:55 src/vocgui/models.py:123
+msgid "training sets"
+msgstr "Module"
+
+#: src/vocgui/admin.py:65 src/vocgui/list_filter.py:16
+#: src/vocgui/list_filter.py:19 src/vocgui/list_filter.py:94
+#: src/vocgui/models.py:47
+msgid "disciplines"
+msgstr "Bereiche"
+
+#: src/vocgui/admin.py:66 src/vocgui/forms.py:20 src/vocgui/forms.py:23
+#: src/vocgui/models.py:96 src/vocgui/models.py:97
+msgid "vocabulary"
+msgstr "Vokabeln"
+
 #: src/vocgui/apps.py:6
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
 #: src/vocgui/forms.py:16 src/vocgui/list_filter.py:97 src/vocgui/models.py:34
-#: src/vocgui/models.py:46 src/vocgui/models.py:47
+#: src/vocgui/models.py:46
 msgid "discipline"
 msgstr "Bereich"
-
-#: src/vocgui/forms.py:20 src/vocgui/forms.py:23 src/vocgui/models.py:96
-#: src/vocgui/models.py:97
-msgid "vocabulary"
-msgstr "Vokabeln"
-
-#: src/vocgui/list_filter.py:16 src/vocgui/list_filter.py:19
-#: src/vocgui/list_filter.py:94
-msgid "disciplines"
-msgstr "Bereiche"
-
-#: src/vocgui/list_filter.py:55 src/vocgui/models.py:123
-msgid "training sets"
-msgstr "Module"
 
 #: src/vocgui/list_filter.py:58 src/vocgui/models.py:105
 #: src/vocgui/models.py:115 src/vocgui/models.py:122
@@ -109,3 +110,16 @@ msgstr ""
 #: src/voctrainer/settings.py:121
 msgid "French"
 msgstr ""
+
+#, fuzzy
+#~| msgid "training sets"
+#~ msgid "Training sets"
+#~ msgstr "Module"
+
+#~ msgid "Disciplines"
+#~ msgstr "Bereiche"
+
+#, fuzzy
+#~| msgid "vocabulary"
+#~ msgid "Vocabulary"
+#~ msgstr "Vokabeln"
