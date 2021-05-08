@@ -1,9 +1,6 @@
 from __future__ import absolute_import, unicode_literals
-
 from django.contrib import admin
-
 from django.utils.translation import ugettext_lazy as _
-
 from .models import Discipline, TrainingSet, Document
 
 
@@ -13,10 +10,10 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = _('disciplines')
+    title = _("disciplines")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = _('disciplines')
+    parameter_name = _("disciplines")
 
     def lookups(self, request, model_admin):
         """
@@ -25,13 +22,21 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         appear in the URL query. The second element is the
         human-readable name for the option that will appear
         in the right sidebar.
+
+        :param self: A handle to the :class:`list_filter.DocumentDisciplineListFilter`
+        :type self: class: `list_filter.DocumentDisciplineListFilter`
+        :param request: Current HTTP request
+        :type request: HTTP request
+        :param model_admin: admin of current model
+        :type model_admin: ModelAdmin
+
+        :return: list of tuples containing id and title of each discipline
+        :rtype: list
         """
         list_of_disciplines = []
         queryset = Discipline.objects.all()
         for discipline in queryset:
-            list_of_disciplines.append(
-                (str(discipline.id), discipline.title)
-            )
+            list_of_disciplines.append((str(discipline.id), discipline.title))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -39,6 +44,16 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         Returns the filtered queryset based on the value
         provided in the query string and retrievable via
         `self.value()`.
+
+        :param self: A handle to the :class:`list_filter.DocumentDisciplineListFilter`
+        :type self: class: `list_filter.DocumentDisciplineListFilter`
+        :param request: Current HTTP request
+        :type request: HTTP request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+
+        :return: filtered queryset based on the value provided in the query string
+        :rtype: QuerySet
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
@@ -52,10 +67,10 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = _('training sets')
+    title = _("training sets")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = _('training set')
+    parameter_name = _("training set")
 
     def lookups(self, request, model_admin):
         """
@@ -64,13 +79,21 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         appear in the URL query. The second element is the
         human-readable name for the option that will appear
         in the right sidebar.
+
+        :param self: A handle to the :class:`list_filter.DocumentTrainingSetListFilter`
+        :type self: class: `list_filter.DocumentTrainingSetListFilter`
+        :param request: Current HTTP request
+        :type request: HTTP request
+        :param model_admin: admin of current model
+        :type model_admin: ModelAdmin
+
+        :return: list of tuples containing id and title of each training set
+        :rtype: list
         """
         list_of_trainingsets = []
         queryset = TrainingSet.objects.all()
         for trainingset in queryset:
-            list_of_trainingsets.append(
-                (str(trainingset.id), trainingset.title)
-            )
+            list_of_trainingsets.append((str(trainingset.id), trainingset.title))
         return sorted(list_of_trainingsets, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -78,6 +101,16 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         Returns the filtered queryset based on the value
         provided in the query string and retrievable via
         `self.value()`.
+
+        :param self: A handle to the :class:`list_filter.DocumentTrainingSetListFilter`
+        :type self: class: `list_filter.DocumentTrainingSetListFilter`
+        :param request: Current HTTP request
+        :type request: HTTP request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+
+        :return: filtered queryset based on the value provided in the query string
+        :rtype: QuerySet
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
@@ -91,10 +124,10 @@ class DisciplineListFilter(admin.SimpleListFilter):
     user choice or by a default value.
     """
 
-    title = _('disciplines')
+    title = _("disciplines")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = _('discipline')
+    parameter_name = _("discipline")
 
     default_value = None
 
@@ -105,13 +138,21 @@ class DisciplineListFilter(admin.SimpleListFilter):
         appear in the URL query. The second element is the
         human-readable name for the option that will appear
         in the right sidebar.
+
+        :param self: A handle to the :class:`list_filter.DisciplineListFilter`
+        :type self: class: `list_filter.DisciplineListFilter`
+        :param request: Current HTTP request
+        :type request: HTTP request
+        :param model_admin: admin of current model
+        :type model_admin: ModelAdmin
+
+        :return: list of tuples containing id and title of each discipline
+        :rtype: list
         """
         list_of_disciplines = []
         queryset = Discipline.objects.all()
         for discipline in queryset:
-            list_of_disciplines.append(
-                (str(discipline.id), discipline.title)
-            )
+            list_of_disciplines.append((str(discipline.id), discipline.title))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -119,6 +160,16 @@ class DisciplineListFilter(admin.SimpleListFilter):
         Returns the filtered queryset based on the value
         provided in the query string and retrievable via
         `self.value()`.
+
+        :param self: A handle to the :class:`list_filter.DisciplineListFilter`
+        :type self: class: `list_filter.DisciplineListFilter`
+        :param request: Current HTTP request
+        :type request: HTTP request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+
+        :return: filtered queryset based on the value provided in the query string
+        :rtype: QuerySet
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
