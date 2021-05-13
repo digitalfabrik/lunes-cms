@@ -57,7 +57,7 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(training_sets__discipline__id=self.value())
+            return queryset.filter(training_sets__discipline__id=self.value()).distinct()
         return queryset
 
 
@@ -114,7 +114,7 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(training_sets__id=self.value())
+            return queryset.filter(training_sets__id=self.value()).distinct()
         return queryset
 
 
@@ -172,5 +172,5 @@ class DisciplineListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(discipline__id=self.value())
+            return queryset.filter(discipline__id=self.value()).distinct()
         return queryset
