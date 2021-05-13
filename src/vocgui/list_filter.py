@@ -6,8 +6,8 @@ from .models import Discipline, TrainingSet, Document
 
 class DocumentDisciplineListFilter(admin.SimpleListFilter):
     """
-    This filter will always return a subset of the instances in a Model, either filtering by the
-    user choice or by a default value.
+    This filter will return a subset of the instances in a Model by filtering according to the
+    user choice.
     """
 
     title = _("disciplines")
@@ -63,8 +63,8 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
 
 class DocumentTrainingSetListFilter(admin.SimpleListFilter):
     """
-    This filter will always return a subset of the instances in a Model, either filtering by the
-    user choice or by a default value.
+    This filter will return a subset of the instances in a Model by filtering according to the
+    user choice.
     """
 
     title = _("training sets")
@@ -119,9 +119,8 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
 
 
 class DisciplineListFilter(admin.SimpleListFilter):
-    """
-    This filter will always return a subset of the instances in a Model, either filtering by the
-    user choice or by a default value.
+    """This filter will return a subset of the instances in a Model by filtering according to the
+    user choice.
     """
 
     title = _("disciplines")
