@@ -158,7 +158,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     discipline = models.ManyToManyField(Discipline, related_name="training_sets")
 
     def __str__(self):
-        return self.title + " (" + _('discipline').capitalize() + ": "# + self.discipline.title + ")"
+        return self.title 
 
     # pylint: disable=R0903
     class Meta:
