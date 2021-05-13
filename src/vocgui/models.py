@@ -232,7 +232,10 @@ class DocumentImage(models.Model):
         img_blurr.save(self.image.path)
 
     def __str__(self):
-        return self.document.word + ">> Images: " + self.name
+        if self.name:
+            return self.name
+        else:
+            return self.document.word
 
     def save(self, *args, **kwargs):
         super(DocumentImage, self).save(*args, **kwargs)
