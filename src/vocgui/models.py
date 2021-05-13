@@ -19,6 +19,7 @@ class Static:
     """
     Module for static and global variables
     """
+
     # possible articles
     article_choices = [
         ("keiner", "keiner"),
@@ -159,9 +160,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     documents = models.ManyToManyField(Document, related_name="training_sets")
 
     def __str__(self):
-        return (
-            self.title + " (" + _("training set") + ": " + self.discipline.title + ")"
-        )
+        return self.title + " (" + _('discipline').capitalize() + ": " + self.discipline.title + ")"
 
     # pylint: disable=R0903
     class Meta:
