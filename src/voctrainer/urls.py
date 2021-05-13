@@ -22,11 +22,11 @@ from django.conf.urls import url
 
 
 urlpatterns = [
-    path('', include('vocgui.urls')),
-    url(r'^i18n/', include('django.conf.urls.i18n')),
+    path("", include("vocgui.urls")),
+    url(r"^i18n/", include("django.conf.urls.i18n")),
 ]
 
-urlpatterns += i18n_patterns(url(r'^admin/', admin.site.urls))
+urlpatterns += i18n_patterns(url(r"^admin/", admin.site.urls))
 
 
 if settings.DEBUG:
