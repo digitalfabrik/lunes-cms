@@ -37,9 +37,8 @@ class TrainingSetAdmin(admin.ModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
     search_fields = ["title"]
-    autocomplete_fields = ["discipline"]
     form = TrainingSetForm
-    ordering = ["title", "discipline__title"]
+
     list_filter = (DisciplineListFilter,)
 
 

@@ -6,14 +6,14 @@ from .models import Discipline, TrainingSet, Document
 
 class DocumentDisciplineListFilter(admin.SimpleListFilter):
     """
-    This filter will always return a subset of the instances in a Model, either filtering by the
-    user choice or by a default value.
+    This filter will return a subset of the instances in a Model by filtering according to the
+    user choice.
     """
 
     title = _("disciplines")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = _("disciplines")
+    parameter_name = ("disciplines")
 
     def lookups(self, request, model_admin):
         """
@@ -57,20 +57,20 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(training_sets__discipline_id=self.value())
+            return queryset.filter(training_sets__discipline__id=self.value()).distinct()
         return queryset
 
 
 class DocumentTrainingSetListFilter(admin.SimpleListFilter):
     """
-    This filter will always return a subset of the instances in a Model, either filtering by the
-    user choice or by a default value.
+    This filter will return a subset of the instances in a Model by filtering according to the
+    user choice.
     """
 
     title = _("training sets")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = _("training set")
+    parameter_name = ("training set")
 
     def lookups(self, request, model_admin):
         """
@@ -114,20 +114,19 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(training_sets__id=self.value())
+            return queryset.filter(training_sets__id=self.value()).distinct()
         return queryset
 
 
 class DisciplineListFilter(admin.SimpleListFilter):
-    """
-    This filter will always return a subset of the instances in a Model, either filtering by the
-    user choice or by a default value.
+    """This filter will return a subset of the instances in a Model by filtering according to the
+    user choice.
     """
 
     title = _("disciplines")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = _("discipline")
+    parameter_name = ("discipline")
 
     default_value = None
 
@@ -173,5 +172,5 @@ class DisciplineListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(discipline_id=self.value())
+            return queryset.filter(discipline__id=self.value()).distinct()
         return queryset

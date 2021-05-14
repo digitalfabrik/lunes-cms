@@ -153,14 +153,12 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
-    discipline = models.ForeignKey(
-        Discipline, on_delete=models.CASCADE, related_name="training_sets"
-    )
     icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
     documents = models.ManyToManyField(Document, related_name="training_sets")
+    discipline = models.ManyToManyField(Discipline, related_name="training_sets")
 
     def __str__(self):
-        return self.title + " (" + _('discipline').capitalize() + ": " + self.discipline.title + ")"
+        return self.title 
 
     # pylint: disable=R0903
     class Meta:

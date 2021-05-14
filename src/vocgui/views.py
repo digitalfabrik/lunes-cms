@@ -91,7 +91,7 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
             return TrainingSet.objects.none()
         user = self.request.user
         queryset = TrainingSet.objects.filter(
-            discipline_id=self.kwargs["discipline_id"]
+            discipline__id=self.kwargs["discipline_id"]
         )
         queryset = queryset.annotate(total_documents=Count("documents"))
         return queryset

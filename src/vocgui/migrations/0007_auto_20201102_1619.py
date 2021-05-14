@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='trainingset',
             name='discipline',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='training_sets', to='vocgui.discipline'),
+            field=models.ManyToManyField(related_name="training_sets", to='vocgui.Discipline'),
             preserve_default=False,
         ),
     ]
