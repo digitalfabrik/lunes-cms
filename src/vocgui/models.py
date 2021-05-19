@@ -47,6 +47,7 @@ class Discipline(models.Model):
     sets with the same topic. Inherits from `models.Model`.
     """
     id = models.AutoField(primary_key=True)
+    released = models.BooleanField(default=False, verbose_name=_("released"))
     title = models.CharField(max_length=255, verbose_name=_("discipline"))
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
@@ -149,6 +150,7 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     """
 
     id = models.AutoField(primary_key=True)
+    released = models.BooleanField(default=False, verbose_name=_("released"))
     title = models.CharField(max_length=255, verbose_name=_("training set"))
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
