@@ -11,7 +11,6 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.utils.module_loading import import_module
-import nested_admin
 
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .list_filter import (
@@ -42,10 +41,10 @@ class TrainingSetAdmin(admin.ModelAdmin):
     list_filter = (DisciplineListFilter,)
 
 
-class AlternativeWordAdmin(nested_admin.NestedStackedInline):
+class AlternativeWordAdmin(admin.StackedInline):
     """
     Admin Interface to for the AlternativeWord module.
-    Inheriting from `nested_admin.NestedStackedInline`.
+    Inheriting from `admin.StackedInline`.
     """
     model = AlternativeWord
     search_fields = ["alt_word"]
@@ -54,10 +53,10 @@ class AlternativeWordAdmin(nested_admin.NestedStackedInline):
     extra = 0
 
 
-class DocumentImageAdmin(nested_admin.NestedStackedInline):
+class DocumentImageAdmin(admin.StackedInline):
     """
     Admin Interface to for the DocumentImage module.
-    Inheriting from `nested_admin.NestedStackedInline`.
+    Inheriting from `admin.StackedInline`.
     """
     model = DocumentImage
     search_fields = ["name"]
@@ -66,10 +65,10 @@ class DocumentImageAdmin(nested_admin.NestedStackedInline):
     extra = 0
 
 
-class DocumentAdmin(nested_admin.NestedModelAdmin):
+class DocumentAdmin(admin.ModelAdmin):
     """
     Admin Interface to for the Document module.
-    Inheriting from `nested_admin.NestedModelAdmin`.
+    Inheriting from `admin.ModelAdmin`.
     """
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
