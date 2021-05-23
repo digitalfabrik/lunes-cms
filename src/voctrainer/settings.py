@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "vocgui",
     "rest_framework",
     "drf_yasg",
-    "nested_admin",
     "pydub",
 ]
 
@@ -151,6 +150,8 @@ JAZZMIN_SETTINGS = {
     "site_logo": "images/logo.png",
     "changeform_format": "collapsible",
     "language_chooser": True,
+    "custom_css": "css/main.css",
+    "custom_js": "js/scripts.css"
 }
 
 JAZZMIN_UI_TWEAKS = {
