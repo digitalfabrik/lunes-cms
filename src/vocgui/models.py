@@ -97,7 +97,7 @@ class Document(models.Model):
         null=True,
         verbose_name=_("audio"),
     )
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_("creation date"))
 
     @property
     def converted(self, content_type="audio/mpeg"):

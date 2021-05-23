@@ -29,7 +29,9 @@ class DisciplineAdmin(OrderedModelAdmin):
     """
 
     search_fields = ["title"]
+    ordering = ["title"]
     list_display = ("title", "released", "move_up_down_links")
+    list_per_page = 25
 
 
 class TrainingSetAdmin(OrderedModelAdmin):
@@ -40,8 +42,10 @@ class TrainingSetAdmin(OrderedModelAdmin):
 
     search_fields = ["title"]
     form = TrainingSetForm
+    ordering = ["title"]
     list_display = ("title", "released", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
+    list_per_page = 25
 
 
 class AlternativeWordAdmin(admin.StackedInline):
@@ -78,12 +82,13 @@ class DocumentAdmin(admin.ModelAdmin):
 
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
-    ordering = ["word"]
+    ordering = ["word", "creation_date"]
     list_display = ("word", "word_type", "article", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
     )
+    list_per_page = 25
 
 
 def get_app_list(self, request):
