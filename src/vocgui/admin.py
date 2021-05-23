@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.utils.module_loading import import_module
+from ordered_model.admin import OrderedModelAdmin
 
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .list_filter import (
@@ -21,24 +22,30 @@ from .list_filter import (
 from .forms import TrainingSetForm
 
 
-class DisciplineAdmin(admin.ModelAdmin):
+class DisciplineAdmin(OrderedModelAdmin):
     """
     Admin Interface to for the Discipline module.
     Inheriting from `admin.ModelAdmin`.
     """
+
     search_fields = ["title"]
     ordering = ["title"]
+    list_display = ("title", "released", "move_up_down_links")
+    list_per_page = 25
 
 
-class TrainingSetAdmin(admin.ModelAdmin):
+class TrainingSetAdmin(OrderedModelAdmin):
     """
     Admin Interface to for the TrainigSet module.
     Inheriting from `admin.ModelAdmin`.
     """
+
     search_fields = ["title"]
     form = TrainingSetForm
-
+    ordering = ["title"]
+    list_display = ("title", "released", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
+    list_per_page = 25
 
 
 class AlternativeWordAdmin(admin.StackedInline):
@@ -46,6 +53,7 @@ class AlternativeWordAdmin(admin.StackedInline):
     Admin Interface to for the AlternativeWord module.
     Inheriting from `admin.StackedInline`.
     """
+
     model = AlternativeWord
     search_fields = ["alt_word"]
     autocomplete_fields = ["document"]
@@ -58,6 +66,7 @@ class DocumentImageAdmin(admin.StackedInline):
     Admin Interface to for the DocumentImage module.
     Inheriting from `admin.StackedInline`.
     """
+
     model = DocumentImage
     search_fields = ["name"]
     autocomplete_fields = ["document"]
@@ -70,13 +79,16 @@ class DocumentAdmin(admin.ModelAdmin):
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
+
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
-    ordering = ["word"]
+    ordering = ["word", "creation_date"]
+    list_display = ("word", "word_type", "article", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
     )
+    list_per_page = 25
 
 
 def get_app_list(self, request):

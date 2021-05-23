@@ -6,7 +6,7 @@ from django.core import serializers
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.shortcuts import redirect
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 
 from .models import TrainingSet, Document, AlternativeWord, Discipline
 from .serializers import (
@@ -40,9 +40,13 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
-        queryset = Discipline.objects.filter(released=True).annotate(
-            total_training_sets=Count(
-                "training_sets", filter=Q(training_sets__released=True)
+        queryset = (
+            Discipline.objects.filter(released=True)
+            .order_by("order")
+            .annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                )
             )
         )
         return queryset
@@ -98,10 +102,13 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
         user = self.request.user
-        queryset = TrainingSet.objects.filter(
-            discipline__id=self.kwargs["discipline_id"], released=True
+        queryset = (
+            TrainingSet.objects.filter(
+                discipline__id=self.kwargs["discipline_id"], released=True
+            )
+            .order_by("order")
+            .annotate(total_documents=Count("documents"))
         )
-        queryset = queryset.annotate(total_documents=Count("documents"))
         return queryset
 
 

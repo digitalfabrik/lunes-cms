@@ -37,6 +37,7 @@ setup(
         "pydub",
         "django-nested-admin",
         "django-jazzmin",
+        "django-ordered-model",
     ],
     extras_require={
         "dev": [
