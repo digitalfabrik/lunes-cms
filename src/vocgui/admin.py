@@ -29,7 +29,7 @@ class DisciplineAdmin(OrderedModelAdmin):
     """
 
     search_fields = ["title"]
-    list_display = ("title", "move_up_down_links")
+    list_display = ("title", "released", "move_up_down_links")
 
 
 class TrainingSetAdmin(OrderedModelAdmin):
@@ -40,7 +40,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
 
     search_fields = ["title"]
     form = TrainingSetForm
-    list_display = ("title", "move_up_down_links")
+    list_display = ("title", "released", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
 
 
@@ -79,6 +79,7 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word"]
+    list_display = ("word", "word_type", "article", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
