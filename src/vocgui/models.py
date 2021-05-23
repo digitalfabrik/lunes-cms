@@ -4,6 +4,7 @@ Models for the UI
 import os
 from pathlib import Path
 from django.db import models
+from ordered_model.models import OrderedModel
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
@@ -30,9 +31,7 @@ class Static:
     ]
 
     # possible word types
-    word_type_choices = [("Nomen", "Nomen"),
-                         ("Verb", "Verb"),
-                         ("Adjektiv", "Adjektiv")]
+    word_type_choices = [("Nomen", "Nomen"), ("Verb", "Verb"), ("Adjektiv", "Adjektiv")]
 
     # number of pixles used for box blurr
     blurr_radius = 30
@@ -40,28 +39,29 @@ class Static:
     img_size = (1024, 768)
 
 
-class Discipline(models.Model):
+class Discipline(OrderedModel):
     """
     Disciplines for training sets.
     They have a title, a description, a icon and contain training
     sets with the same topic. Inherits from `models.Model`.
     """
+
     id = models.AutoField(primary_key=True)
     released = models.BooleanField(default=False, verbose_name=_("released"))
     title = models.CharField(max_length=255, verbose_name=_("discipline"))
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
-    icon = models.ImageField(upload_to="images/",
-                             blank=True, verbose_name=_("icon"))
+    icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
 
     def __str__(self):
         return self.title
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         """
         Define user readable name of Field
         """
+
         verbose_name = _("discipline")
         verbose_name_plural = _("disciplines")
 
@@ -71,6 +71,7 @@ class Document(models.Model):
     Contains a word type, a word, an article and an audio.
     Relates to training sets and inherits from `models.Model`.
     """
+
     id = models.AutoField(primary_key=True)
     word_type = models.CharField(
         max_length=255,
@@ -138,11 +139,12 @@ class Document(models.Model):
         """
         Define user readable name of Document
         """
+
         verbose_name = _("vocabulary")
         verbose_name_plural = _("vocabulary")
 
 
-class TrainingSet(models.Model):  # pylint: disable=R0903
+class TrainingSet(OrderedModel):  # pylint: disable=R0903
     """
     Training sets are part of disciplines, have a title, a description
     an icon and relates to documents and disciplines.
@@ -160,10 +162,10 @@ class TrainingSet(models.Model):  # pylint: disable=R0903
     discipline = models.ManyToManyField(Discipline, related_name="training_sets")
 
     def __str__(self):
-        return self.title 
+        return self.title
 
     # pylint: disable=R0903
-    class Meta:
+    class Meta(OrderedModel.Meta):
         """
         Define user readable name of TrainingSet
         """
@@ -246,6 +248,7 @@ class DocumentImage(models.Model):
         """
         Define user readable name of TrainingSet
         """
+
         verbose_name = _("image")
         verbose_name_plural = _("images")
 
@@ -254,6 +257,7 @@ class AlternativeWord(models.Model):
     """
     Contains words for a document
     """
+
     id = models.AutoField(primary_key=True)
     alt_word = models.CharField(max_length=255, verbose_name=_("alternative word"))
     article = models.CharField(
@@ -274,5 +278,6 @@ class AlternativeWord(models.Model):
         """
         Define user readable name of Document
         """
+
         verbose_name = _("alternative word")
         verbose_name_plural = _("alternative words")
