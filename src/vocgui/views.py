@@ -6,7 +6,7 @@ from django.core import serializers
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.shortcuts import redirect
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from .models import TrainingSet, Document, AlternativeWord, Discipline
 from .serializers import (
@@ -24,6 +24,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
+
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
 
@@ -39,7 +40,16 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
-        return Discipline.objects.annotate(total_training_sets=Count("training_sets"))
+        queryset = (
+            Discipline.objects.filter(released=True)
+            .order_by("order")
+            .annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                )
+            )
+        )
+        return queryset
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -48,6 +58,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
+
     serializer_class = DocumentSerializer
 
     def get_queryset(self):
@@ -75,6 +86,7 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
+
     serializer_class = TrainingSetSerializer
 
     def get_queryset(self):
@@ -90,10 +102,13 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
         user = self.request.user
-        queryset = TrainingSet.objects.filter(
-            discipline__id=self.kwargs["discipline_id"]
+        queryset = (
+            TrainingSet.objects.filter(
+                discipline__id=self.kwargs["discipline_id"], released=True
+            )
+            .order_by("order")
+            .annotate(total_documents=Count("documents"))
         )
-        queryset = queryset.annotate(total_documents=Count("documents"))
         return queryset
 
 
