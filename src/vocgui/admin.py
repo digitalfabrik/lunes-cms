@@ -118,6 +118,10 @@ class DocumentAdmin(admin.ModelAdmin):
     )
     list_per_page = 25
 
+    def get_action_choices(self, request):
+        choices = super(DocumentAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
 
 
 def get_app_list(self, request):
