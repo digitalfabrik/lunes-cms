@@ -107,10 +107,10 @@ class DocumentAdmin(nested_admin.NestedModelAdmin):
     )
 
     def get_action_choices(self, request):
-        choices = super(DisciplineAdmin, self).get_action_choices(request)
+        choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
-        
+
 
 def get_app_list(self, request):
     """
