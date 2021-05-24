@@ -8,11 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2021-05-22 11:13+0000\n"
-=======
 "POT-Creation-Date: 2021-05-23 12:28+0000\n"
->>>>>>> master
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-<<<<<<< HEAD
 #: src/vocgui/admin.py:35
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Bereiche veröffentlichen"
@@ -52,21 +47,6 @@ msgstr "Module"
 
 #: src/vocgui/admin.py:132 src/vocgui/forms.py:30 src/vocgui/forms.py:31
 #: src/vocgui/models.py:140 src/vocgui/models.py:141
-=======
-#: src/vocgui/admin.py:105 src/vocgui/forms.py:25 src/vocgui/forms.py:26
-#: src/vocgui/list_filter.py:13 src/vocgui/list_filter.py:126
-#: src/vocgui/models.py:66
-msgid "disciplines"
-msgstr "Bereiche"
-
-#: src/vocgui/admin.py:106 src/vocgui/list_filter.py:70
-#: src/vocgui/models.py:174
-msgid "training sets"
-msgstr "Module"
-
-#: src/vocgui/admin.py:107 src/vocgui/forms.py:30 src/vocgui/forms.py:31
-#: src/vocgui/models.py:143 src/vocgui/models.py:144
->>>>>>> master
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -74,53 +54,6 @@ msgstr "Vokabeln"
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
-<<<<<<< HEAD
-#: src/vocgui/models.py:50 src/vocgui/models.py:64
-msgid "discipline"
-msgstr "Bereich"
-
-#: src/vocgui/models.py:52 src/vocgui/models.py:154
-msgid "description"
-msgstr "Beschreibung"
-
-#: src/vocgui/models.py:55 src/vocgui/models.py:156
-msgid "icon"
-msgstr "Icon"
-
-#: src/vocgui/models.py:78
-msgid "word type"
-msgstr "Wortart"
-
-#: src/vocgui/models.py:80
-msgid "word"
-msgstr "Wort"
-
-#: src/vocgui/models.py:85 src/vocgui/models.py:261
-msgid "article"
-msgstr "Artikel"
-
-#: src/vocgui/models.py:96
-msgid "audio"
-msgstr "Audio"
-
-#: src/vocgui/models.py:152 src/vocgui/models.py:169
-msgid "training set"
-msgstr "Modul"
-
-#: src/vocgui/models.py:247
-msgid "image"
-msgstr "Bild"
-
-#: src/vocgui/models.py:248
-msgid "images"
-msgstr "Bilder"
-
-#: src/vocgui/models.py:256 src/vocgui/models.py:275
-msgid "alternative word"
-msgstr "Alternatives Word"
-
-#: src/vocgui/models.py:276
-=======
 #: src/vocgui/models.py:50 src/vocgui/models.py:155
 msgid "released"
 msgstr "veröffentlicht"
@@ -174,7 +107,6 @@ msgid "alternative word"
 msgstr "Alternatives Word"
 
 #: src/vocgui/models.py:283
->>>>>>> master
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
