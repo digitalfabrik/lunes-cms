@@ -45,11 +45,6 @@ class DisciplineAdmin(admin.ModelAdmin):
         choices.pop(0)
         return choices
 
-    
-
-    
-
-
 class TrainingSetAdmin(admin.ModelAdmin):
     """
     Admin Interface to for the TrainigSet module.
@@ -111,7 +106,11 @@ class DocumentAdmin(nested_admin.NestedModelAdmin):
         DocumentDisciplineListFilter,
     )
 
-
+    def get_action_choices(self, request):
+        choices = super(DisciplineAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
+        
 
 def get_app_list(self, request):
     """
