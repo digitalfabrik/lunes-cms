@@ -7,7 +7,7 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
 
 from image_cropping import ImageCroppingMixin
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.utils.module_loading import import_module
@@ -29,7 +29,21 @@ class DisciplineAdmin(OrderedModelAdmin):
     """
 
     search_fields = ["title"]
-    ordering = ["title"]
+    actions = ['delete_selected', 'make_released', 'make_unreleased']
+
+    @admin.action(description=_("Release selected disciplines"))
+    def make_released(self, request, queryset):
+        queryset.update(released = True)
+
+    @admin.action(description=_("Unrelease selected disciplines"))
+    def make_unreleased(self, request, queryset):
+        queryset.update(released = False)
+
+    def get_action_choices(self, request):
+        choices = super(DisciplineAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
+    
     list_display = ("title", "released", "move_up_down_links")
     list_per_page = 25
 
@@ -42,11 +56,23 @@ class TrainingSetAdmin(OrderedModelAdmin):
 
     search_fields = ["title"]
     form = TrainingSetForm
-    ordering = ["title"]
     list_display = ("title", "released", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
+    actions = ['make_released', 'make_unreleased']
     list_per_page = 25
 
+    @admin.action(description=_("Release selected training sets"))
+    def make_released(self, request, queryset):
+        queryset.update(released = True)     
+
+    @admin.action(description=_("Unrelease selected training sets"))
+    def make_unreleased(self, request, queryset):
+        queryset.update(released = False)
+
+    def get_action_choices(self, request):
+        choices = super(TrainingSetAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
 
 class AlternativeWordAdmin(admin.StackedInline):
     """
@@ -90,6 +116,11 @@ class DocumentAdmin(admin.ModelAdmin):
     )
     list_per_page = 25
 
+    def get_action_choices(self, request):
+        choices = super(DocumentAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
+
 
 def get_app_list(self, request):
     """
@@ -121,6 +152,8 @@ def get_app_list(self, request):
         except KeyError:
             pass
     return app_list
+
+
 
 
 admin.AdminSite.get_app_list = get_app_list

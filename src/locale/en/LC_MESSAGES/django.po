@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-23 12:28+0000\n"
+"POT-Creation-Date: 2021-05-25 10:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/vocgui/admin.py:105 src/vocgui/forms.py:25 src/vocgui/forms.py:26
+#: src/vocgui/admin.py:34
+msgid "Release selected disciplines"
+msgstr "Release selected disciplines"
+
+#: src/vocgui/admin.py:38
+msgid "Unrelease selected disciplines"
+msgstr "Unrelease selected disciplines"
+
+#: src/vocgui/admin.py:64
+msgid "Release selected training sets"
+msgstr "Release selected training sets"
+
+#: src/vocgui/admin.py:68
+msgid "Unrelease selected training sets"
+msgstr "Unrelease selected training sets"
+
+#: src/vocgui/admin.py:139 src/vocgui/forms.py:25 src/vocgui/forms.py:26
 #: src/vocgui/list_filter.py:13 src/vocgui/list_filter.py:126
 #: src/vocgui/models.py:66
 msgid "disciplines"
 msgstr "disciplines"
 
-#: src/vocgui/admin.py:106 src/vocgui/list_filter.py:70
+#: src/vocgui/admin.py:140 src/vocgui/list_filter.py:70
 #: src/vocgui/models.py:174
 msgid "training sets"
 msgstr "training sets"
 
-#: src/vocgui/admin.py:107 src/vocgui/forms.py:30 src/vocgui/forms.py:31
+#: src/vocgui/admin.py:141 src/vocgui/forms.py:30 src/vocgui/forms.py:31
 #: src/vocgui/models.py:143 src/vocgui/models.py:144
 msgid "vocabulary"
 msgstr "vocabulary"
