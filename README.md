@@ -124,8 +124,9 @@ Further Documentation can be found by accessing `/redoc` or `/swagger`.
 2. `git clone git@github.com:digitalfabrik/lunes-cms.git`
 3. `cd lunes-cms`
 4. `python3 setup.py install`
-5. Change database settings in settings.py, for example to MySQL or Postgresql. After installation, usually find the settings.py in the /usr/lib/python3.X/site-packages/vocabulary-trainer
-6. `vocabulary-trainer migrate`
-7. `vocabulary-trainer collectstatic`
-8. `systemctl start vocabulary-trainer.service`
-9. Configure Apache2 or Nginx reverse proxy. See provided Apache2 example.
+5. `cat requirements.system | xargs sudo apt-get`
+6. Change database settings in settings.py, for example to MySQL or Postgresql. After installation, usually find the settings.py in the /usr/lib/python3.X/site-packages/vocabulary-trainer
+7. `vocabulary-trainer migrate`
+8. `vocabulary-trainer collectstatic`
+9. `systemctl start vocabulary-trainer.service`
+10. Configure Apache2 or Nginx reverse proxy. See provided Apache2 example.
