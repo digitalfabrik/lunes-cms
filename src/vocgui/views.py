@@ -27,6 +27,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
 
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         """
@@ -60,6 +61,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = DocumentSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         """
@@ -88,6 +90,7 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = TrainingSetSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         """
