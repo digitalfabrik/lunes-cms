@@ -28,8 +28,16 @@ class DisciplineAdmin(OrderedModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
+    readonly_fields = (
+        'created_by',
+    )
     search_fields = ["title"]
     actions = ['delete_selected', 'make_released', 'make_unreleased']
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user.groups.all()[0]
+        obj.save()
 
     @admin.action(description=_("Release selected disciplines"))
     def make_released(self, request, queryset):
@@ -53,13 +61,20 @@ class TrainingSetAdmin(OrderedModelAdmin):
     Admin Interface to for the TrainigSet module.
     Inheriting from `admin.ModelAdmin`.
     """
-
+    readonly_fields = (
+        'created_by',
+    )
     search_fields = ["title"]
     form = TrainingSetForm
     list_display = ("title", "released", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
     actions = ['make_released', 'make_unreleased']
     list_per_page = 25
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user.groups.all()[0]
+        obj.save()
 
     @admin.action(description=_("Release selected training sets"))
     def make_released(self, request, queryset):
@@ -105,7 +120,9 @@ class DocumentAdmin(admin.ModelAdmin):
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
-
+    readonly_fields = (
+        'created_by',
+    )
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
@@ -115,6 +132,11 @@ class DocumentAdmin(admin.ModelAdmin):
         DocumentDisciplineListFilter,
     )
     list_per_page = 25
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user.groups.all()[0]
+        obj.save()
 
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
