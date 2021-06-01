@@ -5,6 +5,7 @@ specify autocomplete_fields, search_fields and nested modules
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
+from django.http.request import RAISE_ERROR
 
 from image_cropping import ImageCroppingMixin
 from django.utils.translation import ugettext_lazy as _
@@ -36,7 +37,10 @@ class DisciplineAdmin(OrderedModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.created_by = request.user.groups.all()[0]
+            if len(request.user.groups.all()) >= 1:
+                obj.created_by = request.user.groups.all()[0]
+            else: 
+                raise IndexError ("No group assigned. Please add the user to a group")
         obj.save()
 
     @admin.action(description=_("Release selected disciplines"))
@@ -73,7 +77,10 @@ class TrainingSetAdmin(OrderedModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.created_by = request.user.groups.all()[0]
+            if len(request.user.groups.all()) >= 1:
+                obj.created_by = request.user.groups.all()[0]
+            else: 
+                raise IndexError ("No group assigned. Please add the user to a group")
         obj.save()
 
     @admin.action(description=_("Release selected training sets"))
@@ -135,7 +142,10 @@ class DocumentAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.created_by = request.user.groups.all()[0].name
+            if len(request.user.groups.all()) >= 1:
+                obj.created_by = request.user.groups.all()[0].name
+            else: 
+                raise IndexError ("No group assigned. Please add the user to a group")
         obj.save()
 
     def get_action_choices(self, request):
