@@ -135,7 +135,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.created_by = request.user.groups.all()[0]
+            obj.created_by = request.user.groups.all()[0].name
         obj.save()
 
     def get_action_choices(self, request):
