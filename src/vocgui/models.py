@@ -102,6 +102,7 @@ class Document(models.Model):
     )
     creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_("creation date"))
     created_by = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("created by"))
+    creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     @property
     def converted(self, content_type="audio/mpeg"):

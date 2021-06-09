@@ -129,6 +129,7 @@ class DocumentAdmin(admin.ModelAdmin):
     """
     readonly_fields = (
         'created_by',
+        'creator_is_admin',
     )
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
@@ -146,6 +147,7 @@ class DocumentAdmin(admin.ModelAdmin):
                 obj.created_by = request.user.groups.all()[0].name
             else: 
                 raise IndexError ("No group assigned. Please add the user to a group")
+            obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
     def get_action_choices(self, request):
