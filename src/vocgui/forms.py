@@ -26,7 +26,7 @@ class TrainingSetForm(forms.ModelForm):
         label=_("disciplines"),
     )
     documents = forms.ModelMultipleChoiceField(
-        queryset=Document.objects.all(),
+        queryset=Document.objects.all().order_by('word'),
         widget=FilteredSelectMultiple(verbose_name=(_("vocabulary")), is_stacked=False),
         label=_("vocabulary"),
     )
