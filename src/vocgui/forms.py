@@ -21,7 +21,7 @@ class TrainingSetForm(forms.ModelForm):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
     discipline = forms.ModelMultipleChoiceField(
-        queryset=Discipline.objects.all(),
+        queryset=Discipline.objects.all().order_by('title'),
         widget=FilteredSelectMultiple(verbose_name=(_("disciplines")), is_stacked=False),
         label=_("disciplines"),
     )
