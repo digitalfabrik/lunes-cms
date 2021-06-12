@@ -51,6 +51,9 @@ class Static:
         "ß":"ss",
     }
 
+    # super admin group name
+    admin_group = "Lunes"
+
 def convert_umlaute_images(instance, filename):
     for i,j in Static.replace_dict.items():
         filename = filename.replace(i,j)

@@ -14,7 +14,7 @@ from django.conf import settings
 from django.utils.module_loading import import_module
 from ordered_model.admin import OrderedModelAdmin
 
-from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
+from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage, Static
 from .list_filter import (
     DisciplineListFilter,
     DocumentTrainingSetListFilter,
@@ -73,7 +73,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
     )
     search_fields = ["title"]
     form = TrainingSetForm
-    list_display = ("title", "released", "related_disciplines", "move_up_down_links")
+    list_display = ("title", "released", "related_disciplines", "creator_group", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
     actions = ['make_released', 'make_unreleased']
     list_per_page = 25
@@ -105,6 +105,17 @@ class TrainingSetAdmin(OrderedModelAdmin):
             child.title for child in obj.discipline.all()
         ])
     related_disciplines.short_description = _('disciplines')
+
+    def creator_group(self, obj):
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+    creator_group.short_description = _('creator group')
+
+    
 
 class AlternativeWordAdmin(admin.StackedInline):
     """
