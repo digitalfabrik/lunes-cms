@@ -38,6 +38,7 @@ class DisciplineAdmin(OrderedModelAdmin):
     list_display = ("title", "released", "creator_group", "move_up_down_links")
     list_per_page = 25
 
+    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
         if not change:
             if len(request.user.groups.all()) >= 1:
@@ -47,6 +48,7 @@ class DisciplineAdmin(OrderedModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
+    # django actions to release/unrelease model
     @admin.action(description=_("Release selected disciplines"))
     def make_released(self, request, queryset):
         queryset.update(released = True)
@@ -60,6 +62,7 @@ class DisciplineAdmin(OrderedModelAdmin):
         choices.pop(0)
         return choices
 
+    # function to display creator group in list display
     def creator_group(self, obj):
         if obj.creator_is_admin:
             return Static.admin_group
@@ -68,6 +71,13 @@ class DisciplineAdmin(OrderedModelAdmin):
         else:
             return None
     creator_group.short_description = _('creator group')
+
+    # only display models of the corresponding user group
+    def get_queryset(self, request):
+        qs = super(DisciplineAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
 
 
 class TrainingSetAdmin(OrderedModelAdmin):
@@ -86,6 +96,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
     actions = ['make_released', 'make_unreleased']
     list_per_page = 25
 
+    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
         if not change:
             if len(request.user.groups.all()) >= 1:
@@ -95,6 +106,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
+    # django actions to release/unrelease model
     @admin.action(description=_("Release selected training sets"))
     def make_released(self, request, queryset):
         queryset.update(released = True)     
@@ -108,12 +120,14 @@ class TrainingSetAdmin(OrderedModelAdmin):
         choices.pop(0)
         return choices
 
+    # fucntion to display related disciplines
     def related_disciplines(self, obj):
         return ", ".join([
             child.title for child in obj.discipline.all()
         ])
     related_disciplines.short_description = _('disciplines')
 
+    # function to display creator group in list display
     def creator_group(self, obj):
         if obj.creator_is_admin:
             return Static.admin_group
@@ -122,6 +136,13 @@ class TrainingSetAdmin(OrderedModelAdmin):
         else:
             return None
     creator_group.short_description = _('creator group')
+
+    # only display models of the corresponding user group
+    def get_queryset(self, request):
+        qs = super(TrainingSetAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
 
     
 
@@ -170,6 +191,7 @@ class DocumentAdmin(admin.ModelAdmin):
     )
     list_per_page = 25
 
+    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
         if not change:
             if len(request.user.groups.all()) >= 1:
@@ -179,17 +201,20 @@ class DocumentAdmin(admin.ModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
+    # function to display available action choices
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices#
     
+    # fucntion to display related training sets
     def related_training_set(self, obj):
         return ", ".join([
             child.title for child in obj.training_sets.all()
         ])
     related_training_set.short_description = _('training set')
 
+    # function to display creator group in list display
     def creator_group(self, obj):
         if obj.creator_is_admin:
             return Static.admin_group
@@ -198,6 +223,13 @@ class DocumentAdmin(admin.ModelAdmin):
         else:
             return None
     creator_group.short_description = _('creator group')
+
+    # only display models of the corresponding user group
+    def get_queryset(self, request):
+        qs = super(DocumentAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
 
 
 def get_app_list(self, request):
