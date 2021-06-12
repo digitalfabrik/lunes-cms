@@ -4,6 +4,8 @@ Models for the UI
 import os
 from pathlib import Path
 from django.db import models
+from django.contrib.auth.models import Group
+from django.db.models.deletion import CASCADE
 from ordered_model.models import OrderedModel
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
@@ -53,6 +55,8 @@ class Discipline(OrderedModel):
         max_length=255, blank=True, verbose_name=_("description")
     )
     icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
+    created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
+    creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     def __str__(self):
         return self.title
@@ -98,6 +102,8 @@ class Document(models.Model):
         verbose_name=_("audio"),
     )
     creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_("creation date"))
+    created_by = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("created by"))
+    creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     @property
     def converted(self, content_type="audio/mpeg"):
@@ -160,7 +166,9 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
     icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
     documents = models.ManyToManyField(Document, related_name="training_sets")
     discipline = models.ManyToManyField(Discipline, related_name="training_sets")
-
+    created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
+    creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    
     def __str__(self):
         return self.title
 
