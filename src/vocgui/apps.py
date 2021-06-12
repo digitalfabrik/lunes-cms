@@ -7,5 +7,6 @@ class VocguiConfig(AppConfig):
     Application settings for the `vocgui` app, which
     is our main cms app. Inherits from `AppConfig`.
     """
+
     name = "vocgui"
     verbose_name = _("vocabulary management")

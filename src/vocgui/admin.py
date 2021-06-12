@@ -13,6 +13,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.utils.module_loading import import_module
 from ordered_model.admin import OrderedModelAdmin
+from functools import partial
 
 from .models import (
     Discipline,
@@ -158,6 +159,25 @@ class TrainingSetAdmin(OrderedModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(created_by__in=request.user.groups.all())
+
+    # define custom choices in many to many selector
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(TrainingSetAdmin, self).get_form(request, obj, **kwargs)
+        if not request.user.is_superuser:
+            form.base_fields["discipline"].queryset = Discipline.objects.filter(
+                created_by__in=request.user.groups.all()
+            )
+            form.base_fields["documents"].queryset = Document.objects.filter(
+                created_by__in=request.user.groups.all()
+            )
+        else:
+            form.base_fields["discipline"].queryset = Discipline.objects.filter(
+                creator_is_admin=True
+            )
+            form.base_fields["documents"].queryset = Document.objects.filter(
+                creator_is_admin=True
+            )
+        return form
 
 
 class AlternativeWordAdmin(admin.StackedInline):
