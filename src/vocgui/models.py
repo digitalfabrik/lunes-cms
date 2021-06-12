@@ -56,6 +56,7 @@ class Discipline(OrderedModel):
     )
     icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
     created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
+    creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     def __str__(self):
         return self.title
@@ -166,6 +167,7 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
     documents = models.ManyToManyField(Document, related_name="training_sets")
     discipline = models.ManyToManyField(Discipline, related_name="training_sets")
     created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
+    creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     
     def __str__(self):
         return self.title

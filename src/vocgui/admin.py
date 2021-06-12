@@ -31,6 +31,7 @@ class DisciplineAdmin(OrderedModelAdmin):
 
     readonly_fields = (
         'created_by',
+        'creator_is_admin',
     )
     search_fields = ["title"]
     actions = ['delete_selected', 'make_released', 'make_unreleased']
@@ -41,6 +42,7 @@ class DisciplineAdmin(OrderedModelAdmin):
                 obj.created_by = request.user.groups.all()[0]
             else: 
                 raise IndexError ("No group assigned. Please add the user to a group")
+            obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
     @admin.action(description=_("Release selected disciplines"))
@@ -67,6 +69,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
     """
     readonly_fields = (
         'created_by',
+        'creator_is_admin',
     )
     search_fields = ["title"]
     form = TrainingSetForm
@@ -81,6 +84,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
                 obj.created_by = request.user.groups.all()[0]
             else: 
                 raise IndexError ("No group assigned. Please add the user to a group")
+            obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
     @admin.action(description=_("Release selected training sets"))
