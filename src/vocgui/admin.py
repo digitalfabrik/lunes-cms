@@ -109,7 +109,7 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
-    list_display = ("word", "word_type", "article", "creation_date")
+    list_display = ("word", "word_type", "article", "related_training_set", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
@@ -119,7 +119,13 @@ class DocumentAdmin(admin.ModelAdmin):
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
-        return choices
+        return choices#
+    
+    def related_training_set(self, obj):
+        return ", ".join([
+            child.title for child in obj.training_sets.all()
+        ])
+    related_training_set.short_description = _('training set')
 
 
 def get_app_list(self, request):
