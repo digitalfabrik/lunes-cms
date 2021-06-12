@@ -35,6 +35,8 @@ class DisciplineAdmin(OrderedModelAdmin):
     )
     search_fields = ["title"]
     actions = ['delete_selected', 'make_released', 'make_unreleased']
+    list_display = ("title", "released", "creator_group", "move_up_down_links")
+    list_per_page = 25
 
     def save_model(self, request, obj, form, change):
         if not change:
@@ -57,9 +59,15 @@ class DisciplineAdmin(OrderedModelAdmin):
         choices = super(DisciplineAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
-    
-    list_display = ("title", "released", "move_up_down_links")
-    list_per_page = 25
+
+    def creator_group(self, obj):
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+    creator_group.short_description = _('creator group')
 
 
 class TrainingSetAdmin(OrderedModelAdmin):
@@ -155,7 +163,7 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
-    list_display = ("word", "word_type", "article", "related_training_set", "creation_date")
+    list_display = ("word", "word_type", "article", "related_training_set", "creator_group", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
@@ -181,6 +189,15 @@ class DocumentAdmin(admin.ModelAdmin):
             child.title for child in obj.training_sets.all()
         ])
     related_training_set.short_description = _('training set')
+
+    def creator_group(self, obj):
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+    creator_group.short_description = _('creator group')
 
 
 def get_app_list(self, request):
