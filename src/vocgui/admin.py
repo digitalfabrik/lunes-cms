@@ -73,7 +73,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
     )
     search_fields = ["title"]
     form = TrainingSetForm
-    list_display = ("title", "released", "move_up_down_links")
+    list_display = ("title", "released", "related_disciplines", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
     actions = ['make_released', 'make_unreleased']
     list_per_page = 25
@@ -99,6 +99,12 @@ class TrainingSetAdmin(OrderedModelAdmin):
         choices = super(TrainingSetAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
+
+    def related_disciplines(self, obj):
+        return ", ".join([
+            child.title for child in obj.discipline.all()
+        ])
+    related_disciplines.short_description = _('disciplines')
 
 class AlternativeWordAdmin(admin.StackedInline):
     """
@@ -138,7 +144,7 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
-    list_display = ("word", "word_type", "article", "creation_date")
+    list_display = ("word", "word_type", "article", "related_training_set", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
@@ -157,7 +163,13 @@ class DocumentAdmin(admin.ModelAdmin):
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
-        return choices
+        return choices#
+    
+    def related_training_set(self, obj):
+        return ", ".join([
+            child.title for child in obj.training_sets.all()
+        ])
+    related_training_set.short_description = _('training set')
 
 
 def get_app_list(self, request):
