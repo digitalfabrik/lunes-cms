@@ -5,6 +5,7 @@ specify autocomplete_fields, search_fields and nested modules
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
+from django.http.request import RAISE_ERROR
 
 from image_cropping import ImageCroppingMixin
 from django.utils.translation import ugettext_lazy as _
@@ -28,8 +29,21 @@ class DisciplineAdmin(OrderedModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
+    readonly_fields = (
+        'created_by',
+        'creator_is_admin',
+    )
     search_fields = ["title"]
     actions = ['delete_selected', 'make_released', 'make_unreleased']
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if len(request.user.groups.all()) >= 1:
+                obj.created_by = request.user.groups.all()[0]
+            else: 
+                raise IndexError ("No group assigned. Please add the user to a group")
+            obj.creator_is_admin = request.user.is_superuser
+        obj.save()
 
     @admin.action(description=_("Release selected disciplines"))
     def make_released(self, request, queryset):
@@ -53,13 +67,25 @@ class TrainingSetAdmin(OrderedModelAdmin):
     Admin Interface to for the TrainigSet module.
     Inheriting from `admin.ModelAdmin`.
     """
-
+    readonly_fields = (
+        'created_by',
+        'creator_is_admin',
+    )
     search_fields = ["title"]
     form = TrainingSetForm
-    list_display = ("title", "released", "move_up_down_links")
+    list_display = ("title", "released", "related_disciplines", "move_up_down_links")
     list_filter = (DisciplineListFilter,)
     actions = ['make_released', 'make_unreleased']
     list_per_page = 25
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if len(request.user.groups.all()) >= 1:
+                obj.created_by = request.user.groups.all()[0]
+            else: 
+                raise IndexError ("No group assigned. Please add the user to a group")
+            obj.creator_is_admin = request.user.is_superuser
+        obj.save()
 
     @admin.action(description=_("Release selected training sets"))
     def make_released(self, request, queryset):
@@ -73,6 +99,12 @@ class TrainingSetAdmin(OrderedModelAdmin):
         choices = super(TrainingSetAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
+
+    def related_disciplines(self, obj):
+        return ", ".join([
+            child.title for child in obj.discipline.all()
+        ])
+    related_disciplines.short_description = _('disciplines')
 
 class AlternativeWordAdmin(admin.StackedInline):
     """
@@ -105,21 +137,39 @@ class DocumentAdmin(admin.ModelAdmin):
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
-
+    readonly_fields = (
+        'created_by',
+        'creator_is_admin',
+    )
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
-    list_display = ("word", "word_type", "article", "creation_date")
+    list_display = ("word", "word_type", "article", "related_training_set", "creation_date")
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
     )
     list_per_page = 25
 
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if len(request.user.groups.all()) >= 1:
+                obj.created_by = request.user.groups.all()[0].name
+            else: 
+                raise IndexError ("No group assigned. Please add the user to a group")
+            obj.creator_is_admin = request.user.is_superuser
+        obj.save()
+
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
-        return choices
+        return choices#
+    
+    def related_training_set(self, obj):
+        return ", ".join([
+            child.title for child in obj.training_sets.all()
+        ])
+    related_training_set.short_description = _('training set')
 
 
 def get_app_list(self, request):
