@@ -40,6 +40,26 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
+    # letters that should be converted
+    replace_dict = {
+        "Ä":"Ae",
+        "Ö":"Oe",
+        "Ü":"Ue",
+        "ä":"ae",
+        "ö":"oe",
+        "ü":"ue",
+        "ß":"ss",
+    }
+
+def convert_umlaute_images(instance, filename):
+    for i,j in Static.replace_dict.items():
+        filename = filename.replace(i,j)
+    return os.path.join('images/', filename)
+
+def convert_umlaute_audio(instance, filename):
+    for i,j in Static.replace_dict.items():
+        filename = filename.replace(i,j)
+    return os.path.join('audio/', filename)
 
 class Discipline(OrderedModel):
     """
@@ -54,7 +74,7 @@ class Discipline(OrderedModel):
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
-    icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
+    icon = models.ImageField(upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon"))
     created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
@@ -91,7 +111,7 @@ class Document(models.Model):
         verbose_name=_("article"),
     )
     audio = models.FileField(
-        upload_to="audio/",
+        upload_to=convert_umlaute_audio,
         validators=[
             validate_file_extension,
             validate_file_size,
@@ -163,7 +183,7 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
-    icon = models.ImageField(upload_to="images/", blank=True, verbose_name=_("icon"))
+    icon = models.ImageField(upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon"))
     documents = models.ManyToManyField(Document, related_name="training_sets")
     discipline = models.ManyToManyField(Discipline, related_name="training_sets")
     created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
@@ -186,7 +206,7 @@ class DocumentImage(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
-        upload_to="images/", validators=[validate_multiple_extensions]
+        upload_to=convert_umlaute_images, validators=[validate_multiple_extensions]
     )
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="document_image"
