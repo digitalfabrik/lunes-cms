@@ -20,14 +20,14 @@ from .serializers import (
 
 class DisciplineViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the Discipline module.
+    Defines a view set for the Discipline module, optionally filtered by user groups.
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
 
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
-    http_method_names = ['get']
+    http_method_names = ["get"]
 
     def get_queryset(self):
         """
@@ -41,15 +41,31 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
-        queryset = (
-            Discipline.objects.filter(released=True)
-            .order_by("order")
-            .annotate(
-                total_training_sets=Count(
-                    "training_sets", filter=Q(training_sets__released=True)
+        if 'group_id' in self.kwargs:
+            groups = self.kwargs["group_id"].split("&")
+            queryset = (
+                Discipline.objects.filter(
+                    Q(released=True) & (Q(creator_is_admin=True) | Q(created_by__in=groups))
+                )
+                .order_by("order")
+                .annotate(
+                    total_training_sets=Count(
+                        "training_sets", filter=Q(training_sets__released=True)
+                    )
                 )
             )
-        )
+        else:
+            queryset = (
+                Discipline.objects.filter(
+                    Q(released=True) & Q(creator_is_admin=True)
+                )
+                .order_by("order")
+                .annotate(
+                    total_training_sets=Count(
+                        "training_sets", filter=Q(training_sets__released=True)
+                    )
+                )
+            )
         return queryset
 
 
@@ -61,7 +77,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = DocumentSerializer
-    http_method_names = ['get']
+    http_method_names = ["get"]
 
     def get_queryset(self):
         """
@@ -90,7 +106,7 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = TrainingSetSerializer
-    http_method_names = ['get']
+    http_method_names = ["get"]
 
     def get_queryset(self):
         """

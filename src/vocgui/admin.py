@@ -13,8 +13,16 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.utils.module_loading import import_module
 from ordered_model.admin import OrderedModelAdmin
+from functools import partial
 
-from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
+from .models import (
+    Discipline,
+    TrainingSet,
+    Document,
+    AlternativeWord,
+    DocumentImage,
+    Static,
+)
 from .list_filter import (
     DisciplineListFilter,
     DocumentTrainingSetListFilter,
@@ -30,36 +38,55 @@ class DisciplineAdmin(OrderedModelAdmin):
     """
 
     readonly_fields = (
-        'created_by',
-        'creator_is_admin',
+        "created_by",
+        "creator_is_admin",
     )
     search_fields = ["title"]
-    actions = ['delete_selected', 'make_released', 'make_unreleased']
+    actions = ["delete_selected", "make_released", "make_unreleased"]
+    list_display = ("title", "released", "creator_group", "move_up_down_links")
+    list_per_page = 25
 
+    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]
-            else: 
-                raise IndexError ("No group assigned. Please add the user to a group")
+            else:
+                raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
+    # django actions to release/unrelease model
     @admin.action(description=_("Release selected disciplines"))
     def make_released(self, request, queryset):
-        queryset.update(released = True)
+        queryset.update(released=True)
 
     @admin.action(description=_("Unrelease selected disciplines"))
     def make_unreleased(self, request, queryset):
-        queryset.update(released = False)
+        queryset.update(released=False)
 
     def get_action_choices(self, request):
         choices = super(DisciplineAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
-    
-    list_display = ("title", "released", "move_up_down_links")
-    list_per_page = 25
+
+    # function to display creator group in list display
+    def creator_group(self, obj):
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+
+    creator_group.short_description = _("creator group")
+
+    # only display models of the corresponding user group
+    def get_queryset(self, request):
+        qs = super(DisciplineAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
 
 
 class TrainingSetAdmin(OrderedModelAdmin):
@@ -67,44 +94,91 @@ class TrainingSetAdmin(OrderedModelAdmin):
     Admin Interface to for the TrainigSet module.
     Inheriting from `admin.ModelAdmin`.
     """
+
     readonly_fields = (
-        'created_by',
-        'creator_is_admin',
+        "created_by",
+        "creator_is_admin",
     )
     search_fields = ["title"]
     form = TrainingSetForm
-    list_display = ("title", "released", "related_disciplines", "move_up_down_links")
+    list_display = (
+        "title",
+        "released",
+        "related_disciplines",
+        "creator_group",
+        "move_up_down_links",
+    )
     list_filter = (DisciplineListFilter,)
-    actions = ['make_released', 'make_unreleased']
+    actions = ["make_released", "make_unreleased"]
     list_per_page = 25
 
+    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]
-            else: 
-                raise IndexError ("No group assigned. Please add the user to a group")
+            else:
+                raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
+    # django actions to release/unrelease model
     @admin.action(description=_("Release selected training sets"))
     def make_released(self, request, queryset):
-        queryset.update(released = True)     
+        queryset.update(released=True)
 
     @admin.action(description=_("Unrelease selected training sets"))
     def make_unreleased(self, request, queryset):
-        queryset.update(released = False)
+        queryset.update(released=False)
 
     def get_action_choices(self, request):
         choices = super(TrainingSetAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
 
+    # fucntion to display related disciplines
     def related_disciplines(self, obj):
-        return ", ".join([
-            child.title for child in obj.discipline.all()
-        ])
-    related_disciplines.short_description = _('disciplines')
+        return ", ".join([child.title for child in obj.discipline.all()])
+
+    related_disciplines.short_description = _("disciplines")
+
+    # function to display creator group in list display
+    def creator_group(self, obj):
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+
+    creator_group.short_description = _("creator group")
+
+    # only display models of the corresponding user group
+    def get_queryset(self, request):
+        qs = super(TrainingSetAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
+
+    # define custom choices in many to many selector
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(TrainingSetAdmin, self).get_form(request, obj, **kwargs)
+        if not request.user.is_superuser:
+            form.base_fields["discipline"].queryset = Discipline.objects.filter(
+                created_by__in=request.user.groups.all()
+            )
+            form.base_fields["documents"].queryset = Document.objects.filter(
+                created_by__in=request.user.groups.all()
+            )
+        else:
+            form.base_fields["discipline"].queryset = Discipline.objects.filter(
+                creator_is_admin=True
+            )
+            form.base_fields["documents"].queryset = Document.objects.filter(
+                creator_is_admin=True
+            )
+        return form
+
 
 class AlternativeWordAdmin(admin.StackedInline):
     """
@@ -137,39 +211,67 @@ class DocumentAdmin(admin.ModelAdmin):
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
+
     readonly_fields = (
-        'created_by',
-        'creator_is_admin',
+        "created_by",
+        "creator_is_admin",
     )
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
-    list_display = ("word", "word_type", "article", "related_training_set", "creation_date")
+    list_display = (
+        "word",
+        "word_type",
+        "article",
+        "related_training_set",
+        "creator_group",
+        "creation_date",
+    )
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
     )
     list_per_page = 25
 
+    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0].name
-            else: 
-                raise IndexError ("No group assigned. Please add the user to a group")
+            else:
+                raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
+    # function to display available action choices
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
-        return choices#
-    
+        return choices
+
+    # fucntion to display related training sets
     def related_training_set(self, obj):
-        return ", ".join([
-            child.title for child in obj.training_sets.all()
-        ])
-    related_training_set.short_description = _('training set')
+        return ", ".join([child.title for child in obj.training_sets.all()])
+
+    related_training_set.short_description = _("training set")
+
+    # function to display creator group in list display
+    def creator_group(self, obj):
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+
+    creator_group.short_description = _("creator group")
+
+    # only display models of the corresponding user group
+    def get_queryset(self, request):
+        qs = super(DocumentAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
 
 
 def get_app_list(self, request):
@@ -202,8 +304,6 @@ def get_app_list(self, request):
         except KeyError:
             pass
     return app_list
-
-
 
 
 admin.AdminSite.get_app_list = get_app_list

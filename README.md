@@ -14,6 +14,14 @@ GET /api/disciplines/ HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
+The default endpoint delivers all disciplines created by Lunes administrators. Optionally, group ids can be passed as well (multiple ids devided by `&`):
+```http
+GET /api/disciplines/[[GROUP_ID]&[GROUP_ID]&[...]] HTTP/1.1
+Host: lunes.tuerantuer.org
+Content-Type: application/json
+```
+The request will return all disciplines either created by Lunes administrators or by one of the passed user groups.
+
 ### Response
 ```javascript
 [
@@ -22,6 +30,7 @@ Content-Type: application/json
         "title": String,                // title of discipline
         "description": String,          // description of discipline 
         "icon": String,                 // URL to image
+        "created_by": Integer           // Creator group id, null if created by admin 
         "total_training_sets": Integer  // # of training sets
     },
     [...]   // repeats for available disciplines

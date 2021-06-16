@@ -4,7 +4,9 @@ Models for the UI
 import os
 from pathlib import Path
 from django.db import models
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, Group
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db.models.deletion import CASCADE
 from ordered_model.models import OrderedModel
 from PIL import Image, ImageFilter
@@ -42,24 +44,33 @@ class Static:
 
     # letters that should be converted
     replace_dict = {
-        "Ä":"Ae",
-        "Ö":"Oe",
-        "Ü":"Ue",
-        "ä":"ae",
-        "ö":"oe",
-        "ü":"ue",
-        "ß":"ss",
+        "Ä": "Ae",
+        "Ö": "Oe",
+        "Ü": "Ue",
+        "ä": "ae",
+        "ö": "oe",
+        "ü": "ue",
+        "ß": "ss",
     }
 
+    # super admin group name
+    admin_group = "Lunes"
+
+    # default group name
+    default_group_name = None
+
+
 def convert_umlaute_images(instance, filename):
-    for i,j in Static.replace_dict.items():
-        filename = filename.replace(i,j)
-    return os.path.join('images/', filename)
+    for i, j in Static.replace_dict.items():
+        filename = filename.replace(i, j)
+    return os.path.join("images/", filename)
+
 
 def convert_umlaute_audio(instance, filename):
-    for i,j in Static.replace_dict.items():
-        filename = filename.replace(i,j)
-    return os.path.join('audio/', filename)
+    for i, j in Static.replace_dict.items():
+        filename = filename.replace(i, j)
+    return os.path.join("audio/", filename)
+
 
 class Discipline(OrderedModel):
     """
@@ -74,8 +85,12 @@ class Discipline(OrderedModel):
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
-    icon = models.ImageField(upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon"))
-    created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
+    icon = models.ImageField(
+        upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
+    )
+    created_by = models.ForeignKey(
+        Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by")
+    )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     def __str__(self):
@@ -121,8 +136,12 @@ class Document(models.Model):
         null=True,
         verbose_name=_("audio"),
     )
-    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_("creation date"))
-    created_by = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("created by"))
+    creation_date = models.DateTimeField(
+        auto_now_add=True, verbose_name=_("creation date")
+    )
+    created_by = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("created by")
+    )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     @property
@@ -183,12 +202,16 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
-    icon = models.ImageField(upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon"))
+    icon = models.ImageField(
+        upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
+    )
     documents = models.ManyToManyField(Document, related_name="training_sets")
     discipline = models.ManyToManyField(Discipline, related_name="training_sets")
-    created_by = models.ForeignKey(Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"))
+    created_by = models.ForeignKey(
+        Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by")
+    )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
-    
+
     def __str__(self):
         return self.title
 
@@ -309,3 +332,10 @@ class AlternativeWord(models.Model):
 
         verbose_name = _("alternative word")
         verbose_name_plural = _("alternative words")
+
+
+# automatically adds a group when creating a new user if group name given in Static module
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if Static.default_group_name and created:
+        instance.groups.add(Group.objects.get(name=Static.default_group_name))
