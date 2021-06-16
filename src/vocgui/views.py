@@ -42,7 +42,45 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
         queryset = (
-            Discipline.objects.filter(released=True)
+            Discipline.objects.filter(Q(released=True) & Q(creator_is_admin=True))
+            .order_by("order")
+            .annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                )
+            )
+        )
+        return queryset
+
+
+class DisciplineGroupViewSet(viewsets.ModelViewSet):
+    """
+    Defines a view set for the Discipline module filtered by user groups.
+    Inherits from `viewsets.ModelViewSet` and defines queryset
+    and serializers.
+    """
+
+    queryset = Discipline.objects.all()
+    serializer_class = DisciplineSerializer
+    http_method_names = ["get"]
+
+    def get_queryset(self):
+        """
+        Defining custom queryset
+
+        :param self: A handle to the :class:`DisciplineGroupViewSet`
+        :type self: class
+
+        :return: (filtered) queryset
+        :rtype: QuerySet
+        """
+        if getattr(self, "swagger_fake_view", False):
+            return Discipline.objects.none()
+        groups = self.kwargs["group_id"].split("&")
+        queryset = (
+            Discipline.objects.filter(
+                Q(released=True) & (Q(creator_is_admin=True) | Q(created_by__in=groups))
+            )
             .order_by("order")
             .annotate(
                 total_training_sets=Count(

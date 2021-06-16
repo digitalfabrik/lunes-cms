@@ -247,7 +247,7 @@ class DocumentAdmin(admin.ModelAdmin):
     def get_action_choices(self, request):
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
-        return choices  #
+        return choices
 
     # fucntion to display related training sets
     def related_training_set(self, obj):

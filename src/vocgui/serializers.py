@@ -17,7 +17,14 @@ class DisciplineSerializer(serializers.ModelSerializer):
         """
 
         model = Discipline
-        fields = ("id", "title", "description", "icon", "total_training_sets")
+        fields = (
+            "id",
+            "title",
+            "description",
+            "icon",
+            "created_by",
+            "total_training_sets",
+        )
 
 
 class TrainingSetSerializer(serializers.ModelSerializer):

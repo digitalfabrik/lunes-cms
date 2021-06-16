@@ -4,7 +4,7 @@ Models for the UI
 import os
 from pathlib import Path
 from django.db import models
-from django.contrib.auth.models import User, Group 
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models.deletion import CASCADE
@@ -57,7 +57,7 @@ class Static:
     admin_group = "Lunes"
 
     # default group name
-    default_group_name = "Lunes Admin"
+    default_group_name = None
 
 
 def convert_umlaute_images(instance, filename):
@@ -333,11 +333,9 @@ class AlternativeWord(models.Model):
         verbose_name = _("alternative word")
         verbose_name_plural = _("alternative words")
 
-# automatically adds a group when creating a new user
+
+# automatically adds a group when creating a new user if group name given in Static module
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    if created:
+    if Static.default_group_name and created:
         instance.groups.add(Group.objects.get(name=Static.default_group_name))
-
-        
-
