@@ -55,17 +55,17 @@ class DisciplineViewSet(viewsets.ModelViewSet):
                 )
             )
         else:
-                queryset = (
-                    Discipline.objects.filter(
-                        Q(released=True) & Q(creator_is_admin=True)
-                    )
-                    .order_by("order")
-                    .annotate(
-                        total_training_sets=Count(
-                            "training_sets", filter=Q(training_sets__released=True)
-                        )
+            queryset = (
+                Discipline.objects.filter(
+                    Q(released=True) & Q(creator_is_admin=True)
+                )
+                .order_by("order")
+                .annotate(
+                    total_training_sets=Count(
+                        "training_sets", filter=Q(training_sets__released=True)
                     )
                 )
+            )
         return queryset
 
 
