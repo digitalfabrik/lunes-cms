@@ -5,6 +5,7 @@ specify autocomplete_fields, search_fields and nested modules
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
+from django.forms.fields import NullBooleanField
 from django.http.request import RAISE_ERROR
 
 from image_cropping import ImageCroppingMixin
@@ -224,6 +225,8 @@ class DocumentAdmin(admin.ModelAdmin):
         "word_type",
         "article",
         "related_training_set",
+        "has_audio",
+        "has_image",
         "creator_group",
         "creation_date",
     )
@@ -263,6 +266,25 @@ class DocumentAdmin(admin.ModelAdmin):
             return obj.created_by
         else:
             return None
+
+
+    # function to display if the document has an audio 
+    def has_audio(self, obj):
+        if obj.audio:
+            return True
+        else:
+            return False
+    has_audio.boolean = True
+    has_audio.short_description = _("audio")
+
+    # function to display if the document has atleast one image
+    def has_image(self, obj):
+        if DocumentImage.objects.all().filter(document = obj):
+            return True
+        else:
+            return False
+    has_image.boolean = True
+    has_image.short_description = _("image")
 
     creator_group.short_description = _("creator group")
 
