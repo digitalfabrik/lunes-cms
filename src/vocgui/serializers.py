@@ -56,7 +56,16 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
         """
 
         model = AlternativeWord
-        fields = ("alt_word", "article")
+        fields = ("alt_word", "article", "plural_article")
+
+    def to_representation(self, data):
+        data = super(AlternativeWordSerializer, self).to_representation(data)
+        if data['article'] == "die (Plural)":
+            data['article'] = "die"
+            data['plural_article'] = True
+        else:
+            data['plural_article'] = False
+        return data
 
 
 class DocumentImageSerializer(serializers.ModelSerializer):
@@ -83,6 +92,8 @@ class DocumentSerializer(serializers.ModelSerializer):
     alternatives = AlternativeWordSerializer(many=True, read_only=True)
     document_image = DocumentImageSerializer(many=True, read_only=True)
 
+
+    
     class Meta:
         """
         Define model and the corresponding fields
@@ -93,8 +104,20 @@ class DocumentSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
+            "plural_article",
             "audio",
             "word_type",
             "alternatives",
             "document_image",
         )
+
+    # modifys data to deliver the correct articles to frontend
+    def to_representation(self, data):
+        data = super(DocumentSerializer, self).to_representation(data)
+        if data['article'] == "die (Plural)":
+            data['article'] = "die"
+            data['plural_article'] = True
+        else:
+            data['plural_article'] = False
+        return data
+
