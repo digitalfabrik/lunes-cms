@@ -266,7 +266,8 @@ class DocumentAdmin(admin.ModelAdmin):
             return obj.created_by
         else:
             return None
-
+    creator_group.short_description = _("creator group")
+    creator_group.admin_order_field = 'created_by'
 
     # function to display if the document has an audio 
     def has_audio(self, obj):
@@ -276,6 +277,7 @@ class DocumentAdmin(admin.ModelAdmin):
             return False
     has_audio.boolean = True
     has_audio.short_description = _("audio")
+    has_audio.admin_order_field = 'audio' 
 
     # function to display if the document has atleast one image
     def has_image(self, obj):
@@ -285,8 +287,9 @@ class DocumentAdmin(admin.ModelAdmin):
             return False
     has_image.boolean = True
     has_image.short_description = _("image")
+    has_image.admin_order_field = 'document_image__document'
 
-    creator_group.short_description = _("creator group")
+   
 
     # only display models of the corresponding user group
     def get_queryset(self, request):
