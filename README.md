@@ -73,14 +73,14 @@ Content-Type: application/json
         "id": Integer,              // ID of training set
         "word": String,             // primary correct answer
         "article": String,          // article (german grammer) belonging to the item
-        "plural_article": Boolean,  // if the article is plural
+        "plural_article": Boolean,  // whether the article is plural
         "audio": String,            // URL to (converted) audio file
         "word_type": String,        // Word type of document: Nomen, Verb, Adjektiv
         "alternatives": [
             {
-                "alt_word": String,         //Alternative word
-                "article": String           //Article of alternative word
-                "plural_article": Boolean,  // if the article is plural
+                "alt_word": String,         // Alternative word
+                "article": String           // Article of alternative word
+                "plural_article": Boolean,  // whether the article is plural
             },
             [...]   // repeats for available alternatives
         ],
