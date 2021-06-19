@@ -13,6 +13,7 @@ from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import mark_safe
 from .validators import (
     validate_file_extension,
     validate_file_size,
@@ -41,6 +42,7 @@ class Static:
     blurr_radius = 30
     # maximum (width, height) of images
     img_size = (1024, 768)
+
 
     # letters that should be converted
     replace_dict = {
@@ -143,6 +145,7 @@ class Document(models.Model):
         max_length=255, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    plural_article = models.BooleanField(default=False)
 
     @property
     def converted(self, content_type="audio/mpeg"):
@@ -235,6 +238,11 @@ class DocumentImage(models.Model):
         Document, on_delete=models.CASCADE, related_name="document_image"
     )
 
+    def image_tag(self):
+            return mark_safe('<img src="/media/%s" width="330" height="240"/>' % (self.image))
+
+    image_tag.short_description = ''
+
     def save_original_img(self):
         """
         Function to save rough image with '_original' extension
@@ -317,6 +325,7 @@ class AlternativeWord(models.Model):
         default="",
         verbose_name=_("article"),
     )
+    plural_article = models.BooleanField(default=False)
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="alternatives"
     )

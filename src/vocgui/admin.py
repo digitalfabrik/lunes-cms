@@ -201,6 +201,8 @@ class DocumentImageAdmin(admin.StackedInline):
 
     model = DocumentImage
     search_fields = ["name"]
+    fields = ['name', 'image', 'image_tag']
+    readonly_fields = ['image_tag']
     autocomplete_fields = ["document"]
     insert_after = "autocomplete_fields"
     extra = 0
