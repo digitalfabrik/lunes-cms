@@ -43,7 +43,6 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
-
     # letters that should be converted
     replace_dict = {
         "Ä": "Ae",
@@ -145,7 +144,6 @@ class Document(models.Model):
         max_length=255, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
-    plural_article = models.BooleanField(default=False)
 
     @property
     def converted(self, content_type="audio/mpeg"):
@@ -325,7 +323,6 @@ class AlternativeWord(models.Model):
         default="",
         verbose_name=_("article"),
     )
-    plural_article = models.BooleanField(default=False)
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="alternatives"
     )
