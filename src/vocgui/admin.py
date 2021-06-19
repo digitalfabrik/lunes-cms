@@ -212,7 +212,7 @@ class DocumentAdmin(admin.ModelAdmin):
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
-
+    exclude = ('article_plural',) # hide article_plural in admin
     readonly_fields = (
         "created_by",
         "creator_is_admin",
