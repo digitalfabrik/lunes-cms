@@ -18,6 +18,7 @@ from .validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
+from .utils import create_ressource_path
 
 
 class Static:
@@ -42,35 +43,11 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
-    # letters that should be converted
-    replace_dict = {
-        "Ä": "Ae",
-        "Ö": "Oe",
-        "Ü": "Ue",
-        "ä": "ae",
-        "ö": "oe",
-        "ü": "ue",
-        "ß": "ss",
-    }
-
-    # super admin group name
-    admin_group = "Lunes"
-
-    # default group name
-    default_group_name = None
-
-
 def convert_umlaute_images(instance, filename):
-    for i, j in Static.replace_dict.items():
-        filename = filename.replace(i, j)
-    return os.path.join("images/", filename)
-
+    return create_ressource_path("images", filename)
 
 def convert_umlaute_audio(instance, filename):
-    for i, j in Static.replace_dict.items():
-        filename = filename.replace(i, j)
-    return os.path.join("audio/", filename)
-
+    return create_ressource_path("audio", filename)
 
 class Discipline(OrderedModel):
     """
