@@ -13,7 +13,7 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
     title = _("disciplines")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = ("disciplines")
+    parameter_name = "disciplines"
 
     def lookups(self, request, model_admin):
         """
@@ -57,7 +57,9 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value to decide how to filter the queryset.
         if self.value():
-            return queryset.filter(training_sets__discipline__id=self.value()).distinct()
+            return queryset.filter(
+                training_sets__discipline__id=self.value()
+            ).distinct()
         return queryset
 
 
@@ -70,7 +72,7 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
     title = _("training sets")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = ("training set")
+    parameter_name = "training set"
 
     def lookups(self, request, model_admin):
         """
@@ -126,7 +128,7 @@ class DisciplineListFilter(admin.SimpleListFilter):
     title = _("disciplines")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = ("discipline")
+    parameter_name = "discipline"
 
     default_value = None
 
