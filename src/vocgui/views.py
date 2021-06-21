@@ -1,6 +1,8 @@
 """
 REST-Framework
 """
+import json
+
 from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import render
@@ -8,7 +10,7 @@ from rest_framework import viewsets
 from django.shortcuts import redirect
 from django.db.models import Count, Q
 
-from .models import TrainingSet, Document, AlternativeWord, Discipline
+from .models import TrainingSet, Document, AlternativeWord, Discipline, DocumentImage
 from .serializers import (
     DisciplineSerializer,
     DocumentSerializer,
@@ -142,3 +144,26 @@ def redirect_view(request):
     :rtype: HttpResponse
     """
     return redirect("api/")
+
+
+def public_upload(request):
+    """
+    Public form to upload missing images
+    """
+    if request.method == 'POST':
+        document = Document.objects.get(id=request.POST.get("inputDocument", None))
+        if document:
+            uploaded_image = request.FILES.get("inputFile", None)
+            if uploaded_image:
+                image = DocumentImage(document=document,
+                                      image=uploaded_image,
+                                      name=document.word,
+                                      confirmed=False)
+                image.save()
+    missing_images = (Document.objects.values_list("id", "word", "article", "training_sets").
+                      filter(document_image__isnull=True))
+    training_sets = (TrainingSet.objects.values_list("id", "title").
+                     filter(documents__document_image__isnull=True).distinct())
+    context = {"documents": json.dumps(list(missing_images)),
+               "training_sets": json.dumps(list(training_sets))}
+    return render(request, 'public_upload.html', context)

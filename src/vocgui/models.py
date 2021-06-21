@@ -215,6 +215,7 @@ class DocumentImage(models.Model):
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="document_image"
     )
+    confirmed = models.BooleanField(default=True, verbose_name="confirmed")
 
     def save_original_img(self):
         """
