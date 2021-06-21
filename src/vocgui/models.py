@@ -237,8 +237,7 @@ class DocumentImage(models.Model):
     )
 
     def image_tag(self):
-            return mark_safe('<img src="/media/%s" width="330" height="240"/>' % (self.image))
-
+        return mark_safe('<img src="/media/%s" width="330" height="240"/>' % (self.image))
     image_tag.short_description = ''
 
     def save_original_img(self):
