@@ -20,6 +20,7 @@ from .validators import (
 )
 from .utils import create_ressource_path
 
+
 class Static:
     """
     Module for static and global variables
