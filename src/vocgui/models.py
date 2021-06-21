@@ -52,7 +52,6 @@ class Static:
 def convert_umlaute_images(instance, filename):
     return create_ressource_path("images", filename)
 
-
 def convert_umlaute_audio(instance, filename):
     return create_ressource_path("audio", filename)
 
