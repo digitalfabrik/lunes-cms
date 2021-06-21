@@ -61,13 +61,13 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
     def to_representation(self, data):
         data = super(AlternativeWordSerializer, self).to_representation(data)
         if data['article'] == "der":
-            data['article'] = "1"
+            data['article'] = 1
         elif data['article'] == "die":
-            data['article'] = "2"
+            data['article'] = 2
         elif data['article'] == "das":
-            data['article'] = "3"
+            data['article'] = 3
         elif data['article'] == "die (Plural)":
-            data['article'] = "4"
+            data['article'] = 4
         return data
 
 

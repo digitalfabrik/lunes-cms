@@ -79,8 +79,7 @@ Content-Type: application/json
         "alternatives": [
             {
                 "alt_word": String,         // Alternative word
-                "article": String           // Article of alternative word
-                "plural_article": Boolean,  // whether the article is plural
+                "article": Integer,         // ID of article (german grammer) belonging to the item (1:Der, 2:Die, 3:Das, 4:Die (Plural))
             },
             [...]   // repeats for available alternatives
         ],
