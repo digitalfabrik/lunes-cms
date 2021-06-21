@@ -56,15 +56,18 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
         """
 
         model = AlternativeWord
-        fields = ("alt_word", "article", "plural_article")
+        fields = ("alt_word", "article")
 
     def to_representation(self, data):
         data = super(AlternativeWordSerializer, self).to_representation(data)
-        if data['article'] == "die (Plural)":
-            data['article'] = "die"
-            data['plural_article'] = True
-        else:
-            data['plural_article'] = False
+        if data['article'] == "der":
+            data['article'] = "1"
+        elif data['article'] == "die":
+            data['article'] = "2"
+        elif data['article'] == "das":
+            data['article'] = "3"
+        elif data['article'] == "die (Plural)":
+            data['article'] = "4"
         return data
 
 
@@ -104,7 +107,6 @@ class DocumentSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
-            "plural_article",
             "audio",
             "word_type",
             "alternatives",
@@ -114,10 +116,13 @@ class DocumentSerializer(serializers.ModelSerializer):
     # modifys data to deliver the correct articles to frontend
     def to_representation(self, data):
         data = super(DocumentSerializer, self).to_representation(data)
-        if data['article'] == "die (Plural)":
-            data['article'] = "die"
-            data['plural_article'] = True
-        else:
-            data['plural_article'] = False
+        if data['article'] == "der":
+            data['article'] = 1
+        elif data['article'] == "die":
+            data['article'] = 2
+        elif data['article'] == "das":
+            data['article'] = 3
+        elif data['article'] == "die (Plural)":
+            data['article'] = 4
         return data
-
+            

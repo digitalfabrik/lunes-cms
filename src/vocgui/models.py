@@ -18,7 +18,6 @@ from .validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
-from .utils import create_ressource_path
 
 
 class Static:
@@ -43,11 +42,35 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
+    # letters that should be converted
+    replace_dict = {
+        "Ä": "Ae",
+        "Ö": "Oe",
+        "Ü": "Ue",
+        "ä": "ae",
+        "ö": "oe",
+        "ü": "ue",
+        "ß": "ss",
+    }
+
+    # super admin group name
+    admin_group = "Lunes"
+
+    # default group name
+    default_group_name = None
+
+
 def convert_umlaute_images(instance, filename):
-    return create_ressource_path("images", filename)
+    for i, j in Static.replace_dict.items():
+        filename = filename.replace(i, j)
+    return os.path.join("images/", filename)
+
 
 def convert_umlaute_audio(instance, filename):
-    return create_ressource_path("audio", filename)
+    for i, j in Static.replace_dict.items():
+        filename = filename.replace(i, j)
+    return os.path.join("audio/", filename)
+
 
 class Discipline(OrderedModel):
     """
@@ -120,7 +143,6 @@ class Document(models.Model):
         max_length=255, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
-    plural_article = models.BooleanField(default=False)
 
     @property
     def converted(self, content_type="audio/mpeg"):
@@ -295,7 +317,6 @@ class AlternativeWord(models.Model):
         default="",
         verbose_name=_("article"),
     )
-    plural_article = models.BooleanField(default=False)
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="alternatives"
     )

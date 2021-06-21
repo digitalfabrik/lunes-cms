@@ -72,7 +72,7 @@ Content-Type: application/json
     {
         "id": Integer,              // ID of training set
         "word": String,             // primary correct answer
-        "article": String,          // article (german grammer) belonging to the item
+        "article": Integer,         // ID of article (german grammer) belonging to the item (1:Der, 2:Die, 3:Das, 4:Die (Plural))
         "plural_article": Boolean,  // whether the article is plural
         "audio": String,            // URL to (converted) audio file
         "word_type": String,        // Word type of document: Nomen, Verb, Adjektiv
