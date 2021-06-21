@@ -28,11 +28,11 @@ class Static:
 
     # possible articles
     article_choices = [
-        ("keiner", "keiner"),
-        ("der", "der"),
-        ("das", "das"),
-        ("die", "die"),
-        ("die (Plural)", "die (Plural)"),
+        (0, "keiner"),
+        (1, "der"),
+        (2, "die"),
+        (3, "das"),
+        (4, "die (Plural)"),
     ]
 
     # possible word types

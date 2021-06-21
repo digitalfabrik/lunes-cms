@@ -58,17 +58,7 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
         model = AlternativeWord
         fields = ("alt_word", "article")
 
-    def to_representation(self, data):
-        data = super(AlternativeWordSerializer, self).to_representation(data)
-        if data['article'] == "der":
-            data['article'] = 1
-        elif data['article'] == "die":
-            data['article'] = 2
-        elif data['article'] == "das":
-            data['article'] = 3
-        elif data['article'] == "die (Plural)":
-            data['article'] = 4
-        return data
+   
 
 
 class DocumentImageSerializer(serializers.ModelSerializer):
@@ -113,16 +103,3 @@ class DocumentSerializer(serializers.ModelSerializer):
             "document_image",
         )
 
-    # modifys data to deliver the correct articles to frontend
-    def to_representation(self, data):
-        data = super(DocumentSerializer, self).to_representation(data)
-        if data['article'] == "der":
-            data['article'] = 1
-        elif data['article'] == "die":
-            data['article'] = 2
-        elif data['article'] == "das":
-            data['article'] = 3
-        elif data['article'] == "die (Plural)":
-            data['article'] = 4
-        return data
-            
