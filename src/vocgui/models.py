@@ -103,8 +103,7 @@ class Document(models.Model):
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
-    article = models.CharField(
-        max_length=255,
+    article = models.IntegerField(
         choices=Static.article_choices,
         default="",
         verbose_name=_("article"),
@@ -162,7 +161,7 @@ class Document(models.Model):
         super(Document, self).save(*args, **kwarg)
 
     def __str__(self):
-        return "(" + self.article + ") " + self.word
+        return "(" + self.get_article_display() + ") " + self.word
 
     class Meta:
         """
@@ -295,8 +294,7 @@ class AlternativeWord(models.Model):
 
     id = models.AutoField(primary_key=True)
     alt_word = models.CharField(max_length=255, verbose_name=_("alternative word"))
-    article = models.CharField(
-        max_length=255,
+    article = models.IntegerField(
         choices=Static.article_choices,
         default="",
         verbose_name=_("article"),
