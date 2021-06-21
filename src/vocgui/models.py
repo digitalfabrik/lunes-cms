@@ -43,6 +43,9 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
+    default_group_name = "Lunes"
+    admin_group = "Lunes"
+
 def convert_umlaute_images(instance, filename):
     return create_ressource_path("images", filename)
 
@@ -316,5 +319,8 @@ class AlternativeWord(models.Model):
 # automatically adds a group when creating a new user if group name given in Static module
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    if Static.default_group_name and created:
-        instance.groups.add(Group.objects.get(name=Static.default_group_name))
+    if Static.default_group_name:
+        default_group = Group.objects.filter(name=Static.default_group_name)
+    if not created or not default_group:
+        return False
+    instance.groups.add(Group.objects.get(name=Static.default_group_name))
