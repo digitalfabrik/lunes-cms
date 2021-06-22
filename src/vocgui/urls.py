@@ -42,6 +42,7 @@ router.register(
 
 urlpatterns = [
     path("", views.redirect_view, name="redirect"),
+    path("public_upload", views.public_upload, name="public_upload"),
     path("api/", include(router.urls)),
     url(
         r"^swagger(?P<format>\.json|\.yaml)$",
