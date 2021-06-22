@@ -13,6 +13,7 @@ from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from django.core.files import File
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import mark_safe
 from .validators import (
     validate_file_extension,
     validate_file_size,
@@ -217,6 +218,12 @@ class DocumentImage(models.Model):
         Document, on_delete=models.CASCADE, related_name="document_image"
     )
     confirmed = models.BooleanField(default=True, verbose_name="confirmed")
+
+    def image_tag(self):
+        if self.image:
+            return mark_safe('<img src="/media/%s" width="330" height="240"/>' % (self.image))
+        return ""
+    image_tag.short_description = ''
 
     def save_original_img(self):
         """
