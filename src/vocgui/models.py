@@ -328,6 +328,6 @@ class AlternativeWord(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if Static.default_group_name:
         default_group = Group.objects.filter(name=Static.default_group_name)
-    if not created or not default_group:
-        return False
+        if not created or not default_group:
+            return False
     instance.groups.add(Group.objects.get(name=Static.default_group_name))
