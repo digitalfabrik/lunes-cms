@@ -28,11 +28,11 @@ class Static:
 
     # possible articles
     article_choices = [
-        ("keiner", "keiner"),
-        ("der", "der"),
-        ("das", "das"),
-        ("die", "die"),
-        ("die (Plural)", "die (Plural)"),
+        (0, "keiner"),
+        (1, "der"),
+        (2, "die"),
+        (3, "das"),
+        (4, "die (Plural)"),
     ]
 
     # possible word types
@@ -43,8 +43,11 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
-    default_group_name = "Lunes"
+    # super admin group name
     admin_group = "Lunes"
+
+    # default group name
+    default_group_name = None
 
 def convert_umlaute_images(instance, filename):
     return create_ressource_path("images", filename)
@@ -99,8 +102,7 @@ class Document(models.Model):
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
-    article = models.CharField(
-        max_length=255,
+    article = models.IntegerField(
         choices=Static.article_choices,
         default="",
         verbose_name=_("article"),
@@ -123,7 +125,6 @@ class Document(models.Model):
         max_length=255, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
-    plural_article = models.BooleanField(default=False)
 
     @property
     def converted(self, content_type="audio/mpeg"):
@@ -159,7 +160,7 @@ class Document(models.Model):
         super(Document, self).save(*args, **kwarg)
 
     def __str__(self):
-        return "(" + self.article + ") " + self.word
+        return "(" + self.get_article_display() + ") " + self.word
 
     class Meta:
         """
@@ -293,13 +294,11 @@ class AlternativeWord(models.Model):
 
     id = models.AutoField(primary_key=True)
     alt_word = models.CharField(max_length=255, verbose_name=_("alternative word"))
-    article = models.CharField(
-        max_length=255,
+    article = models.IntegerField(
         choices=Static.article_choices,
         default="",
         verbose_name=_("article"),
     )
-    plural_article = models.BooleanField(default=False)
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="alternatives"
     )
