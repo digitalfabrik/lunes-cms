@@ -247,7 +247,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
-        # ApprovedImageListFilter,
+        ApprovedImageListFilter,
         
     )
     list_per_page = 25

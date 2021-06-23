@@ -209,8 +209,8 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         return (
-            (1, _("approved")),
-            (2, _("pending")),
+            (1, _("at least one approved image")),
+            (2, _("at least one pending image")),
             (3, _("no images")),
         )
 
@@ -232,6 +232,12 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         :rtype: QuerySet
         """
 
-        # Compare the requested value to decide how to filter the queryset.
-        #DocumentImage.objects.all().filter(document = obj)
-        return None
+        if self.value():
+            if int(self.value()) == 1:
+                return queryset.filter(document_image__confirmed=True).distinct()
+            if int(self.value()) == 2:
+                return queryset.filter(document_image__confirmed=False).distinct()
+            if int(self.value()) == 3:
+                return queryset.filter(document_image__isnull=True).distinct()
+        return queryset
+
