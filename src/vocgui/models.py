@@ -220,7 +220,7 @@ class DocumentImage(models.Model):
     confirmed = models.BooleanField(default=True, verbose_name="confirmed")
 
     def image_tag(self):
-        if self.image:
+        if self.image and self.image.storage.exists(self.image.name):
             return mark_safe('<img src="/media/%s" width="330" height="240"/>' % (self.image))
         return ""
     image_tag.short_description = ''
@@ -330,4 +330,4 @@ def create_user_profile(sender, instance, created, **kwargs):
         default_group = Group.objects.filter(name=Static.default_group_name)
         if not created or not default_group:
             return False
-    instance.groups.add(Group.objects.get(name=Static.default_group_name))
+        instance.groups.add(Group.objects.get(name=Static.default_group_name))
