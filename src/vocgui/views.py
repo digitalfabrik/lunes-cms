@@ -96,7 +96,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Document.objects.filter(
             training_sets__id=self.kwargs["training_set_id"], document_image__confirmed=True
-        ).select_related()
+        ).select_related().distinct()
         return queryset
 
 
