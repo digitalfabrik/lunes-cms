@@ -128,7 +128,10 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
                 discipline__id=self.kwargs["discipline_id"], released=True
             )
             .order_by("order")
-            .annotate(total_documents=Count("documents"))
+            .annotate(total_documents=Count(
+                "documents", filter=Q(documents__document_image__confirmed=True)
+                )
+            )
         )
         return queryset
 
