@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 10:58+0000\n"
+"POT-Creation-Date: 2021-06-24 14:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,95 +18,123 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/vocgui/admin.py:34
+#: src/vocgui/admin.py:64
 msgid "Release selected disciplines"
 msgstr "Libérer les secteurs sélectionnés"
 
-#: src/vocgui/admin.py:38
+#: src/vocgui/admin.py:68
 msgid "Unrelease selected disciplines"
 msgstr "Retenir les secteurs sélectionnés"
 
-#: src/vocgui/admin.py:64
+#: src/vocgui/admin.py:86 src/vocgui/admin.py:160 src/vocgui/admin.py:285
+msgid "creator group"
+msgstr "groupe de créateurs"
+
+#: src/vocgui/admin.py:132
 msgid "Release selected training sets"
 msgstr "Libérer les modules sélectionnés"
 
-#: src/vocgui/admin.py:68
+#: src/vocgui/admin.py:136
 msgid "Unrelease selected training sets"
 msgstr "Retenir les modules sélectionnés"
 
-#: src/vocgui/admin.py:139 src/vocgui/forms.py:25 src/vocgui/forms.py:26
-#: src/vocgui/list_filter.py:13 src/vocgui/list_filter.py:126
-#: src/vocgui/models.py:66
+#: src/vocgui/admin.py:149 src/vocgui/admin.py:339 src/vocgui/forms.py:28
+#: src/vocgui/forms.py:30 src/vocgui/list_filter.py:13
+#: src/vocgui/list_filter.py:128 src/vocgui/models.py:89
 msgid "disciplines"
 msgstr "secteurs"
 
-#: src/vocgui/admin.py:140 src/vocgui/list_filter.py:70
-#: src/vocgui/models.py:174
-msgid "training sets"
-msgstr "modules"
-
-#: src/vocgui/admin.py:141 src/vocgui/forms.py:30 src/vocgui/forms.py:31
-#: src/vocgui/models.py:143 src/vocgui/models.py:144
-msgid "vocabulary"
-msgstr "vocabulaire"
-
-#: src/vocgui/apps.py:11
-msgid "vocabulary management"
-msgstr "gestion du vocabulaire"
-
-#: src/vocgui/models.py:50 src/vocgui/models.py:155
-msgid "released"
-msgstr "publié sur"
-
-#: src/vocgui/models.py:51 src/vocgui/models.py:65
-msgid "discipline"
-msgstr "secteur"
-
-#: src/vocgui/models.py:53 src/vocgui/models.py:158
-msgid "description"
-msgstr "description"
-
-#: src/vocgui/models.py:55 src/vocgui/models.py:160
-msgid "icon"
-msgstr "icône"
-
-#: src/vocgui/models.py:80
-msgid "word type"
-msgstr "type de mot"
-
-#: src/vocgui/models.py:82
-msgid "word"
-msgstr "mot"
-
-#: src/vocgui/models.py:87 src/vocgui/models.py:267
-msgid "article"
-msgstr ""
-
-#: src/vocgui/models.py:98
-msgid "audio"
-msgstr "audio"
-
-#: src/vocgui/models.py:100
-msgid "creation date"
-msgstr "date de création"
-
-#: src/vocgui/models.py:156 src/vocgui/models.py:173
+#: src/vocgui/admin.py:275 src/vocgui/models.py:184 src/vocgui/models.py:207
 msgid "training set"
 msgstr "module"
 
-#: src/vocgui/models.py:252
+#: src/vocgui/admin.py:295 src/vocgui/models.py:120
+msgid "audio"
+msgstr "audio"
+
+#: src/vocgui/admin.py:307 src/vocgui/models.py:293
 msgid "image"
 msgstr "image"
 
-#: src/vocgui/models.py:253
+#: src/vocgui/admin.py:313 src/vocgui/models.py:109 src/vocgui/models.py:307
+msgid "article"
+msgstr ""
+
+#: src/vocgui/admin.py:340 src/vocgui/list_filter.py:72
+#: src/vocgui/models.py:208
+msgid "training sets"
+msgstr "modules"
+
+#: src/vocgui/admin.py:341 src/vocgui/forms.py:34 src/vocgui/forms.py:35
+#: src/vocgui/models.py:171 src/vocgui/models.py:172
+msgid "vocabulary"
+msgstr "vocabulaire"
+
+#: src/vocgui/apps.py:12
+msgid "vocabulary management"
+msgstr "gestion du vocabulaire"
+
+#: src/vocgui/list_filter.py:186
+msgid "approved images"
+msgstr "images approuvées"
+
+#: src/vocgui/list_filter.py:212
+msgid "at least one approved image"
+msgstr ""
+
+#: src/vocgui/list_filter.py:213
+msgid "at least one pending image"
+msgstr "au moins une image approuvée"
+
+#: src/vocgui/list_filter.py:214
+msgid "no images"
+msgstr "pas d'images"
+
+#: src/vocgui/models.py:67 src/vocgui/models.py:183
+msgid "released"
+msgstr "publié sur"
+
+#: src/vocgui/models.py:68 src/vocgui/models.py:88
+msgid "discipline"
+msgstr "secteur"
+
+#: src/vocgui/models.py:70 src/vocgui/models.py:186
+msgid "description"
+msgstr "description"
+
+#: src/vocgui/models.py:73 src/vocgui/models.py:189
+msgid "icon"
+msgstr "icône"
+
+#: src/vocgui/models.py:76 src/vocgui/models.py:126 src/vocgui/models.py:194
+msgid "created by"
+msgstr "créé par"
+
+#: src/vocgui/models.py:78 src/vocgui/models.py:128 src/vocgui/models.py:196
+msgid "admin"
+msgstr ""
+
+#: src/vocgui/models.py:103
+msgid "word type"
+msgstr "type de mot"
+
+#: src/vocgui/models.py:105
+msgid "word"
+msgstr "mot"
+
+#: src/vocgui/models.py:123
+msgid "creation date"
+msgstr "date de création"
+
+#: src/vocgui/models.py:294
 msgid "images"
 msgstr "images"
 
-#: src/vocgui/models.py:262 src/vocgui/models.py:282
+#: src/vocgui/models.py:303 src/vocgui/models.py:322
 msgid "alternative word"
 msgstr "mot alternatif"
 
-#: src/vocgui/models.py:283
+#: src/vocgui/models.py:323
 msgid "alternative words"
 msgstr "mots alternatives"
 
@@ -124,15 +152,15 @@ msgstr "N'utilisez qu'une seule extension de fichier!"
 
 #: src/voctrainer/settings.py:119
 msgid "English"
-msgstr ""
+msgstr "Anglais"
 
 #: src/voctrainer/settings.py:120
 msgid "German"
-msgstr ""
+msgstr "Allemand"
 
 #: src/voctrainer/settings.py:121
 msgid "French"
-msgstr ""
+msgstr "Français"
 
 #, fuzzy
 #~| msgid "training sets"
