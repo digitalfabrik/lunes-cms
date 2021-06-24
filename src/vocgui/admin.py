@@ -28,6 +28,7 @@ from .list_filter import (
     DisciplineListFilter,
     DocumentTrainingSetListFilter,
     DocumentDisciplineListFilter,
+    ApprovedImageListFilter,
 )
 from .forms import TrainingSetForm
 
@@ -38,9 +39,11 @@ class DisciplineAdmin(OrderedModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
+    exclude = (
+        "creator_is_admin",
+    )
     readonly_fields = (
         "created_by",
-        "creator_is_admin",
     )
     search_fields = ["title"]
     actions = ["delete_selected", "make_released", "make_unreleased"]
@@ -52,7 +55,7 @@ class DisciplineAdmin(OrderedModelAdmin):
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]
-            else:
+            elif not request.user.is_superuser:
                 raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
@@ -96,9 +99,11 @@ class TrainingSetAdmin(OrderedModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
+    exclude = (
+        "creator_is_admin",
+    )
     readonly_fields = (
         "created_by",
-        "creator_is_admin",
     )
     search_fields = ["title"]
     form = TrainingSetForm
@@ -118,7 +123,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]
-            else:
+            elif not request.user.is_superuser:
                 raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
@@ -202,22 +207,29 @@ class DocumentImageAdmin(admin.StackedInline):
 
     model = DocumentImage
     search_fields = ["name"]
-    fields = ['name', 'image', 'image_tag']
+    fields = ['name', 'image', 'image_tag', 'confirmed']
     readonly_fields = ['image_tag']
     autocomplete_fields = ["document"]
     insert_after = "autocomplete_fields"
     extra = 0
 
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = []
+        if not request.user.is_superuser:
+            self.exclude.append('confirmed')
+        return super(DocumentImageAdmin, self.get_form(request, obj, **kwargs))
 
 class DocumentAdmin(admin.ModelAdmin):
     """
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
-    exclude = ('article_plural',) # hide article_plural in admin
+    exclude = (
+        "article_plural", # hide article_plural in admin
+        "creator_is_admin"
+    )
     readonly_fields = (
         "created_by",
-        "creator_is_admin",
     )
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
@@ -225,7 +237,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = (
         "word",
         "word_type",
-        "article",
+        "article_display",
         "related_training_set",
         "has_audio",
         "has_image",
@@ -235,6 +247,8 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = (
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
+        ApprovedImageListFilter,
+        
     )
     list_per_page = 25
 
@@ -243,7 +257,7 @@ class DocumentAdmin(admin.ModelAdmin):
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0].name
-            else:
+            elif not request.user.is_superuser:
                 raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
@@ -284,21 +298,28 @@ class DocumentAdmin(admin.ModelAdmin):
     # function to display if the document has atleast one image
     def has_image(self, obj):
         if DocumentImage.objects.all().filter(document = obj):
-            return True
-        else:
-            return False
+            if DocumentImage.objects.all().filter(document = obj)[0].confirmed == True:
+                return True
+            elif DocumentImage.objects.all().filter(document = obj)[0].confirmed == False:
+                return None
+        return False
     has_image.boolean = True
     has_image.short_description = _("image")
-    has_image.admin_order_field = 'document_image__document'
-
-   
+    has_image.admin_order_field = 'document_image'
+    
+    # display article names instead of ids in list display
+    def article_display(self, obj):
+       return obj.get_article_display()
+    article_display.short_description = _("article")
 
     # only display models of the corresponding user group
     def get_queryset(self, request):
         qs = super(DocumentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(created_by__in=request.user.groups.all())
+        return qs.filter(
+            created_by__in=request.user.groups.values_list("name", flat=True).distinct()
+        ) 
 
 
 def get_app_list(self, request):
