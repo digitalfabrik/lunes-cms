@@ -50,11 +50,14 @@ class Static:
     # default group name
     default_group_name = None
 
+
 def convert_umlaute_images(instance, filename):
     return create_ressource_path("images", filename)
 
+
 def convert_umlaute_audio(instance, filename):
     return create_ressource_path("audio", filename)
+
 
 class Discipline(OrderedModel):
     """
@@ -221,9 +224,12 @@ class DocumentImage(models.Model):
 
     def image_tag(self):
         if self.image and self.image.storage.exists(self.image.name):
-            return mark_safe('<img src="/media/%s" width="330" height="240"/>' % (self.image))
+            return mark_safe(
+                '<img src="/media/%s" width="330" height="240"/>' % (self.image)
+            )
         return ""
-    image_tag.short_description = ''
+
+    image_tag.short_description = ""
 
     def save_original_img(self):
         """

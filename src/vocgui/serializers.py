@@ -59,7 +59,6 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
         fields = ("alt_word", "article")
 
 
-
 class DocumentImageListSerializer(serializers.ListSerializer):
     """
     List Serializer for the DocumentImage module. Inherits from
@@ -72,7 +71,6 @@ class DocumentImageListSerializer(serializers.ListSerializer):
         """
         data = data.filter(confirmed=True)
         return super(DocumentImageListSerializer, self).to_representation(data)
-
 
 
 class DocumentImageSerializer(serializers.ModelSerializer):
@@ -91,8 +89,6 @@ class DocumentImageSerializer(serializers.ModelSerializer):
         fields = ("id", "image")
 
 
-
-
 class DocumentSerializer(serializers.ModelSerializer):
     """
     Serializer for the Document module. Inherits from
@@ -102,8 +98,6 @@ class DocumentSerializer(serializers.ModelSerializer):
     alternatives = AlternativeWordSerializer(many=True, read_only=True)
     document_image = DocumentImageSerializer(many=True, read_only=True)
 
-
-    
     class Meta:
         """
         Define model and the corresponding fields
@@ -119,4 +113,3 @@ class DocumentSerializer(serializers.ModelSerializer):
             "alternatives",
             "document_image",
         )
-

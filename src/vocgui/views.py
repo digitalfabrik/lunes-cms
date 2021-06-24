@@ -43,11 +43,12 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
-        if 'group_id' in self.kwargs:
+        if "group_id" in self.kwargs:
             groups = self.kwargs["group_id"].split("&")
             queryset = (
                 Discipline.objects.filter(
-                    Q(released=True) & (Q(creator_is_admin=True) | Q(created_by__in=groups))
+                    Q(released=True)
+                    & (Q(creator_is_admin=True) | Q(created_by__in=groups))
                 )
                 .order_by("order")
                 .annotate(
@@ -58,9 +59,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
             )
         else:
             queryset = (
-                Discipline.objects.filter(
-                    Q(released=True) & Q(creator_is_admin=True)
-                )
+                Discipline.objects.filter(Q(released=True) & Q(creator_is_admin=True))
                 .order_by("order")
                 .annotate(
                     total_training_sets=Count(
@@ -94,9 +93,15 @@ class DocumentViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Document.objects.none()
         user = self.request.user
-        queryset = Document.objects.filter(
-            training_sets__id=self.kwargs["training_set_id"], document_image__confirmed=True
-        ).select_related().distinct().order_by("word")
+        queryset = (
+            Document.objects.filter(
+                training_sets__id=self.kwargs["training_set_id"],
+                document_image__confirmed=True,
+            )
+            .select_related()
+            .distinct()
+            .order_by("word")
+        )
         return queryset
 
 
@@ -128,8 +133,9 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
                 discipline__id=self.kwargs["discipline_id"], released=True
             )
             .order_by("order")
-            .annotate(total_documents=Count(
-                "documents", filter=Q(documents__document_image__confirmed=True)
+            .annotate(
+                total_documents=Count(
+                    "documents", filter=Q(documents__document_image__confirmed=True)
                 )
             )
         )
@@ -153,20 +159,28 @@ def public_upload(request):
     """
     Public form to upload missing images
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         document = Document.objects.get(id=request.POST.get("inputDocument", None))
         if document:
             uploaded_image = request.FILES.get("inputFile", None)
             if uploaded_image:
-                image = DocumentImage(document=document,
-                                      image=uploaded_image,
-                                      name=document.word,
-                                      confirmed=False)
+                image = DocumentImage(
+                    document=document,
+                    image=uploaded_image,
+                    name=document.word,
+                    confirmed=False,
+                )
                 image.save()
-    missing_images = (Document.objects.values_list("id", "word", "article", "training_sets").
-                      filter(document_image__isnull=True))
-    training_sets = (TrainingSet.objects.values_list("id", "title").
-                     filter(documents__document_image__isnull=True).distinct())
-    context = {"documents": json.dumps(list(missing_images)),
-               "training_sets": json.dumps(list(training_sets))}
-    return render(request, 'public_upload.html', context)
+    missing_images = Document.objects.values_list(
+        "id", "word", "article", "training_sets"
+    ).filter(document_image__isnull=True)
+    training_sets = (
+        TrainingSet.objects.values_list("id", "title")
+        .filter(documents__document_image__isnull=True)
+        .distinct()
+    )
+    context = {
+        "documents": json.dumps(list(missing_images)),
+        "training_sets": json.dumps(list(training_sets)),
+    }
+    return render(request, "public_upload.html", context)
