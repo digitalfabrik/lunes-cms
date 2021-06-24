@@ -172,17 +172,17 @@ class TrainingSetAdmin(OrderedModelAdmin):
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
                 created_by__in=request.user.groups.all()
-            )
+            ).order_by("title")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 created_by__in=request.user.groups.all()
-            )
+            ).order_by("word")
         else:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
                 creator_is_admin=True
-            )
+            ).order_by("title")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 creator_is_admin=True
-            )
+            ).order_by("word")
         return form
 
 

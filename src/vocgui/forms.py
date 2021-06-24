@@ -23,14 +23,14 @@ class TrainingSetForm(forms.ModelForm):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
     discipline = forms.ModelMultipleChoiceField(
-        queryset=Discipline.objects.all().filter().order_by("title"),
+        queryset=Discipline.objects.all(),
         widget=FilteredSelectMultiple(
             verbose_name=(_("disciplines")), is_stacked=False
         ),
         label=_("disciplines"),
     )
     documents = forms.ModelMultipleChoiceField(
-        queryset=Document.objects.all().order_by("word"),
+        queryset=Document.objects.all(),
         widget=FilteredSelectMultiple(verbose_name=(_("vocabulary")), is_stacked=False),
         label=_("vocabulary"),
     )
