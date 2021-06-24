@@ -55,6 +55,14 @@
     <script>
       var lunes_training_sets = JSON.parse('{{ training_sets|safe }}');
       var lunes_documents = JSON.parse('{{ documents|safe }}');
+      var article_map = {
+        0: "keiner",
+        1: "der",
+        2: "die",
+        3: "das",
+        4: "die (Plural)"
+      }
+
       $( document ).ready(function() {
         lunes_training_sets.forEach(function(element) {
           $("#inputTrainingSet").append(new Option(element[1], element[0]))
@@ -66,7 +74,7 @@
           lunes_documents.forEach(function(element) {
             if(element[3] == training_set_id) {
               console.log("added");
-              $("#inputDocument").append(new Option( element[2] + " " + element[1], element[0]));
+              $("#inputDocument").append(new Option( article_map[element[2]] + " " + element[1], element[0]));
             }
           });
         });
