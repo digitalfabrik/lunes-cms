@@ -39,12 +39,8 @@ class DisciplineAdmin(OrderedModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
-    exclude = (
-        "creator_is_admin",
-    )
-    readonly_fields = (
-        "created_by",
-    )
+    exclude = ("creator_is_admin",)
+    readonly_fields = ("created_by",)
     search_fields = ["title"]
     actions = ["delete_selected", "make_released", "make_unreleased"]
     list_display = ("title", "released", "creator_group", "move_up_down_links")
@@ -99,12 +95,8 @@ class TrainingSetAdmin(OrderedModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
-    exclude = (
-        "creator_is_admin",
-    )
-    readonly_fields = (
-        "created_by",
-    )
+    exclude = ("creator_is_admin",)
+    readonly_fields = ("created_by",)
     search_fields = ["title"]
     form = TrainingSetForm
     list_display = (
@@ -172,17 +164,17 @@ class TrainingSetAdmin(OrderedModelAdmin):
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
                 created_by__in=request.user.groups.all()
-            )
+            ).order_by("title")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 created_by__in=request.user.groups.all()
-            )
+            ).order_by("word")
         else:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
                 creator_is_admin=True
-            )
+            ).order_by("title")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 creator_is_admin=True
-            )
+            ).order_by("word")
         return form
 
 
@@ -207,8 +199,8 @@ class DocumentImageAdmin(admin.StackedInline):
 
     model = DocumentImage
     search_fields = ["name"]
-    fields = ['name', 'image', 'image_tag', 'confirmed']
-    readonly_fields = ['image_tag']
+    fields = ["name", "image", "image_tag", "confirmed"]
+    readonly_fields = ["image_tag"]
     autocomplete_fields = ["document"]
     insert_after = "autocomplete_fields"
     extra = 0
@@ -216,21 +208,18 @@ class DocumentImageAdmin(admin.StackedInline):
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []
         if not request.user.is_superuser:
-            self.exclude.append('confirmed')
+            self.exclude.append("confirmed")
         return super(DocumentImageAdmin, self.get_form(request, obj, **kwargs))
+
 
 class DocumentAdmin(admin.ModelAdmin):
     """
     Admin Interface to for the Document module.
     Inheriting from `admin.ModelAdmin`.
     """
-    exclude = (
-        "article_plural", # hide article_plural in admin
-        "creator_is_admin"
-    )
-    readonly_fields = (
-        "created_by",
-    )
+
+    exclude = ("article_plural", "creator_is_admin")  # hide article_plural in admin
+    readonly_fields = ("created_by",)
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
@@ -248,7 +237,6 @@ class DocumentAdmin(admin.ModelAdmin):
         DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
         ApprovedImageListFilter,
-        
     )
     list_per_page = 25
 
@@ -282,34 +270,38 @@ class DocumentAdmin(admin.ModelAdmin):
             return obj.created_by
         else:
             return None
-    creator_group.short_description = _("creator group")
-    creator_group.admin_order_field = 'created_by'
 
-    # function to display if the document has an audio 
+    creator_group.short_description = _("creator group")
+    creator_group.admin_order_field = "created_by"
+
+    # function to display if the document has an audio
     def has_audio(self, obj):
         if obj.audio:
             return True
         else:
             return False
+
     has_audio.boolean = True
     has_audio.short_description = _("audio")
-    has_audio.admin_order_field = 'audio' 
+    has_audio.admin_order_field = "audio"
 
     # function to display if the document has atleast one image
     def has_image(self, obj):
-        if DocumentImage.objects.all().filter(document = obj):
-            if DocumentImage.objects.all().filter(document = obj)[0].confirmed == True:
+        if DocumentImage.objects.all().filter(document=obj):
+            if DocumentImage.objects.all().filter(document=obj)[0].confirmed == True:
                 return True
-            elif DocumentImage.objects.all().filter(document = obj)[0].confirmed == False:
+            elif DocumentImage.objects.all().filter(document=obj)[0].confirmed == False:
                 return None
         return False
+
     has_image.boolean = True
     has_image.short_description = _("image")
-    has_image.admin_order_field = 'document_image'
-    
+    has_image.admin_order_field = "document_image"
+
     # display article names instead of ids in list display
     def article_display(self, obj):
-       return obj.get_article_display()
+        return obj.get_article_display()
+
     article_display.short_description = _("article")
 
     # only display models of the corresponding user group
@@ -319,7 +311,7 @@ class DocumentAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(
             created_by__in=request.user.groups.values_list("name", flat=True).distinct()
-        ) 
+        )
 
 
 def get_app_list(self, request):

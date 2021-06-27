@@ -214,7 +214,6 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
             (3, _("no images")),
         )
 
-
     def queryset(self, request, queryset):
         """
         Returns the filtered queryset based on the value
@@ -240,4 +239,3 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
             if int(self.value()) == 3:
                 return queryset.filter(document_image__isnull=True).distinct()
         return queryset
-
