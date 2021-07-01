@@ -86,6 +86,7 @@
     <form class="form-signin" method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
       <img class="mb-4" src="static/images/logo.png" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Bild für Lunes-Vokabel beitragen</h1>
+      {% if upload_success %}<div class="alert alert-success" role="alert">Vielen Dank für dein Bild. Das Lunes Team wird es prüfen und freigeben.</div>{% endif %}
       <label for="inputTrainingSet" class="sr-only">Modul auswählen</label>
       <select id="inputTrainingSet" class="form-control" required autofocus><option>Bitte Modul wählen</option></select>
       <label for="inputDocument" class="sr-only">Wort auswählen</label>
@@ -94,7 +95,7 @@
       <input type="file" id="inputFile" name="inputFile" capture="user" accept="image/*" id="inputFile" class="form-control" required>
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me"> Ich bestätige, dass ich das Bild selbst erstellt habe und die Nutzung mit einer <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">CC-0 Lizenz</a> gestatte.
+          <input type="checkbox" value="accept-cc0" required> Ich bestätige, dass ich das Bild selbst erstellt habe und die Nutzung mit einer <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">CC-0 Lizenz</a> gestatte.
         </label>
       </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>

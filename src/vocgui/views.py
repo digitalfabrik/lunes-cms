@@ -159,6 +159,7 @@ def public_upload(request):
     """
     Public form to upload missing images
     """
+    upload_success = False
     if request.method == "POST":
         document = Document.objects.get(id=request.POST.get("inputDocument", None))
         if document:
@@ -171,6 +172,7 @@ def public_upload(request):
                     confirmed=False,
                 )
                 image.save()
+                upload_success = True
     missing_images = Document.objects.values_list(
         "id", "word", "article", "training_sets"
     ).filter(document_image__isnull=True)
@@ -182,5 +184,6 @@ def public_upload(request):
     context = {
         "documents": json.dumps(list(missing_images)),
         "training_sets": json.dumps(list(training_sets)),
+        "upload_success": upload_success
     }
     return render(request, "public_upload.html", context)
