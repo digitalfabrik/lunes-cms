@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Document, TrainingSet, Discipline
+from .widgets import ManyToManyOverlay
 
 
 class TrainingSetForm(forms.ModelForm):
@@ -31,6 +32,6 @@ class TrainingSetForm(forms.ModelForm):
     )
     documents = forms.ModelMultipleChoiceField(
         queryset=Document.objects.all(),
-        widget=FilteredSelectMultiple(verbose_name=(_("vocabulary")), is_stacked=False),
+        widget=ManyToManyOverlay(verbose_name=(_("vocabulary")), is_stacked=False),
         label=_("vocabulary"),
     )
