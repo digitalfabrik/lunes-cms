@@ -41,6 +41,9 @@ router.register(
     r"documents/(?P<training_set_id>[0-9]+)", views.DocumentViewSet, "documents"
 )
 
+router.register(
+    r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
+)
 
 urlpatterns = [
     path("", views.redirect_view, name="redirect"),
