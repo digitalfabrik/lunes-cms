@@ -50,8 +50,7 @@ function display_thumbnail() {
         overlay.content.appendChild(text);
 
     }
-    overlay.content.margin = 0;
-    
+   
     /*Free Space*/
     overlay.content.appendChild(space);
 
