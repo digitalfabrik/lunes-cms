@@ -104,6 +104,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
         )
         return queryset
 
+
 class DocumentByIdViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Document module of a given id.
@@ -127,10 +128,7 @@ class DocumentByIdViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Document.objects.none()
         user = self.request.user
-        queryset = (
-            Document.objects.filter(
-                id = self.kwargs["document_id"]
-            ))
+        queryset = Document.objects.filter(id=self.kwargs["document_id"])
         return queryset
 
 
@@ -213,6 +211,6 @@ def public_upload(request):
     context = {
         "documents": json.dumps(list(missing_images)),
         "training_sets": json.dumps(list(training_sets)),
-        "upload_success": upload_success
+        "upload_success": upload_success,
     }
     return render(request, "public_upload.html", context)
