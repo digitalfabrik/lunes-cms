@@ -77,7 +77,7 @@ msgstr "vocabulary management"
 #: src/vocgui/forms.py:37
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
-"the corresponging image and audio files, press the alt key while selecting."
+"the corresponding image and audio files, press the alt key while selecting."
 msgstr ""
 
 #: src/vocgui/list_filter.py:186

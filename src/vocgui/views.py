@@ -3,12 +3,12 @@ REST-Framework
 """
 import json
 
-from django.http import HttpResponse
-from django.core import serializers
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.shortcuts import redirect
 from django.db.models import Count, Q
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import TrainingSet, Document, AlternativeWord, Discipline, DocumentImage
 from .serializers import (
@@ -114,6 +114,8 @@ class DocumentByIdViewSet(viewsets.ModelViewSet):
 
     serializer_class = DocumentSerializer
     http_method_names = ["get"]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """
