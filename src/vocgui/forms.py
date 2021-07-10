@@ -34,4 +34,5 @@ class TrainingSetForm(forms.ModelForm):
         queryset=Document.objects.all(),
         widget=ManyToManyOverlay(verbose_name=(_("vocabulary")), is_stacked=False),
         label=_("vocabulary"),
+        help_text=_("Please select some vocabularies for your training set. To see a preview of the corresponging image and audio files, press the alt key while selecting."),
     )
