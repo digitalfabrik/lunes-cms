@@ -5,10 +5,11 @@ from .models import Document
 
 class ManyToManyOverlay(FilteredSelectMultiple):
     class Media:
-        js = ("js/manytomany_overlay.js",)
+        js = ("js/jquery.min.js", "js/manytomany_overlay.js", "js/overlay.js", )
+        css = {'all': ("css/overlay.css", )}
 
     def __init__(self, *args, **kwargs):
         return super(ManyToManyOverlay, self).__init__(
-            attrs = {'onchange' : "document_overlay(this.value);"},
+            attrs = {'onclick' : "document_overlay(event);"},
             *args, **kwargs
             )
