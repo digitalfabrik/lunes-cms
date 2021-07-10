@@ -1,4 +1,9 @@
-# About
+[![GitHub issues](https://img.shields.io/github/issues/digitalfabrik/lunes-cms)](https://github.com/digitalfabrik/lunes-cms/issues)
+[![GitHub pulls](https://img.shields.io/github/issues-pr/digitalfabrik/lunes-cms)](https://github.com/digitalfabrik/lunes-cms/pulls)
+[![License](https://img.shields.io/github/license/digitalfabrik/lunes-cms)](https://opensource.org/licenses/Apache-2.0)
+# Lunes CMS
+[![Logo](.github/logo.png) Lunes - Vocabulary for your profession.](https://www.lunes.app)
+
 This is a Django 2 based content management system for the vocabulary trainer app Lunes, a project powered by the Tür an Tür [Digital Factory](https://tuerantuer.de/digitalfabrik/). The main goal is to develop an application which facilitates migrants to acquire technical and subject-specific vocabulary. For more information please see our [GoVolunteer ad](https://translate.google.com/translate?hl=en&sl=de&tl=en&u=https%3A%2F%2Fgovolunteer.com%2Fde%2Fprojects%2Fehrenamtliche-entwickler-innen-fur-vokabeltrainer). 
 
 # License
