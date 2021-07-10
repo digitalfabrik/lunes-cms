@@ -224,9 +224,10 @@ class DocumentImage(models.Model):
 
     def image_tag(self):
         if self.image and self.image.storage.exists(self.image.name):
-            return mark_safe(
-                '<img src="/media/%s" width="330" height="240"/>' % (self.image)
-            )
+            if ".png" in self.image.name or ".jpg" in self.image.name:
+                return mark_safe(
+                    '<img src="/media/%s" width="330" height="240"/>' % (self.image)
+                )
         return ""
 
     image_tag.short_description = ""
