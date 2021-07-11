@@ -156,6 +156,13 @@ JAZZMIN_SETTINGS = {
     "site_logo": "images/logo.png",
     "changeform_format": "collapsible",
     "language_chooser": True,
+    "icons": {
+        "auth.user": "fas fa-user-edit",
+        "auth.Group": "fas fa-users",
+        "vocgui.Discipline": "fas fa-book",
+        "vocgui.TrainingSet": "fas fa-stream",
+        "vocgui.Document": "fab fa-amilia",
+    },
 }
 
 JAZZMIN_UI_TWEAKS = {
