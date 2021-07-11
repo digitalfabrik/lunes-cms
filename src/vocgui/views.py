@@ -3,12 +3,12 @@ REST-Framework
 """
 import json
 
-from django.http import HttpResponse
-from django.core import serializers
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.shortcuts import redirect
 from django.db.models import Count, Q
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import TrainingSet, Document, AlternativeWord, Discipline, DocumentImage
 from .serializers import (
@@ -105,6 +105,35 @@ class DocumentViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class DocumentByIdViewSet(viewsets.ModelViewSet):
+    """
+    Defines a view set for the Document module of a given id.
+    Inherits from `viewsets.ModelViewSet` and defines queryset
+    and serializers.
+    """
+
+    serializer_class = DocumentSerializer
+    http_method_names = ["get"]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        Defining custom queryset
+
+        :param self: A handle to the :class:`DocumentViewSet`
+        :type self: class
+
+        :return: (filtered) queryset
+        :rtype: QuerySet
+        """
+        if getattr(self, "swagger_fake_view", False):
+            return Document.objects.none()
+        user = self.request.user
+        queryset = Document.objects.filter(id=self.kwargs["document_id"])
+        return queryset
+
+
 class TrainingSetViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the TrainingSet module.
@@ -184,6 +213,6 @@ def public_upload(request):
     context = {
         "documents": json.dumps(list(missing_images)),
         "training_sets": json.dumps(list(training_sets)),
-        "upload_success": upload_success
+        "upload_success": upload_success,
     }
     return render(request, "public_upload.html", context)

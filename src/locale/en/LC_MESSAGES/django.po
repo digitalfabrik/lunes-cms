@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-24 14:55+0000\n"
+"POT-Creation-Date: 2021-07-10 09:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,61 +18,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/vocgui/admin.py:64
+#: src/vocgui/admin.py:60
 msgid "Release selected disciplines"
 msgstr "Release selected disciplines"
 
-#: src/vocgui/admin.py:68
+#: src/vocgui/admin.py:64
 msgid "Unrelease selected disciplines"
 msgstr "Unrelease selected disciplines"
 
-#: src/vocgui/admin.py:86 src/vocgui/admin.py:160 src/vocgui/admin.py:285
+#: src/vocgui/admin.py:82 src/vocgui/admin.py:152 src/vocgui/admin.py:274
 msgid "creator group"
 msgstr ""
 
-#: src/vocgui/admin.py:132
+#: src/vocgui/admin.py:124
 msgid "Release selected training sets"
 msgstr "Release selected training sets"
 
-#: src/vocgui/admin.py:136
+#: src/vocgui/admin.py:128
 msgid "Unrelease selected training sets"
 msgstr "Unrelease selected training sets"
 
-#: src/vocgui/admin.py:149 src/vocgui/admin.py:339 src/vocgui/forms.py:28
-#: src/vocgui/forms.py:30 src/vocgui/list_filter.py:13
-#: src/vocgui/list_filter.py:128 src/vocgui/models.py:89
+#: src/vocgui/admin.py:141 src/vocgui/admin.py:331 src/vocgui/forms.py:29
+#: src/vocgui/forms.py:31 src/vocgui/list_filter.py:13
+#: src/vocgui/list_filter.py:128 src/vocgui/models.py:92
 msgid "disciplines"
 msgstr "disciplines"
 
-#: src/vocgui/admin.py:275 src/vocgui/models.py:184 src/vocgui/models.py:207
+#: src/vocgui/admin.py:263 src/vocgui/models.py:187 src/vocgui/models.py:210
 msgid "training set"
 msgstr "training set"
 
-#: src/vocgui/admin.py:295 src/vocgui/models.py:120
+#: src/vocgui/admin.py:285 src/vocgui/models.py:123
 msgid "audio"
 msgstr "audio"
 
-#: src/vocgui/admin.py:307 src/vocgui/models.py:293
+#: src/vocgui/admin.py:298 src/vocgui/models.py:299
 msgid "image"
 msgstr "image"
 
-#: src/vocgui/admin.py:313 src/vocgui/models.py:109 src/vocgui/models.py:307
+#: src/vocgui/admin.py:305 src/vocgui/models.py:112 src/vocgui/models.py:313
 msgid "article"
 msgstr "article"
 
-#: src/vocgui/admin.py:340 src/vocgui/list_filter.py:72
-#: src/vocgui/models.py:208
+#: src/vocgui/admin.py:332 src/vocgui/list_filter.py:72
+#: src/vocgui/models.py:211
 msgid "training sets"
 msgstr "training sets"
 
-#: src/vocgui/admin.py:341 src/vocgui/forms.py:34 src/vocgui/forms.py:35
-#: src/vocgui/models.py:171 src/vocgui/models.py:172
+#: src/vocgui/admin.py:333 src/vocgui/forms.py:35 src/vocgui/forms.py:36
+#: src/vocgui/models.py:174 src/vocgui/models.py:175
 msgid "vocabulary"
 msgstr "vocabulary"
 
 #: src/vocgui/apps.py:12
 msgid "vocabulary management"
 msgstr "vocabulary management"
+
+#: src/vocgui/forms.py:37
+msgid ""
+"Please select some vocabularies for your training set. To see a preview of "
+"the corresponding image and audio files, press the alt key while selecting."
+msgstr ""
 
 #: src/vocgui/list_filter.py:186
 msgid "approved images"
@@ -90,51 +96,51 @@ msgstr ""
 msgid "no images"
 msgstr "images"
 
-#: src/vocgui/models.py:67 src/vocgui/models.py:183
+#: src/vocgui/models.py:70 src/vocgui/models.py:186
 msgid "released"
 msgstr "released"
 
-#: src/vocgui/models.py:68 src/vocgui/models.py:88
+#: src/vocgui/models.py:71 src/vocgui/models.py:91
 msgid "discipline"
 msgstr "discipline"
 
-#: src/vocgui/models.py:70 src/vocgui/models.py:186
+#: src/vocgui/models.py:73 src/vocgui/models.py:189
 msgid "description"
 msgstr "description"
 
-#: src/vocgui/models.py:73 src/vocgui/models.py:189
+#: src/vocgui/models.py:76 src/vocgui/models.py:192
 msgid "icon"
 msgstr "icon"
 
-#: src/vocgui/models.py:76 src/vocgui/models.py:126 src/vocgui/models.py:194
+#: src/vocgui/models.py:79 src/vocgui/models.py:129 src/vocgui/models.py:197
 msgid "created by"
 msgstr ""
 
-#: src/vocgui/models.py:78 src/vocgui/models.py:128 src/vocgui/models.py:196
+#: src/vocgui/models.py:81 src/vocgui/models.py:131 src/vocgui/models.py:199
 msgid "admin"
 msgstr ""
 
-#: src/vocgui/models.py:103
+#: src/vocgui/models.py:106
 msgid "word type"
 msgstr "word type"
 
-#: src/vocgui/models.py:105
+#: src/vocgui/models.py:108
 msgid "word"
 msgstr "word"
 
-#: src/vocgui/models.py:123
+#: src/vocgui/models.py:126
 msgid "creation date"
 msgstr ""
 
-#: src/vocgui/models.py:294
+#: src/vocgui/models.py:300
 msgid "images"
 msgstr "images"
 
-#: src/vocgui/models.py:303 src/vocgui/models.py:322
+#: src/vocgui/models.py:309 src/vocgui/models.py:328
 msgid "alternative word"
 msgstr "alternative word"
 
-#: src/vocgui/models.py:323
+#: src/vocgui/models.py:329
 msgid "alternative words"
 msgstr "alternative words"
 

@@ -44,7 +44,13 @@ INSTALLED_APPS = [
     "ordered_model",
 ]
 
-REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -146,13 +152,10 @@ else:
 JAZZMIN_SETTINGS = {
     "site_title": "Lunes CMS",
     "welcome_sign": "Willkommen bei der Vokabelverwaltung von Lunes!",
-    # "show_ui_builder": True,
     "site_header": "Lunes",
     "site_logo": "images/logo.png",
     "changeform_format": "collapsible",
     "language_chooser": True,
-    "custom_css": "css/main.css",
-    "custom_js": "js/scripts.css",
     "icons": {
         "auth.user": "fas fa-user-edit",
         "auth.Group": "fas fa-users",
