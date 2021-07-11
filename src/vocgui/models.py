@@ -271,8 +271,11 @@ class DocumentImage(models.Model):
             img_cropped.width > Static.img_size[0]
             or img_cropped.height > Static.img_size[1]
         ):
-            max_size = (Static.img_size[0], Static.img_size[1])
-            img_cropped.thumbnail(max_size)
+            img_cropped.thumbnail(Static.img_size)
+        elif (img_cropped.width / img_cropped.height) > (Static.img_size[0] / Static.img_size[1]):
+            img_cropped = img_cropped.resize((Static.img_size[0], round((Static.img_size[0] / img_cropped.width) * img_cropped.height)))
+        else:
+            img_cropped = img_cropped.resize((round(Static.img_size[1] / img_cropped.height) * img_cropped.width, Static.img_size[1]))
 
         offset = (
             ((img_blurr.width - img_cropped.width) // 2),
