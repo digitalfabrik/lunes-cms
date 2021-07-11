@@ -19,7 +19,7 @@ from .validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
-from .utils import create_ressource_path
+from .utils import create_ressource_path, document_to_string
 
 
 class Static:
@@ -164,7 +164,7 @@ class Document(models.Model):
         super(Document, self).save(*args, **kwarg)
 
     def __str__(self):
-        return "(" + self.get_article_display() + ") " + self.word
+        return document_to_string(self)
 
     class Meta:
         """
