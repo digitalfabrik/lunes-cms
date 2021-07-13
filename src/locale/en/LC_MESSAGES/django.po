@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-10 09:26+0000\n"
+"POT-Creation-Date: 2021-07-13 12:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,50 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/templates/admin/vocgui/delete_confirmation.html:16
+msgid "Home"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:20
+#: src/templates/admin/vocgui/delete_confirmation.html:24
+#: src/templates/admin/vocgui/delete_confirmation.html:32
+msgid "Delete"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:39
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:46
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:53
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"It eventually will delete related objects as well, as shown in the summary:"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:62
+msgid "Yes, I’m sure"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:65
+msgid "No, take me back"
+msgstr ""
+
+#: src/templates/admin/vocgui/object_delete_summary.html:2
+msgid "Summary"
+msgstr ""
 
 #: src/vocgui/admin.py:60
 msgid "Release selected disciplines"
@@ -44,7 +88,7 @@ msgstr "Unrelease selected training sets"
 msgid "disciplines"
 msgstr "disciplines"
 
-#: src/vocgui/admin.py:263 src/vocgui/models.py:187 src/vocgui/models.py:210
+#: src/vocgui/admin.py:263 src/vocgui/models.py:190 src/vocgui/models.py:213
 msgid "training set"
 msgstr "training set"
 
@@ -52,21 +96,21 @@ msgstr "training set"
 msgid "audio"
 msgstr "audio"
 
-#: src/vocgui/admin.py:298 src/vocgui/models.py:299
+#: src/vocgui/admin.py:298 src/vocgui/models.py:306
 msgid "image"
 msgstr "image"
 
-#: src/vocgui/admin.py:305 src/vocgui/models.py:112 src/vocgui/models.py:313
+#: src/vocgui/admin.py:305 src/vocgui/models.py:112 src/vocgui/models.py:320
 msgid "article"
 msgstr "article"
 
 #: src/vocgui/admin.py:332 src/vocgui/list_filter.py:72
-#: src/vocgui/models.py:211
+#: src/vocgui/models.py:214
 msgid "training sets"
 msgstr "training sets"
 
 #: src/vocgui/admin.py:333 src/vocgui/forms.py:35 src/vocgui/forms.py:36
-#: src/vocgui/models.py:174 src/vocgui/models.py:175
+#: src/vocgui/models.py:177 src/vocgui/models.py:178
 msgid "vocabulary"
 msgstr "vocabulary"
 
@@ -74,7 +118,7 @@ msgstr "vocabulary"
 msgid "vocabulary management"
 msgstr "vocabulary management"
 
-#: src/vocgui/forms.py:37
+#: src/vocgui/forms.py:38
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
@@ -96,7 +140,7 @@ msgstr ""
 msgid "no images"
 msgstr "images"
 
-#: src/vocgui/models.py:70 src/vocgui/models.py:186
+#: src/vocgui/models.py:70 src/vocgui/models.py:189
 msgid "released"
 msgstr "released"
 
@@ -104,19 +148,19 @@ msgstr "released"
 msgid "discipline"
 msgstr "discipline"
 
-#: src/vocgui/models.py:73 src/vocgui/models.py:189
+#: src/vocgui/models.py:73 src/vocgui/models.py:192
 msgid "description"
 msgstr "description"
 
-#: src/vocgui/models.py:76 src/vocgui/models.py:192
+#: src/vocgui/models.py:76 src/vocgui/models.py:195
 msgid "icon"
 msgstr "icon"
 
-#: src/vocgui/models.py:79 src/vocgui/models.py:129 src/vocgui/models.py:197
+#: src/vocgui/models.py:79 src/vocgui/models.py:129 src/vocgui/models.py:200
 msgid "created by"
 msgstr ""
 
-#: src/vocgui/models.py:81 src/vocgui/models.py:131 src/vocgui/models.py:199
+#: src/vocgui/models.py:81 src/vocgui/models.py:131 src/vocgui/models.py:202
 msgid "admin"
 msgstr ""
 
@@ -132,15 +176,15 @@ msgstr "word"
 msgid "creation date"
 msgstr ""
 
-#: src/vocgui/models.py:300
+#: src/vocgui/models.py:307
 msgid "images"
 msgstr "images"
 
-#: src/vocgui/models.py:309 src/vocgui/models.py:328
+#: src/vocgui/models.py:316 src/vocgui/models.py:335
 msgid "alternative word"
 msgstr "alternative word"
 
-#: src/vocgui/models.py:329
+#: src/vocgui/models.py:336
 msgid "alternative words"
 msgstr "alternative words"
 
@@ -156,15 +200,15 @@ msgstr "File too large! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Only use one file extension!"
 
-#: src/voctrainer/settings.py:119
+#: src/voctrainer/settings.py:125
 msgid "English"
 msgstr "English"
 
-#: src/voctrainer/settings.py:120
+#: src/voctrainer/settings.py:126
 msgid "German"
 msgstr "German"
 
-#: src/voctrainer/settings.py:121
+#: src/voctrainer/settings.py:127
 msgid "French"
 msgstr "French"
 
