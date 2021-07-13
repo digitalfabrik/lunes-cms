@@ -166,9 +166,6 @@ class Document(models.Model):
     def __str__(self):
         return document_to_string(self)
 
-    def __unicode__(self):
-      return self.word
-
     class Meta:
         """
         Define user readable name of Document
