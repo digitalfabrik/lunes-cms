@@ -1,0 +1,14 @@
+{% load i18n %}
+<h4>{% trans "Summary" %}</h4>
+<table class="table table-striped">
+    <tbody>
+    {% for model_name, object_count in model_count %}
+        {% if model_name != "trainingset-document relationships" and model_name != "trainingset-discipline relationships" %}
+            <tr>
+                <td>{{ model_name|capfirst }}</td>
+                <td>{{ object_count }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
