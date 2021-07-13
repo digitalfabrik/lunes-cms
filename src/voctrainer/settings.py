@@ -124,7 +124,6 @@ LANGUAGE_CODE = "en"
 LANGUAGES = [
     ("en", _("English")),
     ("de", _("German")),
-    ("fr", _("French")),
 ]
 
 TIME_ZONE = "UTC"

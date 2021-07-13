@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-13 12:31+0000\n"
+"POT-Creation-Date: 2021-07-13 12:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,6 @@ msgstr ""
 "auch Löschen, wofür Ihnen aber Berechtigungen fehlen."
 
 #: src/templates/admin/vocgui/delete_confirmation.html:46
-#, python-format
 msgid ""
 "Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
 "following protected related objects:"
@@ -48,11 +47,6 @@ msgstr ""
 "auch Löschen, die allerdings geschützt sind."
 
 #: src/templates/admin/vocgui/delete_confirmation.html:53
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the %(object_name)s \"%(escaped_object)s"
-#| "\"? It eventually will delete relationships as well, as shown in the "
-#| "summary:"
 msgid ""
 "Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
 "It eventually will delete related objects as well, as shown in the summary:"
@@ -222,9 +216,8 @@ msgstr "Englisch"
 msgid "German"
 msgstr "Deutsch"
 
-#: src/voctrainer/settings.py:127
-msgid "French"
-msgstr "Französisch"
+#~ msgid "French"
+#~ msgstr "Französisch"
 
 #~ msgid "Relationships between training sets and documents"
 #~ msgstr "Beziehungen zwischen Modulen und Vokabeln"
