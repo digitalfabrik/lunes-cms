@@ -141,7 +141,7 @@ msgstr "Bilder"
 
 #: src/vocgui/models.py:309 src/vocgui/models.py:328
 msgid "alternative word"
-msgstr "Alternatives Word"
+msgstr "Alternatives Wort"
 
 #: src/vocgui/models.py:329
 msgid "alternative words"
