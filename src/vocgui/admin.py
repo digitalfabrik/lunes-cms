@@ -94,7 +94,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
     Admin Interface to for the TrainigSet module.
     Inheriting from `admin.ModelAdmin`.
     """
-
+    
     exclude = ("creator_is_admin",)
     readonly_fields = ("created_by",)
     search_fields = ["title"]

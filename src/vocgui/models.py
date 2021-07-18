@@ -37,7 +37,7 @@ class Static:
     ]
 
     # possible word types
-    word_type_choices = [("Nomen", "Nomen"), ("Verb", "Verb"), ("Adjektiv", "Adjektiv")]
+    word_type_choices = [("Nomen", "Substantiv"), ("Verb", "Verb"), ("Adjektiv", "Adjektiv")]
 
     # number of pixles used for box blurr
     blurr_radius = 30

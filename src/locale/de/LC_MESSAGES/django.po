@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-10 09:26+0000\n"
+"POT-Creation-Date: 2021-07-13 12:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/templates/admin/vocgui/delete_confirmation.html:16
+msgid "Home"
+msgstr ""
+
+#: src/templates/admin/vocgui/delete_confirmation.html:20
+#: src/templates/admin/vocgui/delete_confirmation.html:24
+#: src/templates/admin/vocgui/delete_confirmation.html:32
+msgid "Delete"
+msgstr "Löschen"
+
+#: src/templates/admin/vocgui/delete_confirmation.html:39
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
+"auch Löschen, wofür Ihnen aber Berechtigungen fehlen."
+
+#: src/templates/admin/vocgui/delete_confirmation.html:46
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
+"auch Löschen, die allerdings geschützt sind."
+
+#: src/templates/admin/vocgui/delete_confirmation.html:53
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"It eventually will delete related objects as well, as shown in the summary:"
+msgstr ""
+"Bist du sicher, dass du %(object_name)s '%(escaped_object)s' löschen "
+"möchtest? Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in "
+"der Zusammenfassung sehen kannst:"
+
+#: src/templates/admin/vocgui/delete_confirmation.html:62
+msgid "Yes, I’m sure"
+msgstr "Ja, ich bin mir sicher"
+
+#: src/templates/admin/vocgui/delete_confirmation.html:65
+msgid "No, take me back"
+msgstr "Nein, bitte abbrechen"
+
+#: src/templates/admin/vocgui/object_delete_summary.html:2
+msgid "Summary"
+msgstr "Zusammenfassung"
 
 #: src/vocgui/admin.py:60
 msgid "Release selected disciplines"
@@ -44,7 +93,7 @@ msgstr "Ausgewählte Module zurückhalten"
 msgid "disciplines"
 msgstr "Bereiche"
 
-#: src/vocgui/admin.py:263 src/vocgui/models.py:187 src/vocgui/models.py:210
+#: src/vocgui/admin.py:263 src/vocgui/models.py:190 src/vocgui/models.py:213
 msgid "training set"
 msgstr "Modul"
 
@@ -52,21 +101,21 @@ msgstr "Modul"
 msgid "audio"
 msgstr "Audio"
 
-#: src/vocgui/admin.py:298 src/vocgui/models.py:299
+#: src/vocgui/admin.py:298 src/vocgui/models.py:306
 msgid "image"
 msgstr "Bild"
 
-#: src/vocgui/admin.py:305 src/vocgui/models.py:112 src/vocgui/models.py:313
+#: src/vocgui/admin.py:305 src/vocgui/models.py:112 src/vocgui/models.py:320
 msgid "article"
 msgstr "Artikel"
 
 #: src/vocgui/admin.py:332 src/vocgui/list_filter.py:72
-#: src/vocgui/models.py:211
+#: src/vocgui/models.py:214
 msgid "training sets"
 msgstr "Module"
 
 #: src/vocgui/admin.py:333 src/vocgui/forms.py:35 src/vocgui/forms.py:36
-#: src/vocgui/models.py:174 src/vocgui/models.py:175
+#: src/vocgui/models.py:177 src/vocgui/models.py:178
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -74,14 +123,14 @@ msgstr "Vokabeln"
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
-#: src/vocgui/forms.py:37
+#: src/vocgui/forms.py:38
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
 msgstr ""
-"Bitte wähle ein paar Vokabeln für dein Modul aus. Um eine Vorschau "
-"der Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während "
-"du ein Element auswählst."
+"Bitte wähle ein paar Vokabeln für dein Modul aus. Um eine Vorschau der "
+"Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
+"Element auswählst."
 
 #: src/vocgui/list_filter.py:186
 msgid "approved images"
@@ -99,7 +148,7 @@ msgstr "Min. 1 unbestätigtes Bild"
 msgid "no images"
 msgstr "keine Bilder"
 
-#: src/vocgui/models.py:70 src/vocgui/models.py:186
+#: src/vocgui/models.py:70 src/vocgui/models.py:189
 msgid "released"
 msgstr "veröffentlicht"
 
@@ -107,19 +156,19 @@ msgstr "veröffentlicht"
 msgid "discipline"
 msgstr "Bereich"
 
-#: src/vocgui/models.py:73 src/vocgui/models.py:189
+#: src/vocgui/models.py:73 src/vocgui/models.py:192
 msgid "description"
 msgstr "Beschreibung"
 
-#: src/vocgui/models.py:76 src/vocgui/models.py:192
+#: src/vocgui/models.py:76 src/vocgui/models.py:195
 msgid "icon"
 msgstr "Icon"
 
-#: src/vocgui/models.py:79 src/vocgui/models.py:129 src/vocgui/models.py:197
+#: src/vocgui/models.py:79 src/vocgui/models.py:129 src/vocgui/models.py:200
 msgid "created by"
 msgstr "Erstellt von"
 
-#: src/vocgui/models.py:81 src/vocgui/models.py:131 src/vocgui/models.py:199
+#: src/vocgui/models.py:81 src/vocgui/models.py:131 src/vocgui/models.py:202
 msgid "admin"
 msgstr "Admin"
 
@@ -135,15 +184,15 @@ msgstr "Wort"
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: src/vocgui/models.py:300
+#: src/vocgui/models.py:307
 msgid "images"
 msgstr "Bilder"
 
-#: src/vocgui/models.py:309 src/vocgui/models.py:328
+#: src/vocgui/models.py:316 src/vocgui/models.py:335
 msgid "alternative word"
-msgstr "Alternatives Word"
+msgstr "Alternatives Wort"
 
-#: src/vocgui/models.py:329
+#: src/vocgui/models.py:336
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
@@ -159,17 +208,22 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: src/voctrainer/settings.py:119
+#: src/voctrainer/settings.py:125
 msgid "English"
 msgstr "Englisch"
 
-#: src/voctrainer/settings.py:120
+#: src/voctrainer/settings.py:126
 msgid "German"
 msgstr "Deutsch"
 
-#: src/voctrainer/settings.py:121
-msgid "French"
-msgstr "Französisch"
+#~ msgid "French"
+#~ msgstr "Französisch"
+
+#~ msgid "Relationships between training sets and documents"
+#~ msgstr "Beziehungen zwischen Modulen und Vokabeln"
+
+#~ msgid "Relationships between training sets and disciplines"
+#~ msgstr "Beziehungen zwischen Modulen und Bereichen"
 
 #, fuzzy
 #~| msgid "training sets"

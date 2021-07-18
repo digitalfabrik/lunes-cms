@@ -68,7 +68,7 @@ ROOT_URLCONF = "voctrainer.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -124,7 +124,6 @@ LANGUAGE_CODE = "en"
 LANGUAGES = [
     ("en", _("English")),
     ("de", _("German")),
-    ("fr", _("French")),
 ]
 
 TIME_ZONE = "UTC"
