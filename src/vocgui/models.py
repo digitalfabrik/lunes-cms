@@ -52,10 +52,30 @@ class Static:
 
 
 def convert_umlaute_images(instance, filename):
+    """Convert file name of images to handle all kind of
+    characters (inluding "Umlaute" etc.).
+
+    :param instance: instance where the current file is being attached
+    :type instance: django.db.models
+    :param filename: name of the file
+    :type filename: str
+    :return: file path of converted image
+    :rtype: str
+    """
     return create_ressource_path("images", filename)
 
 
 def convert_umlaute_audio(instance, filename):
+    """Convert file name of audios to handle all kind of
+    characters (inluding "Umlaute" etc.).
+
+    :param instance: instance where the current file is being attached
+    :type instance: django.db.models
+    :param filename: name of the file
+    :type filename: str
+    :return: file path of converted audio
+    :rtype: str
+    """
     return create_ressource_path("audio", filename)
 
 
@@ -63,7 +83,7 @@ class Discipline(OrderedModel):
     """
     Disciplines for training sets.
     They have a title, a description, a icon and contain training
-    sets with the same topic. Inherits from `models.Model`.
+    sets with the same topic. Inherits from `ordered_model.models.OrderedModel`.
     """
 
     id = models.AutoField(primary_key=True)
@@ -81,6 +101,11 @@ class Discipline(OrderedModel):
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     def __str__(self):
+        """String representation of Discipline instance
+
+        :return: title of discipline instance
+        :rtype: str
+        """
         return self.title
 
     class Meta(OrderedModel.Meta):
@@ -158,12 +183,20 @@ class Document(models.Model):
         os.remove(new_path)
         return converted_audiofile
 
-    def save(self, *args, **kwarg):
+    def save(self, *args, **kwargs):
+        """Overwrite djangos save function to convert audio files
+        to mp3 format (orignal file is saved as backup).
+        """
         if self.audio:
             self.audio = self.converted
-        super(Document, self).save(*args, **kwarg)
+        super(Document, self).save(*args, **kwargs)
 
     def __str__(self):
+        """String representation of Document instance
+
+        :return: title of document instance
+        :rtype: str
+        """
         return document_to_string(self)
 
     class Meta:
@@ -179,7 +212,7 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
     """
     Training sets are part of disciplines, have a title, a description
     an icon and relates to documents and disciplines.
-    Inherits from `models.Model`.
+    Inherits from `ordered_model.models.OrderedModel`.
     """
 
     id = models.AutoField(primary_key=True)
@@ -199,6 +232,11 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
 
     def __str__(self):
+        """String representation of TrainingSet instance
+
+        :return: title of training set instance
+        :rtype: str
+        """
         return self.title
 
     # pylint: disable=R0903
@@ -212,6 +250,9 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
 
 
 class DocumentImage(models.Model):
+    """Contains images and its titles that can be linked to
+    a document object.
+    """
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
@@ -223,6 +264,12 @@ class DocumentImage(models.Model):
     confirmed = models.BooleanField(default=True, verbose_name="confirmed")
 
     def image_tag(self):
+        """Image thumbnail to display a preview of a image in the editing section
+        of the DocumentImage admin.
+
+        :return: img HTML tag to display an image thumbnail
+        :rtype: str
+        """
         if self.image and self.image.storage.exists(self.image.name):
             if ".png" in self.image.name or ".jpg" in self.image.name:
                 return mark_safe(
@@ -285,12 +332,20 @@ class DocumentImage(models.Model):
         img_blurr.save(self.image.path)
 
     def __str__(self):
+        """String representation of DocumentImage instance
+
+        :return: title of document image instance
+        :rtype: str
+        """
         if self.name:
             return self.name
         else:
             return self.document.word
 
     def save(self, *args, **kwargs):
+        """Overwrite djangos save function to scale images into a
+        uniform size that is defined in the Static module.
+        """
         super(DocumentImage, self).save(*args, **kwargs)
         self.save_original_img()
         self.crop_img()
@@ -306,7 +361,7 @@ class DocumentImage(models.Model):
 
 class AlternativeWord(models.Model):
     """
-    Contains words for a document
+    Contains alternative words that can be linked to a document
     """
 
     id = models.AutoField(primary_key=True)
@@ -321,6 +376,11 @@ class AlternativeWord(models.Model):
     )
 
     def __str__(self):
+        """String representation of AlternativeWord instance
+
+        :return: title of alternative word instance
+        :rtype: str
+        """
         return self.alt_word
 
     # pylint: disable=R0903
@@ -333,9 +393,20 @@ class AlternativeWord(models.Model):
         verbose_name_plural = _("alternative words")
 
 
-# automatically adds a group when creating a new user if group name given in Static module
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
+    """Automatically adds a group when creating a new user
+    if group name given in Static module
+
+    :param sender: user that sends request
+    :type sender: django.contrib.auth.models
+    :param instance: user that eventually will be added to a new group
+    :type instance: django.contrib.auth.models
+    :param created: checks if User is creator
+    :type created: bool
+    :return: False if User is not creator and not part of Static.default_group_name
+    :rtype: bool
+    """
     if Static.default_group_name:
         default_group = Group.objects.filter(name=Static.default_group_name)
         if not created or not default_group:

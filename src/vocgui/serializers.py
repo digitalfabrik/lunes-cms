@@ -67,7 +67,13 @@ class DocumentImageListSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
         """
-        Only display approved images
+        Overwrite django built-in function to only deliver
+        approved images.
+
+        :param data: model instance
+        :type data: models.Model
+        :return: serialized model data
+        :rtype: dict
         """
         data = data.filter(confirmed=True)
         return super(DocumentImageListSerializer, self).to_representation(data)

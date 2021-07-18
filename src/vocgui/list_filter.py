@@ -6,8 +6,8 @@ from .models import Discipline, DocumentImage, TrainingSet, Document
 
 class DocumentDisciplineListFilter(admin.SimpleListFilter):
     """
-    This filter will return a subset of the instances in a Model by filtering according to the
-    user choice.
+    Filter for disciplines within document list display.
+    Inherits from `admin.SimpleListFilter`.
     """
 
     title = _("disciplines")
@@ -17,19 +17,14 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         """
-        Returns a list of tuples. The first element in each
-        tuple is the coded value for the option that will
-        appear in the URL query. The second element is the
-        human-readable name for the option that will appear
-        in the right sidebar.
+        Defining look up values that can be seen in the admin
+        interface. Returns tuples: the first element is a coded
+        value, whereas the second one is human-readable.
 
-        :param self: A handle to the :class:`list_filter.DocumentDisciplineListFilter`
-        :type self: class: `list_filter.DocumentDisciplineListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param model_admin: admin of current model
         :type model_admin: ModelAdmin
-
         :return: list of tuples containing id and title of each discipline
         :rtype: list
         """
@@ -45,17 +40,13 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
 
-        :param self: A handle to the :class:`list_filter.DocumentDisciplineListFilter`
-        :type self: class: `list_filter.DocumentDisciplineListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
-
         :return: filtered queryset based on the value provided in the query string
         :rtype: QuerySet
         """
-        # Compare the requested value to decide how to filter the queryset.
         if self.value():
             return queryset.filter(
                 training_sets__discipline__id=self.value()
@@ -65,8 +56,8 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
 
 class DocumentTrainingSetListFilter(admin.SimpleListFilter):
     """
-    This filter will return a subset of the instances in a Model by filtering according to the
-    user choice.
+    Filter for training sets within document list display.
+    Inherits from `admin.SimpleListFilter`.
     """
 
     title = _("training sets")
@@ -76,19 +67,14 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         """
-        Returns a list of tuples. The first element in each
-        tuple is the coded value for the option that will
-        appear in the URL query. The second element is the
-        human-readable name for the option that will appear
-        in the right sidebar.
+        Defining look up values that can be seen in the admin
+        interface. Returns tuples: the first element is a coded
+        value, whereas the second one is human-readable.
 
-        :param self: A handle to the :class:`list_filter.DocumentTrainingSetListFilter`
-        :type self: class: `list_filter.DocumentTrainingSetListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param model_admin: admin of current model
         :type model_admin: ModelAdmin
-
         :return: list of tuples containing id and title of each training set
         :rtype: list
         """
@@ -104,25 +90,22 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
 
-        :param self: A handle to the :class:`list_filter.DocumentTrainingSetListFilter`
-        :type self: class: `list_filter.DocumentTrainingSetListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
-
         :return: filtered queryset based on the value provided in the query string
         :rtype: QuerySet
         """
-        # Compare the requested value to decide how to filter the queryset.
         if self.value():
             return queryset.filter(training_sets__id=self.value()).distinct()
         return queryset
 
 
 class DisciplineListFilter(admin.SimpleListFilter):
-    """This filter will return a subset of the instances in a Model by filtering according to the
-    user choice.
+    """
+    Filter for disciplines within training set list display.
+    Inherits from `admin.SimpleListFilter`.
     """
 
     title = _("disciplines")
@@ -134,19 +117,14 @@ class DisciplineListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         """
-        Returns a list of tuples. The first element in each
-        tuple is the coded value for the option that will
-        appear in the URL query. The second element is the
-        human-readable name for the option that will appear
-        in the right sidebar.
+        Defining look up values that can be seen in the admin
+        interface. Returns tuples: the first element is a coded
+        value, whereas the second one is human-readable
 
-        :param self: A handle to the :class:`list_filter.DisciplineListFilter`
-        :type self: class: `list_filter.DisciplineListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param model_admin: admin of current model
         :type model_admin: ModelAdmin
-
         :return: list of tuples containing id and title of each discipline
         :rtype: list
         """
@@ -162,25 +140,22 @@ class DisciplineListFilter(admin.SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
 
-        :param self: A handle to the :class:`list_filter.DisciplineListFilter`
-        :type self: class: `list_filter.DisciplineListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
-
         :return: filtered queryset based on the value provided in the query string
         :rtype: QuerySet
         """
-        # Compare the requested value to decide how to filter the queryset.
         if self.value():
             return queryset.filter(discipline__id=self.value()).distinct()
         return queryset
 
 
 class ApprovedImageListFilter(admin.SimpleListFilter):
-    """This filter will return a subset of the instances in a Model by filtering according to the
-    user choice.
+    """
+    Filter for approved images within document list display.
+    Inherits from `admin.SimpleListFilter`.
     """
 
     title = _("approved images")
@@ -192,19 +167,14 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         """
-        Returns a list of tuples. The first element in each
-        tuple is the coded value for the option that will
-        appear in the URL query. The second element is the
-        human-readable name for the option that will appear
-        in the right sidebar.
+        Defining look up values that can be seen in the admin
+        interface. Returns tuples: the first element is a coded
+        value, whereas the second one is human-readable
 
-        :param self: A handle to the :class:`list_filter.ApprovedImageListFilter`
-        :type self: class: `list_filter.ApprovedImageListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param model_admin: admin of current model
         :type model_admin: ModelAdmin
-
         :return: list of tuples containing id and title of each discipline
         :rtype: list
         """
@@ -220,13 +190,10 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
 
-        :param self: A handle to the :class:`list_filter.DisciplineListFilter`
-        :type self: class: `list_filter.DisciplineListFilter`
-        :param request: Current HTTP request
-        :type request: HTTP request
+        :param request: current user request
+        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
-
         :return: filtered queryset based on the value provided in the query string
         :rtype: QuerySet
         """
