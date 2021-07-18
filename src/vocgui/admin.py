@@ -5,16 +5,8 @@ specify autocomplete_fields, search_fields and nested modules
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
-from django.forms.fields import NullBooleanField
-from django.http.request import RAISE_ERROR
-
-from image_cropping import ImageCroppingMixin
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User, Group
-from django.conf import settings
-from django.utils.module_loading import import_module
 from ordered_model.admin import OrderedModelAdmin
-from functools import partial
 
 from .models import (
     Discipline,
@@ -36,7 +28,7 @@ from .forms import TrainingSetForm
 class DisciplineAdmin(OrderedModelAdmin):
     """
     Admin Interface to for the Discipline module.
-    Inheriting from `admin.ModelAdmin`.
+    Inheriting from `ordered_model.admin.OrderedModelAdmin`.
     """
 
     exclude = ("creator_is_admin",)
@@ -46,8 +38,21 @@ class DisciplineAdmin(OrderedModelAdmin):
     list_display = ("title", "released", "creator_group", "move_up_down_links")
     list_per_page = 25
 
-    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
+        """
+        Overwrite django built-in function to save
+        user group and admin satus of model
+
+        :param request: current user request
+        :type request: django.http.request
+        :param obj: discipline object
+        :type obj: models.Discipline
+        :param form: employed model form
+        :type form: ModelForm
+        :param change: True if change on existing model
+        :type change: bool
+        :raises IndexError: Error when user is not superuser and doesn't belong to any group
+        """
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]
@@ -56,22 +61,70 @@ class DisciplineAdmin(OrderedModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
-    # django actions to release/unrelease model
-    @admin.action(description=_("Release selected disciplines"))
-    def make_released(self, request, queryset):
-        queryset.update(released=True)
-
-    @admin.action(description=_("Unrelease selected disciplines"))
-    def make_unreleased(self, request, queryset):
-        queryset.update(released=False)
-
     def get_action_choices(self, request):
+        """
+        Overwrite django built-in function to modify action choices. The first
+        option is dropped since it is a place holder.
+
+        :param request: current user request
+        :type request: django.http.request
+        :return: modified action choices
+        :rtype: dict
+        """
         choices = super(DisciplineAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
 
-    # function to display creator group in list display
+    def get_queryset(self, request):
+        """
+        Overwrite django built-in function to modify queryset according to user.
+        Users that are not superusers only see disciplines of their groups.
+
+        :param request: current user request
+        :type request: django.http.request
+        :return: adjustet queryset
+        :rtype: QuerySet
+        """
+        qs = super(DisciplineAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by__in=request.user.groups.all())
+
+    @admin.action(description=_("Release selected disciplines"))
+    def make_released(self, request, queryset):
+        """
+        Action to release discipline objects. It sets the
+        corresponding boolean field to true.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        queryset.update(released=True)
+
+    @admin.action(description=_("Unrelease selected disciplines"))
+    def make_unreleased(self, request, queryset):
+        """
+        Action to hide discipline objects. It sets the
+        corresponding boolean field to false.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        queryset.update(released=False)
+
     def creator_group(self, obj):
+        """
+        Include creator group of discipline in list display
+
+        :param obj: Discipline object
+        :type obj: models.Discipline
+        :return: Either static admin group or user group
+        :rtype: str
+        """
         if obj.creator_is_admin:
             return Static.admin_group
         elif obj.created_by:
@@ -81,18 +134,11 @@ class DisciplineAdmin(OrderedModelAdmin):
 
     creator_group.short_description = _("creator group")
 
-    # only display models of the corresponding user group
-    def get_queryset(self, request):
-        qs = super(DisciplineAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(created_by__in=request.user.groups.all())
-
 
 class TrainingSetAdmin(OrderedModelAdmin):
     """
     Admin Interface to for the TrainigSet module.
-    Inheriting from `admin.ModelAdmin`.
+    Inheriting from `ordered_model.admin.OrderedModelAdmin`.
     """
     
     exclude = ("creator_is_admin",)
@@ -110,8 +156,21 @@ class TrainingSetAdmin(OrderedModelAdmin):
     actions = ["make_released", "make_unreleased"]
     list_per_page = 25
 
-    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
+        """
+        Overwrite django built-in function to save
+        user group and admin satus of model
+
+        :param request: current user request
+        :type request: django.http.request
+        :param obj: training set object
+        :type obj: models.TrainingSet
+        :param form: employed model form
+        :type form: ModelForm
+        :param change: True if change on existing model
+        :type change: bool
+        :raises IndexError: Error when user is not superuser and doesn't belong to any group
+        """
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]
@@ -120,46 +179,49 @@ class TrainingSetAdmin(OrderedModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
-    # django actions to release/unrelease model
-    @admin.action(description=_("Release selected training sets"))
-    def make_released(self, request, queryset):
-        queryset.update(released=True)
-
-    @admin.action(description=_("Unrelease selected training sets"))
-    def make_unreleased(self, request, queryset):
-        queryset.update(released=False)
-
     def get_action_choices(self, request):
+        """
+        Overwrite django built-in function to modify action choices. The first
+        option is dropped since it is a place holder.
+
+        :param request: current user request
+        :type request: django.http.request
+        :return: modified action choices
+        :rtype: dict
+        """
         choices = super(TrainingSetAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
 
-    # fucntion to display related disciplines
-    def related_disciplines(self, obj):
-        return ", ".join([child.title for child in obj.discipline.all()])
-
-    related_disciplines.short_description = _("disciplines")
-
-    # function to display creator group in list display
-    def creator_group(self, obj):
-        if obj.creator_is_admin:
-            return Static.admin_group
-        elif obj.created_by:
-            return obj.created_by
-        else:
-            return None
-
-    creator_group.short_description = _("creator group")
-
-    # only display models of the corresponding user group
     def get_queryset(self, request):
+        """
+        Overwrite django built-in function to modify queryset according to user.
+        Users that are not superusers only see training set of their groups.
+
+        :param request: current user request
+        :type request: django.http.request
+        :return: adjustet queryset
+        :rtype: QuerySet
+        """
         qs = super(TrainingSetAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.filter(created_by__in=request.user.groups.all())
 
-    # define custom choices in many to many selector
     def get_form(self, request, obj=None, **kwargs):
+        """
+        Overwrite django built-in function to define custom choices
+        in many to many selectors, e.g. users should not see documents
+        by superusers. The function modifies the querysets of the
+        corresponding base fields dynamically.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param obj: django model object, defaults to None
+        :type obj: django.db.models, optional
+        :return: model form with adjustet querysets
+        :rtype: ModelForm
+        """
         form = super(TrainingSetAdmin, self).get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
@@ -176,6 +238,63 @@ class TrainingSetAdmin(OrderedModelAdmin):
                 creator_is_admin=True
             ).order_by("word")
         return form
+
+    @admin.action(description=_("Release selected training sets"))
+    def make_released(self, request, queryset):
+        """
+        Action to release training set objects. It sets the
+        corresponding boolean field to true.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        queryset.update(released=True)
+
+    @admin.action(description=_("Unrelease selected training sets"))
+    def make_unreleased(self, request, queryset):
+        """
+        Action to hide discipline objects. It sets the
+        corresponding boolean field to false.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        queryset.update(released=False)
+
+    def related_disciplines(self, obj):
+        """
+        Display related disciplines in list display
+
+        :param obj: Training set object
+        :type obj: models.TrainingSet
+        :return: comma seperated list of related disciplines
+        :rtype: str
+        """
+        return ", ".join([child.title for child in obj.discipline.all()])
+
+    related_disciplines.short_description = _("disciplines")
+
+    def creator_group(self, obj):
+        """
+        Include creator group of discipline in list display
+
+        :param obj: Training set object
+        :type obj: models.TrainingSet
+        :return: Either static admin group or user group
+        :rtype: str
+        """
+        if obj.creator_is_admin:
+            return Static.admin_group
+        elif obj.created_by:
+            return obj.created_by
+        else:
+            return None
+
+    creator_group.short_description = _("creator group")
 
 
 class AlternativeWordAdmin(admin.StackedInline):
@@ -206,6 +325,18 @@ class DocumentImageAdmin(admin.StackedInline):
     extra = 0
 
     def get_form(self, request, obj=None, **kwargs):
+        """
+        Modify user form since normal users shouldn't
+        see a confirmed button. This is only neccessary
+        for superusers.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param obj: django model object, defaults to None
+        :type obj: django.db.models, optional
+        :return: model form with adjustet fields
+        :rtype: ModelForm
+        """
         self.exclude = []
         if not request.user.is_superuser:
             self.exclude.append("confirmed")
@@ -240,8 +371,21 @@ class DocumentAdmin(admin.ModelAdmin):
     )
     list_per_page = 25
 
-    # Save user group and admin satus of model
     def save_model(self, request, obj, form, change):
+        """
+        Overwrite django built-in function to save
+        user group and admin satus of model
+
+        :param request: current user request
+        :type request: django.http.request
+        :param obj: document object
+        :type obj: models.Document
+        :param form: employed model form
+        :type form: ModelForm
+        :param change: True if change on existing model
+        :type change: bool
+        :raises IndexError: Error when user is not superuser and doesn't belong to any group
+        """
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0].name
@@ -250,20 +394,60 @@ class DocumentAdmin(admin.ModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
-    # function to display available action choices
     def get_action_choices(self, request):
+        """
+        Overwrite django built-in function to modify action choices. The first
+        option is dropped since it is a place holder.
+
+        :param request: current user request
+        :type request: django.http.request
+        :return: modified action choices
+        :rtype: dict
+        """
         choices = super(DocumentAdmin, self).get_action_choices(request)
         choices.pop(0)
         return choices
 
+    def get_queryset(self, request):
+        """
+        Overwrite django built-in function to modify queryset according to user.
+        Users that are not superusers only see documents of their groups.
+
+        :param request: current user request
+        :type request: django.http.request
+        :return: adjustet queryset
+        :rtype: QuerySet
+        """
+        qs = super(DocumentAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(
+            created_by__in=request.user.groups.values_list("name", flat=True).distinct()
+        )
+
     # fucntion to display related training sets
     def related_training_set(self, obj):
+        """
+        Display related training sets in list display
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: comma seperated list of related training sets
+        :rtype: str
+        """
         return ", ".join([child.title for child in obj.training_sets.all()])
 
     related_training_set.short_description = _("training set")
 
-    # function to display creator group in list display
     def creator_group(self, obj):
+        """
+        Include creator group of discipline in list display
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: Either static admin group or user group
+        :rtype: str
+        """
         if obj.creator_is_admin:
             return Static.admin_group
         elif obj.created_by:
@@ -274,8 +458,15 @@ class DocumentAdmin(admin.ModelAdmin):
     creator_group.short_description = _("creator group")
     creator_group.admin_order_field = "created_by"
 
-    # function to display if the document has an audio
     def has_audio(self, obj):
+        """
+        Include in list display whether a document has an audio file.
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: Either static admin group or user group
+        :rtype: str
+        """
         if obj.audio:
             return True
         else:
@@ -285,8 +476,15 @@ class DocumentAdmin(admin.ModelAdmin):
     has_audio.short_description = _("audio")
     has_audio.admin_order_field = "audio"
 
-    # function to display if the document has atleast one image
     def has_image(self, obj):
+        """
+        Include in list display whether a document has an image file.
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: Either static admin group or user group
+        :rtype: str
+        """
         if DocumentImage.objects.all().filter(document=obj):
             if DocumentImage.objects.all().filter(document=obj)[0].confirmed == True:
                 return True
@@ -300,18 +498,17 @@ class DocumentAdmin(admin.ModelAdmin):
 
     # display article names instead of ids in list display
     def article_display(self, obj):
+        """
+        Include article of document in list display
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: Either static admin group or user group
+        :rtype: str
+        """
         return obj.get_article_display()
 
     article_display.short_description = _("article")
-
-    # only display models of the corresponding user group
-    def get_queryset(self, request):
-        qs = super(DocumentAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(
-            created_by__in=request.user.groups.values_list("name", flat=True).distinct()
-        )
 
 
 def get_app_list(self, request):
@@ -321,8 +518,8 @@ def get_app_list(self, request):
 
     :param self: A handle to the :class:`admin.AdminSite`
     :type self: class: `admin.AdminSite`
-    :param request: Current HTTP request
-    :type request: HTTP request
+    :param request: current user request
+    :type request: django.http.request
 
     :return: list of app dictionaries (e.g. containing models)
     :rtype: list
