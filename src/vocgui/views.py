@@ -185,8 +185,12 @@ def redirect_view(request):
 
 
 def public_upload(request):
-    """
-    Public form to upload missing images
+    """Public form to upload missing images
+
+    :param request: current user request
+    :type request: django.http.request
+    :return: rendered response
+    :rtype: HttpResponse
     """
     upload_success = False
     if request.method == "POST":
