@@ -50,7 +50,6 @@ class DisciplineViewSet(viewsets.ModelViewSet):
                     Q(released=True)
                     & (Q(creator_is_admin=True) | Q(created_by__in=groups))
                 )
-                .order_by("order")
                 .annotate(
                     total_training_sets=Count(
                         "training_sets", filter=Q(training_sets__released=True)
@@ -60,7 +59,6 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         else:
             queryset = (
                 Discipline.objects.filter(Q(released=True) & Q(creator_is_admin=True))
-                .order_by("order")
                 .annotate(
                     total_training_sets=Count(
                         "training_sets", filter=Q(training_sets__released=True)

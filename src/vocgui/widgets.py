@@ -6,6 +6,7 @@ class ManyToManyOverlay(FilteredSelectMultiple):
     widget to preview images and audios of Document objects.
     Inherits from `django.contrib.admin.widgets.FilteredSelectMultiple`.
     """
+
     class Media:
         js = (
             "js/jquery.min.js",

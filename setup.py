@@ -38,6 +38,7 @@ setup(
         "django-nested-admin",
         "django-jazzmin",
         "django-ordered-model",
+        "django-mptt",
     ],
     extras_require={
         "dev": [

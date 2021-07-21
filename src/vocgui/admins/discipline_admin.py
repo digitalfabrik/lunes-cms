@@ -1,21 +1,20 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
-from ordered_model.admin import OrderedModelAdmin
+from mptt.admin import DraggableMPTTAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from vocgui.models import Static
 
-class DisciplineAdmin(OrderedModelAdmin):
+class DisciplineAdmin(DraggableMPTTAdmin):
     """
     Admin Interface to for the Discipline module.
-    Inheriting from `ordered_model.admin.OrderedModelAdmin`.
+    Inheriting from `mptt.admin.DraggableMPTTAdmin`.
     """
 
     exclude = ("creator_is_admin",)
     readonly_fields = ("created_by",)
     search_fields = ["title"]
     actions = ["delete_selected", "make_released", "make_unreleased"]
-    list_display = ("title", "released", "creator_group", "move_up_down_links")
     list_per_page = 25
 
     def save_model(self, request, obj, form, change):

@@ -1,16 +1,16 @@
 from django.db import models
-from ordered_model.models import OrderedModel
 from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
+from mptt.models import MPTTModel, TreeForeignKey
 
 from .static import convert_umlaute_images
 
-class Discipline(OrderedModel):
+class Discipline(MPTTModel):
     """
     Disciplines for training sets.
     They have a title, a description, a icon and contain training
-    sets with the same topic. Inherits from `ordered_model.models.OrderedModel`.
+    sets with the same topic. Inherits from `mptt.models.MPTTModel`.
     """
 
     id = models.AutoField(primary_key=True)
@@ -26,6 +26,7 @@ class Discipline(OrderedModel):
         Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     def __str__(self):
         """String representation of Discipline instance
@@ -35,7 +36,7 @@ class Discipline(OrderedModel):
         """
         return self.title
 
-    class Meta(OrderedModel.Meta):
+    class Meta:
         """
         Define user readable name of Field
         """
