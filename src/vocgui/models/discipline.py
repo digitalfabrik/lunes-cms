@@ -34,7 +34,12 @@ class Discipline(MPTTModel):
         :return: title of discipline instance
         :rtype: str
         """
-        return self.title
+        if self.parent:
+            ancestors = [node.title for node in self.parent.get_ancestors(include_self=True)]
+            ancestors.append(self.title)
+            return " \u2794 ".join(ancestors)
+        else:
+            return self.title
 
     class Meta:
         """

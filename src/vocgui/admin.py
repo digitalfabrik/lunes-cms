@@ -58,7 +58,6 @@ admin.site.register(
     list_display=(
         "tree_actions",
         "indented_title",
-        "title",
         "released",
         "creator_group",
     ),

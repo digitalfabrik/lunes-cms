@@ -66,7 +66,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         """
         qs = super(DisciplineAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return qs
+            return qs.filter(creator_is_admin=True)
         return qs.filter(created_by__in=request.user.groups.all())
 
     @admin.action(description=_("Release selected disciplines"))

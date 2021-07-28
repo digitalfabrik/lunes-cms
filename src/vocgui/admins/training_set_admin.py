@@ -77,7 +77,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
         """
         qs = super(TrainingSetAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return qs
+            return qs.filter(creator_is_admin=True)
         return qs.filter(created_by__in=request.user.groups.all())
 
     def get_form(self, request, obj=None, **kwargs):
@@ -98,14 +98,14 @@ class TrainingSetAdmin(OrderedModelAdmin):
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
                 created_by__in=request.user.groups.all()
-            ).order_by("title")
+            ).order_by("title").order_by("level")
             form.base_fields["documents"].queryset = Document.objects.filter(
-                created_by__in=request.user.groups.all()
+                created_by__in=[group.name for group in request.user.groups.all()]
             ).order_by("word")
         else:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
                 creator_is_admin=True
-            ).order_by("title")
+            ).order_by("title").order_by("level")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 creator_is_admin=True
             ).order_by("word")

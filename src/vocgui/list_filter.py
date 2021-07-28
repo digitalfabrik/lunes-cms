@@ -29,9 +29,17 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         list_of_disciplines = []
-        queryset = Discipline.objects.all()
+
+        if request.user.is_superuser:
+            queryset = Discipline.objects.all().filter(
+                creator_is_admin=True
+            )
+        else:
+            queryset = Discipline.objects.all().filter(
+                created_by__in=request.user.groups.all()
+            )
         for discipline in queryset:
-            list_of_disciplines.append((str(discipline.id), discipline.title))
+            list_of_disciplines.append((str(discipline.id), str(discipline)))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -79,7 +87,14 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         list_of_trainingsets = []
-        queryset = TrainingSet.objects.all()
+        if request.user.is_superuser:
+            queryset = TrainingSet.objects.all().filter(
+                creator_is_admin=True
+            )
+        else:
+            queryset = TrainingSet.objects.all().filter(
+                created_by__in=request.user.groups.all()
+            )
         for trainingset in queryset:
             list_of_trainingsets.append((str(trainingset.id), trainingset.title))
         return sorted(list_of_trainingsets, key=lambda tp: tp[1])
@@ -129,7 +144,14 @@ class DisciplineListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         list_of_disciplines = []
-        queryset = Discipline.objects.all()
+        if request.user.is_superuser:
+            queryset = Discipline.objects.all().filter(
+                creator_is_admin=True
+            )
+        else:
+            queryset = Discipline.objects.all().filter(
+                created_by__in=request.user.groups.all()
+            )        
         for discipline in queryset:
             list_of_disciplines.append((str(discipline.id), discipline.title))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
