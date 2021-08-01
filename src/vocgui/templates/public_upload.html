@@ -86,6 +86,13 @@
     <form class="form-signin" method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
       <img class="mb-4" src="static/images/logo.png" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Foto für Lunes-Vokabel hochladen</h1>
+      <h3 class="h5 mb-4 mt-4 font-weight-normal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+        </svg>
+        <a href="static/guidelines/fotoguide.pdf">Anleitung zum Erstellen geeigneter Fotos</a>
+      </h3>
       {% if upload_success %}<div class="alert alert-success" role="alert">Vielen Dank für dein Bild. Das Lunes Team wird es prüfen und freigeben.</div>{% endif %}
       <label for="inputTrainingSet" class="sr-only">Modul auswählen</label>
       <select id="inputTrainingSet" class="form-control" required autofocus><option>Bitte Modul wählen</option></select>
@@ -93,7 +100,6 @@
       <select id="inputDocument" name="inputDocument" class="form-control" required></select>
       <label for="inputFile" class="sr-only">Bild</label>
       <input type="file" id="inputFile" name="inputFile" accept="image/*" id="inputFile" class="form-control" required>
-      <a href="static/guidelines/fotoguide.pdf">Download Hinweise/Fotoguide</a>
       <div class="col-xs-12" style="height:10px;"></div>
       <div class="checkbox mb-3">
         <label>
