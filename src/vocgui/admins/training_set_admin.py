@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from vocgui.forms import TrainingSetForm
 from vocgui.list_filter import DisciplineListFilter
-from vocgui.models import Static, Document, Discipline
+from vocgui.models import Static, Document, Discipline, discipline
 
 class TrainingSetAdmin(OrderedModelAdmin):
     """
@@ -97,14 +97,16 @@ class TrainingSetAdmin(OrderedModelAdmin):
         form = super(TrainingSetAdmin, self).get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
-                created_by__in=request.user.groups.all()
+                created_by__in=request.user.groups.all(),
+                id__in=[obj.id for obj in Discipline.objects.all() if obj.get_descendant_count() == 0]
             ).order_by("title").order_by("level")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 created_by__in=[group.name for group in request.user.groups.all()]
             ).order_by("word")
         else:
             form.base_fields["discipline"].queryset = Discipline.objects.filter(
-                creator_is_admin=True
+                creator_is_admin=True,
+                id__in=[obj.id for obj in Discipline.objects.all() if obj.get_descendant_count() == 0]
             ).order_by("title").order_by("level")
             form.base_fields["documents"].queryset = Document.objects.filter(
                 creator_is_admin=True

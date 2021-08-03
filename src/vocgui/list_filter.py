@@ -39,7 +39,12 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
                 created_by__in=request.user.groups.all()
             )
         for discipline in queryset:
-            list_of_disciplines.append((str(discipline.id), str(discipline)))
+            if discipline.parent:
+                ancestors = [node.title for node in discipline.parent.get_ancestors(include_self=True)]
+                ancestors.append(discipline.title)
+                list_of_disciplines.append((str(discipline.id), " \u2794 ".join(ancestors)))
+            else:
+                list_of_disciplines.append((str(discipline.id), str(discipline)))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
