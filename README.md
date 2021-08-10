@@ -14,18 +14,18 @@ Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/
 ## List of disciplines
 List available disciplines for learning.
 
-### Discipline filtered by levels
+### Disciplines filtered by levels
 This endpoint displays all child disciplines for a given discipline id. If no id is given, all root disciplines will be returned.
 
 #### Request
 ```http
-GET /api/disciplines/ HTTP/1.1
+GET /api/disciplines_by_level/ HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
 The default endpoint delivers all root disciplines created by Lunes administrators. Optionally, a discipline id can be passed as follows:
 ```http
-GET /api/disciplines/[DISCIPLINE_ID] HTTP/1.1
+GET /api/disciplines_by_level/[DISCIPLINE_ID] HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
