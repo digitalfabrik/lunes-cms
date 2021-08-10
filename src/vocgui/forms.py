@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from .models import Document, TrainingSet, Discipline
 from .widgets import ManyToManyOverlay
 
+
 class DisciplineChoiceField(forms.ModelMultipleChoiceField):
     """
     Custom form field in order to include parent nodes in string representation.
@@ -14,11 +15,14 @@ class DisciplineChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
         if obj.parent:
-            ancestors = [node.title for node in obj.parent.get_ancestors(include_self=True)]
+            ancestors = [
+                node.title for node in obj.parent.get_ancestors(include_self=True)
+            ]
             ancestors.append(obj.title)
             return " \u2794 ".join(ancestors)
         else:
             return obj.title
+
 
 class TrainingSetForm(forms.ModelForm):
     """

@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from .static import Static
 from .document import Document
 
+
 class AlternativeWord(models.Model):
     """
     Contains alternative words that can be linked to a document
@@ -36,4 +37,3 @@ class AlternativeWord(models.Model):
 
         verbose_name = _("alternative word")
         verbose_name_plural = _("alternative words")
-

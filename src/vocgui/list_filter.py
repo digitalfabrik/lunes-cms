@@ -31,18 +31,21 @@ class DocumentDisciplineListFilter(admin.SimpleListFilter):
         list_of_disciplines = []
 
         if request.user.is_superuser:
-            queryset = Discipline.objects.all().filter(
-                creator_is_admin=True
-            )
+            queryset = Discipline.objects.all().filter(creator_is_admin=True)
         else:
             queryset = Discipline.objects.all().filter(
                 created_by__in=request.user.groups.all()
             )
         for discipline in queryset:
             if discipline.parent:
-                ancestors = [node.title for node in discipline.parent.get_ancestors(include_self=True)]
+                ancestors = [
+                    node.title
+                    for node in discipline.parent.get_ancestors(include_self=True)
+                ]
                 ancestors.append(discipline.title)
-                list_of_disciplines.append((str(discipline.id), " \u2794 ".join(ancestors)))
+                list_of_disciplines.append(
+                    (str(discipline.id), " \u2794 ".join(ancestors))
+                )
             else:
                 list_of_disciplines.append((str(discipline.id), str(discipline)))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
@@ -93,9 +96,7 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         """
         list_of_trainingsets = []
         if request.user.is_superuser:
-            queryset = TrainingSet.objects.all().filter(
-                creator_is_admin=True
-            )
+            queryset = TrainingSet.objects.all().filter(creator_is_admin=True)
         else:
             queryset = TrainingSet.objects.all().filter(
                 created_by__in=request.user.groups.all()
@@ -150,13 +151,11 @@ class DisciplineListFilter(admin.SimpleListFilter):
         """
         list_of_disciplines = []
         if request.user.is_superuser:
-            queryset = Discipline.objects.all().filter(
-                creator_is_admin=True
-            )
+            queryset = Discipline.objects.all().filter(creator_is_admin=True)
         else:
             queryset = Discipline.objects.all().filter(
                 created_by__in=request.user.groups.all()
-            )        
+            )
         for discipline in queryset:
             list_of_disciplines.append((str(discipline.id), discipline.title))
         return sorted(list_of_disciplines, key=lambda tp: tp[1])

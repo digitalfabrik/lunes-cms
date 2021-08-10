@@ -6,6 +6,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from .static import convert_umlaute_images
 
+
 class Discipline(MPTTModel):
     """
     Disciplines for training sets.
@@ -26,7 +27,14 @@ class Discipline(MPTTModel):
         Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="children", verbose_name=_("parent"))
+    parent = TreeForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
+        verbose_name=_("parent"),
+    )
 
     def __str__(self):
         """String representation of Discipline instance
@@ -43,4 +51,3 @@ class Discipline(MPTTModel):
 
         verbose_name = _("discipline")
         verbose_name_plural = _("disciplines")
-

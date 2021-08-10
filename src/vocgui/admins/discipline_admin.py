@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from vocgui.models import Static, Discipline
 
+
 class DisciplineAdmin(DraggableMPTTAdmin):
     """
     Admin Interface to for the Discipline module.
@@ -86,13 +87,21 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         """
         form = super(DisciplineAdmin, self).get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
-            form.base_fields["parent"].queryset = Discipline.objects.filter(
-                created_by__in=request.user.groups.all(),
-            ).order_by("title").order_by("level")
+            form.base_fields["parent"].queryset = (
+                Discipline.objects.filter(
+                    created_by__in=request.user.groups.all(),
+                )
+                .order_by("title")
+                .order_by("level")
+            )
         else:
-            form.base_fields["parent"].queryset = Discipline.objects.filter(
-                creator_is_admin=True,
-            ).order_by("title").order_by("level")
+            form.base_fields["parent"].queryset = (
+                Discipline.objects.filter(
+                    creator_is_admin=True,
+                )
+                .order_by("title")
+                .order_by("level")
+            )
         return form
 
     @admin.action(description=_("Release selected disciplines"))
@@ -138,4 +147,3 @@ class DisciplineAdmin(DraggableMPTTAdmin):
             return None
 
     creator_group.short_description = _("creator group")
-

@@ -6,8 +6,13 @@ from django.core.files import File
 from django.utils.translation import ugettext_lazy as _
 
 from .static import Static, convert_umlaute_audio
-from vocgui.validators import validate_file_extension, validate_file_size, validate_multiple_extensions
+from vocgui.validators import (
+    validate_file_extension,
+    validate_file_size,
+    validate_multiple_extensions,
+)
 from vocgui.utils import document_to_string
+
 
 class Document(models.Model):
     """
@@ -98,4 +103,3 @@ class Document(models.Model):
 
         verbose_name = _("vocabulary")
         verbose_name_plural = _("vocabulary")
-

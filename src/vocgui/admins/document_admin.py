@@ -4,8 +4,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from .document_image_admin import DocumentImageAdmin
 from .alternative_word_admin import AlternativeWordAdmin
-from vocgui.list_filter import DocumentDisciplineListFilter, DocumentTrainingSetListFilter, ApprovedImageListFilter
+from vocgui.list_filter import (
+    DocumentDisciplineListFilter,
+    DocumentTrainingSetListFilter,
+    ApprovedImageListFilter,
+)
 from vocgui.models import Static, DocumentImage
+
 
 class DocumentAdmin(admin.ModelAdmin):
     """
@@ -171,4 +176,3 @@ class DocumentAdmin(admin.ModelAdmin):
         return obj.get_article_display()
 
     article_display.short_description = _("article")
-

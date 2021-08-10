@@ -13,5 +13,5 @@ __all__ = [
     "Static",
     "TrainingSet",
     "convert_umlaute_images",
-    "convert_umlaute_images"
+    "convert_umlaute_images",
 ]

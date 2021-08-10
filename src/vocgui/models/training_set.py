@@ -8,6 +8,7 @@ from .static import convert_umlaute_images
 from .document import Document
 from .discipline import Discipline
 
+
 class TrainingSet(OrderedModel):  # pylint: disable=R0903
     """
     Training sets are part of disciplines, have a title, a description
@@ -47,4 +48,3 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
 
         verbose_name = _("training set")
         verbose_name_plural = _("training sets")
-
