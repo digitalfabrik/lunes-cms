@@ -13,21 +13,25 @@ This project is licensed with the Apache 2.0 License.
 Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/).
 ## List of disciplines
 List available disciplines for learning.
-### Request
+
+### Discipline filtered by levels
+This endpoint displays all child disciplines for a given discipline id. If no id is given, all root disciplines will be returned.
+
+#### Request
 ```http
 GET /api/disciplines/ HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
-The default endpoint delivers all disciplines created by Lunes administrators. Optionally, group ids can be passed as well (multiple ids devided by `&`):
+The default endpoint delivers all root disciplines created by Lunes administrators. Optionally, a discipline id can be passed as follows:
 ```http
-GET /api/disciplines/[[GROUP_ID]&[GROUP_ID]&[...]] HTTP/1.1
+GET /api/disciplines/[DISCIPLINE_ID] HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
-The request will return all disciplines either created by Lunes administrators or by one of the passed user groups.
+The request will return either all root elements or all child elements for a given discipline created by a Lunes administrator.
 
-### Response
+#### Response
 ```javascript
 [
     {
@@ -37,6 +41,41 @@ The request will return all disciplines either created by Lunes administrators o
         "icon": String,                 // URL to image
         "created_by": Integer           // Creator group id, null if created by admin 
         "total_training_sets": Integer  // # of training sets
+        "total_discipline_children": Integer // # of child disciplines
+    },
+    [...]   // repeats for available disciplines
+]
+```
+
+
+### Disciplines without child elements (deprecated)
+This endpoint only delivers disciplines that do not have any child elements. Generally, it is advised to use the newer version of this endpoint (see above). However, to keep Lunes functioning for people who haven't installed the recent update, this feature is still available.
+
+#### Request
+```http
+GET /api/disciplines/ HTTP/1.1
+Host: lunes.tuerantuer.org
+Content-Type: application/json
+```
+The default endpoint delivers all disciplines created by Lunes administrators. Optionally, group ids can be passed as well (multiple ids devided by `&`):
+```http
+GET /api/disciplines/[GROUP_ID]&[GROUP_ID]&[...] HTTP/1.1
+Host: lunes.tuerantuer.org
+Content-Type: application/json
+```
+The request will return all disciplines either created by Lunes administrators or by one of the passed user groups.
+
+#### Response
+```javascript
+[
+    {
+        "id": Integer,                  // ID of discipline
+        "title": String,                // title of discipline
+        "description": String,          // description of discipline 
+        "icon": String,                 // URL to image
+        "created_by": Integer           // Creator group id, null if created by admin 
+        "total_training_sets": Integer  // # of training sets
+        "total_discipline_children": Integer // # of child disciplines
     },
     [...]   // repeats for available disciplines
 ]

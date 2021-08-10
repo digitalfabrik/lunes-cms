@@ -78,8 +78,9 @@ class DisciplineViewSet(viewsets.ModelViewSet):
 
 class DisciplineLevelViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the Discipline module, optionally filtered by user groups.
-    It is filtered respected to the different mptt levels.
+    Defines a view set for the Discipline module, optionally filtered respected to
+    the different mptt levels. If no discipline id is given, all root elements will
+    be displayed.
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
