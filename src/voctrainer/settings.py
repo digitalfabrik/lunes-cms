@@ -155,6 +155,8 @@ JAZZMIN_SETTINGS = {
     "site_logo": "images/logo.png",
     "changeform_format": "collapsible",
     "language_chooser": True,
+    "custom_css": "css/corporate_identity.css",
+    "custom_js": "js/corporate_identity.js",
     "icons": {
         "auth.user": "fas fa-user-edit",
         "auth.Group": "fas fa-users",
@@ -184,8 +186,6 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": True,
     "sidebar_nav_flat_style": False,
-    "theme": "lumen",
-    "dark_mode_theme": "darkly",
     "button_classes": {
         "primary": "btn-primary",
         "secondary": "btn-secondary",

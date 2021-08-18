@@ -1,0 +1,144 @@
+/*primary buttons*/
+.btn-primary {
+    background-color: #000e38;
+    border-color: #000e38;
+}
+.btn-primary:active{
+    background-color:#000e38 !important;
+    border-color: #000e38 !important;
+}
+.btn-primary:focus{
+    background-color:#000e38 !important;
+    border-color: #000e38 !important;
+}
+.btn-primary:hover{
+    background-color:#000e38;
+    border-color: #000e38;
+}
+
+/*info buttons*/
+.btn-info {
+    background-color:#000e38;
+    border-color: #000e38;
+}
+
+.btn-info:active{
+    background-color:#000e38 !important;
+    border-color: #000e38 !important;
+}
+
+.btn-info:focus{
+    background-color:#000e38 !important;
+    border-color: #000e38 !important;
+}
+
+.btn-info:hover{
+    background-color:#000e38;
+    border-color: #000e38;
+}
+/*success buttons*/
+.btn-success {
+    background-color: #0adb75;
+    border-color: #0adb75;
+}
+
+.btn-success:focus {
+    background-color: #0adb75 !important;
+    border-color: #0adb75 !important;
+}
+
+.btn-success:active {
+    background-color: #0adb75 !important;
+    border-color: #0adb75 !important;
+}
+
+.btn-success:hover{
+    background-color:#0adb75;
+    border-color: #0adb75;
+}
+
+/*success buttons*/
+.btn-danger {
+    background-color: #ff5252;
+    border-color: #ff5252;
+}
+
+.btn-danger:focus {
+    background-color: #ff5252 !important;
+    border-color: #ff5252 !important;
+}
+
+.btn-danger:active {
+    background-color: #ff5252 !important;
+    border-color: #ff5252 !important;
+}
+
+.btn-danger:hover{
+    background-color:#ff5252;
+    border-color: #ff5252;
+}
+
+/*summary buttons*/
+.btn-secondary {
+    background-color: #5b616a;
+    border-color: #5b616a;
+}
+
+.btn-secondary:focus {
+    background-color: #5b616a !important;
+    border-color: #5b616a !important;
+}
+
+.btn-secondary:active {
+    background-color: #5b616a !important;
+    border-color: #5b616a !important;
+}
+
+.btn-secondary:hover{
+    background-color:#5b616a;
+    border-color: #5b616a;
+}
+
+/*menu and navbar*/
+.main-sidebar {
+    background-color: #000e38;
+}
+
+.brand-link {
+    background-color: #000e38;
+}
+
+.main-header {
+    background-color: #425bee;
+}
+
+/*circles*/
+.bg-success {
+    background-color: #0adb75 !important;
+}
+
+.bg-danger {
+    background-color: #ff5252 !important;
+}
+
+.bg-blue {
+    background-color: #425bee !important;
+}
+
+.bg-gray {
+    background-color: #5b616a !important;
+}
+
+/*labels*/
+.bg-info {
+    background-color: #777e91 !important;
+}
+
+/*alerts*/
+.alert-success {
+    background-color: #0adb75;
+}
+
+.alert-warning {
+    background-color: #ffbb4a;
+}
