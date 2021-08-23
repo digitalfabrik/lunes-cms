@@ -1,21 +1,21 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
-from ordered_model.admin import OrderedModelAdmin
+from mptt.admin import DraggableMPTTAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from vocgui.models import Static
+from vocgui.models import Static, Discipline
 
-class DisciplineAdmin(OrderedModelAdmin):
+
+class DisciplineAdmin(DraggableMPTTAdmin):
     """
     Admin Interface to for the Discipline module.
-    Inheriting from `ordered_model.admin.OrderedModelAdmin`.
+    Inheriting from `mptt.admin.DraggableMPTTAdmin`.
     """
 
     exclude = ("creator_is_admin",)
     readonly_fields = ("created_by",)
     search_fields = ["title"]
     actions = ["delete_selected", "make_released", "make_unreleased"]
-    list_display = ("title", "released", "creator_group", "move_up_down_links")
     list_per_page = 25
 
     def save_model(self, request, obj, form, change):
@@ -67,8 +67,42 @@ class DisciplineAdmin(OrderedModelAdmin):
         """
         qs = super(DisciplineAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return qs
+            return qs.filter(creator_is_admin=True)
         return qs.filter(created_by__in=request.user.groups.all())
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Overwrite django built-in function to define custom choices
+        in mppt many to many selector for parent disciplines,
+        e.g. users should not see disciplines by superusers.
+        The function modifies the querysets of the
+        corresponding base fields dynamically.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param obj: django model object, defaults to None
+        :type obj: django.db.models, optional
+        :return: model form with adjustet querysets
+        :rtype: ModelForm
+        """
+        form = super(DisciplineAdmin, self).get_form(request, obj, **kwargs)
+        if not request.user.is_superuser:
+            form.base_fields["parent"].queryset = (
+                Discipline.objects.filter(
+                    created_by__in=request.user.groups.all(),
+                )
+                .order_by("title")
+                .order_by("level")
+            )
+        else:
+            form.base_fields["parent"].queryset = (
+                Discipline.objects.filter(
+                    creator_is_admin=True,
+                )
+                .order_by("title")
+                .order_by("level")
+            )
+        return form
 
     @admin.action(description=_("Release selected disciplines"))
     def make_released(self, request, queryset):
@@ -113,4 +147,3 @@ class DisciplineAdmin(OrderedModelAdmin):
             return None
 
     creator_group.short_description = _("creator group")
-

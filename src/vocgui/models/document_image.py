@@ -7,10 +7,12 @@ from .static import Static, convert_umlaute_images
 from .document import Document
 from vocgui.validators import validate_multiple_extensions
 
+
 class DocumentImage(models.Model):
     """Contains images and its titles that can be linked to
     a document object.
     """
+
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
@@ -77,10 +79,24 @@ class DocumentImage(models.Model):
             or img_cropped.height > Static.img_size[1]
         ):
             img_cropped.thumbnail(Static.img_size)
-        elif (img_cropped.width / img_cropped.height) > (Static.img_size[0] / Static.img_size[1]):
-            img_cropped = img_cropped.resize((Static.img_size[0], round((Static.img_size[0] / img_cropped.width) * img_cropped.height)))
+        elif (img_cropped.width / img_cropped.height) > (
+            Static.img_size[0] / Static.img_size[1]
+        ):
+            img_cropped = img_cropped.resize(
+                (
+                    Static.img_size[0],
+                    round(
+                        (Static.img_size[0] / img_cropped.width) * img_cropped.height
+                    ),
+                )
+            )
         else:
-            img_cropped = img_cropped.resize((round(Static.img_size[1] / img_cropped.height) * img_cropped.width, Static.img_size[1]))
+            img_cropped = img_cropped.resize(
+                (
+                    round(Static.img_size[1] / img_cropped.height) * img_cropped.width,
+                    Static.img_size[1],
+                )
+            )
 
         offset = (
             ((img_blurr.width - img_cropped.width) // 2),
@@ -115,4 +131,3 @@ class DocumentImage(models.Model):
 
         verbose_name = _("image")
         verbose_name_plural = _("images")
-

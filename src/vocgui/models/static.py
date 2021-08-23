@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 from vocgui.utils import create_ressource_path
 
+
 class Static:
     """
     Module for static and global variables
@@ -19,7 +20,11 @@ class Static:
     ]
 
     # possible word types
-    word_type_choices = [("Nomen", "Substantiv"), ("Verb", "Verb"), ("Adjektiv", "Adjektiv")]
+    word_type_choices = [
+        ("Nomen", "Substantiv"),
+        ("Verb", "Verb"),
+        ("Adjektiv", "Adjektiv"),
+    ]
 
     # number of pixles used for box blurr
     blurr_radius = 30
@@ -60,6 +65,7 @@ def convert_umlaute_audio(instance, filename):
     """
     return create_ressource_path("audio", filename)
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """Automatically adds a group when creating a new user
@@ -79,4 +85,3 @@ def create_user_profile(sender, instance, created, **kwargs):
         if not created or not default_group:
             return False
         instance.groups.add(Group.objects.get(name=Static.default_group_name))
-

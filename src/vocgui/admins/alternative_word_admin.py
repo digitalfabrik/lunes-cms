@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from vocgui.models import AlternativeWord
 
+
 class AlternativeWordAdmin(admin.StackedInline):
     """
     Admin Interface to for the AlternativeWord module.

@@ -7,6 +7,23 @@ from .models import Document, TrainingSet, Discipline
 from .widgets import ManyToManyOverlay
 
 
+class DisciplineChoiceField(forms.ModelMultipleChoiceField):
+    """
+    Custom form field in order to include parent nodes in string representation.
+    Inherits from `forms.ModelMultipleChocieField`.
+    """
+
+    def label_from_instance(self, obj):
+        if obj.parent:
+            ancestors = [
+                node.title for node in obj.parent.get_ancestors(include_self=True)
+            ]
+            ancestors.append(obj.title)
+            return " \u2794 ".join(ancestors)
+        else:
+            return obj.title
+
+
 class TrainingSetForm(forms.ModelForm):
     """
     Defining custom form for the training set admin interface.
@@ -23,7 +40,7 @@ class TrainingSetForm(forms.ModelForm):
 
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True)
-    discipline = forms.ModelMultipleChoiceField(
+    discipline = DisciplineChoiceField(
         queryset=Discipline.objects.all(),
         widget=FilteredSelectMultiple(
             verbose_name=(_("disciplines")), is_stacked=False

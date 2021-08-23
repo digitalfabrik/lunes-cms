@@ -19,6 +19,7 @@ def create_ressource_path(parent_dir, filename):
     """
     return os.path.join(parent_dir, str(uuid.uuid1()) + pathlib.Path(filename).suffix)
 
+
 def document_to_string(doc):
     """Create string representation of a document object
 
@@ -28,7 +29,7 @@ def document_to_string(doc):
     :rtype: str
     """
     alt_words = [str(elem) for elem in doc.alternatives.all()]
-    
+
     if len(alt_words) > 0:
         alt_words = "(" + ", ".join(alt_words) + ")"
         return "(" + doc.get_article_display() + ") " + doc.word + " " + alt_words
