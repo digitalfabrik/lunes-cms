@@ -11,7 +11,9 @@ class DisciplineSerializer(serializers.ModelSerializer):
     """
 
     total_training_sets = serializers.IntegerField()
-    total_discipline_children = serializers.SerializerMethodField("get_total_discipline_children")
+    total_discipline_children = serializers.SerializerMethodField(
+        "get_total_discipline_children"
+    )
 
     class Meta:
         """
@@ -28,7 +30,7 @@ class DisciplineSerializer(serializers.ModelSerializer):
             "total_training_sets",
             "total_discipline_children",
         )
-    
+
     def get_total_discipline_children(self, obj):
         """Returns the total child count by calling
         utils.get_child_count(obj).
@@ -40,6 +42,7 @@ class DisciplineSerializer(serializers.ModelSerializer):
         :rtype: int
         """
         return get_child_count(obj)
+
 
 class TrainingSetSerializer(serializers.ModelSerializer):
     """

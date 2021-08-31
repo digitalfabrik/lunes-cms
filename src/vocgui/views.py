@@ -124,7 +124,9 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                     id__in=[
                         obj.id
                         for obj in Discipline.objects.all()
-                        if get_child_count(obj) + obj.training_sets.filter(released=True).count() > 0
+                        if get_child_count(obj)
+                        + obj.training_sets.filter(released=True).count()
+                        > 0
                     ]
                 )
             ).annotate(
@@ -138,8 +140,12 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 & Q(creator_is_admin=True)
                 & Q(
                     id__in=[
-                        obj.id for obj in Discipline.objects.all()
-                        if obj.is_root_node() and get_child_count(obj) + obj.training_sets.filter(released=True).count() > 0
+                        obj.id
+                        for obj in Discipline.objects.all()
+                        if obj.is_root_node()
+                        and get_child_count(obj)
+                        + obj.training_sets.filter(released=True).count()
+                        > 0
                     ]
                 )
             ).annotate(

@@ -36,6 +36,7 @@ def document_to_string(doc):
     else:
         return "(" + doc.get_article_display() + ") " + doc.word
 
+
 def get_child_count(disc):
     """Returns the number of children of a discipline.
     Every child contains at least one training set or is a direct/indirect
@@ -51,6 +52,7 @@ def get_child_count(disc):
         if get_training_set_count(child) > 0:
             children_counter += 1
     return children_counter
+
 
 def get_training_set_count(disc):
     """Returns the total number of training sets of a discipline and all its
