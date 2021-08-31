@@ -113,9 +113,9 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 Q(released=True)
                 & Q(creator_is_admin=True)
                 & Q(
-                    id__in=Discipline.objects.filter(
+                    id__in=Discipline.objects.get(
                         id=self.kwargs["discipline_id"]
-                    ).get_descendants()
+                    ).get_children()
                 )
             ).annotate(
                 total_training_sets=Count(
