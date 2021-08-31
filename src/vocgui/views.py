@@ -20,6 +20,7 @@ from .serializers import (
     AlternativeWordSerializer,
     DocumentImageSerializer,
 )
+from .utils import get_child_count
 
 
 class DisciplineViewSet(viewsets.ModelViewSet):
@@ -121,7 +122,6 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
                 ),
-                total_discipline_children=Count("children"),
             )
         else:
             queryset = Discipline.objects.filter(
@@ -136,7 +136,6 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
                 ),
-                total_discipline_children=Count("children"),
             )
         return queryset
 
