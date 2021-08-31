@@ -142,3 +142,25 @@
 .alert-warning {
     background-color: #ffbb4a;
 }
+
+/*selectors*/
+.selector-chosen h2 {
+    background: #6588f2;
+}
+
+/*cards*/
+.collapsible-header:active {
+    background-color: #425bee !important;
+}
+
+.collapsible-header:focus {
+    background-color: #425bee !important;
+}
+
+.collapsible-header:hover {
+    background-color: #425bee !important;
+}
+
+.card-primary.card-outline {
+    border-top: 3px solid #425bee;
+}
