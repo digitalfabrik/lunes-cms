@@ -12,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models.functions import Floor
 from django.db.models import F
 
+from vocgui.models import training_set
+
 from .models import TrainingSet, Document, AlternativeWord, Discipline, DocumentImage
 from .serializers import (
     DisciplineSerializer,
@@ -118,6 +120,13 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                         id=self.kwargs["discipline_id"]
                     ).get_children()
                 )
+                & Q(
+                    id__in=[
+                        obj.id
+                        for obj in Discipline.objects.all()
+                        if get_child_count(obj) + obj.training_sets.filter(released=True).count() > 0
+                    ]
+                )
             ).annotate(
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
@@ -129,7 +138,8 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 & Q(creator_is_admin=True)
                 & Q(
                     id__in=[
-                        obj.id for obj in Discipline.objects.all() if obj.is_root_node()
+                        obj.id for obj in Discipline.objects.all()
+                        if obj.is_root_node() and get_child_count(obj) + obj.training_sets.filter(released=True).count() > 0
                     ]
                 )
             ).annotate(
