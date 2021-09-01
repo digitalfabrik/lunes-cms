@@ -10,6 +10,7 @@ class DisciplineSerializer(serializers.ModelSerializer):
     """
 
     total_training_sets = serializers.IntegerField()
+    total_discipline_children = serializers.IntegerField()
 
     class Meta:
         """
@@ -24,6 +25,7 @@ class DisciplineSerializer(serializers.ModelSerializer):
             "icon",
             "created_by",
             "total_training_sets",
+            "total_discipline_children",
         )
 
 

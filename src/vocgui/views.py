@@ -9,6 +9,8 @@ from django.shortcuts import redirect
 from django.db.models import Count, Q
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db.models.functions import Floor
+from django.db.models import F
 
 from .models import TrainingSet, Document, AlternativeWord, Discipline, DocumentImage
 from .serializers import (
@@ -45,27 +47,96 @@ class DisciplineViewSet(viewsets.ModelViewSet):
             return Discipline.objects.none()
         if "group_id" in self.kwargs:
             groups = self.kwargs["group_id"].split("&")
-            queryset = (
-                Discipline.objects.filter(
-                    Q(released=True)
-                    & (Q(creator_is_admin=True) | Q(created_by__in=groups))
+            queryset = Discipline.objects.filter(
+                Q(released=True)
+                & Q(
+                    id__in=[
+                        obj.id
+                        for obj in Discipline.objects.all()
+                        if obj.get_descendant_count() == 0
+                    ]
                 )
-                .order_by("order")
-                .annotate(
-                    total_training_sets=Count(
-                        "training_sets", filter=Q(training_sets__released=True)
-                    )
-                )
+                & (Q(creator_is_admin=True) | Q(created_by__in=groups))
+            ).annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                ),
+                total_discipline_children=Count("children"),
             )
         else:
-            queryset = (
-                Discipline.objects.filter(Q(released=True) & Q(creator_is_admin=True))
-                .order_by("order")
-                .annotate(
-                    total_training_sets=Count(
-                        "training_sets", filter=Q(training_sets__released=True)
-                    )
+            queryset = Discipline.objects.filter(
+                Q(released=True)
+                & Q(creator_is_admin=True)
+                & Q(
+                    id__in=[
+                        obj.id
+                        for obj in Discipline.objects.all()
+                        if obj.get_descendant_count() == 0
+                    ]
                 )
+            ).annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                ),
+                total_discipline_children=Count("children"),
+            )
+        return queryset
+
+
+class DisciplineLevelViewSet(viewsets.ModelViewSet):
+    """
+    Defines a view set for the Discipline module, optionally filtered respected to
+    the different mptt levels. If no discipline id is given, all root elements will
+    be displayed.
+    Inherits from `viewsets.ModelViewSet` and defines queryset
+    and serializers.
+    """
+
+    queryset = Discipline.objects.all()
+    serializer_class = DisciplineSerializer
+    http_method_names = ["get"]
+
+    def get_queryset(self):
+        """
+        Defining custom queryset
+
+        :param self: A handle to the :class:`DisciplineViewSet`
+        :type self: class
+
+        :return: (filtered) queryset
+        :rtype: QuerySet
+        """
+        if getattr(self, "swagger_fake_view", False):
+            return Discipline.objects.none()
+        if "discipline_id" in self.kwargs:
+            queryset = Discipline.objects.filter(
+                Q(released=True)
+                & Q(creator_is_admin=True)
+                & Q(
+                    id__in=Discipline.objects.filter(
+                        id=self.kwargs["discipline_id"]
+                    ).get_descendants()
+                )
+            ).annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                ),
+                total_discipline_children=Count("children"),
+            )
+        else:
+            queryset = Discipline.objects.filter(
+                Q(released=True)
+                & Q(creator_is_admin=True)
+                & Q(
+                    id__in=[
+                        obj.id for obj in Discipline.objects.all() if obj.is_root_node()
+                    ]
+                )
+            ).annotate(
+                total_training_sets=Count(
+                    "training_sets", filter=Q(training_sets__released=True)
+                ),
+                total_discipline_children=Count("children"),
             )
         return queryset
 

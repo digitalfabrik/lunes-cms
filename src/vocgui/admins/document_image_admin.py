@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from vocgui.models import DocumentImage
 
+
 class DocumentImageAdmin(admin.StackedInline):
     """
     Admin Interface to for the DocumentImage module.
@@ -33,4 +34,3 @@ class DocumentImageAdmin(admin.StackedInline):
         if not request.user.is_superuser:
             self.exclude.append("confirmed")
         return super(DocumentImageAdmin, self.get_form(request, obj, **kwargs))
-

@@ -4,8 +4,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from .document_image_admin import DocumentImageAdmin
 from .alternative_word_admin import AlternativeWordAdmin
-from vocgui.list_filter import DocumentDisciplineListFilter, DocumentTrainingSetListFilter, ApprovedImageListFilter
+from vocgui.list_filter import (
+    DocumentDisciplineListFilter,
+    DocumentTrainingSetListFilter,
+    ApprovedImageListFilter,
+)
 from vocgui.models import Static, DocumentImage
+
 
 class DocumentAdmin(admin.ModelAdmin):
     """
@@ -13,7 +18,7 @@ class DocumentAdmin(admin.ModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
-    exclude = ("article_plural", "creator_is_admin")  # hide article_plural in admin
+    exclude = ("article_plural", "creator_is_admin")
     readonly_fields = ("created_by",)
     search_fields = ["word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
@@ -29,8 +34,8 @@ class DocumentAdmin(admin.ModelAdmin):
         "creation_date",
     )
     list_filter = (
-        DocumentTrainingSetListFilter,
         DocumentDisciplineListFilter,
+        DocumentTrainingSetListFilter,
         ApprovedImageListFilter,
     )
     list_per_page = 25
@@ -89,7 +94,6 @@ class DocumentAdmin(admin.ModelAdmin):
             created_by__in=request.user.groups.values_list("name", flat=True).distinct()
         )
 
-    # fucntion to display related training sets
     def related_training_set(self, obj):
         """
         Display related training sets in list display
@@ -160,7 +164,6 @@ class DocumentAdmin(admin.ModelAdmin):
     has_image.short_description = _("image")
     has_image.admin_order_field = "document_image"
 
-    # display article names instead of ids in list display
     def article_display(self, obj):
         """
         Include article of document in list display
@@ -173,4 +176,3 @@ class DocumentAdmin(admin.ModelAdmin):
         return obj.get_article_display()
 
     article_display.short_description = _("article")
-

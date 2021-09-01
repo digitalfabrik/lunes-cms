@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "pydub",
     "ordered_model",
+    "mptt",
 ]
 
 REST_FRAMEWORK = {
