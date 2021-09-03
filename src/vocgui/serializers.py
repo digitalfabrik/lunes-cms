@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
+from .utils import get_child_count
 
 
 class DisciplineSerializer(serializers.ModelSerializer):
@@ -10,7 +11,9 @@ class DisciplineSerializer(serializers.ModelSerializer):
     """
 
     total_training_sets = serializers.IntegerField()
-    total_discipline_children = serializers.IntegerField()
+    total_discipline_children = serializers.SerializerMethodField(
+        "get_total_discipline_children"
+    )
 
     class Meta:
         """
@@ -27,6 +30,18 @@ class DisciplineSerializer(serializers.ModelSerializer):
             "total_training_sets",
             "total_discipline_children",
         )
+
+    def get_total_discipline_children(self, obj):
+        """Returns the total child count by calling
+        utils.get_child_count(obj).
+
+
+        :param disc: Discipline instance
+        :type disc: models.Discipline
+        :return: sum of children
+        :rtype: int
+        """
+        return get_child_count(obj)
 
 
 class TrainingSetSerializer(serializers.ModelSerializer):

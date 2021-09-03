@@ -90,6 +90,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
             form.base_fields["parent"].queryset = (
                 Discipline.objects.filter(
                     created_by__in=request.user.groups.all(),
+                    training_sets__isnull=True,
                 )
                 .order_by("title")
                 .order_by("level")
@@ -98,6 +99,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
             form.base_fields["parent"].queryset = (
                 Discipline.objects.filter(
                     creator_is_admin=True,
+                    training_sets__isnull=True,
                 )
                 .order_by("title")
                 .order_by("level")

@@ -12,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models.functions import Floor
 from django.db.models import F
 
+from vocgui.models import training_set
+
 from .models import TrainingSet, Document, AlternativeWord, Discipline, DocumentImage
 from .serializers import (
     DisciplineSerializer,
@@ -20,6 +22,7 @@ from .serializers import (
     AlternativeWordSerializer,
     DocumentImageSerializer,
 )
+from .utils import get_child_count
 
 
 class DisciplineViewSet(viewsets.ModelViewSet):
@@ -113,15 +116,23 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 Q(released=True)
                 & Q(creator_is_admin=True)
                 & Q(
-                    id__in=Discipline.objects.filter(
+                    id__in=Discipline.objects.get(
                         id=self.kwargs["discipline_id"]
-                    ).get_descendants()
+                    ).get_children()
+                )
+                & Q(
+                    id__in=[
+                        obj.id
+                        for obj in Discipline.objects.all()
+                        if get_child_count(obj)
+                        + obj.training_sets.filter(released=True).count()
+                        > 0
+                    ]
                 )
             ).annotate(
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
                 ),
-                total_discipline_children=Count("children"),
             )
         else:
             queryset = Discipline.objects.filter(
@@ -129,14 +140,18 @@ class DisciplineLevelViewSet(viewsets.ModelViewSet):
                 & Q(creator_is_admin=True)
                 & Q(
                     id__in=[
-                        obj.id for obj in Discipline.objects.all() if obj.is_root_node()
+                        obj.id
+                        for obj in Discipline.objects.all()
+                        if obj.is_root_node()
+                        and get_child_count(obj)
+                        + obj.training_sets.filter(released=True).count()
+                        > 0
                     ]
                 )
             ).annotate(
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
                 ),
-                total_discipline_children=Count("children"),
             )
         return queryset
 
