@@ -20,7 +20,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     exclude = ("article_plural", "creator_is_admin")
     readonly_fields = ("created_by",)
-    search_fields = ["word"]
+    search_fields = ["word", "alternatives__alt_word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
     ordering = ["word", "creation_date"]
     list_display = (
