@@ -48,6 +48,11 @@ router.register(
 router.register(
     r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
 )
+router.register(
+    r"group_by_id/(?P<group_id>[0-9]+)",
+    views.GroupViewSet,
+    "group_by_id",
+)
 
 urlpatterns = [
     path("", views.redirect_view, name="redirect"),
