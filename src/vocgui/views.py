@@ -250,7 +250,9 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
             .order_by("order")
             .annotate(
                 total_documents=Count(
-                    "documents", filter=Q(documents__document_image__confirmed=True)
+                    "documents",
+                    filter=Q(documents__document_image__confirmed=True),
+                    distinct=True,
                 )
             )
         )
