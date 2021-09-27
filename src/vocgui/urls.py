@@ -35,8 +35,13 @@ router.register(
 )
 router.register(
     r"disciplines_by_level(?:/(?P<discipline_id>[0-9]+))?",
-    views.DisciplineLevelViewSet,
+    views.DisciplineFilteredViewSet,
     "disciplines_by_level",
+)
+router.register(
+    r"disciplines_by_group/(?P<group_id>[0-9]+)",
+    views.DisciplineFilteredViewSet,
+    "discipline_by_group",
 )
 router.register(
     r"training_set/(?P<discipline_id>[0-9]+)", views.TrainingSetViewSet, "training_set"
