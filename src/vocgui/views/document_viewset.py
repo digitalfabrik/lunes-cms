@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from vocgui.models import Document
 from vocgui.serializers import DocumentSerializer
 
+
 class DocumentViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Document module.

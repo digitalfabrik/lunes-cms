@@ -3,6 +3,7 @@ from django.db.models import Count, Q
 from vocgui.models import TrainingSet
 from vocgui.serializers import TrainingSetSerializer
 
+
 class TrainingSetViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the TrainingSet module.

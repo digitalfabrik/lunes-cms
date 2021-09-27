@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from vocgui.models import TrainingSet
 from vocgui.serializers import GroupSerializer
 
+
 class GroupViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Group module.
@@ -27,6 +28,6 @@ class GroupViewSet(viewsets.ModelViewSet):
             return TrainingSet.objects.none()
         user = self.request.user
         queryset = Group.objects.filter(
-                id=self.kwargs["group_id"],
-            )
+            id=self.kwargs["group_id"],
+        )
         return queryset

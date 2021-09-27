@@ -1,7 +1,12 @@
-from .utils import get_filtered_discipline_queryset, get_discipline_by_group_queryset, get_overview_discipline_queryset
+from .utils import (
+    get_filtered_discipline_queryset,
+    get_discipline_by_group_queryset,
+    get_overview_discipline_queryset,
+)
 from rest_framework import viewsets
 from vocgui.models import Discipline
 from vocgui.serializers import DisciplineSerializer
+
 
 class DisciplineFilteredViewSet(viewsets.ModelViewSet):
     """
@@ -33,5 +38,5 @@ class DisciplineFilteredViewSet(viewsets.ModelViewSet):
         elif "group_id" in self.kwargs:
             queryset = get_discipline_by_group_queryset(self)
         else:
-            queryset = get_overview_discipline_queryset(self)
+            queryset = get_overview_discipline_queryset()
         return queryset

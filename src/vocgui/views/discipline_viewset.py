@@ -3,6 +3,7 @@ from django.db.models import Count, Q
 from vocgui.models import Discipline
 from vocgui.serializers import DisciplineSerializer
 
+
 class DisciplineViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Discipline module, optionally filtered by user groups.

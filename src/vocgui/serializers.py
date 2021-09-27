@@ -140,6 +140,7 @@ class DocumentSerializer(serializers.ModelSerializer):
             "document_image",
         )
 
+
 class GroupSerializer(serializers.ModelSerializer):
     """
     Serializer for the Group module. Inherits from

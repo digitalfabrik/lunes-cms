@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from vocgui.models import TrainingSet, Document, DocumentImage
 
+
 def redirect_view(request):
     """
     Redirect root URL

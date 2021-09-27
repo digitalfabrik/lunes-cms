@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from vocgui.models import Document
 from vocgui.serializers import DocumentSerializer
 
+
 class DocumentByIdViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Document module of a given id.
