@@ -165,6 +165,7 @@ JAZZMIN_SETTINGS = {
         "vocgui.Discipline": "fas fa-book",
         "vocgui.TrainingSet": "fas fa-stream",
         "vocgui.Document": "fab fa-amilia",
+        "vocgui.GroupAPIKey": "fas fa-key",
     },
 }
 

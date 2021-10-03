@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group
 from rest_framework import viewsets
 from vocgui.models import TrainingSet
 from vocgui.serializers import GroupSerializer
+from vocgui.permissions import VerifyGroupKey
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -10,7 +11,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
-
+    permission_classes = [VerifyGroupKey]
     serializer_class = GroupSerializer
     http_method_names = ["get"]
 
