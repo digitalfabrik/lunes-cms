@@ -68,6 +68,7 @@ def get_training_set_count(disc):
         training_set_counter += child.training_sets.count()
     return training_set_counter
 
+
 def get_key(request, keyword="Api-Key"):
     """Retrieve API Key from Authorization header of http request.
     Optionally, a custom keyword can be specified. The function

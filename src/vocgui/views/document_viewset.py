@@ -4,6 +4,7 @@ from vocgui.serializers import DocumentSerializer
 from vocgui.models import TrainingSet
 from .utils import check_group_object_permissions
 
+
 class DocumentViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Document module.
@@ -26,7 +27,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Document.objects.none()
-        group_id = TrainingSet.objects.filter(id=self.kwargs["training_set_id"]).values_list('created_by_id', flat=True)[0]
+        group_id = TrainingSet.objects.filter(
+            id=self.kwargs["training_set_id"]
+        ).values_list("created_by_id", flat=True)[0]
         if group_id:
             check_group_object_permissions(self.request, group_id)
         queryset = (

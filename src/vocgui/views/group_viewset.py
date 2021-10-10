@@ -16,6 +16,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     Inherits from `viewsets.ModelViewSet` and defines queryset
     and serializers.
     """
+
     permission_classes = [VerifyGroupKey]
     serializer_class = GroupSerializer
     http_method_names = ["get"]

@@ -100,6 +100,7 @@ def get_non_empty_disciplines(queryset):
     ]
     return queryset
 
+
 def check_group_object_permissions(request, group_id):
     key = get_key(request)
     if not key:

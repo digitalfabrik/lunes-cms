@@ -8,12 +8,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from rest_framework_api_key.models import APIKey
 
-from .models import (
-    Discipline,
-    TrainingSet,
-    Document,
-    GroupAPIKey
-)
+from .models import Discipline, TrainingSet, Document, GroupAPIKey
 from .admins import DisciplineAdmin
 from .admins import TrainingSetAdmin
 from .admins import DocumentAdmin

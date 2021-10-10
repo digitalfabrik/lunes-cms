@@ -38,7 +38,9 @@ class DisciplineFilteredViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
         if "discipline_id" in self.kwargs:
-            group_id = Discipline.objects.filter(id=self.kwargs["discipline_id"]).values_list('created_by_id', flat=True)[0]
+            group_id = Discipline.objects.filter(
+                id=self.kwargs["discipline_id"]
+            ).values_list("created_by_id", flat=True)[0]
             if group_id:
                 check_group_object_permissions(self.request, group_id)
             queryset = get_filtered_discipline_queryset(self)

@@ -7,11 +7,13 @@ from django.contrib.auth.models import Group
 from django.db.models import Q
 from .utils import get_key
 
+
 class VerifyGroupKey(permissions.AllowAny):
     """Simple permissions class that blocks
     requests if no valid API-Token is delivered.
     Inherits from `permissions.AllowAny`.
     """
+
     def has_permission(self, request, view):
         """Checks whether a valid API-Key is send
         by the user in the authorization header
