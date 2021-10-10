@@ -49,7 +49,7 @@ def get_child_count(disc):
     """
     children_counter = 0
     for child in disc.get_children():
-        if get_training_set_count(child) > 0:
+        if child.released and get_training_set_count(child) > 0:
             children_counter += 1
     return children_counter
 

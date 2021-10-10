@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import Group
+from django.db.models.fields import related
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -24,7 +25,7 @@ class Discipline(MPTTModel):
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
     created_by = models.ForeignKey(
-        Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by")
+        Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by"), related_name="discipline"
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     parent = TreeForeignKey(
