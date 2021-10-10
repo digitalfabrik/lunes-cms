@@ -3,6 +3,11 @@ from rest_framework import viewsets
 from vocgui.models import TrainingSet
 from vocgui.serializers import GroupSerializer
 from vocgui.permissions import VerifyGroupKey
+from vocgui.models import GroupAPIKey
+from vocgui.utils import get_key
+from django.db.models import Q
+from django.core.exceptions import PermissionDenied
+from .utils import check_group_object_permissions
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -27,8 +32,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
-        user = self.request.user
-        queryset = Group.objects.filter(
-            id=self.kwargs["group_id"],
-        )
+        check_group_object_permissions(self.request, self.kwargs["group_id"])
+        queryset = Group.objects.filter(id=self.kwargs["group_id"])
         return queryset

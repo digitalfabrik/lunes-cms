@@ -1,6 +1,9 @@
 from django.db.models import Count, Q
 from vocgui.models import Discipline
 from vocgui.utils import get_child_count
+from django.core.exceptions import PermissionDenied
+from vocgui.utils import get_key
+from vocgui.models import GroupAPIKey
 
 
 def get_filtered_discipline_queryset(discipline_view_set):
@@ -96,3 +99,11 @@ def get_non_empty_disciplines(queryset):
         or obj.training_sets.filter(released=True).count() > 0
     ]
     return queryset
+
+def check_group_object_permissions(request, group_id):
+    key = get_key(request)
+    if not key:
+        raise PermissionDenied()
+    api_key_object = GroupAPIKey.objects.get_from_key(key)
+    if int(api_key_object.organization_id) != int(group_id):
+        raise PermissionDenied()

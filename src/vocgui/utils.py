@@ -67,3 +67,25 @@ def get_training_set_count(disc):
     for child in disc.get_descendants(include_self=True):
         training_set_counter += child.training_sets.count()
     return training_set_counter
+
+def get_key(request, keyword="Api-Key"):
+    """Retrieve API Key from Authorization header of http request.
+    Optionally, a custom keyword can be specified. The function
+    espects the key to be delivered as follows:
+    {"Authorization": "<keyword> <api-key>}
+
+    :param request: get request
+    :type request: HttpRequest
+    :param keyword: keyword for api key in authorization header, defaults to "Api-Key"
+    :type keyword: str, optional
+    :return: api key in authorization header
+    :rtype: str
+    """
+    authorization = request.META.get("HTTP_AUTHORIZATION")
+    if not authorization:
+        return None
+    try:
+        _, key = authorization.split("{} ".format(keyword))
+    except ValueError:
+        key = None
+    return key
