@@ -12,8 +12,15 @@ This project is licensed with the Apache 2.0 License.
 # API
 Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/).
 
+## Authentication
+Generally, all endpoints are free to use and hence are not secured. However, this doesn't apply for group-specific requests e.g. `/api/group_by_id/[GROUP_ID]` (see below). Within the Lunes CMS it is possible to create API-Keys for a specific group. In order to fetch data of a group, it is necessary to include the following authorization header in the request:
+```json
+{"Authorization": "Api-Key <API_KEY>"}
+```
+Authorization is needed every time when content is accessed that was not created by Lunes administrators.
+
 ## Group information
-List available information of a user group.
+List available information of a user group. A valid API-Key is required.
 
 ### Request
 ```http
@@ -36,7 +43,7 @@ Content-Type: application/json
 List available disciplines for learning.
 
 ### Disciplines filtered by group id
-This endpoint displays all child disciplines for a given group id.
+This endpoint displays all child disciplines for a given group id. A valid API-Key is required.
 
 #### Request
 ```http
@@ -62,7 +69,7 @@ Content-Type: application/json
 ```
 
 ### Disciplines filtered by levels
-This endpoint displays all child disciplines for a given discipline id. If no id is given, all root disciplines will be returned.
+This endpoint displays all child disciplines for a given discipline id. If no id is given, all root disciplines will be returned. A valid API-Key may be required.
 
 #### Request
 ```http
@@ -129,7 +136,7 @@ The request will return all disciplines either created by Lunes administrators o
 ```
 
 ## List of training set
-List training sets. If discipline ID is provided as a parameter, the list will return only training sets belonging to the discipline.
+List training sets. If discipline ID is provided as a parameter, the list will return only training sets belonging to the discipline. A valid API-Key may be required.
 ### Request
 ```http
 GET /api/training_set/[DISCIPLINE_ID] HTTP/1.1
@@ -150,7 +157,7 @@ Content-Type: application/json
 ]
 ```
 ## List of documents
-List of available documents. A document is an item to be learned and consists of an image, multiple correct answers, and other details. If training set ID is provided as a parameter, the list will return only documents belonging to the training set.
+List of available documents. A document is an item to be learned and consists of an image, multiple correct answers, and other details. If training set ID is provided as a parameter, the list will return only documents belonging to the training set. A valid API-Key may be required.
 ### Request
 ```http
 GET /api/documents/[TRAINING_SET_ID] HTTP/1.1
