@@ -11,8 +11,55 @@ This project is licensed with the Apache 2.0 License.
 
 # API
 Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/).
+
+## Group information
+List available information of a user group.
+
+### Request
+```http
+GET /api/group_by_id/[GROUP_ID] HTTP/1.1
+Host: lunes.tuerantuer.org
+Content-Type: application/json
+```
+
+#### Response
+```javascript
+[
+    {
+        "name": String,                 // name of user group
+        "icon": String,                 // URL to image
+    }
+]
+```
+
 ## List of disciplines
 List available disciplines for learning.
+
+### Disciplines filtered by group id
+This endpoint displays all child disciplines for a given group id.
+
+#### Request
+```http
+GET /api/disciplines_by_group/[GROUP_ID] HTTP/1.1
+Host: lunes.tuerantuer.org
+Content-Type: application/json
+```
+
+#### Response
+```javascript
+[
+    {
+        "id": Integer,                  // ID of discipline
+        "title": String,                // title of discipline
+        "description": String,          // description of discipline 
+        "icon": String,                 // URL to image
+        "created_by": Integer           // Creator group id, null if created by admin 
+        "total_training_sets": Integer  // # of training sets
+        "total_discipline_children": Integer // # of child disciplines
+    },
+    [...]   // repeats for available disciplines
+]
+```
 
 ### Disciplines filtered by levels
 This endpoint displays all child disciplines for a given discipline id. If no id is given, all root disciplines will be returned.
