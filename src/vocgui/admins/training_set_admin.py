@@ -20,6 +20,7 @@ class TrainingSetAdmin(OrderedModelAdmin):
     form = TrainingSetForm
     list_display = (
         "title",
+        "description",
         "released",
         "related_disciplines",
         "creator_group",
