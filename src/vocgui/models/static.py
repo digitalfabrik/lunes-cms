@@ -31,6 +31,9 @@ class Static:
     # maximum (width, height) of images
     img_size = (1024, 768)
 
+    # brightning factor for box blurr (>1 = brighter, <1 = darker)
+    brightning_factor = 1.0
+
     # super admin group name
     admin_group = "Lunes"
 

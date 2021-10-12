@@ -1,5 +1,5 @@
 from django.db import models
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageEnhance
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -73,6 +73,9 @@ class DocumentImage(models.Model):
 
         img_blurr = img_blurr.resize((Static.img_size[0], Static.img_size[1]))
         img_blurr = img_blurr.filter(ImageFilter.BoxBlur(Static.blurr_radius))
+
+        enhancer = ImageEnhance.Brightness(img_blurr)
+        img_blurr = enhancer.enhance(Static.brightning_factor)
 
         if (
             img_cropped.width > Static.img_size[0]
