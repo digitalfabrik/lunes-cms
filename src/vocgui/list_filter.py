@@ -232,3 +232,55 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
             if int(self.value()) == 3:
                 return queryset.filter(document_image__isnull=True).distinct()
         return queryset
+
+class AssignedListFilter(admin.SimpleListFilter):
+    """
+    Filter for approved images within document list display.
+    Inherits from `admin.SimpleListFilter`.
+    """
+
+    title = _("assigned & unassigned")
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = "assigned"
+
+    default_value = None
+
+    def lookups(self, request, model_admin):
+        """
+        Defining look up values that can be seen in the admin
+        interface. Returns tuples: the first element is a coded
+        value, whereas the second one is human-readable
+
+        :param request: current user request
+        :type request: django.http.request
+        :param model_admin: admin of current model
+        :type model_admin: ModelAdmin
+        :return: list of tuples containing id and title of each discipline
+        :rtype: list
+        """
+        return (
+            (0, _("unassigned only")),
+            (1, _("assigned only")),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        :return: filtered queryset based on the value provided in the query string
+        :rtype: QuerySet
+        """
+
+        if self.value():
+            if int(self.value()) == 0:
+                return queryset.filter(training_sets__isnull = True).distinct()
+            if int(self.value()) == 1:
+                return queryset.filter(training_sets__isnull = False).distinct()
+        return queryset
