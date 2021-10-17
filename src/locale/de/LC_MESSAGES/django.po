@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 07:34+0000\n"
+"POT-Creation-Date: 2021-10-17 11:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,60 +105,60 @@ msgstr ""
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: src/vocgui/admin.py:36 src/vocgui/admins/training_set_admin.py:153
-#: src/vocgui/forms.py:42 src/vocgui/forms.py:44 src/vocgui/list_filter.py:13
-#: src/vocgui/list_filter.py:131 src/vocgui/models/discipline.py:45
+#: src/vocgui/admin.py:36 src/vocgui/admins/training_set_admin.py:170
+#: src/vocgui/forms.py:46 src/vocgui/forms.py:48 src/vocgui/list_filter.py:13
+#: src/vocgui/list_filter.py:132 src/vocgui/models/discipline.py:54
 msgid "disciplines"
 msgstr "Bereiche"
 
-#: src/vocgui/admin.py:37 src/vocgui/list_filter.py:76
-#: src/vocgui/models/training_set.py:49
+#: src/vocgui/admin.py:37 src/vocgui/list_filter.py:79
+#: src/vocgui/models/training_set.py:50
 msgid "training sets"
 msgstr "Module"
 
-#: src/vocgui/admin.py:38 src/vocgui/forms.py:48 src/vocgui/forms.py:49
-#: src/vocgui/models/document.py:99 src/vocgui/models/document.py:100
+#: src/vocgui/admin.py:38 src/vocgui/forms.py:52 src/vocgui/forms.py:53
+#: src/vocgui/models/document.py:104 src/vocgui/models/document.py:105
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: src/vocgui/admins/discipline_admin.py:72
+#: src/vocgui/admins/discipline_admin.py:109
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Bereiche veröffentlichen"
 
-#: src/vocgui/admins/discipline_admin.py:85
+#: src/vocgui/admins/discipline_admin.py:122
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Bereiche zurückhalten"
 
-#: src/vocgui/admins/discipline_admin.py:114
-#: src/vocgui/admins/document_admin.py:121
-#: src/vocgui/admins/training_set_admin.py:171
+#: src/vocgui/admins/discipline_admin.py:151
+#: src/vocgui/admins/document_admin.py:128
+#: src/vocgui/admins/training_set_admin.py:188
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: src/vocgui/admins/document_admin.py:103 src/vocgui/models/training_set.py:20
-#: src/vocgui/models/training_set.py:48
+#: src/vocgui/admins/document_admin.py:110 src/vocgui/models/training_set.py:21
+#: src/vocgui/models/training_set.py:49
 msgid "training set"
 msgstr "Modul"
 
-#: src/vocgui/admins/document_admin.py:139 src/vocgui/models/document.py:40
+#: src/vocgui/admins/document_admin.py:146 src/vocgui/models/document.py:45
 msgid "audio"
 msgstr "Audio"
 
-#: src/vocgui/admins/document_admin.py:159
-#: src/vocgui/models/document_image.py:116
+#: src/vocgui/admins/document_admin.py:166
+#: src/vocgui/models/document_image.py:132
 msgid "image"
 msgstr "Bild"
 
-#: src/vocgui/admins/document_admin.py:173
-#: src/vocgui/models/alternative_word.py:17 src/vocgui/models/document.py:29
+#: src/vocgui/admins/document_admin.py:180
+#: src/vocgui/models/alternative_word.py:18 src/vocgui/models/document.py:34
 msgid "article"
 msgstr "Artikel"
 
-#: src/vocgui/admins/training_set_admin.py:116
+#: src/vocgui/admins/training_set_admin.py:133
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: src/vocgui/admins/training_set_admin.py:129
+#: src/vocgui/admins/training_set_admin.py:146
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
@@ -166,7 +166,7 @@ msgstr "Ausgewählte Module zurückhalten"
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
-#: src/vocgui/forms.py:51
+#: src/vocgui/forms.py:55
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
@@ -175,74 +175,87 @@ msgstr ""
 "Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
 "Element auswählst."
 
-#: src/vocgui/list_filter.py:188
+#: src/vocgui/list_filter.py:187
 msgid "approved images"
 msgstr "Bestätigte Bilder"
 
-#: src/vocgui/list_filter.py:209
+#: src/vocgui/list_filter.py:208
 msgid "at least one approved image"
 msgstr "Min. 1 bestätigtes Bild"
 
-#: src/vocgui/list_filter.py:210
+#: src/vocgui/list_filter.py:209
 msgid "at least one pending image"
 msgstr "Min. 1 unbestätigtes Bild"
 
-#: src/vocgui/list_filter.py:211
+#: src/vocgui/list_filter.py:210
 msgid "no images"
 msgstr "keine Bilder"
 
-#: src/vocgui/models/alternative_word.py:13
-#: src/vocgui/models/alternative_word.py:37
+#: src/vocgui/list_filter.py:242
+msgid "assigned & unassigned"
+msgstr "zugewiesene und unzugewiesene Vokabeln"
+
+#: src/vocgui/list_filter.py:263
+msgid "unassigned only"
+msgstr "keinem Modul zugewiesen"
+
+#: src/vocgui/list_filter.py:264
+msgid "assigned only"
+msgstr "zu Modul zugewiesen"
+
+#: src/vocgui/models/alternative_word.py:14
+#: src/vocgui/models/alternative_word.py:38
 msgid "alternative word"
 msgstr "Alternatives Wort"
 
-#: src/vocgui/models/alternative_word.py:38
+#: src/vocgui/models/alternative_word.py:39
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: src/vocgui/models/discipline.py:17 src/vocgui/models/training_set.py:19
+#: src/vocgui/models/discipline.py:19 src/vocgui/models/training_set.py:20
 msgid "released"
 msgstr "veröffentlicht"
 
-#: src/vocgui/models/discipline.py:18 src/vocgui/models/discipline.py:44
+#: src/vocgui/models/discipline.py:20 src/vocgui/models/discipline.py:53
 msgid "discipline"
 msgstr "Bereich"
 
-#: src/vocgui/models/discipline.py:20 src/vocgui/models/training_set.py:22
+#: src/vocgui/models/discipline.py:22 src/vocgui/models/training_set.py:23
 msgid "description"
 msgstr "Beschreibung"
 
-#: src/vocgui/models/discipline.py:23 src/vocgui/models/training_set.py:25
+#: src/vocgui/models/discipline.py:25 src/vocgui/models/group.py:7
+#: src/vocgui/models/training_set.py:26
 msgid "icon"
 msgstr "Icon"
 
-#: src/vocgui/models/discipline.py:26 src/vocgui/models/document.py:46
-#: src/vocgui/models/training_set.py:30
+#: src/vocgui/models/discipline.py:28 src/vocgui/models/document.py:51
+#: src/vocgui/models/training_set.py:31
 msgid "created by"
 msgstr "Erstellt von"
 
-#: src/vocgui/models/discipline.py:28 src/vocgui/models/document.py:48
-#: src/vocgui/models/training_set.py:32
+#: src/vocgui/models/discipline.py:30 src/vocgui/models/document.py:53
+#: src/vocgui/models/training_set.py:33
 msgid "admin"
 msgstr "Admin"
 
-#: src/vocgui/models/discipline.py:29
+#: src/vocgui/models/discipline.py:37
 msgid "parent"
 msgstr "Elternbereich"
 
-#: src/vocgui/models/document.py:23
+#: src/vocgui/models/document.py:28
 msgid "word type"
 msgstr "Wortart"
 
-#: src/vocgui/models/document.py:25
+#: src/vocgui/models/document.py:30
 msgid "word"
 msgstr "Wort"
 
-#: src/vocgui/models/document.py:43
+#: src/vocgui/models/document.py:48
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: src/vocgui/models/document_image.py:117
+#: src/vocgui/models/document_image.py:133
 msgid "images"
 msgstr "Bilder"
 
