@@ -27,7 +27,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
         user = self.request.user
-        queryset = Group.objects.filter(
-            id=self.kwargs["group_id"],
+        queryset = (
+            Group.objects.filter(
+                id=self.kwargs["group_id"],
+            )
         )
         return queryset
