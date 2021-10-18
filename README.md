@@ -20,7 +20,7 @@ Generally, all endpoints are free to use and hence are not secured. However, thi
 Authorization is needed every time when content is accessed that was not created by Lunes administrators.
 
 ## Group information
-List available information of a user group. A valid API-Key is required.
+List available information of a user group. A valid API-Key is required. There is no need to pass a group id or similar, the returned queryset is filtered by the delivered API-Key.
 
 ### Request
 ```http
