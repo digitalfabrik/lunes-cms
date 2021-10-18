@@ -33,6 +33,11 @@ class GroupViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
-        check_group_object_permissions(self.request, self.kwargs["group_id"])
-        queryset = Group.objects.filter(id=self.kwargs["group_id"])
+        key = get_key(self.request)
+        if not key:
+            raise PermissionDenied()
+        api_key_object = GroupAPIKey.objects.get_from_key(key)
+        if not api_key_object:
+            raise PermissionDenied()
+        queryset = Group.objects.filter(id=api_key_object.organization_id)
         return queryset

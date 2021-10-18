@@ -13,7 +13,7 @@ This project is licensed with the Apache 2.0 License.
 Further documentation can be accessed [here](https://lunes.tuerantuer.org/redoc/).
 
 ## Authentication
-Generally, all endpoints are free to use and hence are not secured. However, this doesn't apply for group-specific requests e.g. `/api/group_by_id/[GROUP_ID]` (see below). Within the Lunes CMS it is possible to create API-Keys for a specific group. In order to fetch data of a group, it is necessary to include the following authorization header in the request:
+Generally, all endpoints are free to use and hence are not secured. However, this doesn't apply for group-specific requests e.g. `/api/group_info` (see below). Within the Lunes CMS it is possible to create API-Keys for a specific group. In order to fetch data of a group, it is necessary to include the following authorization header in the request:
 ```json
 {"Authorization": "Api-Key <API_KEY>"}
 ```
@@ -24,7 +24,7 @@ List available information of a user group. A valid API-Key is required.
 
 ### Request
 ```http
-GET /api/group_by_id/[GROUP_ID] HTTP/1.1
+GET /api/group_info HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
@@ -33,6 +33,7 @@ Content-Type: application/json
 ```javascript
 [
     {
+        "id": Integer,                  // group id
         "name": String,                 // name of user group
         "icon": String,                 // URL to image
     }

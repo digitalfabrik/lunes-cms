@@ -154,6 +154,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
         model = Group
         fields = (
+            "id",
             "name",
             "icon",
         )
