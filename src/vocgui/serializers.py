@@ -1,10 +1,10 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
-
-from vocgui.models import discipline
+from django.db.models import Count, Q
 
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .utils import get_child_count
+from .views.utils import  get_valid_discipline_ids
 
 
 class DisciplineSerializer(serializers.ModelSerializer):
@@ -146,7 +146,9 @@ class GroupSerializer(serializers.ModelSerializer):
     Serializer for the Group module. Inherits from
     `serializers.ModelSerializer`.
     """
-
+    total_discipline_children = serializers.SerializerMethodField(
+        "get_total_discipline_children"
+    )
     class Meta:
         """
         Define model and the corresponding fields
@@ -157,4 +159,23 @@ class GroupSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "icon",
+            "total_discipline_children",
         )
+    
+    def get_total_discipline_children(self, obj):
+        """Returns the total child count of a group.
+        A child itself or one of its sub-children needs to
+        contain at least one training set.
+
+        :param disc: Discipline instance
+        :type disc: models.Discipline
+        :return: sum of children
+        :rtype: int
+        """
+        queryset = Discipline.objects.filter(
+            Q(released=True)
+            & Q(created_by=obj.id)
+            & Q(id__in=get_valid_discipline_ids())
+        )
+        queryset = [obj for obj in queryset if obj.is_root_node()]
+        return len(queryset)

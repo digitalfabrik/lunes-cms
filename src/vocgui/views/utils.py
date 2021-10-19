@@ -64,15 +64,7 @@ def get_discipline_by_group_queryset(discipline_view_set):
     queryset = Discipline.objects.filter(
         Q(released=True)
         & Q(created_by=discipline_view_set.kwargs["group_id"])
-        & Q(
-            id__in=[
-                obj.id
-                for obj in Discipline.objects.all()
-                if get_child_count(obj)
-                + obj.training_sets.filter(released=True).count()
-                > 0
-            ]
-        )
+        & Q(id__in=get_valid_discipline_ids())
     ).annotate(
         total_training_sets=Count(
             "training_sets", filter=Q(training_sets__released=True)
@@ -100,6 +92,21 @@ def get_non_empty_disciplines(queryset):
     ]
     return queryset
 
+def get_valid_discipline_ids():
+    """Function that fetches all valid disciplines and
+    returns a list of their ids. Valid means the discipline itself
+    or one of its children contains at least one training set.
+
+    :return: list of ids of valid disciplines
+    :rtype: list[int]
+    """
+    disciplines = [
+        obj.id
+        for obj in Discipline.objects.all()
+        if get_child_count(obj) > 0
+        or obj.training_sets.filter(released=True).count() > 0
+    ]
+    return disciplines
 
 def check_group_object_permissions(request, group_id):
     """Function to check if the API-Key of the passed request object
