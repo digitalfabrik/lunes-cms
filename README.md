@@ -33,9 +33,10 @@ Content-Type: application/json
 ```javascript
 [
     {
-        "id": Integer,                  // group id
-        "name": String,                 // name of user group
-        "icon": String,                 // URL to image
+        "id": Integer,                          // group id
+        "name": String,                         // name of user group
+        "icon": String,                         // URL to image
+        "total_discipline_children": Integer,   // number of disciplines of user group
     }
 ]
 ```
@@ -84,7 +85,7 @@ GET /api/disciplines_by_level/[DISCIPLINE_ID] HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
-The request will return either all root elements or all child elements for a given discipline created by a Lunes administrator.
+If the passed discipline id belongs to a custom user group (not to the Lunes admin team), a API-Key is required.
 
 #### Response
 ```javascript
@@ -112,13 +113,7 @@ GET /api/disciplines/ HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
-The default endpoint delivers all disciplines created by Lunes administrators. Optionally, group ids can be passed as well (multiple ids devided by `&`):
-```http
-GET /api/disciplines/[GROUP_ID]&[GROUP_ID]&[...] HTTP/1.1
-Host: lunes.tuerantuer.org
-Content-Type: application/json
-```
-The request will return all disciplines either created by Lunes administrators or by one of the passed user groups.
+The default endpoint delivers all disciplines created by Lunes administrators.
 
 #### Response
 ```javascript
@@ -157,6 +152,7 @@ Content-Type: application/json
     [...]   // repeats for available training sets
 ]
 ```
+
 ## List of documents
 List of available documents. A document is an item to be learned and consists of an image, multiple correct answers, and other details. If training set ID is provided as a parameter, the list will return only documents belonging to the training set. A valid API-Key may be required.
 ### Request
