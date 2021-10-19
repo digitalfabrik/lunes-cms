@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from django.db.models import Count, Q
 from vocgui.models import TrainingSet
 from vocgui.serializers import TrainingSetSerializer
+from vocgui.models import Discipline
+from .utils import check_group_object_permissions
 
 
 class TrainingSetViewSet(viewsets.ModelViewSet):
@@ -26,7 +28,11 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
-        user = self.request.user
+        group_id = Discipline.objects.filter(
+            id=self.kwargs["discipline_id"]
+        ).values_list("created_by_id", flat=True)[0]
+        if group_id:
+            check_group_object_permissions(self.request, group_id)
         queryset = (
             TrainingSet.objects.filter(
                 discipline__id=self.kwargs["discipline_id"], released=True
@@ -34,7 +40,9 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
             .order_by("order")
             .annotate(
                 total_documents=Count(
-                    "documents", filter=Q(documents__document_image__confirmed=True)
+                    "documents",
+                    filter=Q(documents__document_image__confirmed=True),
+                    distinct=True,
                 )
             )
         )

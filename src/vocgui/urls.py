@@ -54,7 +54,7 @@ router.register(
     r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
 )
 router.register(
-    r"group_by_id/(?P<group_id>[0-9]+)",
+    r"group_info",
     views.GroupViewSet,
     "group_by_id",
 )

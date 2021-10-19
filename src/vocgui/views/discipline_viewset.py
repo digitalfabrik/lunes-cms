@@ -28,23 +28,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
         if "group_id" in self.kwargs:
-            groups = self.kwargs["group_id"].split("&")
-            queryset = Discipline.objects.filter(
-                Q(released=True)
-                & Q(
-                    id__in=[
-                        obj.id
-                        for obj in Discipline.objects.all()
-                        if obj.get_descendant_count() == 0
-                    ]
-                )
-                & (Q(creator_is_admin=True) | Q(created_by__in=groups))
-            ).annotate(
-                total_training_sets=Count(
-                    "training_sets", filter=Q(training_sets__released=True)
-                ),
-                total_discipline_children=Count("children"),
-            )
+            return None
         else:
             queryset = Discipline.objects.filter(
                 Q(released=True)

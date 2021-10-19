@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "vocgui",
     "rest_framework",
+    "rest_framework_api_key",
     "drf_yasg",
     "pydub",
     "ordered_model",
@@ -164,6 +165,7 @@ JAZZMIN_SETTINGS = {
         "vocgui.Discipline": "fas fa-book",
         "vocgui.TrainingSet": "fas fa-stream",
         "vocgui.Document": "fab fa-amilia",
+        "vocgui.GroupAPIKey": "fas fa-key",
     },
 }
 
