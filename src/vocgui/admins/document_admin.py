@@ -8,6 +8,7 @@ from vocgui.list_filter import (
     DocumentDisciplineListFilter,
     DocumentTrainingSetListFilter,
     ApprovedImageListFilter,
+    AssignedListFilter,
 )
 from vocgui.models import Static, DocumentImage
 
@@ -37,6 +38,7 @@ class DocumentAdmin(admin.ModelAdmin):
         DocumentDisciplineListFilter,
         DocumentTrainingSetListFilter,
         ApprovedImageListFilter,
+        AssignedListFilter,
     )
     list_per_page = 25
 

@@ -5,18 +5,14 @@ specify autocomplete_fields, search_fields and nested modules
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
-from django.db import models
-from mptt.models import TreeForeignKey
 from django.utils.translation import ugettext_lazy as _
+from rest_framework_api_key.models import APIKey
 
-from .models import (
-    Discipline,
-    TrainingSet,
-    Document,
-)
+from .models import Discipline, TrainingSet, Document, GroupAPIKey
 from .admins import DisciplineAdmin
 from .admins import TrainingSetAdmin
 from .admins import DocumentAdmin
+from .admins import GroupAPIKeyAdmin
 
 
 def get_app_list(self, request):
@@ -36,6 +32,7 @@ def get_app_list(self, request):
         _("disciplines").capitalize(): 1,
         _("training sets").capitalize(): 2,
         _("vocabulary").capitalize(): 3,
+        _("api keys").capitalize(): 4,
     }
     app_dict = self._build_app_dict(request)
 
@@ -65,3 +62,5 @@ admin.site.register(
 )
 admin.site.register(TrainingSet, TrainingSetAdmin)
 admin.site.register(Document, DocumentAdmin)
+admin.site.register(GroupAPIKey, GroupAPIKeyAdmin)
+admin.site.unregister(APIKey)

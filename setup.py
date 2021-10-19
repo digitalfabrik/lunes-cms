@@ -39,6 +39,7 @@ setup(
         "django-jazzmin",
         "django-ordered-model",
         "django-mptt",
+        "djangorestframework-api-key",
     ],
     extras_require={
         "dev": [

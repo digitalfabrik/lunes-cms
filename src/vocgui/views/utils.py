@@ -1,6 +1,9 @@
 from django.db.models import Count, Q
 from vocgui.models import Discipline
 from vocgui.utils import get_child_count
+from django.core.exceptions import PermissionDenied
+from vocgui.utils import get_key
+from vocgui.models import GroupAPIKey
 
 
 def get_filtered_discipline_queryset(discipline_view_set):
@@ -104,3 +107,22 @@ def get_valid_discipline_ids():
         or obj.training_sets.filter(released=True).count() > 0
     ]
     return disciplines
+
+def check_group_object_permissions(request, group_id):
+    """Function to check if the API-Key of the passed request object
+    matches one of the hashed keys stored in the database of the
+    corresponding group id.
+
+    :param request: current request
+    :type request: HttpRequest
+    :param group_id: group id
+    :type group_id: int
+    :raises PermissionDenied: Exception if no API-Key is delivered
+    :raises PermissionDenied: Exception if API-Key doesn't belong to passed group id
+    """
+    key = get_key(request)
+    if not key:
+        raise PermissionDenied()
+    api_key_object = GroupAPIKey.objects.get_from_key(key)
+    if int(api_key_object.organization_id) != int(group_id):
+        raise PermissionDenied()
