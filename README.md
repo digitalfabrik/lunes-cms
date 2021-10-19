@@ -33,9 +33,10 @@ Content-Type: application/json
 ```javascript
 [
     {
-        "id": Integer,                  // group id
-        "name": String,                 // name of user group
-        "icon": String,                 // URL to image
+        "id": Integer,                          // group id
+        "name": String,                         // name of user group
+        "icon": String,                         // URL to image
+        "total_discipline_children": Integer,   // number of disciplines of user group
     }
 ]
 ```
