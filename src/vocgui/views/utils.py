@@ -102,6 +102,17 @@ def get_non_empty_disciplines(queryset):
 
 
 def check_group_object_permissions(request, group_id):
+    """Function to check if the API-Key of the passed request object
+    matches one of the hashed keys stored in the database of the
+    corresponding group id.
+
+    :param request: current request
+    :type request: HttpRequest
+    :param group_id: group id
+    :type group_id: int
+    :raises PermissionDenied: Exception if no API-Key is delivered
+    :raises PermissionDenied: Exception if API-Key doesn't belong to passed group id
+    """
     key = get_key(request)
     if not key:
         raise PermissionDenied()
