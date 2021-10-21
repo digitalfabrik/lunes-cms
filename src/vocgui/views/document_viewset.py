@@ -27,10 +27,12 @@ class DocumentViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Document.objects.none()
-        group_id = TrainingSet.objects.filter(
+        training_set_infos = TrainingSet.objects.filter(
             id=self.kwargs["training_set_id"]
-        ).values_list("created_by_id", flat=True)[0]
-        if group_id:
+        ).values_list("created_by_id", "creator_is_admin")
+        group_id = training_set_infos[0][0]
+        is_admin = training_set_infos[0][1]
+        if group_id and not is_admin:
             check_group_object_permissions(self.request, group_id)
         queryset = (
             Document.objects.filter(

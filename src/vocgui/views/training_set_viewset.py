@@ -28,10 +28,12 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return TrainingSet.objects.none()
-        group_id = Discipline.objects.filter(
+        discipline_infos = Discipline.objects.filter(
             id=self.kwargs["discipline_id"]
-        ).values_list("created_by_id", flat=True)[0]
-        if group_id:
+        ).values_list("created_by_id", "creator_is_admin")
+        group_id = discipline_infos[0][0]
+        is_admin = discipline_infos[0][1]
+        if group_id and not is_admin:
             check_group_object_permissions(self.request, group_id)
         queryset = (
             TrainingSet.objects.filter(
