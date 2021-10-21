@@ -1,10 +1,6 @@
-from typing import get_args
 from rest_framework_api_key.permissions import BaseHasAPIKey
 from .models import GroupAPIKey
 from rest_framework import permissions
-from rest_framework_api_key.models import APIKey
-from django.contrib.auth.models import Group
-from django.db.models import Q
 from .utils import get_key
 
 
@@ -20,8 +16,8 @@ class VerifyGroupKey(permissions.AllowAny):
 
         :param request: http request
         :type request: HttpRequest
-        :param view: [description]
-        :type view: typing.Any
+        :param view: restframework view
+        :type view: viewsets.ModelViewSet
         :return: False if user doesn't send a API-key
         :rtype: bool
         """

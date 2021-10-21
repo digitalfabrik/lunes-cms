@@ -5,10 +5,7 @@ from vocgui.serializers import GroupSerializer
 from vocgui.permissions import VerifyGroupKey
 from vocgui.models import GroupAPIKey
 from vocgui.utils import get_key
-from django.db.models import Q
 from django.core.exceptions import PermissionDenied
-from .utils import check_group_object_permissions
-
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
