@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run:
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+      - run:
+          name: Running tests
+          command: |
+            . venv/bin/activate
+            vocabulary-trainer test vocgui
+      - store_artifacts:
+          path: test-reports/
+          destination: python_app

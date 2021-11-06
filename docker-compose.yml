@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  lunes-cms:
+    build: .
+    volumes:
+      - .:/code
+      - /src/db.sqlite3
+    ports:
+      - "8000:8000"
