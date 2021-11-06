@@ -4,7 +4,7 @@ from django.db.models import Count, Q
 
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .utils import get_child_count
-from .views.utils import  get_valid_discipline_ids
+from .views.utils import get_valid_discipline_ids
 
 
 class DisciplineSerializer(serializers.ModelSerializer):
@@ -146,9 +146,11 @@ class GroupSerializer(serializers.ModelSerializer):
     Serializer for the Group module. Inherits from
     `serializers.ModelSerializer`.
     """
+
     total_discipline_children = serializers.SerializerMethodField(
         "get_total_discipline_children"
     )
+
     class Meta:
         """
         Define model and the corresponding fields
@@ -161,7 +163,7 @@ class GroupSerializer(serializers.ModelSerializer):
             "icon",
             "total_discipline_children",
         )
-    
+
     def get_total_discipline_children(self, obj):
         """Returns the total child count of a group.
         A child itself or one of its sub-children needs to

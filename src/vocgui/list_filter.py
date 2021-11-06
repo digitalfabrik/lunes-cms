@@ -233,6 +233,7 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
                 return queryset.filter(document_image__isnull=True).distinct()
         return queryset
 
+
 class AssignedListFilter(admin.SimpleListFilter):
     """
     Filter for approved images within document list display.
@@ -280,7 +281,7 @@ class AssignedListFilter(admin.SimpleListFilter):
 
         if self.value():
             if int(self.value()) == 0:
-                return queryset.filter(training_sets__isnull = True).distinct()
+                return queryset.filter(training_sets__isnull=True).distinct()
             if int(self.value()) == 1:
-                return queryset.filter(training_sets__isnull = False).distinct()
+                return queryset.filter(training_sets__isnull=False).distinct()
         return queryset

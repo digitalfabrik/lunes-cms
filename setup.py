@@ -43,7 +43,8 @@ setup(
         "djangorestframework-api-key",
         "nose",
         "django-nose",
-        "coverage"
+        "coverage",
+        "black"
     ],
     extras_require={
         "dev": [

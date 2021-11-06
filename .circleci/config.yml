@@ -1,19 +1,67 @@
-version: 2
+version: 2.1
+
 jobs:
-  build:
+  install:
     docker:
-      - image: circleci/python:3.6
+      - image: cimg/python:3.7
     steps:
       - checkout
       - run:
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
+          name: Installing system dependencies
+          command: sudo apt-get update && cat requirements.system | xargs sudo apt-get install
+      - restore_cache:
+          key: pip-{{ checksum "setup.py" }}-v1
       - run:
-          name: Running tests
+          name: Creating virtual environment
           command: |
-            . venv/bin/activate
-            vocabulary-trainer test vocgui
+            if [[ -d ".venv" ]]; then
+              echo "Virtual environment restored from cache, skipping pip install"
+            else
+              python3 -m venv .venv
+              source .venv/bin/activate
+              pip install .
+            fi
+      - save_cache:
+          key: pip-{{ checksum "setup.py" }}-v1
+          paths:
+            - .venv
+            - src/Vocabulary_Trainer.egg-info
+            - /home/circleci/.cache/pip
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .venv
+            - src/Vocabulary_Trainer.egg-info
+  test:
+    docker:
+      - image: cimg/python:3.7
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: |
+          source .venv/bin/activate
+          vocabulary-trainer migrate
+          vocabulary-trainer test vocgui
       - store_artifacts:
           path: test-reports/
           destination: python_app
+  black:
+    docker:
+      - image: cimg/python:3.7
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: black --check src --exclude=src/vocgui/migrations
+
+workflows:
+  develop:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - black:
+          requires:
+            - install

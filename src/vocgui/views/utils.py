@@ -95,6 +95,7 @@ def get_non_empty_disciplines(queryset):
     ]
     return queryset
 
+
 def get_valid_discipline_ids():
     """Function that fetches all valid disciplines and
     returns a list of their ids. Valid means the discipline itself
@@ -110,6 +111,7 @@ def get_valid_discipline_ids():
         or obj.training_sets.filter(released=True).count() > 0
     ]
     return disciplines
+
 
 def check_group_object_permissions(request, group_id):
     """Function to check if the API-Key of the passed request object

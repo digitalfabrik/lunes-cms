@@ -18,41 +18,41 @@ from django.core.exceptions import PermissionDenied
 
 client = APIClient()
 
+
 class TestViews(TestCase):
     def setUp(self):
         setup = setup_db()
         setup.basic_db_setup()
         global api_key
         api_key = setup.credentials["test-group"]
-    
+
     def test_discipline_filtered_viewset(self):
-        response = client.get('/api/disciplines_by_level/', format='json')
+        response = client.get("/api/disciplines_by_level/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         id = response.json()[0]["id"]
-        response = client.get(f'/api/disciplines_by_level/{id}/', format='json')
+        response = client.get(f"/api/disciplines_by_level/{id}/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         group = Group.objects.get(name="test-group")
-        response = client.get(f'/api/disciplines_by_group/{group.id}/', format='json')
+        response = client.get(f"/api/disciplines_by_group/{group.id}/", format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        client.credentials(HTTP_AUTHORIZATION='Api-Key ' + api_key)
-        response = client.get(f'/api/disciplines_by_group/{group.id}/', format='json')
+        client.credentials(HTTP_AUTHORIZATION="Api-Key " + api_key)
+        response = client.get(f"/api/disciplines_by_group/{group.id}/", format="json")
         client.credentials(HTTP_AUTHORIZATION="")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
     def test_training_set_viewset(self):
         discipline = Discipline.objects.get(title="Werkzeug")
-        response = client.get(f'/api/training_set/{discipline.id}/', format='json')
+        response = client.get(f"/api/training_set/{discipline.id}/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_document_viewset(self):
         training_set = TrainingSet.objects.get(title="Grundlagen")
-        response = client.get(f'/api/documents/{training_set.id}/', format='json')
+        response = client.get(f"/api/documents/{training_set.id}/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_discipline_viewset(self):
-        response = client.get('/api/disciplines/', format='json')
+        response = client.get("/api/disciplines/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_document_by_id(self):
@@ -66,7 +66,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_group_view(self):
-        client.credentials(HTTP_AUTHORIZATION='Api-Key ' + api_key)
+        client.credentials(HTTP_AUTHORIZATION="Api-Key " + api_key)
         response = client.get(f"/api/group_info/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         client.credentials(HTTP_AUTHORIZATION="Api-Key INVALIDKEY")

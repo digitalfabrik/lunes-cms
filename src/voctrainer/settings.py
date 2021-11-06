@@ -50,8 +50,8 @@ INSTALLED_APPS = [
 TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
 
 NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=vocgui',
+    "--with-coverage",
+    "--cover-package=vocgui",
 ]
 
 REST_FRAMEWORK = {
@@ -74,7 +74,7 @@ ROOT_URLCONF = "voctrainer.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

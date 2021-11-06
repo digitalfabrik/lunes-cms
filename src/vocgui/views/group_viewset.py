@@ -7,6 +7,7 @@ from vocgui.models import GroupAPIKey
 from vocgui.utils import get_key
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 
+
 class GroupViewSet(viewsets.ModelViewSet):
     """
     Defines a view set for the Group module.
