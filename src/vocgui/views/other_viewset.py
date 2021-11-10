@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
 from django.shortcuts import redirect
-from vocgui.models import TrainingSet, Document, DocumentImage
+from vocgui.models import TrainingSet, Document, DocumentImage, Discipline
 
 
 def redirect_view(request):
@@ -43,12 +43,17 @@ def public_upload(request):
         "id", "word", "article", "training_sets"
     ).filter(document_image__isnull=True)
     training_sets = (
-        TrainingSet.objects.values_list("id", "title")
+        TrainingSet.objects.values_list("id", "title", "discipline__id")
         .filter(documents__document_image__isnull=True)
         .distinct()
     )
+    disciplines = (Discipline.objects.values_list("id", "title", "training_sets__id")
+        .filter(training_sets__isnull=False)
+        .filter(training_sets__documents__document_image__isnull=True).distinct()
+    )
     context = {
         "documents": json.dumps(list(missing_images)),
+        "disciplines": json.dumps(list(disciplines)),
         "training_sets": json.dumps(list(training_sets)),
         "upload_success": upload_success,
     }
