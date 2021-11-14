@@ -53,7 +53,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: black --check src --exclude=src/vocgui/migrations
+      - run: |
+          source .venv/bin/activate
+          black --check src --exclude=src/vocgui/migrations
 
 workflows:
   develop:
