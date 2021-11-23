@@ -13,6 +13,15 @@ from drf_yasg import openapi
 from . import views
 
 
+class OptionalSlashRouter(routers.DefaultRouter):
+    """
+    Custom router to allow routes with and without trailing slash to work without redirects
+    """
+    def __init__(self):
+        super().__init__()
+        self.trailing_slash = "/?"
+
+
 # Schema view for swagger documentation
 schema_view = get_schema_view(
     openapi.Info(
@@ -26,8 +35,8 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
-# Router for dynmaic url patterns
-router = routers.DefaultRouter()
+# Router for dynamic url patterns
+router = OptionalSlashRouter()
 router.register(
     r"disciplines(?:/(?P<group_id>[\d+&]+))?",
     views.DisciplineViewSet,
