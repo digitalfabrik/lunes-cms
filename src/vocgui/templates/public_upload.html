@@ -55,6 +55,7 @@
     <script>
       var lunes_training_sets = JSON.parse('{{ training_sets|safe }}');
       var lunes_documents = JSON.parse('{{ documents|safe }}');
+      var lunes_disc_sets_map = JSON.parse('{{ disc_sets_map|safe }}')
       var lunes_disciplines = JSON.parse('{{ disciplines|safe }}');
       var article_map = {
         0: "keiner",
@@ -75,7 +76,7 @@
           $("#inputTrainingSet").find('option').remove();
           $("#inputTrainingSet").append(new Option("Bitte Modul wählen", 0));
           lunes_training_sets.forEach(function(element) {
-            if(element[2] == discipline_id) {
+            if(lunes_disc_sets_map[discipline_id].includes(element[0])) {
               $("#inputTrainingSet").append(new Option(element[1], element[0]));
             }
           });
