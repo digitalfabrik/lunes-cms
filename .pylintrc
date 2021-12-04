@@ -1,3 +1,5 @@
+[MASTER]
+
 disable=print-statement,
         parameter-unpacking,
         unpacking-in-except,

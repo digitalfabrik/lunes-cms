@@ -5,7 +5,8 @@ from vocgui.serializers import GroupSerializer
 from vocgui.permissions import VerifyGroupKey
 from vocgui.models import GroupAPIKey
 from vocgui.utils import get_key
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
@@ -33,7 +34,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         key = get_key(self.request)
         if not key:
             raise PermissionDenied()
-        api_key_object = GroupAPIKey.objects.get_from_key(key)
+        try:
+            api_key_object = GroupAPIKey.objects.get_from_key(key)
+        except GroupAPIKey.DoesNotExist:
+            raise PermissionDenied()
         if not api_key_object:
             raise PermissionDenied()
         queryset = Group.objects.filter(id=api_key_object.organization_id)

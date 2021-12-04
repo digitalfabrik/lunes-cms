@@ -1,5 +1,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/digitalfabrik/lunes-cms)](https://github.com/digitalfabrik/lunes-cms/issues)
 [![GitHub pulls](https://img.shields.io/github/issues-pr/digitalfabrik/lunes-cms)](https://github.com/digitalfabrik/lunes-cms/pulls)
+[![CircleCI](https://circleci.com/gh/digitalfabrik/lunes-cms.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 [![License](https://img.shields.io/github/license/digitalfabrik/lunes-cms)](https://opensource.org/licenses/Apache-2.0)
 # Lunes CMS
 [![Logo](.github/logo.png) Lunes - Vocabulary for your profession.](https://www.lunes.app)
