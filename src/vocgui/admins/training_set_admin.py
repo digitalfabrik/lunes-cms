@@ -1,31 +1,23 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
-from ordered_model.admin import OrderedModelAdmin
+from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter
 from django.utils.translation import ugettext_lazy as _
 
 from vocgui.forms import TrainingSetForm
-from vocgui.list_filter import DisciplineListFilter
 from vocgui.models import Static, Document, Discipline
 
 
-class TrainingSetAdmin(OrderedModelAdmin):
+class TrainingSetAdmin(DraggableMPTTAdmin):
     """
     Admin Interface to for the TrainigSet module.
-    Inheriting from `ordered_model.admin.OrderedModelAdmin`.
+    Inheriting from `mptt.admin.DraggableMPTTAdmin`.
     """
 
     exclude = ("creator_is_admin",)
     readonly_fields = ("created_by",)
     search_fields = ["title"]
     form = TrainingSetForm
-    list_display = (
-        "title",
-        "released",
-        "related_disciplines",
-        "creator_group",
-        "move_up_down_links",
-    )
-    list_filter = (DisciplineListFilter,)
+    list_filter = (("discipline", TreeRelatedFieldListFilter),)
     actions = ["make_released", "make_unreleased"]
     list_per_page = 25
 

@@ -35,17 +35,13 @@ class TrainingSetViewSet(viewsets.ModelViewSet):
         is_admin = discipline_infos[0][1]
         if group_id and not is_admin:
             check_group_object_permissions(self.request, group_id)
-        queryset = (
-            TrainingSet.objects.filter(
-                discipline__id=self.kwargs["discipline_id"], released=True
-            )
-            .order_by("order")
-            .annotate(
-                total_documents=Count(
-                    "documents",
-                    filter=Q(documents__document_image__confirmed=True),
-                    distinct=True,
-                )
+        queryset = TrainingSet.objects.filter(
+            discipline__id=self.kwargs["discipline_id"], released=True
+        ).annotate(
+            total_documents=Count(
+                "documents",
+                filter=Q(documents__document_image__confirmed=True),
+                distinct=True,
             )
         )
         return queryset

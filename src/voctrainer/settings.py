@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "rest_framework_api_key",
     "drf_yasg",
     "pydub",
-    "ordered_model",
     "mptt",
     "django_nose",
 ]

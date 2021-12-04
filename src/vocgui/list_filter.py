@@ -123,61 +123,6 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         return queryset
 
 
-class DisciplineListFilter(admin.SimpleListFilter):
-    """
-    Filter for disciplines within training set list display.
-    Inherits from `admin.SimpleListFilter`.
-    """
-
-    title = _("disciplines")
-
-    # Parameter for the filter that will be used in the URL query.
-    parameter_name = "discipline"
-
-    default_value = None
-
-    def lookups(self, request, model_admin):
-        """
-        Defining look up values that can be seen in the admin
-        interface. Returns tuples: the first element is a coded
-        value, whereas the second one is human-readable
-
-        :param request: current user request
-        :type request: django.http.request
-        :param model_admin: admin of current model
-        :type model_admin: ModelAdmin
-        :return: list of tuples containing id and title of each discipline
-        :rtype: list
-        """
-        list_of_disciplines = []
-        if request.user.is_superuser:
-            queryset = Discipline.objects.all().filter(creator_is_admin=True)
-        else:
-            queryset = Discipline.objects.all().filter(
-                created_by__in=request.user.groups.all()
-            )
-        for discipline in queryset:
-            list_of_disciplines.append((str(discipline.id), discipline.title))
-        return sorted(list_of_disciplines, key=lambda tp: tp[1])
-
-    def queryset(self, request, queryset):
-        """
-        Returns the filtered queryset based on the value
-        provided in the query string and retrievable via
-        `self.value()`.
-
-        :param request: current user request
-        :type request: django.http.request
-        :param queryset: current queryset
-        :type queryset: QuerySet
-        :return: filtered queryset based on the value provided in the query string
-        :rtype: QuerySet
-        """
-        if self.value():
-            return queryset.filter(discipline__id=self.value()).distinct()
-        return queryset
-
-
 class ApprovedImageListFilter(admin.SimpleListFilter):
     """
     Filter for approved images within document list display.
@@ -236,7 +181,7 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
 
 class AssignedListFilter(admin.SimpleListFilter):
     """
-    Filter for approved images within document list display.
+    Filter for documents that are either assigned or unassigned to at least one training set.
     Inherits from `admin.SimpleListFilter`.
     """
 
