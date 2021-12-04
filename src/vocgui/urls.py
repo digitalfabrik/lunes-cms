@@ -17,6 +17,7 @@ class OptionalSlashRouter(routers.DefaultRouter):
     """
     Custom router to allow routes with and without trailing slash to work without redirects
     """
+
     def __init__(self):
         super().__init__()
         self.trailing_slash = "/?"
