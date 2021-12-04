@@ -1,15 +1,13 @@
+from rest_framework import viewsets
+from vocgui.models import Discipline
+from vocgui.serializers import DisciplineSerializer
+
 from .utils import (
     get_filtered_discipline_queryset,
     get_discipline_by_group_queryset,
     get_overview_discipline_queryset,
+    check_group_object_permissions,
 )
-from rest_framework import request, viewsets
-from vocgui.models import Discipline
-from vocgui.serializers import DisciplineSerializer
-from django.core.exceptions import PermissionDenied
-from vocgui.utils import get_key
-from vocgui.models import GroupAPIKey
-from .utils import check_group_object_permissions
 
 
 class DisciplineFilteredViewSet(viewsets.ModelViewSet):
