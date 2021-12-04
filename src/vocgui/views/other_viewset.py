@@ -48,13 +48,17 @@ def public_upload(request):
         .filter(documents__document_image__isnull=True)
         .distinct()
     )
-    disciplines = (Discipline.objects.values_list("id", "title")
+    disciplines = (
+        Discipline.objects.values_list("id", "title")
         .filter(training_sets__isnull=False)
-        .filter(training_sets__documents__document_image__isnull=True).distinct()
+        .filter(training_sets__documents__document_image__isnull=True)
+        .distinct()
     )
-    disc_sets_map = (Discipline.objects.values_list("id", "training_sets__id")
+    disc_sets_map = (
+        Discipline.objects.values_list("id", "training_sets__id")
         .filter(training_sets__isnull=False)
-        .filter(training_sets__documents__document_image__isnull=True).distinct()
+        .filter(training_sets__documents__document_image__isnull=True)
+        .distinct()
     )
 
     new_map = {}
