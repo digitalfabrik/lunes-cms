@@ -10,8 +10,7 @@ Welcome to Intro to Sphinx's documentation!
    :maxdepth: 2
    :caption: Contents
 
-   vocgui
-   voctrainer
+   lunes_cms
 
 
 
