@@ -50,7 +50,10 @@ class TrainingSet(OrderedModel):  # pylint: disable=R0903
         verbose_name = _("training set")
         verbose_name_plural = _("training sets")
 
-
     def style_description_field(self):
-        return format_html('<div style="overflow-wrap: break-word; max-width: 150px;" >{}</div>', self.description)
+        return format_html(
+            '<div style="overflow-wrap: break-word; max-width: 150px;" >{}</div>',
+            self.description,
+        )
+
     style_description_field.short_description = "description"
