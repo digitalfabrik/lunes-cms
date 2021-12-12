@@ -1,8 +1,7 @@
 from django.db.models import Count, Q
-from vocgui.models import Discipline
-from vocgui.utils import get_child_count
 from django.core.exceptions import PermissionDenied
-from vocgui.utils import get_key
+from vocgui.models import Discipline
+from vocgui.utils import get_child_count, get_key
 from vocgui.models import GroupAPIKey
 
 
@@ -67,13 +66,12 @@ def get_discipline_by_group_queryset(discipline_view_set):
     queryset = Discipline.objects.filter(
         Q(released=True)
         & Q(created_by=discipline_view_set.kwargs["group_id"])
-        & Q(id__in=get_valid_discipline_ids())
     ).annotate(
         total_training_sets=Count(
             "training_sets", filter=Q(training_sets__released=True)
         ),
     )
-    queryset = [obj for obj in queryset if obj.is_root_node()]
+    queryset = [obj for obj in queryset if obj.is_root_node() and obj.is_valid()]
     return queryset
 
 
@@ -94,23 +92,6 @@ def get_non_empty_disciplines(queryset):
         or obj.training_sets.filter(released=True).count() > 0
     ]
     return queryset
-
-
-def get_valid_discipline_ids():
-    """Function that fetches all valid disciplines and
-    returns a list of their ids. Valid means the discipline itself
-    or one of its children contains at least one training set.
-
-    :return: list of ids of valid disciplines
-    :rtype: list[int]
-    """
-    disciplines = [
-        obj.id
-        for obj in Discipline.objects.all()
-        if get_child_count(obj) > 0
-        or obj.training_sets.filter(released=True).count() > 0
-    ]
-    return disciplines
 
 
 def check_group_object_permissions(request, group_id):
