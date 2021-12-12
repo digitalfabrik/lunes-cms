@@ -1,6 +1,6 @@
 .venv
 *.pyc
-media
+src/media
 db.sqlite3
 *.egg-info
 build

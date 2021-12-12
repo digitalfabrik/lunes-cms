@@ -50,6 +50,7 @@ class DocumentImage(models.Model):
         :rtype: None
         """
         name_elements = self.image.path.split(".")
+        #TODO Can't retrace the logic of this loop - it probably adds several underscores ("_") if the filename contains several dots (".")
         for elem in name_elements:
             if elem != name_elements[-1]:
                 new_path = elem + "_"
