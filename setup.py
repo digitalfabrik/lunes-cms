@@ -47,7 +47,7 @@ setup(
         "black",
         "sphinx",
         "sphinxcontrib-django2",
-        "sphinx-rtd-theme"
+        "sphinx-rtd-theme",
     ],
     extras_require={
         "dev": [

@@ -64,8 +64,7 @@ def get_discipline_by_group_queryset(discipline_view_set):
     :rtype: QuerySet
     """
     queryset = Discipline.objects.filter(
-        Q(released=True)
-        & Q(created_by=discipline_view_set.kwargs["group_id"])
+        released=True, created_by=discipline_view_set.kwargs["group_id"]
     ).annotate(
         total_training_sets=Count(
             "training_sets", filter=Q(training_sets__released=True)
