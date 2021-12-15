@@ -1,17 +1,35 @@
-.. Intro to Sphinx documentation master file, created by
-   sphinx-quickstart on .....
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+**********************************
+Lunes Django CMS documentation
+**********************************
 
-Welcome to Intro to Sphinx's documentation!
-===========================================
+This is the developer documentation for the Lunes Django backend.
+
+For general help with the Django framework, please refer to the :doc:`django:index`.
+
+First Steps
+===========
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents
+    :caption: First Steps
+    :hidden:
 
-   lunes_cms
+    quickstart
+    installation
 
+* :doc:`quickstart`: Quickstart
+* :doc:`installation`: Installation guide
+
+
+Reference
+==============
+
+.. toctree::
+    :caption: Reference
+    :hidden:
+
+    lunes_cms
+
+* :doc:`lunes_cms`: Lunes CMS
 
 
 Indices and tables
