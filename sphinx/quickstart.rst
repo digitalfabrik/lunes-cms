@@ -3,9 +3,14 @@ Quickstart
 ************
 
 .. Note::
+    Make sure you have `Docker <https://docs.docker.com/engine/install/>`__ installed on your system for a quickstart. Otherwise, please have a look at our :doc:`installation guide <./installation>`.
 
-    If you want to develop on Windows, we suggest using the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_ in combination with `Ubuntu <https://ubuntu.com/wsl>`_ and `postgresql <https://wiki.ubuntuusers.de/PostgreSQL/>`__ as local database server.
+Docker
+======
 
+To run Lunes CMS within a container, simply run ``docker-compose up`` within the project's main directory. You can log in at ``http://0.0.0.0:8000/admin`` with ``lunes`` as user name and password.
 
-Prerequisites
-=============
+Usage
+======
+The API can simply be accessed via the root url or ``/api``.
+Further Documentation can be found by accessing ``/redoc`` or ``/swagger``.

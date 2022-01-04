@@ -56,6 +56,16 @@ jobs:
       - run: |
           source .venv/bin/activate
           black --check src --exclude=src/vocgui/migrations
+  build-documentation:
+    docker:
+      - image: cimg/python:3.7
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: |
+          source .venv/bin/activate
+          dev-tools/build_documentation.sh --clean
 
 workflows:
   develop:
@@ -65,5 +75,8 @@ workflows:
           requires:
             - install
       - black:
+          requires:
+            - install
+      - build-documentation:
           requires:
             - install
