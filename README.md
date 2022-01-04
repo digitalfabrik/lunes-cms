@@ -199,17 +199,17 @@ Here's how to get the site running on your machine.
 1. Get into a Unix-like environment
     - If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
     - If you're already on Linux/Mac, no action needed.
-1. Clone the repository: `git clone git@github.com:digitalfabrik/lunes-cms.git`
-1. Move into the direcotry: `cd lunes-cms`
-1. Set up virtual environment of choice with a current `pip` and `setuptools` version. For example (using Debian):
+2. Clone the repository: `git clone git@github.com:digitalfabrik/lunes-cms.git`
+3. Move into the direcotry: `cd lunes-cms`
+4. Set up virtual environment of choice with a current `pip` and `setuptools` version. For example (using Debian):
     - `apt install python3-venv`
     - `python3 -m venv .venv`
     - `source .venv/bin/activate`
     - `pip install -U pip setuptools`
     - `pip install wheel`
-1. Install system dependencies: `cat requirements.system | xargs sudo apt-get install`
-1. Install project dependencies: `python3 setup.py develop`
-1. Set up Django and run the development server:
+5. Install system dependencies: `cat requirements.system | xargs sudo apt-get install`
+6. Install project dependencies: `python3 setup.py develop`
+7. Set up Django and run the development server:
     - `vocabulary-trainer migrate`
     - `vocabulary-trainer createsuperuser`
     - `vocabulary-trainer runserver`

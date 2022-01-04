@@ -5,6 +5,7 @@ from django.db.models.fields import related
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
+from vocgui.utils import get_child_count
 from .static import convert_umlaute_images
 
 
@@ -41,6 +42,18 @@ class Discipline(MPTTModel):
         related_name="children",
         verbose_name=_("parent"),
     )
+
+    def is_valid(self):
+        """Checks if a discipline itself or one of its children has at least one training set.
+        If so, it is considered valid.
+
+        :return: True if discipline is valid
+        :rtype: bool
+        """
+        return (
+            get_child_count(self) > 0
+            or self.training_sets.filter(released=True).count() > 0
+        )
 
     def __str__(self):
         """String representation of Discipline instance

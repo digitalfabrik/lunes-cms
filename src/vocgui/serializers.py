@@ -1,10 +1,8 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
-from django.db.models import Count, Q
 
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .utils import get_child_count
-from .views.utils import get_valid_discipline_ids
 
 
 class DisciplineSerializer(serializers.ModelSerializer):
@@ -174,10 +172,6 @@ class GroupSerializer(serializers.ModelSerializer):
         :return: sum of children
         :rtype: int
         """
-        queryset = Discipline.objects.filter(
-            Q(released=True)
-            & Q(created_by=obj.id)
-            & Q(id__in=get_valid_discipline_ids())
-        )
-        queryset = [obj for obj in queryset if obj.is_root_node()]
+        queryset = Discipline.objects.filter(released=True, created_by=obj.id)
+        queryset = [obj for obj in queryset if obj.is_root_node() and obj.is_valid()]
         return len(queryset)

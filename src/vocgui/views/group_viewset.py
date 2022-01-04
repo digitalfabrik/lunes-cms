@@ -1,11 +1,11 @@
 from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from vocgui.models import TrainingSet
 from vocgui.serializers import GroupSerializer
 from vocgui.permissions import VerifyGroupKey
 from vocgui.models import GroupAPIKey
 from vocgui.utils import get_key
-from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 
 
 class GroupViewSet(viewsets.ModelViewSet):

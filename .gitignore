@@ -8,3 +8,5 @@ dist
 .idea
 .vscode
 .coverage
+docs/
+sphinx/ref/

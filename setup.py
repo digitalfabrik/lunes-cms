@@ -44,7 +44,10 @@ setup(
         "nose",
         "django-nose",
         "coverage",
-        "black"
+        "black",
+        "sphinx",
+        "sphinxcontrib-django2",
+        "sphinx-rtd-theme",
     ],
     extras_require={
         "dev": [
