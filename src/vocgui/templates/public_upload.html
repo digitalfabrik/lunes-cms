@@ -55,6 +55,8 @@
     <script>
       var lunes_training_sets = JSON.parse('{{ training_sets|safe }}');
       var lunes_documents = JSON.parse('{{ documents|safe }}');
+      var lunes_disc_sets_map = JSON.parse('{{ disc_sets_map|safe }}')
+      var lunes_disciplines = JSON.parse('{{ disciplines|safe }}');
       var article_map = {
         0: "keiner",
         1: "der",
@@ -64,6 +66,22 @@
       }
 
       $( document ).ready(function() {
+
+        lunes_disciplines.forEach(function(element) {
+          $("#inputDiscipline").append(new Option(element[1], element[0]))
+        });
+
+        $("#inputDiscipline").change(function() {
+          var discipline_id = $("#inputDiscipline").val();
+          $("#inputTrainingSet").find('option').remove();
+          $("#inputTrainingSet").append(new Option("Bitte Modul wählen", 0));
+          lunes_training_sets.forEach(function(element) {
+            if(lunes_disc_sets_map[discipline_id].includes(element[0])) {
+              $("#inputTrainingSet").append(new Option(element[1], element[0]));
+            }
+          });
+        });
+
         lunes_training_sets.forEach(function(element) {
           $("#inputTrainingSet").append(new Option(element[1], element[0]))
         });
@@ -73,7 +91,6 @@
           $("#inputDocument").find('option').remove();
           lunes_documents.forEach(function(element) {
             if(element[3] == training_set_id) {
-              console.log("added");
               $("#inputDocument").append(new Option( article_map[element[2]] + " " + element[1], element[0]));
             }
           });
@@ -94,6 +111,9 @@
         <a href="static/guidelines/fotoguide.pdf">Anleitung zum Erstellen geeigneter Fotos</a>
       </h3>
       {% if upload_success %}<div class="alert alert-success" role="alert">Vielen Dank für dein Bild. Das Lunes Team wird es prüfen und freigeben.</div>{% endif %}
+      <label for="inputDiscipline" class="sr-only">Beruf auswählen</label>
+      <select id="inputDiscipline" class="form-control" required autofocus><option>Bitte Beruf wählen</option></select>
+      <label for="inputDocument" class="sr-only">Wort auswählen</label>
       <label for="inputTrainingSet" class="sr-only">Modul auswählen</label>
       <select id="inputTrainingSet" class="form-control" required autofocus><option>Bitte Modul wählen</option></select>
       <label for="inputDocument" class="sr-only">Wort auswählen</label>

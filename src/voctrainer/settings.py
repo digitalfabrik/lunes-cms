@@ -44,6 +44,14 @@ INSTALLED_APPS = [
     "pydub",
     "ordered_model",
     "mptt",
+    "django_nose",
+]
+
+TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+
+NOSE_ARGS = [
+    "--with-coverage",
+    "--cover-package=vocgui",
 ]
 
 REST_FRAMEWORK = {

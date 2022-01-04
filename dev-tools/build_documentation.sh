@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Script to generate and build documentation. Eventually, you need to run
-# chmod +x dev-tools/build_documentation.sh first in order to have
-# executable rights
+# Script to generate and build documentation
 
 DOC_DIR="docs"
 SPHINX_DIR="sphinx"

@@ -1,7 +1,8 @@
 import json
+import collections
 from django.shortcuts import render
 from django.shortcuts import redirect
-from vocgui.models import TrainingSet, Document, DocumentImage
+from vocgui.models import TrainingSet, Document, DocumentImage, Discipline
 
 
 def redirect_view(request):
@@ -47,8 +48,30 @@ def public_upload(request):
         .filter(documents__document_image__isnull=True)
         .distinct()
     )
+    disciplines = (
+        Discipline.objects.values_list("id", "title")
+        .filter(training_sets__isnull=False)
+        .filter(training_sets__documents__document_image__isnull=True)
+        .distinct()
+    )
+    disc_sets_map = (
+        Discipline.objects.values_list("id", "training_sets__id")
+        .filter(training_sets__isnull=False)
+        .filter(training_sets__documents__document_image__isnull=True)
+        .distinct()
+    )
+
+    new_map = {}
+    for (key, value) in disc_sets_map:
+        if key in new_map:
+            new_map[key].append(value)
+        else:
+            new_map[key] = [value]
+
     context = {
         "documents": json.dumps(list(missing_images)),
+        "disciplines": json.dumps(list(disciplines)),
+        "disc_sets_map": json.dumps(new_map),
         "training_sets": json.dumps(list(training_sets)),
         "upload_success": upload_success,
     }
