@@ -44,7 +44,16 @@ class Discipline(MPTTModel):
     )
 
     def is_valid(self):
-        return get_child_count(self) > 0 or self.training_sets.filter(released=True).count() > 0
+        """Checks if a discipline itself or one of its children has at least one training set.
+        If so, it is considered valid.
+
+        :return: True if discipline is valid
+        :rtype: bool
+        """
+        return (
+            get_child_count(self) > 0
+            or self.training_sets.filter(released=True).count() > 0
+        )
 
     def __str__(self):
         """String representation of Discipline instance

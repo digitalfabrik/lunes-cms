@@ -173,9 +173,6 @@ class GroupSerializer(serializers.ModelSerializer):
         :return: sum of children
         :rtype: int
         """
-        queryset = Discipline.objects.filter(
-            Q(released=True)
-            & Q(created_by=obj.id)
-        )
+        queryset = Discipline.objects.filter(Q(released=True) & Q(created_by=obj.id))
         queryset = [obj for obj in queryset if obj.is_root_node() and obj.is_valid()]
         return len(queryset)
