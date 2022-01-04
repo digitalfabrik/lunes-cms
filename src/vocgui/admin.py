@@ -60,7 +60,19 @@ admin.site.register(
     ),
     list_display_links=("indented_title",),
 )
-admin.site.register(TrainingSet, TrainingSetAdmin)
+admin.site.register(
+    TrainingSet,
+    TrainingSetAdmin,
+    list_display=(
+        "tree_actions",
+        "indented_title",
+        "title",
+        "released",
+        "related_disciplines",
+        "creator_group",
+    ),
+    list_display_links=("indented_title",),
+)
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(GroupAPIKey, GroupAPIKeyAdmin)
 admin.site.unregister(APIKey)

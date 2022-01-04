@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from mptt.models import TreeForeignKey
 
 from .models import Document, TrainingSet, Discipline
 from .widgets import ManyToManyOverlay
