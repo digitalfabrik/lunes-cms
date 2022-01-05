@@ -4,7 +4,9 @@ A collection of helper methods and classes
 
 import os
 import uuid
+import string
 import pathlib
+from django.utils.crypto import get_random_string
 
 
 def create_ressource_path(parent_dir, filename):
@@ -18,6 +20,24 @@ def create_ressource_path(parent_dir, filename):
     :rtype: str
     """
     return os.path.join(parent_dir, str(uuid.uuid1()) + pathlib.Path(filename).suffix)
+
+
+def get_random_key(length: int = 10, excluded_chars: list = []) -> str:
+    """Auxiliary function that creates a random key based on latin letters and digits using
+    the passed length. Optionally, it is possible to exclude characters like l and 1.
+
+    :param length: key length, defaults to 10
+    :type length: int, optional
+    :param excluded_chars: list of characters to be excluded (mixed dtypes possible), defaults to []
+    :type excluded_chars: list, optional
+    :return: key
+    :rtype: str
+    """
+    choices = string.ascii_letters + string.digits
+    for char in excluded_chars:
+        choices = choices.replace(str(char), "")
+    key = get_random_string(length, choices)
+    return key
 
 
 def document_to_string(doc):

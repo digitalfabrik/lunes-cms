@@ -2,11 +2,13 @@
 Tests for vocgui.utils files
 """
 
+import string
 from django.test import TestCase
 from vocgui.models import Document
 from vocgui.models.discipline import Discipline
 from vocgui.models.training_set import TrainingSet
 from vocgui.utils import (
+    get_random_key,
     document_to_string,
     get_child_count,
     create_ressource_path,
@@ -34,6 +36,13 @@ class TestUtils(TestCase):
             title="Werkzeug",
             parent=Discipline.objects.get(title="Handwerker:in"),
         )
+
+    def test_get_random_key(self):
+        excluded_chars = list(string.ascii_uppercase)
+        key = get_random_key(30, excluded_chars)
+        self.assertEqual(30, len(key))
+        for char in excluded_chars:
+            self.assertNotIn(char, key)
 
     def test_document_to_string(self):
         tiger = Document.objects.get(word="Hammer")
