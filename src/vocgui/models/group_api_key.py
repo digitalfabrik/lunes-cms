@@ -15,8 +15,8 @@ class CustomKeyGenerator(KeyGenerator):
 
     def __init__(
         self,
-        prefix_length: int = 3,
-        secret_key_length: int = 7,
+        prefix_length: int,
+        secret_key_length: int,
         excluded_chars: list = [],
     ):
         """Initialize KeyGenerator
@@ -56,7 +56,7 @@ class GroupAPIKeyManager(BaseAPIKeyManager):
     """
 
     key_generator = CustomKeyGenerator(
-        prefix_length=4, secret_key_length=10, excluded_chars=[1, 0, "I", "l", "o", "O"]
+        prefix_length=3, secret_key_length=7, excluded_chars=[1, 0, "I", "l", "o", "O"]
     )
 
 
