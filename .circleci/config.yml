@@ -10,7 +10,7 @@ jobs:
           name: Installing system dependencies
           command: sudo apt-get update && cat requirements.system | xargs sudo apt-get install
       - restore_cache:
-          key: pip-{{ checksum "setup.py" }}-v2
+          key: pip-{{ checksum "setup.cfg" }}-v1
       - run:
           name: Creating virtual environment
           command: |
@@ -22,7 +22,7 @@ jobs:
               pip install .
             fi
       - save_cache:
-          key: pip-{{ checksum "setup.py" }}-v2
+          key: pip-{{ checksum "setup.cfg" }}-v1
           paths:
             - .venv
             - src/Vocabulary_Trainer.egg-info
