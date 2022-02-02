@@ -68,6 +68,7 @@
       $( document ).ready(function() {
 
         lunes_disciplines.forEach(function(element) {
+          if( element[1] === "Allgemeine Grundlagen") { continue; }
           $("#inputDiscipline").append(new Option(element[1], element[0]))
         });
 
