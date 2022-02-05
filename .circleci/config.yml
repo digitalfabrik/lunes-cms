@@ -19,7 +19,7 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install .
+              pip install -e .[dev,doc]
             fi
       - save_cache:
           key: pip-{{ checksum "setup.cfg" }}-v1
