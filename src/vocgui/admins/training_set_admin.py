@@ -1,10 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
-from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter
+from mptt.admin import DraggableMPTTAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from vocgui.forms import TrainingSetForm
 from vocgui.models import Static, Document, Discipline
+from vocgui.list_filter import TrainingSetDisciplineListFilter
 
 
 class TrainingSetAdmin(DraggableMPTTAdmin):
@@ -17,7 +18,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
     readonly_fields = ("created_by",)
     search_fields = ["title"]
     form = TrainingSetForm
-    list_filter = (("discipline", TreeRelatedFieldListFilter),)
+    list_filter = (TrainingSetDisciplineListFilter, )
     actions = ["make_released", "make_unreleased"]
     list_per_page = 25
 
