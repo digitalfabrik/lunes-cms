@@ -13,6 +13,9 @@ from vocgui.list_filter import (
 from vocgui.models import Static, DocumentImage
 
 
+SUPERUSER_ONLY_LIST_FILTERS = [ApprovedImageListFilter]
+
+
 class DocumentAdmin(admin.ModelAdmin):
     """
     Admin Interface to for the Document module.
@@ -178,3 +181,21 @@ class DocumentAdmin(admin.ModelAdmin):
         return obj.get_article_display()
 
     article_display.short_description = _("article")
+
+    def get_list_filter(self, request):
+        """Override djangos get_list_filter function
+        to remove specific list filters that are only relevant
+        for super users.
+
+        :param request: current request
+        :type request: django.http.request
+        :param obj: [description], defaults to None
+        :type obj: django.db.models, optional
+        :return: custom fields list
+        :rtype: list[str]
+        """
+        if request.user.is_superuser:
+            return self.list_filter
+        # remove filters that are only relevant for super users
+        filters = [f for f in self.list_filter if f not in SUPERUSER_ONLY_LIST_FILTERS]
+        return tuple(filters)
