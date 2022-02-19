@@ -91,7 +91,7 @@ class DocumentAdmin(admin.ModelAdmin):
         """
         qs = super(DocumentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return qs
+            return qs.filter(creator_is_admin=True)
         return qs.filter(
             created_by__in=request.user.groups.values_list("name", flat=True).distinct()
         )
