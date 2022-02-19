@@ -1,7 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
-from mptt.admin import DraggableMPTTAdmin
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+from mptt.admin import DraggableMPTTAdmin
 
 from vocgui.forms import TrainingSetForm
 from vocgui.models import Static, Document, Discipline
@@ -18,7 +19,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
     readonly_fields = ("created_by",)
     search_fields = ["title"]
     form = TrainingSetForm
-    list_filter = (TrainingSetDisciplineListFilter, )
+    list_filter = (TrainingSetDisciplineListFilter,)
     actions = ["make_released", "make_unreleased"]
     list_per_page = 25
 
@@ -103,7 +104,14 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
                 .order_by("level")
             )
             form.base_fields["documents"].queryset = Document.objects.filter(
-                created_by__in=[group.name for group in request.user.groups.all()]
+                Q(created_by__in=[group.name for group in request.user.groups.all()])
+                | Q(
+                    id__in=[
+                        obj.id
+                        for obj in Document.objects.filter(creator_is_admin=True)
+                        if obj.is_valid()
+                    ]
+                )
             ).order_by("word")
         else:
             form.base_fields["discipline"].queryset = (

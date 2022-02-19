@@ -80,6 +80,13 @@ class Document(models.Model):
         os.remove(new_path)
         return converted_audiofile
 
+    def is_valid(self):
+        if self.audio is None:
+            return False
+        if self.document_image.filter(confirmed=True).count() > 0:
+            return True
+        return False
+
     def save(self, *args, **kwargs):
         """Overwrite djangos save function to convert audio files
         to mp3 format (orignal file is saved as backup).
