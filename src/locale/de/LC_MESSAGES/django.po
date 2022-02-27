@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 23:07+0000\n"
+"POT-Creation-Date: 2022-03-07 23:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,7 +102,7 @@ msgstr "Zusammenfassung"
 #: src/vocgui/forms.py:47 src/vocgui/forms.py:49 src/vocgui/list_filter.py:13
 #: src/vocgui/models/discipline.py:72
 msgid "disciplines"
-msgstr "Bereiche"
+msgstr "Modulgruppen"
 
 #: src/vocgui/admin.py:33 src/vocgui/list_filter.py:79
 #: src/vocgui/models/training_set.py:77
@@ -120,11 +120,11 @@ msgstr "API Keys"
 
 #: src/vocgui/admins/discipline_admin.py:109
 msgid "Release selected disciplines"
-msgstr "Ausgewählte Bereiche veröffentlichen"
+msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
 #: src/vocgui/admins/discipline_admin.py:122
 msgid "Unrelease selected disciplines"
-msgstr "Ausgewählte Bereiche zurückhalten"
+msgstr "Ausgewählte Modulgruppen zurückhalten"
 
 #: src/vocgui/admins/discipline_admin.py:151
 #: src/vocgui/admins/document_admin.py:128
@@ -216,7 +216,7 @@ msgstr "veröffentlicht"
 #: src/vocgui/models/discipline.py:21 src/vocgui/models/discipline.py:71
 #: src/vocgui/models/training_set.py:34
 msgid "discipline"
-msgstr "Bereich"
+msgstr "Modulgruppe"
 
 #: src/vocgui/models/discipline.py:23 src/vocgui/models/training_set.py:25
 msgid "description"
@@ -239,7 +239,7 @@ msgstr "Admin"
 
 #: src/vocgui/models/discipline.py:43 src/vocgui/models/training_set.py:46
 msgid "parent"
-msgstr "Elternbereich"
+msgstr "Übergeordnete Modulgruppe"
 
 #: src/vocgui/models/document.py:28
 msgid "word type"
@@ -275,7 +275,7 @@ msgid ""
 "disciplines)."
 msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
-"Gegensatz zu Bereichen)"
+"Gegensatz zu Modulgruppen)"
 
 #: src/vocgui/validators.py:20
 msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
@@ -304,10 +304,10 @@ msgstr "Deutsch"
 #~ msgstr "Beziehungen zwischen Modulen und Vokabeln"
 
 #~ msgid "Relationships between training sets and disciplines"
-#~ msgstr "Beziehungen zwischen Modulen und Bereichen"
+#~ msgstr "Beziehungen zwischen Modulen und Modulgruppen"
 
 #~ msgid "Disciplines"
-#~ msgstr "Bereiche"
+#~ msgstr "Modulgruppen"
 
 #~ msgid "Vocabulary"
 #~ msgstr "Vokabeln"
