@@ -50,9 +50,9 @@ function display_thumbnail(doc) {
         let text = document.createElement("div");
         text.className = "alert alert-secondary";
         if (doc["document_image"].length > 0) {
-            text.innerText = "Image cannot be previewed";
+            text.innerText = gettext("Image cannot be previewed");
         } else {
-            text.innerText = "No image available";
+            text.innerText = gettext("No image available");
         }
         overlay.content.appendChild(text);
     }
@@ -72,7 +72,7 @@ function display_thumbnail(doc) {
     } else {
         let text = document.createElement("div");
         text.className += "alert alert-secondary";
-        text.innerText = "No audio available";
+        text.innerText = gettext("No audio available");
         overlay.content.appendChild(text);
     }
 
