@@ -36,19 +36,27 @@ function display_thumbnail() {
     space.style.height = "30px";
     overlay.content.appendChild(space);
 
+    /* Filter out .tiff images because they cannot be previewed */
+    let filtered_images = doc["document_image"].filter((item) => {
+        return !item["image"].endsWith('.tiff');
+    })
+
     /*Image*/
-    if (doc["document_image"].length >0) {
+    if (filtered_images.length > 0) {
         var img = document.createElement("img");
         img.style.width = "600px";
-        img.src = doc["document_image"][0]["image"];
+        img.src = filtered_images[0]["image"];
         img.className += "img-fluid rounded";
         overlay.content.appendChild(img);
     } else {
         var text = document.createElement("div");
         text.className = "alert alert-secondary";
-        text.innerText = "No image available";
+        if (doc["document_image"].length > 0) {
+            text.innerText = "Image cannot be previewed";
+        } else {
+            text.innerText = "No image available";
+        }
         overlay.content.appendChild(text);
-
     }
    
     /*Free Space*/
