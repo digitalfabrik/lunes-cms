@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -56,3 +57,26 @@ class TrainingSetForm(forms.ModelForm):
             "Please select some vocabularies for your training set. To see a preview of the corresponding image and audio files, press the alt key while selecting."
         ),
     )
+
+    def clean(self):
+        """
+        Make sure the training set is only released when it contains at least as many vocabularies as defined in
+        :attr:`voctrainer.settings.TRAININGSET_MIN_DOCS`.
+
+        :return: The cleaned data for this form
+        :rtype: dict
+        """
+        cleaned_data = super().clean()
+        documents = cleaned_data.get("documents")
+        if cleaned_data.get("released") and (
+            not documents
+            or documents.filter(document_image__confirmed=True).count()
+            < settings.TRAININGSET_MIN_DOCS
+        ):
+            self.add_error(
+                "released",
+                _(
+                    "You can only release a training set that contains at least {} vocabulary words with confirmed images."
+                ).format(settings.TRAININGSET_MIN_DOCS),
+            )
+        return cleaned_data

@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#: How many documents a training sets needs at least to get released
+TRAININGSET_MIN_DOCS = 4
+
 # Application definition
 
 INSTALLED_APPS = [
