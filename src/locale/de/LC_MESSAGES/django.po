@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-17 11:08+0000\n"
+"POT-Creation-Date: 2022-03-07 23:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid ""
 "following types of objects:"
 msgstr ""
 "Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"auch Löschen, wofür Ihnen aber Berechtigungen fehlen."
+"ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen."
 
 #: src/templates/admin/vocgui/delete_confirmation.html:46
 #, python-format
@@ -46,7 +46,7 @@ msgid ""
 "following protected related objects:"
 msgstr ""
 "Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"auch Löschen, die allerdings geschützt sind."
+"ebenfalls löschen, die allerdings geschützt sind."
 
 #: src/templates/admin/vocgui/delete_confirmation.html:53
 #: src/templates/admin/vocgui/delete_selected_confirmation.html:51
@@ -76,67 +76,64 @@ msgid "Delete multiple objects"
 msgstr ""
 
 #: src/templates/admin/vocgui/delete_selected_confirmation.html:37
-#, fuzzy, python-format
-#| msgid ""
-#| "Deleting the %(object_name)s '%(escaped_object)s' would result in "
-#| "deleting related objects, but your account doesn't have permission to "
-#| "delete the following types of objects:"
+#, python-format
 msgid ""
 "Deleting the selected %(objects_name)s would result in deleting related "
 "objects, but your account doesn't have permission to delete the following "
 "types of objects:"
 msgstr ""
-"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"auch Löschen, wofür Ihnen aber Berechtigungen fehlen."
+"Löschen der ausgewählten %(object_name)s würde die folgenden verwandten "
+"Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
 
 #: src/templates/admin/vocgui/delete_selected_confirmation.html:44
-#, fuzzy, python-format
-#| msgid ""
-#| "Deleting the %(object_name)s '%(escaped_object)s' would require deleting "
-#| "the following protected related objects:"
+#, python-format
 msgid ""
 "Deleting the selected %(objects_name)s would require deleting the following "
 "protected related objects:"
 msgstr ""
-"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"auch Löschen, die allerdings geschützt sind."
+"Löschen der ausgewählten %(object_name)s würde die folgenden verwandten "
+"Objekte ebenfalls löschen, die allerdings geschützt sind:"
 
 #: src/templates/admin/vocgui/object_delete_summary.html:2
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: src/vocgui/admin.py:36 src/vocgui/admins/training_set_admin.py:170
-#: src/vocgui/forms.py:46 src/vocgui/forms.py:48 src/vocgui/list_filter.py:13
-#: src/vocgui/list_filter.py:132 src/vocgui/models/discipline.py:54
+#: src/vocgui/admin.py:32 src/vocgui/admins/training_set_admin.py:162
+#: src/vocgui/forms.py:47 src/vocgui/forms.py:49 src/vocgui/list_filter.py:13
+#: src/vocgui/models/discipline.py:72
 msgid "disciplines"
-msgstr "Bereiche"
+msgstr "Modulgruppen"
 
-#: src/vocgui/admin.py:37 src/vocgui/list_filter.py:79
-#: src/vocgui/models/training_set.py:50
+#: src/vocgui/admin.py:33 src/vocgui/list_filter.py:79
+#: src/vocgui/models/training_set.py:77
 msgid "training sets"
 msgstr "Module"
 
-#: src/vocgui/admin.py:38 src/vocgui/forms.py:52 src/vocgui/forms.py:53
+#: src/vocgui/admin.py:34 src/vocgui/forms.py:53 src/vocgui/forms.py:54
 #: src/vocgui/models/document.py:104 src/vocgui/models/document.py:105
 msgid "vocabulary"
 msgstr "Vokabeln"
 
+#: src/vocgui/admin.py:35
+msgid "api keys"
+msgstr "API Keys"
+
 #: src/vocgui/admins/discipline_admin.py:109
 msgid "Release selected disciplines"
-msgstr "Ausgewählte Bereiche veröffentlichen"
+msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
 #: src/vocgui/admins/discipline_admin.py:122
 msgid "Unrelease selected disciplines"
-msgstr "Ausgewählte Bereiche zurückhalten"
+msgstr "Ausgewählte Modulgruppen zurückhalten"
 
 #: src/vocgui/admins/discipline_admin.py:151
 #: src/vocgui/admins/document_admin.py:128
-#: src/vocgui/admins/training_set_admin.py:188
+#: src/vocgui/admins/training_set_admin.py:180
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: src/vocgui/admins/document_admin.py:110 src/vocgui/models/training_set.py:21
-#: src/vocgui/models/training_set.py:49
+#: src/vocgui/admins/document_admin.py:110 src/vocgui/models/training_set.py:23
+#: src/vocgui/models/training_set.py:76
 msgid "training set"
 msgstr "Modul"
 
@@ -154,11 +151,11 @@ msgstr "Bild"
 msgid "article"
 msgstr "Artikel"
 
-#: src/vocgui/admins/training_set_admin.py:133
+#: src/vocgui/admins/training_set_admin.py:125
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: src/vocgui/admins/training_set_admin.py:146
+#: src/vocgui/admins/training_set_admin.py:138
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
@@ -166,7 +163,7 @@ msgstr "Ausgewählte Module zurückhalten"
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
-#: src/vocgui/forms.py:55
+#: src/vocgui/forms.py:56
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
@@ -175,31 +172,31 @@ msgstr ""
 "Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
 "Element auswählst."
 
-#: src/vocgui/list_filter.py:187
+#: src/vocgui/list_filter.py:132
 msgid "approved images"
 msgstr "Bestätigte Bilder"
 
-#: src/vocgui/list_filter.py:208
+#: src/vocgui/list_filter.py:153
 msgid "at least one approved image"
 msgstr "Min. 1 bestätigtes Bild"
 
-#: src/vocgui/list_filter.py:209
+#: src/vocgui/list_filter.py:154
 msgid "at least one pending image"
 msgstr "Min. 1 unbestätigtes Bild"
 
-#: src/vocgui/list_filter.py:210
+#: src/vocgui/list_filter.py:155
 msgid "no images"
 msgstr "keine Bilder"
 
-#: src/vocgui/list_filter.py:242
+#: src/vocgui/list_filter.py:188
 msgid "assigned & unassigned"
 msgstr "zugewiesene und unzugewiesene Vokabeln"
 
-#: src/vocgui/list_filter.py:263
+#: src/vocgui/list_filter.py:209
 msgid "unassigned only"
 msgstr "keinem Modul zugewiesen"
 
-#: src/vocgui/list_filter.py:264
+#: src/vocgui/list_filter.py:210
 msgid "assigned only"
 msgstr "zu Modul zugewiesen"
 
@@ -212,36 +209,37 @@ msgstr "Alternatives Wort"
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: src/vocgui/models/discipline.py:19 src/vocgui/models/training_set.py:20
+#: src/vocgui/models/discipline.py:20 src/vocgui/models/training_set.py:22
 msgid "released"
 msgstr "veröffentlicht"
 
-#: src/vocgui/models/discipline.py:20 src/vocgui/models/discipline.py:53
+#: src/vocgui/models/discipline.py:21 src/vocgui/models/discipline.py:71
+#: src/vocgui/models/training_set.py:34
 msgid "discipline"
-msgstr "Bereich"
+msgstr "Modulgruppe"
 
-#: src/vocgui/models/discipline.py:22 src/vocgui/models/training_set.py:23
+#: src/vocgui/models/discipline.py:23 src/vocgui/models/training_set.py:25
 msgid "description"
 msgstr "Beschreibung"
 
-#: src/vocgui/models/discipline.py:25 src/vocgui/models/group.py:7
-#: src/vocgui/models/training_set.py:26
+#: src/vocgui/models/discipline.py:26 src/vocgui/models/group.py:9
+#: src/vocgui/models/training_set.py:28
 msgid "icon"
 msgstr "Icon"
 
-#: src/vocgui/models/discipline.py:28 src/vocgui/models/document.py:51
-#: src/vocgui/models/training_set.py:31
+#: src/vocgui/models/discipline.py:33 src/vocgui/models/document.py:51
+#: src/vocgui/models/training_set.py:37
 msgid "created by"
 msgstr "Erstellt von"
 
-#: src/vocgui/models/discipline.py:30 src/vocgui/models/document.py:53
-#: src/vocgui/models/training_set.py:33
+#: src/vocgui/models/discipline.py:36 src/vocgui/models/document.py:53
+#: src/vocgui/models/training_set.py:39
 msgid "admin"
 msgstr "Admin"
 
-#: src/vocgui/models/discipline.py:37
+#: src/vocgui/models/discipline.py:43 src/vocgui/models/training_set.py:46
 msgid "parent"
-msgstr "Elternbereich"
+msgstr "Übergeordnete Modulgruppe"
 
 #: src/vocgui/models/document.py:28
 msgid "word type"
@@ -259,6 +257,26 @@ msgstr "Erstellt am"
 msgid "images"
 msgstr "Bilder"
 
+#: src/vocgui/models/group_api_key.py:83
+msgid "API Key"
+msgstr ""
+
+#: src/vocgui/models/group_api_key.py:84
+msgid "API Keys"
+msgstr ""
+
+#: src/vocgui/models/training_set.py:31
+msgid "document"
+msgstr "Dokument"
+
+#: src/vocgui/models/training_set.py:65
+msgid ""
+"It is not possible to create child elements for training sets (unlike "
+"disciplines)."
+msgstr ""
+"Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
+"Gegensatz zu Modulgruppen)"
+
 #: src/vocgui/validators.py:20
 msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
 msgstr "Unerlaubtes Dateiformat! Erlaubt: .mp3 .aac .wav .m4a .wma .ogg"
@@ -271,11 +289,11 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: src/voctrainer/settings.py:126
+#: src/voctrainer/settings.py:122
 msgid "English"
 msgstr "Englisch"
 
-#: src/voctrainer/settings.py:127
+#: src/voctrainer/settings.py:123
 msgid "German"
 msgstr "Deutsch"
 
@@ -286,17 +304,10 @@ msgstr "Deutsch"
 #~ msgstr "Beziehungen zwischen Modulen und Vokabeln"
 
 #~ msgid "Relationships between training sets and disciplines"
-#~ msgstr "Beziehungen zwischen Modulen und Bereichen"
-
-#, fuzzy
-#~| msgid "training sets"
-#~ msgid "Training sets"
-#~ msgstr "Module"
+#~ msgstr "Beziehungen zwischen Modulen und Modulgruppen"
 
 #~ msgid "Disciplines"
-#~ msgstr "Bereiche"
+#~ msgstr "Modulgruppen"
 
-#, fuzzy
-#~| msgid "vocabulary"
 #~ msgid "Vocabulary"
 #~ msgstr "Vokabeln"
