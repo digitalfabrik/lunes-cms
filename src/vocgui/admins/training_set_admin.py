@@ -1,12 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 
 from vocgui.forms import TrainingSetForm
 from vocgui.models import Static, Document, Discipline
-from vocgui.list_filter import TrainingSetDisciplineListFilter
+from vocgui.list_filter import DisciplineListFilter
 
 
 class TrainingSetAdmin(DraggableMPTTAdmin):
@@ -19,7 +19,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
     readonly_fields = ("created_by",)
     search_fields = ["title"]
     form = TrainingSetForm
-    list_filter = (TrainingSetDisciplineListFilter,)
+    list_filter = (DisciplineListFilter,)
     actions = ["make_released", "make_unreleased"]
     list_per_page = 25
 
@@ -93,36 +93,29 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = (
                 Discipline.objects.filter(
-                    created_by__in=request.user.groups.all(),
-                    id__in=[
-                        obj.id
-                        for obj in Discipline.objects.all()
-                        if obj.get_descendant_count() == 0
-                    ],
+                    created_by__in=request.user.groups.all(), lft=F("rght") - 1
                 )
                 .order_by("title")
                 .order_by("level")
             )
-            form.base_fields["documents"].queryset = Document.objects.filter(
-                Q(created_by__in=[group.name for group in request.user.groups.all()])
-                | Q(
-                    id__in=[
-                        obj.id
-                        for obj in Document.objects.filter(creator_is_admin=True)
-                        if obj.is_valid()
-                    ]
+            form.base_fields["documents"].queryset = (
+                Document.objects.filter(
+                    Q(
+                        created_by__in=[
+                            group.name for group in request.user.groups.all()
+                        ]
+                    )
+                    | (
+                        Q(creator_is_admin=True, document_image__confirmed=True)
+                        & ~Q(audio="")
+                    )
                 )
-            ).order_by("word")
+                .distinct()
+                .order_by("word")
+            )
         else:
             form.base_fields["discipline"].queryset = (
-                Discipline.objects.filter(
-                    creator_is_admin=True,
-                    id__in=[
-                        obj.id
-                        for obj in Discipline.objects.all()
-                        if obj.get_descendant_count() == 0
-                    ],
-                )
+                Discipline.objects.filter(creator_is_admin=True, lft=F("rght") - 1)
                 .order_by("title")
                 .order_by("level")
             )
