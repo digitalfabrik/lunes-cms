@@ -1,4 +1,5 @@
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.urls import reverse_lazy
 
 
 class ManyToManyOverlay(FilteredSelectMultiple):
@@ -12,6 +13,7 @@ class ManyToManyOverlay(FilteredSelectMultiple):
             "js/jquery.min.js",
             "js/manytomany_overlay.js",
             "js/overlay.js",
+            reverse_lazy("javascript-translations"),
         )
         css = {"all": ("css/overlay.css",)}
 
