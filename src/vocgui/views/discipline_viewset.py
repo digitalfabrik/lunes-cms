@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from django.db.models import Count, Q
+from django.db.models import F, Q, Count
 from vocgui.models import Discipline
 from vocgui.serializers import DisciplineSerializer
 
@@ -31,15 +31,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
             return None
         else:
             queryset = Discipline.objects.filter(
-                Q(released=True)
-                & Q(creator_is_admin=True)
-                & Q(
-                    id__in=[
-                        obj.id
-                        for obj in Discipline.objects.all()
-                        if obj.get_descendant_count() == 0
-                    ]
-                )
+                released=True, creator_is_admin=True, lft=F("rght") - 1
             ).annotate(
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
