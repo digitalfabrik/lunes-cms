@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
+from django.db.models import Case, Exists, IntegerField, OuterRef, Value, When
 from django.utils.translation import ugettext_lazy as _
 
 from .document_image_admin import DocumentImageAdmin
@@ -89,7 +90,24 @@ class DocumentAdmin(admin.ModelAdmin):
         :return: adjustet queryset
         :rtype: QuerySet
         """
-        qs = super(DocumentAdmin, self).get_queryset(request)
+        qs = (
+            super(DocumentAdmin, self)
+            .get_queryset(request)
+            .annotate(
+                has_image=Exists(DocumentImage.objects.filter(document=OuterRef("pk"))),
+                has_confirmed_image=Exists(
+                    DocumentImage.objects.filter(
+                        document=OuterRef("pk"), confirmed=True
+                    )
+                ),
+                image_sort=Case(
+                    When(has_confirmed_image=True, then=Value(2)),
+                    When(has_image=True, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
+            )
+        )
         if request.user.is_superuser:
             return qs
         return qs.filter(
@@ -152,19 +170,19 @@ class DocumentAdmin(admin.ModelAdmin):
 
         :param obj: Document object
         :type obj: models.Document
-        :return: Either static admin group or user group
-        :rtype: str
+
+        :return: Whether the document has at least one confirmed image
+        :rtype: bool
         """
-        if DocumentImage.objects.all().filter(document=obj):
-            if DocumentImage.objects.all().filter(document=obj)[0].confirmed == True:
-                return True
-            elif DocumentImage.objects.all().filter(document=obj)[0].confirmed == False:
-                return None
+        if obj.has_confirmed_image:
+            return True
+        if obj.has_image:
+            return None
         return False
 
     has_image.boolean = True
     has_image.short_description = _("image")
-    has_image.admin_order_field = "document_image"
+    has_image.admin_order_field = "image_sort"
 
     def article_display(self, obj):
         """
