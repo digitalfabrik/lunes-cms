@@ -164,3 +164,38 @@
 .card-primary.card-outline {
     border-top: 3px solid #425bee;
 }
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Selected table row */
+        --selected-row: #2d2d4a;
+    }
+    body {
+        background-color: #282838;
+    }
+    .card {
+        background-color: #2d2d4a;
+    }
+    .table-striped thead tr,
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #000e38;
+    }
+    .main-header,
+    .card-header,
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #47476e;
+    }
+    /* These classes might have to be changed if the accent color is changed to a different value than "navy" */
+    .accent-navy .btn-link,
+    .accent-navy .nav-tabs .nav-link,
+    .accent-navy a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn) {
+        color: #8ba6fa;
+    }
+    .main-footer,
+    .accent-navy .btn-link:hover,
+    .accent-navy .nav-tabs .nav-link:hover,
+    .accent-navy a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn):hover {
+        color: #c4e3ff;
+    }
+}

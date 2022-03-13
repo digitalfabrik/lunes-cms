@@ -171,6 +171,7 @@ JAZZMIN_UI_TWEAKS = {
     "brand_small_text": False,
     "brand_colour": "navbar-dark",
     "accent": "accent-navy",
+    "dark_mode_theme": "darkly",
     "navbar": "navbar-primary navbar-dark",
     "no_navbar_border": True,
     "navbar_fixed": False,

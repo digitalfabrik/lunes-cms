@@ -81,3 +81,9 @@
     opacity: 0;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  .overlay .overlay_content {
+    background-color: #282838;
+  }
+}
