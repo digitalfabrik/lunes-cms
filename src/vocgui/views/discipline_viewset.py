@@ -31,7 +31,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
             return None
         else:
             queryset = Discipline.objects.filter(
-                Q(released=True) & Q(creator_is_admin=True) & Q(lft=F("rght") - 1)
+                released=True, creator_is_admin=True, lft=F("rght") - 1
             ).annotate(
                 total_training_sets=Count(
                     "training_sets", filter=Q(training_sets__released=True)
