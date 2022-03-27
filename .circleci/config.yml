@@ -39,10 +39,14 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-          source .venv/bin/activate
-          vocabulary-trainer migrate
-          vocabulary-trainer test vocgui
+      - run:
+          name: Run migrations and tests
+          command: |
+            source .venv/bin/activate
+            vocabulary-trainer migrate
+            vocabulary-trainer test vocgui
+          environment:
+            LUNES_CMS_SECRET_KEY: circleci-dummy-key
       - store_artifacts:
           path: test-reports/
           destination: python_app

@@ -1,11 +1,23 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+import configparser
 import os
 import sys
 
 
+def read_config():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voctrainer.settings")
+
+    # Read config from config file
+    config = configparser.ConfigParser(interpolation=None)
+    config.read("/etc/lunes-cms.ini")
+    for section in config.sections():
+        for KEY, VALUE in config.items(section):
+            os.environ.setdefault(f"LUNES_CMS_{KEY.upper()}", VALUE)
+
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'voctrainer.settings')
+    read_config()
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
