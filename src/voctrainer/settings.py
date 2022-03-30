@@ -205,6 +205,52 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.environ.get("LUNES_CMS_MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
 
 
+##########
+# EMAILS #
+##########
+
+if DEBUG:
+    #: The backend to use for sending emails (see :setting:`django:EMAIL_BACKEND` and :doc:`django:topics/email`)
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+#: The email address that error messages come from, such as those sent to :setting:`django:ADMINS`.
+#: (see :setting:`django:SERVER_EMAIL`)
+SERVER_EMAIL = os.environ.get(
+    "LUNES_CMS_SERVER_EMAIL", "keineantwort@lunes.app"
+)
+
+#: Default email address to use for various automated correspondence from the site manager(s)
+#: (see :setting:`django:DEFAULT_FROM_EMAIL`)
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
+
+#: The host to use for sending email (see :setting:`django:EMAIL_HOST`)
+EMAIL_HOST = os.environ.get("LUNES_CMS_EMAIL_HOST", "localhost")
+
+#: Password to use for the SMTP server defined in :attr:`~voctrainer.settings.EMAIL_HOST`
+#: (see :setting:`django:EMAIL_HOST_PASSWORD`). If empty, Django won’t attempt authentication.
+EMAIL_HOST_PASSWORD = os.environ.get("LUNES_CMS_EMAIL_HOST_PASSWORD")
+
+#: Username to use for the SMTP server defined in :attr:`~voctrainer.settings.EMAIL_HOST`
+#: (see :setting:`django:EMAIL_HOST_USER`). If empty, Django won’t attempt authentication.
+EMAIL_HOST_USER = os.environ.get("LUNES_CMS_EMAIL_HOST_USER", SERVER_EMAIL)
+
+#: Port to use for the SMTP server defined in :attr:`~voctrainer.settings.EMAIL_HOST`
+#: (see :setting:`django:EMAIL_PORT`)
+EMAIL_PORT = int(os.environ.get("LUNES_CMS_EMAIL_PORT", 587))
+
+#: Whether to use a TLS (secure) connection when talking to the SMTP server.
+#: This is used for explicit TLS connections, generally on port 587.
+#: (see :setting:`django:EMAIL_USE_TLS`)
+EMAIL_USE_TLS = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_TLS", "True")))
+
+#: Whether to use an implicit TLS (secure) connection when talking to the SMTP server.
+#: In most email documentation this type of TLS connection is referred to as SSL. It is generally used on port 465.
+#: (see :setting:`django:EMAIL_USE_SSL`)
+EMAIL_USE_SSL = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_SSL", "False")))
+
+
 #########################
 # DJANGO REST FRAMEWORK #
 #########################
