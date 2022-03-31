@@ -92,6 +92,13 @@ TEMPLATES = [
 #: WSGI (Web Server Gateway Interface) config (see :setting:`django:WSGI_APPLICATION`)
 WSGI_APPLICATION = "voctrainer.wsgi.application"
 
+#: The URL or named URL pattern where requests are redirected for login (see :setting:`django:LOGIN_URL`)
+LOGIN_URL = "/admin/login/"
+
+#: The URL or named URL pattern where requests are redirected after login when the
+#: LoginView doesn't get a next GET parameter. (see :setting:`django:LOGIN_REDIRECT_URL`).
+LOGIN_REDIRECT_URL = "/admin/"
+
 
 ############
 # DATABASE #
