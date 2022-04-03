@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from distutils.util import strtobool
+
 from django.utils.translation import ugettext_lazy as _
+
+from .logging_formatter import ColorFormatter
 
 
 ###################
@@ -224,9 +227,7 @@ else:
 
 #: The email address that error messages come from, such as those sent to :setting:`django:ADMINS`.
 #: (see :setting:`django:SERVER_EMAIL`)
-SERVER_EMAIL = os.environ.get(
-    "LUNES_CMS_SERVER_EMAIL", "keineantwort@lunes.app"
-)
+SERVER_EMAIL = os.environ.get("LUNES_CMS_SERVER_EMAIL", "keineantwort@lunes.app")
 
 #: Default email address to use for various automated correspondence from the site manager(s)
 #: (see :setting:`django:DEFAULT_FROM_EMAIL`)
@@ -256,6 +257,119 @@ EMAIL_USE_TLS = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_TLS", "True")
 #: In most email documentation this type of TLS connection is referred to as SSL. It is generally used on port 465.
 #: (see :setting:`django:EMAIL_USE_SSL`)
 EMAIL_USE_SSL = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_SSL", "False")))
+
+
+###########
+# LOGGING #
+###########
+
+#: The log level for lunes-cms django apps
+LOG_LEVEL = os.environ.get("LUNES_CMS_LOG_LEVEL", "DEBUG" if DEBUG else "INFO")
+
+#: The log level for the syslog
+SYS_LOG_LEVEL = "INFO"
+
+#: The log level for dependencies
+DEPS_LOG_LEVEL = os.environ.get("LUNES_CMS_DEPS_LOG_LEVEL", "INFO" if DEBUG else "WARN")
+
+#: The file path of the logfile. Needs to be writable by the application.
+LOGFILE = os.environ.get("LUNES_CMS_LOGFILE", os.path.join(BASE_DIR, "lunes-cms.log"))
+
+#: Logging configuration dictionary (see :setting:`django:LOGGING`)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {
+            "format": "{asctime} \x1b[1m{levelname}\x1b[0m {name} - {message}",
+            "datefmt": "%b %d %H:%M:%S",
+            "style": "{",
+        },
+        "console-colored": {
+            "()": ColorFormatter,
+            "format": "{asctime} {levelname} {name} - {message}",
+            "datefmt": "%b %d %H:%M:%S",
+            "style": "{",
+        },
+        "logfile": {
+            "format": "{asctime} {levelname:7} {name} - {message}",
+            "datefmt": "%b %d %H:%M:%S",
+            "style": "{",
+        },
+        "syslog": {
+            "format": "LUNES CMS - {levelname}: {message}",
+            "style": "{",
+        },
+        "email": {
+            "format": "Date and time: {asctime}\nSeverity: {levelname}\nLogger: {name}\nMessage: {message}\nFile: {funcName}() in {pathname}:{lineno}",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+    },
+    "handlers": {
+        "console": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+        },
+        "console-colored": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console-colored",
+        },
+        "logfile": {
+            "class": "logging.FileHandler",
+            "filename": LOGFILE,
+            "formatter": "logfile",
+        },
+        "authlog": {
+            "filters": ["require_debug_false"],
+            "class": "logging.handlers.SysLogHandler",
+            "address": "/dev/log",
+            "facility": "auth",
+            "formatter": "syslog",
+        },
+        "syslog": {
+            "filters": ["require_debug_false"],
+            "class": "logging.handlers.SysLogHandler",
+            "address": "/dev/log",
+            "facility": "syslog",
+        },
+    },
+    "loggers": {
+        # Loggers of lunes-cms django apps
+        "vocgui": {
+            "handlers": ["console-colored", "logfile"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        # Syslog for authentication
+        "auth": {
+            "handlers": ["console", "logfile", "authlog", "syslog"],
+            "level": SYS_LOG_LEVEL,
+            "propagate": False,
+        },
+        # Loggers of dependencies
+        "django": {
+            "handlers": ["console", "logfile"],
+            "level": DEPS_LOG_LEVEL,
+            "propagate": False,
+        },
+        "": {
+            "handlers": ["console", "logfile"],
+            "level": DEPS_LOG_LEVEL,
+            "propagate": True,
+        },
+    },
+}
 
 
 #########################
