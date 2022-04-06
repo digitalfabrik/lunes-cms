@@ -156,13 +156,17 @@ Content-Type: application/json
 
 ## List of documents
 List of available documents. A document is an item to be learned and consists of an image, multiple correct answers, and other details. If training set ID is provided as a parameter, the list will return only documents belonging to the training set. A valid API-Key may be required.
-### Request
+
+### List of documents by training set
+Get all documents that belong to a given training set
+
+#### Request
 ```http
 GET /api/documents/[TRAINING_SET_ID] HTTP/1.1
 Host: lunes.tuerantuer.org
 Content-Type: application/json
 ```
-### Response
+#### Response
 ```javascript
 [
     {
@@ -174,7 +178,44 @@ Content-Type: application/json
         "alternatives": [
             {
                 "alt_word": String,         // Alternative word
-                "article": Integer,         // ID of article (german grammer) belonging to the item (1:Der, 2:Die, 3:Das, 4:Die (Plural))
+                "article": Integer,         // ID of article (german grammar) belonging to the item (1:Der, 2:Die, 3:Das, 4:Die (Plural))
+            },
+            [...]   // repeats for available alternatives
+        ],
+        "document_image": [
+            {
+                "id": Integer,  //image id
+                "image": String //URL to image
+            },
+            [...]   // repeats for available images
+        ]
+    },
+    [...]   // repeats for available documents
+]
+```
+
+### All documents
+Get the list of all documents or retrieve a single record by appending the id of the word.
+
+#### Request
+```http
+GET /api/words/HTTP/1.1
+Host: lunes.tuerantuer.org
+Content-Type: application/json
+```
+#### Response
+```javascript
+[
+    {
+        "id": Integer,              // ID of training set
+        "word": String,             // primary correct answer
+        "article": Integer,         // ID of article (german grammar) belonging to the item (1:Der, 2:Die, 3:Das, 4:Die (Plural))
+        "audio": String,            // URL to (converted) audio file
+        "word_type": String,        // Word type of document: Nomen, Verb, Adjektiv
+        "alternatives": [
+            {
+                "alt_word": String,         // Alternative word
+                "article": Integer,         // ID of article (german grammar) belonging to the item (1:Der, 2:Die, 3:Das, 4:Die (Plural))
             },
             [...]   // repeats for available alternatives
         ],

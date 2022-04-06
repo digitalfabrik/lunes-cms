@@ -5,6 +5,7 @@ from .document_viewset import DocumentViewSet
 from .group_viewset import GroupViewSet
 from .training_set_viewset import TrainingSetViewSet
 from .other_viewset import public_upload, redirect_view
+from .word_viewset import WordViewSet
 
 __all__ = [
     "DisciplineFilteredViewSet",
