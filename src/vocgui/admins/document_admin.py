@@ -217,3 +217,6 @@ class DocumentAdmin(admin.ModelAdmin):
         # remove filters that are only relevant for super users
         filters = [f for f in self.list_filter if f not in SUPERUSER_ONLY_LIST_FILTERS]
         return tuple(filters)
+
+    class Media:
+        js = ("js/image_preview.js",)
