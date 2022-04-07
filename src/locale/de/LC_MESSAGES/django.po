@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 23:11+0000\n"
+"POT-Creation-Date: 2022-04-07 09:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,7 +82,7 @@ msgid ""
 "objects, but your account doesn't have permission to delete the following "
 "types of objects:"
 msgstr ""
-"Löschen der ausgewählten %(object_name)s würde die folgenden verwandten "
+"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
 
 #: src/templates/admin/vocgui/delete_selected_confirmation.html:44
@@ -91,20 +91,20 @@ msgid ""
 "Deleting the selected %(objects_name)s would require deleting the following "
 "protected related objects:"
 msgstr ""
-"Löschen der ausgewählten %(object_name)s würde die folgenden verwandten "
+"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, die allerdings geschützt sind:"
 
 #: src/templates/admin/vocgui/object_delete_summary.html:2
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: src/vocgui/admin.py:32 src/vocgui/admins/training_set_admin.py:162
-#: src/vocgui/forms.py:47 src/vocgui/forms.py:49 src/vocgui/list_filter.py:13
+#: src/vocgui/admin.py:32 src/vocgui/admins/training_set_admin.py:164
+#: src/vocgui/forms.py:47 src/vocgui/forms.py:49 src/vocgui/list_filter.py:14
 #: src/vocgui/models/discipline.py:72
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: src/vocgui/admin.py:33 src/vocgui/list_filter.py:79
+#: src/vocgui/admin.py:33 src/vocgui/list_filter.py:102
 #: src/vocgui/models/training_set.py:77
 msgid "training sets"
 msgstr "Module"
@@ -127,35 +127,35 @@ msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
 #: src/vocgui/admins/discipline_admin.py:151
-#: src/vocgui/admins/document_admin.py:128
-#: src/vocgui/admins/training_set_admin.py:180
+#: src/vocgui/admins/document_admin.py:149
+#: src/vocgui/admins/training_set_admin.py:182
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: src/vocgui/admins/document_admin.py:110 src/vocgui/models/training_set.py:23
+#: src/vocgui/admins/document_admin.py:131 src/vocgui/models/training_set.py:23
 #: src/vocgui/models/training_set.py:76
 msgid "training set"
 msgstr "Modul"
 
-#: src/vocgui/admins/document_admin.py:146 src/vocgui/models/document.py:45
+#: src/vocgui/admins/document_admin.py:167 src/vocgui/models/document.py:45
 msgid "audio"
 msgstr "Audio"
 
-#: src/vocgui/admins/document_admin.py:166
+#: src/vocgui/admins/document_admin.py:187
 #: src/vocgui/models/document_image.py:132
 msgid "image"
 msgstr "Bild"
 
-#: src/vocgui/admins/document_admin.py:180
+#: src/vocgui/admins/document_admin.py:201
 #: src/vocgui/models/alternative_word.py:18 src/vocgui/models/document.py:34
 msgid "article"
 msgstr "Artikel"
 
-#: src/vocgui/admins/training_set_admin.py:125
+#: src/vocgui/admins/training_set_admin.py:127
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: src/vocgui/admins/training_set_admin.py:138
+#: src/vocgui/admins/training_set_admin.py:140
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
@@ -172,31 +172,31 @@ msgstr ""
 "Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
 "Element auswählst."
 
-#: src/vocgui/list_filter.py:132
+#: src/vocgui/list_filter.py:155
 msgid "approved images"
 msgstr "Bestätigte Bilder"
 
-#: src/vocgui/list_filter.py:153
+#: src/vocgui/list_filter.py:176
 msgid "at least one approved image"
 msgstr "Min. 1 bestätigtes Bild"
 
-#: src/vocgui/list_filter.py:154
+#: src/vocgui/list_filter.py:177
 msgid "at least one pending image"
 msgstr "Min. 1 unbestätigtes Bild"
 
-#: src/vocgui/list_filter.py:155
+#: src/vocgui/list_filter.py:178
 msgid "no images"
 msgstr "keine Bilder"
 
-#: src/vocgui/list_filter.py:188
+#: src/vocgui/list_filter.py:211
 msgid "assigned & unassigned"
 msgstr "zugewiesene und unzugewiesene Vokabeln"
 
-#: src/vocgui/list_filter.py:209
+#: src/vocgui/list_filter.py:232
 msgid "unassigned only"
 msgstr "keinem Modul zugewiesen"
 
-#: src/vocgui/list_filter.py:210
+#: src/vocgui/list_filter.py:233
 msgid "assigned only"
 msgstr "zu Modul zugewiesen"
 
@@ -296,6 +296,18 @@ msgstr "Englisch"
 #: src/voctrainer/settings.py:123
 msgid "German"
 msgstr "Deutsch"
+
+#: src/voctrainer/settings.py:149 src/voctrainer/settings.py:150
+msgid "Lunes Administration"
+msgstr "Lunes-Verwaltung"
+
+#: src/voctrainer/settings.py:151
+msgid "Welcome to the vocabulary management of Lunes!"
+msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
+
+#: src/voctrainer/urls.py:45
+msgid "Dashboard"
+msgstr ""
 
 #~ msgid "French"
 #~ msgstr "Französisch"
