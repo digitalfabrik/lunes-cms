@@ -32,9 +32,14 @@ class DocumentImage(models.Model):
         """
         if self.image and self.image.storage.exists(self.image.name):
             if ".png" in self.image.name or ".jpg" in self.image.name:
+                # The normal image tag for jpg and png previews
                 return mark_safe(
-                    '<img src="/media/%s" width="330" height="240"/>' % (self.image)
+                    f'<img src="/media/{self.image}" width="330" height="240" />'
                 )
+        else:
+            # The dummy image tag for new files which are to be uploaded
+            return mark_safe('<img src="" width="330" height="auto" class="hidden" />')
+        # Empty tag for image types that cannot be previewed
         return ""
 
     image_tag.short_description = ""
