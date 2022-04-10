@@ -1,12 +1,16 @@
 from __future__ import absolute_import, unicode_literals
-from django.contrib import admin
-from django.db.models import Q, F
-from django.utils.translation import ugettext_lazy as _
+
+from django.conf import settings
+from django.contrib import admin, messages
+from django.db.models import Count, F, Q
+from django.utils.translation import ugettext_lazy as _, ngettext
+
 from mptt.admin import DraggableMPTTAdmin
 
+from vocgui.list_filter import DisciplineListFilter
 from vocgui.forms import TrainingSetForm
 from vocgui.models import Static, Document, Discipline
-from vocgui.list_filter import DisciplineListFilter
+from vocgui.utils import iter_to_string
 
 
 class TrainingSetAdmin(DraggableMPTTAdmin):
@@ -135,7 +139,62 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :param queryset: current queryset
         :type queryset: QuerySet
         """
-        queryset.update(released=True)
+        # Annotate queryset so it can be filtered by the document count later
+        annotated_queryset = queryset.annotate(
+            document_count=Count(
+                "documents",
+                filter=Q(documents__document_image__confirmed=True),
+                distinct=True,
+            )
+        )
+        # Split training sets by their validity and their "released" status
+        invalid_trainingsets = []
+        released_trainingsets = []
+        unreleased_trainingsets = []
+        for trainingset in annotated_queryset:
+            if trainingset.document_count < settings.TRAININGSET_MIN_DOCS:
+                invalid_trainingsets.append(trainingset)
+            elif trainingset.released:
+                released_trainingsets.append(trainingset)
+            else:
+                unreleased_trainingsets.append(trainingset)
+        # Show error message for invalid trainingsets
+        if invalid_trainingsets:
+            messages.error(
+                request,
+                ngettext(
+                    "The training set {} could not be released because it contains less than {} vocabulary words with confirmed images.",
+                    "The training sets {} could not be released because they contain less than {} vocabulary words with confirmed images.",
+                    len(invalid_trainingsets),
+                ).format(
+                    iter_to_string(invalid_trainingsets),
+                    settings.TRAININGSET_MIN_DOCS,
+                ),
+            )
+        # Show info message for valid trainingsets that are already released
+        if released_trainingsets:
+            messages.info(
+                request,
+                ngettext(
+                    "The training set {} is already released.",
+                    "The training sets {} are already released.",
+                    len(released_trainingsets),
+                ).format(iter_to_string(released_trainingsets)),
+            )
+        # Update valid trainingsets and show success message
+        if unreleased_trainingsets:
+            # Update valid queryset
+            annotated_queryset.filter(
+                document_count__gte=settings.TRAININGSET_MIN_DOCS
+            ).update(released=True)
+            messages.success(
+                request,
+                ngettext(
+                    "The training set {} was successfully released.",
+                    "The training sets {} were successfully released.",
+                    len(unreleased_trainingsets),
+                ).format(iter_to_string(unreleased_trainingsets)),
+            )
 
     @admin.action(description=_("Unrelease selected training sets"))
     def make_unreleased(self, request, queryset):
@@ -148,7 +207,35 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :param queryset: current queryset
         :type queryset: QuerySet
         """
-        queryset.update(released=False)
+        # Split all training sets by their "released" status
+        released_trainingsets = []
+        unreleased_trainingsets = []
+        for trainingset in queryset:
+            if trainingset.released:
+                released_trainingsets.append(trainingset)
+            else:
+                unreleased_trainingsets.append(trainingset)
+        # Add info messages for training sets that are already unreleased
+        if unreleased_trainingsets:
+            messages.info(
+                request,
+                ngettext(
+                    "The training set {} is already unreleased.",
+                    "The training sets {} are already unreleased.",
+                    len(unreleased_trainingsets),
+                ).format(iter_to_string(unreleased_trainingsets)),
+            )
+        # Get all training sets that are released and need to be updated
+        if released_trainingsets:
+            queryset.update(released=False)
+            messages.success(
+                request,
+                ngettext(
+                    "The training set {} was successfully unreleased.",
+                    "The training sets {} were successfully unreleased.",
+                    len(released_trainingsets),
+                ).format(iter_to_string(released_trainingsets)),
+            )
 
     def related_disciplines(self, obj):
         """

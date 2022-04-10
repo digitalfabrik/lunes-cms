@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-07 09:53+0000\n"
+"POT-Creation-Date: 2022-04-10 15:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,8 +97,8 @@ msgstr ""
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: src/vocgui/admin.py:32 src/vocgui/admins/training_set_admin.py:164
-#: src/vocgui/forms.py:47 src/vocgui/forms.py:49 src/vocgui/list_filter.py:14
+#: src/vocgui/admin.py:32 src/vocgui/admins/training_set_admin.py:251
+#: src/vocgui/forms.py:48 src/vocgui/forms.py:50 src/vocgui/list_filter.py:14
 #: src/vocgui/models/discipline.py:72
 msgid "disciplines"
 msgstr "Modulgruppen"
@@ -109,7 +108,7 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: src/vocgui/admin.py:34 src/vocgui/forms.py:53 src/vocgui/forms.py:54
+#: src/vocgui/admin.py:34 src/vocgui/forms.py:54 src/vocgui/forms.py:55
 #: src/vocgui/models/document.py:104 src/vocgui/models/document.py:105
 msgid "vocabulary"
 msgstr "Vokabeln"
@@ -128,7 +127,7 @@ msgstr "Ausgewählte Modulgruppen zurückhalten"
 
 #: src/vocgui/admins/discipline_admin.py:151
 #: src/vocgui/admins/document_admin.py:149
-#: src/vocgui/admins/training_set_admin.py:182
+#: src/vocgui/admins/training_set_admin.py:269
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -142,7 +141,7 @@ msgid "audio"
 msgstr "Audio"
 
 #: src/vocgui/admins/document_admin.py:187
-#: src/vocgui/models/document_image.py:132
+#: src/vocgui/models/document_image.py:137
 msgid "image"
 msgstr "Bild"
 
@@ -151,19 +150,57 @@ msgstr "Bild"
 msgid "article"
 msgstr "Artikel"
 
-#: src/vocgui/admins/training_set_admin.py:127
+#: src/vocgui/admins/training_set_admin.py:131
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: src/vocgui/admins/training_set_admin.py:140
+#: src/vocgui/admins/training_set_admin.py:166
+msgid ""
+"The training set {} could not be released because it contains less than {} "
+"vocabulary words with confirmed images."
+msgid_plural ""
+"The training sets {} could not be released because they contain less than {} "
+"vocabulary words with confirmed images."
+msgstr[0] ""
+"Das Modul {} konnte nicht veröffentlicht werden, da es weniger als {} "
+"Vokabeln mit bestätigten Bildern enthält."
+msgstr[1] ""
+"Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
+"Vokabeln mit bestätigten Bildern enthalten."
+
+#: src/vocgui/admins/training_set_admin.py:179
+msgid "The training set {} is already released."
+msgid_plural "The training sets {} are already released."
+msgstr[0] "Das Modul {} ist bereits veröffentlicht."
+msgstr[1] "Die Module {} sind bereits veröffentlicht."
+
+#: src/vocgui/admins/training_set_admin.py:193
+msgid "The training set {} was successfully released."
+msgid_plural "The training sets {} were successfully released."
+msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
+msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
+
+#: src/vocgui/admins/training_set_admin.py:199
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
+
+#: src/vocgui/admins/training_set_admin.py:223
+msgid "The training set {} is already unreleased."
+msgid_plural "The training sets {} are already unreleased."
+msgstr[0] "Das Modul {} ist bereits zurückgehalten."
+msgstr[1] "Die Module {} sind bereits zurückgehalten."
+
+#: src/vocgui/admins/training_set_admin.py:234
+msgid "The training set {} was successfully unreleased."
+msgid_plural "The training sets {} were successfully unreleased."
+msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
+msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 
 #: src/vocgui/apps.py:12
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
-#: src/vocgui/forms.py:56
+#: src/vocgui/forms.py:57
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
@@ -171,6 +208,14 @@ msgstr ""
 "Bitte wähle ein paar Vokabeln für dein Modul aus. Um eine Vorschau der "
 "Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
 "Element auswählst."
+
+#: src/vocgui/forms.py:79
+msgid ""
+"You can only release a training set that contains at least {} vocabulary "
+"words with confirmed images."
+msgstr ""
+"Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
+"bestätigten Bildern enthalten."
 
 #: src/vocgui/list_filter.py:155
 msgid "approved images"
@@ -253,7 +298,7 @@ msgstr "Wort"
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: src/vocgui/models/document_image.py:133
+#: src/vocgui/models/document_image.py:138
 msgid "images"
 msgstr "Bilder"
 
@@ -277,6 +322,10 @@ msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
 
+#: src/vocgui/utils.py:135
+msgid "and"
+msgstr "und"
+
 #: src/vocgui/validators.py:20
 msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
 msgstr "Unerlaubtes Dateiformat! Erlaubt: .mp3 .aac .wav .m4a .wma .ogg"
@@ -289,19 +338,19 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: src/voctrainer/settings.py:122
+#: src/voctrainer/settings.py:125
 msgid "English"
 msgstr "Englisch"
 
-#: src/voctrainer/settings.py:123
+#: src/voctrainer/settings.py:126
 msgid "German"
 msgstr "Deutsch"
 
-#: src/voctrainer/settings.py:149 src/voctrainer/settings.py:150
+#: src/voctrainer/settings.py:152 src/voctrainer/settings.py:153
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: src/voctrainer/settings.py:151
+#: src/voctrainer/settings.py:154
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

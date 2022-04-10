@@ -7,6 +7,7 @@ import uuid
 import string
 import pathlib
 from django.utils.crypto import get_random_string
+from django.utils.translation import ugettext as _
 
 
 def create_ressource_path(parent_dir, filename):
@@ -110,3 +111,27 @@ def get_key(request, keyword="Api-Key"):
     except ValueError:
         key = None
     return key
+
+
+def iter_to_string(iter):
+    """
+    Convert an iterable of objects to a readable string.
+    It joins the first elements with commas and separates the last element by "and".
+
+    :param iter: The input iterable
+    :type iter: ~collections.abc.Iterable
+
+    :return: The joined list
+    :rtype: str
+    """
+    # Convert iterable to list to support querysets etc.
+    lst = list(iter)
+    # If the list contains more than 1 element, save the last element for later
+    last_element = lst.pop() if len(lst) > 1 else None
+    # Join remaining elements with commas and surrounding quotes
+    list_str = '"' + '", "'.join(map(str, lst)) + '"'
+    # Append the last element with "and"
+    if last_element:
+        list_str += " " + _("and") + f' "{last_element}"'
+    # Return final string
+    return list_str
