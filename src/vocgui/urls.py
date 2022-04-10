@@ -39,7 +39,7 @@ schema_view = get_schema_view(
 # Router for dynamic url patterns
 router = OptionalSlashRouter()
 router.register(
-    r"disciplines(?:/(?P<group_id>[\d+&]+))?",
+    r"disciplines",
     views.DisciplineViewSet,
     "disciplines",
 )

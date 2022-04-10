@@ -105,8 +105,9 @@ If the passed discipline id belongs to a custom user group (not to the Lunes adm
 ```
 
 
-### Disciplines without child elements (deprecated)
-This endpoint only delivers disciplines that do not have any child elements. Generally, it is advised to use the newer version of this endpoint (see above). However, to keep Lunes functioning for people who haven't installed the recent update, this feature is still available.
+### All disciplines
+This endpoint delivers all disciplines, either all global disciplines or filtered by the given API key.
+A single record can be retrieved by appending the id of the requested discipline.
 
 #### Request
 ```http
