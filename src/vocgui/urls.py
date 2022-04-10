@@ -63,6 +63,7 @@ router.register(
 router.register(
     r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
 )
+router.register(r"words", views.WordViewSet, "words")
 router.register(
     r"group_info",
     views.GroupViewSet,
