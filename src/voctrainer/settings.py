@@ -146,8 +146,9 @@ else:
 
 # UI/UX
 JAZZMIN_SETTINGS = {
-    "site_title": "Lunes CMS",
-    "welcome_sign": "Willkommen bei der Vokabelverwaltung von Lunes!",
+    "site_brand": _("Lunes Administration"),
+    "site_title": _("Lunes Administration"),
+    "welcome_sign": _("Welcome to the vocabulary management of Lunes!"),
     "site_header": "Lunes",
     "site_logo": "images/logo.png",
     "changeform_format": "collapsible",
