@@ -13,7 +13,7 @@
 # certbot renew --post-hook "systemctl restart apache2"
 
 <VirtualHost *:80>
-        DocumentRoot /var/www/html/
+        DocumentRoot /var/www/lunes-cms/
         ServerName example.com
         RewriteEngine on
         RewriteCond %{REQUEST_URI} !^\/\.well-known\/
@@ -22,7 +22,7 @@
 
 <VirtualHost *:443>
         ServerName example.com:443
-        DocumentRoot /var/www/html
+        DocumentRoot /var/www/lunes-cms
 
         SSLEngine On
         SSLCertificateFile /etc/letsencrypt/live/example.com/cert.pem

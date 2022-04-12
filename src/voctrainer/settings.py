@@ -11,47 +11,56 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from distutils.util import strtobool
+
 from django.utils.translation import ugettext_lazy as _
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from .logging_formatter import ColorFormatter
+
+
+###################
+# CUSTOM SETTINGS #
+###################
+
+#: Build paths inside the project like this: ``os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "uh&@a5u4q1!%ndkoh$8wcp8^g2w0hxwk!2m&6c@!0)beiclggf"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 #: How many documents a training sets needs at least to get released
-TRAININGSET_MIN_DOCS = 4
+TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 
-# Application definition
 
+########################
+# DJANGO CORE SETTINGS #
+########################
+
+#: A boolean that turns on/off debug mode (see :setting:`django:DEBUG`)
+#:
+#: .. warning::
+#:     Never deploy a site into production with :setting:`DEBUG` turned on!
+DEBUG = bool(strtobool(os.environ.get("LUNES_CMS_DEBUG", "False")))
+
+#: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
+    # Installed custom apps
+    "vocgui",
+    # Django jazzmin needs to be installed before Django admin
     "jazzmin",
+    # Installed Django apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sessions",
     "django.contrib.staticfiles",
-    "vocgui",
+    # Installed third-party-apps
+    "drf_yasg",
+    "mptt",
+    "pydub",
     "rest_framework",
     "rest_framework_api_key",
-    "drf_yasg",
-    "pydub",
-    "mptt",
 ]
 
-REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
-}
-
+#: Activated middlewares (see :setting:`django:MIDDLEWARE`)
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -63,8 +72,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+#: Default URL dispatcher (see :setting:`django:ROOT_URLCONF`)
 ROOT_URLCONF = "voctrainer.urls"
 
+#: Config for HTML templates (see :setting:`django:TEMPLATES`)
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -81,11 +92,23 @@ TEMPLATES = [
     },
 ]
 
+#: WSGI (Web Server Gateway Interface) config (see :setting:`django:WSGI_APPLICATION`)
 WSGI_APPLICATION = "voctrainer.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+#: The URL or named URL pattern where requests are redirected for login (see :setting:`django:LOGIN_URL`)
+LOGIN_URL = "/admin/login/"
 
+#: The URL or named URL pattern where requests are redirected after login when the
+#: LoginView doesn't get a next GET parameter. (see :setting:`django:LOGIN_REDIRECT_URL`).
+LOGIN_REDIRECT_URL = "/admin/"
+
+
+############
+# DATABASE #
+############
+
+#: A dictionary containing the settings for all databases to be used with this Django installation
+#: (see :setting:`django:DATABASES`)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -93,9 +116,32 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
+############
+# SECURITY #
+############
+
+#: This is a security measure to prevent HTTP Host header attacks, which are possible even under many seemingly-safe
+#: web server configurations (see :setting:`django:ALLOWED_HOSTS` and :ref:`django:host-headers-virtual-hosting`)
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"] + list(
+    filter(
+        None,
+        (x.strip() for x in os.environ.get("LUNES_CMS_ALLOWED_HOSTS", "").splitlines()),
+    )
+)
+
+#: A list of IP addresses, as strings, that allow the :func:`~django.template.context_processors.debug` context
+#: processor to add some variables to the template context.
+INTERNAL_IPS = ["localhost", "127.0.0.1"]
+
+#: The secret key for this particular Django installation (see :setting:`django:SECRET_KEY`)
+#:
+#: .. warning::
+#:     Provide a key via the environment variable ``LUNES_CMS_SECRET_KEY`` in production and keep it secret!
+SECRET_KEY = os.environ.get("LUNES_CMS_SECRET_KEY", "dummy" if DEBUG else "")
+
+#: The list of validators that are used to check the strength of user's passwords.
+#: See Password validation for more details. By default, no validation is performed and all passwords are accepted.
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -111,43 +157,236 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
 
+########################
+# INTERNATIONALIZATION #
+########################
 
+#: A list of directories where Django looks for translation files
+#: (see :setting:`django:LOCALE_PATHS` and :doc:`topics/i18n/index`)
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
+#: A string representing the language slug for this installation
+#: (see :setting:`django:LANGUAGE_CODE` and :doc:`topics/i18n/index`)
 LANGUAGE_CODE = "en"
 
+#: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`topics/i18n/index`)
 LANGUAGES = [
     ("en", _("English")),
     ("de", _("German")),
 ]
 
+#: A string representing the time zone for this installation
+#: (see :setting:`django:TIME_ZONE` and :doc:`topics/i18n/index`)
 TIME_ZONE = "UTC"
 
+#: A boolean that specifies whether Django’s translation system should be enabled
+#: (see :setting:`django:USE_I18N` and :doc:`topics/i18n/index`)
 USE_I18N = True
 
+#: A boolean that specifies if localized formatting of data will be enabled by default or not
+#: (see :setting:`django:USE_L10N` and :doc:`topics/i18n/index`)
 USE_L10N = True
 
+#: A boolean that specifies if datetimes will be timezone-aware by default or not
+#: (see :setting:`django:USE_TZ` and :doc:`topics/i18n/index`)
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+################
+# STATIC FILES #
+################
+
+#: URL to use in development when referring to static files located in :setting:`STATICFILES_DIRS`
+#: (see :setting:`django:STATIC_URL` and :doc:`Managing static files <django:howto/static-files/index>`)
 STATIC_URL = "/static/"
-if not DEBUG:
-    STATIC_ROOT = "/var/www/html/static/"
 
+#: The absolute path to the output directory where :mod:`django.contrib.staticfiles` will put static files for
+#: deployment (see :setting:`django:STATIC_ROOT` and :doc:`Managing static files <django:howto/static-files/index>`)
+#: In debug mode, this is not required since :mod:`django.contrib.staticfiles` can directly serve these files.
+STATIC_ROOT = os.environ.get("LUNES_CMS_STATIC_ROOT")
+
+#: URL that handles the media served from :setting:`MEDIA_ROOT` (see :setting:`django:MEDIA_URL`)
 MEDIA_URL = "/media/"
-if DEBUG:
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-else:
-    MEDIA_ROOT = "/var/www/html/media/"
 
-# UI/UX
+#: Absolute filesystem path to the directory that will hold user-uploaded files (see :setting:`django:MEDIA_ROOT`)
+MEDIA_ROOT = os.environ.get("LUNES_CMS_MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
+
+
+##########
+# EMAILS #
+##########
+
+if DEBUG:
+    #: The backend to use for sending emails (see :setting:`django:EMAIL_BACKEND` and :doc:`django:topics/email`)
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+#: The email address that error messages come from, such as those sent to :setting:`django:ADMINS`.
+#: (see :setting:`django:SERVER_EMAIL`)
+SERVER_EMAIL = os.environ.get("LUNES_CMS_SERVER_EMAIL", "keineantwort@lunes.app")
+
+#: Default email address to use for various automated correspondence from the site manager(s)
+#: (see :setting:`django:DEFAULT_FROM_EMAIL`)
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
+
+#: The host to use for sending email (see :setting:`django:EMAIL_HOST`)
+EMAIL_HOST = os.environ.get("LUNES_CMS_EMAIL_HOST", "localhost")
+
+#: Password to use for the SMTP server defined in :attr:`~voctrainer.settings.EMAIL_HOST`
+#: (see :setting:`django:EMAIL_HOST_PASSWORD`). If empty, Django won’t attempt authentication.
+EMAIL_HOST_PASSWORD = os.environ.get("LUNES_CMS_EMAIL_HOST_PASSWORD")
+
+#: Username to use for the SMTP server defined in :attr:`~voctrainer.settings.EMAIL_HOST`
+#: (see :setting:`django:EMAIL_HOST_USER`). If empty, Django won’t attempt authentication.
+EMAIL_HOST_USER = os.environ.get("LUNES_CMS_EMAIL_HOST_USER", SERVER_EMAIL)
+
+#: Port to use for the SMTP server defined in :attr:`~voctrainer.settings.EMAIL_HOST`
+#: (see :setting:`django:EMAIL_PORT`)
+EMAIL_PORT = int(os.environ.get("LUNES_CMS_EMAIL_PORT", 587))
+
+#: Whether to use a TLS (secure) connection when talking to the SMTP server.
+#: This is used for explicit TLS connections, generally on port 587.
+#: (see :setting:`django:EMAIL_USE_TLS`)
+EMAIL_USE_TLS = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_TLS", "True")))
+
+#: Whether to use an implicit TLS (secure) connection when talking to the SMTP server.
+#: In most email documentation this type of TLS connection is referred to as SSL. It is generally used on port 465.
+#: (see :setting:`django:EMAIL_USE_SSL`)
+EMAIL_USE_SSL = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_SSL", "False")))
+
+
+###########
+# LOGGING #
+###########
+
+#: The log level for lunes-cms django apps
+LOG_LEVEL = os.environ.get("LUNES_CMS_LOG_LEVEL", "DEBUG" if DEBUG else "INFO")
+
+#: The log level for the syslog
+SYS_LOG_LEVEL = "INFO"
+
+#: The log level for dependencies
+DEPS_LOG_LEVEL = os.environ.get("LUNES_CMS_DEPS_LOG_LEVEL", "INFO" if DEBUG else "WARN")
+
+#: The file path of the logfile. Needs to be writable by the application.
+LOGFILE = os.environ.get("LUNES_CMS_LOGFILE", os.path.join(BASE_DIR, "lunes-cms.log"))
+
+#: Logging configuration dictionary (see :setting:`django:LOGGING`)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {
+            "format": "{asctime} \x1b[1m{levelname}\x1b[0m {name} - {message}",
+            "datefmt": "%b %d %H:%M:%S",
+            "style": "{",
+        },
+        "console-colored": {
+            "()": ColorFormatter,
+            "format": "{asctime} {levelname} {name} - {message}",
+            "datefmt": "%b %d %H:%M:%S",
+            "style": "{",
+        },
+        "logfile": {
+            "format": "{asctime} {levelname:7} {name} - {message}",
+            "datefmt": "%b %d %H:%M:%S",
+            "style": "{",
+        },
+        "syslog": {
+            "format": "LUNES CMS - {levelname}: {message}",
+            "style": "{",
+        },
+        "email": {
+            "format": "Date and time: {asctime}\nSeverity: {levelname}\nLogger: {name}\nMessage: {message}\nFile: {funcName}() in {pathname}:{lineno}",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+    },
+    "handlers": {
+        "console": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+        },
+        "console-colored": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console-colored",
+        },
+        "logfile": {
+            "class": "logging.FileHandler",
+            "filename": LOGFILE,
+            "formatter": "logfile",
+        },
+        "authlog": {
+            "filters": ["require_debug_false"],
+            "class": "logging.handlers.SysLogHandler",
+            "address": "/dev/log",
+            "facility": "auth",
+            "formatter": "syslog",
+        },
+        "syslog": {
+            "filters": ["require_debug_false"],
+            "class": "logging.handlers.SysLogHandler",
+            "address": "/dev/log",
+            "facility": "syslog",
+        },
+    },
+    "loggers": {
+        # Loggers of lunes-cms django apps
+        "vocgui": {
+            "handlers": ["console-colored", "logfile"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        # Syslog for authentication
+        "auth": {
+            "handlers": ["console", "logfile", "authlog", "syslog"],
+            "level": SYS_LOG_LEVEL,
+            "propagate": False,
+        },
+        # Loggers of dependencies
+        "django": {
+            "handlers": ["console", "logfile"],
+            "level": DEPS_LOG_LEVEL,
+            "propagate": False,
+        },
+        "": {
+            "handlers": ["console", "logfile"],
+            "level": DEPS_LOG_LEVEL,
+            "propagate": True,
+        },
+    },
+}
+
+
+#########################
+# DJANGO REST FRAMEWORK #
+#########################
+
+#: Configuration of Django REST Framework
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+}
+
+
+##################
+# DJANGO JAZZMIN #
+##################
+
+#: Basic settings for Django Jazzmin
 JAZZMIN_SETTINGS = {
     "site_brand": _("Lunes Administration"),
     "site_title": _("Lunes Administration"),
@@ -168,6 +407,7 @@ JAZZMIN_SETTINGS = {
     },
 }
 
+#: UI tweaks for Django Jazzmin
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
     "footer_small_text": False,

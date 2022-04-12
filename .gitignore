@@ -10,3 +10,4 @@ dist
 .coverage
 docs/
 sphinx/ref/
+src/lunes-cms.log
