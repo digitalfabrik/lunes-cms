@@ -1,19 +1,19 @@
 from django.db import migrations, models
-import vocgui.models.static
+import lunes_cms.cms.models.static
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0012_alter_user_first_name_max_length'),
-        ('vocgui', '0031_alter_discipline_created_by'),
+        ('cms', '0031_alter_discipline_created_by'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='group',
             name='icon',
-            field=models.ImageField(blank=True, upload_to=vocgui.models.static.convert_umlaute_images, verbose_name='icon'),
+            field=models.ImageField(blank=True, upload_to=lunes_cms.cms.models.static.convert_umlaute_images, verbose_name='icon'),
         ),
     ]
     def mutate_state(self, project_state, preserve=True):

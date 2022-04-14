@@ -4,7 +4,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0027_merge_20210622_1700'),
+        ('cms', '0027_merge_20210622_1700'),
     ]
 
     operations = [

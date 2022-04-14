@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0012_auto_20210323_1842'),
+        ('cms', '0012_auto_20210323_1842'),
     ]
 
     operations = [
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=255)),
                 ('image', models.ImageField(upload_to='images/')),
-                ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='document_image', to='vocgui.document')),
+                ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='document_image', to='cms.document')),
             ],
         ),
     ]

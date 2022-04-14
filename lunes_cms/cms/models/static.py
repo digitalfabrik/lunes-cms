@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from vocgui.utils import create_ressource_path
+from ..utils import create_ressource_path
 
 
 class Static:

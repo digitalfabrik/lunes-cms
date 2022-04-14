@@ -1,9 +1,11 @@
-from rest_framework import viewsets
 from django.core.exceptions import PermissionDenied
-from django.db.models import F, Q, Count
-from vocgui.models import Discipline, GroupAPIKey
-from vocgui.serializers import DisciplineSerializer
-from vocgui.utils import get_key
+from django.db.models import Q, Count
+
+from rest_framework import viewsets
+
+from ..models import Discipline, GroupAPIKey
+from ..serializers import DisciplineSerializer
+from .utils import get_key
 
 
 class DisciplineViewSet(viewsets.ModelViewSet):

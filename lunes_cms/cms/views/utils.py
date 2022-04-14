@@ -1,8 +1,8 @@
 from django.db.models import Count, Q
 from django.core.exceptions import PermissionDenied
-from vocgui.models import Discipline
-from vocgui.utils import get_child_count, get_key
-from vocgui.models import GroupAPIKey
+
+from ..models import Discipline, GroupAPIKey
+from ..utils import get_child_count, get_key
 
 
 def get_filtered_discipline_queryset(discipline_view_set):
@@ -79,7 +79,7 @@ def get_non_empty_disciplines(queryset):
     Filters a discipline queryset so that every element recursively either have
     at least one sub-discipline or one training set.
 
-    :param queryset: Queryset of `vocgui.Discipline` objects
+    :param queryset: Queryset of `~lunes_cms.cms.models.Discipline` objects
     :type queryset: QuerySet
     :return: (filtered) queryset
     :rtype: QuerySet

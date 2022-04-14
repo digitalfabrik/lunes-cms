@@ -1,8 +1,10 @@
-from rest_framework import viewsets
 from django.db.models import Count, Q
-from vocgui.models import TrainingSet
-from vocgui.serializers import TrainingSetSerializer
-from vocgui.models import Discipline
+
+from rest_framework import viewsets
+
+from ..models import TrainingSet
+from ..serializers import TrainingSetSerializer
+from ..models import Discipline
 from .utils import check_group_object_permissions
 
 

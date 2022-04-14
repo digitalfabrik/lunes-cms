@@ -6,7 +6,7 @@ import sys
 
 
 def read_config():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voctrainer.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lunes_cms.core.settings")
 
     # Read config from config file
     config = configparser.ConfigParser(interpolation=None)

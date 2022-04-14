@@ -1,7 +1,7 @@
 from rest_framework import viewsets
-from vocgui.models import Document
-from vocgui.serializers import DocumentSerializer
-from vocgui.models import TrainingSet
+
+from ..models import Document, TrainingSet
+from ..serializers import DocumentSerializer
 from .utils import check_group_object_permissions
 
 

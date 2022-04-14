@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
                 ('description', models.CharField(blank=True, max_length=255)),
-                ('documents', models.ManyToManyField(related_name='training_sets', to='vocgui.Document')),
+                ('documents', models.ManyToManyField(related_name='training_sets', to='cms.Document')),
             ],
             options={
                 'verbose_name': 'Lektion',

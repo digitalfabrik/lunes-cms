@@ -1,17 +1,19 @@
 import os
+
 from pathlib import Path
-from django.db import models
-from pydub import AudioSegment
 from django.core.files import File
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .static import Static, convert_umlaute_audio
-from vocgui.validators import (
+from pydub import AudioSegment
+
+from ..utils import document_to_string
+from ..validators import (
     validate_file_extension,
     validate_file_size,
     validate_multiple_extensions,
 )
-from vocgui.utils import document_to_string
+from .static import Static, convert_umlaute_audio
 
 
 class Document(models.Model):

@@ -8,7 +8,7 @@ import image_cropping.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0006_auto_20200825_1216'),
+        ('cms', '0006_auto_20200825_1216'),
     ]
 
     operations = [
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='trainingset',
             name='discipline',
-            field=models.ManyToManyField(related_name="training_sets", to='vocgui.Discipline'),
+            field=models.ManyToManyField(related_name="training_sets", to='cms.Discipline'),
             preserve_default=False,
         ),
     ]

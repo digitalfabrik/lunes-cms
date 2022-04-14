@@ -1,11 +1,12 @@
 from django.db import models
-from PIL import Image, ImageFilter
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
+from PIL import Image, ImageFilter
+
+from ..validators import validate_multiple_extensions
 from .static import Static, convert_umlaute_images
 from .document import Document
-from vocgui.validators import validate_multiple_extensions
 
 
 class DocumentImage(models.Model):

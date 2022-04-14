@@ -1,11 +1,11 @@
-import typing
-from django.db import models
-from rest_framework_api_key.crypto import KeyGenerator
-from rest_framework_api_key.models import AbstractAPIKey
-from rest_framework_api_key.models import BaseAPIKeyManager
 from django.contrib.auth.models import Group
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from vocgui.utils import get_random_key
+
+from rest_framework_api_key.crypto import KeyGenerator
+from rest_framework_api_key.models import AbstractAPIKey, BaseAPIKeyManager
+
+from ..utils import get_random_key
 
 
 class CustomKeyGenerator(KeyGenerator):

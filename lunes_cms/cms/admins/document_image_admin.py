@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from vocgui.models import DocumentImage
+from ..models import DocumentImage
 
 
 class DocumentImageAdmin(admin.StackedInline):

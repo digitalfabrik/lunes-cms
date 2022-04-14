@@ -1,5 +1,5 @@
 """
-WSGI config for voctrainer project.
+WSGI config for lunes-cms project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -26,7 +26,7 @@ def application(environ, start_response):
     :return: The WSGI callable
     :rtype: ~django.core.handlers.WSGIHandler
     """
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voctrainer.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lunes_cms.core.settings")
 
     # Read config from config file
     config = configparser.ConfigParser(interpolation=None)

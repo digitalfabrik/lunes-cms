@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0012_alter_user_first_name_max_length'),
-        ('vocgui', '0020_alter_document_creation_date'),
+        ('cms', '0020_alter_document_creation_date'),
     ]
 
     operations = [

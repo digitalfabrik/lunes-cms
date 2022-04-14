@@ -1,7 +1,7 @@
 from rest_framework import viewsets
-from vocgui.models import Discipline
-from vocgui.serializers import DisciplineSerializer
 
+from ..models import Discipline
+from ..serializers import DisciplineSerializer
 from .utils import (
     get_filtered_discipline_queryset,
     get_discipline_by_group_queryset,

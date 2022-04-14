@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from vocgui.models import Document
-from vocgui.serializers import DocumentSerializer
+
+from ..models import Document
+from ..serializers import DocumentSerializer
 
 
 class WordViewSet(viewsets.ModelViewSet):

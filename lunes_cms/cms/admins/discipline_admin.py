@@ -1,9 +1,11 @@
 from __future__ import absolute_import, unicode_literals
+
 from django.contrib import admin
-from mptt.admin import DraggableMPTTAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from vocgui.models import Static, Discipline
+from mptt.admin import DraggableMPTTAdmin
+
+from ..models import Static, Discipline
 
 
 class DisciplineAdmin(DraggableMPTTAdmin):

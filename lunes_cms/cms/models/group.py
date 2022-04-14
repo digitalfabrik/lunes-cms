@@ -1,7 +1,8 @@
 from django.contrib.auth.models import Group
 from django.db import models
-from .static import convert_umlaute_images
 from django.utils.translation import ugettext_lazy as _
+
+from .static import convert_umlaute_images
 
 Group.add_to_class(
     "icon",

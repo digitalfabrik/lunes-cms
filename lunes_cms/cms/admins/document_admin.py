@@ -1,17 +1,18 @@
 from __future__ import absolute_import, unicode_literals
+
 from django.contrib import admin
 from django.db.models import Case, Exists, IntegerField, OuterRef, Value, When
 from django.utils.translation import ugettext_lazy as _
 
-from .document_image_admin import DocumentImageAdmin
-from .alternative_word_admin import AlternativeWordAdmin
-from vocgui.list_filter import (
+from ..list_filter import (
     DocumentDisciplineListFilter,
     DocumentTrainingSetListFilter,
     ApprovedImageListFilter,
     AssignedListFilter,
 )
-from vocgui.models import Static, DocumentImage
+from ..models import Static, DocumentImage
+from .document_image_admin import DocumentImageAdmin
+from .alternative_word_admin import AlternativeWordAdmin
 
 
 SUPERUSER_ONLY_LIST_FILTERS = [ApprovedImageListFilter]

@@ -1,13 +1,15 @@
 """
-Tests for vocgui.utils files
+Tests for lunes_cms.cms.utils files
 """
 
 import string
+
 from django.test import TestCase
-from vocgui.models import Document
-from vocgui.models.discipline import Discipline
-from vocgui.models.training_set import TrainingSet
-from vocgui.utils import (
+
+from lunes_cms.cms.models import Document
+from lunes_cms.cms.models.discipline import Discipline
+from lunes_cms.cms.models.training_set import TrainingSet
+from lunes_cms.cms.utils import (
     get_random_key,
     document_to_string,
     get_child_count,

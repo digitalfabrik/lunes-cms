@@ -61,7 +61,7 @@ class TrainingSetForm(forms.ModelForm):
     def clean(self):
         """
         Make sure the training set is only released when it contains at least as many vocabularies as defined in
-        :attr:`voctrainer.settings.TRAININGSET_MIN_DOCS`.
+        :attr:`~lunes_cms.core.settings.TRAININGSET_MIN_DOCS`.
 
         :return: The cleaned data for this form
         :rtype: dict

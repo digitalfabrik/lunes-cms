@@ -16,7 +16,7 @@ def unrelease_invalid_trainingsets(apps, schema_editor):
     :type schema_editor: ~django.db.backends.base.schema.BaseDatabaseSchemaEditor
     """
     # Get model instead of importing to support historic migration even if the TrainingSet gets changed or deleted
-    TrainingSet = apps.get_model("vocgui", "TrainingSet")
+    TrainingSet = apps.get_model("cms", "TrainingSet")
     # Get queryset of all invalid trainingsets in the database
     queryset = TrainingSet.objects.annotate(
         document_count=Count(
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("vocgui", "0036_auto_20211204_1252"),
+        ("cms", "0036_auto_20211204_1252"),
     ]
 
     operations = [

@@ -8,13 +8,13 @@ import mptt.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0029_auto_20210721_1141'),
+        ('cms', '0029_auto_20210721_1141'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='discipline',
             name='parent',
-            field=mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='vocgui.discipline', verbose_name='parent'),
+            field=mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='cms.discipline', verbose_name='parent'),
         ),
     ]

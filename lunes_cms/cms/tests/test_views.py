@@ -1,15 +1,17 @@
 """
-Tests for vocgui.views files
+Tests for lunes_cms.cms.views files
 """
 
 from django.test import TestCase
-from rest_framework.test import APIClient
-from vocgui.models import GroupAPIKey
-from vocgui.models.discipline import Discipline
-from vocgui.models.document import Document
-from vocgui.models.training_set import TrainingSet
-from rest_framework import status
 from django.contrib.auth.models import Group, User
+
+from rest_framework import status
+from rest_framework.test import APIClient
+
+from lunes_cms.cms.models import GroupAPIKey
+from lunes_cms.cms.models.discipline import Discipline
+from lunes_cms.cms.models.document import Document
+from lunes_cms.cms.models.training_set import TrainingSet
 
 client = APIClient()
 

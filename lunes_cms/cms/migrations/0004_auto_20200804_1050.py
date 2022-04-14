@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0003_auto_20200729_0746'),
+        ('cms', '0003_auto_20200729_0746'),
     ]
 
     operations = [
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('alt_word', models.CharField(max_length=255)),
-                ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='alternatives', to='vocgui.Document')),
+                ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='alternatives', to='cms.Document')),
             ],
             options={
                 'verbose_name': 'Alternatives Wort',

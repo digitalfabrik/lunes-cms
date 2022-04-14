@@ -2,8 +2,6 @@ from django.contrib.auth.models import Group
 from django.templatetags.static import static
 from rest_framework import serializers
 
-from vocgui.models import training_set
-
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .utils import get_child_count
 

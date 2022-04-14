@@ -7,10 +7,10 @@ from django.utils.translation import ugettext_lazy as _, ngettext
 
 from mptt.admin import DraggableMPTTAdmin
 
-from vocgui.list_filter import DisciplineListFilter
-from vocgui.forms import TrainingSetForm
-from vocgui.models import Static, Document, Discipline
-from vocgui.utils import iter_to_string
+from ..list_filter import DisciplineListFilter
+from ..forms import TrainingSetForm
+from ..models import Static, Document, Discipline
+from ..utils import iter_to_string
 
 
 class TrainingSetAdmin(DraggableMPTTAdmin):

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0019_auto_20210523_0936'),
+        ('cms', '0019_auto_20210523_0936'),
     ]
 
     operations = [

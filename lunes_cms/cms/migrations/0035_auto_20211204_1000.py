@@ -11,7 +11,7 @@ def rebuild_tree(apps, schema_editor):
     fields is generally set to 0. In order to make mptt work it is necessary
     to run TrainingSet.objects.rebuild() before running the server.
     """
-    training_set_model = apps.get_model("vocgui", "TrainingSet")
+    training_set_model = apps.get_model("cms", "TrainingSet")
     manager = managers.TreeManager()
     manager.model = training_set_model
     register(training_set_model)
@@ -21,7 +21,7 @@ def rebuild_tree(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0034_alter_groupapikey_options'),
+        ('cms', '0034_alter_groupapikey_options'),
     ]
 
     operations = [
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='trainingset',
             name='parent',
-            field=fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='vocgui.trainingset', verbose_name='parent'),
+            field=fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='cms.trainingset', verbose_name='parent'),
         ),
         migrations.AddField(
             model_name='trainingset',

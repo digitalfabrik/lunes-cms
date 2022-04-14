@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocgui', '0015_alter_document_audio'),
+        ('cms', '0015_alter_document_audio'),
     ]
 
     operations = [
