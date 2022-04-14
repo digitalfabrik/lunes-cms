@@ -5,5 +5,5 @@ Lunes CMS
    :maxdepth: 2
    :caption: Contents
 
-   ref/vocgui
-   ref/voctrainer
+   ref/cms
+   ref/core

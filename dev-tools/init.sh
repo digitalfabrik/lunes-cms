@@ -4,5 +4,5 @@ if [ -e "$file" ]; then
   rm $file
 fi
 
-src/vocabulary-trainer migrate
-src/vocabulary-trainer shell < dev-tools/create_user.py
+lunes_cms/lunes-cms-cli migrate
+lunes_cms/lunes-cms-cli shell < dev-tools/create_user.py

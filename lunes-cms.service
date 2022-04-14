@@ -4,8 +4,8 @@ After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/vocabulary-trainer runserver 8080
-User=vocabulary-trainer
+ExecStart=/usr/local/bin/lunes-cms runserver 8080
+User=lunes-cms
 
 [Install]
 WantedBy=multi-user.target

@@ -20,7 +20,7 @@ fi
 
 # Generate .rst files
 echo -e "Scanning Python source code and generating reStructuredText files from it..." | print_info
-sphinx-apidoc --no-toc --module-first -o ${SPHINX_APIDOC_DIR} "src" "src/vocgui/migrations"
+sphinx-apidoc --no-toc --module-first -o ${SPHINX_APIDOC_DIR} "lunes_cms" "lunes_cms/cms/migrations"
 
 # Modify .rst files to remove unnecessary submodule- & subpackage-titles
 # Example: "integreat_cms.cms.models.push_notifications.push_notification_translation module" becomes "Push Notification Translation"

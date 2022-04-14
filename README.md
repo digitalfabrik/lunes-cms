@@ -5,7 +5,7 @@
 # Lunes CMS
 [![Logo](.github/logo.png) Lunes - Vocabulary for your profession.](https://www.lunes.app)
 
-This is a Django 2 based content management system for the vocabulary trainer app Lunes, a project powered by the Tür an Tür [Digital Factory](https://tuerantuer.de/digitalfabrik/). The main goal is to develop an application which facilitates migrants to acquire technical and subject-specific vocabulary. For more information please see our [GoVolunteer ad](https://translate.google.com/translate?hl=en&sl=de&tl=en&u=https%3A%2F%2Fgovolunteer.com%2Fde%2Fprojects%2Fehrenamtliche-entwickler-innen-fur-vokabeltrainer). 
+This is a Django 2 based content management system for the vocabulary trainer app Lunes, a project powered by the Tür an Tür [Digital Factory](https://tuerantuer.de/digitalfabrik/). The main goal is to develop an application which facilitates migrants to acquire technical and subject-specific vocabulary. For more information please see our [GoVolunteer ad](https://translate.google.com/translate?hl=en&sl=de&tl=en&u=https%3A%2F%2Fgovolunteer.com%2Fde%2Fprojects%2Fehrenamtliche-entwickler-innen-fur-vokabeltrainer).
 
 # License
 This project is licensed with the Apache 2.0 License.
@@ -61,9 +61,9 @@ Content-Type: application/json
     {
         "id": Integer,                  // ID of discipline
         "title": String,                // title of discipline
-        "description": String,          // description of discipline 
+        "description": String,          // description of discipline
         "icon": String,                 // URL to image
-        "created_by": Integer           // Creator group id, null if created by admin 
+        "created_by": Integer           // Creator group id, null if created by admin
         "total_training_sets": Integer  // # of training sets
         "total_discipline_children": Integer // # of child disciplines
         "nested_training_sets": List[Integer] // training set ids of discipline and its child elements
@@ -95,9 +95,9 @@ If the passed discipline id belongs to a custom user group (not to the Lunes adm
     {
         "id": Integer,                  // ID of discipline
         "title": String,                // title of discipline
-        "description": String,          // description of discipline 
+        "description": String,          // description of discipline
         "icon": String,                 // URL to image
-        "created_by": Integer           // Creator group id, null if created by admin 
+        "created_by": Integer           // Creator group id, null if created by admin
         "total_training_sets": Integer  // # of training sets
         "total_discipline_children": Integer // # of child disciplines
         "nested_training_sets": List[Integer] // training set ids of discipline and its child elements
@@ -125,9 +125,9 @@ The default endpoint delivers all disciplines created by Lunes administrators.
     {
         "id": Integer,                  // ID of discipline
         "title": String,                // title of discipline
-        "description": String,          // description of discipline 
+        "description": String,          // description of discipline
         "icon": String,                 // URL to image
-        "created_by": Integer           // Creator group id, null if created by admin 
+        "created_by": Integer           // Creator group id, null if created by admin
         "total_training_sets": Integer  // # of training sets
         "total_discipline_children": Integer // # of child disciplines
         "nested_training_sets": List[Integer] // training set ids of discipline and its child elements
@@ -150,7 +150,7 @@ Content-Type: application/json
     {
         "id": Integer,             // ID of training set
         "title": String,           // title of discipline
-        "details": String,         // details about training set 
+        "details": String,         // details about training set
         "icon": String,            // URL to image
         "total_documents": Integer // # of documents
     }
@@ -244,21 +244,19 @@ Here's how to get the site running on your machine.
 1. Get into a Unix-like environment
     - If you're on Windows, install the Windows Subsystem for Linux. Then execute `wsl bash` and continue with the commands below.
     - If you're already on Linux/Mac, no action needed.
-2. Clone the repository: `git clone git@github.com:digitalfabrik/lunes-cms.git`
-3. Move into the direcotry: `cd lunes-cms`
-4. Set up virtual environment of choice with a current `pip` and `setuptools` version. For example (using Debian):
+2. Install system dependencies: `cat requirements.system | xargs sudo apt-get install`
+3. Clone the repository: `git clone git@github.com:digitalfabrik/lunes-cms.git`
+4. Move into the directory: `cd lunes-cms`
+5. Set up and activate a virtual environment of choice with a current `pip` version. For example (using Debian):
     - `apt install python3-venv`
     - `python3 -m venv .venv`
     - `source .venv/bin/activate`
-    - `pip install -U pip setuptools`
-    - `pip install wheel`
-5. Install system dependencies: `cat requirements.system | xargs sudo apt-get install`
-6. Install project dependencies: `python3 setup.py develop`
-7. Run `lunes-cms` in debug mode by executing `export LUNES_CMS_DEBUG=1` 
+6. Install project locally including pip dependencies: `pip install -e .[dev,doc]`
+7. Run `lunes-cms` in debug mode by executing `export LUNES_CMS_DEBUG=1`
 8. Set up Django and run the development server:
-    - `vocabulary-trainer migrate`
-    - `vocabulary-trainer createsuperuser`
-    - `vocabulary-trainer runserver`
+    - `lunes-cms-cli migrate`
+    - `lunes-cms-cli createsuperuser`
+    - `lunes-cms-cli runserver`
 
 Now that you've gotten everything set up, to run the development server in
 the future, all you'll need to do is activate your virtual environment
@@ -273,13 +271,13 @@ Further Documentation can be found by accessing `/redoc` or `/swagger`.
 
 
 # Production Deployment
-1. `adduser vocabulary-trainer`
+1. `adduser lunes-cms`
 2. `git clone git@github.com:digitalfabrik/lunes-cms.git`
 3. `cd lunes-cms`
 4. `python3 setup.py install`
 5. `cat requirements.system | xargs sudo apt-get`
-6. Change database settings in settings.py, for example to MySQL or Postgresql. After installation, usually find the settings.py in the /usr/lib/python3.X/site-packages/vocabulary-trainer
-7. `vocabulary-trainer migrate`
-8. `vocabulary-trainer collectstatic`
-9. `systemctl start vocabulary-trainer.service`
+6. Change database settings in settings.py, for example to MySQL or Postgresql. After installation, usually find the settings.py in the /usr/lib/python3.X/site-packages/lunes-cms
+7. `lunes-cms-cli migrate`
+8. `lunes-cms-cli collectstatic`
+9. `systemctl start lunes-cms.service`
 10. Configure Apache2 or Nginx reverse proxy. See provided Apache2 example.

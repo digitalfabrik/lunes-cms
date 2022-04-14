@@ -40,9 +40,9 @@ Here's how to get the site running on your machine.
 
 #. Set up Django and run the development server:
 
-    * ``vocabulary-trainer migrate``
-    * ``vocabulary-trainer createsuperuser``
-    * ``vocabulary-trainer runserver``
+    * ``lunes-cms-cli migrate``
+    * ``lunes-cms-cli createsuperuser``
+    * ``lunes-cms-cli runserver``
 
 Now that you've gotten everything set up, to run the development server in
 the future, all you'll need to do is activate your virtual environment
@@ -54,14 +54,14 @@ last command above.
 Production Deployment
 =====================
 
-#. ``adduser vocabulary-trainer``
+#. ``adduser lunes-cms``
 #. ``git clone git@github.com:digitalfabrik/lunes-cms.git``
 #. ``cd lunes-cms``
 #. ``pip install -U pip setuptools``
 #. ``cat requirements.system | xargs sudo apt-get``
 #. ``python3 setup.py install``
-#. Change database settings in ``settings.py``, for example to MySQL or Postgresql. After installation, usually find the ``settings.py`` in the ``/usr/lib/python3.X/site-packages/vocabulary-trainer``
-#. ``vocabulary-trainer migrate``
-#. ``vocabulary-trainer collectstatic``
-#. ``systemctl start vocabulary-trainer.service``
+#. Change database settings in ``settings.py``, for example to MySQL or Postgresql. After installation, usually find the ``settings.py`` in the ``/usr/lib/python3.X/site-packages/lunes-cms``
+#. ``lunes-cms-cli migrate``
+#. ``lunes-cms-cli collectstatic``
+#. ``systemctl start lunes-cms.service``
 #. Configure Apache2 or Nginx reverse proxy. See provided Apache2 example.

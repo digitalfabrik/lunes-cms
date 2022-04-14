@@ -25,13 +25,13 @@ jobs:
           key: pip-{{ checksum "setup.cfg" }}-v1
           paths:
             - .venv
-            - src/Vocabulary_Trainer.egg-info
+            - lunes_cms.egg-info
             - /home/circleci/.cache/pip
       - persist_to_workspace:
           root: .
           paths:
             - .venv
-            - src/Vocabulary_Trainer.egg-info
+            - lunes_cms.egg-info
   test:
     docker:
       - image: cimg/python:3.7
@@ -43,8 +43,8 @@ jobs:
           name: Run migrations and tests
           command: |
             source .venv/bin/activate
-            vocabulary-trainer migrate
-            vocabulary-trainer test vocgui
+            lunes-cms-cli migrate
+            lunes-cms-cli test lunes_cms
           environment:
             LUNES_CMS_SECRET_KEY: circleci-dummy-key
       - store_artifacts:
@@ -59,7 +59,7 @@ jobs:
           at: .
       - run: |
           source .venv/bin/activate
-          black --check src --exclude=src/vocgui/migrations
+          black --check lunes_cms --exclude=lunes_cms/cms/migrations
   build-documentation:
     docker:
       - image: cimg/python:3.7

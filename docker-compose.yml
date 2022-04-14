@@ -5,6 +5,6 @@ services:
     build: .
     volumes:
       - .:/code
-      - /src/db.sqlite3
+      - /lunes_cms/db.sqlite3
     ports:
       - "8000:8000"

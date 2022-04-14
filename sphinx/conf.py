@@ -20,9 +20,9 @@ import sphinx.builders.text
 import sphinx.ext.autodoc
 
 # Append project source directory to path environment variable
-sys.path.insert(0, os.path.abspath("../src"))
+sys.path.insert(0, os.path.abspath("../lunes_cms"))
 
-django_settings = "voctrainer.settings"
+django_settings = "lunes_cms.core.settings"
 
 
 # -- Project information -----------------------------------------------------
