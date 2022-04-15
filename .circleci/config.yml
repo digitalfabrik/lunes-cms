@@ -59,7 +59,7 @@ jobs:
           at: .
       - run: |
           source .venv/bin/activate
-          black --check lunes_cms --exclude=lunes_cms/cms/migrations
+          black --check .
   build-documentation:
     docker:
       - image: cimg/python:3.7

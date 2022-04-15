@@ -5,15 +5,19 @@ import lunes_cms.cms.models.static
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
-        ('cms', '0001_initial'),
+        ("auth", "0012_alter_user_first_name_max_length"),
+        ("cms", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='group',
-            name='icon',
-            field=models.ImageField(blank=True, upload_to=lunes_cms.cms.models.static.convert_umlaute_images, verbose_name='icon'),
+            model_name="group",
+            name="icon",
+            field=models.ImageField(
+                blank=True,
+                upload_to=lunes_cms.cms.models.static.convert_umlaute_images,
+                verbose_name="icon",
+            ),
         ),
     ]
 
@@ -25,7 +29,7 @@ class Migration(migrations.Migration):
         Preserves the original object state by default and will return a mutated state from a copy.
         """
         app_label = self.app_label
-        self.app_label = 'auth'
+        self.app_label = "auth"
         state = super(Migration, self).mutate_state(project_state, preserve)
         self.app_label = app_label
         return state
@@ -38,7 +42,7 @@ class Migration(migrations.Migration):
         Returns the resulting project state for efficient re-use by following Migrations.
         """
         app_label = self.app_label
-        self.app_label = 'auth'
+        self.app_label = "auth"
         state = super(Migration, self).apply(project_state, schema_editor, collect_sql)
         self.app_label = app_label
         return state
