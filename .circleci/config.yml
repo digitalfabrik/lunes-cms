@@ -143,9 +143,24 @@ jobs:
             eval $(bumpver show --env -n)
             echo "export CURRENT_VERSION=$CURRENT_VERSION" >> $BASH_ENV
       - run:
+          name: Update changelog
+          command: |
+            # Insert version number in "unreleased" section of changelog
+            UNRELEASED="UNRELEASED\n----------"
+            # Build a string of dashes of same length as the version
+            UNDERLINE=$(echo "$CURRENT_VERSION" | tr "[:print:]" "-")
+            sed --null-data --in-place \
+              "s/${UNRELEASED}/${UNRELEASED}\n\n\n${CURRENT_VERSION}\n${UNDERLINE}/g" \
+              CHANGELOG.md
+            # Amend to bump version commit
+            git add CHANGELOG.md
+            git commit --amend --no-edit
+      - run:
           name: Tag and push commit
           command: |
-            git tag --annotate "${CURRENT_VERSION}"
+            # Get most recent changelog (split by 3 sequential new lines and print the second record except the first three lines)
+            CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4 | sed --regexp-extended 's|\[#([0-9]+)\]\(https://github\.com/digitalfabrik/lunes-cms/issues/([0-9]+)\)|#\1|')
+            git tag --annotate "${CURRENT_VERSION}" --message "${CHANGELOG}"
             git push origin --follow-tags "${CURRENT_VERSION}" HEAD
       - run:
           name: Merge version bump into develop
