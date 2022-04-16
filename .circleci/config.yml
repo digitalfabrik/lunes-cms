@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   install:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - restore_cache:
@@ -31,7 +31,7 @@ jobs:
             - lunes_cms.egg-info
   test:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - attach_workspace:
@@ -52,7 +52,7 @@ jobs:
           destination: python_app
   black:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - attach_workspace:
@@ -62,7 +62,7 @@ jobs:
           black --check .
   build-documentation:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - attach_workspace:
