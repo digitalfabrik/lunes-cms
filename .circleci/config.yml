@@ -70,6 +70,86 @@ jobs:
       - run: |
           source .venv/bin/activate
           dev-tools/build_documentation.sh
+  bump-dev-version:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Upgrade pip
+          command: |
+            echo "Install recent version of pip to make sure 'pip index' is available"
+            pip install --upgrade pip
+      - run:
+          name: Check available versions
+          command: |
+            echo "Check which versions of lunes-cms are available on the TestPyPI repository"
+            AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
+            echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
+            echo "export AVAILABLE_VERSIONS='${AVAILABLE_VERSIONS}'" >> $BASH_ENV
+      - run:
+          name: Get current alpha version
+          command: |
+            CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
+            echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
+            echo "export CURRENT_ALPHA_VERSION='${CURRENT_ALPHA_VERSION}'" >> $BASH_ENV
+      - run:
+          name: Parse current alpha version
+          command: |
+            CURRENT_ALPHA_VERSION_PARSED=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
+            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
+            echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
+      - run:
+          name: Bump version to current alpha version
+          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
+      - run:
+          name: Bump version to next alpha version
+          command: bumpver update -n -t alpha --no-commit
+      - persist_to_workspace:
+          root: .
+          paths:
+            - setup.cfg
+            - lunes_cms/__init__.py
+  bump-version:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Request installation access token to authorize as Deliverino app
+          command: echo "export DELIVERINO_ACCESS_TOKEN=$(./.circleci/scripts/get_access_token.py)" >> $BASH_ENV
+      - run:
+          name: Config git repository to commit & push as Deliverino app
+          command: |
+            git config user.name "deliverino[bot]"
+            git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
+            git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
+      - run:
+          name: Bump version
+          command: bumpver update --tag=final
+      - run:
+          name: Get tag of newly created version
+          command: |
+            eval $(bumpver show --env -n)
+            echo "export CURRENT_VERSION=$CURRENT_VERSION" >> $BASH_ENV
+      - run:
+          name: Tag and push commit
+          command: |
+            git tag --annotate "${CURRENT_VERSION}"
+            git push origin --follow-tags "${CURRENT_VERSION}" HEAD
+      - run:
+          name: Merge version bump into develop
+          command: git checkout develop && git merge main --commit --no-edit && git push
 
 workflows:
   develop:
@@ -84,3 +164,31 @@ workflows:
       - build-documentation:
           requires:
             - install
+      - bump-dev-version:
+          filters:
+            branches:
+              only:
+                - develop
+                - /.*-publish-dev-package/
+          requires:
+            - install
+  main:
+    jobs:
+      - install:
+          name: install-main
+          filters:
+            branches:
+              only: main
+      - bump-version:
+          context: deliverino
+          requires:
+            - install-main
+  deploy:
+    jobs:
+      - install:
+          name: install-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/

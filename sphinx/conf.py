@@ -32,7 +32,7 @@ copyright = "2021, Lunes"
 author = "Lunes"
 
 # The full version, including alpha/beta/rc tags
-release = "1.0"
+release = "2022.3.0"
 
 
 # -- General configuration ---------------------------------------------------
