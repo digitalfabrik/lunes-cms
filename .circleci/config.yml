@@ -165,6 +165,32 @@ jobs:
       - run:
           name: Merge version bump into develop
           command: git checkout develop && git merge main --commit --no-edit && git push
+  build-package:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Build lunes-cms package
+          command: python setup.py sdist bdist_wheel
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+  publish-package:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Publish lunes-cms package to (Test-)PyPI
+          command: |
+            source .venv/bin/activate
+            twine upload --non-interactive ./dist/lunes-cms-*.tar.gz
 
 workflows:
   develop:
@@ -187,6 +213,20 @@ workflows:
                 - /.*-publish-dev-package/
           requires:
             - install
+      - build-package:
+          name: build-dev-package
+          requires:
+            - bump-dev-version
+      - publish-package:
+          name: publish-dev-package
+          context: pypi-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /.*-publish-dev-package/
+          requires:
+            - build-dev-package
   main:
     jobs:
       - install:
@@ -207,3 +247,16 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
+      - build-package:
+          requires:
+            - install-deploy
+          filters:
+            tags:
+              only: /.*/
+      - publish-package:
+          context: pypi
+          requires:
+            - build-package
+          filters:
+            tags:
+              only: /.*/
