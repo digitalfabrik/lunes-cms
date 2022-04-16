@@ -214,6 +214,32 @@ jobs:
       - run:
           name: Create release as Deliverino app
           command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes-cms-*.tar.gz
+  notify-mattermost:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Notify mattermost about release
+          command: |
+            # Get most recent changelog (split by 3 sequential new lines and print the second record except the first three lines)
+            CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
+            # Build notification message
+            MM_MESSAGE="##### Lunes CMS version [${CIRCLE_TAG}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${CIRCLE_TAG}) has been released successfully :tada:\n\n###### **Release Notes:**\n\n${CHANGELOG}"
+            # Send message to mattermost
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST -H 'Content-type: application/json' \
+              --data \
+              "{
+                \"channel\": \"releases\",
+                \"username\": \"circleci\",
+                \"icon_emoji\": \":lunes:\",
+                \"text\": \"${MM_MESSAGE}\"
+              }" "${MM_WEBHOOK}")
+            if [ "$STATUS" -ne "200" ]; then
+              echo "Notification not sent due to an error (HTTP status: ${STATUS})."
+              exit 1
+            fi
+            echo "Notification sent!"
 
 workflows:
   develop:
@@ -287,6 +313,13 @@ workflows:
           context: deliverino
           requires:
             - publish-package
+          filters:
+            tags:
+              only: /.*/
+      - notify-mattermost:
+          context: mattermost
+          requires:
+            - create-release
           filters:
             tags:
               only: /.*/
