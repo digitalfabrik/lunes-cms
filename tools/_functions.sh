@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This file contains utility functions which can be used in the dev-tools.
+# This file contains utility functions which can be used in the development tools.
 
 # This function prints the given input lines in red color
 function print_error {

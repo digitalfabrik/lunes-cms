@@ -67,9 +67,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-          source .venv/bin/activate
-          dev-tools/build_documentation.sh
+      - run: ./tools/build_documentation.sh
   bump-dev-version:
     docker:
       - image: cimg/python:3.9

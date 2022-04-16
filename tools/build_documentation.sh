@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# Script to generate and build documentation. Eventually, you need to run
-# chmod +x dev-tools/build_documentation.sh first in order to have
-# executable rights
+# Script to generate and build documentation.
 
 DOC_DIR="docs"
 SPHINX_DIR="sphinx"
 SPHINX_APIDOC_DIR="sphinx/ref"
 
 # Import utility functions
-# shellcheck source=./dev-tools/_functions.sh
+# shellcheck source=./tools/_functions.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_functions.sh"
 
 # remove stale doc files
