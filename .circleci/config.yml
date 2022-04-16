@@ -191,6 +191,29 @@ jobs:
           command: |
             source .venv/bin/activate
             twine upload --non-interactive ./dist/lunes-cms-*.tar.gz
+  create-release:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Request installation access token to authorize as Deliverino app
+          command: echo "export DELIVERINO_ACCESS_TOKEN=$(./.circleci/scripts/get_access_token.py)" >> $BASH_ENV
+      - run:
+          name: Assemble release body
+          command: |
+            PREV_TAG=$(git describe --abbrev=0 --tags "${CIRCLE_TAG}^") || true
+            CHANGELOG+=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
+            echo "export PREV_TAG=\"${PREV_TAG}\"" >> $BASH_ENV
+            echo "export CHANGELOG=\"${CHANGELOG}\"" >> $BASH_ENV
+      - run:
+          name: Create release as Deliverino app
+          command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes-cms-*.tar.gz
 
 workflows:
   develop:
@@ -257,6 +280,13 @@ workflows:
           context: pypi
           requires:
             - build-package
+          filters:
+            tags:
+              only: /.*/
+      - create-release:
+          context: deliverino
+          requires:
+            - publish-package
           filters:
             tags:
               only: /.*/
