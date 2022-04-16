@@ -60,6 +60,14 @@ activate_venv
 echo "Installing Lunes CMS including its python dependencies..." | print_info
 pip install -e .[dev,doc]
 
+# Install pre-commit-hooks if --pre-commit option is given
+if [[ "$*" == *"--pre-commit"* ]]; then
+    echo "Installing pre-commit hooks..." | print_info
+    # Install pre-commit hooks
+    pre-commit install
+    echo "✔ Installed pre-commit hooks" | print_success
+fi
+
 echo -e "\n✔ Lunes CMS was successfully installed 😻" | print_success
 echo -e "Use the following command to start the development server:\n" | print_info
 echo -e "\t$(dirname "${BASH_SOURCE[0]}")/run.sh\n" | print_bold
