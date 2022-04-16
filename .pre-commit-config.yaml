@@ -3,3 +3,11 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
+  - repo: local
+    hooks:
+      - id: translations
+        name: translations
+        description: Check if the translation file is up-to-date
+        entry: tools/check_translations.sh
+        language: script
+        pass_filenames: false

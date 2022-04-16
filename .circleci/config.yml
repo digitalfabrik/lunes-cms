@@ -60,6 +60,19 @@ jobs:
       - run: |
           source .venv/bin/activate
           black --check .
+  check-translations:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install translation requirements
+          command: sudo apt-get update && sudo apt-get install gettext pcregrep
+      - run:
+          name: Check translation file for missing or empty entries
+          command: ./tools/check_translations.sh
   build-documentation:
     docker:
       - image: cimg/python:3.9
@@ -247,6 +260,9 @@ workflows:
           requires:
             - install
       - black:
+          requires:
+            - install
+      - check-translations:
           requires:
             - install
       - build-documentation:

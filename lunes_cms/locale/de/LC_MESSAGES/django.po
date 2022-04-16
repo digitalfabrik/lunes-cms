@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-16 12:21+0000\n"
+"POT-Creation-Date: 2022-04-16 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,11 +219,11 @@ msgstr "Bilder"
 
 #: cms/models/group_api_key.py:83
 msgid "API Key"
-msgstr ""
+msgstr "API-Key"
 
 #: cms/models/group_api_key.py:84
 msgid "API Keys"
-msgstr ""
+msgstr "API-Keys"
 
 #: cms/models/training_set.py:31
 msgid "document"
@@ -271,12 +271,12 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
 #: core/urls.py:67
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: templates/admin/cms/delete_confirmation.html:16
 #: templates/admin/cms/delete_selected_confirmation.html:15
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: templates/admin/cms/delete_confirmation.html:20
 #: templates/admin/cms/delete_confirmation.html:24
@@ -328,7 +328,7 @@ msgstr "Nein, bitte abbrechen"
 #: templates/admin/cms/delete_selected_confirmation.html:22
 #: templates/admin/cms/delete_selected_confirmation.html:30
 msgid "Delete multiple objects"
-msgstr ""
+msgstr "Mehrere Objekte löschen"
 
 #: templates/admin/cms/delete_selected_confirmation.html:37
 #, python-format
