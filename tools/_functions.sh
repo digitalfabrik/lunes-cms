@@ -10,6 +10,7 @@ LUNES_CMS_PORT=8080
 # Change to dev tools directory
 cd "$(dirname "${BASH_SOURCE[0]}")"
 # The absolute path to the dev tools directory
+# shellcheck disable=SC2034
 DEV_TOOL_DIR=$(pwd)
 # Change to base directory
 cd ..
@@ -17,6 +18,7 @@ cd ..
 BASE_DIR=$(pwd)
 # The path to the package
 PACKAGE_DIR_REL="lunes_cms"
+# shellcheck disable=SC2034
 PACKAGE_DIR="${BASE_DIR}/${PACKAGE_DIR_REL}"
 
 # This function prints the given input lines in red color
@@ -108,6 +110,7 @@ function activate_venv {
             echo "✔ Created virtual environment" | print_success
         fi
         # Activate virtual environment
+        # shellcheck disable=SC1091
         source .venv/bin/activate
         echo "✔ Activated virtual environment" | print_success
         LUNES_VENV_ACTIVATED=1

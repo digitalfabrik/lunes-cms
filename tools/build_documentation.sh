@@ -24,7 +24,7 @@ sphinx-apidoc --no-toc --module-first -o ${SPHINX_APIDOC_DIR} "lunes_cms" "lunes
 # Example: "integreat_cms.cms.models.push_notifications.push_notification_translation module" becomes "Push Notification Translation"
 # At first, the 'find'-command returns all .rst files in the sphinx directory
 # The sed pattern replacement is divided into five stages explained below:
-find ${SPHINX_DIR}/${SPHINX_APIDOC_EXT_DIR} -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty sed --in-place \
+find "${SPHINX_DIR}/${SPHINX_APIDOC_EXT_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty sed --in-place \
     -e '/Submodules\|Subpackages/{N;d;}' `# Remove Sub-Headings including their following lines` \
     -e 's/\( module\| package\)//' `# Remove module & package strings at the end of headings` \
     -e '/^[^ ]\+$/s/\(.*\.\)\?\([^\.]\+\)/\u\2/' `# Remove module path in headings (separated by dots) and make first letter uppercase` \

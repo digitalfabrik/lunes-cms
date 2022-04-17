@@ -1,5 +1,7 @@
 version: 2.1
 
+orbs:
+  shellcheck: circleci/shellcheck@2.2.4
 jobs:
   install:
     docker:
@@ -278,6 +280,12 @@ jobs:
 workflows:
   develop:
     jobs:
+      - shellcheck/check:
+          dir: ./tools
+          external_sources: true
+          filters:
+            branches:
+              ignore: main
       - install
       - compile-translations:
           requires:

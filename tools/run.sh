@@ -5,6 +5,7 @@
 
 
 # Import utility functions
+# shellcheck source=./tools/_functions.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_functions.sh"
 
 # Skip installation check, migrations and translations if --fast option is given

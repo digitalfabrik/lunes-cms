@@ -58,6 +58,7 @@ activate_venv
 
 # Install pip dependencies
 echo "Installing Lunes CMS including its python dependencies..." | print_info
+# shellcheck disable=SC2102
 pip install -e .[dev,doc]
 
 # Install pre-commit-hooks if --pre-commit option is given
