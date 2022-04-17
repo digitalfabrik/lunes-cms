@@ -3,8 +3,9 @@
 # Script to generate and build documentation.
 
 DOC_DIR="docs"
-SPHINX_DIR="sphinx"
-SPHINX_APIDOC_DIR="sphinx/ref"
+DOC_DIST_DIR="${DOC_DIR}/dist"
+DOC_SRC_DIR="${DOC_DIR}/src"
+DOC_SRC_REF_DIR="${DOC_SRC_DIR}/ref"
 
 # Import utility functions
 # shellcheck source=./tools/_functions.sh
@@ -21,7 +22,7 @@ function suggest_clean_parameter  {
 # remove stale doc files
 if [[ "$*" == *"--clean"* ]]; then
     echo "Removing temporary documentation files..." | print_info
-    rm -rf ${DOC_DIR} ${SPHINX_APIDOC_DIR}
+    rm -rf "${DOC_DIST_DIR}" "${DOC_SRC_REF_DIR}"
 elif [[ -z "$CIRCLECI" ]]; then
     # If the script is neither running on CircleCI, nor a clean build and failing anyway, trap to suggest the --clean parameter
     trap 'suggest_clean_parameter' ERR
@@ -29,12 +30,12 @@ fi
 
 # Generate .rst files
 echo -e "Scanning Python source code and generating reStructuredText files from it..." | print_info
-sphinx-apidoc --no-toc --module-first -o ${SPHINX_APIDOC_DIR} "${PACKAGE_DIR}" "${PACKAGE_DIR}/cms/migrations"
+sphinx-apidoc --no-toc --module-first -o "${DOC_SRC_REF_DIR}" "${PACKAGE_DIR}" "${PACKAGE_DIR}/cms/migrations"
 
 # Modify .rst files to remove unnecessary submodule- & subpackage-titles
 # At first, the 'find'-command returns all .rst files in the sphinx directory
 # The sed pattern replacement is divided into five stages explained below:
-find "${SPHINX_DIR}/${SPHINX_APIDOC_EXT_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty sed --in-place \
+find "${DOC_SRC_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty sed --in-place \
     -e '/Submodules\|Subpackages/{N;d;}' `# Remove Sub-Headings including their following lines` \
     -e 's/\( module\| package\)//' `# Remove module & package strings at the end of headings` \
     -e '/^[^ ]\+$/s/\(.*\.\)\?\([^\.]\+\)/\u\2/' `# Remove module path in headings (separated by dots) and make first letter uppercase` \
@@ -43,10 +44,10 @@ find "${SPHINX_DIR}/${SPHINX_APIDOC_EXT_DIR}" -type f -name "*.rst" -print0 | xa
 
 # Build documentation
 echo -e "Generating documentation from reStructuredText files..." | print_info
-sphinx-build -j auto -W --keep-going ${SPHINX_DIR} ${DOC_DIR}
+sphinx-build -j auto -W --keep-going "${DOC_SRC_DIR}" "${DOC_DIST_DIR}"
 
 echo -e "✔ Documentation build complete 😻" | print_success
 if [[ -z "$CIRCLECI" ]]; then
     echo -e "Open the following file in your browser to view the result:\n" | print_info
-    echo -e "\tfile://${BASE_DIR}/${DOC_DIR}/index.html\n" | print_bold
+    echo -e "\tfile://${BASE_DIR}/${DOC_DIST_DIR}/index.html\n" | print_bold
 fi
