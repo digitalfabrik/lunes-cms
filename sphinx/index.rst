@@ -27,9 +27,9 @@ Reference
     :caption: Reference
     :hidden:
 
-    lunes_cms
+    ref/lunes_cms
 
-* :doc:`lunes_cms`: Lunes CMS
+* :doc:`ref/lunes_cms`: Lunes CMS
 
 
 Indices and tables

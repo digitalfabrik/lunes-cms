@@ -22,7 +22,7 @@ from .logging_formatter import ColorFormatter
 # CUSTOM SETTINGS #
 ###################
 
-#: Build paths inside the project like this: ``os.path.join(BASE_DIR, ...)
+#: Build paths inside the project like this: ``os.path.join(BASE_DIR, ...)``
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 #: How many documents a training sets needs at least to get released

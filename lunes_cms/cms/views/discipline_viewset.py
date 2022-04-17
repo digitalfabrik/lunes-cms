@@ -14,7 +14,6 @@ class DisciplineViewSet(viewsets.ModelViewSet):
     Get a single record by appending the id of the requested discipline.
     """
 
-    queryset = Discipline.objects.filter(released=True)
     serializer_class = DisciplineSerializer
     http_method_names = ["get"]
 
@@ -27,6 +26,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Discipline.objects.none()
+        queryset = Discipline.objects.filter(released=True)
         key = get_key(self.request)
         if key:
             # If the key is given, get the corresponding group
@@ -35,10 +35,10 @@ class DisciplineViewSet(viewsets.ModelViewSet):
             except GroupAPIKey.DoesNotExist:
                 raise PermissionDenied()
             # Return all disciplines of the group with the given key
-            self.queryset = self.queryset.filter(created_by=api_key_object.organization)
+            self.queryset = queryset.filter(created_by=api_key_object.organization)
         else:
             # If no key is given, return all admin disciplines
-            self.queryset = self.queryset.filter(creator_is_admin=True)
+            self.queryset = queryset.filter(creator_is_admin=True)
         # Return annotated queryset
         return self.queryset.annotate(
             total_training_sets=Count(
