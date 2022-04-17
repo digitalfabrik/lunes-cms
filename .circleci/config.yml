@@ -29,6 +29,29 @@ jobs:
           paths:
             - .venv
             - lunes_cms.egg-info
+  compile-translations:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install gettext
+          command: sudo apt-get update && sudo apt-get install gettext
+      - run:
+          name: Compile translation file
+          command: |
+            source .venv/bin/activate
+            cd lunes_cms
+            lunes-cms-cli compilemessages
+          environment:
+            LUNES_CMS_SECRET_KEY: circleci-dummy-key
+      - persist_to_workspace:
+          root: .
+          paths:
+            - lunes_cms/locale/de/LC_MESSAGES/django.mo
+            - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
   test:
     docker:
       - image: cimg/python:3.9
@@ -256,9 +279,12 @@ workflows:
   develop:
     jobs:
       - install
-      - test:
+      - compile-translations:
           requires:
             - install
+      - test:
+          requires:
+            - compile-translations
       - black:
           requires:
             - install
@@ -280,6 +306,7 @@ workflows:
           name: build-dev-package
           requires:
             - bump-dev-version
+            - compile-translations
       - publish-package:
           name: publish-dev-package
           context: pypi-test
@@ -310,9 +337,16 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
-      - build-package:
+      - compile-translations:
+          name: compile-translations-deploy
           requires:
             - install-deploy
+          filters:
+            tags:
+              only: /.*/
+      - build-package:
+          requires:
+            - compile-translations-deploy
           filters:
             tags:
               only: /.*/

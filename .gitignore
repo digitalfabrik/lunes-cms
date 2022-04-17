@@ -1,5 +1,6 @@
 .venv
 *.pyc
+*.mo
 media
 db.sqlite3
 *.egg-info

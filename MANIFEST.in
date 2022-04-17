@@ -17,5 +17,6 @@ exclude lunes_cms/lunes-cms.log
 # Exclude pyproject.toml
 exclude pyproject.toml
 
-# Exclude source of translation file
+# Exclude source of translation files
 exclude lunes_cms/locale/de/LC_MESSAGES/django.po
+exclude lunes_cms/locale/de/LC_MESSAGES/djangojs.po
