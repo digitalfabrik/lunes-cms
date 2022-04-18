@@ -13,40 +13,155 @@
 import os
 import sys
 
-import sphinx.builders.html
-import sphinx.builders.latex
-import sphinx.builders.texinfo
-import sphinx.builders.text
-import sphinx.ext.autodoc
+from datetime import date
+
+from django import VERSION as django_version
+
 
 # Append project source directory to path environment variable
-sys.path.insert(0, os.path.abspath("../lunes_cms"))
-
+sys.path.append(os.path.abspath(".."))
+# Append sphinx source directory to path environment variable to allow documentation for this file
+sys.path.append(os.path.abspath("."))
+#: The path to the django settings module (see :doc:`sphinxcontrib-django2:readme`)
 django_settings = "lunes_cms.core.settings"
+#: The "major.minor" version of Django
+django_version = f"{django_version[0]}.{django_version[1]}"
 
 
 # -- Project information -----------------------------------------------------
 
-project = "Lunes CMS"
-copyright = "2021, Lunes"
+#: The project name
+project = "lunes-cms"
+#: The copyright notice
+copyright = "Tür an Tür – Digitalfabrik gGmbH"
+#: The project author
 author = "Lunes"
-
-# The full version, including alpha/beta/rc tags
+#: The full version, including alpha/beta/rc tags
 release = "2022.3.0"
+#: GitHub username
+github_username = "digitalfabrik"
+#: GitHub repository name
+github_repository = "lunes-cms"
+#: GitHub URL
+github_url = f"https://github.com/{github_username}/{github_repository}"
+# GitHub URL of Django repository
+django_github_url = f"https://github.com/django/django/blob/stable/{django_version}.x"
 
 
 # -- General configuration ---------------------------------------------------
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+#: All enabled sphinx extensions (see :ref:`sphinx-extensions`)
 extensions = [
+    "sphinx.ext.extlinks",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
     "sphinx_rtd_theme",
     "sphinxcontrib_django2",
 ]
+#: Enable cross-references to other documentations
+intersphinx_mapping = {
+    "python": (
+        f"https://docs.python.org/{sys.version_info.major}.{sys.version_info.minor}/",
+        None,
+    ),
+    "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
+    "sphinx-rtd-theme": (
+        "https://sphinx-rtd-theme.readthedocs.io/en/latest/",
+        None,
+    ),
+    "sphinxcontrib-django2": (
+        "https://sphinxcontrib-django2.readthedocs.io/en/latest/",
+        None,
+    ),
+    "django": (
+        f"https://docs.djangoproject.com/en/{django_version}/",
+        f"https://docs.djangoproject.com/en/{django_version}/_objects/",
+    ),
+    "setuptools": ("https://setuptools.pypa.io/en/latest/", None),
+    "twine": ("https://twine.readthedocs.io/en/latest/", None),
+    "wsgi": ("https://wsgi.readthedocs.io/en/latest/", None),
+}
+#: The number of seconds for timeout. The default is None, meaning do not timeout.
+intersphinx_timeout = 5
+#: The path for patched template files
+templates_path = ["templates"]
+#: Markup to shorten external links (see :doc:`sphinx:usage/extensions/extlinks`)
+extlinks = {
+    "github": (f"{github_url}/%s", ""),
+    "github-source": (f"{github_url}/blob/develop/%s", ""),
+    "django-source": (f"{django_github_url}/%s", ""),
+}
+#: A string of reStructuredText that will be included at the end of every source file that is read. Used for substitutions.
+rst_epilog = f"""
+.. |github-username| replace:: {github_username}
+.. |github-repository| replace:: {github_repository}
+"""
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
+
+#: The theme to use for HTML and HTML Help pages.
 html_theme = "sphinx_rtd_theme"
+#: The theme options
+html_theme_options = {
+    "prev_next_buttons_location": None,
+}
+#: Static files
+html_static_path = ["static"]
+#: Custom css files
+html_css_files = [
+    "custom.css",
+]
+#: Additional template context
+html_context = {"current_year": date.today().year}
+#: The logo shown in the menu bar
+html_logo = "../../lunes_cms/cms/static/images/logo-lunes-dark.svg"
+#: The favicon of the html doc files
+html_favicon = "../../lunes_cms/cms/static/images/logo.svg"
+#: Do not include links to the documentation source (.rst files) in build
+html_show_sourcelink = False
+#: Do not include a link to sphinx
+html_show_sphinx = False
+#: Include last updated timestamp
+html_last_updated_fmt = "%b %d, %Y"
+
+
+# -- Source Code links to GitHub ---------------------------------------------
+
+
+def linkcode_resolve(domain, info):
+    """
+    This function adds source code links to all modules (see :mod:`sphinx:sphinx.ext.linkcode`).
+    It links all classes and functions to their source files on GitHub including line numbers.
+
+    :param domain: The programming language of the given object (e.g. ``py``, ``c``, ``cpp`` or ``javascript``)
+    :type domain: str
+
+    :param info: Information about the given object. For a python object, it has the keys ``module`` and ``fullname``.
+    :type info: dict
+
+    :return: The URL of the given module on GitHub
+    :rtype: str
+    """
+    module_str = info["module"]
+    if domain != "py" or not module_str:
+        return None
+    item = importlib.import_module(module_str)
+    line_number_reference = ""
+    for piece in info["fullname"].split("."):
+        item = getattr(item, piece)
+        try:
+            line_number_reference = f"#L{inspect.getsourcelines(item)[1]}"
+            module_str = item.__module__
+        except (TypeError, IOError):
+            pass
+    module = importlib.import_module(module_str)
+    module_path = module_str.replace(".", "/")
+    filename = module.__file__.partition(module_path)[2]
+    if module_str.startswith("django."):
+        url = django_github_url
+    else:
+        url = f"{github_url}/blob/develop"
+    return f"{url}/{module_path}{filename}{line_number_reference}"

@@ -1,6 +1,6 @@
-**********************************
-Lunes Django CMS documentation
-**********************************
+***********************
+Lunes CMS documentation
+***********************
 
 This is the developer documentation for the Lunes Django backend.
 
@@ -13,11 +13,27 @@ First Steps
     :caption: First Steps
     :hidden:
 
-    quickstart
     installation
+    dev-server
 
-* :doc:`quickstart`: Quickstart
 * :doc:`installation`: Installation guide
+* :doc:`dev-server`: Run local development server
+
+
+Deployment
+==========
+
+.. toctree::
+    :caption: Deployment
+    :hidden:
+
+    packaging
+    prod-server
+    changelog
+
+* :doc:`packaging`: Create an easy installable python
+* :doc:`prod-server`: Setup the production server
+* :doc:`changelog`: The release history including all relevant changes
 
 
 Reference
@@ -28,8 +44,14 @@ Reference
     :hidden:
 
     ref/lunes_cms
+    ref/tests
 
-* :doc:`ref/lunes_cms`: Lunes CMS
+* :doc:`ref/lunes_cms`: The main of the lunes-cms with the following sub-packages:
+
+  - :doc:`ref/lunes_cms.cms`: This is the content management system for backend users which contains all database models, views, forms and templates.
+  - :doc:`ref/lunes_cms.core`: This is the project's main app which contains all configuration files.
+
+* :doc:`ref/tests`: The tests for lunes-cms
 
 
 Indices and tables

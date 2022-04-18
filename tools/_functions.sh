@@ -131,14 +131,16 @@ function require_installed {
             exit 1
         fi
         # Check if script is running in CircleCI context and set DEBUG=True if not
-        if [[ -z "$CIRCLECI" ]]; then
+        if [[ -z "$CIRCLECI" ]] && [[ -z "$READTHEDOCS" ]]; then
             # Set debug mode
             LUNES_CMS_DEBUG=1
             export LUNES_CMS_DEBUG
+            echo "Enabling debug mode..." | print_info
         else
             # Set dummy secret key
             LUNES_CMS_SECRET_KEY="dummy"
             export LUNES_CMS_SECRET_KEY
+            echo "Setting dummy secret key..." | print_info
         fi
         # Check if lunes-cms-cli can be started
         if ! lunes-cms-cli > /dev/null; then

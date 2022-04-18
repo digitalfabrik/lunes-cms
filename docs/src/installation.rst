@@ -4,64 +4,51 @@ Installation
 
 .. Note::
 
-    If you want to develop on Windows, we suggest using the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_ in combination with `Ubuntu <https://ubuntu.com/wsl>`_ and `postgresql <https://wiki.ubuntuusers.de/PostgreSQL/>`__ as local database server.
+    If you want to develop on Windows, we suggest using the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_ in combination with `Ubuntu <https://ubuntu.com/wsl>`_.
 
 
-Development Setup
-=================
+Prerequisites
+=============
 
-.. Note::
+Followings are required before installing the project (install them with your manager):
 
-    This project runs on Django – if you're new to Django it may be worth checking out `Django's getting started guide <https://www.djangoproject.com/start/>`__.
+* `git <https://git-scm.com/>`_
+* `python3.8 <https://www.python.org/downloads/release/python-380/>`_ or higher
+* `python3-pip <https://packages.ubuntu.com/search?keywords=python3-pip>`_ (`Debian-based distributions <https://en.wikipedia.org/wiki/Category:Debian-based_distributions>`_, e.g. `Ubuntu <https://ubuntu.com>`__) / `python-pip <https://www.archlinux.de/packages/extra/x86_64/python-pip>`_ (`Arch-based distributions <https://wiki.archlinux.org/index.php/Arch-based_distributions>`_)
+* `gettext <https://www.gnu.org/software/gettext/>`_ and `pcregrep <https://pcre.org/original/doc/html/pcregrep.html>`_ to use the translation features
+* `ffmpeg <https://ffmpeg.org/>`_ for audio processing
 
-Here's how to get the site running on your machine.
+Download sources
+================
 
-#. Get into a Unix-like environment
+.. highlight:: bash
 
-    * If you're on Windows, install the Windows Subsystem for Linux. Then execute ``wsl bash`` and continue with the commands below.
+Clone the project, either
 
-    * If you're already on Linux/Mac, no action needed.
+.. container:: two-columns
 
-#. Clone the repository: ``git clone git@github.com:digitalfabrik/lunes-cms.git``
+    .. container:: left-side
 
-#. Move into the direcotry: ``cd lunes-cms``
+        via SSH:
 
-#. Set up virtual environment of choice with a current ``pip`` and ``setuptools`` version. For example (using Debian):
+        .. parsed-literal::
 
-    * ``apt install python3-venv``
-    * ``python3 -m venv .venv``
-    * ``source .venv/bin/activate``
-    * ``pip install -U pip setuptools``
-    * ``pip install wheel``
+            git clone git\@github.com:|github-username|/|github-repository|.git
+            cd |github-repository|
 
-#. Install system dependencies: ``cat requirements.system | xargs sudo apt-get install``
+    .. container:: right-side
 
-#. Install project dependencies: ``python3 setup.py develop``
+        or HTTPS:
 
-#. Set up Django and run the development server:
+        .. parsed-literal::
 
-    * ``lunes-cms-cli migrate``
-    * ``lunes-cms-cli createsuperuser``
-    * ``lunes-cms-cli runserver``
-
-Now that you've gotten everything set up, to run the development server in
-the future, all you'll need to do is activate your virtual environment
-(e.g. via ``source .venv/bin/activate`` if you use the instructions above, or
-``pipenv shell`` if you're using pipenv) and call ``runserver`` like in the
-last command above.
+            git clone \https://github.com/|github-username|/|github-repository|.git
+            cd |github-repository|
 
 
-Production Deployment
-=====================
+Install dependencies and local
+======================================
 
-#. ``adduser lunes-cms``
-#. ``git clone git@github.com:digitalfabrik/lunes-cms.git``
-#. ``cd lunes-cms``
-#. ``pip install -U pip setuptools``
-#. ``cat requirements.system | xargs sudo apt-get``
-#. ``python3 setup.py install``
-#. Change database settings in ``settings.py``, for example to MySQL or Postgresql. After installation, usually find the ``settings.py`` in the ``/usr/lib/python3.X/site-packages/lunes-cms``
-#. ``lunes-cms-cli migrate``
-#. ``lunes-cms-cli collectstatic``
-#. ``systemctl start lunes-cms.service``
-#. Configure Apache2 or Nginx reverse proxy. See provided Apache2 example.
+And install it using our developer tool :github-source:`tools/install.sh`::
+
+    ./tools/install.sh

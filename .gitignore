@@ -11,4 +11,5 @@ dist
 .coverage
 docs/dist/
 docs/src/ref/
+docs/src/changelog.rst
 lunes_cms/lunes-cms.log

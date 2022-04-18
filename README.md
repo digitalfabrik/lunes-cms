@@ -1,12 +1,14 @@
 [![CircleCI](https://circleci.com/gh/digitalfabrik/lunes-cms.svg?style=shield)](https://circleci.com/gh/digitalfabrik/lunes-cms)
+[![Documentation Status](https://readthedocs.org/projects/lunes-cms/badge/?version=latest)](https://lunes-cms.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/digitalfabrik/lunes-cms)](https://opensource.org/licenses/Apache-2.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # Lunes CMS
 [![Logo](.github/logo.png) Lunes - Vocabulary for your profession.](https://www.lunes.app)
 
 This is a Django 3 based content management system for the vocabulary trainer app Lunes, a project powered by the Tür an Tür [Digital Factory](https://tuerantuer.de/digitalfabrik/).
 The main goal is to develop an application which facilitates migrants to acquire technical and subject-specific vocabulary.
-For more information please see our [GoVolunteer ad](https://translate.google.com/translate?hl=en&sl=de&tl=en&u=https%3A%2F%2Fgovolunteer.com%2Fde%2Fprojects%2Fehrenamtliche-entwickler-innen-fur-vokabeltrainer).
+For more information please see our [GoVolunteer ad](https://translate.google.com/translate?hl=en&sl=de&tl=en&u=https%3A%2F%2Fgovolunteer.com%2Fde%2Fprojects%2Fehrenamtliche-entwickler-innen-fuer-vokabeltrainer).
 
 ## TL;DR
 
@@ -16,6 +18,7 @@ Following packages are required before installing the project (install them with
 
 * python3.8 or higher
 * python3-pip
+* python3-venv
 * gettext and pcregrep to use the translation features
 * ffmpeg for audio processing
 
@@ -41,6 +44,12 @@ cd lunes-cms
 
 * Go to your browser and open the URL `http://localhost:8080`
 * Default user is "lunes" with password "lunes".
+
+## Documentation
+
+For detailed instructions and the source code reference have a look at our documentation:
+
+### <p align="center">:notebook: https://lunes-cms.rtfd.io</p>
 
 ## API
 
