@@ -267,16 +267,3 @@ Content-Type: application/json
     [...]   // repeats for available documents
 ]
 ```
-
-
-## Production Deployment
-1. `adduser lunes-cms`
-2. `git clone git@github.com:digitalfabrik/lunes-cms.git`
-3. `cd lunes-cms`
-4. `python3 setup.py install`
-5. `cat requirements.system | xargs sudo apt-get`
-6. Change database settings in settings.py, for example to MySQL or Postgresql. After installation, usually find the settings.py in the /usr/lib/python3.X/site-packages/lunes-cms
-7. `lunes-cms-cli migrate`
-8. `lunes-cms-cli collectstatic`
-9. `systemctl start lunes-cms.service`
-10. Configure Apache2 or Nginx reverse proxy. See provided Apache2 example.
