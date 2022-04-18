@@ -65,10 +65,23 @@ jobs:
           name: Installing system dependencies
           command: sudo apt-get update && cat requirements.system | xargs sudo apt-get install
       - run:
-          name: Run migrations and tests
+          name: Check for missing migrations
+          command: |
+            source .venv/bin/activate
+            lunes-cms-cli makemigrations cms --check
+          environment:
+            LUNES_CMS_SECRET_KEY: circleci-dummy-key
+      - run:
+          name: Migrate database
           command: |
             source .venv/bin/activate
             lunes-cms-cli migrate
+          environment:
+            LUNES_CMS_SECRET_KEY: circleci-dummy-key
+      - run:
+          name: Run tests
+          command: |
+            source .venv/bin/activate
             lunes-cms-cli test tests
           environment:
             LUNES_CMS_SECRET_KEY: circleci-dummy-key
@@ -82,9 +95,11 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-          source .venv/bin/activate
-          black --check .
+      - run:
+          name: Check formatting of python files
+          command: |
+            source .venv/bin/activate
+            black --check .
   check-translations:
     docker:
       - image: cimg/python:3.9
@@ -105,7 +120,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: ./tools/build_documentation.sh
+      - run:
+          name: Build documentation
+          command: ./tools/build_documentation.sh
   bump-dev-version:
     docker:
       - image: cimg/python:3.9
