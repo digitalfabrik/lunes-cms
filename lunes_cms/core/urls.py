@@ -26,12 +26,15 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import url
+from django.urls import path, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.base import RedirectView
 from django.views.i18n import JavaScriptCatalog
 
 
 #: The url patterns of this module (see :doc:`topics/http/urls`)
 urlpatterns = [
+    path("", RedirectView.as_view(url=reverse_lazy("admin:login"))),
     path("", include("lunes_cms.cms.urls")),
     url(r"^i18n/", include("django.conf.urls.i18n")),
 ]
