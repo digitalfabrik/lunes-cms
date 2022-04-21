@@ -226,6 +226,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Use alternative README.md file
+          command: mv lunes_cms/README.md .
+      - run:
           name: Build lunes-cms package
           command: python setup.py sdist bdist_wheel
       - persist_to_workspace:
