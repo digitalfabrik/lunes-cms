@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 18:40+0000\n"
+"POT-Creation-Date: 2022-05-05 06:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,7 +269,7 @@ msgstr "Lunes-Verwaltung"
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
-#: core/urls.py:71
+#: core/urls.py:76
 msgid "Dashboard"
 msgstr "Dashboard"
 
