@@ -449,6 +449,8 @@ JAZZMIN_SETTINGS = {
     "site_header": _("Lunes Administration"),
     "site_logo": "images/logo.svg",
     "site_icon": "images/logo.svg",
+    "login_logo": "images/logo-lunes.svg",
+    "login_logo_dark": "images/logo-lunes-dark.svg",
     "site_logo_classes": "",
     "changeform_format": "collapsible",
     "language_chooser": True,
