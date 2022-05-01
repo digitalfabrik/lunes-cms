@@ -2,6 +2,8 @@ from django.contrib.auth.models import Group
 from django.templatetags.static import static
 from rest_framework import serializers
 
+from vocgui.models import training_set
+
 from .models import Discipline, TrainingSet, Document, AlternativeWord, DocumentImage
 from .utils import get_child_count
 
@@ -43,6 +45,9 @@ class DisciplineSerializer(FallbackIconSerializer):
     total_discipline_children = serializers.SerializerMethodField(
         "get_total_discipline_children"
     )
+    nested_training_sets = serializers.ListSerializer(
+        child=serializers.IntegerField(), source="get_nested_training_sets"
+    )
 
     class Meta:
         """
@@ -58,6 +63,7 @@ class DisciplineSerializer(FallbackIconSerializer):
             "created_by",
             "total_training_sets",
             "total_discipline_children",
+            "nested_training_sets",
         )
 
     def get_total_discipline_children(self, obj):

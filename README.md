@@ -66,6 +66,7 @@ Content-Type: application/json
         "created_by": Integer           // Creator group id, null if created by admin 
         "total_training_sets": Integer  // # of training sets
         "total_discipline_children": Integer // # of child disciplines
+        "nested_training_sets": List[Integer] // training set ids of discipline and its child elements
     },
     [...]   // repeats for available disciplines
 ]
@@ -99,6 +100,7 @@ If the passed discipline id belongs to a custom user group (not to the Lunes adm
         "created_by": Integer           // Creator group id, null if created by admin 
         "total_training_sets": Integer  // # of training sets
         "total_discipline_children": Integer // # of child disciplines
+        "nested_training_sets": List[Integer] // training set ids of discipline and its child elements
     },
     [...]   // repeats for available disciplines
 ]
@@ -128,6 +130,7 @@ The default endpoint delivers all disciplines created by Lunes administrators.
         "created_by": Integer           // Creator group id, null if created by admin 
         "total_training_sets": Integer  // # of training sets
         "total_discipline_children": Integer // # of child disciplines
+        "nested_training_sets": List[Integer] // training set ids of discipline and its child elements
     },
     [...]   // repeats for available disciplines
 ]
@@ -251,7 +254,8 @@ Here's how to get the site running on your machine.
     - `pip install wheel`
 5. Install system dependencies: `cat requirements.system | xargs sudo apt-get install`
 6. Install project dependencies: `python3 setup.py develop`
-7. Set up Django and run the development server:
+7. Run `lunes-cms` in debug mode by executing `export LUNES_CMS_DEBUG=1` 
+8. Set up Django and run the development server:
     - `vocabulary-trainer migrate`
     - `vocabulary-trainer createsuperuser`
     - `vocabulary-trainer runserver`
