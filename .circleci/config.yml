@@ -57,6 +57,13 @@ jobs:
   test:
     docker:
       - image: cimg/python:3.9
+        environment:
+          LUNES_CMS_SECRET_KEY: circleci-dummy-key
+      - image: cimg/postgres:14.1
+        environment:
+          POSTGRES_USER: lunes
+          POSTGRES_DB: lunes
+          POSTGRES_PASSWORD: password
     steps:
       - checkout
       - attach_workspace:
@@ -69,22 +76,16 @@ jobs:
           command: |
             source .venv/bin/activate
             lunes-cms-cli makemigrations cms --check
-          environment:
-            LUNES_CMS_SECRET_KEY: circleci-dummy-key
       - run:
           name: Migrate database
           command: |
             source .venv/bin/activate
             lunes-cms-cli migrate
-          environment:
-            LUNES_CMS_SECRET_KEY: circleci-dummy-key
       - run:
           name: Run tests
           command: |
             source .venv/bin/activate
             lunes-cms-cli test tests
-          environment:
-            LUNES_CMS_SECRET_KEY: circleci-dummy-key
       - store_artifacts:
           path: test-reports/
           destination: python_app

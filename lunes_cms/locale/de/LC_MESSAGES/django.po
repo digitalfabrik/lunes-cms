@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-05 06:02+0000\n"
+"POT-Creation-Date: 2022-05-09 14:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: cms/admin.py:32 cms/admins/training_set_admin.py:251 cms/forms.py:48
-#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:72
+#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:86
 msgid "disciplines"
 msgstr "Modulgruppen"
 
@@ -173,7 +173,7 @@ msgstr "Alternative Wörter"
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:21 cms/models/discipline.py:71
+#: cms/models/discipline.py:21 cms/models/discipline.py:85
 #: cms/models/training_set.py:34
 msgid "discipline"
 msgstr "Modulgruppe"
@@ -253,19 +253,19 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:177
+#: core/settings.py:193
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:178
+#: core/settings.py:194
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:391 core/settings.py:392 core/settings.py:394
+#: core/settings.py:407 core/settings.py:408 core/settings.py:410
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:393
+#: core/settings.py:409
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

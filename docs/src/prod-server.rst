@@ -122,7 +122,23 @@ Webserver
 Database
 ========
 
-    1. Execute initial migrations::
+    1. Install a `PostgreSQL <https://www.postgresql.org/>`_ database on your system::
+
+        sudo apt -y install postgresql
+
+    2. Create a database user ``lunes`` and set a password::
+
+        sudo -u postgres createuser -P -d lunes
+
+    3. Create a database ``lunes``::
+
+        sudo -u postgres createdb -O lunes lunes
+
+    4. Add the database credentials to the config in ``/etc/lunes-cms.ini``::
+
+        DB_PASSWORD = <your-password>
+
+    5. Execute initial migrations::
 
         cd /opt/lunes-cms
         sudo -u www-data bash

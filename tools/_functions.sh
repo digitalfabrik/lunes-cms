@@ -142,6 +142,10 @@ function require_installed {
             export LUNES_CMS_SECRET_KEY
             echo "Setting dummy secret key..." | print_info
         fi
+        # Use sqlite as database backend for local development
+        LUNES_CMS_DB_BACKEND="sqlite"
+        export LUNES_CMS_DB_BACKEND
+        echo "Enabling SQLite database for local development..." | print_info
         # Check if lunes-cms-cli can be started
         if ! lunes-cms-cli > /dev/null; then
             echo -e "The Lunes CMS is could not be started due to the above error. Please install it again with:\n"  | print_error

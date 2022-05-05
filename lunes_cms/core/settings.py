@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from distutils.util import strtobool
 
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
 from .logging_formatter import ColorFormatter
@@ -110,11 +111,26 @@ LOGIN_REDIRECT_URL = "/admin/"
 #: A dictionary containing the settings for all databases to be used with this Django installation
 #: (see :setting:`django:DATABASES`)
 DATABASES = {
-    "default": {
+    "postgres": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("LUNES_CMS_DB_NAME", "lunes"),
+        "USER": os.environ.get("LUNES_CMS_DB_USER", "lunes"),
+        "PASSWORD": os.environ.get("LUNES_CMS_DB_PASSWORD", "password"),
+        "HOST": os.environ.get("LUNES_CMS_DB_HOST", "localhost"),
+        "PORT": os.environ.get("LUNES_CMS_DB_PORT", "5432"),
+    },
+    "sqlite": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
+    },
 }
+
+try:
+    DATABASES["default"] = DATABASES[os.environ.get("LUNES_CMS_DB_BACKEND", "postgres")]
+except KeyError as e:
+    raise ImproperlyConfigured(
+        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASES.keys()}."
+    ) from e
 
 
 ############
