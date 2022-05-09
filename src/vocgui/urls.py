@@ -38,11 +38,7 @@ schema_view = get_schema_view(
 )
 # Router for dynamic url patterns
 router = OptionalSlashRouter()
-router.register(
-    r"disciplines",
-    views.DisciplineViewSet,
-    "disciplines",
-)
+router.register(r"disciplines", views.DisciplineViewSet, "disciplines")
 router.register(
     r"disciplines_by_level(?:/(?P<discipline_id>[0-9]+))?",
     views.DisciplineFilteredViewSet,
@@ -57,6 +53,11 @@ router.register(
     r"training_set/(?P<discipline_id>[0-9]+)", views.TrainingSetViewSet, "training_set"
 )
 router.register(
+    r"training_sets",
+    views.TrainingSetByIdViewSet,
+    "training_sets",
+)
+router.register(
     r"documents/(?P<training_set_id>[0-9]+)", views.DocumentViewSet, "documents"
 )
 
@@ -64,11 +65,7 @@ router.register(
     r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
 )
 router.register(r"words", views.WordViewSet, "words")
-router.register(
-    r"group_info",
-    views.GroupViewSet,
-    "group_by_id",
-)
+router.register(r"group_info", views.GroupViewSet, "group_by_id")
 
 urlpatterns = [
     path("", views.redirect_view, name="redirect"),
