@@ -55,6 +55,20 @@ class Discipline(MPTTModel):
             or self.training_sets.filter(released=True).count() > 0
         )
 
+    def get_nested_training_sets(self):
+        """Returns a list of distinct training set ids that are part of this
+        disipline or one of its child elements.
+
+        :return: training set ids
+        :rtype: list(int)
+        """
+        training_sets = []
+        for child in self.get_descendants(include_self=True):
+            training_sets += child.training_sets.filter(released=True).values_list(
+                "id", flat=True
+            )
+        return set(training_sets)
+
     def __str__(self):
         """String representation of Discipline instance
 
