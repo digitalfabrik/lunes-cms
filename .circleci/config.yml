@@ -307,7 +307,10 @@ workflows:
           filters:
             branches:
               ignore: main
-      - install
+      - install:
+          filters:
+            branches:
+              ignore: main
       - compile-translations:
           requires:
             - install
