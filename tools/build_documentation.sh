@@ -32,9 +32,6 @@ fi
 echo -e "Scanning Python source code and generating reStructuredText files from it..." | print_info
 sphinx-apidoc --no-toc --module-first -o "${DOC_SRC_REF_DIR}" "${PACKAGE_DIR}" "${PACKAGE_DIR}/cms/migrations"
 
-# Generate .rst files for tests module
-sphinx-apidoc --no-toc --module-first -o "${DOC_SRC_REF_DIR}" "tests"
-
 # Modify .rst files to remove unnecessary submodule- & subpackage-titles
 # At first, the 'find'-command returns all .rst files in the sphinx directory
 # The sed pattern replacement is divided into five stages explained below:
