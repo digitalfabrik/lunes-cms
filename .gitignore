@@ -1,5 +1,6 @@
 .venv
 *.pyc
+*.mo
 media
 db.sqlite3
 *.egg-info
@@ -8,6 +9,7 @@ dist
 .idea
 .vscode
 .coverage
-docs/
-sphinx/ref/
-src/lunes-cms.log
+docs/dist/
+docs/src/ref/
+docs/src/changelog.rst
+lunes_cms/lunes-cms.log

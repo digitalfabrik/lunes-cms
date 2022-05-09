@@ -1,0 +1,20 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$tX360jOwBEnw2Ia8XAn0au$aLj/XCWIIqNKbv1UayRjYQA/CUo0AsFto5HuGUZBHPs=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "lunes",
+      "first_name": "Lunes",
+      "last_name": "Superuser",
+      "email": "admin@lunes.app",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-04-16T11:20:36.269Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
