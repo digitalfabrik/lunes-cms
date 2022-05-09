@@ -1,0 +1,20 @@
+{%- extends "sphinx_rtd_theme/footer.html" %}
+
+{%- block contentinfo %}
+  <p>
+    {%- if show_copyright %}
+      &copy;{{ current_year }} <a href="https://tuerantuer.de/digitalfabrik/">{{ copyright }}</a>
+      | <a href="https://lunes.app/">Lunes Website</a>
+    {%- endif %}
+    {%- if commit %}
+      <span class="commit">
+        | {% trans %}Revision{% endtrans %} <a href="https://github.com/digitalfabrik/lunes-cms/tree/{{ commit }}">{{ commit }}</a>.
+      </span>
+    {%- endif %}
+    {%- if last_updated %}
+      <span class="lastupdated">
+        {%- trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+      </span>
+    {%- endif -%}
+  </p>
+{%- endblock %}

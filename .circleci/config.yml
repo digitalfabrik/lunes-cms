@@ -1,16 +1,15 @@
 version: 2.1
 
+orbs:
+  shellcheck: circleci/shellcheck@2.2.4
 jobs:
   install:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
-      - run:
-          name: Installing system dependencies
-          command: sudo apt-get update && cat requirements.system | xargs sudo apt-get install
       - restore_cache:
-          key: pip-{{ checksum "setup.py" }}-v2
+          key: pip-{{ checksum "setup.cfg" }}-v2
       - run:
           name: Creating virtual environment
           command: |
@@ -19,68 +18,385 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install .
+              pip install -e .[dev,doc]
             fi
       - save_cache:
-          key: pip-{{ checksum "setup.py" }}-v2
+          key: pip-{{ checksum "setup.cfg" }}-v2
           paths:
             - .venv
-            - src/Vocabulary_Trainer.egg-info
+            - lunes_cms.egg-info
             - /home/circleci/.cache/pip
       - persist_to_workspace:
           root: .
           paths:
             - .venv
-            - src/Vocabulary_Trainer.egg-info
-  test:
+            - lunes_cms.egg-info
+  compile-translations:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - attach_workspace:
           at: .
       - run:
-          name: Run migrations and tests
+          name: Install gettext
+          command: sudo apt-get update && sudo apt-get install gettext
+      - run:
+          name: Compile translation file
           command: |
             source .venv/bin/activate
-            vocabulary-trainer migrate
-            vocabulary-trainer test vocgui
+            cd lunes_cms
+            lunes-cms-cli compilemessages
           environment:
             LUNES_CMS_SECRET_KEY: circleci-dummy-key
+      - persist_to_workspace:
+          root: .
+          paths:
+            - lunes_cms/locale/de/LC_MESSAGES/django.mo
+            - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
+  test:
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          LUNES_CMS_SECRET_KEY: circleci-dummy-key
+      - image: cimg/postgres:14.1
+        environment:
+          POSTGRES_USER: lunes
+          POSTGRES_DB: lunes
+          POSTGRES_PASSWORD: password
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Installing system dependencies
+          command: sudo apt-get update && cat requirements.system | xargs sudo apt-get install
+      - run:
+          name: Check for missing migrations
+          command: |
+            source .venv/bin/activate
+            lunes-cms-cli makemigrations cms --check
+      - run:
+          name: Migrate database
+          command: |
+            source .venv/bin/activate
+            lunes-cms-cli migrate
+      - run:
+          name: Run tests
+          command: |
+            source .venv/bin/activate
+            lunes-cms-cli test tests
       - store_artifacts:
           path: test-reports/
           destination: python_app
   black:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-          source .venv/bin/activate
-          black --check src --exclude=src/vocgui/migrations
+      - run:
+          name: Check formatting of python files
+          command: |
+            source .venv/bin/activate
+            black --check .
+  check-translations:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install translation requirements
+          command: sudo apt-get update && sudo apt-get install gettext pcregrep
+      - run:
+          name: Check translation file for missing or empty entries
+          command: ./tools/check_translations.sh
   build-documentation:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.9
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-          source .venv/bin/activate
-          dev-tools/build_documentation.sh
+      - run:
+          name: Build documentation
+          command: ./tools/build_documentation.sh
+  bump-dev-version:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Upgrade pip
+          command: |
+            echo "Install recent version of pip to make sure 'pip index' is available"
+            pip install --upgrade pip
+      - run:
+          name: Check available versions
+          command: |
+            echo "Check which versions of lunes-cms are available on the TestPyPI repository"
+            AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
+            echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
+            echo "export AVAILABLE_VERSIONS='${AVAILABLE_VERSIONS}'" >> $BASH_ENV
+      - run:
+          name: Get current alpha version
+          command: |
+            CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
+            echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
+            echo "export CURRENT_ALPHA_VERSION='${CURRENT_ALPHA_VERSION}'" >> $BASH_ENV
+      - run:
+          name: Parse current alpha version
+          command: |
+            CURRENT_ALPHA_VERSION_PARSED=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
+            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
+            echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
+      - run:
+          name: Bump version to current alpha version
+          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
+      - run:
+          name: Bump version to next alpha version
+          command: bumpver update -n -t alpha --no-commit
+      - persist_to_workspace:
+          root: .
+          paths:
+            - setup.cfg
+            - lunes_cms/__init__.py
+  bump-version:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Request installation access token to authorize as Deliverino app
+          command: echo "export DELIVERINO_ACCESS_TOKEN=$(./.circleci/scripts/get_access_token.py)" >> $BASH_ENV
+      - run:
+          name: Config git repository to commit & push as Deliverino app
+          command: |
+            git config user.name "deliverino[bot]"
+            git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
+            git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
+      - run:
+          name: Bump version
+          command: bumpver update --tag=final
+      - run:
+          name: Get tag of newly created version
+          command: |
+            eval $(bumpver show --env -n)
+            echo "export CURRENT_VERSION=$CURRENT_VERSION" >> $BASH_ENV
+      - run:
+          name: Update changelog
+          command: |
+            # Insert version number in "unreleased" section of changelog
+            UNRELEASED="UNRELEASED\n----------"
+            # Build a string of dashes of same length as the version
+            UNDERLINE=$(echo "$CURRENT_VERSION" | tr "[:print:]" "-")
+            sed --null-data --in-place \
+              "s/${UNRELEASED}/${UNRELEASED}\n\n\n${CURRENT_VERSION}\n${UNDERLINE}/g" \
+              CHANGELOG.md
+            # Amend to bump version commit
+            git add CHANGELOG.md
+            git commit --amend --no-edit
+      - run:
+          name: Tag and push commit
+          command: |
+            # Get most recent changelog (split by 3 sequential new lines and print the second record except the first three lines)
+            CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4 | sed --regexp-extended 's|\[#([0-9]+)\]\(https://github\.com/digitalfabrik/lunes-cms/issues/([0-9]+)\)|#\1|')
+            git tag --annotate "${CURRENT_VERSION}" --message "${CHANGELOG}"
+            git push origin --follow-tags "${CURRENT_VERSION}" HEAD
+      - run:
+          name: Merge version bump into develop
+          command: git checkout develop && git merge main --commit --no-edit && git push
+  build-package:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Use alternative README.md file
+          command: mv lunes_cms/README.md .
+      - run:
+          name: Build lunes-cms package
+          command: python setup.py sdist bdist_wheel
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+  publish-package:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Publish lunes-cms package to (Test-)PyPI
+          command: |
+            source .venv/bin/activate
+            twine upload --non-interactive ./dist/lunes-cms-*.tar.gz
+  create-release:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Request installation access token to authorize as Deliverino app
+          command: echo "export DELIVERINO_ACCESS_TOKEN=$(./.circleci/scripts/get_access_token.py)" >> $BASH_ENV
+      - run:
+          name: Assemble release body
+          command: |
+            PREV_TAG=$(git describe --abbrev=0 --tags "${CIRCLE_TAG}^") || true
+            CHANGELOG+=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
+            echo "export PREV_TAG=\"${PREV_TAG}\"" >> $BASH_ENV
+            echo "export CHANGELOG=\"${CHANGELOG}\"" >> $BASH_ENV
+      - run:
+          name: Create release as Deliverino app
+          command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes-cms-*.tar.gz
+  notify-mattermost:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Notify mattermost about release
+          command: |
+            # Get most recent changelog (split by 3 sequential new lines and print the second record except the first three lines)
+            CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
+            # Build notification message
+            MM_MESSAGE="##### Lunes CMS version [${CIRCLE_TAG}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${CIRCLE_TAG}) has been released successfully :tada:\n\n###### **Release Notes:**\n\n${CHANGELOG}"
+            # Send message to mattermost
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST -H 'Content-type: application/json' \
+              --data \
+              "{
+                \"channel\": \"releases\",
+                \"username\": \"circleci\",
+                \"icon_emoji\": \":lunes:\",
+                \"text\": \"${MM_MESSAGE}\"
+              }" "${MM_WEBHOOK}")
+            if [ "$STATUS" -ne "200" ]; then
+              echo "Notification not sent due to an error (HTTP status: ${STATUS})."
+              exit 1
+            fi
+            echo "Notification sent!"
 
 workflows:
   develop:
     jobs:
+      - shellcheck/check:
+          dir: ./tools
+          external_sources: true
+          filters:
+            branches:
+              ignore: main
       - install
-      - test:
+      - compile-translations:
           requires:
             - install
+      - test:
+          requires:
+            - compile-translations
       - black:
+          requires:
+            - install
+      - check-translations:
           requires:
             - install
       - build-documentation:
           requires:
             - install
+      - bump-dev-version:
+          filters:
+            branches:
+              only:
+                - develop
+                - /.*-publish-dev-package/
+          requires:
+            - install
+      - build-package:
+          name: build-dev-package
+          requires:
+            - bump-dev-version
+            - compile-translations
+      - publish-package:
+          name: publish-dev-package
+          context: pypi-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /.*-publish-dev-package/
+          requires:
+            - build-dev-package
+  main:
+    jobs:
+      - install:
+          name: install-main
+          filters:
+            branches:
+              only: main
+      - bump-version:
+          context: deliverino
+          requires:
+            - install-main
+  deploy:
+    jobs:
+      - install:
+          name: install-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - compile-translations:
+          name: compile-translations-deploy
+          requires:
+            - install-deploy
+          filters:
+            tags:
+              only: /.*/
+      - build-package:
+          requires:
+            - compile-translations-deploy
+          filters:
+            tags:
+              only: /.*/
+      - publish-package:
+          context: pypi
+          requires:
+            - build-package
+          filters:
+            tags:
+              only: /.*/
+      - create-release:
+          context: deliverino
+          requires:
+            - publish-package
+          filters:
+            tags:
+              only: /.*/
+      - notify-mattermost:
+          context: mattermost
+          requires:
+            - create-release
+          filters:
+            tags:
+              only: /.*/
