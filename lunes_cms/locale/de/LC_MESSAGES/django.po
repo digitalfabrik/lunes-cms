@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 14:27+0000\n"
+"POT-Creation-Date: 2022-05-25 13:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: cms/admin.py:32 cms/admins/training_set_admin.py:251 cms/forms.py:48
-#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:86
+#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:85
 msgid "disciplines"
 msgstr "Modulgruppen"
 
@@ -173,33 +173,32 @@ msgstr "Alternative Wörter"
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:21 cms/models/discipline.py:85
-#: cms/models/training_set.py:34
-msgid "discipline"
-msgstr "Modulgruppe"
-
-#: cms/models/discipline.py:23 cms/models/training_set.py:25
+#: cms/models/discipline.py:22 cms/models/training_set.py:25
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:26 cms/models/group.py:10
+#: cms/models/discipline.py:25 cms/models/group.py:10
 #: cms/models/training_set.py:28
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:53
+#: cms/models/discipline.py:32 cms/models/document.py:53
 #: cms/models/training_set.py:37
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:55
+#: cms/models/discipline.py:35 cms/models/document.py:55
 #: cms/models/training_set.py:39
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:43 cms/models/training_set.py:46
+#: cms/models/discipline.py:42 cms/models/training_set.py:46
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
+
+#: cms/models/discipline.py:84 cms/models/training_set.py:34
+msgid "discipline"
+msgstr "Modulgruppe"
 
 #: cms/models/document.py:30
 msgid "word type"

@@ -18,7 +18,6 @@ class Discipline(MPTTModel):
 
     id = models.AutoField(primary_key=True)
     released = models.BooleanField(default=False, verbose_name=_("released"))
-    title = models.CharField(max_length=255, verbose_name=_("discipline"))
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")
     )
