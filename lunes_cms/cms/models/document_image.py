@@ -32,7 +32,7 @@ class DocumentImage(models.Model):
         :rtype: str
         """
         if self.image and self.image.storage.exists(self.image.name):
-            if ".png" in self.image.name or ".jpg" in self.image.name:
+            if any(self.image.name.lower().endswith(ext) for ext in [".jpg", ".png"]):
                 # The normal image tag for jpg and png previews
                 return mark_safe(
                     f'<img src="/media/{self.image}" width="330" height="240" />'

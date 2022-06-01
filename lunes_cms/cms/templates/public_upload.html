@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="de">
   <head>
@@ -5,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <link rel="icon" href="{% static 'images/logo.svg' %}">
 
     <title>Lunes App - Bild beitragen</title>
 
@@ -75,25 +76,15 @@
 
         $("#inputDiscipline").change(function() {
           var discipline_id = $("#inputDiscipline").val();
-          $("#inputTrainingSet").find('option').remove();
-          $("#inputTrainingSet").append(new Option("Bitte Modul wählen", 0));
+          $("#inputDocument").find('option').remove();
           lunes_training_sets.forEach(function(element) {
             if(lunes_disc_sets_map[discipline_id].includes(element[0])) {
-              $("#inputTrainingSet").append(new Option(element[1], element[0]));
-            }
-          });
-        });
-
-        lunes_training_sets.forEach(function(element) {
-          $("#inputTrainingSet").append(new Option(element[1], element[0]))
-        });
-
-        $("#inputTrainingSet").change(function() {
-          var training_set_id = $("#inputTrainingSet").val();
-          $("#inputDocument").find('option').remove();
-          lunes_documents.forEach(function(element) {
-            if(element[3] == training_set_id) {
-              $("#inputDocument").append(new Option( article_map[element[2]] + " " + element[1], element[0]));
+              var training_set_id = element[0];
+              lunes_documents.forEach(function(element) {
+                if(element[3] == training_set_id) {
+                  $("#inputDocument").append(new Option( article_map[element[2]] + " " + element[1], element[0]));
+                }
+              });
             }
           });
         });
@@ -103,7 +94,7 @@
 
   <body class="text-center">
     <form class="form-signin" method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
-      <img class="mb-4" src="static/images/logo.png" alt="" width="72" height="72">
+      <img class="mb-4" src="{% static 'images/logo.svg' %}" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Foto für Lunes-Vokabel hochladen</h1>
       <h3 class="h5 mb-4 mt-4 font-weight-normal">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -115,9 +106,6 @@
       {% if upload_success %}<div class="alert alert-success" role="alert">Vielen Dank für dein Bild. Das Lunes Team wird es prüfen und freigeben.</div>{% endif %}
       <label for="inputDiscipline" class="sr-only">Beruf auswählen</label>
       <select id="inputDiscipline" class="form-control" required autofocus><option>Bitte Beruf wählen</option></select>
-      <label for="inputDocument" class="sr-only">Wort auswählen</label>
-      <label for="inputTrainingSet" class="sr-only">Modul auswählen</label>
-      <select id="inputTrainingSet" class="form-control" required autofocus><option>Bitte Modul wählen</option></select>
       <label for="inputDocument" class="sr-only">Wort auswählen</label>
       <select id="inputDocument" name="inputDocument" class="form-control" required></select>
       <label for="inputFile" class="sr-only">Bild</label>
