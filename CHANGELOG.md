@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#337](https://github.com/digitalfabrik/lunes-cms/issues/337) ] Remove image names
+
 
 2022.6.0
 --------

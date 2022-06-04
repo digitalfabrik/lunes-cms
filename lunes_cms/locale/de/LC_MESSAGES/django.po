@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 14:27+0000\n"
+"POT-Creation-Date: 2022-06-04 03:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr "Modul"
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:188 cms/models/document_image.py:138
+#: cms/admins/document_admin.py:188 cms/models/document_image.py:134
 msgid "image"
 msgstr "Bild"
 
@@ -213,7 +213,7 @@ msgstr "Wort"
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document_image.py:139
+#: cms/models/document_image.py:135
 msgid "images"
 msgstr "Bilder"
 

@@ -15,7 +15,6 @@ class DocumentImage(models.Model):
     """
 
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
         upload_to=convert_umlaute_images, validators=[validate_multiple_extensions]
     )
@@ -117,10 +116,7 @@ class DocumentImage(models.Model):
         :return: title of document image instance
         :rtype: str
         """
-        if self.name:
-            return self.name
-        else:
-            return self.document.word
+        return self.document.word
 
     def save(self, *args, **kwargs):
         """Overwrite djangos save function to scale images into a
