@@ -19,6 +19,7 @@ Following packages are required before installing the project (install them with
 * python3.8 or higher
 * python3-pip
 * python3-venv
+* libpq-dev to compile psycopg2
 * gettext and pcregrep to use the translation features
 * ffmpeg for audio processing
 

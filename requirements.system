@@ -1,3 +1,6 @@
+python3-pip
+python3-venv
+libpq-dev
 ffmpeg
 gettext
 pcregrep

@@ -19,7 +19,10 @@ Following packages are required before installing the project (install them with
 
 * python3.8 or greater
 * python3-pip
+* python3-venv
 * ffmpeg
+* libpq-dev
+* [PostgreSQL](https://www.postgresql.org/) database server
 * [Apache2](https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/modwsgi/) server with `mod_wsgi`
 
 ### Installation
