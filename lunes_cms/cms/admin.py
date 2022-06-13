@@ -8,11 +8,12 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from rest_framework_api_key.models import APIKey
 
-from .models import Discipline, TrainingSet, Document, GroupAPIKey
+from .models import Discipline, TrainingSet, Document, GroupAPIKey, Feedback
 from .admins import DisciplineAdmin
 from .admins import TrainingSetAdmin
 from .admins import DocumentAdmin
 from .admins import GroupAPIKeyAdmin
+from .admins import FeedbackAdmin
 
 
 def get_app_list(self, request):
@@ -33,6 +34,7 @@ def get_app_list(self, request):
         _("training sets").capitalize(): 2,
         _("vocabulary").capitalize(): 3,
         _("api keys").capitalize(): 4,
+        _("feedback").capitalize(): 5,
     }
     app_dict = self._build_app_dict(request)
 
@@ -76,3 +78,4 @@ admin.site.register(
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(GroupAPIKey, GroupAPIKeyAdmin)
 admin.site.unregister(APIKey)
+admin.site.register(Feedback, FeedbackAdmin)

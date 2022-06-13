@@ -422,6 +422,7 @@ JAZZMIN_SETTINGS = {
         "cms.TrainingSet": "fas fa-stream",
         "cms.Document": "fab fa-amilia",
         "cms.GroupAPIKey": "fas fa-key",
+        "cms.Feedback": "fas fa-comment",
     },
 }
 

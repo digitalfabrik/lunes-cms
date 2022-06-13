@@ -17,23 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cms/admin.py:32 cms/admins/training_set_admin.py:251 cms/forms.py:48
+#: cms/admin.py:33 cms/admins/training_set_admin.py:251 cms/forms.py:48
 #: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:89
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:33 cms/list_filter.py:102 cms/models/training_set.py:80
+#: cms/admin.py:34 cms/list_filter.py:102 cms/models/training_set.py:80
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:34 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:109
+#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:109
 #: cms/models/document.py:110
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:35
+#: cms/admin.py:36
 msgid "api keys"
 msgstr "API Keys"
+
+#: cms/admin.py:37 cms/models/feedback.py:85
+msgid "feedback"
+msgstr "Feedback"
 
 #: cms/admins/discipline_admin.py:111
 msgid "Release selected disciplines"
@@ -260,10 +264,6 @@ msgstr "übermittelt am"
 #: cms/models/feedback.py:53
 msgid "The time and date when the feedback was submitted."
 msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
-
-#: cms/models/feedback.py:85
-msgid "feedback"
-msgstr "Feedback"
 
 #: cms/models/feedback.py:87
 msgid "feedback entries"
