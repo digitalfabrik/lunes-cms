@@ -2,6 +2,7 @@ import os
 
 from pathlib import Path
 from django.core.files import File
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -13,6 +14,7 @@ from ..validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
+from .feedback import Feedback
 from .static import Static, convert_umlaute_audio
 
 
@@ -53,6 +55,7 @@ class Document(models.Model):
         max_length=255, null=True, blank=True, verbose_name=_("created by")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    feedback = GenericRelation(Feedback)
 
     @property
     def converted(self, content_type="audio/mpeg"):
