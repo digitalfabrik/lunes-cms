@@ -1,11 +1,13 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db.models.deletion import CASCADE
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
+from .feedback import Feedback
 from .static import convert_umlaute_images
 from .document import Document
 from .discipline import Discipline
@@ -45,6 +47,7 @@ class TrainingSet(MPTTModel):  # pylint: disable=R0903
         related_name="children",
         verbose_name=_("parent"),
     )
+    feedback = GenericRelation(Feedback)
 
     def __str__(self):
         """String representation of TrainingSet instance

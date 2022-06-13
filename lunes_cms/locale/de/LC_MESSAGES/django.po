@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 03:07+0000\n"
+"POT-Creation-Date: 2022-06-13 21:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cms/admin.py:32 cms/admins/training_set_admin.py:251 cms/forms.py:48
-#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:86
+#: cms/admin.py:33 cms/admins/training_set_admin.py:251 cms/forms.py:48
+#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:89
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:33 cms/list_filter.py:102 cms/models/training_set.py:77
+#: cms/admin.py:34 cms/list_filter.py:102 cms/models/training_set.py:80
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:34 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:106
-#: cms/models/document.py:107
+#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:109
+#: cms/models/document.py:110
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:35
+#: cms/admin.py:36
 msgid "api keys"
 msgstr "API Keys"
+
+#: cms/admin.py:37 cms/models/feedback.py:85
+msgid "feedback"
+msgstr "Feedback"
 
 #: cms/admins/discipline_admin.py:111
 msgid "Release selected disciplines"
@@ -48,12 +52,12 @@ msgstr "Ausgewählte Modulgruppen zurückhalten"
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:132 cms/models/training_set.py:23
-#: cms/models/training_set.py:76
+#: cms/admins/document_admin.py:132 cms/models/training_set.py:25
+#: cms/models/training_set.py:79
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:168 cms/models/document.py:47
+#: cms/admins/document_admin.py:168 cms/models/document.py:49
 msgid "audio"
 msgstr "Audio"
 
@@ -62,7 +66,7 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:202 cms/models/alternative_word.py:18
-#: cms/models/document.py:36
+#: cms/models/document.py:38
 msgid "article"
 msgstr "Artikel"
 
@@ -169,53 +173,101 @@ msgstr "Alternatives Wort"
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: cms/models/discipline.py:20 cms/models/training_set.py:22
+#: cms/models/discipline.py:22 cms/models/training_set.py:24
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:21 cms/models/discipline.py:85
-#: cms/models/training_set.py:34
+#: cms/models/discipline.py:23 cms/models/discipline.py:88
+#: cms/models/training_set.py:36
 msgid "discipline"
 msgstr "Modulgruppe"
 
-#: cms/models/discipline.py:23 cms/models/training_set.py:25
+#: cms/models/discipline.py:25 cms/models/training_set.py:27
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:26 cms/models/group.py:10
-#: cms/models/training_set.py:28
+#: cms/models/discipline.py:28 cms/models/group.py:10
+#: cms/models/training_set.py:30
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:53
-#: cms/models/training_set.py:37
+#: cms/models/discipline.py:35 cms/models/document.py:55
+#: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:55
-#: cms/models/training_set.py:39
+#: cms/models/discipline.py:38 cms/models/document.py:57
+#: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:43 cms/models/training_set.py:46
+#: cms/models/discipline.py:45 cms/models/training_set.py:48
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:30
+#: cms/models/document.py:32
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:32
+#: cms/models/document.py:34
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:50
+#: cms/models/document.py:52
 msgid "creation date"
 msgstr "Erstellt am"
 
 #: cms/models/document_image.py:135
 msgid "images"
 msgstr "Bilder"
+
+#: cms/models/feedback.py:24
+msgid "content type"
+msgstr "Inhaltstyp"
+
+#: cms/models/feedback.py:25
+msgid "The content type this feedback entry refers to."
+msgstr "Der Inhaltstyp, auf den sich dieser Feedback-Eintrag bezieht."
+
+#: cms/models/feedback.py:28
+msgid "object id"
+msgstr "Objekt-ID"
+
+#: cms/models/feedback.py:29
+msgid "The id of the object this feedback entry refers to."
+msgstr "Die ID des Objekts, auf das sich dieser Feedback-Eintrag bezieht."
+
+#: cms/models/feedback.py:32 cms/models/feedback.py:72
+msgid "refers to"
+msgstr "bezieht sich auf"
+
+#: cms/models/feedback.py:35
+msgid "comment"
+msgstr "Kommentar"
+
+#: cms/models/feedback.py:44
+msgid "marked as read by"
+msgstr "als gelesen markiert von"
+
+#: cms/models/feedback.py:46
+msgid ""
+"The user who marked this feedback as read. If the feedback is unread, this "
+"field is empty."
+msgstr ""
+"Der Benutzer, der dieses Feedback als gelesen markiert hat. Wenn das "
+"Feedback ungelesen ist, ist dieses Feld leer."
+
+#: cms/models/feedback.py:52
+msgid "submitted on"
+msgstr "übermittelt am"
+
+#: cms/models/feedback.py:53
+msgid "The time and date when the feedback was submitted."
+msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
+
+#: cms/models/feedback.py:87
+msgid "feedback entries"
+msgstr "Feedback-Einträge"
 
 #: cms/models/group_api_key.py:83
 msgid "API Key"
@@ -225,17 +277,28 @@ msgstr "API-Key"
 msgid "API Keys"
 msgstr "API-Keys"
 
-#: cms/models/training_set.py:31
+#: cms/models/training_set.py:33
 msgid "document"
 msgstr "Dokument"
 
-#: cms/models/training_set.py:65
+#: cms/models/training_set.py:68
 msgid ""
 "It is not possible to create child elements for training sets (unlike "
 "disciplines)."
 msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
+
+#: cms/serializers.py:196
+msgid ""
+"The content type must be either 'discipline', 'training set' or 'document'."
+msgstr ""
+"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
+"sein."
+
+#: cms/serializers.py:208
+msgid "{} with id {} does not exist."
+msgstr "{} mit der ID {} existiert nicht."
 
 #: cms/utils.py:135
 msgid "and"

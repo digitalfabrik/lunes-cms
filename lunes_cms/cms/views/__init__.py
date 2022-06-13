@@ -7,6 +7,7 @@ from .training_set_viewset import TrainingSetViewSet
 from .training_set_by_id_viewset import TrainingSetByIdViewSet
 from .other_viewset import public_upload, redirect_view
 from .word_viewset import WordViewSet
+from .feedback_viewset import CreateFeedbackViewSet
 
 __all__ = [
     "DisciplineFilteredViewSet",
@@ -18,4 +19,5 @@ __all__ = [
     "TrainingSetByIdViewSet",
     "public_upload",
     "redirect_view",
+    "CreateFeedbackViewSet",
 ]
