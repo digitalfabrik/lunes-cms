@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 21:51+0000\n"
+"POT-Creation-Date: 2022-06-13 21:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,6 +288,17 @@ msgid ""
 msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
+
+#: cms/serializers.py:196
+msgid ""
+"The content type must be either 'discipline', 'training set' or 'document'."
+msgstr ""
+"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
+"sein."
+
+#: cms/serializers.py:208
+msgid "{} with id {} does not exist."
+msgstr "{} mit der ID {} existiert nicht."
 
 #: cms/utils.py:135
 msgid "and"
