@@ -40,37 +40,12 @@ urlpatterns = [
         "favicon.ico",
         RedirectView.as_view(url=get_static_url("images/logo.svg")),
     ),
-    path("", include("lunes_cms.cms.urls")),
+    path("api/", include("lunes_cms.api.urls", namespace="api")),
+    path("", include("lunes_cms.help.urls")),
     url(r"^i18n/", include("django.conf.urls.i18n")),
 ]
 
-urlpatterns += i18n_patterns(
-    path(
-        "admin/password_reset/",
-        auth_views.PasswordResetView.as_view(),
-        name="admin_password_reset",
-    ),
-    path(
-        "admin/password_reset/done/",
-        auth_views.PasswordResetDoneView.as_view(),
-        name="password_reset_done",
-    ),
-    path(
-        "reset/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(),
-        name="password_reset_confirm",
-    ),
-    path(
-        "reset/done/",
-        auth_views.PasswordResetCompleteView.as_view(),
-        name="password_reset_complete",
-    ),
-    url(r"^admin/", admin.site.urls),
-    path("i18n.js", JavaScriptCatalog.as_view(), name="javascript-translations"),
-)
+urlpatterns += i18n_patterns(path("", include("lunes_cms.cms.urls")))
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# Set dashboard title
-admin.site.index_title = _("Dashboard")

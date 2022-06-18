@@ -51,7 +51,7 @@
                 <p>{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object_name }} "{{ escaped_object }}"? It eventually will delete related objects as well, as shown in the summary:{% endblocktrans %}</p>
                     <div class="row">
                         <div class="col-12 col-sm-3">
-                            {% include "admin/cms/object_delete_summary.html" %}
+                            {% include "admin/object_delete_summary.html" %}
                             <hr />
                             <form method="post">
                                 {% csrf_token %}

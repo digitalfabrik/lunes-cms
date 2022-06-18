@@ -4,7 +4,7 @@ from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
-from .models import (
+from ..cms.models import (
     Discipline,
     TrainingSet,
     Document,
@@ -12,7 +12,7 @@ from .models import (
     DocumentImage,
     Feedback,
 )
-from .utils import get_child_count
+from ..cms.utils import get_child_count
 
 
 class FallbackIconSerializer(serializers.ModelSerializer):

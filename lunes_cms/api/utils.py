@@ -1,8 +1,54 @@
-from django.db.models import Count, Q
-from django.core.exceptions import PermissionDenied
+"""
+A collection of helper methods and classes
+"""
 
-from ..models import Discipline, GroupAPIKey
-from ..utils import get_child_count, get_key
+import os
+import uuid
+import string
+import pathlib
+
+from django.core.exceptions import PermissionDenied
+from django.db.models import Count, Q
+from django.utils.crypto import get_random_string
+from django.utils.translation import gettext as _
+
+from rest_framework import routers
+
+from ..cms.models import Discipline, GroupAPIKey
+from ..cms.utils import get_child_count
+
+
+class OptionalSlashRouter(routers.DefaultRouter):
+    """
+    Custom router to allow routes with and without trailing slash to work without redirects
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.trailing_slash = "/?"
+
+
+def get_key(request, keyword="Api-Key"):
+    """Retrieve API Key from Authorization header of http request.
+    Optionally, a custom keyword can be specified. The function
+    espects the key to be delivered as follows:
+    {"Authorization": "<keyword> <api-key>}
+
+    :param request: get request
+    :type request: HttpRequest
+    :param keyword: keyword for api key in authorization header, defaults to "Api-Key"
+    :type keyword: str, optional
+    :return: api key in authorization header
+    :rtype: str
+    """
+    authorization = request.META.get("HTTP_AUTHORIZATION")
+    if not authorization:
+        return None
+    try:
+        _, key = authorization.split("{} ".format(keyword))
+    except ValueError:
+        key = None
+    return key
 
 
 def get_filtered_discipline_queryset(discipline_view_set):

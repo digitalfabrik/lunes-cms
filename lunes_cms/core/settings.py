@@ -43,7 +43,9 @@ DEBUG = bool(strtobool(os.environ.get("LUNES_CMS_DEBUG", "False")))
 #: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
     # Installed custom apps
+    "lunes_cms.api",
     "lunes_cms.cms",
+    "lunes_cms.help",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
     # Installed Django apps
@@ -220,6 +222,11 @@ USE_TZ = True
 # STATIC FILES #
 ################
 
+#: This setting defines the additional locations the :mod:`django.contrib.staticfiles` app will traverse to collect
+#: static files for deployment or to serve them during development (see :setting:`django:STATICFILES_DIRS` and
+#: :doc:`Managing static files <django:howto/static-files/index>`).
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
 #: URL to use in development when referring to static files located in :setting:`STATICFILES_DIRS`
 #: (see :setting:`django:STATIC_URL` and :doc:`Managing static files <django:howto/static-files/index>`)
 STATIC_URL = "/static/"
@@ -367,7 +374,7 @@ LOGGING = {
     },
     "loggers": {
         # Loggers of lunes-cms django apps
-        "cms": {
+        "lunes_cms": {
             "handlers": ["console-colored", "logfile"],
             "level": LOG_LEVEL,
             "propagate": False,
@@ -400,6 +407,7 @@ LOGGING = {
 #: Configuration of Django REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
 }
 
 

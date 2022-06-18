@@ -1,7 +1,8 @@
 from django.core.exceptions import PermissionDenied
 from rest_framework_api_key.permissions import BaseHasAPIKey
-from .models import GroupAPIKey
 from rest_framework import permissions
+
+from ..cms.models import GroupAPIKey
 from .utils import get_key
 
 

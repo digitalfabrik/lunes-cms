@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 22:54+0000\n"
+"POT-Creation-Date: 2022-07-18 12:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: api/apps.py:13
+msgid "API"
+msgstr "API"
+
+#: api/serializers.py:196
+msgid ""
+"The content type must be either 'discipline', 'training set' or 'document'."
+msgstr ""
+"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
+"sein."
+
+#: api/serializers.py:208
+msgid "{} with id {} does not exist."
+msgstr "{} mit der ID {} existiert nicht."
 
 #: cms/admin.py:33 cms/admins/training_set_admin.py:261 cms/forms.py:48
 #: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:100
@@ -307,18 +322,91 @@ msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
 
-#: cms/serializers.py:196
+#: cms/templates/admin/delete_confirmation.html:16
+#: cms/templates/admin/delete_selected_confirmation.html:15
+msgid "Home"
+msgstr "Home"
+
+#: cms/templates/admin/delete_confirmation.html:20
+#: cms/templates/admin/delete_confirmation.html:24
+#: cms/templates/admin/delete_confirmation.html:32
+msgid "Delete"
+msgstr "Löschen"
+
+#: cms/templates/admin/delete_confirmation.html:39
+#, python-format
 msgid ""
-"The content type must be either 'discipline', 'training set' or 'document'."
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
 msgstr ""
-"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
-"sein."
+"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
+"ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen."
 
-#: cms/serializers.py:208
-msgid "{} with id {} does not exist."
-msgstr "{} mit der ID {} existiert nicht."
+#: cms/templates/admin/delete_confirmation.html:46
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
+"ebenfalls löschen, die allerdings geschützt sind."
 
-#: cms/utils.py:163
+#: cms/templates/admin/delete_confirmation.html:53
+#: cms/templates/admin/delete_selected_confirmation.html:51
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"It eventually will delete related objects as well, as shown in the summary:"
+msgstr ""
+"Bist du sicher, dass du %(object_name)s '%(escaped_object)s' löschen "
+"möchtest? Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in "
+"der Zusammenfassung sehen kannst:"
+
+#: cms/templates/admin/delete_confirmation.html:62
+#: cms/templates/admin/delete_selected_confirmation.html:64
+msgid "Yes, I’m sure"
+msgstr "Ja, ich bin mir sicher"
+
+#: cms/templates/admin/delete_confirmation.html:65
+#: cms/templates/admin/delete_selected_confirmation.html:67
+msgid "No, take me back"
+msgstr "Nein, bitte abbrechen"
+
+#: cms/templates/admin/delete_selected_confirmation.html:18
+#: cms/templates/admin/delete_selected_confirmation.html:22
+#: cms/templates/admin/delete_selected_confirmation.html:30
+msgid "Delete multiple objects"
+msgstr "Mehrere Objekte löschen"
+
+#: cms/templates/admin/delete_selected_confirmation.html:37
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
+"Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
+
+#: cms/templates/admin/delete_selected_confirmation.html:44
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
+"Objekte ebenfalls löschen, die allerdings geschützt sind:"
+
+#: cms/templates/admin/object_delete_summary.html:2
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#: cms/urls.py:48
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: cms/utils.py:140
 msgid "and"
 msgstr "und"
 
@@ -334,105 +422,25 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:198
+#: core/settings.py:200
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:199
+#: core/settings.py:201
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:412 core/settings.py:413 core/settings.py:415
+#: core/settings.py:420 core/settings.py:421 core/settings.py:423
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:414
+#: core/settings.py:422
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
-#: core/urls.py:76
-msgid "Dashboard"
-msgstr "Dashboard"
-
-#: templates/admin/cms/delete_confirmation.html:16
-#: templates/admin/cms/delete_selected_confirmation.html:15
-msgid "Home"
-msgstr "Home"
-
-#: templates/admin/cms/delete_confirmation.html:20
-#: templates/admin/cms/delete_confirmation.html:24
-#: templates/admin/cms/delete_confirmation.html:32
-msgid "Delete"
-msgstr "Löschen"
-
-#: templates/admin/cms/delete_confirmation.html:39
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
-"related objects, but your account doesn't have permission to delete the "
-"following types of objects:"
-msgstr ""
-"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen."
-
-#: templates/admin/cms/delete_confirmation.html:46
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
-"following protected related objects:"
-msgstr ""
-"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"ebenfalls löschen, die allerdings geschützt sind."
-
-#: templates/admin/cms/delete_confirmation.html:53
-#: templates/admin/cms/delete_selected_confirmation.html:51
-#, python-format
-msgid ""
-"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
-"It eventually will delete related objects as well, as shown in the summary:"
-msgstr ""
-"Bist du sicher, dass du %(object_name)s '%(escaped_object)s' löschen "
-"möchtest? Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in "
-"der Zusammenfassung sehen kannst:"
-
-#: templates/admin/cms/delete_confirmation.html:62
-#: templates/admin/cms/delete_selected_confirmation.html:64
-msgid "Yes, I’m sure"
-msgstr "Ja, ich bin mir sicher"
-
-#: templates/admin/cms/delete_confirmation.html:65
-#: templates/admin/cms/delete_selected_confirmation.html:67
-msgid "No, take me back"
-msgstr "Nein, bitte abbrechen"
-
-#: templates/admin/cms/delete_selected_confirmation.html:18
-#: templates/admin/cms/delete_selected_confirmation.html:22
-#: templates/admin/cms/delete_selected_confirmation.html:30
-msgid "Delete multiple objects"
-msgstr "Mehrere Objekte löschen"
-
-#: templates/admin/cms/delete_selected_confirmation.html:37
-#, python-format
-msgid ""
-"Deleting the selected %(objects_name)s would result in deleting related "
-"objects, but your account doesn't have permission to delete the following "
-"types of objects:"
-msgstr ""
-"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
-"Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
-
-#: templates/admin/cms/delete_selected_confirmation.html:44
-#, python-format
-msgid ""
-"Deleting the selected %(objects_name)s would require deleting the following "
-"protected related objects:"
-msgstr ""
-"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
-"Objekte ebenfalls löschen, die allerdings geschützt sind:"
-
-#: templates/admin/cms/object_delete_summary.html:2
-msgid "Summary"
-msgstr "Zusammenfassung"
+#: help/apps.py:13
+msgid "help"
+msgstr "Hilfe"
 
 #~ msgid "French"
 #~ msgstr "Französisch"

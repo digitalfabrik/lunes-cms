@@ -3,9 +3,9 @@ from django.db.models import Q, Count
 
 from rest_framework import viewsets
 
-from ..models import Discipline, GroupAPIKey
-from ..serializers import DisciplineSerializer
-from .utils import get_key
+from ....cms.models import Discipline, GroupAPIKey
+from ...serializers import DisciplineSerializer
+from ...utils import get_key
 
 
 class DisciplineViewSet(viewsets.ModelViewSet):

@@ -1,9 +1,10 @@
 from rest_framework import viewsets
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
-from ..models import TrainingSet, GroupAPIKey
-from ..serializers import TrainingSetSerializer
-from ..utils import get_key
+
+from ....cms.models import TrainingSet, GroupAPIKey
+from ...serializers import TrainingSetSerializer
+from ...utils import get_key
 
 
 class TrainingSetByIdViewSet(viewsets.ReadOnlyModelViewSet):
