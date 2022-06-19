@@ -14,8 +14,16 @@ class DisciplineAdmin(DraggableMPTTAdmin):
     Inheriting from `mptt.admin.DraggableMPTTAdmin`.
     """
 
-    exclude = ("creator_is_admin",)
-    readonly_fields = ("created_by",)
+    fields = [
+        "released",
+        "title",
+        "description",
+        "icon",
+        "image_tag",
+        "parent",
+        "created_by",
+    ]
+    readonly_fields = ["created_by", "image_tag"]
     search_fields = ["title"]
     actions = ["delete_selected", "make_released", "make_unreleased"]
     list_per_page = 25
@@ -151,3 +159,6 @@ class DisciplineAdmin(DraggableMPTTAdmin):
             return None
 
     creator_group.short_description = _("creator group")
+
+    class Media:
+        js = ("js/image_preview.js",)

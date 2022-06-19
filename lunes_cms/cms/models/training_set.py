@@ -7,6 +7,7 @@ from django.db.models.deletion import CASCADE
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
+from ..utils import get_image_tag
 from .feedback import Feedback
 from .static import convert_umlaute_images
 from .document import Document
@@ -48,6 +49,17 @@ class TrainingSet(MPTTModel):  # pylint: disable=R0903
         verbose_name=_("parent"),
     )
     feedback = GenericRelation(Feedback)
+
+    def image_tag(self):
+        """
+        Image thumbnail to display a preview of the icon
+
+        :return: img HTML tag to display an image thumbnail
+        :rtype: str
+        """
+        return get_image_tag(self.icon)
+
+    image_tag.short_description = ""
 
     def __str__(self):
         """String representation of TrainingSet instance

@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-from ..utils import get_child_count
+from ..utils import get_child_count, get_image_tag
 from .feedback import Feedback
 from .static import convert_umlaute_images
 
@@ -71,6 +71,17 @@ class Discipline(MPTTModel):
                 "id", flat=True
             )
         return set(training_sets)
+
+    def image_tag(self):
+        """
+        Image thumbnail to display a preview of the icon
+
+        :return: img HTML tag to display an image thumbnail
+        :rtype: str
+        """
+        return get_image_tag(self.icon)
+
+    image_tag.short_description = ""
 
     def __str__(self):
         """String representation of Discipline instance
