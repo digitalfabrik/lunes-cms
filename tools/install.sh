@@ -24,6 +24,11 @@ if [[ ! -x "$(command -v pip3)" ]]; then
     echo "Pip for Python3 is not installed. Please install python3-pip manually and run this script again."  | print_error
     exit 1
 fi
+# Check if prerequisite for psycopg2 is installed
+if [[ ! -x "$(command -v pg_config)" ]]; then
+    echo "The command pg_config is not available. Please install libpq-dev manually and run this script again."  | print_error
+    exit 1
+fi
 # Check if nc (netcat) is installed
 if [[ ! -x "$(command -v nc)" ]]; then
     echo "Netcat is not installed. Please install it manually and run this script again."  | print_error
