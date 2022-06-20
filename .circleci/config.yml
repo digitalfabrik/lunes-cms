@@ -18,7 +18,7 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install -e .[dev,doc]
+              pip install -e .[dev,doc,test]
             fi
       - save_cache:
           key: pip-{{ checksum "setup.cfg" }}-v2
@@ -69,26 +69,29 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Installing system dependencies
-          command: sudo apt-get update && cat requirements.system | xargs sudo apt-get install
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Check for missing migrations
-          command: |
-            source .venv/bin/activate
-            lunes-cms-cli makemigrations cms --check
+          command: lunes-cms-cli makemigrations cms --check
       - run:
           name: Migrate database
-          command: |
-            source .venv/bin/activate
-            lunes-cms-cli migrate
+          command: lunes-cms-cli migrate
       - run:
           name: Run tests
-          command: |
-            source .venv/bin/activate
-            lunes-cms-cli test tests
+          command: pytest --circleci-parallelize --disable-warnings --cov=lunes_cms --cov-report xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
+      - run:
+          name: Format test coverage
+          command: ./cc-test-reporter format-coverage -t coverage.py -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
+      - store_test_results:
+          path: test-results
       - store_artifacts:
-          path: test-reports/
-          destination: python_app
+          path: test-results
+      - persist_to_workspace:
+          root: .
+          paths:
+            - cc-test-reporter
+            - coverage
   black:
     docker:
       - image: cimg/python:3.9

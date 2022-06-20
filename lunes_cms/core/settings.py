@@ -111,7 +111,7 @@ LOGIN_REDIRECT_URL = "/admin/"
 
 #: A dictionary containing the settings for all databases to be used with this Django installation
 #: (see :setting:`django:DATABASES`)
-DATABASES = {
+DATABASE_CHOICES = {
     "postgres": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("LUNES_CMS_DB_NAME", "lunes"),
@@ -127,10 +127,14 @@ DATABASES = {
 }
 
 try:
-    DATABASES["default"] = DATABASES[os.environ.get("LUNES_CMS_DB_BACKEND", "postgres")]
+    #: A dictionary containing the settings for all databases to be used with this Django installation
+    #: (see :setting:`django:DATABASES`)
+    DATABASES = {
+        "default": DATABASE_CHOICES[os.environ.get("LUNES_CMS_DB_BACKEND", "postgres")]
+    }
 except KeyError as e:
     raise ImproperlyConfigured(
-        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASES.keys()}."
+        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASE_CHOICES.keys()}."
     ) from e
 
 
