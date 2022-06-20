@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 21:52+0000\n"
+"POT-Creation-Date: 2022-06-20 13:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,24 @@ msgstr "Bild"
 #: cms/models/document.py:38
 msgid "article"
 msgstr "Artikel"
+
+#: cms/admins/feedback_admin.py:32
+msgid "Mark as read"
+msgstr "Als gelesen markieren"
+
+#: cms/admins/feedback_admin.py:47
+msgid "The selected feedback entries were successfully marked as read."
+msgstr ""
+"Die ausgewählten Feedback-Eitnräge wurden erfolgreich als gelesen markiert."
+
+#: cms/admins/feedback_admin.py:51
+msgid "Mark as unread"
+msgstr "Als ungelesen markieren"
+
+#: cms/admins/feedback_admin.py:66
+msgid "The selected feedback entries were successfully marked as unread."
+msgstr ""
+"Die ausgewählten Feedback-Eitnräge wurden erfolgreich als ungelesen markiert."
 
 #: cms/admins/training_set_admin.py:131
 msgid "Release selected training sets"
