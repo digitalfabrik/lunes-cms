@@ -2,7 +2,8 @@ UNRELEASED
 ----------
 
 * [ [#337](https://github.com/digitalfabrik/lunes-cms/issues/337) ] Remove image names
-* [ [#337](https://github.com/digitalfabrik/lunes-cms/issues/211) ] Add feedback endpoint to API
+* [ [#211](https://github.com/digitalfabrik/lunes-cms/issues/211) ] Add feedback endpoint to API
+* [ [#346](https://github.com/digitalfabrik/lunes-cms/issues/346) ] Add bulk action to mark feedback as read
 
 
 2022.6.0
