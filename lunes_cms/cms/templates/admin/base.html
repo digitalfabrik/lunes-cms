@@ -1,0 +1,21 @@
+{% extends 'admin/base.html' %}
+
+{% block extrajs %}
+    <script>
+        let unread_feedback_cnt = {{ unread_feedback_cnt }};
+        // Get the navigation item for the feedback menu entry
+        let feedbackNavItem = $("#jazzy-sidebar a.nav-link[href$='/admin/cms/feedback/']");
+        // If unread feedback exists, show counter
+        if (feedbackNavItem && unread_feedback_cnt > 0) {
+            // Create span element for counter
+            let counterSpan = $(document.createElement("span"));
+            counterSpan.text(unread_feedback_cnt);
+            counterSpan.addClass("position-absolute text-center rounded-circle bg-danger ml-2 px-1");
+            counterSpan.css("min-width", "22.5px");
+            // Append counter to the feedback link
+            feedbackNavItem.append(counterSpan);
+            // Fix position of counter when sidebar is collapsed
+            feedbackNavItem.find("p").width("auto");
+        }
+    </script>
+{% endblock %}
