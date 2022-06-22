@@ -2,8 +2,6 @@
 
 table {
 /* Additional CSS for styling the feedback table */
-
-table {
   width: 100%;
   table-layout: fixed;
   overflow-wrap: break-word;
