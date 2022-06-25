@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     # Installed third-party-apps
-    "drf_yasg",
+    "drf_spectacular",
     "mptt",
     "pydub",
     "rest_framework",
@@ -82,7 +82,7 @@ ROOT_URLCONF = "lunes_cms.core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -406,10 +406,33 @@ LOGGING = {
 
 #: Configuration of Django REST Framework
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    # "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
+    "ALLOWED_VERSIONS": ("v1", "v2"),
+    "DEFAULT_VERSION": "default",
+    "DEFAULT_API_URL": "http://localhost:8080/api/",
 }
 
+from django.templatetags.static import static
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Lunes API",
+    "DESCRIPTION": "The API documentation for the Lunes CMS",
+    "VERSION": None,
+    "SCHEMA_PATH_PREFIX": "/api(/v[0-9])?",
+    "CONTACT": {"email": "tech@integreat-app.de"},
+    "LICENSE": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    },
+    "SWAGGER_UI_FAVICON_HREF": "/favicon.ico",
+    "SWAGGER_UI_SETTINGS": """{
+        deepLinking: true,
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        layout: "StandaloneLayout",
+    }""",
+}
 
 ##################
 # DJANGO JAZZMIN #

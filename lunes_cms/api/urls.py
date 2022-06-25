@@ -1,7 +1,5 @@
 """
-Map paths to view functions.
-Defines custom schema views and a router that
-handles the url patterns described in the `README.md` file
+URL patterns for the Lunes API
 """
 from django.urls import include, path
 

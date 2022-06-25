@@ -1,13 +1,12 @@
 """
-Map paths to view functions.
-Defines custom schema views and a router that
-handles the url patterns described in the `README.md` file
+URL patterns for the first version of the Lunes API
 """
-from django.urls import include, path
-from django.conf.urls import url
+from django.urls import include, path, re_path
+
 from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+from rest_framework.versioning import NamespaceVersioning
+
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from ..utils import OptionalSlashRouter
 from . import views
@@ -16,24 +15,16 @@ from . import views
 #: The namespace for this URL config (see :attr:`django.urls.ResolverMatch.app_name`)
 app_name = "v1"
 
-#: Schema view for swagger documentation
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Snippets API",
-        default_version="v1",
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
 #: Router for dynamic url patterns
 router = OptionalSlashRouter()
 router.register(r"disciplines", views.DisciplineViewSet, "disciplines")
 router.register(
-    r"disciplines_by_level(?:/(?P<discipline_id>[0-9]+))?",
+    "disciplines_by_level/",
+    views.DisciplineFilteredViewSet,
+    "disciplines_overview",
+)
+router.register(
+    r"disciplines_by_level/(?P<discipline_id>[0-9]+)?",
     views.DisciplineFilteredViewSet,
     "disciplines_by_level",
 )
@@ -64,17 +55,12 @@ router.register(r"feedback", views.CreateFeedbackViewSet, "feedback")
 #: The url patterns of this module (see :doc:`topics/http/urls`)
 urlpatterns = [
     path("", include(router.urls)),
-    url(
-        r"^swagger(?P<format>\.json|\.yaml)$",
-        schema_view.without_ui(cache_timeout=0),
-        name="schema-json",
-    ),
-    url(
-        r"^swagger/$",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
-    url(
-        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "docs/",
+        SpectacularSwaggerView.as_view(
+            template_name="swagger_ui.html", url_name="api:v1:schema"
+        ),
+        name="swagger-ui",
     ),
 ]

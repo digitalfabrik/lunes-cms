@@ -4,7 +4,12 @@ Lunes CMS documentation
 
 This is the developer documentation for the Lunes Django backend.
 
-For general help with the Django framework, please refer to the :doc:`django:index`.
+.. Note::
+    For general help with the Django framework, please refer to the :doc:`django:index`.
+
+.. Note::
+    The API usage documentation can be found here: https://lunes.tuerantuer.org/api/docs/
+
 
 First Steps
 ===========

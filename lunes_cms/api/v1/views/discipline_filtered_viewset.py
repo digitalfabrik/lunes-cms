@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 
 from ....cms.models import Discipline
 from ...serializers import DisciplineSerializer
@@ -10,7 +10,7 @@ from ...utils import (
 )
 
 
-class DisciplineFilteredViewSet(viewsets.ModelViewSet):
+class DisciplineFilteredViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     Defines a view set for the Discipline module, optionally filtered respected to
     the different mptt levels or a group id.
@@ -21,7 +21,6 @@ class DisciplineFilteredViewSet(viewsets.ModelViewSet):
 
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
-    http_method_names = ["get"]
 
     def get_queryset(self):
         """

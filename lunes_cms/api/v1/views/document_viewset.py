@@ -7,9 +7,12 @@ from ...utils import check_group_object_permissions
 
 class DocumentViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the Document module.
-    Inherits from `viewsets.ModelViewSet` and defines queryset
-    and serializers.
+    List of available documents.
+    A document is an item to be learned and consists of an image,
+    multiple correct answers, and other details.
+    If training set ID is provided as a parameter,
+    the list will return only documents belonging to the training set.
+    A valid API-Key may be required.
     """
 
     serializer_class = DocumentSerializer

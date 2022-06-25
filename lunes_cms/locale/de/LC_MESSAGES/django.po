@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 12:35+0000\n"
+"POT-Creation-Date: 2022-07-18 12:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -430,11 +430,11 @@ msgstr "Englisch"
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:420 core/settings.py:421 core/settings.py:423
+#: core/settings.py:443 core/settings.py:444 core/settings.py:446
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:422
+#: core/settings.py:445
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

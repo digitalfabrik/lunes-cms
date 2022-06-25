@@ -11,9 +11,10 @@ from ...utils import get_key
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the Group module.
-    Inherits from `viewsets.ModelViewSet` and defines queryset
-    and serializers.
+    List available information of a user group.
+    A valid API-Key is required.
+    There is no need to pass a group id or similar,
+    the returned queryset is filtered by the delivered API-Key.
     """
 
     permission_classes = [VerifyGroupKey]

@@ -9,9 +9,10 @@ from ...utils import check_group_object_permissions
 
 class TrainingSetViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the TrainingSet module.
-    Inherits from `viewsets.ModelViewSet` and defines queryset
-    and serializers.
+    List training sets.
+    If discipline ID is provided as a parameter,
+    the list will return only training sets belonging to the discipline.
+    A valid API-Key may be required.
     """
 
     serializer_class = TrainingSetSerializer
