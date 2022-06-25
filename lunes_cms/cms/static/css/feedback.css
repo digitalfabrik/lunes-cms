@@ -1,0 +1,48 @@
+/* Additional CSS for styling the feedback table */
+
+table {
+/* Additional CSS for styling the feedback table */
+  width: 100%;
+  table-layout: fixed;
+  overflow-wrap: break-word;
+  min-width: 1000px;
+}
+
+/* Checkbox column */
+thead th:nth-child(1) {
+  width: 40px;
+}
+
+/* Comment column */
+thead th:nth-child(2) {
+  width: auto;
+}
+
+/* Related object column */
+thead th:nth-child(3) {
+  width: 250px;
+}
+
+/* Related object type column */
+thead th:nth-child(4) {
+  width: 140px;
+}
+
+/* Submission date column */
+thead th:nth-child(5) {
+  width: 185px;
+}
+
+/* Read by column */
+thead th:nth-child(6) {
+  width: 230px;
+}
+
+/* Truncate long comments and content object links */
+.field-comment a,
+.field-content_object_link a {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

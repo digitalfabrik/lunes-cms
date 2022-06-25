@@ -10,8 +10,7 @@ class DocumentImageAdmin(admin.StackedInline):
     """
 
     model = DocumentImage
-    search_fields = ["name"]
-    fields = ["name", "image", "image_tag"]
+    fields = ["image", "image_tag"]
     superuser_fields = ["confirmed"]
     readonly_fields = ["image_tag"]
     autocomplete_fields = ["document"]

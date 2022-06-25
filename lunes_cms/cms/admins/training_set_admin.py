@@ -20,7 +20,17 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
     """
 
     exclude = ("creator_is_admin",)
-    readonly_fields = ("created_by",)
+    fields = [
+        "released",
+        "title",
+        "description",
+        "icon",
+        "image_tag",
+        "documents",
+        "discipline",
+        "created_by",
+    ]
+    readonly_fields = ["created_by", "image_tag"]
     search_fields = ["title"]
     form = TrainingSetForm
     list_filter = (DisciplineListFilter,)
@@ -267,3 +277,6 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
             return None
 
     creator_group.short_description = _("creator group")
+
+    class Media:
+        js = ("js/image_preview.js",)

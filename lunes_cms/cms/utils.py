@@ -6,7 +6,11 @@ import os
 import uuid
 import string
 import pathlib
+
+from html import escape
+
 from django.utils.crypto import get_random_string
+from django.utils.html import mark_safe
 from django.utils.translation import ugettext as _
 
 
@@ -111,6 +115,30 @@ def get_key(request, keyword="Api-Key"):
     except ValueError:
         key = None
     return key
+
+
+def get_image_tag(image):
+    """
+    Image thumbnail to display a preview of a image
+
+    :param image: The image file
+    :type image: ~django.db.models.fields.files.ImageFieldFile
+
+    :return: HTML tag to display an image thumbnail
+    :rtype: str
+    """
+    src = ""
+    if (
+        image
+        and image.storage.exists(image.name)
+        and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png"])
+    ):
+        # The normal src attribute for jpg and png previews
+        src = escape(f"/media/{image}")
+    # Hide preview if image is empty or has invalid type
+    html_cls = "" if src else 'class="hidden"'
+    # HTML image tag for previews
+    return mark_safe(f'<img src="{src}" width="330" height="auto" {html_cls} />')
 
 
 def iter_to_string(iter):

@@ -1,9 +1,9 @@
 from django.db import models
-from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from PIL import Image, ImageFilter
 
+from ..utils import get_image_tag
 from ..validators import validate_multiple_extensions
 from .static import Static, convert_umlaute_images
 from .document import Document
@@ -15,7 +15,6 @@ class DocumentImage(models.Model):
     """
 
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
         upload_to=convert_umlaute_images, validators=[validate_multiple_extensions]
     )
@@ -25,23 +24,14 @@ class DocumentImage(models.Model):
     confirmed = models.BooleanField(default=True, verbose_name="confirmed")
 
     def image_tag(self):
-        """Image thumbnail to display a preview of a image in the editing section
+        """
+        Image thumbnail to display a preview of a image in the editing section
         of the DocumentImage admin.
 
         :return: img HTML tag to display an image thumbnail
         :rtype: str
         """
-        if self.image and self.image.storage.exists(self.image.name):
-            if any(self.image.name.lower().endswith(ext) for ext in [".jpg", ".png"]):
-                # The normal image tag for jpg and png previews
-                return mark_safe(
-                    f'<img src="/media/{self.image}" width="330" height="240" />'
-                )
-        else:
-            # The dummy image tag for new files which are to be uploaded
-            return mark_safe('<img src="" width="330" height="auto" class="hidden" />')
-        # Empty tag for image types that cannot be previewed
-        return ""
+        return get_image_tag(self.image)
 
     image_tag.short_description = ""
 
@@ -117,10 +107,7 @@ class DocumentImage(models.Model):
         :return: title of document image instance
         :rtype: str
         """
-        if self.name:
-            return self.name
-        else:
-            return self.document.word
+        return self.document.word
 
     def save(self, *args, **kwargs):
         """Overwrite djangos save function to scale images into a

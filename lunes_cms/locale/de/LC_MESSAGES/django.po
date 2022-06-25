@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 14:27+0000\n"
+"POT-Creation-Date: 2022-06-22 13:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,60 +17,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cms/admin.py:32 cms/admins/training_set_admin.py:251 cms/forms.py:48
-#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:86
+#: cms/admin.py:33 cms/admins/training_set_admin.py:261 cms/forms.py:48
+#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:100
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:33 cms/list_filter.py:102 cms/models/training_set.py:77
+#: cms/admin.py:34 cms/list_filter.py:102 cms/models/training_set.py:92
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:34 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:106
-#: cms/models/document.py:107
+#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:109
+#: cms/models/document.py:110
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:35
+#: cms/admin.py:36
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admins/discipline_admin.py:111
+#: cms/admin.py:37 cms/models/feedback.py:85
+msgid "feedback"
+msgstr "Feedback"
+
+#: cms/admins/discipline_admin.py:119
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:124
+#: cms/admins/discipline_admin.py:132
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:153 cms/admins/document_admin.py:150
-#: cms/admins/training_set_admin.py:269
+#: cms/admins/discipline_admin.py:161 cms/admins/document_admin.py:150
+#: cms/admins/training_set_admin.py:279
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:132 cms/models/training_set.py:23
-#: cms/models/training_set.py:76
+#: cms/admins/document_admin.py:132 cms/models/training_set.py:26
+#: cms/models/training_set.py:91
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:168 cms/models/document.py:47
+#: cms/admins/document_admin.py:168 cms/models/document.py:49
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:188 cms/models/document_image.py:138
+#: cms/admins/document_admin.py:188 cms/models/document_image.py:125
 msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:202 cms/models/alternative_word.py:18
-#: cms/models/document.py:36
+#: cms/models/document.py:38
 msgid "article"
 msgstr "Artikel"
 
-#: cms/admins/training_set_admin.py:131
+#: cms/admins/feedback_admin.py:32
+msgid "Mark as read"
+msgstr "Als gelesen markieren"
+
+#: cms/admins/feedback_admin.py:47
+msgid "The selected feedback entries were successfully marked as read."
+msgstr ""
+"Die ausgewählten Feedback-Eitnräge wurden erfolgreich als gelesen markiert."
+
+#: cms/admins/feedback_admin.py:51
+msgid "Mark as unread"
+msgstr "Als ungelesen markieren"
+
+#: cms/admins/feedback_admin.py:66
+msgid "The selected feedback entries were successfully marked as unread."
+msgstr ""
+"Die ausgewählten Feedback-Eitnräge wurden erfolgreich als ungelesen markiert."
+
+#: cms/admins/training_set_admin.py:141
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: cms/admins/training_set_admin.py:166
+#: cms/admins/training_set_admin.py:176
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -84,29 +106,29 @@ msgstr[1] ""
 "Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
 "Vokabeln mit bestätigten Bildern enthalten."
 
-#: cms/admins/training_set_admin.py:179
+#: cms/admins/training_set_admin.py:189
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
-#: cms/admins/training_set_admin.py:193
+#: cms/admins/training_set_admin.py:203
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
 msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
 
-#: cms/admins/training_set_admin.py:199
+#: cms/admins/training_set_admin.py:209
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
-#: cms/admins/training_set_admin.py:223
+#: cms/admins/training_set_admin.py:233
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
-#: cms/admins/training_set_admin.py:234
+#: cms/admins/training_set_admin.py:244
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
@@ -169,53 +191,101 @@ msgstr "Alternatives Wort"
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: cms/models/discipline.py:20 cms/models/training_set.py:22
+#: cms/models/discipline.py:22 cms/models/training_set.py:25
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:21 cms/models/discipline.py:85
-#: cms/models/training_set.py:34
+#: cms/models/discipline.py:23 cms/models/discipline.py:99
+#: cms/models/training_set.py:37
 msgid "discipline"
 msgstr "Modulgruppe"
 
-#: cms/models/discipline.py:23 cms/models/training_set.py:25
+#: cms/models/discipline.py:25 cms/models/training_set.py:28
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:26 cms/models/group.py:10
-#: cms/models/training_set.py:28
+#: cms/models/discipline.py:28 cms/models/group.py:10
+#: cms/models/training_set.py:31
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:53
-#: cms/models/training_set.py:37
+#: cms/models/discipline.py:35 cms/models/document.py:55
+#: cms/models/training_set.py:40
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:55
-#: cms/models/training_set.py:39
+#: cms/models/discipline.py:38 cms/models/document.py:57
+#: cms/models/training_set.py:42
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:43 cms/models/training_set.py:46
+#: cms/models/discipline.py:45 cms/models/training_set.py:49
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:30
+#: cms/models/document.py:32
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:32
+#: cms/models/document.py:34
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:50
+#: cms/models/document.py:52
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document_image.py:139
+#: cms/models/document_image.py:126
 msgid "images"
 msgstr "Bilder"
+
+#: cms/models/feedback.py:24
+msgid "content type"
+msgstr "Inhaltstyp"
+
+#: cms/models/feedback.py:25
+msgid "The content type this feedback entry refers to."
+msgstr "Der Inhaltstyp, auf den sich dieser Feedback-Eintrag bezieht."
+
+#: cms/models/feedback.py:28
+msgid "object id"
+msgstr "Objekt-ID"
+
+#: cms/models/feedback.py:29
+msgid "The id of the object this feedback entry refers to."
+msgstr "Die ID des Objekts, auf das sich dieser Feedback-Eintrag bezieht."
+
+#: cms/models/feedback.py:32 cms/models/feedback.py:72
+msgid "refers to"
+msgstr "bezieht sich auf"
+
+#: cms/models/feedback.py:35
+msgid "comment"
+msgstr "Kommentar"
+
+#: cms/models/feedback.py:44
+msgid "marked as read by"
+msgstr "als gelesen markiert von"
+
+#: cms/models/feedback.py:46
+msgid ""
+"The user who marked this feedback as read. If the feedback is unread, this "
+"field is empty."
+msgstr ""
+"Der Benutzer, der dieses Feedback als gelesen markiert hat. Wenn das "
+"Feedback ungelesen ist, ist dieses Feld leer."
+
+#: cms/models/feedback.py:52
+msgid "submitted on"
+msgstr "übermittelt am"
+
+#: cms/models/feedback.py:53
+msgid "The time and date when the feedback was submitted."
+msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
+
+#: cms/models/feedback.py:87
+msgid "feedback entries"
+msgstr "Feedback-Einträge"
 
 #: cms/models/group_api_key.py:83
 msgid "API Key"
@@ -225,11 +295,11 @@ msgstr "API-Key"
 msgid "API Keys"
 msgstr "API-Keys"
 
-#: cms/models/training_set.py:31
+#: cms/models/training_set.py:34
 msgid "document"
 msgstr "Dokument"
 
-#: cms/models/training_set.py:65
+#: cms/models/training_set.py:80
 msgid ""
 "It is not possible to create child elements for training sets (unlike "
 "disciplines)."
@@ -237,7 +307,18 @@ msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
 
-#: cms/utils.py:135
+#: cms/serializers.py:196
+msgid ""
+"The content type must be either 'discipline', 'training set' or 'document'."
+msgstr ""
+"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
+"sein."
+
+#: cms/serializers.py:208
+msgid "{} with id {} does not exist."
+msgstr "{} mit der ID {} existiert nicht."
+
+#: cms/utils.py:163
 msgid "and"
 msgstr "und"
 
@@ -253,19 +334,19 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:193
+#: core/settings.py:194
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:194
+#: core/settings.py:195
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:407 core/settings.py:408 core/settings.py:410
+#: core/settings.py:408 core/settings.py:409 core/settings.py:411
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:409
+#: core/settings.py:410
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

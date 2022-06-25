@@ -88,6 +88,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "lunes_cms.core.context_processors.feedback_processor",
             ],
         },
     },
@@ -422,6 +423,7 @@ JAZZMIN_SETTINGS = {
         "cms.TrainingSet": "fas fa-stream",
         "cms.Document": "fab fa-amilia",
         "cms.GroupAPIKey": "fas fa-key",
+        "cms.Feedback": "fas fa-comment",
     },
 }
 

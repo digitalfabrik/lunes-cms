@@ -66,6 +66,7 @@ router.register(
 )
 router.register(r"words", views.WordViewSet, "words")
 router.register(r"group_info", views.GroupViewSet, "group_by_id")
+router.register(r"feedback", views.CreateFeedbackViewSet, "feedback")
 
 urlpatterns = [
     path("", views.redirect_view, name="redirect"),

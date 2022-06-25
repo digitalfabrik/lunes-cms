@@ -21,7 +21,7 @@ System requirements
 
     2. Install system requirements::
 
-        sudo apt -y install python3-venv python3-pip ffmpeg
+        sudo apt -y install python3-venv python3-pip libpq-dev ffmpeg
 
 
 Lunes CMS Package

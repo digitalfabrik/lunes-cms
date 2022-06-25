@@ -15,6 +15,7 @@ def read_config():
         for KEY, VALUE in config.items(section):
             os.environ.setdefault(f"LUNES_CMS_{KEY.upper()}", VALUE)
 
+
 def main():
     read_config()
 
@@ -29,5 +30,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
