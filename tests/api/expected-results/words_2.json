@@ -1,0 +1,14 @@
+{
+  "id": 2,
+  "word": "Schere",
+  "article": 2,
+  "audio": "http://testserver/media/audio/schere.mp3",
+  "word_type": "Nomen",
+  "alternatives": [],
+  "document_image": [
+    {
+      "id": 2,
+      "image": "http://testserver/media/images/schere.jpg"
+    }
+  ]
+}

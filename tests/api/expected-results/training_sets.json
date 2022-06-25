@@ -1,0 +1,520 @@
+[
+  {
+    "id": 211,
+    "title": "Grundlagen Arbeitsmittel",
+    "description": "Grundlegende Vokabeln zu Arbeitsmitteln",
+    "icon": "http://testserver/media/images/grundlagen-arbeitsmittel.png",
+    "total_documents": 9
+  },
+  {
+    "id": 226,
+    "title": "Grundlagen Fräsen",
+    "description": "Grundlegende Vokabeln zum Fräsen",
+    "icon": "http://testserver/media/images/grundlagen-frasen.png",
+    "total_documents": 7
+  },
+  {
+    "id": 25,
+    "title": "Grundlagen Metallverarbeitung",
+    "description": "Grundlegende Vokabeln für Metallverarbeitung",
+    "icon": "http://testserver/media/images/grundlagen-metallverarbeitung.png",
+    "total_documents": 11
+  },
+  {
+    "id": 17,
+    "title": "Grundlagen Werkzeuge",
+    "description": "Grundlegende Vokabeln zu Werkzeugen",
+    "icon": "http://testserver/media/images/grundlagen-werkzeuge.png",
+    "total_documents": 13
+  },
+  {
+    "id": 183,
+    "title": "Grundlagen Zangen und Sägen",
+    "description": "Grundlegende Vokabeln zu Zangen und Sägen",
+    "icon": "http://testserver/media/images/grundlagen-zangen-und-sagen.png",
+    "total_documents": 9
+  },
+  {
+    "id": 23,
+    "title": "Grundlagen Backen",
+    "description": "Grundlegende Vokabeln zum Backen",
+    "icon": "http://testserver/media/images/grundlagen-backen.png",
+    "total_documents": 8
+  },
+  {
+    "id": 172,
+    "title": "Anschlüsse und Signale",
+    "description": "Vokabeln zu Anschlüssen und Signalen",
+    "icon": "http://testserver/media/images/anschlusse-und-signale.png",
+    "total_documents": 7
+  },
+  {
+    "id": 28,
+    "title": "Arbeitskleidung und Schutzkleidung",
+    "description": "Vokabeln für Arbeitskleidung und Schutzkleidung ( Arbeitsschutz)",
+    "icon": "http://testserver/media/images/arbeitskleidung-und-schutzkleidung.png",
+    "total_documents": 10
+  },
+  {
+    "id": 82,
+    "title": "Grundlagen Gastronomie",
+    "description": "Grundlegende Vokabeln für die Gastronomie",
+    "icon": "http://testserver/media/images/grundlagen-gastronomie.png",
+    "total_documents": 5
+  },
+  {
+    "id": 88,
+    "title": "Grundlagen Gastronomie Service",
+    "description": "Grundlegende Vokabeln für den Bereich Service in der Gastronomie",
+    "icon": "http://testserver/media/images/grundlagen-gastronomie-service.png",
+    "total_documents": 5
+  },
+  {
+    "id": 106,
+    "title": "Grundlagen Rezeption",
+    "description": "Grundlegende Vokabeln für den Bereich Rezeption",
+    "icon": "http://testserver/media/images/grundlagen-rezeption.png",
+    "total_documents": 7
+  },
+  {
+    "id": 186,
+    "title": "Arbeitsmaterialien",
+    "description": "Vokabeln zu Arbeitsmaterialien",
+    "icon": "http://testserver/media/images/arbeitsmaterialien.png",
+    "total_documents": 11
+  },
+  {
+    "id": 29,
+    "title": "Spezielle Reinigung",
+    "description": "Vertiefte Vokabeln zu Reiniung auf dem Bau",
+    "icon": "http://testserver/media/images/spezielle-reinigung.png",
+    "total_documents": 13
+  },
+  {
+    "id": 175,
+    "title": "Atome",
+    "description": "Vokabeln zu Atomen",
+    "icon": "http://testserver/media/images/atome.png",
+    "total_documents": 5
+  },
+  {
+    "id": 184,
+    "title": "Bau und Gerüst",
+    "description": "Vokabeln für Bau und Gerüst",
+    "icon": "http://testserver/media/images/bau-und-gerust.png",
+    "total_documents": 6
+  },
+  {
+    "id": 165,
+    "title": "Bau und Kabel",
+    "description": "Vokabeln zu Bau und Kabeln",
+    "icon": "http://testserver/media/images/bau-und-kabel.png",
+    "total_documents": 9
+  },
+  {
+    "id": 224,
+    "title": "Bohrmaschinen und Aufsätze",
+    "description": "Vokabeln zu Bohren und Schneiden",
+    "icon": "http://testserver/media/images/bohrmaschinen-und-aufsatze.png",
+    "total_documents": 12
+  },
+  {
+    "id": 182,
+    "title": "Bohrzubehör",
+    "description": "Grundlegende Vokabeln für den Bereich Bohren",
+    "icon": "http://testserver/media/images/bohrzubehor.png",
+    "total_documents": 14
+  },
+  {
+    "id": 161,
+    "title": "Dosen und Zangen",
+    "description": "Vokabeln zu Dosen und Zangen",
+    "icon": "http://testserver/media/images/dosen-und-zangen.png",
+    "total_documents": 10
+  },
+  {
+    "id": 232,
+    "title": "Drehen und Schneiden",
+    "description": "Vokabeln zu Drehen und Schneiden",
+    "icon": "http://testserver/media/images/drehen-und-schneiden.png",
+    "total_documents": 7
+  },
+  {
+    "id": 169,
+    "title": "Spezielle Sägen",
+    "description": "Spezielle Vokabeln für Elektroniker/-innen",
+    "icon": "http://testserver/media/images/spezielle-sagen.png",
+    "total_documents": 5
+  },
+  {
+    "id": 179,
+    "title": "Elektrischer Strom",
+    "description": "Vokabeln zum elektrischen Strom",
+    "icon": "http://testserver/media/images/elektrischer-strom.png",
+    "total_documents": 5
+  },
+  {
+    "id": 162,
+    "title": "Elektro-Installationen",
+    "description": "Vokabeln zu Elektro-Installationen",
+    "icon": "http://testserver/media/images/elektro-installationen.png",
+    "total_documents": 5
+  },
+  {
+    "id": 230,
+    "title": "Grundlagen Feilen",
+    "description": "Grundlegende Vokabeln zu Feilen",
+    "icon": "http://testserver/media/images/grundlagen-feilen.png",
+    "total_documents": 9
+  },
+  {
+    "id": 236,
+    "title": "Fixieren und Trennen",
+    "description": "Vokabeln zu Fixieren und Trennen",
+    "icon": "http://testserver/media/images/fixieren-und-trennen.png",
+    "total_documents": 7
+  },
+  {
+    "id": 43,
+    "title": "Kabel und Batterie",
+    "description": "Vokabeln zu Kabel und Batterie",
+    "icon": "http://testserver/media/images/kabel-und-batterie.png",
+    "total_documents": 7
+  },
+  {
+    "id": 181,
+    "title": "Inbus und Ratsche",
+    "description": "Vokabeln zu Inbus und Ratsche",
+    "icon": "http://testserver/media/images/inbus-und-ratsche.png",
+    "total_documents": 13
+  },
+  {
+    "id": 185,
+    "title": "Kleben und Schreiben",
+    "description": "Vokabeln zu Kleben und Schreiben",
+    "icon": "http://testserver/media/images/kleben-und-schreiben.png",
+    "total_documents": 6
+  },
+  {
+    "id": 164,
+    "title": "Klemme und Schelle",
+    "description": "Vokabeln zu Klemme und Schelle",
+    "icon": "http://testserver/media/images/klemme-und-schelle.png",
+    "total_documents": 5
+  },
+  {
+    "id": 171,
+    "title": "Leitung und Isolation",
+    "description": "Vokabeln zu Leitung und Isolation",
+    "icon": "http://testserver/media/images/leitung-und-isolation.png",
+    "total_documents": 7
+  },
+  {
+    "id": 173,
+    "title": "Löten",
+    "description": "Vokabeln zu Löten",
+    "icon": "http://testserver/media/images/loten.png",
+    "total_documents": 6
+  },
+  {
+    "id": 234,
+    "title": "Grundlagen Meißeln und Gewinde",
+    "description": "Vokabeln zu Meißel und Gewinde",
+    "icon": "http://testserver/media/images/grundlagen-meieln-und-gewinde.png",
+    "total_documents": 8
+  },
+  {
+    "id": 223,
+    "title": "Spezielle Hilfs- und Messgeräte",
+    "description": "Vokabeln zu Messen und Prüfen",
+    "icon": "http://testserver/media/images/spezielle-hilfs-und-messgerate.png",
+    "total_documents": 8
+  },
+  {
+    "id": 9,
+    "title": "Grundlagen Badezimmer",
+    "description": "Vokabeln zu den Grundlagen im Badezimmer",
+    "icon": "http://testserver/media/images/grundlagen-badezimmer.png",
+    "total_documents": 8
+  },
+  {
+    "id": 163,
+    "title": "Messgeräte",
+    "description": "Vokabeln zu Messgeräten",
+    "icon": "http://testserver/media/images/messgerate.png",
+    "total_documents": 6
+  },
+  {
+    "id": 95,
+    "title": "Grundlagen Reinigung",
+    "description": "Vokabeln  zur Reinigung",
+    "icon": "http://testserver/media/images/grundlagen-reinigung.png",
+    "total_documents": 15
+  },
+  {
+    "id": 97,
+    "title": "Hygiene",
+    "description": "Vokabeln zu Hygiene",
+    "icon": "http://testserver/media/images/hygiene.png",
+    "total_documents": 8
+  },
+  {
+    "id": 103,
+    "title": "Hygiene im Badezimmer",
+    "description": "Vokabeln zu Hygiene im Badezimmer",
+    "icon": "http://testserver/media/images/hygiene-im-badezimmer.png",
+    "total_documents": 6
+  },
+  {
+    "id": 94,
+    "title": "Sauberkeit in der Küche",
+    "description": "Vokabeln zu Sauberkeit in der Küche",
+    "icon": "http://testserver/media/images/sauberkeit-in-der-kuche.png",
+    "total_documents": 7
+  },
+  {
+    "id": 99,
+    "title": "Spezielle Badezimmerausstattung",
+    "description": "Vokabeln für das Badezimmer",
+    "icon": "http://testserver/media/images/spezielle-badezimmerausstattung.png",
+    "total_documents": 8
+  },
+  {
+    "id": 98,
+    "title": "Zimmer",
+    "description": "Vokabeln für den Bereich Zimmerservice",
+    "icon": "http://testserver/media/images/zimmer.png",
+    "total_documents": 9
+  },
+  {
+    "id": 100,
+    "title": "Bett",
+    "description": "Vokabeln zum Bett",
+    "icon": "http://testserver/media/images/bett.png",
+    "total_documents": 6
+  },
+  {
+    "id": 101,
+    "title": "Elektrogeräte im Zimmer",
+    "description": "Vokabeln zu Elektrogeräten im Zimmer",
+    "icon": "http://testserver/media/images/elektrogerate-im-zimmer.png",
+    "total_documents": 6
+  },
+  {
+    "id": 188,
+    "title": "Sicherheit und Notfall",
+    "description": "Vokabeln für Sicherheit und Notfall (Arbeitsschutz)",
+    "icon": "http://testserver/media/images/sicherheit-und-notfall.png",
+    "total_documents": 12
+  },
+  {
+    "id": 250,
+    "title": "Backofen",
+    "description": "Vokabeln zum Backofen",
+    "icon": "http://testserver/media/images/backofen.png",
+    "total_documents": 5
+  },
+  {
+    "id": 84,
+    "title": "Behälter",
+    "description": "Vokabeln zu Behältern in der Küche",
+    "icon": "http://testserver/media/images/behalter.png",
+    "total_documents": 6
+  },
+  {
+    "id": 78,
+    "title": "Grundlagen Besteck und Geschirr",
+    "description": "Vokabeln zu Besteck und Geschirr",
+    "icon": "http://testserver/media/images/grundlagen-besteck-und-geschirr.png",
+    "total_documents": 8
+  },
+  {
+    "id": 85,
+    "title": "Frühstück",
+    "description": "Vokabeln zu Frühstück",
+    "icon": "http://testserver/media/images/fruhstuck.png",
+    "total_documents": 8
+  },
+  {
+    "id": 104,
+    "title": "Garderobe und Gepäck",
+    "description": "Vokabeln zu Garderobe und Gepäck",
+    "icon": "http://testserver/media/images/garderobe-und-gepack.png",
+    "total_documents": 7
+  },
+  {
+    "id": 79,
+    "title": "Gefäße",
+    "description": "Vokabeln zu Gefäßen",
+    "icon": "http://testserver/media/images/gefae.png",
+    "total_documents": 6
+  },
+  {
+    "id": 105,
+    "title": "Geld",
+    "description": "Vokabeln zu Geld",
+    "icon": "http://testserver/media/images/geld.png",
+    "total_documents": 5
+  },
+  {
+    "id": 92,
+    "title": "Spezielles Geschirr",
+    "description": "Vokabeln zu Geschirr",
+    "icon": "http://testserver/media/images/spezielles-geschirr.png",
+    "total_documents": 7
+  },
+  {
+    "id": 86,
+    "title": "Getränke",
+    "description": "Vokabeln zu Getränken",
+    "icon": "http://testserver/media/images/getranke.png",
+    "total_documents": 8
+  },
+  {
+    "id": 91,
+    "title": "Gläser und Tassen",
+    "description": "Vokabeln zu Gläsern und Tassen",
+    "icon": "http://testserver/media/images/glaser-und-tassen.png",
+    "total_documents": 10
+  },
+  {
+    "id": 200,
+    "title": "Hotelzimmer",
+    "description": "Vokabeln zum Hotelzimmer",
+    "icon": "http://testserver/media/images/hotelzimmer.png",
+    "total_documents": 6
+  },
+  {
+    "id": 87,
+    "title": "Kaffee und Tee",
+    "description": "Grundlegende Vokabeln zu Kaffee und Tee",
+    "icon": "http://testserver/media/images/kaffee-und-tee.png",
+    "total_documents": 4
+  },
+  {
+    "id": 119,
+    "title": "Grundlagen Garten",
+    "description": "Grundlegende Vokabeln für Gärtner:innen",
+    "icon": "http://testserver/media/images/grundlagen-garten.png",
+    "total_documents": 5
+  },
+  {
+    "id": 193,
+    "title": "Schleifen",
+    "description": "Vokabeln zum Schleifen",
+    "icon": "http://testserver/media/images/schleifen.png",
+    "total_documents": 14
+  },
+  {
+    "id": 166,
+    "title": "Schalter",
+    "description": "Vokabeln zu Schaltern",
+    "icon": "http://testserver/media/images/schalter.png",
+    "total_documents": 6
+  },
+  {
+    "id": 233,
+    "title": "Schneiden und Schweißen",
+    "description": "Vokabeln zu Schneiden und Schweißen",
+    "icon": "http://testserver/media/images/schneiden-und-schweien.png",
+    "total_documents": 8
+  },
+  {
+    "id": 225,
+    "title": "Schrauben",
+    "description": "Vokabeln zu Schrauben",
+    "icon": "http://testserver/media/images/schrauben.png",
+    "total_documents": 10
+  },
+  {
+    "id": 168,
+    "title": "Schutzschalter",
+    "description": "Vokabeln zu Schutzschaltern",
+    "icon": "http://testserver/media/images/schutzschalter.png",
+    "total_documents": 7
+  },
+  {
+    "id": 80,
+    "title": "Küchengeräte",
+    "description": "Vokabeln zu Küchengeräten",
+    "icon": "http://testserver/media/images/kuchengerate.png",
+    "total_documents": 11
+  },
+  {
+    "id": 153,
+    "title": "Schreiben, Ordnen und Telefonieren",
+    "description": "Vokabeln zu Schreiben, Ordnen und Telefonieren",
+    "icon": "http://testserver/media/images/schreiben-ordnen-und-telefonieren.png",
+    "total_documents": 11
+  },
+  {
+    "id": 90,
+    "title": "Servieren",
+    "description": "Vokabeln zum Bereich Servieren",
+    "icon": "http://testserver/media/images/servieren.png",
+    "total_documents": 6
+  },
+  {
+    "id": 235,
+    "title": "Spannen",
+    "description": "Vokabeln zu Spannen",
+    "icon": "http://testserver/media/images/spannen.png",
+    "total_documents": 8
+  },
+  {
+    "id": 7,
+    "title": "Spannung und Phasenprüfung",
+    "description": "Vokabeln zu Spannung und Phasenprüfung",
+    "icon": "http://testserver/media/images/spannung-und-phasenprufung.png",
+    "total_documents": 7
+  },
+  {
+    "id": 170,
+    "title": "Spezialgeräte",
+    "description": "Vokabeln zu Spezialgeräten",
+    "icon": "http://testserver/media/images/spezialgerate.png",
+    "total_documents": 5
+  },
+  {
+    "id": 227,
+    "title": "Spezielle Fräsen",
+    "description": "Vokabeln zu speziellen Fräsen",
+    "icon": "http://testserver/media/images/spezielle-frasen.png",
+    "total_documents": 8
+  },
+  {
+    "id": 180,
+    "title": "Stromkreislauf",
+    "description": "Vokabeln zum Stromkreislauf",
+    "icon": "http://testserver/media/images/stromkreislauf.png",
+    "total_documents": 5
+  },
+  {
+    "id": 229,
+    "title": "Werkbank",
+    "description": "Vokabeln zur Werkbank",
+    "icon": "http://testserver/media/images/werkbank.png",
+    "total_documents": 8
+  },
+  {
+    "id": 167,
+    "title": "Zangen",
+    "description": "Vokabeln zu Zangen",
+    "icon": "http://testserver/media/images/zangen.png",
+    "total_documents": 6
+  },
+  {
+    "id": 228,
+    "title": "Zubehör und Spezialwerkzeug",
+    "description": "Vokabeln zu Zubehör und Spezialwerkzeug",
+    "icon": "http://testserver/media/images/zubehor-und-spezialwerkzeug.png",
+    "total_documents": 12
+  },
+  {
+    "id": 93,
+    "title": "Waschmaschine",
+    "description": "Vokabeln zur Waschmaschine",
+    "icon": "http://testserver/media/images/waschmaschine.png",
+    "total_documents": 7
+  }
+]

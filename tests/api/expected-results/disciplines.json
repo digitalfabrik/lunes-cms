@@ -1,0 +1,152 @@
+[
+  {
+    "id": 27,
+    "title": "Metall, Elektro und Maschinenbau",
+    "description": "Wörter zu den Themen Metall, Elektro und Maschinenbau",
+    "icon": "http://testserver/media/images/metall-elektro-und-maschinenbau.png",
+    "created_by": null,
+    "total_training_sets": 0,
+    "total_discipline_children": 6,
+    "nested_training_sets": [
+      7, 9, 17, 25, 28, 29, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 43, 172, 171, 173,
+      175, 179, 180, 181, 182, 183, 184, 185, 186, 188, 193, 211, 223, 224, 225, 226, 227, 228, 229,
+      230, 232, 233, 234, 235, 236
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Elektroniker/-in",
+    "description": "Vokabeln für Elektroniker:innen",
+    "icon": "http://testserver/media/images/elektroniker-in.png",
+    "created_by": null,
+    "total_training_sets": 30,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 28, 29, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 43, 172, 171, 173, 175, 179,
+      180, 181, 182, 183, 184, 185, 186, 188, 211, 224
+    ]
+  },
+  {
+    "id": 125,
+    "title": "Informationselektroniker/-in",
+    "description": "Vokabel für Informationselektroniker:innen",
+    "icon": "http://testserver/media/images/informationselektroniker-in.png",
+    "created_by": null,
+    "total_training_sets": 21,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 28, 161, 162, 163, 165, 167, 171, 173, 175, 179, 180, 181, 182, 183, 186, 188, 193,
+      211, 224
+    ]
+  },
+  {
+    "id": 28,
+    "title": "Anlagenmechaniker/-in für Sanitär-, Heizungs- und Klimatechnik",
+    "description": "Vokabeln für Anlagenmechaniker:innen für Sanitär-, Heizungs- und Klimatechnik",
+    "icon": "http://testserver/media/images/anlagenmechaniker-in-fur-sanitar-heizungs-und-klimatechnik.png",
+    "created_by": null,
+    "total_training_sets": 24,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      9, 17, 25, 28, 181, 182, 183, 184, 186, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232,
+      233, 234, 235, 236
+    ]
+  },
+  {
+    "id": 50,
+    "title": "Industriemechaniker/-in",
+    "description": "Vokabeln für Industriemechaniker:innen",
+    "icon": "http://testserver/media/images/industriemechaniker-in.png",
+    "created_by": null,
+    "total_training_sets": 22,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 25, 161, 182, 183, 184, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232, 233,
+      234, 235, 236
+    ]
+  },
+  {
+    "id": 52,
+    "title": "Maschinen- und Anlagenführer/-in",
+    "description": "Vokabeln für Maschinen- und Anlagenführer:innen",
+    "icon": "http://testserver/media/images/maschinen-und-anlagenfuhrer-in.png",
+    "created_by": null,
+    "total_training_sets": 20,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      17, 25, 182, 183, 184, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232, 233, 234, 235,
+      236
+    ]
+  },
+  {
+    "id": 54,
+    "title": "Zerspanungsmechaniker/-in",
+    "description": "Vokabeln für Zerspanungsmechaniker:innen",
+    "icon": "http://testserver/media/images/zerspanungsmechaniker-in.png",
+    "created_by": null,
+    "total_training_sets": 20,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      17, 25, 182, 183, 184, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232, 233, 234, 235,
+      236
+    ]
+  },
+  {
+    "id": 45,
+    "title": "Gastronomie, Hotel und Lebensmittel",
+    "description": "Vokabeln zu Gastronomie, Hotel und Lebensmittel",
+    "icon": "http://testserver/media/images/gastronomie-hotel-und-lebensmittel.png",
+    "created_by": null,
+    "total_training_sets": 0,
+    "total_discipline_children": 4,
+    "nested_training_sets": [
+      9, 23, 153, 188, 200, 78, 79, 80, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 97, 98, 99,
+      100, 101, 103, 104, 105, 106, 250
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Bäcker/-in",
+    "description": "Vokabeln für Bäcker:innen",
+    "icon": "http://testserver/media/images/backer-in.png",
+    "created_by": null,
+    "total_training_sets": 11,
+    "total_discipline_children": 0,
+    "nested_training_sets": [97, 78, 79, 92, 80, 87, 23, 250, 188, 94, 95]
+  },
+  {
+    "id": 40,
+    "title": "Fachkraft für Gastgewerbe",
+    "description": "Vokabeln für Fachkräfte für Gastgewerbe",
+    "icon": "http://testserver/media/images/fachkraft-fur-gastgewerbe.png",
+    "created_by": null,
+    "total_training_sets": 28,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      9, 153, 188, 200, 78, 79, 80, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 97, 98, 99, 100,
+      101, 103, 104, 105, 106
+    ]
+  },
+  {
+    "id": 42,
+    "title": "Restaurantfachmann/-frau",
+    "description": "Vokabeln für Restaurantfachleute",
+    "icon": "http://testserver/media/images/restaurantfachmann-frau.png",
+    "created_by": null,
+    "total_training_sets": 17,
+    "total_discipline_children": 0,
+    "nested_training_sets": [97, 101, 78, 79, 92, 80, 82, 84, 85, 86, 87, 88, 90, 91, 188, 94, 95]
+  },
+  {
+    "id": 43,
+    "title": "Hauswirtschafter/-in",
+    "description": "Vokabeln für Hauswirtschafter:innen",
+    "icon": "http://testserver/media/images/hauswirtschafter-in.png",
+    "created_by": null,
+    "total_training_sets": 19,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      23, 188, 78, 79, 80, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 97, 250
+    ]
+  }
+]
