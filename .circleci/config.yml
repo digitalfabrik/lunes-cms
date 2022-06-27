@@ -54,6 +54,24 @@ jobs:
           paths:
             - lunes_cms/locale/de/LC_MESSAGES/django.mo
             - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
+  setup-test-reporter:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install CodeClimate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Notify CodeClimate of a pending report
+          command: ./cc-test-reporter before-build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - cc-test-reporter
   test:
     docker:
       - image: cimg/python:3.9
@@ -80,6 +98,9 @@ jobs:
       - run:
           name: Run tests
           command: pytest --circleci-parallelize --disable-warnings --cov=lunes_cms --cov-report xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
+      - run:
+          name: Format test coverage
+          command: ./cc-test-reporter format-coverage -t coverage.py -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
       - store_test_results:
           path: test-results
       - store_artifacts:
@@ -87,7 +108,23 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
+            - cc-test-reporter
             - coverage
+  upload-test-coverage:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install CodeClimate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Sum coverage data and upload to CodeClimate
+          command: |
+            ./cc-test-reporter sum-coverage -o - coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
   black:
     docker:
       - image: cimg/python:3.9
@@ -313,9 +350,19 @@ workflows:
       - compile-translations:
           requires:
             - install
+      - setup-test-reporter:
+          context: codeclimate-lunes-cms
+          filters:
+            branches:
+              ignore: main
       - test:
           requires:
             - compile-translations
+            - setup-test-reporter
+      - upload-test-coverage:
+          context: codeclimate-lunes-cms
+          requires:
+            - test
       - black:
           requires:
             - install

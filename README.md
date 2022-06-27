@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/digitalfabrik/lunes-cms.svg?style=shield)](https://circleci.com/gh/digitalfabrik/lunes-cms)
+![Coverage](https://img.shields.io/codeclimate/coverage/digitalfabrik/lunes-cms)
 [![Documentation Status](https://readthedocs.org/projects/lunes-cms/badge/?version=latest)](https://lunes-cms.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/digitalfabrik/lunes-cms)](https://opensource.org/licenses/Apache-2.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
