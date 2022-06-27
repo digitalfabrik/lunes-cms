@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2022.6.2
+--------
+
 * [ [#358](https://github.com/digitalfabrik/lunes-cms/issues/358) ] Fix public image upload
 
 
