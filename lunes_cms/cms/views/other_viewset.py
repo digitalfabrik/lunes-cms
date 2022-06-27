@@ -36,7 +36,6 @@ def public_upload(request):
                 image = DocumentImage(
                     document=document,
                     image=uploaded_image,
-                    name=document.word,
                     confirmed=False,
                 )
                 image.save()
