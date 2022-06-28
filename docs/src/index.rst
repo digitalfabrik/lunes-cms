@@ -15,10 +15,25 @@ First Steps
 
     installation
     dev-server
+    dev-tools
 
 * :doc:`installation`: Installation guide
 * :doc:`dev-server`: Run local development server
+* :doc:`dev-tools`: Introduction to development tools
 
+Basic Concepts
+==============
+.. toctree::
+    :caption: Basic Concepts
+    :hidden:
+
+    internationalization
+    documentation
+    continous-integration
+
+* :doc:`internationalization`: Internationalization (i18n)
+* :doc:`documentation`: Documentation (Sphinx)
+* :doc:`continous-integration`: Continous Integration (Circle CI)
 
 Deployment
 ==========
@@ -35,6 +50,21 @@ Deployment
 * :doc:`prod-server`: Setup the production server
 * :doc:`changelog`: The release history including all relevant changes
 
+Contributing
+============
+.. toctree::
+    :caption: Contributing
+    :hidden:
+
+    issue-reporting
+    code-style-guidelines
+    git-workflow
+    code-of-conduct
+
+* :doc:`issue-reporting`: How to report issues four our project
+* :doc:`code-style-guidelines`: Guidelines on how to style your code
+* :doc:`git-workflow`: Description of our Git workflow
+* :doc:`code-of-conduct`: Our code of conduct
 
 Reference
 ==============
