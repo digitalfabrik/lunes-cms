@@ -25,10 +25,11 @@ class Document(models.Model):
     Relates to training sets and inherits from `models.Model`.
     """
 
+    id = models.AutoField(primary_key=True)
     word_type = models.CharField(
         max_length=255,
         choices=Static.word_type_choices,
-        default="",
+        default=Static.word_type_choices[0][0],
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))

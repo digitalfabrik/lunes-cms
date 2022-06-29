@@ -1,6 +1,6 @@
 UNRELEASED
 ----------
-
+* [ [#198](https://github.com/digitalfabrik/lunes-cms/issues/198) ] Change word type from string to integer
 
 2022.8.0
 --------

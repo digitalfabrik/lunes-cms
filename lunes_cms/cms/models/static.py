@@ -21,9 +21,9 @@ class Static:
 
     # possible word types
     word_type_choices = [
-        ("Nomen", "Substantiv"),
-        ("Verb", "Verb"),
-        ("Adjektiv", "Adjektiv"),
+        (0, "Nomen"),
+        (1, "Verb"),
+        (2, "Adjektiv"),
     ]
 
     # number of pixles used for box blurr
