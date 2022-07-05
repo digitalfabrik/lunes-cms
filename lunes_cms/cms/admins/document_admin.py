@@ -64,7 +64,7 @@ class DocumentAdmin(admin.ModelAdmin):
         """
         if not change:
             if len(request.user.groups.all()) >= 1:
-                obj.created_by = request.user.groups.all()[0].name
+                obj.created_by = request.user.groups.all()[0]
             elif not request.user.is_superuser:
                 raise IndexError("No group assigned. Please add the user to a group")
             obj.creator_is_admin = request.user.is_superuser
@@ -114,9 +114,7 @@ class DocumentAdmin(admin.ModelAdmin):
         )
         if request.user.is_superuser:
             return qs.filter(creator_is_admin=True)
-        return qs.filter(
-            created_by__in=request.user.groups.values_list("name", flat=True).distinct()
-        )
+        return qs.filter(created_by__in=request.user.groups.all())
 
     def related_training_set(self, obj):
         """
