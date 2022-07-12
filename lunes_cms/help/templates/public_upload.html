@@ -65,28 +65,43 @@
         3: "das",
         4: "die (Plural)"
       }
+      let buffer_array = []
+
+      function Comparator(a, b) {
+        if (a[1] < b[1]) return -1;
+        if (a[1] > b[1]) return 1;
+        return 0;
+      }
 
       $( document ).ready(function() {
-
         lunes_disciplines.forEach(function(element) {
           if( element[1] !== "Allgemeine Grundlagen") {
             $("#inputDiscipline").append(new Option(element[1], element[0]))
           }
         });
-
         $("#inputDiscipline").change(function() {
-          var discipline_id = $("#inputDiscipline").val();
+          buffer_array = [];
+          let discipline_id = $("#inputDiscipline").val();
+          if (discipline_id == "all") {
+            buffer_array = lunes_documents;
+          } else if (discipline_id != "none") {
+            lunes_training_sets.forEach(function(element) {
+              if(lunes_disc_sets_map[discipline_id].includes(element[0])) {
+                let training_set_id = element[0];
+                lunes_documents = lunes_documents.sort(Comparator)
+                lunes_documents.forEach(function(element) {
+                  if(element[3] == training_set_id) {
+                    buffer_array.push(element)
+                  }
+                });
+              }
+            });
+          }
           $("#inputDocument").find('option').remove();
-          lunes_training_sets.forEach(function(element) {
-            if(lunes_disc_sets_map[discipline_id].includes(element[0])) {
-              var training_set_id = element[0];
-              lunes_documents.forEach(function(element) {
-                if(element[3] == training_set_id) {
-                  $("#inputDocument").append(new Option( article_map[element[2]] + " " + element[1], element[0]));
-                }
-              });
-            }
-          });
+          buffer_array = buffer_array.sort(Comparator);
+          buffer_array.forEach(element =>
+            $("#inputDocument").append(new Option(article_map[element[2]] + " " + element[1], element[0]))
+          );
         });
       });
     </script>
@@ -105,11 +120,14 @@
       </h3>
       {% if upload_success %}<div class="alert alert-success" role="alert">Vielen Dank für dein Bild. Das Lunes Team wird es prüfen und freigeben.</div>{% endif %}
       <label for="inputDiscipline" class="sr-only">Beruf auswählen</label>
-      <select id="inputDiscipline" class="form-control" required autofocus><option>Bitte Beruf wählen</option></select>
+      <select id="inputDiscipline" class="form-control" required autofocus>
+          <option value="none">Bitte Beruf wählen</option>
+          <option value="all">Alle Berufe</option>
+      </select>
       <label for="inputDocument" class="sr-only">Wort auswählen</label>
       <select id="inputDocument" name="inputDocument" class="form-control" required></select>
       <label for="inputFile" class="sr-only">Bild</label>
-      <input type="file" id="inputFile" name="inputFile" accept="image/*" id="inputFile" class="form-control" required>
+      <input type="file" id="inputFile" name="inputFile" accept="image/*" id="inputFile" class="form-control" capture="environment" required>
       <div class="col-xs-12" style="height:10px;"></div>
       <div class="checkbox mb-3">
         <label>

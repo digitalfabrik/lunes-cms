@@ -4,6 +4,8 @@ UNRELEASED
 * [ [#269](https://github.com/digitalfabrik/lunes-cms/issues/269) ] Allow to set custom API key
 * [ [#285](https://github.com/digitalfabrik/lunes-cms/issues/285) ] Generate API key with correct requirements
 * [ [#271](https://github.com/digitalfabrik/lunes-cms/issues/271) ] Generate QR codes for API keys
+* [ [#369](https://github.com/digitalfabrik/lunes-cms/issues/369) ] Improve list view of missing images
+* [ [#372](https://github.com/digitalfabrik/lunes-cms/issues/372) ] Extend the public upload form with a show-all-list
 
 
 2022.6.2
