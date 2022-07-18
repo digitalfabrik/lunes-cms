@@ -18,7 +18,7 @@ from django.views.generic.base import RedirectView
 from django.views.i18n import JavaScriptCatalog
 
 
-#: The url patterns of this module (see :doc:`topics/http/urls`)
+#: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
     path(
         "admin/password_reset/",

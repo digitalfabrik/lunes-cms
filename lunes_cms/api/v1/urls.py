@@ -52,7 +52,7 @@ router.register(r"words", views.WordViewSet, "words")
 router.register(r"group_info", views.GroupViewSet, "group_by_id")
 router.register(r"feedback", views.CreateFeedbackViewSet, "feedback")
 
-#: The url patterns of this module (see :doc:`topics/http/urls`)
+#: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
     path("", include(router.urls)),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

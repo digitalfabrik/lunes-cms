@@ -189,35 +189,35 @@ AUTH_PASSWORD_VALIDATORS = [
 ########################
 
 #: A list of directories where Django looks for translation files
-#: (see :setting:`django:LOCALE_PATHS` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:LOCALE_PATHS` and :doc:`django:topics/i18n/index`)
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
 #: A string representing the language slug for this installation
-#: (see :setting:`django:LANGUAGE_CODE` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:LANGUAGE_CODE` and :doc:`django:topics/i18n/index`)
 LANGUAGE_CODE = "en"
 
-#: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`topics/i18n/index`)
+#: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`django:topics/i18n/index`)
 LANGUAGES = [
     ("en", _("English")),
     ("de", _("German")),
 ]
 
 #: A string representing the time zone for this installation
-#: (see :setting:`django:TIME_ZONE` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:TIME_ZONE` and :doc:`django:topics/i18n/index`)
 TIME_ZONE = "UTC"
 
 #: A boolean that specifies whether Django’s translation system should be enabled
-#: (see :setting:`django:USE_I18N` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:USE_I18N` and :doc:`django:topics/i18n/index`)
 USE_I18N = True
 
 #: A boolean that specifies if localized formatting of data will be enabled by default or not
-#: (see :setting:`django:USE_L10N` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:USE_L10N` and :doc:`django:topics/i18n/index`)
 USE_L10N = True
 
 #: A boolean that specifies if datetimes will be timezone-aware by default or not
-#: (see :setting:`django:USE_TZ` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:USE_TZ` and :doc:`django:topics/i18n/index`)
 USE_TZ = True
 
 
