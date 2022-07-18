@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lunes_cms/cms/static/js/manytomany_overlay.js:53
+#: lunes_cms/static/js/manytomany_overlay.js:53
 msgid "Image cannot be previewed"
 msgstr "Bild kann nicht in der Vorschau angezeigt werden"
 
-#: lunes_cms/cms/static/js/manytomany_overlay.js:55
+#: lunes_cms/static/js/manytomany_overlay.js:55
 msgid "No image available"
 msgstr "Kein Bild verfügbar"
 
-#: lunes_cms/cms/static/js/manytomany_overlay.js:75
+#: lunes_cms/static/js/manytomany_overlay.js:75
 msgid "No audio available"
 msgstr "Kein Audio verfügbar"

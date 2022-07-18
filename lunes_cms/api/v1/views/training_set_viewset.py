@@ -2,17 +2,17 @@ from django.db.models import Count, Q
 
 from rest_framework import viewsets
 
-from ..models import TrainingSet
-from ..serializers import TrainingSetSerializer
-from ..models import Discipline
-from .utils import check_group_object_permissions
+from ....cms.models import Discipline, TrainingSet
+from ...serializers import TrainingSetSerializer
+from ...utils import check_group_object_permissions
 
 
 class TrainingSetViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the TrainingSet module.
-    Inherits from `viewsets.ModelViewSet` and defines queryset
-    and serializers.
+    List training sets.
+    If discipline ID is provided as a parameter,
+    the list will return only training sets belonging to the discipline.
+    A valid API-Key may be required.
     """
 
     serializer_class = TrainingSetSerializer

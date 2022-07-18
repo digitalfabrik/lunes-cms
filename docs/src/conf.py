@@ -120,9 +120,9 @@ html_css_files = [
 #: Additional template context
 html_context = {"current_year": date.today().year}
 #: The logo shown in the menu bar
-html_logo = "../../lunes_cms/cms/static/images/logo-lunes-dark.svg"
+html_logo = "../../lunes_cms/static/images/logo-lunes-dark.svg"
 #: The favicon of the html doc files
-html_favicon = "../../lunes_cms/cms/static/images/logo.svg"
+html_favicon = "../../lunes_cms/static/images/logo.svg"
 #: Do not include links to the documentation source (.rst files) in build
 html_show_sourcelink = False
 #: Do not include a link to sphinx

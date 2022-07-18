@@ -3,17 +3,18 @@ from django.core.exceptions import PermissionDenied
 
 from rest_framework import viewsets
 
-from ..models import GroupAPIKey, TrainingSet
-from ..serializers import GroupSerializer
-from ..permissions import VerifyGroupKey
-from .utils import get_key
+from ....cms.models import GroupAPIKey, TrainingSet
+from ...serializers import GroupSerializer
+from ...permissions import VerifyGroupKey
+from ...utils import get_key
 
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
-    Defines a view set for the Group module.
-    Inherits from `viewsets.ModelViewSet` and defines queryset
-    and serializers.
+    List available information of a user group.
+    A valid API-Key is required.
+    There is no need to pass a group id or similar,
+    the returned queryset is filtered by the delivered API-Key.
     """
 
     permission_classes = [VerifyGroupKey]

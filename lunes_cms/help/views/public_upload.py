@@ -1,22 +1,8 @@
 import json
 
 from django.shortcuts import render
-from django.shortcuts import redirect
 
-from ..models import TrainingSet, Document, DocumentImage, Discipline
-
-
-def redirect_view(request):
-    """
-    Redirect root URL
-
-    :param request: Current HTTP request
-    :param type: HttpRequest
-
-    :return: Redirection to api/
-    :rtype: HttpResponse
-    """
-    return redirect("api/")
+from ...cms.models import TrainingSet, Document, DocumentImage, Discipline
 
 
 def public_upload(request):
