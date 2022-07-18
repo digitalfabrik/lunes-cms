@@ -1,0 +1,13 @@
+{
+  "id": 20,
+  "title": "Kfz-Mechatroniker/-in",
+  "description": "Vokabeln für Kfz-Mechatroniker:innen",
+  "icon": "http://testserver/media/images/kfz-mechatroniker-in.png",
+  "created_by": 1,
+  "total_training_sets": 34,
+  "total_discipline_children": 0,
+  "nested_training_sets": [
+    7, 17, 25, 28, 29, 161, 164, 166, 299, 301, 302, 303, 304, 179, 180, 181, 182, 183, 184, 185,
+    186, 311, 188, 313, 315, 198, 211, 223, 224, 225, 233, 235, 108, 123
+  ]
+}

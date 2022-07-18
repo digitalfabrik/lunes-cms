@@ -1,0 +1,79 @@
+[
+  {
+    "id": 23,
+    "title": "Grundlagen Backen",
+    "description": "Grundlegende Vokabeln zum Backen",
+    "icon": "http://testserver/media/images/grundlagen-backen.png",
+    "total_documents": 8
+  },
+  {
+    "id": 95,
+    "title": "Grundlagen Reinigung",
+    "description": "Vokabeln  zur Reinigung",
+    "icon": "http://testserver/media/images/grundlagen-reinigung.png",
+    "total_documents": 15
+  },
+  {
+    "id": 97,
+    "title": "Hygiene",
+    "description": "Vokabeln zu Hygiene",
+    "icon": "http://testserver/media/images/hygiene.png",
+    "total_documents": 8
+  },
+  {
+    "id": 94,
+    "title": "Sauberkeit in der Küche",
+    "description": "Vokabeln zu Sauberkeit in der Küche",
+    "icon": "http://testserver/media/images/sauberkeit-in-der-kuche.png",
+    "total_documents": 7
+  },
+  {
+    "id": 188,
+    "title": "Sicherheit und Notfall",
+    "description": "Vokabeln für Sicherheit und Notfall (Arbeitsschutz)",
+    "icon": "http://testserver/media/images/sicherheit-und-notfall.png",
+    "total_documents": 12
+  },
+  {
+    "id": 250,
+    "title": "Backofen",
+    "description": "Vokabeln zum Backofen",
+    "icon": "http://testserver/media/images/backofen.png",
+    "total_documents": 5
+  },
+  {
+    "id": 78,
+    "title": "Grundlagen Besteck und Geschirr",
+    "description": "Vokabeln zu Besteck und Geschirr",
+    "icon": "http://testserver/media/images/grundlagen-besteck-und-geschirr.png",
+    "total_documents": 8
+  },
+  {
+    "id": 79,
+    "title": "Gefäße",
+    "description": "Vokabeln zu Gefäßen",
+    "icon": "http://testserver/media/images/gefae.png",
+    "total_documents": 6
+  },
+  {
+    "id": 92,
+    "title": "Spezielles Geschirr",
+    "description": "Vokabeln zu Geschirr",
+    "icon": "http://testserver/media/images/spezielles-geschirr.png",
+    "total_documents": 7
+  },
+  {
+    "id": 87,
+    "title": "Kaffee und Tee",
+    "description": "Grundlegende Vokabeln zu Kaffee und Tee",
+    "icon": "http://testserver/media/images/kaffee-und-tee.png",
+    "total_documents": 4
+  },
+  {
+    "id": 80,
+    "title": "Küchengeräte",
+    "description": "Vokabeln zu Küchengeräten",
+    "icon": "http://testserver/media/images/kuchengerate.png",
+    "total_documents": 11
+  }
+]

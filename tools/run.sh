@@ -10,16 +10,8 @@ source "$(dirname "${BASH_SOURCE[0]}")/_functions.sh"
 
 # Skip installation check, migrations and translations if --fast option is given
 if [[ "$*" != *"--fast"* ]]; then
-    # Require that lunes-cms is installed
-    require_installed
-    # Check if database already exists
-    if [ -f "${PACKAGE_DIR}/db.sqlite3" ]; then
-        # Migrate database
-        migrate_database
-    else
-        # Load test data
-        bash "${DEV_TOOL_DIR}/load_test_data.sh"
-    fi
+    # Require that the database exists and is in the correct state
+    require_database
     # Update translation file
     bash "${DEV_TOOL_DIR}/translate.sh"
 else

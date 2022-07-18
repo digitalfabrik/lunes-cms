@@ -32,4 +32,6 @@ class WordViewSet(viewsets.ModelViewSet):
             )
             .select_related()
             .distinct()
+            # Sort queryset to make output order deterministic for testing
+            .order_by("id")
         )

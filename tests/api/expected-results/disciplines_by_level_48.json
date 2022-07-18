@@ -1,0 +1,39 @@
+[
+  {
+    "id": 47,
+    "title": "Berufskraftfahrer/-in",
+    "description": "Vokabeln für Berufskraftfahrer:innen",
+    "icon": "http://testserver/media/images/berufskraftfahrer-in.png",
+    "created_by": 1,
+    "total_training_sets": 16,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      199, 299, 108, 109, 300, 301, 302, 305, 303, 304, 310, 311, 316, 313, 315, 188
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Kfz-Mechatroniker/-in",
+    "description": "Vokabeln für Kfz-Mechatroniker:innen",
+    "icon": "http://testserver/media/images/kfz-mechatroniker-in.png",
+    "created_by": 1,
+    "total_training_sets": 34,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 25, 28, 29, 161, 164, 166, 299, 301, 302, 303, 304, 179, 180, 181, 182, 183, 184, 185,
+      186, 311, 188, 313, 315, 198, 211, 223, 224, 225, 233, 235, 108, 123
+    ]
+  },
+  {
+    "id": 51,
+    "title": "Karosserie- und Fahrzeug-baumechaniker/-in",
+    "description": "Vokabeln für Karosserie- und Fahrzeugbaumechaniker:innen",
+    "icon": "http://testserver/media/images/karosserie-und-fahrzeug-baumechaniker-in.png",
+    "created_by": 1,
+    "total_training_sets": 15,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      224, 225, 232, 233, 234, 235, 236, 17, 211, 181, 182, 183, 184, 25, 188
+    ]
+  }
+]

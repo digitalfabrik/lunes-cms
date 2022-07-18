@@ -173,6 +173,23 @@ function migrate_database {
     fi
 }
 
+# This function makes sure the database exists and is in the correct state
+function require_database {
+    if [[ -z "$LUNES_DATABASE" ]]; then
+        require_installed
+        # Check if database already exists
+        if [ -f "${PACKAGE_DIR}/db.sqlite3" ]; then
+            # Migrate database
+            migrate_database
+        else
+            # Load test data
+            bash "${DEV_TOOL_DIR}/load_test_data.sh"
+        fi
+        LUNES_DATABASE=1
+        export LUNES_DATABASE
+    fi
+}
+
 # This function shows a success message once the Lunes development server is running
 function listen_for_devserver {
     until nc -z localhost "$LUNES_CMS_PORT"; do sleep 0.1; done

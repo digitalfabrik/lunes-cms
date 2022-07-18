@@ -62,6 +62,11 @@ extensions = [
 ]
 #: Enable cross-references to other documentations
 intersphinx_mapping = {
+    "django": (
+        f"https://docs.djangoproject.com/en/{django_version}/",
+        f"https://docs.djangoproject.com/en/{django_version}/_objects/",
+    ),
+    "pytest-django": ("https://pytest-django.readthedocs.io/en/latest/", None),
     "python": (
         f"https://docs.python.org/{sys.version_info.major}.{sys.version_info.minor}/",
         None,
@@ -74,10 +79,6 @@ intersphinx_mapping = {
     "sphinxcontrib-django2": (
         "https://sphinxcontrib-django2.readthedocs.io/en/latest/",
         None,
-    ),
-    "django": (
-        f"https://docs.djangoproject.com/en/{django_version}/",
-        f"https://docs.djangoproject.com/en/{django_version}/_objects/",
     ),
     "setuptools": ("https://setuptools.pypa.io/en/latest/", None),
     "twine": ("https://twine.readthedocs.io/en/latest/", None),

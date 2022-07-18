@@ -1,0 +1,121 @@
+[
+  {
+    "id": 123,
+    "title": "Grundlagen Hämmer",
+    "description": "Vokabeln zu Hämmern auf dem Bau",
+    "icon": "http://testserver/media/images/grundlagen-hammer.png",
+    "total_documents": 6
+  },
+  {
+    "id": 299,
+    "title": "Grundlagen Fahrzeuge",
+    "description": "Vokabeln zur Grundausstattung von Fahrzeugen",
+    "icon": "http://testserver/media/images/grundlagen-fahrzeuge.None",
+    "total_documents": 12
+  },
+  {
+    "id": 108,
+    "title": "Karosserie von Fahrzeugen",
+    "description": "Vokabeln zur Außenausstattung (Fahrzeuge)",
+    "icon": "http://testserver/media/images/karosserie-von-fahrzeugen.png",
+    "total_documents": 6
+  },
+  {
+    "id": 198,
+    "title": "Fahrzeuge und Geräte",
+    "description": "Vokabeln zu Fahrzeugen und Geräten",
+    "icon": "http://testserver/media/images/fahrzeuge-und-gerate.png",
+    "total_documents": 7
+  },
+  {
+    "id": 109,
+    "title": "Bordcomputer und elektronische Ausstattung in Fahrzeugen",
+    "description": "Vokabeln zur Innenausstattung und Bordcomputer von Fahrzeugen",
+    "icon": "http://testserver/media/images/bordcomputer-und-elektronische-ausstattung-in-fahrzeugen.png",
+    "total_documents": 7
+  },
+  {
+    "id": 199,
+    "title": "Lagerarten",
+    "description": "Vokabeln zu Lagerarten",
+    "icon": "http://testserver/media/images/lagerarten.png",
+    "total_documents": 7
+  },
+  {
+    "id": 300,
+    "title": "Recht und Sicherheit in Fahrzeugen",
+    "description": "Vokabeln zu Recht und Sicherheit in Fahrzeugen",
+    "icon": "http://testserver/media/images/recht-und-sicherheit-in-fahrzeugen.png",
+    "total_documents": 9
+  },
+  {
+    "id": 305,
+    "title": "Innenausstattung in Fahrzeugen",
+    "description": "Vokabeln rund um die Innenausstattung in Fahrzeugen",
+    "icon": "http://testserver/media/images/innenausstattung-in-fahrzeugen.png",
+    "total_documents": 10
+  },
+  {
+    "id": 301,
+    "title": "Lichter",
+    "description": "Vokabeln zu den Lichtern an Fahrzeugen",
+    "icon": "http://testserver/media/images/lichter.png",
+    "total_documents": 8
+  },
+  {
+    "id": 302,
+    "title": "Motor und Elektronik",
+    "description": "Vokabeln zu Motoren und Elektronik an Kraftfahrzeugen",
+    "icon": "http://testserver/media/images/motor-und-elektronik.png",
+    "total_documents": 10
+  },
+  {
+    "id": 303,
+    "title": "Fahrwerk von Kraftfahrzeugen",
+    "description": "Vokabeln zum Fahrwerk von Kraftfahrzeugen",
+    "icon": "http://testserver/media/images/fahrwerk-von-kraftfahrzeugen.png",
+    "total_documents": 8
+  },
+  {
+    "id": 304,
+    "title": "Bremsen",
+    "description": "Vokabeln rund um Bremsen und Instandhaltung von Bremsen",
+    "icon": "http://testserver/media/images/bremsen.png",
+    "total_documents": 8
+  },
+  {
+    "id": 310,
+    "title": "Öl",
+    "description": "Vokabeln rund um Öl",
+    "icon": "http://testserver/media/images/ol.png",
+    "total_documents": 4
+  },
+  {
+    "id": 311,
+    "title": "Abgas und Auspuff",
+    "description": "Vokabeln zu Abgasen und Auspuff",
+    "icon": "http://testserver/media/images/abgas-und-auspuff.png",
+    "total_documents": 7
+  },
+  {
+    "id": 313,
+    "title": "Reparatur und Werkstatt",
+    "description": "Vokabeln zu Reparatur und Werkstatt",
+    "icon": "http://testserver/media/images/reparatur-und-werkstatt.png",
+    "total_documents": 6
+  },
+  {
+    "id": 315,
+    "title": "Spezielles Werkzeug",
+    "description": "Spezielles Werkzeug für Kfz",
+    "icon": "http://testserver/media/images/spezielles-werkzeug.png",
+    "total_documents": 6
+  },
+  {
+    "id": 316,
+    "title": "Scheiben von Fahrzeugen und Scheibenwischer",
+    "description": "Vokabeln zu Scheiben von Fahrzeugen und Scheibenwischer",
+    "icon": "http://testserver/media/images/scheiben-von-fahrzeugen-und-scheibenwischer.png",
+    "total_documents": 7
+  }
+]
