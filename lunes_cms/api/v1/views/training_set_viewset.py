@@ -3,8 +3,8 @@ from django.db.models import Count, Q
 from rest_framework import viewsets
 
 from ....cms.models import Discipline, TrainingSet
-from ...serializers import TrainingSetSerializer
 from ...utils import check_group_object_permissions
+from ..serializers import TrainingSetSerializer
 
 
 class TrainingSetViewSet(viewsets.ModelViewSet):

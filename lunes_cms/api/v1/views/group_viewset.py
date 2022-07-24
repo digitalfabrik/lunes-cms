@@ -4,9 +4,9 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 
 from ....cms.models import GroupAPIKey, TrainingSet
-from ...serializers import GroupSerializer
 from ...permissions import VerifyGroupKey
 from ...utils import get_key
+from ..serializers import GroupSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):

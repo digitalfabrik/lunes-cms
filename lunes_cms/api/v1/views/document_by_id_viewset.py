@@ -3,7 +3,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 from ....cms.models import Document
-from ...serializers import DocumentSerializer
+from ..serializers import DocumentSerializer
 
 
 class DocumentByIdViewSet(viewsets.ModelViewSet):

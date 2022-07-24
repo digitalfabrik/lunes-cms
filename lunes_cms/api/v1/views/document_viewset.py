@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 
 from ....cms.models import Document, TrainingSet
-from ...serializers import DocumentSerializer
 from ...utils import check_group_object_permissions
+from ..serializers import DocumentSerializer
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
