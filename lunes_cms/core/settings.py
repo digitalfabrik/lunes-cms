@@ -139,6 +139,9 @@ except KeyError as e:
         f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASE_CHOICES.keys()}."
     ) from e
 
+#: Default primary key field type to use for models that don’t have a field with primary_key=True.
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 
 ############
 # SECURITY #
