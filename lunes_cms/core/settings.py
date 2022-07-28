@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     "mptt",
     "pydub",
     "rest_framework",
-    "rest_framework_api_key",
 ]
 
 #: Activated middlewares (see :setting:`django:MIDDLEWARE`)

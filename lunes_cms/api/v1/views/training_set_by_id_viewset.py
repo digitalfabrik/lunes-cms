@@ -37,12 +37,7 @@ class TrainingSetByIdViewSet(viewsets.ReadOnlyModelViewSet):
         )
         key = get_key(self.request)
         if key:
-            try:
-                queryset = queryset.filter(
-                    created_by=GroupAPIKey.objects.get_from_key(key).organization
-                )
-            except GroupAPIKey.DoesNotExist:
-                raise PermissionDenied()
+            queryset = queryset.filter(created_by=GroupAPIKey.get_from_token(key).group)
         else:
             queryset = queryset.filter(creator_is_admin=True)
         return queryset

@@ -10,12 +10,12 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_key.json",
     },
     {
         "endpoint": "/api/disciplines/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -25,13 +25,13 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines/15/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/not_found.json",
         "expected_status_code": 404,
     },
     {
         "endpoint": "/api/disciplines/15/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -42,12 +42,12 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines/20/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_20.json",
     },
     {
         "endpoint": "/api/disciplines/20/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -62,12 +62,12 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines_by_level/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_level.json",
     },
     {
         "endpoint": "/api/disciplines_by_level/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_level.json",
     },
     {
@@ -76,17 +76,17 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines_by_level/27/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_level_27.json",
     },
     {
         "endpoint": "/api/disciplines_by_level/27/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_level_27.json",
     },
     {
         "endpoint": "/api/disciplines_by_level/48/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_level_48.json",
     },
     {
@@ -96,13 +96,13 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines_by_level/48/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
     {
         "endpoint": "/api/disciplines_by_group/1/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/disciplines_by_group.json",
     },
     {
@@ -112,7 +112,7 @@ DISCIPLINE_ENDPOINTS = [
     },
     {
         "endpoint": "/api/disciplines_by_group/1/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -126,12 +126,12 @@ TRAINING_SET_ENDPOINTS = [
     },
     {
         "endpoint": "/api/training_sets/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/training_sets_by_key.json",
     },
     {
         "endpoint": "/api/training_sets/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -141,19 +141,19 @@ TRAINING_SET_ENDPOINTS = [
     },
     {
         "endpoint": "/api/training_sets/7/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/not_found.json",
         "expected_status_code": 404,
     },
     {
         "endpoint": "/api/training_sets/7/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
     {
         "endpoint": "/api/training_sets/108/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/training_sets_108.json",
     },
     {
@@ -163,7 +163,7 @@ TRAINING_SET_ENDPOINTS = [
     },
     {
         "endpoint": "/api/training_sets/108/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -173,17 +173,17 @@ TRAINING_SET_ENDPOINTS = [
     },
     {
         "endpoint": "/api/training_set/15/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/training_sets_by_discipline_15.json",
     },
     {
         "endpoint": "/api/training_set/15/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/training_sets_by_discipline_15.json",
     },
     {
         "endpoint": "/api/training_set/20/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/training_sets_by_discipline_20.json",
     },
     {
@@ -193,7 +193,7 @@ TRAINING_SET_ENDPOINTS = [
     },
     {
         "endpoint": "/api/training_set/20/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -207,22 +207,22 @@ VOCABULARY_ENDPOINTS = [
     },
     {
         "endpoint": "/api/documents/7/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/documents_by_training_set_7.json",
     },
     {
         "endpoint": "/api/documents/7/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/documents_by_training_set_7.json",
     },
     {
         "endpoint": "/api/documents/108/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/documents_by_training_set_108.json",
     },
     {
         "endpoint": "/api/documents/108/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
@@ -242,12 +242,12 @@ VOCABULARY_ENDPOINTS = [
     },
     {
         "endpoint": "/api/words/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/words.json",
     },
     {
         "endpoint": "/api/words/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/words.json",
     },
     {
@@ -256,12 +256,12 @@ VOCABULARY_ENDPOINTS = [
     },
     {
         "endpoint": "/api/words/2/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/words_2.json",
     },
     {
         "endpoint": "/api/words/2/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/words_2.json",
     },
 ]
@@ -270,18 +270,30 @@ VOCABULARY_ENDPOINTS = [
 GROUP_ENDPOINTS = [
     {
         "endpoint": "/api/group_info/",
-        "api_key": "EAC.CnQqaJm",
+        "api_key": "VALIDTOKEN",
         "expected_result": "tests/api/expected-results/group_info.json",
     },
     {
         "endpoint": "/api/group_info/",
-        "api_key": "invalid",
+        "api_key": "INVALIDTOKEN",
         "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
     {
         "endpoint": "/api/group_info/",
         "expected_result": "tests/api/expected-results/not_authenticated.json",
+        "expected_status_code": 403,
+    },
+    {
+        "endpoint": "/api/group_info/",
+        "api_key": "EXPIREDTOKEN",
+        "expected_result": "tests/api/expected-results/permission_denied.json",
+        "expected_status_code": 403,
+    },
+    {
+        "endpoint": "/api/group_info/",
+        "api_key": "REVOKEDTOKEN",
+        "expected_result": "tests/api/expected-results/permission_denied.json",
         "expected_status_code": 403,
     },
 ]

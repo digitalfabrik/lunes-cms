@@ -1,8 +1,8 @@
-from rest_framework_api_key.admin import APIKeyModelAdmin
+from django.contrib import admin
 
 
-class GroupAPIKeyAdmin(APIKeyModelAdmin):
-    exclude = ("objects",)
-    list_display = [*APIKeyModelAdmin.list_display, "organization"]
-    search_fields = [*APIKeyModelAdmin.search_fields, "organization"]
+class GroupAPIKeyAdmin(admin.ModelAdmin):
+    list_display = ["token", "group", "is_valid", "expiry_date"]
+    search_fields = ["group"]
+    readonly_fields = ["is_valid"]
     list_per_page = 25

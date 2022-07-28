@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-25 14:26+0000\n"
+"POT-Creation-Date: 2022-07-25 17:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,25 +32,25 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:33 cms/admins/training_set_admin.py:261 cms/forms.py:48
+#: cms/admin.py:32 cms/admins/training_set_admin.py:261 cms/forms.py:48
 #: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:99
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:34 cms/list_filter.py:102 cms/models/training_set.py:91
+#: cms/admin.py:33 cms/list_filter.py:102 cms/models/training_set.py:91
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:108
+#: cms/admin.py:34 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:108
 #: cms/models/document.py:109
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:36
+#: cms/admin.py:35
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:37 cms/models/feedback.py:85
+#: cms/admin.py:36 cms/models/feedback.py:85
 msgid "feedback"
 msgstr "Feedback"
 
@@ -246,7 +246,7 @@ msgstr "Wortart"
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:51
+#: cms/models/document.py:51 cms/models/group_api_key.py:62
 msgid "creation date"
 msgstr "Erstellt am"
 
@@ -302,11 +302,55 @@ msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
 msgid "feedback entries"
 msgstr "Feedback-Einträge"
 
-#: cms/models/group_api_key.py:83
+#: cms/models/group_api_key.py:33
+msgid "group"
+msgstr "Gruppe"
+
+#: cms/models/group_api_key.py:39
+msgid "token"
+msgstr "Token"
+
+#: cms/models/group_api_key.py:40
+msgid "10-50 characters, only digits and upper case letters allowed."
+msgstr "10-50 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
+
+#: cms/models/group_api_key.py:44
+msgid "Only digits and upper case letters allowed"
+msgstr "Nur Ziffern und Großbuchstaben erlaubt"
+
+#: cms/models/group_api_key.py:52
+msgid "revoked"
+msgstr "widerrufen"
+
+#: cms/models/group_api_key.py:53
+msgid "If the API key is revoked, clients cannot use it anymore."
+msgstr ""
+"Wenn der API-Schlüssel widerrufen wird, können Clients ihn nicht mehr "
+"verwenden."
+
+#: cms/models/group_api_key.py:58
+msgid "expiration date"
+msgstr "Ablaufdatum"
+
+#: cms/models/group_api_key.py:59
+msgid "Once API key expires, clients cannot use it anymore."
+msgstr ""
+"Sobald der API-Schlüssel abläuft, können die Clients ihn nicht mehr "
+"verwenden."
+
+#: cms/models/group_api_key.py:75
+msgid "valid"
+msgstr "gültig"
+
+#: cms/models/group_api_key.py:92
+msgid "{}: Token for the group \"{}\""
+msgstr "{}: Token für die Gruppe \"{}\""
+
+#: cms/models/group_api_key.py:95
 msgid "API Key"
 msgstr "API-Key"
 
-#: cms/models/group_api_key.py:84
+#: cms/models/group_api_key.py:96
 msgid "API Keys"
 msgstr "API-Keys"
 
@@ -422,19 +466,19 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:203
+#: core/settings.py:202
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:204
+#: core/settings.py:203
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:446 core/settings.py:447 core/settings.py:449
+#: core/settings.py:445 core/settings.py:446 core/settings.py:448
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:448
+#: core/settings.py:447
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

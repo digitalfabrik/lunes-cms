@@ -2,15 +2,8 @@
 A collection of helper methods and classes
 """
 
-import os
-import uuid
-import string
-import pathlib
-
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
-from django.utils.crypto import get_random_string
-from django.utils.translation import gettext as _
 
 from rest_framework import routers
 
@@ -146,17 +139,14 @@ def check_group_object_permissions(request, group_id):
 
     :param request: current request
     :type request: HttpRequest
+
     :param group_id: group id
-    :type group_id: int
+    :type group_id: str
+
     :raises PermissionDenied: Exception if no API-Key is delivered
     :raises PermissionDenied: Exception if API-Key doesn't belong to passed group id
     """
     key = get_key(request)
-    if not key:
-        raise PermissionDenied()
-    try:
-        api_key_object = GroupAPIKey.objects.get_from_key(key)
-    except GroupAPIKey.DoesNotExist:
-        raise PermissionDenied()
-    if int(api_key_object.organization_id) != int(group_id):
+    api_key_object = GroupAPIKey.get_from_token(key)
+    if api_key_object.group_id != int(group_id):
         raise PermissionDenied()

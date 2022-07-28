@@ -30,12 +30,9 @@ class DisciplineViewSet(viewsets.ModelViewSet):
         key = get_key(self.request)
         if key:
             # If the key is given, get the corresponding group
-            try:
-                api_key_object = GroupAPIKey.objects.get_from_key(key)
-            except GroupAPIKey.DoesNotExist:
-                raise PermissionDenied()
+            api_key_object = GroupAPIKey.get_from_token(key)
             # Return all disciplines of the group with the given key
-            self.queryset = queryset.filter(created_by=api_key_object.organization)
+            self.queryset = queryset.filter(created_by=api_key_object.group)
         else:
             # If no key is given, return all admin disciplines
             self.queryset = queryset.filter(creator_is_admin=True)

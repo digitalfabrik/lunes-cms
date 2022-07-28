@@ -6,7 +6,6 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from rest_framework_api_key.models import APIKey
 
 from .models import Discipline, TrainingSet, Document, GroupAPIKey, Feedback
 from .admins import DisciplineAdmin
@@ -77,5 +76,4 @@ admin.site.register(
 )
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(GroupAPIKey, GroupAPIKeyAdmin)
-admin.site.unregister(APIKey)
 admin.site.register(Feedback, FeedbackAdmin)
