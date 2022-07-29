@@ -1,3 +1,4 @@
+from html import escape
 from string import digits, ascii_uppercase
 
 from django.contrib.auth.models import Group
@@ -6,8 +7,11 @@ from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.db.models import Q
 from django.utils.crypto import get_random_string
+from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
+
+from qr_code.qrcode.maker import make_qr_code_url_with_args
 
 
 def generate_default_token():
@@ -73,6 +77,58 @@ class GroupAPIKey(models.Model):
 
     is_valid.boolean = True
     is_valid.short_description = _("valid")
+
+    @property
+    def qr_code_url(self):
+        """
+        :return: URL to the QR code for the token
+        :rtype: str
+        """
+        return make_qr_code_url_with_args(
+            data=self.token, qr_code_args={"image_format": "png"}
+        )
+
+    def qr_code_link(self, link, title=None):
+        """
+        :param link: The link text/image (needs to be properly escaped)
+        :type link: str
+
+        :param title: The link title (optional, needs to be properly escaped)
+        :type title: str
+
+        :return: HTML Link to the QR code for the token
+        :rtype: str
+        """
+        return mark_safe(
+            f'<a download="Lunes-QR-code-{escape(self.group.name)}.jpg" href="{escape(self.qr_code_url)}" title="{title or link}">{link}</a>'
+        )
+
+    def qr_code_download_link(self):
+        """
+        :return: Download link to the QR code for the token
+        :rtype: str
+        """
+        return self.qr_code_link(escape(_("Download"))) if self.is_valid() else None
+
+    qr_code_download_link.short_description = _("QR code")
+
+    def qr_code(self):
+        """
+        :return: QR code image for the token with download link
+        :rtype: str
+        """
+        return (
+            self.qr_code_link(
+                mark_safe(
+                    f'<img src="{escape(self.qr_code_url)}" width="330" height="auto" /></a>'
+                ),
+                escape(_("Download QR code")),
+            )
+            if self.is_valid()
+            else "-"
+        )
+
+    qr_code.short_description = _("QR code")
 
     @classmethod
     def get_from_token(cls, token):

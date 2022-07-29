@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "mptt",
     "pydub",
     "rest_framework",
+    "qr_code",
 ]
 
 #: Activated middlewares (see :setting:`django:MIDDLEWARE`)
@@ -495,3 +496,10 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+
+############
+# QR CODES #
+############
+
+SERVE_QR_CODE_IMAGE_PATH = ""
