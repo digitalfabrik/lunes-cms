@@ -18,7 +18,6 @@ class Discipline(MPTTModel):
     sets with the same topic. Inherits from `mptt.models.MPTTModel`.
     """
 
-    id = models.AutoField(primary_key=True)
     released = models.BooleanField(default=False, verbose_name=_("released"))
     title = models.CharField(max_length=255, verbose_name=_("discipline"))
     description = models.CharField(

@@ -64,15 +64,35 @@
   },
   {
     "model": "cms.groupapikey",
-    "pk": "EAC.pbkdf2_sha256$260000$bv1PvCOSWn9RueMOdPQq72$ckC54WsmJ0F9OfLBXhXJJjw9pQ44wc20drIPIYRM7F4=",
+    "pk": 1,
     "fields": {
-      "prefix": "EAC",
-      "hashed_key": "pbkdf2_sha256$260000$bv1PvCOSWn9RueMOdPQq72$ckC54WsmJ0F9OfLBXhXJJjw9pQ44wc20drIPIYRM7F4=",
-      "created": "2022-06-28T23:04:05.479Z",
-      "name": "EAC.CnQqaJm",
+      "creation_date": "2022-06-28T23:04:05.479Z",
+      "token": "VALIDTOKEN",
       "revoked": false,
       "expiry_date": null,
-      "organization": ["Berufsschule Musterstadt"]
+      "group": ["Berufsschule Musterstadt"]
+    }
+  },
+  {
+    "model": "cms.groupapikey",
+    "pk": 2,
+    "fields": {
+      "creation_date": "2022-01-01T12:00:00.000Z",
+      "token": "EXPIREDTOKEN",
+      "revoked": false,
+      "expiry_date": "2022-02-01T12:00:00.000Z",
+      "group": ["Berufsschule Musterstadt"]
+    }
+  },
+  {
+    "model": "cms.groupapikey",
+    "pk": 3,
+    "fields": {
+      "creation_date": "2022-01-01T12:00:00.000Z",
+      "token": "REVOKEDTOKEN",
+      "revoked": true,
+      "expiry_date": null,
+      "group": ["Berufsschule Musterstadt"]
     }
   },
   {

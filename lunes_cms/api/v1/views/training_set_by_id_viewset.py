@@ -3,8 +3,8 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
 
 from ....cms.models import TrainingSet, GroupAPIKey
-from ...serializers import TrainingSetSerializer
 from ...utils import get_key
+from ..serializers import TrainingSetSerializer
 
 
 class TrainingSetByIdViewSet(viewsets.ReadOnlyModelViewSet):
@@ -37,12 +37,7 @@ class TrainingSetByIdViewSet(viewsets.ReadOnlyModelViewSet):
         )
         key = get_key(self.request)
         if key:
-            try:
-                queryset = queryset.filter(
-                    created_by=GroupAPIKey.objects.get_from_key(key).organization
-                )
-            except GroupAPIKey.DoesNotExist:
-                raise PermissionDenied()
+            queryset = queryset.filter(created_by=GroupAPIKey.get_from_token(key).group)
         else:
             queryset = queryset.filter(creator_is_admin=True)
         return queryset

@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+* [ [#269](https://github.com/digitalfabrik/lunes-cms/issues/269) ] Allow to set custom API key
+* [ [#285](https://github.com/digitalfabrik/lunes-cms/issues/285) ] Generate API key with correct requirements
+* [ [#271](https://github.com/digitalfabrik/lunes-cms/issues/271) ] Generate QR codes for API keys
+
 
 2022.6.2
 --------

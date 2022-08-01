@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     "mptt",
     "pydub",
     "rest_framework",
-    "rest_framework_api_key",
+    "qr_code",
 ]
 
 #: Activated middlewares (see :setting:`django:MIDDLEWARE`)
@@ -138,6 +138,9 @@ except KeyError as e:
     raise ImproperlyConfigured(
         f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASE_CHOICES.keys()}."
     ) from e
+
+#: Default primary key field type to use for models that don’t have a field with primary_key=True.
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 ############
@@ -493,3 +496,10 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+
+############
+# QR CODES #
+############
+
+SERVE_QR_CODE_IMAGE_PATH = ""

@@ -1,6 +1,6 @@
 from rest_framework import mixins, viewsets
 
-from ...serializers import FeedbackSerializer
+from ..serializers import FeedbackSerializer
 
 
 class CreateFeedbackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

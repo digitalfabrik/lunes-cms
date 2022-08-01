@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 from ....cms.models import Document
-from ...serializers import DocumentSerializer
+from ..serializers import DocumentSerializer
 
 
 class WordViewSet(viewsets.ModelViewSet):

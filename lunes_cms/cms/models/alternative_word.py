@@ -10,7 +10,6 @@ class AlternativeWord(models.Model):
     Contains alternative words that can be linked to a document
     """
 
-    id = models.AutoField(primary_key=True)
     alt_word = models.CharField(max_length=255, verbose_name=_("alternative word"))
     article = models.IntegerField(
         choices=Static.article_choices,

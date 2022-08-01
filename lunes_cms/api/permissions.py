@@ -1,5 +1,7 @@
 from django.core.exceptions import PermissionDenied
-from rest_framework_api_key.permissions import BaseHasAPIKey
+from django.db.models import Q
+from django.utils.timezone import now
+
 from rest_framework import permissions
 
 from ..cms.models import GroupAPIKey
@@ -26,8 +28,5 @@ class VerifyGroupKey(permissions.AllowAny):
         key = get_key(request)
         if key is None:
             return False
-        try:
-            api_key = GroupAPIKey.objects.get_from_key(key)
-        except GroupAPIKey.DoesNotExist:
-            raise PermissionDenied()
+        GroupAPIKey.get_from_token(key)
         return True

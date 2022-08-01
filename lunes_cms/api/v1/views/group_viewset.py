@@ -4,9 +4,9 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 
 from ....cms.models import GroupAPIKey, TrainingSet
-from ...serializers import GroupSerializer
 from ...permissions import VerifyGroupKey
 from ...utils import get_key
+from ..serializers import GroupSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -37,10 +37,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         if not key:
             raise PermissionDenied()
         try:
-            api_key_object = GroupAPIKey.objects.get_from_key(key)
+            api_key_object = GroupAPIKey.get_from_token(key)
         except GroupAPIKey.DoesNotExist:
             raise PermissionDenied()
         if not api_key_object:
             raise PermissionDenied()
-        queryset = Group.objects.filter(id=api_key_object.organization_id)
+        queryset = Group.objects.filter(id=api_key_object.group_id)
         return queryset

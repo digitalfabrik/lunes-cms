@@ -14,7 +14,6 @@ class DocumentImage(models.Model):
     a document object.
     """
 
-    id = models.AutoField(primary_key=True)
     image = models.ImageField(
         upload_to=convert_umlaute_images, validators=[validate_multiple_extensions]
     )
