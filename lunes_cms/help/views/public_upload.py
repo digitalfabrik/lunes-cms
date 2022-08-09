@@ -36,6 +36,7 @@ def public_upload(request):
     )
     disciplines = (
         Discipline.objects.values_list("id", "title")
+        .order_by("title")
         .filter(training_sets__isnull=False)
         .filter(training_sets__documents__document_image__isnull=True)
         .distinct()
