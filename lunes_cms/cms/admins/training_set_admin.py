@@ -114,11 +114,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
             )
             form.base_fields["documents"].queryset = (
                 Document.objects.filter(
-                    Q(
-                        created_by__in=[
-                            group.name for group in request.user.groups.all()
-                        ]
-                    )
+                    Q(created_by__in=request.user.groups.all())
                     | (
                         Q(creator_is_admin=True, document_image__confirmed=True)
                         & ~Q(audio="")
