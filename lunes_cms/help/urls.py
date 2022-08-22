@@ -8,7 +8,7 @@ from django.urls import path
 from . import views
 
 
-#: The url patterns of this module (see :doc:`topics/http/urls`)
+#: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
     path("public_upload", views.public_upload, name="public_upload"),
 ]
