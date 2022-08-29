@@ -1,0 +1,16 @@
+[
+  {
+    "id": 48,
+    "title": "Verkehr, Transport und Logistik",
+    "description": "Vokabeln zu Verkehr, Transport und Logistik",
+    "icon": "http://testserver/media/images/verkehr-transport-und-logistik.png",
+    "created_by": 1,
+    "total_training_sets": 0,
+    "total_discipline_children": 3,
+    "nested_training_sets": [
+      7, 17, 25, 28, 29, 161, 164, 166, 299, 300, 301, 302, 303, 304, 305, 179, 180, 181, 310, 311,
+      183, 313, 186, 315, 316, 188, 184, 182, 185, 198, 199, 211, 223, 224, 225, 232, 233, 234, 235,
+      108, 109, 236, 123
+    ]
+  }
+]

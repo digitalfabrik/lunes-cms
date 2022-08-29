@@ -43,7 +43,9 @@ DEBUG = bool(strtobool(os.environ.get("LUNES_CMS_DEBUG", "False")))
 #: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
     # Installed custom apps
+    "lunes_cms.api",
     "lunes_cms.cms",
+    "lunes_cms.help",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
     # Installed Django apps
@@ -54,11 +56,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     # Installed third-party-apps
-    "drf_yasg",
+    "drf_spectacular",
     "mptt",
     "pydub",
     "rest_framework",
-    "rest_framework_api_key",
+    "qr_code",
 ]
 
 #: Activated middlewares (see :setting:`django:MIDDLEWARE`)
@@ -80,7 +82,7 @@ ROOT_URLCONF = "lunes_cms.core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -111,7 +113,7 @@ LOGIN_REDIRECT_URL = "/admin/"
 
 #: A dictionary containing the settings for all databases to be used with this Django installation
 #: (see :setting:`django:DATABASES`)
-DATABASES = {
+DATABASE_CHOICES = {
     "postgres": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("LUNES_CMS_DB_NAME", "lunes"),
@@ -127,11 +129,18 @@ DATABASES = {
 }
 
 try:
-    DATABASES["default"] = DATABASES[os.environ.get("LUNES_CMS_DB_BACKEND", "postgres")]
+    #: A dictionary containing the settings for all databases to be used with this Django installation
+    #: (see :setting:`django:DATABASES`)
+    DATABASES = {
+        "default": DATABASE_CHOICES[os.environ.get("LUNES_CMS_DB_BACKEND", "postgres")]
+    }
 except KeyError as e:
     raise ImproperlyConfigured(
-        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASES.keys()}."
+        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASE_CHOICES.keys()}."
     ) from e
+
+#: Default primary key field type to use for models that don’t have a field with primary_key=True.
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 ############
@@ -180,41 +189,46 @@ AUTH_PASSWORD_VALIDATORS = [
 ########################
 
 #: A list of directories where Django looks for translation files
-#: (see :setting:`django:LOCALE_PATHS` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:LOCALE_PATHS` and :doc:`django:topics/i18n/index`)
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
 #: A string representing the language slug for this installation
-#: (see :setting:`django:LANGUAGE_CODE` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:LANGUAGE_CODE` and :doc:`django:topics/i18n/index`)
 LANGUAGE_CODE = "en"
 
-#: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`topics/i18n/index`)
+#: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`django:topics/i18n/index`)
 LANGUAGES = [
     ("en", _("English")),
     ("de", _("German")),
 ]
 
 #: A string representing the time zone for this installation
-#: (see :setting:`django:TIME_ZONE` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:TIME_ZONE` and :doc:`django:topics/i18n/index`)
 TIME_ZONE = "UTC"
 
 #: A boolean that specifies whether Django’s translation system should be enabled
-#: (see :setting:`django:USE_I18N` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:USE_I18N` and :doc:`django:topics/i18n/index`)
 USE_I18N = True
 
 #: A boolean that specifies if localized formatting of data will be enabled by default or not
-#: (see :setting:`django:USE_L10N` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:USE_L10N` and :doc:`django:topics/i18n/index`)
 USE_L10N = True
 
 #: A boolean that specifies if datetimes will be timezone-aware by default or not
-#: (see :setting:`django:USE_TZ` and :doc:`topics/i18n/index`)
+#: (see :setting:`django:USE_TZ` and :doc:`django:topics/i18n/index`)
 USE_TZ = True
 
 
 ################
 # STATIC FILES #
 ################
+
+#: This setting defines the additional locations the :mod:`django.contrib.staticfiles` app will traverse to collect
+#: static files for deployment or to serve them during development (see :setting:`django:STATICFILES_DIRS` and
+#: :doc:`Managing static files <django:howto/static-files/index>`).
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 #: URL to use in development when referring to static files located in :setting:`STATICFILES_DIRS`
 #: (see :setting:`django:STATIC_URL` and :doc:`Managing static files <django:howto/static-files/index>`)
@@ -363,7 +377,7 @@ LOGGING = {
     },
     "loggers": {
         # Loggers of lunes-cms django apps
-        "cms": {
+        "lunes_cms": {
             "handlers": ["console-colored", "logfile"],
             "level": LOG_LEVEL,
             "propagate": False,
@@ -395,9 +409,33 @@ LOGGING = {
 
 #: Configuration of Django REST Framework
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    # "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
+    "ALLOWED_VERSIONS": ("v1", "v2"),
+    "DEFAULT_VERSION": "default",
+    "DEFAULT_API_URL": "http://localhost:8080/api/",
 }
 
+from django.templatetags.static import static
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Lunes API",
+    "DESCRIPTION": "The API documentation for the Lunes CMS",
+    "VERSION": None,
+    "SCHEMA_PATH_PREFIX": "/api(/v[0-9])?",
+    "CONTACT": {"email": "tech@integreat-app.de"},
+    "LICENSE": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    },
+    "SWAGGER_UI_FAVICON_HREF": "/favicon.ico",
+    "SWAGGER_UI_SETTINGS": """{
+        deepLinking: true,
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        layout: "StandaloneLayout",
+    }""",
+}
 
 ##################
 # DJANGO JAZZMIN #
@@ -458,3 +496,10 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+
+############
+# QR CODES #
+############
+
+SERVE_QR_CODE_IMAGE_PATH = ""

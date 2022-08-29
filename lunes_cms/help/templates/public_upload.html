@@ -1,0 +1,141 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'images/logo.svg' %}">
+
+    <title>Lunes App - Bild beitragen</title>
+
+    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+
+      .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+      }
+      .form-signin .checkbox {
+        font-weight: 400;
+      }
+      .form-signin .form-control {
+        position: relative;
+        box-sizing: border-box;
+        height: auto;
+        padding: 10px;
+        font-size: 16px;
+      }
+      .form-signin .form-control:focus {
+        z-index: 2;
+      }
+      .form-signin input {
+        margin-bottom: 10px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    </style>
+    <script src="static/js/jquery.min.js"></script>
+    <script>
+      var lunes_training_sets = JSON.parse('{{ training_sets|safe }}');
+      var lunes_documents = JSON.parse('{{ documents|safe }}');
+      var lunes_disc_sets_map = JSON.parse('{{ disc_sets_map|safe }}')
+      var lunes_disciplines = JSON.parse('{{ disciplines|safe }}');
+      var article_map = {
+        0: "keiner",
+        1: "der",
+        2: "die",
+        3: "das",
+        4: "die (Plural)"
+      }
+      let buffer_array = []
+
+      function Comparator(a, b) {
+        if (a[1] < b[1]) return -1;
+        if (a[1] > b[1]) return 1;
+        return 0;
+      }
+
+      $( document ).ready(function() {
+        lunes_disciplines.forEach(function(element) {
+          if( element[1] !== "Allgemeine Grundlagen") {
+            $("#inputDiscipline").append(new Option(element[1], element[0]))
+          }
+        });
+        $("#inputDiscipline").change(function() {
+          buffer_array = [];
+          let discipline_id = $("#inputDiscipline").val();
+          if (discipline_id == "all") {
+            buffer_array = lunes_documents;
+          } else if (discipline_id != "none") {
+            lunes_training_sets.forEach(function(element) {
+              if(lunes_disc_sets_map[discipline_id].includes(element[0])) {
+                let training_set_id = element[0];
+                lunes_documents = lunes_documents.sort(Comparator)
+                lunes_documents.forEach(function(element) {
+                  if(element[3] == training_set_id) {
+                    buffer_array.push(element)
+                  }
+                });
+              }
+            });
+          }
+          $("#inputDocument").find('option').remove();
+          buffer_array = buffer_array.sort(Comparator);
+          buffer_array.forEach(element =>
+            $("#inputDocument").append(new Option(article_map[element[2]] + " " + element[1], element[0]))
+          );
+        });
+      });
+    </script>
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin" method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+      <img class="mb-4" src="{% static 'images/logo.svg' %}" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Foto für Lunes-Vokabel hochladen</h1>
+      <h3 class="h5 mb-4 mt-4 font-weight-normal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+        </svg>
+        <a href="static/guidelines/fotoguide.pdf">Anleitung zum Erstellen geeigneter Fotos</a>
+      </h3>
+      {% if upload_success %}<div class="alert alert-success" role="alert">Vielen Dank für dein Bild. Das Lunes Team wird es prüfen und freigeben.</div>{% endif %}
+      <label for="inputDiscipline" class="sr-only">Beruf auswählen</label>
+      <select id="inputDiscipline" class="form-control" required autofocus>
+          <option value="none">Bitte Beruf wählen</option>
+          <option value="all">Alle Berufe</option>
+      </select>
+      <label for="inputDocument" class="sr-only">Wort auswählen</label>
+      <select id="inputDocument" name="inputDocument" class="form-control" required></select>
+      <label for="inputFile" class="sr-only">Bild</label>
+      <input type="file" id="inputFile" name="inputFile" accept="image/*" id="inputFile" class="form-control" capture="environment" required>
+      <div class="col-xs-12" style="height:10px;"></div>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="accept-cc0" required> Ich bestätige, dass ich das Bild selbst erstellt habe und die Nutzung mit einer <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">CC-0 Lizenz</a> gestatte.
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
+      <p class="mt-5 mb-3 text-muted"></p>
+    </form>
+  </body>
+</html>

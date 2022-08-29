@@ -1,88 +1,48 @@
 """
 Map paths to view functions.
 Defines custom schema views and a router that
-handles the url patterns descriped in the `README.md` file
+handles the url patterns described in the `README.md` file
 """
-from django.urls import include, path
-from rest_framework import routers
+
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import url
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-from . import views
-
-
-class OptionalSlashRouter(routers.DefaultRouter):
-    """
-    Custom router to allow routes with and without trailing slash to work without redirects
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.trailing_slash = "/?"
+from django.templatetags.static import static as get_static_url
+from django.urls import path, reverse_lazy
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic.base import RedirectView
+from django.views.i18n import JavaScriptCatalog
 
 
-# Schema view for swagger documentation
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Snippets API",
-        default_version="v1",
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
-# Router for dynamic url patterns
-router = OptionalSlashRouter()
-router.register(r"disciplines", views.DisciplineViewSet, "disciplines")
-router.register(
-    r"disciplines_by_level(?:/(?P<discipline_id>[0-9]+))?",
-    views.DisciplineFilteredViewSet,
-    "disciplines_by_level",
-)
-router.register(
-    r"disciplines_by_group/(?P<group_id>[0-9]+)",
-    views.DisciplineFilteredViewSet,
-    "discipline_by_group",
-)
-router.register(
-    r"training_set/(?P<discipline_id>[0-9]+)", views.TrainingSetViewSet, "training_set"
-)
-router.register(
-    r"training_sets",
-    views.TrainingSetByIdViewSet,
-    "training_sets",
-)
-router.register(
-    r"documents/(?P<training_set_id>[0-9]+)", views.DocumentViewSet, "documents"
-)
-
-router.register(
-    r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
-)
-router.register(r"words", views.WordViewSet, "words")
-router.register(r"group_info", views.GroupViewSet, "group_by_id")
-router.register(r"feedback", views.CreateFeedbackViewSet, "feedback")
-
+#: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
-    path("", views.redirect_view, name="redirect"),
-    path("public_upload", views.public_upload, name="public_upload"),
-    path("api/", include(router.urls)),
-    url(
-        r"^swagger(?P<format>\.json|\.yaml)$",
-        schema_view.without_ui(cache_timeout=0),
-        name="schema-json",
+    path(
+        "admin/password_reset/",
+        auth_views.PasswordResetView.as_view(),
+        name="admin_password_reset",
     ),
-    url(
-        r"^swagger/$",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
+    path(
+        "admin/password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
     ),
-    url(
-        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
     ),
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
+    path("admin/", admin.site.urls),
+    path("i18n.js", JavaScriptCatalog.as_view(), name="javascript-translations"),
 ]
+
+# Set dashboard title
+admin.site.index_title = _("Dashboard")

@@ -1,0 +1,80 @@
+[
+  {
+    "id": 16,
+    "title": "Elektroniker/-in",
+    "description": "Vokabeln für Elektroniker:innen",
+    "icon": "http://testserver/media/images/elektroniker-in.png",
+    "created_by": null,
+    "total_training_sets": 30,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 28, 29, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 43, 172, 171, 173, 175, 179,
+      180, 181, 182, 183, 184, 185, 186, 188, 211, 224
+    ]
+  },
+  {
+    "id": 125,
+    "title": "Informationselektroniker/-in",
+    "description": "Vokabel für Informationselektroniker:innen",
+    "icon": "http://testserver/media/images/informationselektroniker-in.png",
+    "created_by": null,
+    "total_training_sets": 21,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 28, 161, 162, 163, 165, 167, 171, 173, 175, 179, 180, 181, 182, 183, 186, 188, 193,
+      211, 224
+    ]
+  },
+  {
+    "id": 28,
+    "title": "Anlagenmechaniker/-in für Sanitär-, Heizungs- und Klimatechnik",
+    "description": "Vokabeln für Anlagenmechaniker:innen für Sanitär-, Heizungs- und Klimatechnik",
+    "icon": "http://testserver/media/images/anlagenmechaniker-in-fur-sanitar-heizungs-und-klimatechnik.png",
+    "created_by": null,
+    "total_training_sets": 24,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      9, 17, 25, 28, 181, 182, 183, 184, 186, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232,
+      233, 234, 235, 236
+    ]
+  },
+  {
+    "id": 50,
+    "title": "Industriemechaniker/-in",
+    "description": "Vokabeln für Industriemechaniker:innen",
+    "icon": "http://testserver/media/images/industriemechaniker-in.png",
+    "created_by": null,
+    "total_training_sets": 22,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      7, 17, 25, 161, 182, 183, 184, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232, 233,
+      234, 235, 236
+    ]
+  },
+  {
+    "id": 52,
+    "title": "Maschinen- und Anlagenführer/-in",
+    "description": "Vokabeln für Maschinen- und Anlagenführer:innen",
+    "icon": "http://testserver/media/images/maschinen-und-anlagenfuhrer-in.png",
+    "created_by": null,
+    "total_training_sets": 20,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      17, 25, 182, 183, 184, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232, 233, 234, 235,
+      236
+    ]
+  },
+  {
+    "id": 54,
+    "title": "Zerspanungsmechaniker/-in",
+    "description": "Vokabeln für Zerspanungsmechaniker:innen",
+    "icon": "http://testserver/media/images/zerspanungsmechaniker-in.png",
+    "created_by": null,
+    "total_training_sets": 20,
+    "total_discipline_children": 0,
+    "nested_training_sets": [
+      17, 25, 182, 183, 184, 188, 211, 223, 224, 225, 226, 227, 228, 229, 230, 232, 233, 234, 235,
+      236
+    ]
+  }
+]

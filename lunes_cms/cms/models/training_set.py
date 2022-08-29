@@ -21,7 +21,6 @@ class TrainingSet(MPTTModel):  # pylint: disable=R0903
     Inherits from `mptt.models.MPTTModel`.
     """
 
-    id = models.AutoField(primary_key=True)
     released = models.BooleanField(default=False, verbose_name=_("released"))
     title = models.CharField(max_length=255, verbose_name=_("training set"))
     description = models.CharField(

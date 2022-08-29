@@ -62,6 +62,11 @@ extensions = [
 ]
 #: Enable cross-references to other documentations
 intersphinx_mapping = {
+    "django": (
+        f"https://docs.djangoproject.com/en/{django_version}/",
+        f"https://docs.djangoproject.com/en/{django_version}/_objects/",
+    ),
+    "pytest-django": ("https://pytest-django.readthedocs.io/en/latest/", None),
     "python": (
         f"https://docs.python.org/{sys.version_info.major}.{sys.version_info.minor}/",
         None,
@@ -75,10 +80,6 @@ intersphinx_mapping = {
         "https://sphinxcontrib-django2.readthedocs.io/en/latest/",
         None,
     ),
-    "django": (
-        f"https://docs.djangoproject.com/en/{django_version}/",
-        f"https://docs.djangoproject.com/en/{django_version}/_objects/",
-    ),
     "setuptools": ("https://setuptools.pypa.io/en/latest/", None),
     "twine": ("https://twine.readthedocs.io/en/latest/", None),
     "wsgi": ("https://wsgi.readthedocs.io/en/latest/", None),
@@ -89,9 +90,9 @@ intersphinx_timeout = 5
 templates_path = ["templates"]
 #: Markup to shorten external links (see :doc:`sphinx:usage/extensions/extlinks`)
 extlinks = {
-    "github": (f"{github_url}/%s", ""),
-    "github-source": (f"{github_url}/blob/develop/%s", ""),
-    "django-source": (f"{django_github_url}/%s", ""),
+    "github": (f"{github_url}/%s", None),
+    "github-source": (f"{github_url}/blob/develop/%s", None),
+    "django-source": (f"{django_github_url}/%s", None),
 }
 #: A string of reStructuredText that will be included at the end of every source file that is read. Used for substitutions.
 rst_epilog = f"""
@@ -119,9 +120,9 @@ html_css_files = [
 #: Additional template context
 html_context = {"current_year": date.today().year}
 #: The logo shown in the menu bar
-html_logo = "../../lunes_cms/cms/static/images/logo-lunes-dark.svg"
+html_logo = "../../lunes_cms/static/images/logo-lunes-dark.svg"
 #: The favicon of the html doc files
-html_favicon = "../../lunes_cms/cms/static/images/logo.svg"
+html_favicon = "../../lunes_cms/static/images/logo.svg"
 #: Do not include links to the documentation source (.rst files) in build
 html_show_sourcelink = False
 #: Do not include a link to sphinx

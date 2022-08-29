@@ -1,0 +1,115 @@
+[
+  {
+    "id": 1242,
+    "word": "Elektroinstallation",
+    "article": 2,
+    "audio": "http://testserver/media/audio/elektroinstallation.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 764,
+        "image": "http://testserver/media/images/elektroinstallation.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1247,
+    "word": "Eurostecker",
+    "article": 1,
+    "audio": "http://testserver/media/audio/eurostecker.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 769,
+        "image": "http://testserver/media/images/eurostecker.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1264,
+    "word": "Kuparohr",
+    "article": 3,
+    "audio": "http://testserver/media/audio/kuparohr.mp3",
+    "word_type": "Nomen",
+    "alternatives": [
+      {
+        "alt_word": "Kuparohre",
+        "article": 4
+      }
+    ],
+    "document_image": [
+      {
+        "id": 787,
+        "image": "http://testserver/media/images/kuparohr.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1277,
+    "word": "Phasenprüfer",
+    "article": 1,
+    "audio": "http://testserver/media/audio/phasenprufer.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 811,
+        "image": "http://testserver/media/images/phasenprufer.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1297,
+    "word": "Schaltplan",
+    "article": 1,
+    "audio": "http://testserver/media/audio/schaltplan.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 829,
+        "image": "http://testserver/media/images/schaltplan.jpg"
+      }
+    ]
+  },
+  {
+    "id": 117,
+    "word": "Spannungsprüfer",
+    "article": 1,
+    "audio": "http://testserver/media/audio/spannungsprufer.mp3",
+    "word_type": "Nomen",
+    "alternatives": [
+      {
+        "alt_word": "Duspol",
+        "article": 1
+      }
+    ],
+    "document_image": [
+      {
+        "id": 122,
+        "image": "http://testserver/media/images/spannungsprufer.jpg"
+      }
+    ]
+  },
+  {
+    "id": 284,
+    "word": "zweipolige Phasenprüfer",
+    "article": 1,
+    "audio": "http://testserver/media/audio/zweipolige-phasenprufer.mp3",
+    "word_type": "Nomen",
+    "alternatives": [
+      {
+        "alt_word": "Phasenprüfer",
+        "article": 1
+      }
+    ],
+    "document_image": [
+      {
+        "id": 308,
+        "image": "http://testserver/media/images/zweipolige-phasenprufer.jpg"
+      }
+    ]
+  }
+]

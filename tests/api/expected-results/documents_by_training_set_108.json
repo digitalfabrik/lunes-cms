@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1733,
+    "word": "Dachreling",
+    "article": 2,
+    "audio": "http://testserver/media/audio/dachreling.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 1370,
+        "image": "http://testserver/media/images/dachreling.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1735,
+    "word": "Fahrzeugfront",
+    "article": 2,
+    "audio": "http://testserver/media/audio/fahrzeugfront.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 1372,
+        "image": "http://testserver/media/images/fahrzeugfront.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1736,
+    "word": "Fahrzeugheck",
+    "article": 3,
+    "audio": "http://testserver/media/audio/fahrzeugheck.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 1373,
+        "image": "http://testserver/media/images/fahrzeugheck.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1815,
+    "word": "Führungslenker",
+    "article": 1,
+    "audio": "http://testserver/media/audio/fuhrungslenker.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 1463,
+        "image": "http://testserver/media/images/fuhrungslenker.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1739,
+    "word": "Kotflügel",
+    "article": 1,
+    "audio": "http://testserver/media/audio/kotflugel.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 1377,
+        "image": "http://testserver/media/images/kotflugel.jpg"
+      }
+    ]
+  },
+  {
+    "id": 1744,
+    "word": "Schweller",
+    "article": 1,
+    "audio": "http://testserver/media/audio/schweller.mp3",
+    "word_type": "Nomen",
+    "alternatives": [],
+    "document_image": [
+      {
+        "id": 1382,
+        "image": "http://testserver/media/images/schweller.jpg"
+      }
+    ]
+  }
+]

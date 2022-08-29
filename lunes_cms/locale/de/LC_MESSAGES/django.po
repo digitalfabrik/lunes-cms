@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 13:30+0000\n"
+"POT-Creation-Date: 2022-08-11 09:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cms/admin.py:33 cms/admins/training_set_admin.py:261 cms/forms.py:48
-#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:100
+#: api/apps.py:13
+msgid "API"
+msgstr "API"
+
+#: api/v1/serializers/feedback_serializer.py:21
+msgid ""
+"The content type must be either 'discipline', 'training set' or 'document'."
+msgstr ""
+"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
+"sein."
+
+#: api/v1/serializers/feedback_serializer.py:33
+msgid "{} with id {} does not exist."
+msgstr "{} mit der ID {} existiert nicht."
+
+#: cms/admin.py:32 cms/admins/training_set_admin.py:257 cms/forms.py:48
+#: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:99
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:34 cms/list_filter.py:102 cms/models/training_set.py:92
+#: cms/admin.py:33 cms/list_filter.py:102 cms/models/training_set.py:91
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:109
-#: cms/models/document.py:110
+#: cms/admin.py:34 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:114
+#: cms/models/document.py:115
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:36
+#: cms/admin.py:35
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:37 cms/models/feedback.py:85
+#: cms/admin.py:36 cms/models/feedback.py:85
 msgid "feedback"
 msgstr "Feedback"
 
@@ -47,25 +62,25 @@ msgstr "Ausgewählte Modulgruppen veröffentlichen"
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:161 cms/admins/document_admin.py:150
-#: cms/admins/training_set_admin.py:279
+#: cms/admins/discipline_admin.py:161 cms/admins/document_admin.py:148
+#: cms/admins/training_set_admin.py:275
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:132 cms/models/training_set.py:26
-#: cms/models/training_set.py:91
+#: cms/admins/document_admin.py:130 cms/models/training_set.py:25
+#: cms/models/training_set.py:90
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:168 cms/models/document.py:49
+#: cms/admins/document_admin.py:166 cms/models/document.py:49
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:188 cms/models/document_image.py:125
+#: cms/admins/document_admin.py:186 cms/models/document_image.py:124
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:202 cms/models/alternative_word.py:18
+#: cms/admins/document_admin.py:200 cms/models/alternative_word.py:17
 #: cms/models/document.py:38
 msgid "article"
 msgstr "Artikel"
@@ -88,11 +103,11 @@ msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Eitnräge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/training_set_admin.py:141
+#: cms/admins/training_set_admin.py:137
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: cms/admins/training_set_admin.py:176
+#: cms/admins/training_set_admin.py:172
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -106,29 +121,29 @@ msgstr[1] ""
 "Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
 "Vokabeln mit bestätigten Bildern enthalten."
 
-#: cms/admins/training_set_admin.py:189
+#: cms/admins/training_set_admin.py:185
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
-#: cms/admins/training_set_admin.py:203
+#: cms/admins/training_set_admin.py:199
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
 msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
 
-#: cms/admins/training_set_admin.py:209
+#: cms/admins/training_set_admin.py:205
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
-#: cms/admins/training_set_admin.py:233
+#: cms/admins/training_set_admin.py:229
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
-#: cms/admins/training_set_admin.py:244
+#: cms/admins/training_set_admin.py:240
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
@@ -183,43 +198,43 @@ msgstr "keinem Modul zugewiesen"
 msgid "assigned only"
 msgstr "zu Modul zugewiesen"
 
-#: cms/models/alternative_word.py:14 cms/models/alternative_word.py:38
+#: cms/models/alternative_word.py:13 cms/models/alternative_word.py:37
 msgid "alternative word"
 msgstr "Alternatives Wort"
 
-#: cms/models/alternative_word.py:39
+#: cms/models/alternative_word.py:38
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: cms/models/discipline.py:22 cms/models/training_set.py:25
+#: cms/models/discipline.py:21 cms/models/training_set.py:24
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:23 cms/models/discipline.py:99
-#: cms/models/training_set.py:37
+#: cms/models/discipline.py:22 cms/models/discipline.py:98
+#: cms/models/training_set.py:36
 msgid "discipline"
 msgstr "Modulgruppe"
 
-#: cms/models/discipline.py:25 cms/models/training_set.py:28
+#: cms/models/discipline.py:24 cms/models/training_set.py:27
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:28 cms/models/group.py:10
-#: cms/models/training_set.py:31
+#: cms/models/discipline.py:27 cms/models/group.py:10
+#: cms/models/training_set.py:30
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:35 cms/models/document.py:55
-#: cms/models/training_set.py:40
+#: cms/models/discipline.py:34 cms/models/document.py:58
+#: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:38 cms/models/document.py:57
-#: cms/models/training_set.py:42
+#: cms/models/discipline.py:37 cms/models/document.py:62
+#: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:45 cms/models/training_set.py:49
+#: cms/models/discipline.py:44 cms/models/training_set.py:48
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
@@ -231,11 +246,11 @@ msgstr "Wortart"
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:52
+#: cms/models/document.py:52 cms/models/group_api_key.py:66
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document_image.py:126
+#: cms/models/document_image.py:125
 msgid "images"
 msgstr "Bilder"
 
@@ -287,19 +302,75 @@ msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
 msgid "feedback entries"
 msgstr "Feedback-Einträge"
 
-#: cms/models/group_api_key.py:83
+#: cms/models/group_api_key.py:37
+msgid "group"
+msgstr "Gruppe"
+
+#: cms/models/group_api_key.py:43
+msgid "token"
+msgstr "Token"
+
+#: cms/models/group_api_key.py:44
+msgid "10-50 characters, only digits and upper case letters allowed."
+msgstr "10-50 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
+
+#: cms/models/group_api_key.py:48
+msgid "Only digits and upper case letters allowed"
+msgstr "Nur Ziffern und Großbuchstaben erlaubt"
+
+#: cms/models/group_api_key.py:56
+msgid "revoked"
+msgstr "widerrufen"
+
+#: cms/models/group_api_key.py:57
+msgid "If the API key is revoked, clients cannot use it anymore."
+msgstr ""
+"Wenn der API-Schlüssel widerrufen wird, können Clients ihn nicht mehr "
+"verwenden."
+
+#: cms/models/group_api_key.py:62
+msgid "expiration date"
+msgstr "Ablaufdatum"
+
+#: cms/models/group_api_key.py:63
+msgid "Once API key expires, clients cannot use it anymore."
+msgstr ""
+"Sobald der API-Schlüssel abläuft, können die Clients ihn nicht mehr "
+"verwenden."
+
+#: cms/models/group_api_key.py:79
+msgid "valid"
+msgstr "gültig"
+
+#: cms/models/group_api_key.py:111
+msgid "Download"
+msgstr "Herunterladen"
+
+#: cms/models/group_api_key.py:113 cms/models/group_api_key.py:131
+msgid "QR code"
+msgstr "QR-Code"
+
+#: cms/models/group_api_key.py:125
+msgid "Download QR code"
+msgstr "QR-Code herunterladen"
+
+#: cms/models/group_api_key.py:148
+msgid "{}: Token for the group \"{}\""
+msgstr "{}: Token für die Gruppe \"{}\""
+
+#: cms/models/group_api_key.py:151
 msgid "API Key"
 msgstr "API-Key"
 
-#: cms/models/group_api_key.py:84
+#: cms/models/group_api_key.py:152
 msgid "API Keys"
 msgstr "API-Keys"
 
-#: cms/models/training_set.py:34
+#: cms/models/training_set.py:33
 msgid "document"
 msgstr "Dokument"
 
-#: cms/models/training_set.py:80
+#: cms/models/training_set.py:79
 msgid ""
 "It is not possible to create child elements for training sets (unlike "
 "disciplines)."
@@ -307,18 +378,91 @@ msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
 
-#: cms/serializers.py:196
+#: cms/templates/admin/delete_confirmation.html:16
+#: cms/templates/admin/delete_selected_confirmation.html:15
+msgid "Home"
+msgstr "Home"
+
+#: cms/templates/admin/delete_confirmation.html:20
+#: cms/templates/admin/delete_confirmation.html:24
+#: cms/templates/admin/delete_confirmation.html:32
+msgid "Delete"
+msgstr "Löschen"
+
+#: cms/templates/admin/delete_confirmation.html:39
+#, python-format
 msgid ""
-"The content type must be either 'discipline', 'training set' or 'document'."
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
 msgstr ""
-"Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
-"sein."
+"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
+"ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen."
 
-#: cms/serializers.py:208
-msgid "{} with id {} does not exist."
-msgstr "{} mit der ID {} existiert nicht."
+#: cms/templates/admin/delete_confirmation.html:46
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
+"ebenfalls löschen, die allerdings geschützt sind."
 
-#: cms/utils.py:163
+#: cms/templates/admin/delete_confirmation.html:53
+#: cms/templates/admin/delete_selected_confirmation.html:51
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"It eventually will delete related objects as well, as shown in the summary:"
+msgstr ""
+"Bist du sicher, dass du %(object_name)s '%(escaped_object)s' löschen "
+"möchtest? Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in "
+"der Zusammenfassung sehen kannst:"
+
+#: cms/templates/admin/delete_confirmation.html:62
+#: cms/templates/admin/delete_selected_confirmation.html:64
+msgid "Yes, I’m sure"
+msgstr "Ja, ich bin mir sicher"
+
+#: cms/templates/admin/delete_confirmation.html:65
+#: cms/templates/admin/delete_selected_confirmation.html:67
+msgid "No, take me back"
+msgstr "Nein, bitte abbrechen"
+
+#: cms/templates/admin/delete_selected_confirmation.html:18
+#: cms/templates/admin/delete_selected_confirmation.html:22
+#: cms/templates/admin/delete_selected_confirmation.html:30
+msgid "Delete multiple objects"
+msgstr "Mehrere Objekte löschen"
+
+#: cms/templates/admin/delete_selected_confirmation.html:37
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
+"Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
+
+#: cms/templates/admin/delete_selected_confirmation.html:44
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
+"Objekte ebenfalls löschen, die allerdings geschützt sind:"
+
+#: cms/templates/admin/object_delete_summary.html:2
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#: cms/urls.py:48
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: cms/utils.py:140
 msgid "and"
 msgstr "und"
 
@@ -334,105 +478,25 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:194
+#: core/settings.py:203
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:195
+#: core/settings.py:204
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:408 core/settings.py:409 core/settings.py:411
+#: core/settings.py:446 core/settings.py:447 core/settings.py:449
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:410
+#: core/settings.py:448
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
-#: core/urls.py:76
-msgid "Dashboard"
-msgstr "Dashboard"
-
-#: templates/admin/cms/delete_confirmation.html:16
-#: templates/admin/cms/delete_selected_confirmation.html:15
-msgid "Home"
-msgstr "Home"
-
-#: templates/admin/cms/delete_confirmation.html:20
-#: templates/admin/cms/delete_confirmation.html:24
-#: templates/admin/cms/delete_confirmation.html:32
-msgid "Delete"
-msgstr "Löschen"
-
-#: templates/admin/cms/delete_confirmation.html:39
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
-"related objects, but your account doesn't have permission to delete the "
-"following types of objects:"
-msgstr ""
-"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen."
-
-#: templates/admin/cms/delete_confirmation.html:46
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
-"following protected related objects:"
-msgstr ""
-"Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
-"ebenfalls löschen, die allerdings geschützt sind."
-
-#: templates/admin/cms/delete_confirmation.html:53
-#: templates/admin/cms/delete_selected_confirmation.html:51
-#, python-format
-msgid ""
-"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
-"It eventually will delete related objects as well, as shown in the summary:"
-msgstr ""
-"Bist du sicher, dass du %(object_name)s '%(escaped_object)s' löschen "
-"möchtest? Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in "
-"der Zusammenfassung sehen kannst:"
-
-#: templates/admin/cms/delete_confirmation.html:62
-#: templates/admin/cms/delete_selected_confirmation.html:64
-msgid "Yes, I’m sure"
-msgstr "Ja, ich bin mir sicher"
-
-#: templates/admin/cms/delete_confirmation.html:65
-#: templates/admin/cms/delete_selected_confirmation.html:67
-msgid "No, take me back"
-msgstr "Nein, bitte abbrechen"
-
-#: templates/admin/cms/delete_selected_confirmation.html:18
-#: templates/admin/cms/delete_selected_confirmation.html:22
-#: templates/admin/cms/delete_selected_confirmation.html:30
-msgid "Delete multiple objects"
-msgstr "Mehrere Objekte löschen"
-
-#: templates/admin/cms/delete_selected_confirmation.html:37
-#, python-format
-msgid ""
-"Deleting the selected %(objects_name)s would result in deleting related "
-"objects, but your account doesn't have permission to delete the following "
-"types of objects:"
-msgstr ""
-"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
-"Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
-
-#: templates/admin/cms/delete_selected_confirmation.html:44
-#, python-format
-msgid ""
-"Deleting the selected %(objects_name)s would require deleting the following "
-"protected related objects:"
-msgstr ""
-"Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
-"Objekte ebenfalls löschen, die allerdings geschützt sind:"
-
-#: templates/admin/cms/object_delete_summary.html:2
-msgid "Summary"
-msgstr "Zusammenfassung"
+#: help/apps.py:13
+msgid "help"
+msgstr "Hilfe"
 
 #~ msgid "French"
 #~ msgstr "Französisch"

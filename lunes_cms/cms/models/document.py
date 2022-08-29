@@ -15,6 +15,7 @@ from ..validators import (
     validate_multiple_extensions,
 )
 from .feedback import Feedback
+from .group import Group
 from .static import Static, convert_umlaute_audio
 
 
@@ -24,7 +25,6 @@ class Document(models.Model):
     Relates to training sets and inherits from `models.Model`.
     """
 
-    id = models.AutoField(primary_key=True)
     word_type = models.CharField(
         max_length=255,
         choices=Static.word_type_choices,
@@ -51,8 +51,13 @@ class Document(models.Model):
     creation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("creation date")
     )
-    created_by = models.CharField(
-        max_length=255, null=True, blank=True, verbose_name=_("created by")
+    created_by = models.ForeignKey(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_("created by"),
+        to=Group,
+        on_delete=models.CASCADE,
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     feedback = GenericRelation(Feedback)
