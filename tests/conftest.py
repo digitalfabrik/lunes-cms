@@ -7,7 +7,7 @@ from django.core.management import call_command
 
 
 # pylint: disable=unused-argument
-@pytest.fixture(scope="session")
+@pytest.fixture(autouse=True, scope="session")
 def load_test_data(django_db_setup, django_db_blocker):
     """
     Load the test data initially for all test cases

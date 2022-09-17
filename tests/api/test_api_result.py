@@ -13,7 +13,7 @@ from .api_config import PARAMETRIZED_API_ENDPOINTS
     PARAMETRIZED_API_ENDPOINTS,
 )
 def test_api_result(
-    load_test_data, endpoint, post_data, api_key, expected_result, expected_status_code
+    endpoint, post_data, api_key, expected_result, expected_status_code
 ):
     """
     This test class checks all endpoints defined in :attr:`~tests.api.api_config.API_ENDPOINTS`.
