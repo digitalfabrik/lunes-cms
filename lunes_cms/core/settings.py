@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from distutils.util import strtobool
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
 from .logging_formatter import ColorFormatter
+from .utils import strtobool
 
 
 ###################
@@ -416,8 +416,6 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSION": "default",
     "DEFAULT_API_URL": "http://localhost:8080/api/",
 }
-
-from django.templatetags.static import static
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Lunes API",

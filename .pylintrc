@@ -26,7 +26,6 @@ ignore=.venv,build,docs
 # regex matches against paths and can be in Posix or Windows format.
 ignore-paths=^lunes_cms/cms/.*$,
              ^lunes_cms/api/.*$,
-             ^lunes_cms/core/.*$,
 
 # Files or directories matching the regex patterns are skipped. The regex
 # matches against base names, not paths. The default value ignores emacs file
