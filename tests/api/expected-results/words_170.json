@@ -1,0 +1,14 @@
+{
+  "id": 170,
+  "word": "Auto",
+  "article": 3,
+  "audio": "http://testserver/media/audio/auto.mp3",
+  "word_type": "Nomen",
+  "alternatives": [],
+  "document_image": [
+      {
+          "id": 178,
+          "image": "http://testserver/media/images/auto.jpg"
+      }
+  ]
+}

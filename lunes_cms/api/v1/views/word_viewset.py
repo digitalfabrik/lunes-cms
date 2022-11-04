@@ -1,7 +1,10 @@
+from django.db.models import Q
+
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-from ....cms.models import Document
+from ....cms.models import Document, GroupAPIKey
+from ...utils import get_key
 from ..serializers import DocumentSerializer
 
 
@@ -23,15 +26,26 @@ class WordViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Document.objects.none()
-        return (
-            Document.objects.filter(
-                creator_is_admin=True,
-                document_image__confirmed=True,
-                training_sets__released=True,
-                training_sets__discipline__released=True,
+        # Get base queryset
+        queryset = Document.objects.filter(
+            document_image__confirmed=True,
+            training_sets__released=True,
+            training_sets__discipline__released=True,
+        )
+        # Get API key of current request
+        key = get_key(self.request)
+        if key:
+            # If the key is given, get the corresponding group
+            api_key_object = GroupAPIKey.get_from_token(key)
+            # Return all public words as well as those of the group with the given key
+            queryset = queryset.filter(
+                Q(creator_is_admin=True) | Q(created_by=api_key_object.group)
             )
-            .select_related()
-            .distinct()
+        else:
+            # If no key is given, return all public words
+            queryset = queryset.filter(creator_is_admin=True)
+        return (
+            queryset.select_related().distinct()
             # Sort queryset to make output order deterministic for testing
             .order_by("id")
         )
