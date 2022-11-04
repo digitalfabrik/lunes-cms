@@ -1,6 +1,9 @@
 UNRELEASED
 ----------
 
+* [ [#404](https://github.com/digitalfabrik/lunes-cms/issues/404) ] Deliver protected vocabulary words in API
+* [ [#412](https://github.com/digitalfabrik/lunes-cms/issues/412) ] Use different logo on login form
+
 
 2022.8.0
 --------

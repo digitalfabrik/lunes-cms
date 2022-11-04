@@ -243,12 +243,13 @@ VOCABULARY_ENDPOINTS = [
     {
         "endpoint": "/api/words/",
         "api_key": "VALIDTOKEN",
-        "expected_result": "tests/api/expected-results/words.json",
+        "expected_result": "tests/api/expected-results/words_by_key.json",
     },
     {
         "endpoint": "/api/words/",
         "api_key": "INVALIDTOKEN",
-        "expected_result": "tests/api/expected-results/words.json",
+        "expected_result": "tests/api/expected-results/permission_denied.json",
+        "expected_status_code": 403,
     },
     {
         "endpoint": "/api/words/2/",
@@ -262,7 +263,24 @@ VOCABULARY_ENDPOINTS = [
     {
         "endpoint": "/api/words/2/",
         "api_key": "INVALIDTOKEN",
-        "expected_result": "tests/api/expected-results/words_2.json",
+        "expected_result": "tests/api/expected-results/permission_denied.json",
+        "expected_status_code": 403,
+    },
+    {
+        "endpoint": "/api/words/170/",
+        "expected_result": "tests/api/expected-results/not_found.json",
+        "expected_status_code": 404,
+    },
+    {
+        "endpoint": "/api/words/170/",
+        "api_key": "VALIDTOKEN",
+        "expected_result": "tests/api/expected-results/words_170.json",
+    },
+    {
+        "endpoint": "/api/words/170/",
+        "api_key": "INVALIDTOKEN",
+        "expected_result": "tests/api/expected-results/permission_denied.json",
+        "expected_status_code": 403,
     },
 ]
 
