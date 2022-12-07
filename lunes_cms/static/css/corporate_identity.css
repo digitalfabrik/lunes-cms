@@ -171,7 +171,7 @@
         /* Selected table row */
         --selected-row: #2d2d4a;
     }
-    body {
+    body, .content-wrapper {
         background-color: #282838;
     }
     .card {
@@ -183,6 +183,7 @@
     }
     .main-header,
     .card-header,
+    .main-footer,
     .table-striped tbody tr:nth-of-type(odd) {
         background-color: #47476e;
     }
@@ -197,5 +198,8 @@
     .accent-navy .nav-tabs .nav-link:hover,
     .accent-navy a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn):hover {
         color: #c4e3ff;
+    }
+    .main-footer {
+        border-top: 0;
     }
 }
