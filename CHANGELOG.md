@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2022.12.0
+---------
+
 * [ [#418](https://github.com/digitalfabrik/lunes-cms/issues/418) ] Fix background color in dark mode
 
 
