@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v2
+          key: pip-{{ checksum "setup.cfg" }}-v3
       - run:
           name: Creating virtual environment
           command: |
@@ -21,7 +21,7 @@ jobs:
               pip install -e .[dev,doc,test]
             fi
       - save_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v2
+          key: pip-{{ checksum "setup.cfg" }}-v3
           paths:
             - .venv
             - lunes_cms.egg-info
