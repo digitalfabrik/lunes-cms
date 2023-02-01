@@ -3,7 +3,6 @@ import lunes_cms.cms.models.static
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("auth", "0012_alter_user_first_name_max_length"),
         ("cms", "0001_initial"),
