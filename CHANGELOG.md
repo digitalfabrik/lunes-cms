@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#371](https://github.com/digitalfabrik/lunes-cms/issues/371) ] Add sponsor management and api delivery
+
 
 2022.12.0
 ---------

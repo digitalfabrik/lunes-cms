@@ -6,6 +6,7 @@ from .static import Static, convert_umlaute_images, convert_umlaute_audio
 from .training_set import TrainingSet
 from .group_api_key import GroupAPIKey
 from .feedback import Feedback
+from .sponsor import Sponsor
 from . import group, content_type
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "group",
     "GroupAPIKey",
     "Feedback",
+    "Sponsor",
 ]

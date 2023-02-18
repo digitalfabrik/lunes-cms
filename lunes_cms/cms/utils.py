@@ -14,13 +14,15 @@ from django.utils.html import mark_safe
 from django.utils.translation import ugettext as _
 
 
-def create_ressource_path(parent_dir, filename):
-    """Create a file path with a uuid and given parent directory.
+def create_resource_path(parent_dir, filename):
+    """
+    Create a file path with a uuid and given parent directory.
 
     :param parent_dir: parent directory
     :type parent_dir: str
     :param filename: file name
     :type filename: str
+
     :return: full file path
     :rtype: str
     """
@@ -28,13 +30,15 @@ def create_ressource_path(parent_dir, filename):
 
 
 def get_random_key(length: int = 10, excluded_chars: list = []) -> str:
-    """Auxiliary function that creates a random key based on latin letters and digits using
+    """
+    Auxiliary function that creates a random key based on latin letters and digits using
     the passed length. Optionally, it is possible to exclude characters like l and 1.
 
     :param length: key length, defaults to 10
     :type length: int, optional
     :param excluded_chars: list of characters to be excluded (mixed dtypes possible), defaults to []
     :type excluded_chars: list, optional
+
     :return: key
     :rtype: str
     """
@@ -46,10 +50,12 @@ def get_random_key(length: int = 10, excluded_chars: list = []) -> str:
 
 
 def document_to_string(doc):
-    """Create string representation of a document object
+    """
+    Create string representation of a document object
 
     :param doc: Document object
     :type doc: models.Document
+
     :return: String representation of document image
     :rtype: str
     """
@@ -63,12 +69,14 @@ def document_to_string(doc):
 
 
 def get_child_count(disc):
-    """Returns the number of children of a discipline.
+    """
+    Returns the number of children of a discipline.
     Every child contains at least one training set or is a direct/indirect
     parent of a discipline that contains one.
 
     :param disc: Discipline instance
     :type disc: models.Discipline
+
     :return: sum of children
     :rtype: int
     """
@@ -80,11 +88,13 @@ def get_child_count(disc):
 
 
 def get_training_set_count(disc):
-    """Returns the total number of training sets of a discipline and all its
+    """
+    Returns the total number of training sets of a discipline and all its
     child elements.
 
     :param disc: Discipline instance
     :type disc: models.Discipline
+
     :return: sum of training sets
     :rtype: int
     """
@@ -94,12 +104,14 @@ def get_training_set_count(disc):
     return training_set_counter
 
 
-def get_image_tag(image):
+def get_image_tag(image, width=330):
     """
     Image thumbnail to display a preview of a image
 
     :param image: The image file
     :type image: ~django.db.models.fields.files.ImageFieldFile
+    :param width: The pixel width of the created image tag. Defaults to 330
+    :type image: int
 
     :return: HTML tag to display an image thumbnail
     :rtype: str
@@ -115,7 +127,7 @@ def get_image_tag(image):
     # Hide preview if image is empty or has invalid type
     html_cls = "" if src else 'class="hidden"'
     # HTML image tag for previews
-    return mark_safe(f'<img src="{src}" width="330" height="auto" {html_cls} />')
+    return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
 
 
 def iter_to_string(iter):

@@ -10,8 +10,8 @@ from .document import Document
 
 
 class DocumentImage(models.Model):
-    """Contains images and its titles that can be linked to
-    a document object.
+    """
+    Contains images and its titles that can be linked to a document object.
     """
 
     image = models.ImageField(
