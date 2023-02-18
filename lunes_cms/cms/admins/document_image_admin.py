@@ -18,7 +18,8 @@ class DocumentImageAdmin(admin.StackedInline):
     extra = 0
 
     def get_fields(self, request, obj=None):
-        """Override djangos get_fields function
+        """
+        Override djangos get_fields function
         to add custom superuser fields to the
         admin interface if the user has the corresponding
         access rights.
@@ -27,6 +28,7 @@ class DocumentImageAdmin(admin.StackedInline):
         :type request: django.http.request
         :param obj: [description], defaults to None
         :type obj: django.db.models, optional
+
         :return: custom fields list
         :rtype: list[str]
         """

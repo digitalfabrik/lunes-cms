@@ -45,13 +45,15 @@ def get_key(request, keyword="Api-Key"):
 
 
 def get_filtered_discipline_queryset(discipline_view_set):
-    """Returns child disciplines belonging to the discipline id
+    """
+    Returns child disciplines belonging to the discipline id
     of the passed discipline view set. Only released and non-empty
     objects are returned. The number of training sets contained by
     a child is annotated as well.
 
     :param discipline_view_set: A handle to the :class:`DisciplineViewSet`
     :type discipline_view_set: class
+
     :return: (filtered) queryset
     :rtype: QuerySet
     """

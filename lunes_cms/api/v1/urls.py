@@ -51,6 +51,7 @@ router.register(
 router.register(r"words", views.WordViewSet, "words")
 router.register(r"group_info", views.GroupViewSet, "group_by_id")
 router.register(r"feedback", views.CreateFeedbackViewSet, "feedback")
+router.register(r"sponsors", views.SponsorsViewSet, "sponsors")
 
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [

@@ -7,12 +7,13 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Discipline, TrainingSet, Document, GroupAPIKey, Feedback
+from .models import Discipline, TrainingSet, Document, GroupAPIKey, Feedback, Sponsor
 from .admins import DisciplineAdmin
 from .admins import TrainingSetAdmin
 from .admins import DocumentAdmin
 from .admins import GroupAPIKeyAdmin
 from .admins import FeedbackAdmin
+from .admins import SponsorAdmin
 
 
 def get_app_list(self, request):
@@ -77,3 +78,4 @@ admin.site.register(
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(GroupAPIKey, GroupAPIKeyAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
+admin.site.register(Sponsor, SponsorAdmin)
