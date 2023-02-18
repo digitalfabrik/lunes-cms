@@ -65,6 +65,20 @@ def convert_umlaute_audio(instance, filename):
     """
     return create_ressource_path("audio", filename)
 
+def upload_sponsor_icons(instance, filename):
+    """
+    Upload path for sponsor icons
+
+    :param instance: instance where the current file is being attached
+    :type instance: django.db.models
+    :param filename: name of the file
+    :type filename: str
+
+    :return: file path for sponsor icons
+    :rtype: str
+    """
+    return create_ressource_path("sponsors", filename)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
