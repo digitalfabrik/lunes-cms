@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-20 12:00+0000\n"
+"POT-Creation-Date: 2023-02-20 13:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -220,7 +220,7 @@ msgid "description"
 msgstr "Beschreibung"
 
 #: cms/models/discipline.py:27 cms/models/group.py:10 cms/models/sponsor.py:24
-#: cms/models/training_set.py:30
+#: cms/models/sponsor.py:57 cms/models/training_set.py:30
 msgid "icon"
 msgstr "Icon"
 

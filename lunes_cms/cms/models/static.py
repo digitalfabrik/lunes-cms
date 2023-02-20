@@ -97,7 +97,7 @@ def upload_sponsor_icons(instance, filename):
     :return: file path for sponsor icons
     :rtype: str
     """
-    return create_ressource_path("sponsors", filename)
+    return create_resource_path("sponsors", filename)
 
 
 @receiver(post_save, sender=User)

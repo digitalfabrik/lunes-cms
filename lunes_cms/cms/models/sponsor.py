@@ -24,6 +24,15 @@ class Sponsor(models.Model):
         verbose_name=_("icon"),
     )
 
+    def __str__(self):
+        """
+        String representation of sponsor name
+
+        :return: name of the sponsor
+        :rtype: str
+        """
+        return self.name
+
     def preview(self):
         """
         Image thumbnail to display a preview of a image in the editing section
@@ -43,3 +52,6 @@ class Sponsor(models.Model):
         """
 
         return bool(self.icon)
+
+    icon_is_set.boolean = True
+    icon_is_set.short_description = _("icon")

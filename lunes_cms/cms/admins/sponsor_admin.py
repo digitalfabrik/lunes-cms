@@ -11,11 +11,9 @@ class SponsorAdmin(admin.ModelAdmin):
     fields = [
         "name",
         "icon",
-        "preview",
     ]
     list_display = [
         "name",
-        "preview",
         "icon_is_set",
     ]
     list_per_page = 25
