@@ -24,6 +24,9 @@ class Static:
         ("Nomen", "Substantiv"),
         ("Verb", "Verb"),
         ("Adjektiv", "Adjektiv"),
+        ("Numeral", "Numeral"),
+        ("Pronomen", "Pronomen"),
+        ("Adverb", "Adverb"),
     ]
 
     # number of pixles used for box blurr
