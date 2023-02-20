@@ -27,6 +27,7 @@ class Static:
         ("Numeral", "Numeral"),
         ("Pronomen", "Pronomen"),
         ("Adverb", "Adverb"),
+        ("Personenbezeichnung", "Personenbezeichnung"),
     ]
 
     # number of pixels used for box blur

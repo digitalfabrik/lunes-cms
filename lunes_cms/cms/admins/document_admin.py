@@ -27,6 +27,9 @@ class DocumentAdmin(admin.ModelAdmin):
         "word_type",
         ("article", "word"),
         "plural",
+        ("job_title_feminin_singluar", "job_title_feminin_plural"),
+        ("job_title_masculin_singluar", "job_title_masculin_plural"),
+        ("job_title_neutrum_singluar", "job_title_neutrum_plural"),
         "audio",
     )
     readonly_fields = ("created_by",)

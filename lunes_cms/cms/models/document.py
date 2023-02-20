@@ -43,6 +43,42 @@ class Document(models.Model):
         blank=True,
         default="",
     )
+    job_title_feminin_singluar = models.CharField(
+        max_length=255,
+        null=False,
+        blank=True,
+        verbose_name=_("feminin singluar"),
+    )
+    job_title_feminin_plural = models.CharField(
+        max_length=255,
+        null=False,
+        blank=True,
+        verbose_name=_("feminin plural"),
+    )
+    job_title_masculin_singluar = models.CharField(
+        max_length=255,
+        null=False,
+        blank=True,
+        verbose_name=_("masculin singluar"),
+    )
+    job_title_masculin_plural = models.CharField(
+        max_length=255,
+        null=False,
+        blank=True,
+        verbose_name=_("masculin plural"),
+    )
+    job_title_neutrum_singluar = models.CharField(
+        max_length=255,
+        null=False,
+        blank=True,
+        verbose_name=_("neutrum singluar"),
+    )
+    job_title_neutrum_plural = models.CharField(
+        max_length=255,
+        null=False,
+        blank=True,
+        verbose_name=_("neutrum plural"),
+    )
     audio = models.FileField(
         upload_to=convert_umlaute_audio,
         validators=[

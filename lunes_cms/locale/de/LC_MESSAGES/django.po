@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 13:21+0000\n"
+"POT-Creation-Date: 2023-03-02 14:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,8 +41,8 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:120
-#: cms/models/document.py:121
+#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:156
+#: cms/models/document.py:157
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -62,25 +62,25 @@ msgstr "Ausgewählte Modulgruppen veröffentlichen"
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:165 cms/admins/document_admin.py:153
+#: cms/admins/discipline_admin.py:165 cms/admins/document_admin.py:156
 #: cms/admins/training_set_admin.py:275
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:135 cms/models/training_set.py:25
+#: cms/admins/document_admin.py:138 cms/models/training_set.py:25
 #: cms/models/training_set.py:90
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:171 cms/models/document.py:55
+#: cms/admins/document_admin.py:174 cms/models/document.py:91
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:191 cms/models/document_image.py:124
+#: cms/admins/document_admin.py:194 cms/models/document_image.py:124
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:206 cms/models/alternative_word.py:17
+#: cms/admins/document_admin.py:209 cms/models/alternative_word.py:17
 #: cms/models/document.py:38
 msgid "article"
 msgstr "Artikel"
@@ -228,12 +228,12 @@ msgstr "Beschreibung"
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:34 cms/models/document.py:64
+#: cms/models/discipline.py:34 cms/models/document.py:100
 #: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:37 cms/models/document.py:68
+#: cms/models/discipline.py:37 cms/models/document.py:104
 #: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
@@ -254,7 +254,31 @@ msgstr "Wort"
 msgid "plural"
 msgstr "Plural"
 
-#: cms/models/document.py:58 cms/models/group_api_key.py:66
+#: cms/models/document.py:50
+msgid "feminin singluar"
+msgstr "Feminin (Singular)"
+
+#: cms/models/document.py:56
+msgid "feminin plural"
+msgstr "Feminin (Plural)"
+
+#: cms/models/document.py:62
+msgid "masculin singluar"
+msgstr "Maskulin (Singular)"
+
+#: cms/models/document.py:68
+msgid "masculin plural"
+msgstr "Maskulin (Plural)"
+
+#: cms/models/document.py:74
+msgid "neutrum singluar"
+msgstr "Neutrum (Singular)"
+
+#: cms/models/document.py:80
+msgid "neutrum plural"
+msgstr "Neutrum (Plural)"
+
+#: cms/models/document.py:94 cms/models/group_api_key.py:66
 msgid "creation date"
 msgstr "Erstellt am"
 

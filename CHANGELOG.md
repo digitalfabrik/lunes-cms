@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#436](https://github.com/digitalfabrik/lunes-cms/issues/436) ] Add field to add the genus of a document
+
 
 2023.2.0
 --------
