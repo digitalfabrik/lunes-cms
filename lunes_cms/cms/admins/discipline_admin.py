@@ -31,7 +31,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
     def save_model(self, request, obj, form, change):
         """
         Overwrite django built-in function to save
-        user group and admin satus of model
+        user group and admin status of model
 
         :param request: current user request
         :type request: django.http.request
@@ -58,6 +58,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
 
         :param request: current user request
         :type request: django.http.request
+
         :return: modified action choices
         :rtype: dict
         """
@@ -72,7 +73,8 @@ class DisciplineAdmin(DraggableMPTTAdmin):
 
         :param request: current user request
         :type request: django.http.request
-        :return: adjustet queryset
+
+        :return: adjusted queryset
         :rtype: QuerySet
         """
         qs = super(DisciplineAdmin, self).get_queryset(request)
@@ -83,7 +85,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
     def get_form(self, request, obj=None, **kwargs):
         """
         Overwrite django built-in function to define custom choices
-        in mppt many to many selector for parent disciplines,
+        in MPTT many to many selector for parent disciplines,
         e.g. users should not see disciplines by superusers.
         The function modifies the querysets of the
         corresponding base fields dynamically.
@@ -92,7 +94,8 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :type request: django.http.request
         :param obj: django model object, defaults to None
         :type obj: django.db.models, optional
-        :return: model form with adjustet querysets
+
+        :return: model form with adjusted querysets
         :rtype: ModelForm
         """
         form = super(DisciplineAdmin, self).get_form(request, obj, **kwargs)
@@ -148,6 +151,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
 
         :param obj: Discipline object
         :type obj: models.Discipline
+
         :return: Either static admin group or user group
         :rtype: str
         """

@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from ....cms.models import Sponsor
 
+
 class SponsorSerializer(serializers.ModelSerializer):
     """
     Serializer for the Sponsor module.

@@ -46,7 +46,8 @@ class Discipline(MPTTModel):
     feedback = GenericRelation(Feedback)
 
     def is_valid(self):
-        """Checks if a discipline itself or one of its children has at least one training set.
+        """
+        Checks if a discipline itself or one of its children has at least one training set.
         If so, it is considered valid.
 
         :return: True if discipline is valid
@@ -58,8 +59,9 @@ class Discipline(MPTTModel):
         )
 
     def get_nested_training_sets(self):
-        """Returns a list of distinct training set ids that are part of this
-        disipline or one of its child elements.
+        """
+        Returns a list of distinct training set ids that are part of this
+        discipline or one of its child elements.
 
         :return: training set ids
         :rtype: list(int)
@@ -83,12 +85,13 @@ class Discipline(MPTTModel):
     image_tag.short_description = ""
 
     def __str__(self):
-        """String representation of Discipline instance
+        """
+        String representation of Discipline instance
 
         :return: title of discipline instance
         :rtype: str
         """
-        return self.title
+        return str(self.title)
 
     class Meta:
         """
