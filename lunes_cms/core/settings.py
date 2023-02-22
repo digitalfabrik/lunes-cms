@@ -464,6 +464,7 @@ JAZZMIN_SETTINGS = {
         "cms.Document": "fab fa-amilia",
         "cms.GroupAPIKey": "fas fa-key",
         "cms.Feedback": "fas fa-comment",
+        "cms.Sponsor": "fas fa-star",
     },
 }
 

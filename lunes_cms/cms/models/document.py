@@ -92,7 +92,7 @@ class Document(models.Model):
 
     def save(self, *args, **kwargs):
         """Overwrite djangos save function to convert audio files
-        to mp3 format (orignal file is saved as backup).
+        to mp3 format (original file is saved as backup).
         """
         if self.audio:
             self.audio = self.converted
