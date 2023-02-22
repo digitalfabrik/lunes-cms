@@ -7,3 +7,4 @@ from .training_set_viewset import TrainingSetViewSet
 from .training_set_by_id_viewset import TrainingSetByIdViewSet
 from .word_viewset import WordViewSet
 from .feedback_viewset import CreateFeedbackViewSet
+from .sponsors_viewset import SponsorsViewSet

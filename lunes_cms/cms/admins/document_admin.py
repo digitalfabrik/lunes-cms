@@ -50,7 +50,7 @@ class DocumentAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         """
         Overwrite django built-in function to save
-        user group and admin satus of model
+        user group and admin status of model
 
         :param request: current user request
         :type request: django.http.request
@@ -91,7 +91,8 @@ class DocumentAdmin(admin.ModelAdmin):
 
         :param request: current user request
         :type request: django.http.request
-        :return: adjustet queryset
+
+        :return: adjusted queryset
         :rtype: QuerySet
         """
         qs = (
@@ -192,6 +193,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
         :param obj: Document object
         :type obj: models.Document
+
         :return: Either static admin group or user group
         :rtype: str
         """
@@ -200,7 +202,8 @@ class DocumentAdmin(admin.ModelAdmin):
     article_display.short_description = _("article")
 
     def get_list_filter(self, request):
-        """Override djangos get_list_filter function
+        """
+        Override djangos get_list_filter function
         to remove specific list filters that are only relevant
         for super users.
 
@@ -208,6 +211,7 @@ class DocumentAdmin(admin.ModelAdmin):
         :type request: django.http.request
         :param obj: [description], defaults to None
         :type obj: django.db.models, optional
+
         :return: custom fields list
         :rtype: list[str]
         """

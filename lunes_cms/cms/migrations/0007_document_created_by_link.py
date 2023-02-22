@@ -43,7 +43,6 @@ def reverse_created_by(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("cms", "0006_convert_group_api_key"),
     ]

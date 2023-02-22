@@ -49,7 +49,7 @@ def public_upload(request):
     )
 
     new_map = {}
-    for (key, value) in disc_sets_map:
+    for key, value in disc_sets_map:
         if key in new_map:
             new_map[key].append(value)
         else:

@@ -40,7 +40,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
     def save_model(self, request, obj, form, change):
         """
         Overwrite django built-in function to save
-        user group and admin satus of model
+        user group and admin status of model
 
         :param request: current user request
         :type request: django.http.request
@@ -81,7 +81,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
 
         :param request: current user request
         :type request: django.http.request
-        :return: adjustet queryset
+        :return: adjusted queryset
         :rtype: QuerySet
         """
         qs = super(TrainingSetAdmin, self).get_queryset(request)
@@ -100,7 +100,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :type request: django.http.request
         :param obj: django model object, defaults to None
         :type obj: django.db.models, optional
-        :return: model form with adjustet querysets
+        :return: model form with adjusted querysets
         :rtype: ModelForm
         """
         form = super(TrainingSetAdmin, self).get_form(request, obj, **kwargs)
@@ -249,7 +249,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
 
         :param obj: Training set object
         :type obj: models.TrainingSet
-        :return: comma seperated list of related disciplines
+        :return: comma separated list of related disciplines
         :rtype: str
         """
         return ", ".join([child.title for child in obj.discipline.all()])
