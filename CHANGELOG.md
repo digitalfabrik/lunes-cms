@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2023.2.0
+--------
+
 * [ [#434](https://github.com/digitalfabrik/lunes-cms/issues/434) ] Add adverbs, pronouns and numerals as word types
 * [ [#371](https://github.com/digitalfabrik/lunes-cms/issues/371) ] Add sponsor management and api delivery
 
