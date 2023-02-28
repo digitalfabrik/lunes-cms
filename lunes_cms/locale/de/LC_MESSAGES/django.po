@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-23 10:06+0000\n"
+"POT-Creation-Date: 2024-04-11 08:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:35 cms/admins/document_admin.py:151
+#: cms/admin.py:35 cms/admins/document_admin.py:156
 #: cms/admins/training_set_admin.py:359 cms/forms.py:46 cms/forms.py:48
 #: cms/list_filter.py:14 cms/models/discipline.py:101
 msgid "disciplines"
@@ -42,8 +42,8 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:130
-#: cms/models/document.py:131
+#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:136
+#: cms/models/document.py:137
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -75,25 +75,25 @@ msgstr "unveröffentlichte Module"
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:168
+#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:173
 #: cms/admins/training_set_admin.py:376
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:131 cms/models/training_set.py:25
+#: cms/admins/document_admin.py:136 cms/models/training_set.py:25
 #: cms/models/training_set.py:90
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:185 cms/models/document.py:48
+#: cms/admins/document_admin.py:190 cms/models/document.py:54
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:205 cms/models/document_image.py:123
+#: cms/admins/document_admin.py:210 cms/models/document_image.py:123
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:220 cms/models/alternative_word.py:17
+#: cms/admins/document_admin.py:225 cms/models/alternative_word.py:17
 #: cms/models/document.py:37
 msgid "article"
 msgstr "Artikel"
@@ -269,12 +269,12 @@ msgstr "Beschreibung"
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:76
+#: cms/models/discipline.py:33 cms/models/document.py:82
 #: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:80
+#: cms/models/discipline.py:36 cms/models/document.py:86
 #: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
@@ -291,23 +291,27 @@ msgstr "Wortart"
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:50
+#: cms/models/document.py:41
+msgid "plural"
+msgstr "Plural"
+
+#: cms/models/document.py:56
 msgid "example sentence"
 msgstr "Beispielsatz"
 
-#: cms/models/document.py:52 cms/models/group_api_key.py:65
+#: cms/models/document.py:58 cms/models/group_api_key.py:65
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:58
+#: cms/models/document.py:64
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:64
+#: cms/models/document.py:70
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:70
+#: cms/models/document.py:76
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -598,6 +602,15 @@ msgstr "Hilfe"
 
 #~ msgid "Released modules"
 #~ msgstr "Veröffentlichte Module"
+
+#~ msgid "This field is required for substantives."
+#~ msgstr "Dieses Feld is für Substantive ein Pflichtfeld."
+
+#~ msgid "Only required for substantives."
+#~ msgstr "Wird nur für Substantive benötigt"
+
+#~ msgid "plural article"
+#~ msgstr "Plural-Artikel"
 
 #~ msgid "icon_file"
 #~ msgstr "Icon"
