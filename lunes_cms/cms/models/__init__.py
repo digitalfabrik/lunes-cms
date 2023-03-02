@@ -7,6 +7,7 @@ from .training_set import TrainingSet
 from .group_api_key import GroupAPIKey
 from .feedback import Feedback
 from .sponsor import Sponsor
+from .user import User
 from . import group, content_type
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "GroupAPIKey",
     "Feedback",
     "Sponsor",
+    "User",
 ]

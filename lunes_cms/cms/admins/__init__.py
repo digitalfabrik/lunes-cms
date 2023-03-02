@@ -12,4 +12,5 @@ __all__ = [
     "GroupAPIKeyAdmin",
     "FeedbackAdmin",
     "SponsorAdmin",
+    "UserAdmin",
 ]

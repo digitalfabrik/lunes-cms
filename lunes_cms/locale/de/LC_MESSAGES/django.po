@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-20 20:24+0000\n"
+"POT-Creation-Date: 2023-03-07 16:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -494,19 +494,19 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:203
+#: core/settings.py:205
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:204
+#: core/settings.py:206
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:446 core/settings.py:447 core/settings.py:449
+#: core/settings.py:448 core/settings.py:449 core/settings.py:451
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:448
+#: core/settings.py:450
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
