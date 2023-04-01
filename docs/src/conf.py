@@ -24,7 +24,7 @@ from django import VERSION as django_version
 sys.path.append(os.path.abspath(".."))
 # Append sphinx source directory to path environment variable to allow documentation for this file
 sys.path.append(os.path.abspath("."))
-#: The path to the django settings module (see :doc:`sphinxcontrib-django2:readme`)
+#: The path to the django settings module (see :doc:`sphinxcontrib-django:readme`)
 django_settings = "lunes_cms.core.settings"
 #: The "major.minor" version of Django
 django_version = f"{django_version[0]}.{django_version[1]}"
@@ -58,7 +58,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "sphinx_rtd_theme",
-    "sphinxcontrib_django2",
+    "sphinxcontrib_django",
 ]
 #: Enable cross-references to other documentations
 intersphinx_mapping = {
@@ -76,8 +76,8 @@ intersphinx_mapping = {
         "https://sphinx-rtd-theme.readthedocs.io/en/latest/",
         None,
     ),
-    "sphinxcontrib-django2": (
-        "https://sphinxcontrib-django2.readthedocs.io/en/latest/",
+    "sphinxcontrib-django": (
+        "https://sphinxcontrib-django.readthedocs.io/en/latest/",
         None,
     ),
     "setuptools": ("https://setuptools.pypa.io/en/latest/", None),
