@@ -14,7 +14,6 @@ from ..models import Static, DocumentImage
 from .document_image_admin import DocumentImageAdmin
 from .alternative_word_admin import AlternativeWordAdmin
 
-
 SUPERUSER_ONLY_LIST_FILTERS = [ApprovedImageListFilter]
 
 
@@ -24,7 +23,12 @@ class DocumentAdmin(admin.ModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
-    exclude = ("article_plural", "creator_is_admin")
+    fields = (
+        "word_type",
+        ("article", "word"),
+        "plural",
+        "audio",
+    )
     readonly_fields = ("created_by",)
     search_fields = ["word", "alternatives__alt_word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
@@ -222,4 +226,8 @@ class DocumentAdmin(admin.ModelAdmin):
         return tuple(filters)
 
     class Media:
-        js = ("js/image_preview.js",)
+        css = {"all": ("css/document_form.css",)}
+        js = (
+            "js/image_preview.js",
+            "js/toggle_plural_field.js",
+        )
