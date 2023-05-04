@@ -12,6 +12,7 @@ class SponsorAdmin(admin.ModelAdmin):
 
     fields = [
         "name",
+        "url",
         "logo",
         "image_tag",
     ]

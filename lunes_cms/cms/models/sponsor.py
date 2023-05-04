@@ -15,7 +15,10 @@ class Sponsor(models.Model):
         max_length=255,
         blank=False,
     )
-
+    url = models.URLField(
+        blank=True,
+        verbose_name=_("URL"),
+    )
     logo = models.ImageField(
         upload_to=upload_sponsor_logos,
         validators=[validate_multiple_extensions],

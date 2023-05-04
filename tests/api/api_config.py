@@ -366,6 +366,28 @@ FEEDBACK_ENDPOINTS = [
     },
 ]
 
+
+#: The sponsor endpoints
+SPONSOR_ENDPOINTS = [
+    {
+        "endpoint": "/api/sponsors/",
+        "expected_result": "tests/api/expected-results/sponsors.json",
+    },
+    {
+        "endpoint": "/api/sponsors/1",
+        "expected_result": "tests/api/expected-results/sponsors_1.json",
+    },
+    {
+        "endpoint": "/api/sponsors/2",
+        "expected_result": "tests/api/expected-results/sponsors_2.json",
+    },
+    {
+        "endpoint": "/api/sponsors/3",
+        "expected_result": "tests/api/expected-results/not_found.json",
+        "expected_status_code": 404,
+    },
+]
+
 #: The API endpoints
 API_ENDPOINTS = (
     DISCIPLINE_ENDPOINTS
@@ -373,6 +395,7 @@ API_ENDPOINTS = (
     + VOCABULARY_ENDPOINTS
     + GROUP_ENDPOINTS
     + FEEDBACK_ENDPOINTS
+    + SPONSOR_ENDPOINTS
 )
 
 #: Convert the dicts to tuples with a fixed length

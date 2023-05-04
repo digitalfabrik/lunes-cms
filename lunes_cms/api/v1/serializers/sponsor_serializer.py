@@ -17,5 +17,6 @@ class SponsorSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+            "url",
             "logo",
         )
