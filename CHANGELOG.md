@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#464](https://github.com/digitalfabrik/lunes-cms/issues/464) ] Add URL to sponsor model
+
 
 2023.2.0
 --------

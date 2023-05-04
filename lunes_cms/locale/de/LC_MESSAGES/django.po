@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-20 20:24+0000\n"
+"POT-Creation-Date: 2023-05-03 14:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,7 +103,7 @@ msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/sponsor_admin.py:36 cms/models/sponsor.py:23
+#: cms/admins/sponsor_admin.py:37 cms/models/sponsor.py:26
 msgid "logo"
 msgstr "Logo"
 
@@ -374,11 +374,15 @@ msgstr "API-Keys"
 msgid "name"
 msgstr "Name"
 
-#: cms/models/sponsor.py:40
+#: cms/models/sponsor.py:20
+msgid "URL"
+msgstr "URL"
+
+#: cms/models/sponsor.py:43
 msgid "sponsor"
 msgstr "Sponsor"
 
-#: cms/models/sponsor.py:41
+#: cms/models/sponsor.py:44
 msgid "sponsors"
 msgstr "Sponsoren"
 

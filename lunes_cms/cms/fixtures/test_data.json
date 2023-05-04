@@ -24806,5 +24806,19 @@
       "tree_id": 41,
       "level": 1
     }
+  },
+  {
+    "model": "cms.sponsor",
+    "pk": 1,
+    "fields": {
+      "name": "Industrie- und Handelskammer",
+      "url": "https://www.ihk.de/",
+      "logo": ""
+    }
+  },
+  {
+    "model": "cms.sponsor",
+    "pk": 2,
+    "fields": { "name": "Bundesagentur für Arbeit", "url": "https://www.arbeitsagentur.de/", "logo": "" }
   }
 ]
