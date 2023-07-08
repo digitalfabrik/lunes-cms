@@ -28,4 +28,5 @@ class DocumentSerializer(serializers.ModelSerializer):
             "word_type",
             "alternatives",
             "document_image",
+            "example_sentence",
         )
