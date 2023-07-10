@@ -52,7 +52,7 @@
         border-bottom-left-radius: 0;
       }
     </style>
-    <script src="static/js/jquery.min.js"></script>
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     <script>
       var lunes_training_sets = JSON.parse('{{ training_sets|safe }}');
       var lunes_documents = JSON.parse('{{ documents|safe }}');
