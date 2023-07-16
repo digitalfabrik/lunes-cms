@@ -5,6 +5,7 @@ UNRELEASED
 * [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Add module and vocabulary counters to discipline list
 * [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Add vocabulary counters to training set list
 * [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Group discipline filter by parent discipline
+* [ [#368](https://github.com/digitalfabrik/lunes-cms/issues/368) ] Limit training set filter options by selected discipline and vice versa
 
 
 2023.5.0

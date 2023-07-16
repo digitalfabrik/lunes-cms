@@ -37,7 +37,7 @@ msgstr "{} mit der ID {} existiert nicht."
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:34 cms/list_filter.py:101 cms/models/training_set.py:91
+#: cms/admin.py:34 cms/list_filter.py:104 cms/models/training_set.py:91
 msgid "training sets"
 msgstr "Module"
 
@@ -198,31 +198,31 @@ msgstr ""
 "Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
 "bestätigten Bildern enthalten."
 
-#: cms/list_filter.py:154
+#: cms/list_filter.py:158
 msgid "approved images"
 msgstr "Bestätigte Bilder"
 
-#: cms/list_filter.py:175
+#: cms/list_filter.py:179
 msgid "at least one approved image"
 msgstr "Mind. ein bestätigtes Bild"
 
-#: cms/list_filter.py:176
+#: cms/list_filter.py:180
 msgid "at least one pending image"
 msgstr "Mind. ein unbestätigtes Bild"
 
-#: cms/list_filter.py:177
+#: cms/list_filter.py:181
 msgid "no images"
 msgstr "Keine Bilder"
 
-#: cms/list_filter.py:210
+#: cms/list_filter.py:214
 msgid "assigned & unassigned"
 msgstr "Zugewiesen & unzugewiesen"
 
-#: cms/list_filter.py:231
+#: cms/list_filter.py:235
 msgid "unassigned only"
 msgstr "keinem Modul zugewiesen"
 
-#: cms/list_filter.py:232
+#: cms/list_filter.py:236
 msgid "assigned only"
 msgstr "Mind. einem Modul zugewiesen"
 

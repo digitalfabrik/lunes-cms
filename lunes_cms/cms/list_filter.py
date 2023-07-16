@@ -36,6 +36,9 @@ class DisciplineListFilter(admin.SimpleListFilter):
         # Verify that only disciplines are displayed that actually can contain training sets
         queryset = Discipline.objects.filter(lft=F("rght") - 1)
 
+        if "training set" in request.GET:
+            queryset = queryset.filter(training_sets=request.GET["training set"])
+
         if request.user.is_superuser:
             queryset = queryset.filter(creator_is_admin=True)
         else:
@@ -116,15 +119,16 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         :return: list of tuples containing id and title of each training set
         :rtype: list
         """
-        list_of_trainingsets = []
+        queryset = TrainingSet.objects.all()
+        if "disciplines" in request.GET:
+            queryset = queryset.filter(discipline=request.GET["disciplines"])
         if request.user.is_superuser:
-            queryset = TrainingSet.objects.all().filter(creator_is_admin=True)
+            queryset = queryset.filter(creator_is_admin=True)
         else:
-            queryset = TrainingSet.objects.all().filter(
-                created_by__in=request.user.groups.all()
-            )
-        for trainingset in queryset:
-            list_of_trainingsets.append((str(trainingset.id), trainingset.title))
+            queryset = queryset.filter(created_by__in=request.user.groups.all())
+        list_of_trainingsets = [
+            ((str(trainingset.id), trainingset.title)) for trainingset in queryset
+        ]
         return sorted(list_of_trainingsets, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
