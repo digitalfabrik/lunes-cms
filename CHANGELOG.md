@@ -3,6 +3,7 @@ UNRELEASED
 
 * [ [#478](https://github.com/digitalfabrik/lunes-cms/issues/478) ] Add possibility to set example sentence
 * [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Add module and vocabulary counters to discipline list
+* [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Add vocabulary counters to training set list
 
 
 2023.5.0

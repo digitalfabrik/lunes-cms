@@ -32,7 +32,7 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:33 cms/admins/training_set_admin.py:257 cms/forms.py:48
+#: cms/admin.py:33 cms/admins/training_set_admin.py:335 cms/forms.py:48
 #: cms/forms.py:50 cms/list_filter.py:14 cms/models/discipline.py:102
 msgid "disciplines"
 msgstr "Modulgruppen"
@@ -75,7 +75,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:310 cms/admins/document_admin.py:149
-#: cms/admins/training_set_admin.py:275
+#: cms/admins/training_set_admin.py:353
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -119,11 +119,11 @@ msgstr ""
 msgid "logo"
 msgstr "Logo"
 
-#: cms/admins/training_set_admin.py:137
+#: cms/admins/training_set_admin.py:185
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: cms/admins/training_set_admin.py:172
+#: cms/admins/training_set_admin.py:220
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -137,33 +137,45 @@ msgstr[1] ""
 "Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
 "Vokabeln mit bestätigten Bildern enthalten."
 
-#: cms/admins/training_set_admin.py:185
+#: cms/admins/training_set_admin.py:233
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
-#: cms/admins/training_set_admin.py:199
+#: cms/admins/training_set_admin.py:247
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
 msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
 
-#: cms/admins/training_set_admin.py:205
+#: cms/admins/training_set_admin.py:253
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
-#: cms/admins/training_set_admin.py:229
+#: cms/admins/training_set_admin.py:277
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
-#: cms/admins/training_set_admin.py:240
+#: cms/admins/training_set_admin.py:288
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
 msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
+
+#: cms/admins/training_set_admin.py:295
+msgid "words"
+msgstr "Vokabeln"
+
+#: cms/admins/training_set_admin.py:305
+msgid "published words"
+msgstr "veröffentlichte Vokabeln"
+
+#: cms/admins/training_set_admin.py:315
+msgid "unpublished words"
+msgstr "unveröffentlichte Vokabeln"
 
 #: cms/apps.py:12
 msgid "vocabulary management"
@@ -533,12 +545,6 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
-
-#~ msgid "published words"
-#~ msgstr "veröffentlichte Vokabeln"
-
-#~ msgid "unpublished words"
-#~ msgstr "unveröffentlichte Vokabeln"
 
 #~ msgid "Images"
 #~ msgstr "Bilder"
