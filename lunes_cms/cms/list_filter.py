@@ -1,4 +1,5 @@
-from __future__ import absolute_import, unicode_literals
+from collections import defaultdict
+
 from django.contrib import admin
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
@@ -16,6 +17,8 @@ class DisciplineListFilter(admin.SimpleListFilter):
     # Parameter for the filter that will be used in the URL query.
     parameter_name = "disciplines"
 
+    template = "admin/discipline_filter.html"
+
     def lookups(self, request, model_admin):
         """
         Defining look up values that can be seen in the admin
@@ -29,7 +32,6 @@ class DisciplineListFilter(admin.SimpleListFilter):
         :return: list of tuples containing id and title of each discipline
         :rtype: list
         """
-        list_of_disciplines = []
 
         # Verify that only disciplines are displayed that actually can contain training sets
         queryset = Discipline.objects.filter(lft=F("rght") - 1)
@@ -38,15 +40,14 @@ class DisciplineListFilter(admin.SimpleListFilter):
             queryset = queryset.filter(creator_is_admin=True)
         else:
             queryset = queryset.filter(created_by__in=request.user.groups.all())
-        for discipline in queryset:
-            list_of_disciplines.append(
-                (
-                    str(discipline.id),
-                    " \u2794 ".join(
-                        map(str, discipline.get_ancestors(include_self=True))
-                    ),
-                )
+
+        list_of_disciplines = [
+            (
+                str(discipline.id),
+                f"{discipline.parent} \u2794 {discipline}",
             )
+            for discipline in queryset
+        ]
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -63,7 +64,7 @@ class DisciplineListFilter(admin.SimpleListFilter):
         :rtype: QuerySet
         """
         if self.value():
-            return queryset.filter(discipline__id=self.value()).distinct()
+            return queryset.filter(discipline=self.value()).distinct()
         return queryset
 
 
@@ -87,9 +88,7 @@ class DocumentDisciplineListFilter(DisciplineListFilter):
         :rtype: QuerySet
         """
         if self.value():
-            return queryset.filter(
-                training_sets__discipline__id=self.value()
-            ).distinct()
+            return queryset.filter(training_sets__discipline=self.value()).distinct()
         return queryset
 
 
