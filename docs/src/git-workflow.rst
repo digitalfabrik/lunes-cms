@@ -107,7 +107,7 @@ To activate the pre-commit hooks, either install the CMS with the command::
 
 or execute::
 
-    source .venv/bin/activate 
+    source .venv/bin/activate
     pre-commit install
 
 
@@ -121,4 +121,3 @@ To deactivate a specific hook (in this example the ``translations``-hook), use::
 To deactivate all pre-commit hooks for a specific commit, use::
 
     git commit --no-verify
-

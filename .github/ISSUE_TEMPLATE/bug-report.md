@@ -26,4 +26,3 @@ labels: bug
 
 ### Additional Information
 <!-- Add any other context (e.g. logs, screenshots, etc.) about the problem here. -->
-

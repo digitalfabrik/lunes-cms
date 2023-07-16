@@ -56,7 +56,7 @@ function display_thumbnail(doc) {
         }
         overlay.content.appendChild(text);
     }
-   
+
     /*Free Space*/
     overlay.content.appendChild(space);
 

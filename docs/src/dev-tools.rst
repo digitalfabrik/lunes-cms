@@ -2,7 +2,7 @@
 Development Tools
 *****************
 
-This is a collection of scripts which facilitate the development process. 
+This is a collection of scripts which facilitate the development process.
 They are targeted at as much platforms and configurations as possible, but there might be edge cases in which they don’t work as expected.
 
 Installation
@@ -13,7 +13,7 @@ Install all project dependencies and the local python package with :github-sourc
     ./tools/install.sh [--clean] [--pre-commit]
 
 * ``--clean``: Remove all installed dependencies in the ``.venv/`` and ``node_modules/`` directories as well as compiled
-  static files in ``lunes_cms/static/dist/``. 
+  static files in ``lunes_cms/static/dist/``.
 * ``--pre-commit``: Install all :ref:`pre-commit-hooks`
 
 Development Server

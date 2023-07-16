@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # This file contains utility functions which can be used in the development tools.
 

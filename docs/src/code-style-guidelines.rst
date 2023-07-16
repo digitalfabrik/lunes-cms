@@ -13,7 +13,7 @@ We use the `black <https://github.com/psf/black>`_ coding style, a flavour of `P
 We use a `pre-commit-hook <https://pre-commit.com/>`_ to apply this style before committing, so you don't have to bother about formatting.
 Just code how you feel comfortable and let the tool do the work for you (see :ref:`pre-commit-hooks`).
 
-Run black manually by starting the virtual environment and then: 
+Run black manually by starting the virtual environment and then:
 
     black .
 
