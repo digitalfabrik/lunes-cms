@@ -214,13 +214,20 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         return queryset
 
 
+NONE = "none"
+AT_LEAST_ONE = "at-least-one"
+RELEASED = "released"
+RELEASED_DISCIPLINE = "released-discipline"
+UNRELEASED = "unreleased"
+
+
 class AssignedListFilter(admin.SimpleListFilter):
     """
     Filter for documents that are either assigned or unassigned to at least one training set.
     Inherits from `admin.SimpleListFilter`.
     """
 
-    title = _("assigned & unassigned")
+    title = _("Assignments")
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = "assigned"
@@ -241,8 +248,14 @@ class AssignedListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         return (
-            (0, _("unassigned only")),
-            (1, _("assigned only")),
+            (NONE, _("Not assigned to any module")),
+            (AT_LEAST_ONE, _("Assigned to at least one module")),
+            (RELEASED, _("Assigned to released modules")),
+            (
+                RELEASED_DISCIPLINE,
+                _("Assigned to released modules in released disciplines"),
+            ),
+            (UNRELEASED, _("Assigned to unreleased modules")),
         )
 
     def queryset(self, request, queryset):
@@ -259,9 +272,21 @@ class AssignedListFilter(admin.SimpleListFilter):
         :rtype: QuerySet
         """
 
+        filters = {}
         if self.value():
-            if int(self.value()) == 0:
-                return queryset.filter(training_sets__isnull=True).distinct()
-            if int(self.value()) == 1:
-                return queryset.filter(training_sets__isnull=False).distinct()
-        return queryset
+            if "disciplines" in request.GET:
+                filters["training_sets__discipline"] = request.GET["disciplines"]
+            if "training set" in request.GET:
+                filters["training_sets"] = request.GET["training set"]
+            if self.value() == NONE:
+                filters["training_sets__isnull"] = True
+            elif self.value() == AT_LEAST_ONE:
+                filters["training_sets__isnull"] = False
+            elif self.value() == RELEASED:
+                filters["training_sets__released"] = True
+            elif self.value() == RELEASED_DISCIPLINE:
+                filters["training_sets__released"] = True
+                filters["training_sets__discipline__released"] = True
+            elif self.value() == UNRELEASED:
+                filters["training_sets__released"] = False
+        return queryset.filter(**filters).distinct()

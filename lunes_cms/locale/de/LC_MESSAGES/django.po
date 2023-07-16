@@ -218,17 +218,29 @@ msgstr "Keine bestätigten Bilder"
 msgid "No images"
 msgstr "Keine Bilder"
 
-#: cms/list_filter.py:223
-msgid "assigned & unassigned"
-msgstr "Zugewiesen & unzugewiesen"
+#: cms/list_filter.py:230
+msgid "Assignments"
+msgstr "Zuweisungen"
 
-#: cms/list_filter.py:244
-msgid "unassigned only"
-msgstr "keinem Modul zugewiesen"
+#: cms/list_filter.py:251
+msgid "Not assigned to any module"
+msgstr "Keinem Modul zugewiesen"
 
-#: cms/list_filter.py:245
-msgid "assigned only"
+#: cms/list_filter.py:252
+msgid "Assigned to at least one module"
 msgstr "Mind. einem Modul zugewiesen"
+
+#: cms/list_filter.py:253
+msgid "Assigned to released modules"
+msgstr "Veröffentlichten Modulen zugewiesen"
+
+#: cms/list_filter.py:256
+msgid "Assigned to released modules in released disciplines"
+msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
+
+#: cms/list_filter.py:258
+msgid "Assigned to unreleased modules"
+msgstr "Unveröffentlichten Modulen zugewiesen"
 
 #: cms/models/alternative_word.py:13 cms/models/alternative_word.py:37
 msgid "alternative word"
@@ -550,27 +562,20 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 msgid "help"
 msgstr "Hilfe"
 
-#~ msgid "Assignments"
-#~ msgstr "Zuweisungen"
+#~ msgid "assigned & unassigned"
+#~ msgstr "Zugewiesen & unzugewiesen"
 
-#~ msgid "Not assigned to any module"
-#~ msgstr "Keinem Modul zugewiesen"
+#~ msgid "unassigned only"
+#~ msgstr "keinem Modul zugewiesen"
 
-#~ msgid "Assigned to at least one module"
+#~ msgid "assigned only"
 #~ msgstr "Mind. einem Modul zugewiesen"
-
-#~ msgid "Assigned to released modules"
-#~ msgstr "Veröffentlichten Modulen zugewiesen"
-
-#~ msgid "Assigned to released modules in released disciplines"
-#~ msgstr ""
-#~ "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
-
-#~ msgid "Assigned to unreleased modules"
-#~ msgstr "Unveröffentlichten Modulen zugewiesen"
 
 #~ msgid "approved images"
 #~ msgstr "Bestätigte Bilder"
+
+#~ msgid "Assigned & unassigned"
+#~ msgstr "Zugewiesen & unzugewiesen"
 
 #~ msgid "Published words"
 #~ msgstr "Veröffentlichte Vokabeln"
