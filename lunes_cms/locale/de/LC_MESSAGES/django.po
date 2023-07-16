@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-16 11:54+0000\n"
+"POT-Creation-Date: 2023-07-18 11:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,15 +54,27 @@ msgstr "API Keys"
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:122
+#: cms/admins/discipline_admin.py:247
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:135
+#: cms/admins/discipline_admin.py:260
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:165 cms/admins/document_admin.py:149
+#: cms/admins/discipline_admin.py:274
+msgid "released modules"
+msgstr "veröffentlichte Module"
+
+#: cms/admins/discipline_admin.py:286
+msgid "unreleased modules"
+msgstr "unveröffentlichte Module"
+
+#: cms/admins/discipline_admin.py:298
+msgid "published words in released modules"
+msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
+
+#: cms/admins/discipline_admin.py:310 cms/admins/document_admin.py:149
 #: cms/admins/training_set_admin.py:275
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -180,19 +192,19 @@ msgstr "Bestätigte Bilder"
 
 #: cms/list_filter.py:176
 msgid "at least one approved image"
-msgstr "Min. 1 bestätigtes Bild"
+msgstr "Mind. ein bestätigtes Bild"
 
 #: cms/list_filter.py:177
 msgid "at least one pending image"
-msgstr "Min. 1 unbestätigtes Bild"
+msgstr "Mind. ein unbestätigtes Bild"
 
 #: cms/list_filter.py:178
 msgid "no images"
-msgstr "keine Bilder"
+msgstr "Keine Bilder"
 
 #: cms/list_filter.py:211
 msgid "assigned & unassigned"
-msgstr "zugewiesene und unzugewiesene Vokabeln"
+msgstr "Zugewiesen & unzugewiesen"
 
 #: cms/list_filter.py:232
 msgid "unassigned only"
@@ -200,7 +212,7 @@ msgstr "keinem Modul zugewiesen"
 
 #: cms/list_filter.py:233
 msgid "assigned only"
-msgstr "zu Modul zugewiesen"
+msgstr "Mind. einem Modul zugewiesen"
 
 #: cms/models/alternative_word.py:13 cms/models/alternative_word.py:37
 msgid "alternative word"
@@ -521,6 +533,46 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "published words"
+#~ msgstr "veröffentlichte Vokabeln"
+
+#~ msgid "unpublished words"
+#~ msgstr "unveröffentlichte Vokabeln"
+
+#~ msgid "Images"
+#~ msgstr "Bilder"
+
+#~ msgid "No approved images"
+#~ msgstr "Keine bestätigten Bilder"
+
+#~ msgid "Assignments"
+#~ msgstr "Zuweisungen"
+
+#~ msgid "Not assigned to any module"
+#~ msgstr "Keinem Modul zugewiesen"
+
+#~ msgid "Assigned to at least one module"
+#~ msgstr "Mind. einem Modul zugewiesen"
+
+#~ msgid "Assigned to released modules"
+#~ msgstr "Veröffentlichten Modulen zugewiesen"
+
+#~ msgid "Assigned to released modules in released disciplines"
+#~ msgstr ""
+#~ "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
+
+#~ msgid "Assigned to unreleased modules"
+#~ msgstr "Unveröffentlichten Modulen zugewiesen"
+
+#~ msgid "Published words"
+#~ msgstr "Veröffentlichte Vokabeln"
+
+#~ msgid "Unpublished words"
+#~ msgstr "Unveröffentlichte Vokabeln"
+
+#~ msgid "Released modules"
+#~ msgstr "Veröffentlichte Module"
 
 #~ msgid "icon_file"
 #~ msgstr "Icon"
