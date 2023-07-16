@@ -149,16 +149,22 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         return queryset
 
 
+NONE = "none"
+PENDING = "pending"
+APPROVED = "approved"
+NO_APPROVED = "no-approved"
+
+
 class ApprovedImageListFilter(admin.SimpleListFilter):
     """
     Filter for approved images within document list display.
     Inherits from `admin.SimpleListFilter`.
     """
 
-    title = _("approved images")
+    title = _("Images")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = "approvedimages"
+    parameter_name = "images"
 
     default_value = None
 
@@ -176,9 +182,10 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         return (
-            (1, _("at least one approved image")),
-            (2, _("at least one pending image")),
-            (3, _("no images")),
+            (APPROVED, _("At least one approved image")),
+            (PENDING, _("At least one pending image")),
+            (NO_APPROVED, _("No approved images")),
+            (NONE, _("No images")),
         )
 
     def queryset(self, request, queryset):
@@ -196,12 +203,14 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         """
 
         if self.value():
-            if int(self.value()) == 1:
-                return queryset.filter(document_image__confirmed=True).distinct()
-            if int(self.value()) == 2:
-                return queryset.filter(document_image__confirmed=False).distinct()
-            if int(self.value()) == 3:
+            if self.value() == NONE:
                 return queryset.filter(document_image__isnull=True).distinct()
+            elif self.value() == PENDING:
+                return queryset.filter(document_image__confirmed=False).distinct()
+            elif self.value() == APPROVED:
+                return queryset.filter(document_image__confirmed=True).distinct()
+            elif self.value() == NO_APPROVED:
+                return queryset.exclude(document_image__confirmed=True).distinct()
         return queryset
 
 

@@ -198,31 +198,35 @@ msgstr ""
 "Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
 "bestätigten Bildern enthalten."
 
-#: cms/list_filter.py:158
-msgid "approved images"
-msgstr "Bestätigte Bilder"
+#: cms/list_filter.py:164
+msgid "Images"
+msgstr "Bilder"
 
-#: cms/list_filter.py:179
-msgid "at least one approved image"
+#: cms/list_filter.py:185
+msgid "At least one approved image"
 msgstr "Mind. ein bestätigtes Bild"
 
-#: cms/list_filter.py:180
-msgid "at least one pending image"
+#: cms/list_filter.py:186
+msgid "At least one pending image"
 msgstr "Mind. ein unbestätigtes Bild"
 
-#: cms/list_filter.py:181
-msgid "no images"
+#: cms/list_filter.py:187
+msgid "No approved images"
+msgstr "Keine bestätigten Bilder"
+
+#: cms/list_filter.py:188
+msgid "No images"
 msgstr "Keine Bilder"
 
-#: cms/list_filter.py:214
+#: cms/list_filter.py:223
 msgid "assigned & unassigned"
 msgstr "Zugewiesen & unzugewiesen"
 
-#: cms/list_filter.py:235
+#: cms/list_filter.py:244
 msgid "unassigned only"
 msgstr "keinem Modul zugewiesen"
 
-#: cms/list_filter.py:236
+#: cms/list_filter.py:245
 msgid "assigned only"
 msgstr "Mind. einem Modul zugewiesen"
 
@@ -546,12 +550,6 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 msgid "help"
 msgstr "Hilfe"
 
-#~ msgid "Images"
-#~ msgstr "Bilder"
-
-#~ msgid "No approved images"
-#~ msgstr "Keine bestätigten Bilder"
-
 #~ msgid "Assignments"
 #~ msgstr "Zuweisungen"
 
@@ -570,6 +568,9 @@ msgstr "Hilfe"
 
 #~ msgid "Assigned to unreleased modules"
 #~ msgstr "Unveröffentlichten Modulen zugewiesen"
+
+#~ msgid "approved images"
+#~ msgstr "Bestätigte Bilder"
 
 #~ msgid "Published words"
 #~ msgstr "Veröffentlichte Vokabeln"
