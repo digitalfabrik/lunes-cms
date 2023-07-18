@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-03 14:15+0000\n"
+"POT-Creation-Date: 2023-07-16 11:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,8 +41,8 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:114
-#: cms/models/document.py:115
+#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:115
+#: cms/models/document.py:116
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -228,12 +228,12 @@ msgstr "Beschreibung"
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:34 cms/models/document.py:58
+#: cms/models/discipline.py:34 cms/models/document.py:59
 #: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:37 cms/models/document.py:62
+#: cms/models/discipline.py:37 cms/models/document.py:63
 #: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
@@ -250,7 +250,11 @@ msgstr "Wortart"
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:52 cms/models/group_api_key.py:66
+#: cms/models/document.py:51
+msgid "example sentence"
+msgstr "Beispielsatz"
+
+#: cms/models/document.py:53 cms/models/group_api_key.py:66
 msgid "creation date"
 msgstr "Erstellt am"
 

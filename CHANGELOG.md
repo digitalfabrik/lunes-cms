@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#478](https://github.com/digitalfabrik/lunes-cms/issues/478) ] Add possibility to set example sentence
+
 
 2023.5.0
 --------

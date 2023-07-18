@@ -11,7 +11,8 @@
         "id": 764,
         "image": "http://testserver/media/images/elektroinstallation.jpg"
       }
-    ]
+    ],
+    "example_sentence": ""
   },
   {
     "id": 1247,
@@ -25,7 +26,8 @@
         "id": 769,
         "image": "http://testserver/media/images/eurostecker.jpg"
       }
-    ]
+    ],
+    "example_sentence": "Das Netzteil ist versehen mit einem Eurostecker für den direkten Anschluss an eine Schuko-Steckdose und verfügt über eine 3m lange Zuleitung."
   },
   {
     "id": 1264,
@@ -44,7 +46,8 @@
         "id": 787,
         "image": "http://testserver/media/images/kuparohr.jpg"
       }
-    ]
+    ],
+    "example_sentence": ""
   },
   {
     "id": 1277,
@@ -58,7 +61,8 @@
         "id": 811,
         "image": "http://testserver/media/images/phasenprufer.jpg"
       }
-    ]
+    ],
+    "example_sentence": ""
   },
   {
     "id": 1297,
@@ -72,7 +76,8 @@
         "id": 829,
         "image": "http://testserver/media/images/schaltplan.jpg"
       }
-    ]
+    ],
+    "example_sentence": ""
   },
   {
     "id": 117,
@@ -91,7 +96,8 @@
         "id": 122,
         "image": "http://testserver/media/images/spannungsprufer.jpg"
       }
-    ]
+    ],
+    "example_sentence": ""
   },
   {
     "id": 284,
@@ -110,6 +116,7 @@
         "id": 308,
         "image": "http://testserver/media/images/zweipolige-phasenprufer.jpg"
       }
-    ]
+    ],
+    "example_sentence": ""
   }
 ]
