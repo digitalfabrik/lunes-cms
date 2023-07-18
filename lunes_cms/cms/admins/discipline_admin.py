@@ -1,11 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
+import csv
+
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse
 
 from mptt.admin import DraggableMPTTAdmin
 
-from ..models import Static, Discipline
+from ..models import Static, Discipline, TrainingSet
 
 
 class DisciplineAdmin(DraggableMPTTAdmin):
@@ -25,7 +28,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
     ]
     readonly_fields = ["created_by", "image_tag"]
     search_fields = ["title"]
-    actions = ["delete_selected", "make_released", "make_unreleased"]
+    actions = ["delete_selected", "make_released", "make_unreleased", "export_to_csv"]
     list_per_page = 25
 
     def save_model(self, request, obj, form, change):
@@ -144,6 +147,40 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :type queryset: QuerySet
         """
         queryset.update(released=False)
+
+    @admin.action(description=_("Export to CSV"))
+    def export_to_csv(self, request, queryset):
+        """
+        Export all documents of selected discipline to CSV file
+
+        :param request: current user request
+        :type request: django.http.request
+
+        :param queryset: current queryset
+        :type queryset: QuerySet
+
+        :return: CSV file
+        :rtype: HTTPResponse
+        """
+
+        ARTICLE_INDEX = 1
+
+        training_sets = TrainingSet.objects.all()
+
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={"Content-Disposition": 'attachment; filename="vocabulary.csv"'},
+        )
+
+        for training_set in training_sets:
+            for discipline in queryset:
+                writer=csv.writer(response)
+                writer.writerow(["Modul", "Artikel", "Vokabel", "Bild vorhanden?", "Audio vorhanden?"])
+                if discipline in training_set.discipline.all():
+                    for document in training_set.documents.all():
+                        writer.writerow([training_set.title, Static.article_choices[document.article][ARTICLE_INDEX], document.word, "Ja" if document.document_image.all() else "Nein", "Ja" if document.audio else "Nein"])
+
+        return response
 
     def creator_group(self, obj):
         """

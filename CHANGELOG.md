@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#468](https://github.com/digitalfabrik/lunes-cms/issues/468) ] Add option to create CSV out of existing vocabulary
+
 
 2023.5.0
 --------
