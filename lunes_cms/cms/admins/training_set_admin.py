@@ -3,6 +3,8 @@ from __future__ import absolute_import, unicode_literals
 from django.conf import settings
 from django.contrib import admin, messages
 from django.db.models import Count, F, Q
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ngettext
 
 from mptt.admin import DraggableMPTTAdmin
@@ -33,9 +35,31 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
     readonly_fields = ["created_by", "image_tag"]
     search_fields = ["title"]
     form = TrainingSetForm
-    list_filter = (DisciplineListFilter,)
+    list_display = [
+        "tree_actions",
+        "title",
+        "released",
+        "words",
+        "words_released",
+        "words_unreleased",
+        "related_disciplines",
+        "creator_group",
+    ]
+    list_display_links = ["title"]
+    list_filter = [DisciplineListFilter, "released"]
     actions = ["make_released", "make_unreleased"]
     list_per_page = 25
+
+    def get_list_display(self, request):
+        if request.user.is_superuser:
+            return [
+                display for display in self.list_display if display not in ["words"]
+            ]
+        return [
+            display
+            for display in self.list_display
+            if display not in ["words_released", "words_unreleased"]
+        ]
 
     def save_model(self, request, obj, form, change):
         """
@@ -84,10 +108,34 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :return: adjusted queryset
         :rtype: QuerySet
         """
-        qs = super(TrainingSetAdmin, self).get_queryset(request)
+        qs = super().get_queryset(request)
         if request.user.is_superuser:
-            return qs.filter(creator_is_admin=True)
-        return qs.filter(created_by__in=request.user.groups.all())
+            return qs.filter(creator_is_admin=True).annotate(
+                words_released=Count(
+                    "documents",
+                    filter=Q(
+                        documents__creator_is_admin=True,
+                        documents__document_image__confirmed=True,
+                    ),
+                    distinct=True,
+                ),
+                words_unreleased=Count(
+                    "documents",
+                    filter=(
+                        Q(documents__creator_is_admin=True)
+                        & ~Q(documents__document_image__confirmed=True)
+                    ),
+                    distinct=True,
+                ),
+            )
+        user_groups = request.user.groups.all()
+        return qs.filter(created_by__in=user_groups).annotate(
+            words=Count(
+                "documents",
+                filter=Q(documents__created_by__in=user_groups),
+                distinct=True,
+            ),
+        )
 
     def get_form(self, request, obj=None, **kwargs):
         """
@@ -242,6 +290,36 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
                     len(released_trainingsets),
                 ).format(iter_to_string(released_trainingsets)),
             )
+
+    @admin.display(
+        description=_("words"),
+        ordering="-words",
+    )
+    def words(self, obj):
+        document_list = reverse("admin:cms_document_changelist")
+        return mark_safe(
+            f"<a href={document_list}?training+set={obj.id}>{obj.words}</a>"
+        )
+
+    @admin.display(
+        description=_("published words"),
+        ordering="-words_released",
+    )
+    def words_released(self, obj):
+        document_list = reverse("admin:cms_document_changelist")
+        return mark_safe(
+            f"<a href={document_list}?training+set={obj.id}&images=approved>{obj.words_released}</a>"
+        )
+
+    @admin.display(
+        description=_("unpublished words"),
+        ordering="-words_unreleased",
+    )
+    def words_unreleased(self, obj):
+        document_list = reverse("admin:cms_document_changelist")
+        return mark_safe(
+            f"<a href={document_list}?training+set={obj.id}&images=no-approved>{obj.words_unreleased}</a>"
+        )
 
     def related_disciplines(self, obj):
         """

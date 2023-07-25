@@ -1,0 +1,28 @@
+{% load i18n %}
+{% load admin_filter_tags %}
+
+<div class="form-group">
+    <select class="form-control search-filter" style="width: 100%;" tabindex="-1" aria-hidden="true" data-name="{{ field_name }}">
+        <option value="">{{ title }}</option>
+        <option value="">---------</option>
+        {% group_discipline_filter_choices choices as grouped_choices %}
+        {% for choice in grouped_choices.options %}
+            {% if choice.name %}
+                <option data-name="{{ choice.name }}" value="{{ choice.value }}" {% if choice.selected %}selected {% endif %}>
+                    {{ choice.display }}
+                </option>
+            {% endif %}
+        {% endfor %}
+        {% for parent, choices in grouped_choices.optgroups.items %}
+            <optgroup label="{{ parent }}">
+                {% for choice in choices %}
+                    {% if choice.name %}
+                        <option data-name="{{ choice.name }}" value="{{ choice.value }}" {% if choice.selected %}selected {% endif %}>
+                            {{ choice.display }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            </optgroup>
+        {% endfor %}
+    </select>
+</div>

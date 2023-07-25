@@ -2,6 +2,11 @@ UNRELEASED
 ----------
 
 * [ [#478](https://github.com/digitalfabrik/lunes-cms/issues/478) ] Add possibility to set example sentence
+* [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Add module and vocabulary counters to discipline list
+* [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Add vocabulary counters to training set list
+* [ [#490](https://github.com/digitalfabrik/lunes-cms/issues/490) ] Group discipline filter by parent discipline
+* [ [#368](https://github.com/digitalfabrik/lunes-cms/issues/368) ] Limit training set filter options by selected discipline and vice versa
+* [ [#476](https://github.com/digitalfabrik/lunes-cms/issues/476) ] Add possibility to filter vocabulary by released training sets
 
 
 2023.5.0
