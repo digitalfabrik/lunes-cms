@@ -10,7 +10,6 @@ class ManyToManyOverlay(FilteredSelectMultiple):
 
     class Media:
         js = (
-            "js/jquery.min.js",
             "js/manytomany_overlay.js",
             "js/overlay.js",
             reverse_lazy("javascript-translations"),
