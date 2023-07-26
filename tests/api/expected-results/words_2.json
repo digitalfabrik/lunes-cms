@@ -10,5 +10,6 @@
       "id": 2,
       "image": "http://testserver/media/images/schere.jpg"
     }
-  ]
+  ],
+  "example_sentence": "Die Schnur mit einer Schere zerschneiden."
 }

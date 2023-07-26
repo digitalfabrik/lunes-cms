@@ -103,6 +103,7 @@
       "word": "Schere",
       "article": 2,
       "audio": "audio/schere.mp3",
+      "example_sentence": "Die Schnur mit einer Schere zerschneiden.",
       "creation_date": "2021-04-13T15:58:10.468Z",
       "created_by": null,
       "creator_is_admin": true
@@ -844,6 +845,7 @@
       "word": "Abdeckfolie",
       "article": 2,
       "audio": "audio/abdeckfolie.mp3",
+      "example_sentence": "Die Buchsenleiste wurde mit einer Abdeckfolie abgeklebt, um das Beschlagen der Kontakte im Steckbereich während des Lötvorgangs zu vermeiden.",
       "creation_date": "2021-05-27T14:36:58.219Z",
       "created_by": null,
       "creator_is_admin": true
@@ -7955,6 +7957,7 @@
       "word": "Eurostecker",
       "article": 1,
       "audio": "audio/eurostecker.mp3",
+      "example_sentence": "Das Netzteil ist versehen mit einem Eurostecker für den direkten Anschluss an eine Schuko-Steckdose und verfügt über eine 3m lange Zuleitung.",
       "creation_date": "2021-08-26T10:25:22.812Z",
       "created_by": null,
       "creator_is_admin": true

@@ -1,4 +1,5 @@
-from __future__ import absolute_import, unicode_literals
+from collections import defaultdict
+
 from django.contrib import admin
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
@@ -16,6 +17,8 @@ class DisciplineListFilter(admin.SimpleListFilter):
     # Parameter for the filter that will be used in the URL query.
     parameter_name = "disciplines"
 
+    template = "admin/discipline_filter.html"
+
     def lookups(self, request, model_admin):
         """
         Defining look up values that can be seen in the admin
@@ -29,24 +32,25 @@ class DisciplineListFilter(admin.SimpleListFilter):
         :return: list of tuples containing id and title of each discipline
         :rtype: list
         """
-        list_of_disciplines = []
 
         # Verify that only disciplines are displayed that actually can contain training sets
         queryset = Discipline.objects.filter(lft=F("rght") - 1)
+
+        if "training set" in request.GET:
+            queryset = queryset.filter(training_sets=request.GET["training set"])
 
         if request.user.is_superuser:
             queryset = queryset.filter(creator_is_admin=True)
         else:
             queryset = queryset.filter(created_by__in=request.user.groups.all())
-        for discipline in queryset:
-            list_of_disciplines.append(
-                (
-                    str(discipline.id),
-                    " \u2794 ".join(
-                        map(str, discipline.get_ancestors(include_self=True))
-                    ),
-                )
+
+        list_of_disciplines = [
+            (
+                str(discipline.id),
+                f"{discipline.parent} \u2794 {discipline}",
             )
+            for discipline in queryset
+        ]
         return sorted(list_of_disciplines, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -63,7 +67,7 @@ class DisciplineListFilter(admin.SimpleListFilter):
         :rtype: QuerySet
         """
         if self.value():
-            return queryset.filter(discipline__id=self.value()).distinct()
+            return queryset.filter(discipline=self.value()).distinct()
         return queryset
 
 
@@ -87,9 +91,7 @@ class DocumentDisciplineListFilter(DisciplineListFilter):
         :rtype: QuerySet
         """
         if self.value():
-            return queryset.filter(
-                training_sets__discipline__id=self.value()
-            ).distinct()
+            return queryset.filter(training_sets__discipline=self.value()).distinct()
         return queryset
 
 
@@ -117,15 +119,16 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         :return: list of tuples containing id and title of each training set
         :rtype: list
         """
-        list_of_trainingsets = []
+        queryset = TrainingSet.objects.all()
+        if "disciplines" in request.GET:
+            queryset = queryset.filter(discipline=request.GET["disciplines"])
         if request.user.is_superuser:
-            queryset = TrainingSet.objects.all().filter(creator_is_admin=True)
+            queryset = queryset.filter(creator_is_admin=True)
         else:
-            queryset = TrainingSet.objects.all().filter(
-                created_by__in=request.user.groups.all()
-            )
-        for trainingset in queryset:
-            list_of_trainingsets.append((str(trainingset.id), trainingset.title))
+            queryset = queryset.filter(created_by__in=request.user.groups.all())
+        list_of_trainingsets = [
+            ((str(trainingset.id), trainingset.title)) for trainingset in queryset
+        ]
         return sorted(list_of_trainingsets, key=lambda tp: tp[1])
 
     def queryset(self, request, queryset):
@@ -146,16 +149,22 @@ class DocumentTrainingSetListFilter(admin.SimpleListFilter):
         return queryset
 
 
+NONE = "none"
+PENDING = "pending"
+APPROVED = "approved"
+NO_APPROVED = "no-approved"
+
+
 class ApprovedImageListFilter(admin.SimpleListFilter):
     """
     Filter for approved images within document list display.
     Inherits from `admin.SimpleListFilter`.
     """
 
-    title = _("approved images")
+    title = _("Images")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = "approvedimages"
+    parameter_name = "images"
 
     default_value = None
 
@@ -173,9 +182,10 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         return (
-            (1, _("at least one approved image")),
-            (2, _("at least one pending image")),
-            (3, _("no images")),
+            (APPROVED, _("At least one approved image")),
+            (PENDING, _("At least one pending image")),
+            (NO_APPROVED, _("No approved images")),
+            (NONE, _("No images")),
         )
 
     def queryset(self, request, queryset):
@@ -193,13 +203,22 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         """
 
         if self.value():
-            if int(self.value()) == 1:
-                return queryset.filter(document_image__confirmed=True).distinct()
-            if int(self.value()) == 2:
-                return queryset.filter(document_image__confirmed=False).distinct()
-            if int(self.value()) == 3:
+            if self.value() == NONE:
                 return queryset.filter(document_image__isnull=True).distinct()
+            elif self.value() == PENDING:
+                return queryset.filter(document_image__confirmed=False).distinct()
+            elif self.value() == APPROVED:
+                return queryset.filter(document_image__confirmed=True).distinct()
+            elif self.value() == NO_APPROVED:
+                return queryset.exclude(document_image__confirmed=True).distinct()
         return queryset
+
+
+NONE = "none"
+AT_LEAST_ONE = "at-least-one"
+RELEASED = "released"
+RELEASED_DISCIPLINE = "released-discipline"
+UNRELEASED = "unreleased"
 
 
 class AssignedListFilter(admin.SimpleListFilter):
@@ -208,7 +227,7 @@ class AssignedListFilter(admin.SimpleListFilter):
     Inherits from `admin.SimpleListFilter`.
     """
 
-    title = _("assigned & unassigned")
+    title = _("Assignments")
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = "assigned"
@@ -229,8 +248,14 @@ class AssignedListFilter(admin.SimpleListFilter):
         :rtype: list
         """
         return (
-            (0, _("unassigned only")),
-            (1, _("assigned only")),
+            (NONE, _("Not assigned to any module")),
+            (AT_LEAST_ONE, _("Assigned to at least one module")),
+            (RELEASED, _("Assigned to released modules")),
+            (
+                RELEASED_DISCIPLINE,
+                _("Assigned to released modules in released disciplines"),
+            ),
+            (UNRELEASED, _("Assigned to unreleased modules")),
         )
 
     def queryset(self, request, queryset):
@@ -247,9 +272,21 @@ class AssignedListFilter(admin.SimpleListFilter):
         :rtype: QuerySet
         """
 
+        filters = {}
         if self.value():
-            if int(self.value()) == 0:
-                return queryset.filter(training_sets__isnull=True).distinct()
-            if int(self.value()) == 1:
-                return queryset.filter(training_sets__isnull=False).distinct()
-        return queryset
+            if "disciplines" in request.GET:
+                filters["training_sets__discipline"] = request.GET["disciplines"]
+            if "training set" in request.GET:
+                filters["training_sets"] = request.GET["training set"]
+            if self.value() == NONE:
+                filters["training_sets__isnull"] = True
+            elif self.value() == AT_LEAST_ONE:
+                filters["training_sets__isnull"] = False
+            elif self.value() == RELEASED:
+                filters["training_sets__released"] = True
+            elif self.value() == RELEASED_DISCIPLINE:
+                filters["training_sets__released"] = True
+                filters["training_sets__discipline__released"] = True
+            elif self.value() == UNRELEASED:
+                filters["training_sets__released"] = False
+        return queryset.filter(**filters).distinct()

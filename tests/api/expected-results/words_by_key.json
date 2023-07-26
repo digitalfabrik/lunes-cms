@@ -11,7 +11,8 @@
               "id": 2,
               "image": "http://testserver/media/images/schere.jpg"
           }
-      ]
+      ],
+      "example_sentence": "Die Schnur mit einer Schere zerschneiden."
   },
   {
       "id": 3,
@@ -25,7 +26,8 @@
               "id": 3,
               "image": "http://testserver/media/images/schlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 4,
@@ -39,7 +41,8 @@
               "id": 4,
               "image": "http://testserver/media/images/buch.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 6,
@@ -53,7 +56,8 @@
               "id": 6,
               "image": "http://testserver/media/images/akkuschrauber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 7,
@@ -72,7 +76,8 @@
               "id": 7,
               "image": "http://testserver/media/images/bohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 8,
@@ -91,7 +96,8 @@
               "id": 746,
               "image": "http://testserver/media/images/bohrmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 9,
@@ -105,7 +111,8 @@
               "id": 9,
               "image": "http://testserver/media/images/dubel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 10,
@@ -119,7 +126,8 @@
               "id": 10,
               "image": "http://testserver/media/images/feile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 11,
@@ -133,7 +141,8 @@
               "id": 11,
               "image": "http://testserver/media/images/gerust.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 12,
@@ -147,7 +156,8 @@
               "id": 1274,
               "image": "http://testserver/media/images/leiter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 13,
@@ -161,7 +171,8 @@
               "id": 290,
               "image": "http://testserver/media/images/maband.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 14,
@@ -175,7 +186,8 @@
               "id": 291,
               "image": "http://testserver/media/images/meiel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 15,
@@ -189,7 +201,8 @@
               "id": 513,
               "image": "http://testserver/media/images/messer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 16,
@@ -208,7 +221,8 @@
               "id": 16,
               "image": "http://testserver/media/images/schubkarre.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 17,
@@ -231,7 +245,8 @@
               "id": 828,
               "image": "http://testserver/media/images/zollstock.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 18,
@@ -250,7 +265,8 @@
               "id": 317,
               "image": "http://testserver/media/images/arbeitshandschuh.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 20,
@@ -264,7 +280,8 @@
               "id": 20,
               "image": "http://testserver/media/images/besen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 21,
@@ -278,7 +295,8 @@
               "id": 21,
               "image": "http://testserver/media/images/eimer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 22,
@@ -292,7 +310,8 @@
               "id": 1272,
               "image": "http://testserver/media/images/gehorschutz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 23,
@@ -306,7 +325,8 @@
               "id": 23,
               "image": "http://testserver/media/images/hammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 24,
@@ -320,7 +340,8 @@
               "id": 237,
               "image": "http://testserver/media/images/kabeltrommel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 25,
@@ -334,7 +355,8 @@
               "id": 287,
               "image": "http://testserver/media/images/klebeband.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 26,
@@ -348,7 +370,8 @@
               "id": 299,
               "image": "http://testserver/media/images/schraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 27,
@@ -367,7 +390,8 @@
               "id": 27,
               "image": "http://testserver/media/images/schraubenzieher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 28,
@@ -386,7 +410,8 @@
               "id": 1423,
               "image": "http://testserver/media/images/schraubenschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 29,
@@ -405,7 +430,8 @@
               "id": 29,
               "image": "http://testserver/media/images/schutzbrille.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 30,
@@ -419,7 +445,8 @@
               "id": 30,
               "image": "http://testserver/media/images/schutzhelm.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 31,
@@ -433,7 +460,8 @@
               "id": 31,
               "image": "http://testserver/media/images/staubsauger.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 32,
@@ -447,7 +475,8 @@
               "id": 32,
               "image": "http://testserver/media/images/wasserwaage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 33,
@@ -461,7 +490,8 @@
               "id": 807,
               "image": "http://testserver/media/images/abisolierzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 34,
@@ -475,7 +505,8 @@
               "id": 34,
               "image": "http://testserver/media/images/bohrkrone.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 35,
@@ -494,7 +525,8 @@
               "id": 446,
               "image": "http://testserver/media/images/crimpzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 49,
@@ -513,7 +545,8 @@
               "id": 1612,
               "image": "http://testserver/media/images/gipsbecher.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 66,
@@ -527,7 +560,8 @@
               "id": 70,
               "image": "http://testserver/media/images/schleifpapier.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 116,
@@ -541,7 +575,8 @@
               "id": 121,
               "image": "http://testserver/media/images/seitenschneider.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 117,
@@ -560,7 +595,8 @@
               "id": 122,
               "image": "http://testserver/media/images/spannungsprufer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 118,
@@ -574,7 +610,8 @@
               "id": 123,
               "image": "http://testserver/media/images/steckdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 119,
@@ -588,7 +625,8 @@
               "id": 124,
               "image": "http://testserver/media/images/badewanne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 120,
@@ -607,7 +645,8 @@
               "id": 125,
               "image": "http://testserver/media/images/doppelmaulschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 123,
@@ -626,7 +665,8 @@
               "id": 128,
               "image": "http://testserver/media/images/toilette.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 124,
@@ -640,7 +680,8 @@
               "id": 607,
               "image": "http://testserver/media/images/waschbecken.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 125,
@@ -659,7 +700,8 @@
               "id": 130,
               "image": "http://testserver/media/images/wasserhahn.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 126,
@@ -673,7 +715,8 @@
               "id": 131,
               "image": "http://testserver/media/images/wasserpumpenzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 132,
@@ -687,7 +730,8 @@
               "id": 137,
               "image": "http://testserver/media/images/elektrohammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 133,
@@ -710,7 +754,8 @@
               "id": 138,
               "image": "http://testserver/media/images/spachtel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 135,
@@ -724,7 +769,8 @@
               "id": 140,
               "image": "http://testserver/media/images/antennendose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 136,
@@ -738,7 +784,8 @@
               "id": 141,
               "image": "http://testserver/media/images/kreuzerder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 139,
@@ -757,7 +804,8 @@
               "id": 144,
               "image": "http://testserver/media/images/leuchtmittel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 140,
@@ -771,7 +819,8 @@
               "id": 145,
               "image": "http://testserver/media/images/arbeitskleidung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 141,
@@ -794,7 +843,8 @@
               "id": 288,
               "image": "http://testserver/media/images/putzlappen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 142,
@@ -813,7 +863,8 @@
               "id": 255,
               "image": "http://testserver/media/images/mulleimer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 143,
@@ -827,7 +878,8 @@
               "id": 149,
               "image": "http://testserver/media/images/bleistift.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 144,
@@ -846,7 +898,8 @@
               "id": 150,
               "image": "http://testserver/media/images/zimmermannsbleistift.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 145,
@@ -865,7 +918,8 @@
               "id": 1515,
               "image": "http://testserver/media/images/werkzeugkiste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 146,
@@ -879,7 +933,8 @@
               "id": 449,
               "image": "http://testserver/media/images/abdeckfolie.png"
           }
-      ]
+      ],
+      "example_sentence": "Die Buchsenleiste wurde mit einer Abdeckfolie abgeklebt, um das Beschlagen der Kontakte im Steckbereich während des Lötvorgangs zu vermeiden."
   },
   {
       "id": 151,
@@ -898,7 +953,8 @@
               "id": 655,
               "image": "http://testserver/media/images/fohn.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 156,
@@ -912,7 +968,8 @@
               "id": 625,
               "image": "http://testserver/media/images/kamm.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 157,
@@ -926,7 +983,8 @@
               "id": 164,
               "image": "http://testserver/media/images/spiegel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 160,
@@ -945,7 +1003,8 @@
               "id": 167,
               "image": "http://testserver/media/images/handbugelsage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 161,
@@ -980,7 +1039,8 @@
               "id": 168,
               "image": "http://testserver/media/images/nageleisen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 167,
@@ -1003,7 +1063,8 @@
               "id": 175,
               "image": "http://testserver/media/images/winkel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 170,
@@ -1017,7 +1078,8 @@
               "id": 178,
               "image": "http://testserver/media/images/auto.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 171,
@@ -1036,7 +1098,8 @@
               "id": 180,
               "image": "http://testserver/media/images/autobatterie.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 173,
@@ -1050,7 +1113,8 @@
               "id": 182,
               "image": "http://testserver/media/images/hebebuhne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 175,
@@ -1069,7 +1133,8 @@
               "id": 184,
               "image": "http://testserver/media/images/drehmomentschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 177,
@@ -1083,7 +1148,8 @@
               "id": 186,
               "image": "http://testserver/media/images/motorbremse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 178,
@@ -1097,7 +1163,8 @@
               "id": 187,
               "image": "http://testserver/media/images/olkanister.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 181,
@@ -1116,7 +1183,8 @@
               "id": 190,
               "image": "http://testserver/media/images/ratsche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 182,
@@ -1135,7 +1203,8 @@
               "id": 191,
               "image": "http://testserver/media/images/scheibenwischer.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 183,
@@ -1149,7 +1218,8 @@
               "id": 192,
               "image": "http://testserver/media/images/schweigerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 186,
@@ -1163,7 +1233,8 @@
               "id": 195,
               "image": "http://testserver/media/images/schurze.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 187,
@@ -1177,7 +1248,8 @@
               "id": 196,
               "image": "http://testserver/media/images/ofenhandschuh.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 188,
@@ -1191,7 +1263,8 @@
               "id": 197,
               "image": "http://testserver/media/images/kittel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 189,
@@ -1205,7 +1278,8 @@
               "id": 198,
               "image": "http://testserver/media/images/backofen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 201,
@@ -1240,7 +1314,8 @@
               "id": 877,
               "image": "http://testserver/media/images/cutter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 202,
@@ -1254,7 +1329,8 @@
               "id": 211,
               "image": "http://testserver/media/images/betonmischer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 204,
@@ -1268,7 +1344,8 @@
               "id": 213,
               "image": "http://testserver/media/images/maurerhammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 208,
@@ -1282,7 +1359,8 @@
               "id": 217,
               "image": "http://testserver/media/images/schaufel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 211,
@@ -1301,7 +1379,8 @@
               "id": 1118,
               "image": "http://testserver/media/images/sackkarre.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 214,
@@ -1315,7 +1394,8 @@
               "id": 223,
               "image": "http://testserver/media/images/bugelmessschraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 215,
@@ -1329,7 +1409,8 @@
               "id": 224,
               "image": "http://testserver/media/images/drehwerkzeug.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 216,
@@ -1356,7 +1437,8 @@
               "id": 1093,
               "image": "http://testserver/media/images/universelle-frasmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 217,
@@ -1370,7 +1452,8 @@
               "id": 226,
               "image": "http://testserver/media/images/grenzlehrdorn.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 218,
@@ -1389,7 +1472,8 @@
               "id": 227,
               "image": "http://testserver/media/images/korner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 219,
@@ -1403,7 +1487,8 @@
               "id": 228,
               "image": "http://testserver/media/images/messschieber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 220,
@@ -1417,7 +1502,8 @@
               "id": 229,
               "image": "http://testserver/media/images/schweigeschirr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 221,
@@ -1431,7 +1517,8 @@
               "id": 230,
               "image": "http://testserver/media/images/dusche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 223,
@@ -1445,7 +1532,8 @@
               "id": 232,
               "image": "http://testserver/media/images/kreissage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 224,
@@ -1464,7 +1552,8 @@
               "id": 233,
               "image": "http://testserver/media/images/nagel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 225,
@@ -1478,7 +1567,8 @@
               "id": 234,
               "image": "http://testserver/media/images/pumpenzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 226,
@@ -1492,7 +1582,8 @@
               "id": 235,
               "image": "http://testserver/media/images/stichsage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 227,
@@ -1511,7 +1602,8 @@
               "id": 236,
               "image": "http://testserver/media/images/zange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 228,
@@ -1530,7 +1622,8 @@
               "id": 238,
               "image": "http://testserver/media/images/akku-winkelschleifer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 231,
@@ -1549,7 +1642,8 @@
               "id": 1558,
               "image": "http://testserver/media/images/filzstift.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 232,
@@ -1568,7 +1662,8 @@
               "id": 242,
               "image": "http://testserver/media/images/faustel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 237,
@@ -1591,7 +1686,8 @@
               "id": 247,
               "image": "http://testserver/media/images/handfeger.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 238,
@@ -1610,7 +1706,8 @@
               "id": 248,
               "image": "http://testserver/media/images/isolierband.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 260,
@@ -1629,7 +1726,8 @@
               "id": 274,
               "image": "http://testserver/media/images/warnweste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 261,
@@ -1643,7 +1741,8 @@
               "id": 275,
               "image": "http://testserver/media/images/arbeitshose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 262,
@@ -1657,7 +1756,8 @@
               "id": 276,
               "image": "http://testserver/media/images/arbeitsjacke.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 263,
@@ -1671,7 +1771,8 @@
               "id": 278,
               "image": "http://testserver/media/images/bohrstange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 265,
@@ -1685,7 +1786,8 @@
               "id": 281,
               "image": "http://testserver/media/images/flachsenker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 266,
@@ -1699,7 +1801,8 @@
               "id": 282,
               "image": "http://testserver/media/images/gewindefraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 267,
@@ -1713,7 +1816,8 @@
               "id": 283,
               "image": "http://testserver/media/images/gewindeschneider.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 268,
@@ -1732,7 +1836,8 @@
               "id": 284,
               "image": "http://testserver/media/images/handreibahle.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 269,
@@ -1751,7 +1856,8 @@
               "id": 285,
               "image": "http://testserver/media/images/industriestaubsauger.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 270,
@@ -1765,7 +1871,8 @@
               "id": 286,
               "image": "http://testserver/media/images/kegelsenker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 271,
@@ -1779,7 +1886,8 @@
               "id": 292,
               "image": "http://testserver/media/images/mulltonne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 272,
@@ -1793,7 +1901,8 @@
               "id": 1001,
               "image": "http://testserver/media/images/nutenfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 274,
@@ -1807,7 +1916,8 @@
               "id": 295,
               "image": "http://testserver/media/images/randel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 275,
@@ -1821,7 +1931,8 @@
               "id": 296,
               "image": "http://testserver/media/images/rohrzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 276,
@@ -1835,7 +1946,8 @@
               "id": 297,
               "image": "http://testserver/media/images/schaftfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 277,
@@ -1849,7 +1961,8 @@
               "id": 298,
               "image": "http://testserver/media/images/scheibenfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 280,
@@ -1863,7 +1976,8 @@
               "id": 303,
               "image": "http://testserver/media/images/wendeschneidplatte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 281,
@@ -1877,7 +1991,8 @@
               "id": 1011,
               "image": "http://testserver/media/images/winkelfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 282,
@@ -1891,7 +2006,8 @@
               "id": 306,
               "image": "http://testserver/media/images/zentrierbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 284,
@@ -1910,7 +2026,8 @@
               "id": 308,
               "image": "http://testserver/media/images/zweipolige-phasenprufer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 285,
@@ -1929,7 +2046,8 @@
               "id": 309,
               "image": "http://testserver/media/images/lan-tester.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 286,
@@ -1948,7 +2066,8 @@
               "id": 310,
               "image": "http://testserver/media/images/digitale-messschieber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 287,
@@ -1975,7 +2094,8 @@
               "id": 311,
               "image": "http://testserver/media/images/gummihammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 290,
@@ -1994,7 +2114,8 @@
               "id": 314,
               "image": "http://testserver/media/images/nc-anbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 292,
@@ -2008,7 +2129,8 @@
               "id": 318,
               "image": "http://testserver/media/images/schlagbohrmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 300,
@@ -2022,7 +2144,8 @@
               "id": 328,
               "image": "http://testserver/media/images/kreissageblatt.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 301,
@@ -2036,7 +2159,8 @@
               "id": 329,
               "image": "http://testserver/media/images/schlangenbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 302,
@@ -2050,7 +2174,8 @@
               "id": 330,
               "image": "http://testserver/media/images/langbandschleifmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 303,
@@ -2064,7 +2189,8 @@
               "id": 331,
               "image": "http://testserver/media/images/schleifigel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 304,
@@ -2078,7 +2204,8 @@
               "id": 332,
               "image": "http://testserver/media/images/schraubstock.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 309,
@@ -2097,7 +2224,8 @@
               "id": 337,
               "image": "http://testserver/media/images/kehrblech.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 311,
@@ -2111,7 +2239,8 @@
               "id": 339,
               "image": "http://testserver/media/images/sabelsageblatt.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 315,
@@ -2125,7 +2254,8 @@
               "id": 1571,
               "image": "http://testserver/media/images/standerbohrmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 320,
@@ -2139,7 +2269,8 @@
               "id": 348,
               "image": "http://testserver/media/images/breitbandschleifmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 322,
@@ -2158,7 +2289,8 @@
               "id": 1446,
               "image": "http://testserver/media/images/winkelschleifer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 323,
@@ -2177,7 +2309,8 @@
               "id": 351,
               "image": "http://testserver/media/images/bithalter.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 324,
@@ -2196,7 +2329,8 @@
               "id": 352,
               "image": "http://testserver/media/images/bit.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 335,
@@ -2210,7 +2344,8 @@
               "id": 1444,
               "image": "http://testserver/media/images/exzenterschleifer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 337,
@@ -2237,7 +2372,8 @@
               "id": 1482,
               "image": "http://testserver/media/images/inbus.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 343,
@@ -2251,7 +2387,8 @@
               "id": 385,
               "image": "http://testserver/media/images/locher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 350,
@@ -2270,7 +2407,8 @@
               "id": 1027,
               "image": "http://testserver/media/images/desinfektionsmittel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 360,
@@ -2289,7 +2427,8 @@
               "id": 1213,
               "image": "http://testserver/media/images/einweghandschuh.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 361,
@@ -2312,7 +2451,8 @@
               "id": 1164,
               "image": "http://testserver/media/images/mund-nase-schutz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 401,
@@ -2331,7 +2471,8 @@
               "id": 723,
               "image": "http://testserver/media/images/kabelentmantler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 402,
@@ -2345,7 +2486,8 @@
               "id": 782,
               "image": "http://testserver/media/images/kabelmesser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 403,
@@ -2359,7 +2501,8 @@
               "id": 783,
               "image": "http://testserver/media/images/kabelschere.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 409,
@@ -2373,7 +2516,8 @@
               "id": 1108,
               "image": "http://testserver/media/images/gabelstapler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 415,
@@ -2387,7 +2531,8 @@
               "id": 384,
               "image": "http://testserver/media/images/ordner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 418,
@@ -2401,7 +2546,8 @@
               "id": 386,
               "image": "http://testserver/media/images/tacker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 419,
@@ -2415,7 +2561,8 @@
               "id": 383,
               "image": "http://testserver/media/images/telefon.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 425,
@@ -2429,7 +2576,8 @@
               "id": 379,
               "image": "http://testserver/media/images/kugelschreiber.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 436,
@@ -2443,7 +2591,8 @@
               "id": 1076,
               "image": "http://testserver/media/images/halbrundfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 438,
@@ -2462,7 +2611,8 @@
               "id": 812,
               "image": "http://testserver/media/images/metall-bugelsage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 441,
@@ -2476,7 +2626,8 @@
               "id": 1077,
               "image": "http://testserver/media/images/rundfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 473,
@@ -2490,7 +2641,8 @@
               "id": 1072,
               "image": "http://testserver/media/images/dreikantfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 474,
@@ -2504,7 +2656,8 @@
               "id": 1586,
               "image": "http://testserver/media/images/flachstumpffeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 476,
@@ -2523,7 +2676,8 @@
               "id": 441,
               "image": "http://testserver/media/images/kombinationszange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 477,
@@ -2537,7 +2691,8 @@
               "id": 785,
               "image": "http://testserver/media/images/kraft-seitenschneider.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 484,
@@ -2551,7 +2706,8 @@
               "id": 814,
               "image": "http://testserver/media/images/schlosserhammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 495,
@@ -2570,7 +2726,8 @@
               "id": 1111,
               "image": "http://testserver/media/images/handhubwagen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 499,
@@ -2584,7 +2741,8 @@
               "id": 1124,
               "image": "http://testserver/media/images/hochregallager.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 500,
@@ -2598,7 +2756,8 @@
               "id": 1130,
               "image": "http://testserver/media/images/verladerampe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 502,
@@ -2612,7 +2771,8 @@
               "id": 1125,
               "image": "http://testserver/media/images/kleinteilelager.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 508,
@@ -2626,7 +2786,8 @@
               "id": 800,
               "image": "http://testserver/media/images/schwamm.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 509,
@@ -2640,7 +2801,8 @@
               "id": 1209,
               "image": "http://testserver/media/images/spulmittel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 510,
@@ -2654,7 +2816,8 @@
               "id": 1224,
               "image": "http://testserver/media/images/kuchentuch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 511,
@@ -2673,7 +2836,8 @@
               "id": 529,
               "image": "http://testserver/media/images/geschirrtuch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 512,
@@ -2687,7 +2851,8 @@
               "id": 1211,
               "image": "http://testserver/media/images/spulburste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 513,
@@ -2701,7 +2866,8 @@
               "id": 1212,
               "image": "http://testserver/media/images/spulbecken.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 514,
@@ -2720,7 +2886,8 @@
               "id": 1287,
               "image": "http://testserver/media/images/elektroherd.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 515,
@@ -2734,7 +2901,8 @@
               "id": 1288,
               "image": "http://testserver/media/images/herdplatte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 516,
@@ -2748,7 +2916,8 @@
               "id": 668,
               "image": "http://testserver/media/images/suppe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 518,
@@ -2762,7 +2931,8 @@
               "id": 678,
               "image": "http://testserver/media/images/butter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 522,
@@ -2776,7 +2946,8 @@
               "id": 510,
               "image": "http://testserver/media/images/schussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 523,
@@ -2790,7 +2961,8 @@
               "id": 526,
               "image": "http://testserver/media/images/sieb.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 524,
@@ -2804,7 +2976,8 @@
               "id": 797,
               "image": "http://testserver/media/images/topf.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 525,
@@ -2818,7 +2991,8 @@
               "id": 537,
               "image": "http://testserver/media/images/pfanne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 528,
@@ -2832,7 +3006,8 @@
               "id": 1308,
               "image": "http://testserver/media/images/platte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 529,
@@ -2846,7 +3021,8 @@
               "id": 1281,
               "image": "http://testserver/media/images/salatbesteck.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 530,
@@ -2860,7 +3036,8 @@
               "id": 1289,
               "image": "http://testserver/media/images/schale.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 531,
@@ -2874,7 +3051,8 @@
               "id": 1282,
               "image": "http://testserver/media/images/flaschenoffner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 532,
@@ -2888,7 +3066,8 @@
               "id": 402,
               "image": "http://testserver/media/images/besteck.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 533,
@@ -2902,7 +3081,8 @@
               "id": 403,
               "image": "http://testserver/media/images/loffel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 534,
@@ -2916,7 +3096,8 @@
               "id": 404,
               "image": "http://testserver/media/images/gabel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 535,
@@ -2930,7 +3111,8 @@
               "id": 405,
               "image": "http://testserver/media/images/geschirr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 536,
@@ -2944,7 +3126,8 @@
               "id": 471,
               "image": "http://testserver/media/images/tasse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 537,
@@ -2958,7 +3141,8 @@
               "id": 407,
               "image": "http://testserver/media/images/teller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 538,
@@ -2972,7 +3156,8 @@
               "id": 1611,
               "image": "http://testserver/media/images/gedeck.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 539,
@@ -2991,7 +3176,8 @@
               "id": 520,
               "image": "http://testserver/media/images/unterteller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 540,
@@ -3005,7 +3191,8 @@
               "id": 685,
               "image": "http://testserver/media/images/flasche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 541,
@@ -3019,7 +3206,8 @@
               "id": 485,
               "image": "http://testserver/media/images/glas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 542,
@@ -3033,7 +3221,8 @@
               "id": 1596,
               "image": "http://testserver/media/images/bierglas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 543,
@@ -3047,7 +3236,8 @@
               "id": 521,
               "image": "http://testserver/media/images/weinglas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 544,
@@ -3061,7 +3251,8 @@
               "id": 516,
               "image": "http://testserver/media/images/sektglas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 545,
@@ -3075,7 +3266,8 @@
               "id": 713,
               "image": "http://testserver/media/images/schnapsglas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 546,
@@ -3089,7 +3281,8 @@
               "id": 875,
               "image": "http://testserver/media/images/eierbecher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 547,
@@ -3103,7 +3296,8 @@
               "id": 1310,
               "image": "http://testserver/media/images/kanne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 548,
@@ -3122,7 +3316,8 @@
               "id": 509,
               "image": "http://testserver/media/images/krug.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 549,
@@ -3136,7 +3331,8 @@
               "id": 514,
               "image": "http://testserver/media/images/serviette.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 553,
@@ -3150,7 +3346,8 @@
               "id": 978,
               "image": "http://testserver/media/images/gewindebohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 559,
@@ -3164,7 +3361,8 @@
               "id": 1039,
               "image": "http://testserver/media/images/kreisschneider.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 567,
@@ -3178,7 +3376,8 @@
               "id": 1587,
               "image": "http://testserver/media/images/spiralbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 568,
@@ -3192,7 +3391,8 @@
               "id": 1010,
               "image": "http://testserver/media/images/walzenstirnfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 589,
@@ -3206,7 +3406,8 @@
               "id": 494,
               "image": "http://testserver/media/images/auflaufform.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 595,
@@ -3220,7 +3421,8 @@
               "id": 1295,
               "image": "http://testserver/media/images/tischdecke.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 596,
@@ -3234,7 +3436,8 @@
               "id": 1249,
               "image": "http://testserver/media/images/vase.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 599,
@@ -3248,7 +3451,8 @@
               "id": 496,
               "image": "http://testserver/media/images/backblech.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 613,
@@ -3267,7 +3471,8 @@
               "id": 463,
               "image": "http://testserver/media/images/schneebesen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 617,
@@ -3281,7 +3486,8 @@
               "id": 454,
               "image": "http://testserver/media/images/teigschaber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 636,
@@ -3295,7 +3501,8 @@
               "id": 1290,
               "image": "http://testserver/media/images/butterdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 638,
@@ -3309,7 +3516,8 @@
               "id": 522,
               "image": "http://testserver/media/images/zuckerspender.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 641,
@@ -3323,7 +3531,8 @@
               "id": 410,
               "image": "http://testserver/media/images/gn-behalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 646,
@@ -3337,7 +3546,8 @@
               "id": 414,
               "image": "http://testserver/media/images/teeglas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 649,
@@ -3351,7 +3561,8 @@
               "id": 457,
               "image": "http://testserver/media/images/dosenoffner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 651,
@@ -3365,7 +3576,8 @@
               "id": 719,
               "image": "http://testserver/media/images/pinsel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 654,
@@ -3379,7 +3591,8 @@
               "id": 466,
               "image": "http://testserver/media/images/backpapier.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 656,
@@ -3398,7 +3611,8 @@
               "id": 493,
               "image": "http://testserver/media/images/dunstabzugshaube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 667,
@@ -3417,7 +3631,8 @@
               "id": 503,
               "image": "http://testserver/media/images/kaffeemaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 668,
@@ -3431,7 +3646,8 @@
               "id": 535,
               "image": "http://testserver/media/images/kuhlschrank.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 670,
@@ -3445,7 +3661,8 @@
               "id": 544,
               "image": "http://testserver/media/images/thermoskanne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 671,
@@ -3459,7 +3676,8 @@
               "id": 666,
               "image": "http://testserver/media/images/omelett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 673,
@@ -3473,7 +3691,8 @@
               "id": 667,
               "image": "http://testserver/media/images/spiegelei.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 674,
@@ -3487,7 +3706,8 @@
               "id": 664,
               "image": "http://testserver/media/images/haferflocken.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 675,
@@ -3501,7 +3721,8 @@
               "id": 675,
               "image": "http://testserver/media/images/rotwein.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 676,
@@ -3515,7 +3736,8 @@
               "id": 677,
               "image": "http://testserver/media/images/weiwein.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 678,
@@ -3529,7 +3751,8 @@
               "id": 670,
               "image": "http://testserver/media/images/bier.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 679,
@@ -3543,7 +3766,8 @@
               "id": 671,
               "image": "http://testserver/media/images/eistee.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 680,
@@ -3557,7 +3781,8 @@
               "id": 676,
               "image": "http://testserver/media/images/saft.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 681,
@@ -3571,7 +3796,8 @@
               "id": 672,
               "image": "http://testserver/media/images/eiswurfel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 682,
@@ -3585,7 +3811,8 @@
               "id": 679,
               "image": "http://testserver/media/images/honig.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 683,
@@ -3599,7 +3826,8 @@
               "id": 681,
               "image": "http://testserver/media/images/marmelade.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 685,
@@ -3613,7 +3841,8 @@
               "id": 682,
               "image": "http://testserver/media/images/tee.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 686,
@@ -3627,7 +3856,8 @@
               "id": 683,
               "image": "http://testserver/media/images/teebeutel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 687,
@@ -3641,7 +3871,8 @@
               "id": 680,
               "image": "http://testserver/media/images/kaffee.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 688,
@@ -3655,7 +3886,8 @@
               "id": 504,
               "image": "http://testserver/media/images/kaffeefilter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 689,
@@ -3669,7 +3901,8 @@
               "id": 674,
               "image": "http://testserver/media/images/milch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 691,
@@ -3683,7 +3916,8 @@
               "id": 673,
               "image": "http://testserver/media/images/ol.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 692,
@@ -3697,7 +3931,8 @@
               "id": 665,
               "image": "http://testserver/media/images/musli.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 693,
@@ -3711,7 +3946,8 @@
               "id": 1390,
               "image": "http://testserver/media/images/zahnstocher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 698,
@@ -3725,7 +3961,8 @@
               "id": 798,
               "image": "http://testserver/media/images/korkenzieher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 700,
@@ -3739,7 +3976,8 @@
               "id": 499,
               "image": "http://testserver/media/images/chafing-dish.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 701,
@@ -3753,7 +3991,8 @@
               "id": 500,
               "image": "http://testserver/media/images/cocktailglas.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 702,
@@ -3767,7 +4006,8 @@
               "id": 501,
               "image": "http://testserver/media/images/espressotasse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 703,
@@ -3781,7 +4021,8 @@
               "id": 505,
               "image": "http://testserver/media/images/kaffeeloffel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 704,
@@ -3795,7 +4036,8 @@
               "id": 511,
               "image": "http://testserver/media/images/kuchengabel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 705,
@@ -3809,7 +4051,8 @@
               "id": 506,
               "image": "http://testserver/media/images/kaffeeportionierer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 706,
@@ -3823,7 +4066,8 @@
               "id": 832,
               "image": "http://testserver/media/images/kuchenteller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 707,
@@ -3842,7 +4086,8 @@
               "id": 515,
               "image": "http://testserver/media/images/schieferplatte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 709,
@@ -3856,7 +4101,8 @@
               "id": 518,
               "image": "http://testserver/media/images/suppenteller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 710,
@@ -3870,7 +4116,8 @@
               "id": 507,
               "image": "http://testserver/media/images/kaffeetasse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 713,
@@ -3884,7 +4131,8 @@
               "id": 1854,
               "image": "http://testserver/media/images/bodenwischgerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 714,
@@ -3898,7 +4146,8 @@
               "id": 583,
               "image": "http://testserver/media/images/papierhandtuch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 715,
@@ -3912,7 +4161,8 @@
               "id": 584,
               "image": "http://testserver/media/images/papierhandtuchspender.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 716,
@@ -3926,7 +4176,8 @@
               "id": 801,
               "image": "http://testserver/media/images/reinigungsburste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 717,
@@ -3945,7 +4196,8 @@
               "id": 1240,
               "image": "http://testserver/media/images/reinigungshandschuh.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 718,
@@ -3959,7 +4211,8 @@
               "id": 1214,
               "image": "http://testserver/media/images/reinigungsmittel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 719,
@@ -3973,7 +4226,8 @@
               "id": 1263,
               "image": "http://testserver/media/images/reinigungswagen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 720,
@@ -3987,7 +4241,8 @@
               "id": 587,
               "image": "http://testserver/media/images/seifenspender.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 721,
@@ -4001,7 +4256,8 @@
               "id": 650,
               "image": "http://testserver/media/images/spruhflasche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 723,
@@ -4015,7 +4271,8 @@
               "id": 1219,
               "image": "http://testserver/media/images/staubsaugerbeutel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 724,
@@ -4029,7 +4286,8 @@
               "id": 1220,
               "image": "http://testserver/media/images/wischbezug.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 726,
@@ -4043,7 +4301,8 @@
               "id": 1279,
               "image": "http://testserver/media/images/bademantel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 727,
@@ -4057,7 +4316,8 @@
               "id": 569,
               "image": "http://testserver/media/images/badezimmer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 728,
@@ -4071,7 +4331,8 @@
               "id": 1237,
               "image": "http://testserver/media/images/balkon.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 729,
@@ -4085,7 +4346,8 @@
               "id": 565,
               "image": "http://testserver/media/images/bettdecke.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 730,
@@ -4099,7 +4361,8 @@
               "id": 714,
               "image": "http://testserver/media/images/bettwasche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 731,
@@ -4113,7 +4376,8 @@
               "id": 566,
               "image": "http://testserver/media/images/doppelbett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 732,
@@ -4127,7 +4391,8 @@
               "id": 567,
               "image": "http://testserver/media/images/duschkopf.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 733,
@@ -4141,7 +4406,8 @@
               "id": 568,
               "image": "http://testserver/media/images/einzelbett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 734,
@@ -4155,7 +4421,8 @@
               "id": 434,
               "image": "http://testserver/media/images/fenster.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 735,
@@ -4169,7 +4436,8 @@
               "id": 715,
               "image": "http://testserver/media/images/fernbedienung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 736,
@@ -4183,7 +4451,8 @@
               "id": 580,
               "image": "http://testserver/media/images/fernseher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 738,
@@ -4197,7 +4466,8 @@
               "id": 572,
               "image": "http://testserver/media/images/garderobe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 739,
@@ -4211,7 +4481,8 @@
               "id": 1254,
               "image": "http://testserver/media/images/gardine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 740,
@@ -4225,7 +4496,8 @@
               "id": 796,
               "image": "http://testserver/media/images/handtuch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 741,
@@ -4239,7 +4511,8 @@
               "id": 574,
               "image": "http://testserver/media/images/handtuchhalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 742,
@@ -4253,7 +4526,8 @@
               "id": 575,
               "image": "http://testserver/media/images/handtuchstange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 743,
@@ -4280,7 +4554,8 @@
               "id": 592,
               "image": "http://testserver/media/images/hoteltresor.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 745,
@@ -4294,7 +4569,8 @@
               "id": 1216,
               "image": "http://testserver/media/images/kleiderbugel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 746,
@@ -4308,7 +4584,8 @@
               "id": 576,
               "image": "http://testserver/media/images/kleiderschrank.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 747,
@@ -4322,7 +4599,8 @@
               "id": 577,
               "image": "http://testserver/media/images/klimaanlagenregler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 748,
@@ -4336,7 +4614,8 @@
               "id": 578,
               "image": "http://testserver/media/images/kopfkissen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 749,
@@ -4350,7 +4629,8 @@
               "id": 581,
               "image": "http://testserver/media/images/minibar.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 750,
@@ -4369,7 +4649,8 @@
               "id": 582,
               "image": "http://testserver/media/images/nachttisch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 751,
@@ -4383,7 +4664,8 @@
               "id": 1217,
               "image": "http://testserver/media/images/rasierapparat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 753,
@@ -4397,7 +4679,8 @@
               "id": 589,
               "image": "http://testserver/media/images/toilettenburste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 754,
@@ -4411,7 +4694,8 @@
               "id": 716,
               "image": "http://testserver/media/images/toilettenpapier.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 755,
@@ -4425,7 +4709,8 @@
               "id": 590,
               "image": "http://testserver/media/images/toilettenpapierhalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 756,
@@ -4439,7 +4724,8 @@
               "id": 1228,
               "image": "http://testserver/media/images/wasserkocher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 757,
@@ -4453,7 +4739,8 @@
               "id": 651,
               "image": "http://testserver/media/images/zahnburste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 758,
@@ -4467,7 +4754,8 @@
               "id": 718,
               "image": "http://testserver/media/images/zahnpasta.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 759,
@@ -4486,7 +4774,8 @@
               "id": 436,
               "image": "http://testserver/media/images/ec-karte.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 761,
@@ -4500,7 +4789,8 @@
               "id": 1396,
               "image": "http://testserver/media/images/gepack.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 762,
@@ -4514,7 +4804,8 @@
               "id": 558,
               "image": "http://testserver/media/images/gepackwagen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 764,
@@ -4528,7 +4819,8 @@
               "id": 1397,
               "image": "http://testserver/media/images/koffer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 765,
@@ -4547,7 +4839,8 @@
               "id": 437,
               "image": "http://testserver/media/images/kreditkarte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 766,
@@ -4561,7 +4854,8 @@
               "id": 1236,
               "image": "http://testserver/media/images/parkplatz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 767,
@@ -4575,7 +4869,8 @@
               "id": 551,
               "image": "http://testserver/media/images/rezeption.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 768,
@@ -4589,7 +4884,8 @@
               "id": 1395,
               "image": "http://testserver/media/images/rezeptionsglocke.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 769,
@@ -4603,7 +4899,8 @@
               "id": 1283,
               "image": "http://testserver/media/images/sicherheitsnadel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 771,
@@ -4617,7 +4914,8 @@
               "id": 1284,
               "image": "http://testserver/media/images/streichholz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 772,
@@ -4631,7 +4929,8 @@
               "id": 1234,
               "image": "http://testserver/media/images/tasche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 773,
@@ -4645,7 +4944,8 @@
               "id": 432,
               "image": "http://testserver/media/images/trolley.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 776,
@@ -4659,7 +4959,8 @@
               "id": 1153,
               "image": "http://testserver/media/images/waschmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 778,
@@ -4673,7 +4974,8 @@
               "id": 1242,
               "image": "http://testserver/media/images/waschmittel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 779,
@@ -4687,7 +4989,8 @@
               "id": 1842,
               "image": "http://testserver/media/images/waschestander.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 780,
@@ -4701,7 +5004,8 @@
               "id": 1243,
               "image": "http://testserver/media/images/wascheklammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 782,
@@ -4715,7 +5019,8 @@
               "id": 1244,
               "image": "http://testserver/media/images/waschgang.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 783,
@@ -4729,7 +5034,8 @@
               "id": 1245,
               "image": "http://testserver/media/images/schleuderzahl.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 784,
@@ -4743,7 +5049,8 @@
               "id": 1246,
               "image": "http://testserver/media/images/pflegeetikett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 786,
@@ -4757,7 +5064,8 @@
               "id": 1225,
               "image": "http://testserver/media/images/seife.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 797,
@@ -4776,7 +5084,8 @@
               "id": 1719,
               "image": "http://testserver/media/images/seitenscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 798,
@@ -4790,7 +5099,8 @@
               "id": 1375,
               "image": "http://testserver/media/images/heckscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 799,
@@ -4804,7 +5114,8 @@
               "id": 1624,
               "image": "http://testserver/media/images/bremspedal.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 800,
@@ -4818,7 +5129,8 @@
               "id": 1717,
               "image": "http://testserver/media/images/gaspedal.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 801,
@@ -4832,7 +5144,8 @@
               "id": 1424,
               "image": "http://testserver/media/images/kupplung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 803,
@@ -4846,7 +5159,8 @@
               "id": 1436,
               "image": "http://testserver/media/images/motorol.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 805,
@@ -4860,7 +5174,8 @@
               "id": 1718,
               "image": "http://testserver/media/images/lenkrad.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 807,
@@ -4874,7 +5189,8 @@
               "id": 1452,
               "image": "http://testserver/media/images/reifen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 808,
@@ -4888,7 +5204,8 @@
               "id": 1716,
               "image": "http://testserver/media/images/fahrersitz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 818,
@@ -4911,7 +5228,8 @@
               "id": 1116,
               "image": "http://testserver/media/images/lkw.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 832,
@@ -4925,7 +5243,8 @@
               "id": 1804,
               "image": "http://testserver/media/images/sicherheitsgurt.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 908,
@@ -4939,7 +5258,8 @@
               "id": 439,
               "image": "http://testserver/media/images/handtacker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 909,
@@ -4953,7 +5273,8 @@
               "id": 990,
               "image": "http://testserver/media/images/winkelmesser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 912,
@@ -4967,7 +5288,8 @@
               "id": 417,
               "image": "http://testserver/media/images/vorhangeschloss.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 914,
@@ -4981,7 +5303,8 @@
               "id": 1514,
               "image": "http://testserver/media/images/zimmermannshammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 924,
@@ -4995,7 +5318,8 @@
               "id": 1270,
               "image": "http://testserver/media/images/reibebrett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 932,
@@ -5014,7 +5338,8 @@
               "id": 991,
               "image": "http://testserver/media/images/bogenzirkel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 937,
@@ -5028,7 +5353,8 @@
               "id": 771,
               "image": "http://testserver/media/images/flachzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 938,
@@ -5042,7 +5368,8 @@
               "id": 1031,
               "image": "http://testserver/media/images/gripzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 945,
@@ -5056,7 +5383,8 @@
               "id": 945,
               "image": "http://testserver/media/images/schlagschnur.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 953,
@@ -5070,7 +5398,8 @@
               "id": 419,
               "image": "http://testserver/media/images/schraubenziehersatz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 954,
@@ -5084,7 +5413,8 @@
               "id": 1607,
               "image": "http://testserver/media/images/holzbock.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 955,
@@ -5098,7 +5428,8 @@
               "id": 418,
               "image": "http://testserver/media/images/spitzzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 958,
@@ -5121,7 +5452,8 @@
               "id": 1840,
               "image": "http://testserver/media/images/staubsaugerfilter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 959,
@@ -5135,7 +5467,8 @@
               "id": 1573,
               "image": "http://testserver/media/images/schlauch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 961,
@@ -5149,7 +5482,8 @@
               "id": 443,
               "image": "http://testserver/media/images/anschlagwinkel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 964,
@@ -5168,7 +5502,8 @@
               "id": 1037,
               "image": "http://testserver/media/images/drehmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 980,
@@ -5182,7 +5517,8 @@
               "id": 435,
               "image": "http://testserver/media/images/bargeld.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1005,
@@ -5196,7 +5532,8 @@
               "id": 547,
               "image": "http://testserver/media/images/erste-hilfe-koffer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1006,
@@ -5210,7 +5547,8 @@
               "id": 488,
               "image": "http://testserver/media/images/feuerloscher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1010,
@@ -5229,7 +5567,8 @@
               "id": 1106,
               "image": "http://testserver/media/images/container-kran.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1012,
@@ -5256,7 +5595,8 @@
               "id": 1107,
               "image": "http://testserver/media/images/forderband.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1019,
@@ -5270,7 +5610,8 @@
               "id": 1117,
               "image": "http://testserver/media/images/rolltor.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1020,
@@ -5284,7 +5625,8 @@
               "id": 1119,
               "image": "http://testserver/media/images/sattelzug.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1021,
@@ -5298,7 +5640,8 @@
               "id": 1120,
               "image": "http://testserver/media/images/transportroller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1022,
@@ -5312,7 +5655,8 @@
               "id": 1121,
               "image": "http://testserver/media/images/transportwagen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1023,
@@ -5326,7 +5670,8 @@
               "id": 1256,
               "image": "http://testserver/media/images/bett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1034,
@@ -5340,7 +5685,8 @@
               "id": 803,
               "image": "http://testserver/media/images/lichtschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1049,
@@ -5354,7 +5700,8 @@
               "id": 687,
               "image": "http://testserver/media/images/geldschein.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1050,
@@ -5368,7 +5715,8 @@
               "id": 688,
               "image": "http://testserver/media/images/munze.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1111,
@@ -5387,7 +5735,8 @@
               "id": 497,
               "image": "http://testserver/media/images/backrost.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1113,
@@ -5406,7 +5755,8 @@
               "id": 508,
               "image": "http://testserver/media/images/kaffeevollautomat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1115,
@@ -5420,7 +5770,8 @@
               "id": 517,
               "image": "http://testserver/media/images/servierteller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1116,
@@ -5434,7 +5785,8 @@
               "id": 519,
               "image": "http://testserver/media/images/tumbler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1117,
@@ -5448,7 +5800,8 @@
               "id": 523,
               "image": "http://testserver/media/images/warmhalterost.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1118,
@@ -5462,7 +5815,8 @@
               "id": 524,
               "image": "http://testserver/media/images/desinfektionsmittelspender.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1119,
@@ -5476,7 +5830,8 @@
               "id": 531,
               "image": "http://testserver/media/images/kasebrett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1122,
@@ -5490,7 +5845,8 @@
               "id": 539,
               "image": "http://testserver/media/images/ruhrschussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1123,
@@ -5504,7 +5860,8 @@
               "id": 540,
               "image": "http://testserver/media/images/ceranfeldschaber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1126,
@@ -5518,7 +5875,8 @@
               "id": 1280,
               "image": "http://testserver/media/images/topflappen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1127,
@@ -5532,7 +5890,8 @@
               "id": 548,
               "image": "http://testserver/media/images/defibrillator.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1128,
@@ -5546,7 +5905,8 @@
               "id": 549,
               "image": "http://testserver/media/images/notfallplan.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1129,
@@ -5560,7 +5920,8 @@
               "id": 550,
               "image": "http://testserver/media/images/notausgang.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1136,
@@ -5574,7 +5935,8 @@
               "id": 559,
               "image": "http://testserver/media/images/garderobenstander.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1138,
@@ -5588,7 +5950,8 @@
               "id": 561,
               "image": "http://testserver/media/images/telefonanlage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1139,
@@ -5602,7 +5965,8 @@
               "id": 562,
               "image": "http://testserver/media/images/sitzgruppe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1142,
@@ -5616,7 +5980,8 @@
               "id": 570,
               "image": "http://testserver/media/images/fliese.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1143,
@@ -5630,7 +5995,8 @@
               "id": 571,
               "image": "http://testserver/media/images/flurschild.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1144,
@@ -5644,7 +6010,8 @@
               "id": 579,
               "image": "http://testserver/media/images/kosmetikmulleimer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1145,
@@ -5658,7 +6025,8 @@
               "id": 586,
               "image": "http://testserver/media/images/schliezylinder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1146,
@@ -5672,7 +6040,8 @@
               "id": 588,
               "image": "http://testserver/media/images/sicherheitssteckdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1147,
@@ -5686,7 +6055,8 @@
               "id": 1569,
               "image": "http://testserver/media/images/waschtisch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1148,
@@ -5700,7 +6070,8 @@
               "id": 591,
               "image": "http://testserver/media/images/turschild.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1149,
@@ -5714,7 +6085,8 @@
               "id": 1570,
               "image": "http://testserver/media/images/badregal.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1197,
@@ -5728,7 +6100,8 @@
               "id": 663,
               "image": "http://testserver/media/images/mikrowelle.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1198,
@@ -5742,7 +6115,8 @@
               "id": 661,
               "image": "http://testserver/media/images/kuchenmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1199,
@@ -5756,7 +6130,8 @@
               "id": 662,
               "image": "http://testserver/media/images/gasherd.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1200,
@@ -5770,7 +6145,8 @@
               "id": 669,
               "image": "http://testserver/media/images/bierkrug.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1203,
@@ -5784,7 +6160,8 @@
               "id": 724,
               "image": "http://testserver/media/images/abstandschelle.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1204,
@@ -5798,7 +6175,8 @@
               "id": 725,
               "image": "http://testserver/media/images/abzweigdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1205,
@@ -5817,7 +6195,8 @@
               "id": 726,
               "image": "http://testserver/media/images/aderendhulse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1206,
@@ -5831,7 +6210,8 @@
               "id": 727,
               "image": "http://testserver/media/images/aderleitung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1207,
@@ -5845,7 +6225,8 @@
               "id": 728,
               "image": "http://testserver/media/images/alarmleuchte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1208,
@@ -5859,7 +6240,8 @@
               "id": 729,
               "image": "http://testserver/media/images/analogmessgerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1209,
@@ -5873,7 +6255,8 @@
               "id": 730,
               "image": "http://testserver/media/images/anlagenmessgerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1210,
@@ -5887,7 +6270,8 @@
               "id": 731,
               "image": "http://testserver/media/images/anschlussdatenbezeichnung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1211,
@@ -5901,7 +6285,8 @@
               "id": 732,
               "image": "http://testserver/media/images/baustrahler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1212,
@@ -5915,7 +6300,8 @@
               "id": 733,
               "image": "http://testserver/media/images/aufputzinstallation.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1213,
@@ -5929,7 +6315,8 @@
               "id": 734,
               "image": "http://testserver/media/images/aufputzinstallationsrohr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1214,
@@ -5943,7 +6330,8 @@
               "id": 735,
               "image": "http://testserver/media/images/audiosignal.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1215,
@@ -5957,7 +6345,8 @@
               "id": 737,
               "image": "http://testserver/media/images/auengewinde.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1216,
@@ -5971,7 +6360,8 @@
               "id": 738,
               "image": "http://testserver/media/images/bananenstecker.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1217,
@@ -5985,7 +6375,8 @@
               "id": 739,
               "image": "http://testserver/media/images/batterie.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1218,
@@ -5999,7 +6390,8 @@
               "id": 740,
               "image": "http://testserver/media/images/baustromverteiler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1219,
@@ -6013,7 +6405,8 @@
               "id": 741,
               "image": "http://testserver/media/images/bedienfeld.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1220,
@@ -6027,7 +6420,8 @@
               "id": 742,
               "image": "http://testserver/media/images/betoninstallationsrohr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1221,
@@ -6041,7 +6435,8 @@
               "id": 743,
               "image": "http://testserver/media/images/bohrfutter.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1222,
@@ -6055,7 +6450,8 @@
               "id": 744,
               "image": "http://testserver/media/images/bohrfutterschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1223,
@@ -6074,7 +6470,8 @@
               "id": 745,
               "image": "http://testserver/media/images/bohrloch.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1224,
@@ -6088,7 +6485,8 @@
               "id": 747,
               "image": "http://testserver/media/images/brandschutzschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1225,
@@ -6102,7 +6500,8 @@
               "id": 748,
               "image": "http://testserver/media/images/brustungskanal.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1226,
@@ -6116,7 +6515,8 @@
               "id": 749,
               "image": "http://testserver/media/images/bugelgehorschutz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1227,
@@ -6130,7 +6530,8 @@
               "id": 750,
               "image": "http://testserver/media/images/dammerungsschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1228,
@@ -6144,7 +6545,8 @@
               "id": 751,
               "image": "http://testserver/media/images/deckenleuchte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1229,
@@ -6158,7 +6560,8 @@
               "id": 752,
               "image": "http://testserver/media/images/dimmer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1230,
@@ -6177,7 +6580,8 @@
               "id": 753,
               "image": "http://testserver/media/images/dosenklemme.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1231,
@@ -6191,7 +6595,8 @@
               "id": 754,
               "image": "http://testserver/media/images/draht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1232,
@@ -6205,7 +6610,8 @@
               "id": 755,
               "image": "http://testserver/media/images/dreheisenmessgerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1233,
@@ -6219,7 +6625,8 @@
               "id": 756,
               "image": "http://testserver/media/images/drehfeldmessgerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1234,
@@ -6233,7 +6640,8 @@
               "id": 757,
               "image": "http://testserver/media/images/drehschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1236,
@@ -6247,7 +6655,8 @@
               "id": 758,
               "image": "http://testserver/media/images/druckschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1237,
@@ -6261,7 +6670,8 @@
               "id": 759,
               "image": "http://testserver/media/images/durchbruchbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1238,
@@ -6275,7 +6685,8 @@
               "id": 760,
               "image": "http://testserver/media/images/durchgangsprufer.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1239,
@@ -6298,7 +6709,8 @@
               "id": 761,
               "image": "http://testserver/media/images/e-check.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1240,
@@ -6317,7 +6729,8 @@
               "id": 762,
               "image": "http://testserver/media/images/elektrikergips.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1241,
@@ -6344,7 +6757,8 @@
               "id": 763,
               "image": "http://testserver/media/images/elektrische-verteiler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1242,
@@ -6358,7 +6772,8 @@
               "id": 764,
               "image": "http://testserver/media/images/elektroinstallation.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1243,
@@ -6372,7 +6787,8 @@
               "id": 765,
               "image": "http://testserver/media/images/elektrosage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1244,
@@ -6386,7 +6802,8 @@
               "id": 766,
               "image": "http://testserver/media/images/elektroschere.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1246,
@@ -6400,7 +6817,8 @@
               "id": 768,
               "image": "http://testserver/media/images/entlotpumpe.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1247,
@@ -6414,7 +6832,8 @@
               "id": 769,
               "image": "http://testserver/media/images/eurostecker.jpg"
           }
-      ]
+      ],
+      "example_sentence": "Das Netzteil ist versehen mit einem Eurostecker für den direkten Anschluss an eine Schuko-Steckdose und verfügt über eine 3m lange Zuleitung."
   },
   {
       "id": 1249,
@@ -6428,7 +6847,8 @@
               "id": 1574,
               "image": "http://testserver/media/images/flachmeiel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1250,
@@ -6442,7 +6862,8 @@
               "id": 770,
               "image": "http://testserver/media/images/flachrundzange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1252,
@@ -6465,7 +6886,8 @@
               "id": 772,
               "image": "http://testserver/media/images/gehorstopsel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1253,
@@ -6479,7 +6901,8 @@
               "id": 773,
               "image": "http://testserver/media/images/heiklebepistole.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1254,
@@ -6493,7 +6916,8 @@
               "id": 774,
               "image": "http://testserver/media/images/heiluftgeblase.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1255,
@@ -6507,7 +6931,8 @@
               "id": 775,
               "image": "http://testserver/media/images/hygrometer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1256,
@@ -6521,7 +6946,8 @@
               "id": 776,
               "image": "http://testserver/media/images/infrarotstrahler.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1257,
@@ -6535,7 +6961,8 @@
               "id": 777,
               "image": "http://testserver/media/images/innengewinde.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1258,
@@ -6549,7 +6976,8 @@
               "id": 778,
               "image": "http://testserver/media/images/inverte-stromerzeuger.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1259,
@@ -6563,7 +6991,8 @@
               "id": 779,
               "image": "http://testserver/media/images/kabel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1260,
@@ -6577,7 +7006,8 @@
               "id": 780,
               "image": "http://testserver/media/images/kabelbinder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1261,
@@ -6591,7 +7021,8 @@
               "id": 781,
               "image": "http://testserver/media/images/kabeleinziehsystem.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1263,
@@ -6605,7 +7036,8 @@
               "id": 786,
               "image": "http://testserver/media/images/kraftstromsteckdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1264,
@@ -6624,7 +7056,8 @@
               "id": 787,
               "image": "http://testserver/media/images/kuparohr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1265,
@@ -6638,7 +7071,8 @@
               "id": 788,
               "image": "http://testserver/media/images/litzenleitung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1266,
@@ -6652,7 +7086,8 @@
               "id": 789,
               "image": "http://testserver/media/images/lochsage.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1267,
@@ -6666,7 +7101,8 @@
               "id": 1278,
               "image": "http://testserver/media/images/lotkolben.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1268,
@@ -6680,7 +7116,8 @@
               "id": 790,
               "image": "http://testserver/media/images/lotset.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1270,
@@ -6694,7 +7131,8 @@
               "id": 791,
               "image": "http://testserver/media/images/lotstation.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1271,
@@ -6713,7 +7151,8 @@
               "id": 792,
               "image": "http://testserver/media/images/lotstelle.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1272,
@@ -6727,7 +7166,8 @@
               "id": 793,
               "image": "http://testserver/media/images/lotzinn.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1273,
@@ -6746,7 +7186,8 @@
               "id": 794,
               "image": "http://testserver/media/images/lsa-plus-auflegewerkzeug.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1274,
@@ -6760,7 +7201,8 @@
               "id": 808,
               "image": "http://testserver/media/images/mauernutfrase.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1275,
@@ -6774,7 +7216,8 @@
               "id": 809,
               "image": "http://testserver/media/images/metalldetektor.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1276,
@@ -6788,7 +7231,8 @@
               "id": 810,
               "image": "http://testserver/media/images/netzteil.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1277,
@@ -6802,7 +7246,8 @@
               "id": 811,
               "image": "http://testserver/media/images/phasenprufer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1278,
@@ -6816,7 +7261,8 @@
               "id": 1575,
               "image": "http://testserver/media/images/doppelringschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1279,
@@ -6835,7 +7281,8 @@
               "id": 1576,
               "image": "http://testserver/media/images/ringmaulschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1280,
@@ -6849,7 +7296,8 @@
               "id": 813,
               "image": "http://testserver/media/images/schleifenimpedanzmessgerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1281,
@@ -6863,7 +7311,8 @@
               "id": 815,
               "image": "http://testserver/media/images/schraubenkopf.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1282,
@@ -6882,7 +7331,8 @@
               "id": 816,
               "image": "http://testserver/media/images/schraubenmutter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1283,
@@ -6896,7 +7346,8 @@
               "id": 817,
               "image": "http://testserver/media/images/schutzschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1284,
@@ -6910,7 +7361,8 @@
               "id": 818,
               "image": "http://testserver/media/images/signalband.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1286,
@@ -6924,7 +7376,8 @@
               "id": 819,
               "image": "http://testserver/media/images/stabschrauber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1287,
@@ -6943,7 +7396,8 @@
               "id": 820,
               "image": "http://testserver/media/images/starkstromleitung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1288,
@@ -6962,7 +7416,8 @@
               "id": 821,
               "image": "http://testserver/media/images/steckverbinder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1289,
@@ -6976,7 +7431,8 @@
               "id": 822,
               "image": "http://testserver/media/images/storlichtbogen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1290,
@@ -6990,7 +7446,8 @@
               "id": 823,
               "image": "http://testserver/media/images/strommesszange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1291,
@@ -7004,7 +7461,8 @@
               "id": 824,
               "image": "http://testserver/media/images/transformator.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1292,
@@ -7023,7 +7481,8 @@
               "id": 825,
               "image": "http://testserver/media/images/trockenbauwand.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1293,
@@ -7037,7 +7496,8 @@
               "id": 826,
               "image": "http://testserver/media/images/unterputzdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1297,
@@ -7051,7 +7511,8 @@
               "id": 829,
               "image": "http://testserver/media/images/schaltplan.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1298,
@@ -7070,7 +7531,8 @@
               "id": 830,
               "image": "http://testserver/media/images/nut.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1299,
@@ -7084,7 +7546,8 @@
               "id": 831,
               "image": "http://testserver/media/images/kondensator.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1300,
@@ -7098,7 +7561,8 @@
               "id": 833,
               "image": "http://testserver/media/images/atom.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1304,
@@ -7112,7 +7576,8 @@
               "id": 837,
               "image": "http://testserver/media/images/atomstrom.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1306,
@@ -7126,7 +7591,8 @@
               "id": 839,
               "image": "http://testserver/media/images/auenleiter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1309,
@@ -7140,7 +7606,8 @@
               "id": 842,
               "image": "http://testserver/media/images/neutralleiter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1328,
@@ -7154,7 +7621,8 @@
               "id": 861,
               "image": "http://testserver/media/images/abfallstrom.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1329,
@@ -7168,7 +7636,8 @@
               "id": 862,
               "image": "http://testserver/media/images/amplitude.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1330,
@@ -7182,7 +7651,8 @@
               "id": 863,
               "image": "http://testserver/media/images/dreiphasenwechselstrom.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1331,
@@ -7196,7 +7666,8 @@
               "id": 864,
               "image": "http://testserver/media/images/gleichstrom.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1332,
@@ -7210,7 +7681,8 @@
               "id": 865,
               "image": "http://testserver/media/images/wechselstrom.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1333,
@@ -7224,7 +7696,8 @@
               "id": 866,
               "image": "http://testserver/media/images/anode.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1334,
@@ -7238,7 +7711,8 @@
               "id": 867,
               "image": "http://testserver/media/images/kathode.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1335,
@@ -7252,7 +7726,8 @@
               "id": 868,
               "image": "http://testserver/media/images/leitung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1337,
@@ -7266,7 +7741,8 @@
               "id": 870,
               "image": "http://testserver/media/images/stromkreis.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1339,
@@ -7280,7 +7756,8 @@
               "id": 872,
               "image": "http://testserver/media/images/verbraucher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1375,
@@ -7294,7 +7771,8 @@
               "id": 891,
               "image": "http://testserver/media/images/beipackzettel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1377,
@@ -7308,7 +7786,8 @@
               "id": 894,
               "image": "http://testserver/media/images/bordbrett.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1403,
@@ -7327,7 +7806,8 @@
               "id": 1855,
               "image": "http://testserver/media/images/ladegerat.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1424,
@@ -7341,7 +7821,8 @@
               "id": 947,
               "image": "http://testserver/media/images/schwingschleifer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1426,
@@ -7355,7 +7836,8 @@
               "id": 949,
               "image": "http://testserver/media/images/sicherung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1428,
@@ -7369,7 +7851,8 @@
               "id": 951,
               "image": "http://testserver/media/images/sondermull.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1446,
@@ -7383,7 +7866,8 @@
               "id": 971,
               "image": "http://testserver/media/images/ader.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1447,
@@ -7402,7 +7886,8 @@
               "id": 972,
               "image": "http://testserver/media/images/notausschalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1449,
@@ -7416,7 +7901,8 @@
               "id": 973,
               "image": "http://testserver/media/images/auengewindeschneider.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1450,
@@ -7430,7 +7916,8 @@
               "id": 974,
               "image": "http://testserver/media/images/bohrvorrichtung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1452,
@@ -7444,7 +7931,8 @@
               "id": 976,
               "image": "http://testserver/media/images/federscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1453,
@@ -7458,7 +7946,8 @@
               "id": 977,
               "image": "http://testserver/media/images/flugelmutter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1454,
@@ -7472,7 +7961,8 @@
               "id": 979,
               "image": "http://testserver/media/images/handbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1455,
@@ -7486,7 +7976,8 @@
               "id": 980,
               "image": "http://testserver/media/images/kegelreibahle.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1456,
@@ -7500,7 +7991,8 @@
               "id": 981,
               "image": "http://testserver/media/images/kuhlmittelflasche.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1457,
@@ -7514,7 +8006,8 @@
               "id": 982,
               "image": "http://testserver/media/images/manometer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1458,
@@ -7528,7 +8021,8 @@
               "id": 983,
               "image": "http://testserver/media/images/maschinengewindebohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1459,
@@ -7547,7 +8041,8 @@
               "id": 984,
               "image": "http://testserver/media/images/olkanne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1460,
@@ -7561,7 +8056,8 @@
               "id": 985,
               "image": "http://testserver/media/images/radius.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1461,
@@ -7575,7 +8071,8 @@
               "id": 986,
               "image": "http://testserver/media/images/randelschraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1463,
@@ -7598,7 +8095,8 @@
               "id": 988,
               "image": "http://testserver/media/images/spax-schraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1464,
@@ -7612,7 +8110,8 @@
               "id": 989,
               "image": "http://testserver/media/images/unterlegscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1465,
@@ -7626,7 +8125,8 @@
               "id": 992,
               "image": "http://testserver/media/images/zylinderkopfschraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1466,
@@ -7640,7 +8140,8 @@
               "id": 993,
               "image": "http://testserver/media/images/cnc-frasmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1467,
@@ -7654,7 +8155,8 @@
               "id": 994,
               "image": "http://testserver/media/images/eckmesserkopf.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1468,
@@ -7668,7 +8170,8 @@
               "id": 995,
               "image": "http://testserver/media/images/einstellring.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1469,
@@ -7682,7 +8185,8 @@
               "id": 996,
               "image": "http://testserver/media/images/formfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1470,
@@ -7696,7 +8200,8 @@
               "id": 997,
               "image": "http://testserver/media/images/grenzrachenlehre.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1471,
@@ -7710,7 +8215,8 @@
               "id": 998,
               "image": "http://testserver/media/images/kantentaster.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1472,
@@ -7724,7 +8230,8 @@
               "id": 999,
               "image": "http://testserver/media/images/messerkopf.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1473,
@@ -7738,7 +8245,8 @@
               "id": 1000,
               "image": "http://testserver/media/images/messuhr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1474,
@@ -7752,7 +8260,8 @@
               "id": 1002,
               "image": "http://testserver/media/images/radienfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1475,
@@ -7766,7 +8275,8 @@
               "id": 1003,
               "image": "http://testserver/media/images/satzfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1476,
@@ -7780,7 +8290,8 @@
               "id": 1004,
               "image": "http://testserver/media/images/schaftfraser-mit-radius.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1477,
@@ -7794,7 +8305,8 @@
               "id": 1005,
               "image": "http://testserver/media/images/t-nutenfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1478,
@@ -7808,7 +8320,8 @@
               "id": 1006,
               "image": "http://testserver/media/images/t-nutenstein.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1479,
@@ -7822,7 +8335,8 @@
               "id": 1007,
               "image": "http://testserver/media/images/trapezantriebsspindel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1480,
@@ -7836,7 +8350,8 @@
               "id": 1008,
               "image": "http://testserver/media/images/universaltaster.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1481,
@@ -7850,7 +8365,8 @@
               "id": 1009,
               "image": "http://testserver/media/images/walzenfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1482,
@@ -7864,7 +8380,8 @@
               "id": 1012,
               "image": "http://testserver/media/images/zahnradfraser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1483,
@@ -7878,7 +8395,8 @@
               "id": 1013,
               "image": "http://testserver/media/images/abstechdrehmeiel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1485,
@@ -7892,7 +8410,8 @@
               "id": 1015,
               "image": "http://testserver/media/images/bitsatz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1487,
@@ -7906,7 +8425,8 @@
               "id": 1016,
               "image": "http://testserver/media/images/bolzenschneider.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1488,
@@ -7920,7 +8440,8 @@
               "id": 1017,
               "image": "http://testserver/media/images/bugelprisma.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1489,
@@ -7934,7 +8455,8 @@
               "id": 1018,
               "image": "http://testserver/media/images/doppelkorner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1491,
@@ -7948,7 +8470,8 @@
               "id": 1020,
               "image": "http://testserver/media/images/druckluftpistole.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1492,
@@ -7962,7 +8485,8 @@
               "id": 1021,
               "image": "http://testserver/media/images/e-motor.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1493,
@@ -7976,7 +8500,8 @@
               "id": 1022,
               "image": "http://testserver/media/images/einstechdrehmeiel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1494,
@@ -7990,7 +8515,8 @@
               "id": 1023,
               "image": "http://testserver/media/images/gegenschlag.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1495,
@@ -8004,7 +8530,8 @@
               "id": 1024,
               "image": "http://testserver/media/images/gewindestange.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1496,
@@ -8018,7 +8545,8 @@
               "id": 1025,
               "image": "http://testserver/media/images/gewindestift.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1501,
@@ -8032,7 +8560,8 @@
               "id": 1033,
               "image": "http://testserver/media/images/innendrehmeiel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1502,
@@ -8059,7 +8588,8 @@
               "id": 1034,
               "image": "http://testserver/media/images/inbus-mit-griff.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1503,
@@ -8086,7 +8616,8 @@
               "id": 1035,
               "image": "http://testserver/media/images/inbussatz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1504,
@@ -8105,7 +8636,8 @@
               "id": 1036,
               "image": "http://testserver/media/images/klebekerze.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1505,
@@ -8119,7 +8651,8 @@
               "id": 1038,
               "image": "http://testserver/media/images/kornerplatte.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1506,
@@ -8133,7 +8666,8 @@
               "id": 1040,
               "image": "http://testserver/media/images/kugellager.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1507,
@@ -8152,7 +8686,8 @@
               "id": 1041,
               "image": "http://testserver/media/images/kraftmessdose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1509,
@@ -8171,7 +8706,8 @@
               "id": 1043,
               "image": "http://testserver/media/images/akku-ladestation.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1510,
@@ -8185,7 +8721,8 @@
               "id": 1044,
               "image": "http://testserver/media/images/lastenkran.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1511,
@@ -8199,7 +8736,8 @@
               "id": 1045,
               "image": "http://testserver/media/images/mitlaufende-spitze.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1512,
@@ -8213,7 +8751,8 @@
               "id": 1046,
               "image": "http://testserver/media/images/o-ring.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1513,
@@ -8227,7 +8766,8 @@
               "id": 1047,
               "image": "http://testserver/media/images/passstift.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1514,
@@ -8241,7 +8781,8 @@
               "id": 1048,
               "image": "http://testserver/media/images/poliervlies.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1515,
@@ -8255,7 +8796,8 @@
               "id": 1049,
               "image": "http://testserver/media/images/prisma.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1517,
@@ -8269,7 +8811,8 @@
               "id": 1051,
               "image": "http://testserver/media/images/reduzierose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1518,
@@ -8283,7 +8826,8 @@
               "id": 1052,
               "image": "http://testserver/media/images/richtbank.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1519,
@@ -8297,7 +8841,8 @@
               "id": 1053,
               "image": "http://testserver/media/images/rohrschere.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1520,
@@ -8311,7 +8856,8 @@
               "id": 1054,
               "image": "http://testserver/media/images/saulenbohrmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1521,
@@ -8325,7 +8871,8 @@
               "id": 1055,
               "image": "http://testserver/media/images/schlauchschere.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1522,
@@ -8339,7 +8886,8 @@
               "id": 1056,
               "image": "http://testserver/media/images/schleifpapierhalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1523,
@@ -8353,7 +8901,8 @@
               "id": 1057,
               "image": "http://testserver/media/images/schnellspanner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1525,
@@ -8367,7 +8916,8 @@
               "id": 1060,
               "image": "http://testserver/media/images/schweierkabine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1526,
@@ -8381,7 +8931,8 @@
               "id": 1061,
               "image": "http://testserver/media/images/sicherungsring.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1527,
@@ -8400,7 +8951,8 @@
               "id": 1062,
               "image": "http://testserver/media/images/spannfeder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1528,
@@ -8414,7 +8966,8 @@
               "id": 1063,
               "image": "http://testserver/media/images/spannfutter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1529,
@@ -8428,7 +8981,8 @@
               "id": 1064,
               "image": "http://testserver/media/images/spannhulse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1530,
@@ -8442,7 +8996,8 @@
               "id": 1065,
               "image": "http://testserver/media/images/spanntreppe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1531,
@@ -8456,7 +9011,8 @@
               "id": 1066,
               "image": "http://testserver/media/images/tafelschere.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1532,
@@ -8470,7 +9026,8 @@
               "id": 1067,
               "image": "http://testserver/media/images/tiefenmastab.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1533,
@@ -8484,7 +9041,8 @@
               "id": 1068,
               "image": "http://testserver/media/images/trennstemmer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1534,
@@ -8498,7 +9056,8 @@
               "id": 1069,
               "image": "http://testserver/media/images/werkzeugwagen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1536,
@@ -8512,7 +9071,8 @@
               "id": 1071,
               "image": "http://testserver/media/images/austreiber.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1537,
@@ -8526,7 +9086,8 @@
               "id": 1073,
               "image": "http://testserver/media/images/feilenburste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1538,
@@ -8540,7 +9101,8 @@
               "id": 1074,
               "image": "http://testserver/media/images/flachspanner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1539,
@@ -8554,7 +9116,8 @@
               "id": 1075,
               "image": "http://testserver/media/images/haarwinkel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1540,
@@ -8568,7 +9131,8 @@
               "id": 1078,
               "image": "http://testserver/media/images/schlichtfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1541,
@@ -8582,7 +9146,8 @@
               "id": 1079,
               "image": "http://testserver/media/images/schlosserfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1542,
@@ -8596,7 +9161,8 @@
               "id": 1080,
               "image": "http://testserver/media/images/senkkopfschraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1543,
@@ -8610,7 +9176,8 @@
               "id": 1081,
               "image": "http://testserver/media/images/schruppfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1544,
@@ -8624,7 +9191,8 @@
               "id": 1082,
               "image": "http://testserver/media/images/spannpratze.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1545,
@@ -8638,7 +9206,8 @@
               "id": 1083,
               "image": "http://testserver/media/images/stahlmastab.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1546,
@@ -8652,7 +9221,8 @@
               "id": 1084,
               "image": "http://testserver/media/images/vierkantfeile.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1547,
@@ -8666,7 +9236,8 @@
               "id": 1085,
               "image": "http://testserver/media/images/werkbank.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1555,
@@ -8680,7 +9251,8 @@
               "id": 1087,
               "image": "http://testserver/media/images/kreide.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1556,
@@ -8694,7 +9266,8 @@
               "id": 1088,
               "image": "http://testserver/media/images/pinsel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1557,
@@ -8708,7 +9281,8 @@
               "id": 1089,
               "image": "http://testserver/media/images/schaferkiste.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1558,
@@ -8722,7 +9296,8 @@
               "id": 1090,
               "image": "http://testserver/media/images/spiritus.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1559,
@@ -8736,7 +9311,8 @@
               "id": 1091,
               "image": "http://testserver/media/images/spruhreiniger.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1573,
@@ -8750,7 +9326,8 @@
               "id": 1599,
               "image": "http://testserver/media/images/sechskantschraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1594,
@@ -8764,7 +9341,8 @@
               "id": 1126,
               "image": "http://testserver/media/images/heftklammern.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1595,
@@ -8778,7 +9356,8 @@
               "id": 1127,
               "image": "http://testserver/media/images/lagerplatzetikett.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1596,
@@ -8792,7 +9371,8 @@
               "id": 1128,
               "image": "http://testserver/media/images/stempel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1599,
@@ -8806,7 +9386,8 @@
               "id": 1852,
               "image": "http://testserver/media/images/stempelkissen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1623,
@@ -8820,7 +9401,8 @@
               "id": 1296,
               "image": "http://testserver/media/images/dose.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1684,
@@ -8834,7 +9416,8 @@
               "id": 1324,
               "image": "http://testserver/media/images/brandmelder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1685,
@@ -8848,7 +9431,8 @@
               "id": 1325,
               "image": "http://testserver/media/images/kapselgehorschutz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1699,
@@ -8862,7 +9446,8 @@
               "id": 1346,
               "image": "http://testserver/media/images/kfz-werkstatt.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1701,
@@ -8876,7 +9461,8 @@
               "id": 1348,
               "image": "http://testserver/media/images/prufwerkstatt.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1707,
@@ -8890,7 +9476,8 @@
               "id": 1584,
               "image": "http://testserver/media/images/werkzeugkoffer.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1709,
@@ -8904,7 +9491,8 @@
               "id": 1350,
               "image": "http://testserver/media/images/fahrzeugbrief.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1711,
@@ -8918,7 +9506,8 @@
               "id": 1351,
               "image": "http://testserver/media/images/fahrzeugschein.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1713,
@@ -8932,7 +9521,8 @@
               "id": 1352,
               "image": "http://testserver/media/images/feinstaubplakette.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1716,
@@ -8946,7 +9536,8 @@
               "id": 1354,
               "image": "http://testserver/media/images/prufplakette.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1717,
@@ -8960,7 +9551,8 @@
               "id": 1355,
               "image": "http://testserver/media/images/serviceheft.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1718,
@@ -8974,7 +9566,8 @@
               "id": 1356,
               "image": "http://testserver/media/images/typenschild.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1732,
@@ -8988,7 +9581,8 @@
               "id": 1369,
               "image": "http://testserver/media/images/beifahrertur.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1733,
@@ -9002,7 +9596,8 @@
               "id": 1370,
               "image": "http://testserver/media/images/dachreling.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1734,
@@ -9016,7 +9611,8 @@
               "id": 1371,
               "image": "http://testserver/media/images/fahrertur.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1735,
@@ -9030,7 +9626,8 @@
               "id": 1372,
               "image": "http://testserver/media/images/fahrzeugfront.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1736,
@@ -9044,7 +9641,8 @@
               "id": 1373,
               "image": "http://testserver/media/images/fahrzeugheck.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1737,
@@ -9058,7 +9656,8 @@
               "id": 1374,
               "image": "http://testserver/media/images/frontscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1738,
@@ -9072,7 +9671,8 @@
               "id": 1376,
               "image": "http://testserver/media/images/kofferraum.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1739,
@@ -9086,7 +9686,8 @@
               "id": 1377,
               "image": "http://testserver/media/images/kotflugel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1740,
@@ -9100,7 +9701,8 @@
               "id": 1378,
               "image": "http://testserver/media/images/kuhlergrill.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1741,
@@ -9114,7 +9716,8 @@
               "id": 1379,
               "image": "http://testserver/media/images/ladeanschluss.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1742,
@@ -9128,7 +9731,8 @@
               "id": 1380,
               "image": "http://testserver/media/images/motorhaube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1743,
@@ -9142,7 +9746,8 @@
               "id": 1381,
               "image": "http://testserver/media/images/motorhaubenschloss.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1744,
@@ -9156,7 +9761,8 @@
               "id": 1382,
               "image": "http://testserver/media/images/schweller.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1747,
@@ -9170,7 +9776,8 @@
               "id": 1386,
               "image": "http://testserver/media/images/turgriff.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1748,
@@ -9184,7 +9791,8 @@
               "id": 1387,
               "image": "http://testserver/media/images/turschloss.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1754,
@@ -9198,7 +9806,8 @@
               "id": 1400,
               "image": "http://testserver/media/images/ablagefach.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1755,
@@ -9212,7 +9821,8 @@
               "id": 1398,
               "image": "http://testserver/media/images/airbag.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1757,
@@ -9226,7 +9836,8 @@
               "id": 1399,
               "image": "http://testserver/media/images/aschenbecher.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1758,
@@ -9245,7 +9856,8 @@
               "id": 1401,
               "image": "http://testserver/media/images/mittelarmlehne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1761,
@@ -9259,7 +9871,8 @@
               "id": 1402,
               "image": "http://testserver/media/images/handbremshebel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1762,
@@ -9273,7 +9886,8 @@
               "id": 1403,
               "image": "http://testserver/media/images/gurtschloss.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1763,
@@ -9287,7 +9901,8 @@
               "id": 1404,
               "image": "http://testserver/media/images/furaum.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1767,
@@ -9301,7 +9916,8 @@
               "id": 1408,
               "image": "http://testserver/media/images/handgriff.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1768,
@@ -9315,7 +9931,8 @@
               "id": 1409,
               "image": "http://testserver/media/images/handschuhfach.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1770,
@@ -9329,7 +9946,8 @@
               "id": 1411,
               "image": "http://testserver/media/images/instrumententafel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1771,
@@ -9343,7 +9961,8 @@
               "id": 1412,
               "image": "http://testserver/media/images/kofferraumabdeckung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1773,
@@ -9357,7 +9976,8 @@
               "id": 1414,
               "image": "http://testserver/media/images/kupplungspedal.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1776,
@@ -9371,7 +9991,8 @@
               "id": 1417,
               "image": "http://testserver/media/images/rucksitz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1777,
@@ -9385,7 +10006,8 @@
               "id": 1418,
               "image": "http://testserver/media/images/schalthebel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1779,
@@ -9399,7 +10021,8 @@
               "id": 1420,
               "image": "http://testserver/media/images/sicherungskasten.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1780,
@@ -9413,7 +10036,8 @@
               "id": 1421,
               "image": "http://testserver/media/images/sonnenblende.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1781,
@@ -9427,7 +10051,8 @@
               "id": 1422,
               "image": "http://testserver/media/images/turoffner.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1783,
@@ -9441,7 +10066,8 @@
               "id": 1426,
               "image": "http://testserver/media/images/anlasser.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1784,
@@ -9455,7 +10081,8 @@
               "id": 1427,
               "image": "http://testserver/media/images/batterieklemme.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1785,
@@ -9469,7 +10096,8 @@
               "id": 1428,
               "image": "http://testserver/media/images/bremsflussigkeit.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1786,
@@ -9483,7 +10111,8 @@
               "id": 1429,
               "image": "http://testserver/media/images/keilriemen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1788,
@@ -9497,7 +10126,8 @@
               "id": 1431,
               "image": "http://testserver/media/images/kuhlflussigkeit.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1789,
@@ -9511,7 +10141,8 @@
               "id": 1432,
               "image": "http://testserver/media/images/lichtmaschine.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1792,
@@ -9525,7 +10156,8 @@
               "id": 1435,
               "image": "http://testserver/media/images/motorabdeckung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1793,
@@ -9539,7 +10171,8 @@
               "id": 1437,
               "image": "http://testserver/media/images/olfilter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1797,
@@ -9553,7 +10186,8 @@
               "id": 1440,
               "image": "http://testserver/media/images/waschwasserbehalter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1798,
@@ -9567,7 +10201,8 @@
               "id": 1441,
               "image": "http://testserver/media/images/zahnriemen.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1799,
@@ -9581,7 +10216,8 @@
               "id": 1597,
               "image": "http://testserver/media/images/feder.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1804,
@@ -9595,7 +10231,8 @@
               "id": 1453,
               "image": "http://testserver/media/images/abgasendrohr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1805,
@@ -9609,7 +10246,8 @@
               "id": 1454,
               "image": "http://testserver/media/images/abgasrohr.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1807,
@@ -9623,7 +10261,8 @@
               "id": 1455,
               "image": "http://testserver/media/images/auspuffblende.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1808,
@@ -9637,7 +10276,8 @@
               "id": 1456,
               "image": "http://testserver/media/images/auswuchtgewicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1809,
@@ -9651,7 +10291,8 @@
               "id": 1457,
               "image": "http://testserver/media/images/bremsbelag.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1810,
@@ -9665,7 +10306,8 @@
               "id": 1458,
               "image": "http://testserver/media/images/bremsleitung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1811,
@@ -9679,7 +10321,8 @@
               "id": 1459,
               "image": "http://testserver/media/images/bremssattel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1812,
@@ -9693,7 +10336,8 @@
               "id": 1460,
               "image": "http://testserver/media/images/bremsscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1813,
@@ -9707,7 +10351,8 @@
               "id": 1461,
               "image": "http://testserver/media/images/federbein.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1814,
@@ -9721,7 +10366,8 @@
               "id": 1462,
               "image": "http://testserver/media/images/felge.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1815,
@@ -9735,7 +10381,8 @@
               "id": 1463,
               "image": "http://testserver/media/images/fuhrungslenker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1818,
@@ -9749,7 +10396,8 @@
               "id": 1465,
               "image": "http://testserver/media/images/kugelgelenk.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1819,
@@ -9763,7 +10411,8 @@
               "id": 1466,
               "image": "http://testserver/media/images/lambdasonde.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1820,
@@ -9777,7 +10426,8 @@
               "id": 1467,
               "image": "http://testserver/media/images/mittelschalldampfer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1821,
@@ -9791,7 +10441,8 @@
               "id": 1468,
               "image": "http://testserver/media/images/olwanne.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1822,
@@ -9805,7 +10456,8 @@
               "id": 1469,
               "image": "http://testserver/media/images/radaufhangung.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1823,
@@ -9819,7 +10471,8 @@
               "id": 1470,
               "image": "http://testserver/media/images/radmutter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1824,
@@ -9833,7 +10486,8 @@
               "id": 1471,
               "image": "http://testserver/media/images/reifenprofil.png"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1825,
@@ -9847,7 +10501,8 @@
               "id": 1472,
               "image": "http://testserver/media/images/scheibenbremse.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1826,
@@ -9861,7 +10516,8 @@
               "id": 1480,
               "image": "http://testserver/media/images/stabilisator.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1827,
@@ -9875,7 +10531,8 @@
               "id": 1473,
               "image": "http://testserver/media/images/stodampfer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1830,
@@ -9889,7 +10546,8 @@
               "id": 1476,
               "image": "http://testserver/media/images/ringschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1831,
@@ -9903,7 +10561,8 @@
               "id": 1477,
               "image": "http://testserver/media/images/kunststoffhammer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1833,
@@ -9917,7 +10576,8 @@
               "id": 1479,
               "image": "http://testserver/media/images/zundkerzenschlussel.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1834,
@@ -9931,7 +10591,8 @@
               "id": 1483,
               "image": "http://testserver/media/images/abblendlicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1835,
@@ -9945,7 +10606,8 @@
               "id": 1484,
               "image": "http://testserver/media/images/blinklicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1836,
@@ -9959,7 +10621,8 @@
               "id": 1485,
               "image": "http://testserver/media/images/bremslicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1837,
@@ -9973,7 +10636,8 @@
               "id": 1486,
               "image": "http://testserver/media/images/fernlicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1839,
@@ -9987,7 +10651,8 @@
               "id": 1488,
               "image": "http://testserver/media/images/kennzeichenlicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1840,
@@ -10001,7 +10666,8 @@
               "id": 1489,
               "image": "http://testserver/media/images/ruckfahrlicht.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1841,
@@ -10015,7 +10681,8 @@
               "id": 1490,
               "image": "http://testserver/media/images/scheinwerfer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1844,
@@ -10029,7 +10696,8 @@
               "id": 1491,
               "image": "http://testserver/media/images/bordcomputer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1845,
@@ -10043,7 +10711,8 @@
               "id": 1492,
               "image": "http://testserver/media/images/einparkhilfe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1846,
@@ -10057,7 +10726,8 @@
               "id": 1493,
               "image": "http://testserver/media/images/hupe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1848,
@@ -10071,7 +10741,8 @@
               "id": 1495,
               "image": "http://testserver/media/images/scheibenwischintervall.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1850,
@@ -10085,7 +10756,8 @@
               "id": 1497,
               "image": "http://testserver/media/images/wischautomatik.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1851,
@@ -10099,7 +10771,8 @@
               "id": 1498,
               "image": "http://testserver/media/images/gefahrenstofflager.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1852,
@@ -10113,7 +10786,8 @@
               "id": 1499,
               "image": "http://testserver/media/images/mundschutz.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1857,
@@ -10127,7 +10801,8 @@
               "id": 1504,
               "image": "http://testserver/media/images/schleifset.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1864,
@@ -10141,7 +10816,8 @@
               "id": 1516,
               "image": "http://testserver/media/images/bandschleifer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1874,
@@ -10155,7 +10831,8 @@
               "id": 1526,
               "image": "http://testserver/media/images/schleifscheibe.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1875,
@@ -10169,7 +10846,8 @@
               "id": 1527,
               "image": "http://testserver/media/images/steinbohrer.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1887,
@@ -10183,7 +10861,8 @@
               "id": 1533,
               "image": "http://testserver/media/images/maschinenschraubstock.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1888,
@@ -10197,7 +10876,8 @@
               "id": 1534,
               "image": "http://testserver/media/images/schleifblock.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1889,
@@ -10211,7 +10891,8 @@
               "id": 1535,
               "image": "http://testserver/media/images/starkstromstecker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1896,
@@ -10225,7 +10906,8 @@
               "id": 1539,
               "image": "http://testserver/media/images/d3-leim.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1897,
@@ -10239,7 +10921,8 @@
               "id": 1540,
               "image": "http://testserver/media/images/einschraubhaken.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1898,
@@ -10253,7 +10936,8 @@
               "id": 1541,
               "image": "http://testserver/media/images/hutmutter.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1900,
@@ -10267,7 +10951,8 @@
               "id": 1543,
               "image": "http://testserver/media/images/schlossschraube.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 1973,
@@ -10281,7 +10966,8 @@
               "id": 1627,
               "image": "http://testserver/media/images/textmarker.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   },
   {
       "id": 2139,
@@ -10300,6 +10986,7 @@
               "id": 1849,
               "image": "http://testserver/media/images/arbeitsschuh.jpg"
           }
-      ]
+      ],
+      "example_sentence": ""
   }
 ]

@@ -48,6 +48,7 @@ class Document(models.Model):
         null=True,
         verbose_name=_("audio"),
     )
+    example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
     creation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("creation date")
     )

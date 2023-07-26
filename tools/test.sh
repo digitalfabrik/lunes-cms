@@ -12,7 +12,24 @@ rm -rf "${BASE_DIR:?}/htmlcov/"
 # Require that the database exists and is in the correct state
 require_database
 
-pytest --disable-warnings --quiet --numprocesses=auto --cov=lunes_cms --cov-report html --ds=lunes_cms.core.settings
+# Parse given command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        # Verbosity for pytest
+        -v|-vv|-vvv|-vvvv) VERBOSITY="$1";shift;;
+    esac
+done
+
+# The default pytests args we use
+PYTEST_ARGS=("--disable-warnings" "--color=yes" "--cov=lunes_cms" "--cov-report=html" "--ds=lunes_cms.core.settings")
+
+if [[ -n "${VERBOSITY}" ]]; then
+    PYTEST_ARGS+=("$VERBOSITY")
+else
+    PYTEST_ARGS+=("--quiet" "--numprocesses=auto")
+fi
+
+pytest "${PYTEST_ARGS[@]}"
 echo "✔ Tests successfully completed " | print_success
 
 echo -e "Open the following file in your browser to view the test coverage:\n" | print_info
