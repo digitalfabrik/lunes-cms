@@ -4,6 +4,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file to add an url to sponsors
+    """
+
     dependencies = [
         ("cms", "0009_sponsor"),
     ]

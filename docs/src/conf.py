@@ -6,19 +6,18 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import importlib
+import inspect
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
 import sys
-import inspect
-import importlib
-
 from datetime import date
 
 from django import VERSION as django_version
-
 
 # Append project source directory to path environment variable
 sys.path.append(os.path.abspath(".."))

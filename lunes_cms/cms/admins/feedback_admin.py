@@ -68,4 +68,8 @@ class FeedbackAdmin(admin.ModelAdmin):
         )
 
     class Media:
+        """
+        Media class for Feedback Admin
+        """
+
         css = {"all": ("css/feedback.css",)}

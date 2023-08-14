@@ -4,6 +4,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file to add auto field for ids
+    """
+
     dependencies = [
         ("cms", "0004_feedback"),
     ]

@@ -4,6 +4,7 @@
 [![PyPi](https://img.shields.io/pypi/v/lunes-cms.svg)](https://pypi.org/project/lunes-cms/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Pylint](https://img.shields.io/badge/pylint-10.00-brightgreen)](https://www.pylint.org/)
 
 # Lunes CMS
 [![Logo](.github/logo.png) Lunes - Vocabulary for your profession.](https://www.lunes.app)

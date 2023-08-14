@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 
-from ...cms.models import TrainingSet, Document, DocumentImage, Discipline
+from ...cms.models import Discipline, Document, DocumentImage, TrainingSet
 
 
 def public_upload(request):

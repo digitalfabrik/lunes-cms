@@ -89,6 +89,11 @@ black
 
 This job executes ``black --check .``, which checks whether the code matches the :ref:`black-code-style` code style.
 
+pylint
+------
+
+This job executes ``pylint_runner``, which checks whether the :ref:`pylint` throws any errors or warnings.
+
 shellcheck/check
 ----------------
 

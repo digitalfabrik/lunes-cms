@@ -1,11 +1,10 @@
 import os
-
 from pathlib import Path
-from django.core.files import File
+
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.files import File
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from pydub import AudioSegment
 
 from ..utils import document_to_string
@@ -77,7 +76,7 @@ class Document(models.Model):
         :return: File containing .mp3 audio
         :rtype: .mp3 File
         """
-        super(Document, self).save()
+        super().save()
         file_path = self.audio.path
         original_extension = file_path.split(".")[-1]
         mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
@@ -97,7 +96,7 @@ class Document(models.Model):
         """
         if self.audio:
             self.audio = self.converted
-        super(Document, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         """String representation of Document instance

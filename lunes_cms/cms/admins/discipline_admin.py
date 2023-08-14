@@ -1,15 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
-from django.db.models import Count, F, Q
+from django.db.models import Count, Q
 from django.db.models.functions import Greatest
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from mptt.admin import DraggableMPTTAdmin
 
-from ..models import Static, Discipline
+from ..models import Discipline, Static
 
 
 class DisciplineAdmin(DraggableMPTTAdmin):
@@ -82,7 +81,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :return: modified action choices
         :rtype: dict
         """
-        choices = super(DisciplineAdmin, self).get_action_choices(request)
+        choices = super().get_action_choices(request)
         choices.pop(0)
         return choices
 
@@ -223,7 +222,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :return: model form with adjusted querysets
         :rtype: ModelForm
         """
-        form = super(DisciplineAdmin, self).get_form(request, obj, **kwargs)
+        form = super().get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields["parent"].queryset = (
                 Discipline.objects.filter(
@@ -321,10 +320,13 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         """
         if obj.creator_is_admin:
             return Static.admin_group
-        elif obj.created_by:
+        if obj.created_by:
             return obj.created_by
-        else:
-            return None
+        return None
 
     class Media:
+        """
+        Media class for admin interface for disciplines
+        """
+
         js = ("js/image_preview.js",)

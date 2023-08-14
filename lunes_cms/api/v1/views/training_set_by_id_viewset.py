@@ -1,8 +1,7 @@
-from rest_framework import viewsets
-from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
+from rest_framework import viewsets
 
-from ....cms.models import TrainingSet, GroupAPIKey
+from ....cms.models import GroupAPIKey, TrainingSet
 from ...utils import get_key
 from ..serializers import TrainingSetSerializer
 

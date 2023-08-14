@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -110,3 +110,4 @@ def create_user_profile(sender, instance, created, **kwargs):
         if not created or not default_group:
             return False
         instance.groups.add(Group.objects.get(name=Static.default_group_name))
+    return True

@@ -5,13 +5,13 @@ from django.contrib import admin, messages
 from django.db.models import Count, F, Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _, ngettext
-
+from django.utils.translation import ngettext
+from django.utils.translation import ugettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 
-from ..list_filter import DisciplineListFilter
 from ..forms import TrainingSetForm
-from ..models import Static, Document, Discipline
+from ..list_filter import DisciplineListFilter
+from ..models import Discipline, Document, Static
 from ..utils import iter_to_string
 
 
@@ -94,7 +94,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :return: modified action choices
         :rtype: dict
         """
-        choices = super(TrainingSetAdmin, self).get_action_choices(request)
+        choices = super().get_action_choices(request)
         choices.pop(0)
         return choices
 
@@ -151,7 +151,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :return: model form with adjusted querysets
         :rtype: ModelForm
         """
-        form = super(TrainingSetAdmin, self).get_form(request, obj, **kwargs)
+        form = super().get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields["discipline"].queryset = (
                 Discipline.objects.filter(
@@ -345,12 +345,15 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         """
         if obj.creator_is_admin:
             return Static.admin_group
-        elif obj.created_by:
+        if obj.created_by:
             return obj.created_by
-        else:
-            return None
+        return None
 
     creator_group.short_description = _("creator group")
 
     class Media:
+        """
+        Media class of Training Set Admin
+        """
+
         js = ("js/image_preview.js",)

@@ -2,10 +2,10 @@ from rest_framework import mixins, viewsets
 
 from ....cms.models import Discipline
 from ...utils import (
-    get_filtered_discipline_queryset,
-    get_discipline_by_group_queryset,
-    get_overview_discipline_queryset,
     check_group_object_permissions,
+    get_discipline_by_group_queryset,
+    get_filtered_discipline_queryset,
+    get_overview_discipline_queryset,
 )
 from ..serializers import DisciplineSerializer
 

@@ -1,6 +1,5 @@
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
-
 from rest_framework import viewsets
 
 from ....cms.models import GroupAPIKey, TrainingSet
@@ -38,8 +37,8 @@ class GroupViewSet(viewsets.ModelViewSet):
             raise PermissionDenied()
         try:
             api_key_object = GroupAPIKey.get_from_token(key)
-        except GroupAPIKey.DoesNotExist:
-            raise PermissionDenied()
+        except GroupAPIKey.DoesNotExist as e:
+            raise PermissionDenied() from e
         if not api_key_object:
             raise PermissionDenied()
         queryset = Group.objects.filter(id=api_key_object.group_id)

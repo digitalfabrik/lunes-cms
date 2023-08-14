@@ -13,14 +13,20 @@ We use the `black <https://github.com/psf/black>`_ coding style, a flavour of `P
 We use a `pre-commit-hook <https://pre-commit.com/>`_ to apply this style before committing, so you don't have to bother about formatting.
 Just code how you feel comfortable and let the tool do the work for you (see :ref:`pre-commit-hooks`).
 
-Run black manually by starting the virtual environment and then: 
+If you want to apply the formatting without committing, use our developer tool :github-source:`tools/black.sh`::
 
-    black .
+    ./tools/black.sh
+
+
+.. _pylint:
 
 Linting
 -------
 
 In addition to black, we use pylint to check the code for semantic correctness.
+Run pylint with our developer tool :github-source:`tools/pylint.sh`::
+
+    ./tools/pylint.sh
 
 When you think a warning is a false positive, add a comment before the specific line::
 

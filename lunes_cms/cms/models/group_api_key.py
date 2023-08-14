@@ -1,5 +1,5 @@
 from html import escape
-from string import digits, ascii_uppercase
+from string import ascii_uppercase, digits
 
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
@@ -8,9 +8,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
-
+from django.utils.translation import ugettext_lazy as _
 from qr_code.qrcode.maker import make_qr_code_url_with_args
 
 
@@ -148,5 +147,9 @@ class GroupAPIKey(models.Model):
         return _('{}: Token for the group "{}"').format(self.token, self.group)
 
     class Meta:
+        """
+        Meta class for GroupAPIKey
+        """
+
         verbose_name = _("API Key")
         verbose_name_plural = _("API Keys")

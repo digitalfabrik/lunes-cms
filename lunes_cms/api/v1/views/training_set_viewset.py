@@ -1,5 +1,4 @@
 from django.db.models import Count, Q
-
 from rest_framework import viewsets
 
 from ....cms.models import Discipline, TrainingSet

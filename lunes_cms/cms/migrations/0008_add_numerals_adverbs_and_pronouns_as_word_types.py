@@ -4,6 +4,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file to add numerals, adverbs and pronouns as word types
+    """
+
     dependencies = [
         ("cms", "0007_document_created_by_link"),
     ]

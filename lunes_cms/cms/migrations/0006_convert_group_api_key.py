@@ -2,10 +2,15 @@
 
 import django.core.validators
 from django.db import migrations, models
+
 import lunes_cms.cms.models.group_api_key
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file to convert fields of group api key
+    """
+
     dependencies = [
         ("cms", "0005_auto_create_id"),
     ]

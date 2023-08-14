@@ -54,6 +54,16 @@ jobs:
           paths:
             - lunes_cms/locale/de/LC_MESSAGES/django.mo
             - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
+  pylint:
+    docker:
+      - image: "cimg/python:3.9"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run pylint
+          command: ./tools/pylint.sh
   setup-test-reporter:
     docker:
       - image: cimg/base:stable
@@ -355,6 +365,9 @@ workflows:
           filters:
             branches:
               ignore: main
+      - pylint:
+          requires:
+            - install
       - test:
           requires:
             - compile-translations

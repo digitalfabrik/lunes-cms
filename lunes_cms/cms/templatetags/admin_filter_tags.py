@@ -1,8 +1,8 @@
 """
 This is a collection of admin filter tags and filters
 """
-from collections import defaultdict
 import logging
+from collections import defaultdict
 
 from django import template
 
