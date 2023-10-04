@@ -1,13 +1,13 @@
+from . import content_type, group
 from .alternative_word import AlternativeWord
 from .discipline import Discipline
 from .document import Document
 from .document_image import DocumentImage
-from .static import Static, convert_umlaute_images, convert_umlaute_audio
-from .training_set import TrainingSet
-from .group_api_key import GroupAPIKey
 from .feedback import Feedback
+from .group_api_key import GroupAPIKey
 from .sponsor import Sponsor
-from . import group, content_type
+from .static import Static, convert_umlaute_audio, convert_umlaute_images
+from .training_set import TrainingSet
 
 __all__ = [
     "AlternativeWord",

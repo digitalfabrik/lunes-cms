@@ -1,6 +1,6 @@
-from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
 
 from ....cms.models import Feedback
 

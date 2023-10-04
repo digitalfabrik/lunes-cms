@@ -7,13 +7,15 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Discipline, TrainingSet, Document, GroupAPIKey, Feedback, Sponsor
-from .admins import DisciplineAdmin
-from .admins import TrainingSetAdmin
-from .admins import DocumentAdmin
-from .admins import GroupAPIKeyAdmin
-from .admins import FeedbackAdmin
-from .admins import SponsorAdmin
+from .admins import (
+    DisciplineAdmin,
+    DocumentAdmin,
+    FeedbackAdmin,
+    GroupAPIKeyAdmin,
+    SponsorAdmin,
+    TrainingSetAdmin,
+)
+from .models import Discipline, Document, Feedback, GroupAPIKey, Sponsor, TrainingSet
 
 
 def get_app_list(self, request):
@@ -36,6 +38,8 @@ def get_app_list(self, request):
         _("api keys").capitalize(): 4,
         _("feedback").capitalize(): 5,
     }
+
+    # pylint: disable=protected-access
     app_dict = self._build_app_dict(request)
 
     # Sort the apps alphabetically.

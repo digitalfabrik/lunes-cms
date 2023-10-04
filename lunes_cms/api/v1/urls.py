@@ -1,16 +1,11 @@
 """
 URL patterns for the first version of the Lunes API
 """
-from django.urls import include, path, re_path
-
-from rest_framework import permissions
-from rest_framework.versioning import NamespaceVersioning
-
+from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from ..utils import OptionalSlashRouter
 from . import views
-
 
 #: The namespace for this URL config (see :attr:`django.urls.ResolverMatch.app_name`)
 app_name = "v1"

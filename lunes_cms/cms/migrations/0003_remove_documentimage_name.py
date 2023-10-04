@@ -4,6 +4,10 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file to remove documentimage field
+    """
+
     dependencies = [
         ("cms", "0002_modify_group_model"),
     ]

@@ -5,15 +5,14 @@ from django.db.models import Case, Exists, IntegerField, OuterRef, Value, When
 from django.utils.translation import ugettext_lazy as _
 
 from ..list_filter import (
-    DocumentDisciplineListFilter,
-    DocumentTrainingSetListFilter,
     ApprovedImageListFilter,
     AssignedListFilter,
+    DocumentDisciplineListFilter,
+    DocumentTrainingSetListFilter,
 )
-from ..models import Static, DocumentImage
-from .document_image_admin import DocumentImageAdmin
+from ..models import DocumentImage, Static
 from .alternative_word_admin import AlternativeWordAdmin
-
+from .document_image_admin import DocumentImageAdmin
 
 SUPERUSER_ONLY_LIST_FILTERS = [ApprovedImageListFilter]
 
@@ -80,7 +79,7 @@ class DocumentAdmin(admin.ModelAdmin):
         :return: modified action choices
         :rtype: dict
         """
-        choices = super(DocumentAdmin, self).get_action_choices(request)
+        choices = super().get_action_choices(request)
         choices.pop(0)
         return choices
 
@@ -96,7 +95,7 @@ class DocumentAdmin(admin.ModelAdmin):
         :rtype: QuerySet
         """
         qs = (
-            super(DocumentAdmin, self)
+            super()
             .get_queryset(request)
             .annotate(
                 has_image=Exists(DocumentImage.objects.filter(document=OuterRef("pk"))),
@@ -141,10 +140,9 @@ class DocumentAdmin(admin.ModelAdmin):
         """
         if obj.creator_is_admin:
             return Static.admin_group
-        elif obj.created_by:
+        if obj.created_by:
             return obj.created_by
-        else:
-            return None
+        return None
 
     creator_group.short_description = _("creator group")
     creator_group.admin_order_field = "created_by"
@@ -160,8 +158,7 @@ class DocumentAdmin(admin.ModelAdmin):
         """
         if obj.audio:
             return True
-        else:
-            return False
+        return False
 
     has_audio.boolean = True
     has_audio.short_description = _("audio")
@@ -222,4 +219,8 @@ class DocumentAdmin(admin.ModelAdmin):
         return tuple(filters)
 
     class Media:
+        """
+        Media class of admin interface for documents
+        """
+
         js = ("js/image_preview.js",)

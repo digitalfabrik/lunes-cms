@@ -9,5 +9,5 @@ from .document_image_serializer import DocumentImageSerializer
 from .document_serializer import DocumentSerializer
 from .feedback_serializer import FeedbackSerializer
 from .group_serializer import GroupSerializer
-from .training_set_serializer import TrainingSetSerializer
 from .sponsor_serializer import SponsorSerializer
+from .training_set_serializer import TrainingSetSerializer

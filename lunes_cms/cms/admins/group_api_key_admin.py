@@ -2,6 +2,10 @@ from django.contrib import admin
 
 
 class GroupAPIKeyAdmin(admin.ModelAdmin):
+    """
+    Class for admin pannel of GroupAPIKey
+    """
+
     list_display = [
         "token",
         "group",

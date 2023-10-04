@@ -1,12 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from PIL import Image, ImageFilter
 
 from ..utils import get_image_tag
 from ..validators import validate_multiple_extensions
-from .static import Static, convert_umlaute_images
 from .document import Document
+from .static import Static, convert_umlaute_images
 
 
 class DocumentImage(models.Model):
@@ -112,7 +111,7 @@ class DocumentImage(models.Model):
         """Overwrite djangos save function to scale images into a
         uniform size that is defined in the Static module.
         """
-        super(DocumentImage, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.save_original_img()
         self.crop_img()
 

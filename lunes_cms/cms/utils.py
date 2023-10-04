@@ -3,10 +3,9 @@ A collection of helper methods and classes
 """
 
 import os
-import uuid
-import string
 import pathlib
-
+import string
+import uuid
 from html import escape
 
 from django.utils.crypto import get_random_string
@@ -29,19 +28,21 @@ def create_resource_path(parent_dir, filename):
     return os.path.join(parent_dir, str(uuid.uuid1()) + pathlib.Path(filename).suffix)
 
 
-def get_random_key(length: int = 10, excluded_chars: list = []) -> str:
+def get_random_key(length: int = 10, excluded_chars: list = None) -> str:
     """
     Auxiliary function that creates a random key based on latin letters and digits using
     the passed length. Optionally, it is possible to exclude characters like l and 1.
 
     :param length: key length, defaults to 10
     :type length: int, optional
-    :param excluded_chars: list of characters to be excluded (mixed dtypes possible), defaults to []
+    :param excluded_chars: list of characters to be excluded (mixed dtypes possible), defaults to None
     :type excluded_chars: list, optional
 
     :return: key
     :rtype: str
     """
+    if excluded_chars is None:
+        excluded_chars = []
     choices = string.ascii_letters + string.digits
     for char in excluded_chars:
         choices = choices.replace(str(char), "")
@@ -64,8 +65,7 @@ def document_to_string(doc):
     if len(alt_words) > 0:
         alt_words = "(" + ", ".join(alt_words) + ")"
         return "(" + doc.get_article_display() + ") " + doc.word + " " + alt_words
-    else:
-        return "(" + doc.get_article_display() + ") " + doc.word
+    return "(" + doc.get_article_display() + ") " + doc.word
 
 
 def get_child_count(disc):
@@ -130,6 +130,7 @@ def get_image_tag(image, width=330):
     return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
 
 
+# pylint: disable=redefined-builtin
 def iter_to_string(iter):
     """
     Convert an iterable of objects to a readable string.

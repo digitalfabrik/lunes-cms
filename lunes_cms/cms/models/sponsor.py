@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .static import upload_sponsor_logos
 from ..validators import validate_multiple_extensions
+from .static import upload_sponsor_logos
 
 
 class Sponsor(models.Model):
@@ -33,7 +33,7 @@ class Sponsor(models.Model):
         :return: name of the sponsor
         :rtype: str
         """
-        return self.name
+        return str(self.name)
 
     class Meta:
         """

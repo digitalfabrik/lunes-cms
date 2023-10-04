@@ -4,7 +4,6 @@ A collection of helper methods and classes
 
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
-
 from rest_framework import routers
 
 from ..cms.models import Discipline, GroupAPIKey
@@ -38,7 +37,7 @@ def get_key(request, keyword="Api-Key"):
     if not authorization:
         return None
     try:
-        _, key = authorization.split("{} ".format(keyword))
+        _, key = authorization.split(f"{keyword} ")
     except ValueError:
         key = None
     return key

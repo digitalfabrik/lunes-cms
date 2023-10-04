@@ -1,8 +1,7 @@
-from collections import defaultdict
-
 from django.contrib import admin
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
+
 from .models import Discipline, TrainingSet
 
 
@@ -205,11 +204,11 @@ class ApprovedImageListFilter(admin.SimpleListFilter):
         if self.value():
             if self.value() == NONE:
                 return queryset.filter(document_image__isnull=True).distinct()
-            elif self.value() == PENDING:
+            if self.value() == PENDING:
                 return queryset.filter(document_image__confirmed=False).distinct()
-            elif self.value() == APPROVED:
+            if self.value() == APPROVED:
                 return queryset.filter(document_image__confirmed=True).distinct()
-            elif self.value() == NO_APPROVED:
+            if self.value() == NO_APPROVED:
                 return queryset.exclude(document_image__confirmed=True).distinct()
         return queryset
 

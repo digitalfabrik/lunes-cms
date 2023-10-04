@@ -34,4 +34,4 @@ class DocumentImageAdmin(admin.StackedInline):
         """
         if request.user.is_superuser and self.superuser_fields:
             return (self.fields or tuple()) + self.superuser_fields
-        return super(DocumentImageAdmin, self).get_fields(request, obj)
+        return super().get_fields(request, obj)

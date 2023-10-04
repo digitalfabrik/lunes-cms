@@ -148,7 +148,7 @@ function require_installed {
         echo "Enabling SQLite database for local development..." | print_info
         # Check if lunes-cms-cli can be started
         if ! lunes-cms-cli > /dev/null; then
-            echo -e "The Lunes CMS is could not be started due to the above error. Please install it again with:\n"  | print_error
+            echo -e "The Lunes CMS could not be started due to the above error. Please install it again with:\n"  | print_error
             echo -e "\t$(dirname "${BASH_SOURCE[0]}")/install.sh\n" | print_bold
             exit 1
         fi

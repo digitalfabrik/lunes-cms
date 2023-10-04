@@ -4,7 +4,6 @@ Context processors pass additional variables to templates (see :ref:`context-pro
 from ..cms.models import Feedback
 
 
-# pylint: disable=unused-variable
 def feedback_processor(request):
     """
     This context processor injects the number of unread feedback entries into the template context.

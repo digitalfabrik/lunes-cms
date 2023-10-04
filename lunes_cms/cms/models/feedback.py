@@ -5,9 +5,9 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
+from django.utils.translation import gettext_lazy as _
 
 
 class Feedback(models.Model):
@@ -81,6 +81,10 @@ class Feedback(models.Model):
         return Truncator(self.comment).chars(80)
 
     class Meta:
+        """
+        Meta class of feedback model
+        """
+
         #: The verbose name of the model
         verbose_name = _("feedback")
         #: The plural verbose name of the model
