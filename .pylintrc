@@ -8,11 +8,7 @@ disable=missing-module-docstring,
         too-few-public-methods,
         too-many-ancestors,
         duplicate-code,
-        missing-function-docstring,
         consider-using-with,
-        arguments-differ,
-        empty-docstring,
-        raise-missing-from,
-        property-with-parameters
+        arguments-differ
 
 enable = useless-suppression

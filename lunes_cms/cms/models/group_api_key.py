@@ -131,13 +131,22 @@ class GroupAPIKey(models.Model):
 
     @classmethod
     def get_from_token(cls, token):
+        """
+        returns a group api which maches to the given token
+
+        :param token: token
+        :type token: str
+
+        :return: Group API Key object
+        :rtype: ~lunes_cms.cms.models.group_api_key.GroupAPIKey
+        """
         try:
             return cls.objects.get(
                 Q(token=token, revoked=False)
                 & (Q(expiry_date__isnull=True) | Q(expiry_date__gt=now()))
             )
-        except cls.DoesNotExist:
-            raise PermissionDenied()
+        except cls.DoesNotExist as e:
+            raise PermissionDenied() from e
 
     def __str__(self):
         """

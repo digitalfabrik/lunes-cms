@@ -75,7 +75,7 @@ def get_child_count(disc):
     parent of a discipline that contains one.
 
     :param disc: Discipline instance
-    :type disc: models.Discipline
+    :type disc: ~lunes_cms.cms.models.discipline.Discipline
 
     :return: sum of children
     :rtype: int
@@ -93,7 +93,7 @@ def get_training_set_count(disc):
     child elements.
 
     :param disc: Discipline instance
-    :type disc: models.Discipline
+    :type disc: ~lunes_cms.cms.models.discipline.Discipline
 
     :return: sum of training sets
     :rtype: int

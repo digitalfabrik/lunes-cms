@@ -69,7 +69,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         :param request: current user request
         :type request: django.http.request
         :param obj: training set object
-        :type obj: models.TrainingSet
+        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
         :param form: employed model form
         :type form: ModelForm
         :param change: True if change on existing model
@@ -296,6 +296,14 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         ordering="-words",
     )
     def words(self, obj):
+        """
+        returns HTML tag of the link to the list of words related to the training set
+
+        :param obj: Training set object
+        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :return: HTML tag of the link to the list of words related to the training set
+        :rtype: str
+        """
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
             f"<a href={document_list}?training+set={obj.id}>{obj.words}</a>"
@@ -306,6 +314,14 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         ordering="-words_released",
     )
     def words_released(self, obj):
+        """
+        returns HTML tag of the link to the list of released words related to the training set
+
+        :param obj: Training set object
+        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :return: HTML tag of the link to the list of released words related to the training set
+        :rtype: str
+        """
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
             f"<a href={document_list}?training+set={obj.id}&images=approved>{obj.words_released}</a>"
@@ -316,6 +332,14 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         ordering="-words_unreleased",
     )
     def words_unreleased(self, obj):
+        """
+        returns HTML tag of the Link to the list of unreleased words related to the training set
+
+        :param obj: Training set object
+        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :return: HTML tag of the Link to the list of unreleased words related to the training set
+        :rtype: str
+        """
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
             f"<a href={document_list}?training+set={obj.id}&images=no-approved>{obj.words_unreleased}</a>"
@@ -326,7 +350,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         Display related disciplines in list display
 
         :param obj: Training set object
-        :type obj: models.TrainingSet
+        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: comma separated list of related disciplines
         :rtype: str
         """
@@ -339,7 +363,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         Include creator group of discipline in list display
 
         :param obj: Training set object
-        :type obj: models.TrainingSet
+        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: Either static admin group or user group
         :rtype: str
         """

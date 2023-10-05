@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-04 13:05+0000\n"
+"POT-Creation-Date: 2023-10-07 11:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,18 +21,18 @@ msgstr ""
 msgid "API"
 msgstr "API"
 
-#: api/v1/serializers/feedback_serializer.py:21
+#: api/v1/serializers/feedback_serializer.py:22
 msgid ""
 "The content type must be either 'discipline', 'training set' or 'document'."
 msgstr ""
 "Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
 "sein."
 
-#: api/v1/serializers/feedback_serializer.py:33
+#: api/v1/serializers/feedback_serializer.py:35
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:35 cms/admins/training_set_admin.py:335 cms/forms.py:46
+#: cms/admin.py:35 cms/admins/training_set_admin.py:359 cms/forms.py:46
 #: cms/forms.py:48 cms/list_filter.py:14 cms/models/discipline.py:101
 msgid "disciplines"
 msgstr "Modulgruppen"
@@ -41,8 +41,8 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:114
-#: cms/models/document.py:115
+#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:112
+#: cms/models/document.py:113
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -66,16 +66,16 @@ msgstr "Ausgewählte Modulgruppen zurückhalten"
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:285
+#: cms/admins/discipline_admin.py:294
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:297
+#: cms/admins/discipline_admin.py:315
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:309 cms/admins/document_admin.py:147
-#: cms/admins/training_set_admin.py:352
+#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:147
+#: cms/admins/training_set_admin.py:376
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -169,11 +169,11 @@ msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 msgid "words"
 msgstr "Vokabeln"
 
-#: cms/admins/training_set_admin.py:305
+#: cms/admins/training_set_admin.py:313
 msgid "published words"
 msgstr "veröffentlichte Vokabeln"
 
-#: cms/admins/training_set_admin.py:315
+#: cms/admins/training_set_admin.py:331
 msgid "unpublished words"
 msgstr "unveröffentlichte Vokabeln"
 
@@ -402,15 +402,15 @@ msgstr "QR-Code"
 msgid "Download QR code"
 msgstr "QR-Code herunterladen"
 
-#: cms/models/group_api_key.py:147
+#: cms/models/group_api_key.py:156
 msgid "{}: Token for the group \"{}\""
 msgstr "{}: Token für die Gruppe \"{}\""
 
-#: cms/models/group_api_key.py:154
+#: cms/models/group_api_key.py:163
 msgid "API Key"
 msgstr "API-Key"
 
-#: cms/models/group_api_key.py:155
+#: cms/models/group_api_key.py:164
 msgid "API Keys"
 msgstr "API-Keys"
 
