@@ -2,7 +2,7 @@
 ![Coverage](https://img.shields.io/codeclimate/coverage/digitalfabrik/lunes-cms)
 [![Documentation Status](https://readthedocs.org/projects/lunes-cms/badge/?version=latest)](https://lunes-cms.readthedocs.io/en/latest/?badge=latest)
 [![PyPi](https://img.shields.io/pypi/v/lunes-cms.svg)](https://pypi.org/project/lunes-cms/)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Pylint](https://img.shields.io/badge/pylint-10.00-brightgreen)](https://www.pylint.org/)
 
@@ -60,3 +60,10 @@ For detailed instructions and the source code reference have a look at our docum
 The API usage documentation is available here:
 
 ### <p align="center">:iphone: https://lunes.tuerantuer.org/api/docs/</p>
+
+## License
+
+Copyright © 2020 [Tür an Tür - Digitalfabrik gGmbH](https://github.com/digitalfabrik) and [individual contributors](https://github.com/digitalfabrik/lunes-cms/graphs/contributors).
+All rights reserved.
+
+This project is licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0), see [LICENSE](./LICENSE) and [NOTICE.md](./NOTICE.md).
