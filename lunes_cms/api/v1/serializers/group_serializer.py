@@ -33,7 +33,7 @@ class GroupSerializer(serializers.ModelSerializer):
         contain at least one training set.
 
         :param disc: Discipline instance
-        :type disc: models.Discipline
+        :type disc: ~lunes_cms.cms.models.discipline.Discipline
         :return: sum of children
         :rtype: int
         """

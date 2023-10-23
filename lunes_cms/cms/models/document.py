@@ -63,15 +63,13 @@ class Document(models.Model):
     feedback = GenericRelation(Feedback)
 
     @property
-    def converted(self, content_type="audio/mpeg"):
+    def converted(self):
         """
         Function that converts the uploaded audio to .mp3 and
         returns the converted file
 
         :param self: A handle to the :class:`models.Document`
         :type self: class: `models.Document`
-        :param content_type: content type of the converted file, defaults to "audio/mpeg"
-        :type request: content_type
 
         :return: File containing .mp3 audio
         :rtype: .mp3 File
@@ -85,7 +83,7 @@ class Document(models.Model):
 
         converted_audiofile = File(file=open(new_path, "rb"), name=Path(new_path))
         converted_audiofile.name = Path(new_path).name
-        converted_audiofile.content_type = content_type
+        converted_audiofile.content_type = "audio/mpeg"
         converted_audiofile.size = os.path.getsize(new_path)
         os.remove(new_path)
         return converted_audiofile
