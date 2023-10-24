@@ -62,6 +62,7 @@ class Document(models.Model):
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     feedback = GenericRelation(Feedback)
 
+    # pylint: disable=consider-using-with
     @property
     def converted(self):
         """
