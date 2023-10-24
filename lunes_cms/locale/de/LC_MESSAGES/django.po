@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 08:59+0000\n"
+"POT-Creation-Date: 2026-01-15 17:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,7 +135,7 @@ msgstr "Bild"
 msgid "singular article"
 msgstr "Singular-Artikel"
 
-#: cms/admins/document_resource.py:24 cmsv2/models/word.py:298
+#: cms/admins/document_resource.py:24 cmsv2/models/word.py:291
 msgid "Word"
 msgstr "Vokabel"
 
@@ -812,7 +812,7 @@ msgstr "Einheit"
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:299 cmsv2/templates/admin/word_generate_audio.html:7
+#: cmsv2/models/word.py:292 cmsv2/templates/admin/word_generate_audio.html:7
 #: cmsv2/templates/admin/word_generate_example_sentence_audio.html:9
 #: cmsv2/templates/admin/word_generate_image.html:7
 msgid "Words"
