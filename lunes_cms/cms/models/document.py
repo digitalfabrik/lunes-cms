@@ -51,6 +51,24 @@ class Document(models.Model):
     creation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("creation date")
     )
+    definition = models.TextField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name=_("definition"),
+    )
+    additional_meaning_1 = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name=_("additional meaning 1"),
+    )
+    additional_meaning_2 = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name=_("additional meaning 2"),
+    )
     created_by = models.ForeignKey(
         max_length=255,
         null=True,
