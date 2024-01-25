@@ -25,6 +25,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         "image_tag",
         "parent",
         "created_by",
+        "sponsor",
     ]
     readonly_fields = ["created_by", "image_tag"]
     search_fields = ["title"]

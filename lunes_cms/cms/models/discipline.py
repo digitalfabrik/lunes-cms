@@ -8,6 +8,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from ..utils import get_child_count, get_image_tag
 from .feedback import Feedback
 from .static import convert_umlaute_images
+from .sponsor import Sponsor
 
 
 class Discipline(MPTTModel):
@@ -43,6 +44,14 @@ class Discipline(MPTTModel):
         verbose_name=_("parent"),
     )
     feedback = GenericRelation(Feedback)
+    sponsor = models.ForeignKey(
+        Sponsor,
+        on_delete=CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("sponsor"),
+        related_name="discipline",
+    )
 
     def is_valid(self):
         """

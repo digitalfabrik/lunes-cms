@@ -34,6 +34,7 @@ class DisciplineSerializer(FallbackIconSerializer):
             "total_training_sets",
             "total_discipline_children",
             "nested_training_sets",
+            "sponsor",
         )
 
     def get_total_discipline_children(self, obj):

@@ -6,5 +6,6 @@
   "created_by": null,
   "total_training_sets": 11,
   "total_discipline_children": 0,
-  "nested_training_sets": [97, 78, 79, 92, 80, 87, 23, 250, 188, 94, 95]
+  "nested_training_sets": [97, 78, 79, 92, 80, 87, 23, 250, 188, 94, 95],
+  "sponsor": 1
 }

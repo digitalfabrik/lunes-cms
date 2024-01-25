@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-19 14:49+0000\n"
+"POT-Creation-Date: 2024-02-20 16:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "{} mit der ID {} existiert nicht."
 
 #: cms/admin.py:35 cms/admins/document_admin.py:151
 #: cms/admins/training_set_admin.py:359 cms/forms.py:46 cms/forms.py:48
-#: cms/list_filter.py:14 cms/models/discipline.py:101
+#: cms/list_filter.py:14 cms/models/discipline.py:110
 msgid "disciplines"
 msgstr "Modulgruppen"
 
@@ -55,27 +55,27 @@ msgstr "API Keys"
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:246
+#: cms/admins/discipline_admin.py:247
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:259
+#: cms/admins/discipline_admin.py:260
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:273
+#: cms/admins/discipline_admin.py:274
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:294
+#: cms/admins/discipline_admin.py:295
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:315
+#: cms/admins/discipline_admin.py:316
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:168
+#: cms/admins/discipline_admin.py:337 cms/admins/document_admin.py:168
 #: cms/admins/training_set_admin.py:376
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -251,37 +251,41 @@ msgstr "Alternatives Wort"
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: cms/models/discipline.py:20 cms/models/training_set.py:24
+#: cms/models/discipline.py:21 cms/models/training_set.py:24
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:21 cms/models/discipline.py:100
+#: cms/models/discipline.py:22 cms/models/discipline.py:109
 #: cms/models/training_set.py:36
 msgid "discipline"
 msgstr "Modulgruppe"
 
-#: cms/models/discipline.py:23 cms/models/training_set.py:27
+#: cms/models/discipline.py:24 cms/models/training_set.py:27
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:26 cms/models/group.py:10
+#: cms/models/discipline.py:27 cms/models/group.py:10
 #: cms/models/training_set.py:30
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:58
+#: cms/models/discipline.py:34 cms/models/document.py:58
 #: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:62
+#: cms/models/discipline.py:37 cms/models/document.py:62
 #: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:43 cms/models/training_set.py:48
+#: cms/models/discipline.py:44 cms/models/training_set.py:48
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
+
+#: cms/models/discipline.py:52 cms/models/sponsor.py:43
+msgid "sponsor"
+msgstr "Sponsor"
 
 #: cms/models/document.py:31
 msgid "word type"
@@ -422,10 +426,6 @@ msgstr "Name"
 #: cms/models/sponsor.py:20
 msgid "URL"
 msgstr "URL"
-
-#: cms/models/sponsor.py:43
-msgid "sponsor"
-msgstr "Sponsor"
 
 #: cms/models/sponsor.py:44
 msgid "sponsors"
