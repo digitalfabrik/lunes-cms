@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-19 14:49+0000\n"
+"POT-Creation-Date: 2024-03-06 18:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
 #: cms/admin.py:35 cms/admins/document_admin.py:151
-#: cms/admins/training_set_admin.py:359 cms/forms.py:46 cms/forms.py:48
+#: cms/admins/training_set_admin.py:360 cms/forms.py:46 cms/forms.py:48
 #: cms/list_filter.py:14 cms/models/discipline.py:101
 msgid "disciplines"
 msgstr "Modulgruppen"
@@ -55,28 +55,28 @@ msgstr "API Keys"
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:246
+#: cms/admins/discipline_admin.py:247
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:259
+#: cms/admins/discipline_admin.py:260
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:273
+#: cms/admins/discipline_admin.py:274
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:294
+#: cms/admins/discipline_admin.py:295
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:315
+#: cms/admins/discipline_admin.py:316
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:168
-#: cms/admins/training_set_admin.py:376
+#: cms/admins/discipline_admin.py:337 cms/admins/document_admin.py:168
+#: cms/admins/training_set_admin.py:377
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -120,11 +120,11 @@ msgstr ""
 msgid "logo"
 msgstr "Logo"
 
-#: cms/admins/training_set_admin.py:185
+#: cms/admins/training_set_admin.py:186
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: cms/admins/training_set_admin.py:220
+#: cms/admins/training_set_admin.py:221
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -138,43 +138,43 @@ msgstr[1] ""
 "Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
 "Vokabeln mit bestätigten Bildern enthalten."
 
-#: cms/admins/training_set_admin.py:233
+#: cms/admins/training_set_admin.py:234
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
-#: cms/admins/training_set_admin.py:247
+#: cms/admins/training_set_admin.py:248
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
 msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
 
-#: cms/admins/training_set_admin.py:253
+#: cms/admins/training_set_admin.py:254
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
-#: cms/admins/training_set_admin.py:277
+#: cms/admins/training_set_admin.py:278
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
-#: cms/admins/training_set_admin.py:288
+#: cms/admins/training_set_admin.py:289
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
 msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 
-#: cms/admins/training_set_admin.py:295
+#: cms/admins/training_set_admin.py:296
 msgid "words"
 msgstr "Vokabeln"
 
-#: cms/admins/training_set_admin.py:313
+#: cms/admins/training_set_admin.py:314
 msgid "published words"
 msgstr "veröffentlichte Vokabeln"
 
-#: cms/admins/training_set_admin.py:331
+#: cms/admins/training_set_admin.py:332
 msgid "unpublished words"
 msgstr "unveröffentlichte Vokabeln"
 
