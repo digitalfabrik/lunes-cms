@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-10 17:19+0000\n"
+"POT-Creation-Date: 2024-02-19 14:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -527,7 +527,7 @@ msgstr "Zusammenfassung"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:153
+#: cms/utils.py:163
 msgid "and"
 msgstr "und"
 

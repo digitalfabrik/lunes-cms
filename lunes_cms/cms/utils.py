@@ -61,11 +61,21 @@ def document_to_string(doc):
     :rtype: str
     """
     alt_words = [str(elem) for elem in doc.alternatives.all()]
+    has_foto = "\U0001F4F7" if doc.document_image.all() else "\U000026A0"
 
     if len(alt_words) > 0:
         alt_words = "(" + ", ".join(alt_words) + ")"
-        return "(" + doc.get_article_display() + ") " + doc.word + " " + alt_words
-    return "(" + doc.get_article_display() + ") " + doc.word
+        return (
+            has_foto
+            + " "
+            + "("
+            + doc.get_article_display()
+            + ") "
+            + doc.word
+            + " "
+            + alt_words
+        )
+    return has_foto + " " + "(" + doc.get_article_display() + ") " + doc.word
 
 
 def get_child_count(disc):
