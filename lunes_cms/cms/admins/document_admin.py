@@ -33,6 +33,7 @@ class DocumentAdmin(admin.ModelAdmin):
         "word_type",
         "article_display",
         "related_training_set",
+        "related_disciplines",
         "has_audio",
         "has_image",
         "creator_group",
@@ -128,6 +129,26 @@ class DocumentAdmin(admin.ModelAdmin):
         return ", ".join([child.title for child in obj.training_sets.all()])
 
     related_training_set.short_description = _("training set")
+
+    def related_disciplines(self, obj):
+        """
+        Display related desciplines in list display
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: comma seperated list of related training sets
+        :rtype: str
+        """
+        disciplines = []
+
+        for training_set in obj.training_sets.all():
+            disciplines += [
+                discipline.title for discipline in training_set.discipline.all()
+            ]
+
+        return ", ".join(disciplines)
+
+    related_disciplines.short_description = _("disciplines")
 
     def creator_group(self, obj):
         """

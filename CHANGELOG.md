@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#267](https://github.com/digitalfabrik/lunes-cms/issues/267) ] Add professions in the vocabulary list
+
 
 2023.7.0
 --------
