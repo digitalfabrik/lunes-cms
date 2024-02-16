@@ -39,7 +39,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
     ]
     list_display_links = ["indented_title"]
     list_filter = ["released"]
-    actions = ["delete_selected", "make_released", "make_unreleased"]
+    actions = ["delete_selected", "make_released", "make_unreleased", "make_export_to_CSV"]
     list_per_page = 25
 
     def get_list_display(self, request):
@@ -268,6 +268,37 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :type queryset: QuerySet
         """
         queryset.update(released=False)
+
+    @admin.action(description=_("export to CSV"))
+    def make_export_to_CSV(self, request, queryset):
+        """
+        Export the documents of the selected disciplines. 
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        data = {}
+        temp = {}
+
+        for profession in queryset:
+            for training_set in profession.training_sets.all():
+                for document in training_set.documents.all():
+                    document_fields = {}
+                    document_fields["word_type"] = document.word_type
+                    document_fields["article"] = document.article
+                    document_fields["has_audio"] = bool(document.audio)
+                    document_fields["example_sentence"] = document.example_sentence
+                    document_fields["creation_date"] = document.creation_date
+                    document_fields["training_set_name"] = training_set.title
+                    document_fields["training_set_is_published"] = training_set.released
+
+                temp[document.word] = document_fields
+            data[profession.title] = temp
+
+        print(data)
+
 
     @admin.display(
         description=_("released modules"),

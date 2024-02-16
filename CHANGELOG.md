@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#468](https://github.com/digitalfabrik/lunes-cms/issues/468) ] Excel list out of existing vocabulary in cms
+
 
 2023.7.0
 --------
