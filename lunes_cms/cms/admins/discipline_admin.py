@@ -1,14 +1,21 @@
 from __future__ import absolute_import, unicode_literals
 
+import io
+import re
+from zipfile import ZipFile
+
 from django.contrib import admin
 from django.db.models import Count, Q
 from django.db.models.functions import Greatest
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
+from tablib import Dataset
 
-from ..models import Discipline, Static
+from ..models import Discipline, Document, Static
+from .document_resource import DocumentResource
 
 
 class DisciplineAdmin(DraggableMPTTAdmin):
@@ -39,7 +46,12 @@ class DisciplineAdmin(DraggableMPTTAdmin):
     ]
     list_display_links = ["indented_title"]
     list_filter = ["released"]
-    actions = ["delete_selected", "make_released", "make_unreleased"]
+    actions = [
+        "delete_selected",
+        "make_released",
+        "make_unreleased",
+        "make_export_to_CSV",
+    ]
     list_per_page = 25
 
     def get_list_display(self, request):
@@ -269,6 +281,45 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         """
         queryset.update(released=False)
 
+    @admin.action(description=_("Export all vocabulary for this discipline to CSV"))
+    def make_export_to_CSV(self, request, queryset):
+        """
+        Export the documents of the selected disciplines.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        csvs = {}
+
+        for profession in queryset:
+            if profession.children.exists():
+                continue
+            resource = DocumentResource()
+
+            dataset = Dataset(
+                *(
+                    resource.export_resource(obj)
+                    for obj in Document.objects.filter(
+                        training_sets__discipline=profession
+                    )
+                ),
+                headers=resource.export().headers,
+            )
+
+            csvs[profession] = dataset.csv
+
+        zip_buffer = io.BytesIO()
+
+        with ZipFile(zip_buffer, "w") as zipfile:
+            for profession, csv in csvs.items():
+                zipfile.writestr(f"{make_safe_filename(profession.title)}.csv", csv)
+
+        response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+        response["Content-Disposition"] = 'attachment; filename="Lunes_vocabulary.zip"'
+        return response
+
     @admin.display(
         description=_("released modules"),
         ordering="modules_released_order",
@@ -357,3 +408,10 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         """
 
         js = ("js/image_preview.js",)
+
+
+def make_safe_filename(unsafe):
+    """
+    Method to create a safe filename with regex.
+    """
+    return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)

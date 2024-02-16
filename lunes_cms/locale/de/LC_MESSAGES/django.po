@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 08:52+0000\n"
+"POT-Creation-Date: 2024-06-02 09:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,27 +55,31 @@ msgstr "API Keys"
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:246
+#: cms/admins/discipline_admin.py:258
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:259
+#: cms/admins/discipline_admin.py:271
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:273
+#: cms/admins/discipline_admin.py:284
+msgid "Export all vocabulary for this discipline to CSV"
+msgstr "Alle Vokabeln dieser Modulgruppe als CSV exportieren"
+
+#: cms/admins/discipline_admin.py:324
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:294
+#: cms/admins/discipline_admin.py:345
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:315
+#: cms/admins/discipline_admin.py:366
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:177
+#: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:177
 #: cms/admins/training_set_admin.py:376
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -97,6 +101,46 @@ msgstr "Bild"
 #: cms/models/document.py:43
 msgid "singular article"
 msgstr "Singular-Artikel"
+
+#: cms/admins/document_resource.py:24
+msgid "Word"
+msgstr "Vokabel"
+
+#: cms/admins/document_resource.py:26
+msgid "Word type"
+msgstr "Wortart"
+
+#: cms/admins/document_resource.py:29
+msgid "Singular Article"
+msgstr "Singular Artikel"
+
+#: cms/admins/document_resource.py:43
+msgid "Plural Article"
+msgstr "Plural Artikel"
+
+#: cms/admins/document_resource.py:56
+msgid "Has audio?"
+msgstr "Audio"
+
+#: cms/admins/document_resource.py:63
+msgid "Yes"
+msgstr "Ja"
+
+#: cms/admins/document_resource.py:64
+msgid "No"
+msgstr "Nein"
+
+#: cms/admins/document_resource.py:67
+msgid "Example sentence"
+msgstr "Beispielsatz"
+
+#: cms/admins/document_resource.py:71
+msgid "Creation date"
+msgstr "Erstellt am"
+
+#: cms/admins/document_resource.py:81
+msgid "Training Sets"
+msgstr "Module"
 
 #: cms/admins/feedback_admin.py:34
 msgid "Mark as read"
@@ -571,19 +615,19 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:203
+#: core/settings.py:204
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:204
+#: core/settings.py:205
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:444 core/settings.py:445 core/settings.py:447
+#: core/settings.py:445 core/settings.py:446 core/settings.py:448
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:446
+#: core/settings.py:447
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
@@ -591,8 +635,11 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 msgid "help"
 msgstr "Hilfe"
 
-#~ msgid "article"
-#~ msgstr "Artikel"
+#~ msgid "Article"
+#~ msgstr "Arikel"
+
+#~ msgid "Export to CSV"
+#~ msgstr "Als CSV exportieren"
 
 #~ msgid "assigned & unassigned"
 #~ msgstr "Zugewiesen & unzugewiesen"
