@@ -73,3 +73,4 @@ class FeedbackAdmin(admin.ModelAdmin):
         """
 
         css = {"all": ("css/feedback.css",)}
+        js = ("js/color_unread_feedback.js",)
