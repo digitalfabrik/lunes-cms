@@ -84,7 +84,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
-    def get_action_choices(self, request):
+    def get_action_choices(self, request, default_choices=""):
         """
         Overwrite django built-in function to modify action choices. The first
         option is dropped since it is a place holder.
@@ -137,6 +137,7 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
             ),
         )
 
+    # pylint: disable=arguments-differ
     def get_form(self, request, obj=None, **kwargs):
         """
         Overwrite django built-in function to define custom choices
