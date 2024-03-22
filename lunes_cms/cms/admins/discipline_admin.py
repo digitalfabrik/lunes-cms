@@ -8,8 +8,14 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 
-from ..models import Discipline, Static
-
+from ..models import Discipline, Static, Document
+from .document_resource import DocumentResource
+from tablib import Dataset
+from django.http import HttpResponse
+from zipfile import ZipFile, Path
+from tempfile import mkstemp
+import os
+import shutil
 
 class DisciplineAdmin(DraggableMPTTAdmin):
     """
@@ -283,22 +289,50 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         temp = {}
 
         for profession in queryset:
-            for training_set in profession.training_sets.all():
-                for document in training_set.documents.all():
-                    document_fields = {}
-                    document_fields["word_type"] = document.word_type
-                    document_fields["article"] = document.article
-                    document_fields["has_audio"] = bool(document.audio)
-                    document_fields["example_sentence"] = document.example_sentence
-                    document_fields["creation_date"] = document.creation_date
-                    document_fields["training_set_name"] = training_set.title
-                    document_fields["training_set_is_published"] = training_set.released
+            resource = DocumentResource()
+            #testresource = resource.export_resource (Document.objects.filter(training_sets__discipline = profession)[0])
+            testresource = DocumentResource (id= Document.objects.filter(training_sets__discipline = profession)[0].pk)
+            print (testresource.export_resource(Document.objects.filter(training_sets__discipline = profession)[0]))
+
+            #print (testresource.export ().dict)
+            print (testresource.export ().headers)
+
+            """             
+
+            dataset = Dataset(
+                (resource.export_resource (obj) for obj in Document.objects.filter(training_sets__discipline = profession) ),
+                headers= resource.export (). headers
+            )
+
+
+            
+            for document in Document.objects.filter(training_sets__discipline = profession):
+
+                document_fields = {}
+                document_fields["word_type"] = document.word_type
+                document_fields["article"] = document.article
+                document_fields["has_audio"] = bool(document.audio)
+                document_fields["example_sentence"] = document.example_sentence
+                document_fields["creation_date"] = document.creation_date
+                document_fields["training_set_name"] = " | ".join([t.title for t in document.training_sets .filter (discipline=profession) ])
 
                 temp[document.word] = document_fields
-            data[profession.title] = temp
+            print(f"csv file for {profession.title}")
+            print(temp) """
 
-        print(data)
+        zipfile_path= (mkstemp(prefix="lunes_professions_", suffix=".zip")[1])
 
+        with ZipFile (zipfile_path, "w") as zipfile: 
+            zipfile.writestr ("something.csv", "tests")
+            zipfile.writestr ("somethingtwo.csv", "teststwo")
+        
+        shutil.move (zipfile_path, f"{zipfile_path}_done")
+        response = HttpResponse (Path(f"{zipfile_path}_done").read_bytes(),content_type="application/zip")
+        response["Content-Disposition"] = (
+            f'attachment; filename="Lunes_vocabulary.zip"'
+        )
+        os.unlink(zipfile_path)
+        return response
 
     @admin.display(
         description=_("released modules"),
