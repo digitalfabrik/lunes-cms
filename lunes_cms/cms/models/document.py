@@ -36,6 +36,12 @@ class Document(models.Model):
         default="",
         verbose_name=_("article"),
     )
+    plural = models.CharField(
+        max_length=255,
+        verbose_name=_("plural"),
+        blank=True,
+        default="",
+    )
     audio = models.FileField(
         upload_to=convert_umlaute_audio,
         validators=[
