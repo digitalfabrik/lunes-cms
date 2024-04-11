@@ -69,13 +69,13 @@ def document_to_string(doc):
             has_foto
             + " "
             + "("
-            + doc.get_article_display()
+            + doc.get_singular_article_display()
             + ") "
             + doc.word
             + " "
             + alt_words
         )
-    return has_foto + " " + "(" + doc.get_article_display() + ") " + doc.word
+    return has_foto + " " + "(" + doc.get_singular_article_display() + ") " + doc.word
 
 
 def get_child_count(disc):

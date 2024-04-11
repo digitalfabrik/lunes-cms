@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 08:22+0000\n"
+"POT-Creation-Date: 2024-04-11 12:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,8 +42,8 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:136
-#: cms/models/document.py:137
+#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:142
+#: cms/models/document.py:143
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -85,7 +85,7 @@ msgstr "Besitzergruppe"
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:190 cms/models/document.py:54
+#: cms/admins/document_admin.py:190 cms/models/document.py:60
 msgid "audio"
 msgstr "Audio"
 
@@ -93,10 +93,10 @@ msgstr "Audio"
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:225 cms/models/alternative_word.py:17
+#: cms/admins/document_admin.py:225 cms/models/alternative_word.py:18
 #: cms/models/document.py:37
-msgid "article"
-msgstr "Artikel"
+msgid "singular article"
+msgstr "Singular-Artikel"
 
 #: cms/admins/feedback_admin.py:32
 msgid "Mark as read"
@@ -243,11 +243,19 @@ msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py:13 cms/models/alternative_word.py:37
+#: cms/models/alternative_word.py:13 cms/models/alternative_word.py:50
 msgid "alternative word"
 msgstr "Alternatives Wort"
 
-#: cms/models/alternative_word.py:38
+#: cms/models/alternative_word.py:22 cms/models/document.py:41
+msgid "plural"
+msgstr "Plural"
+
+#: cms/models/alternative_word.py:28 cms/models/document.py:47
+msgid "plural article"
+msgstr "Plural-Artikel"
+
+#: cms/models/alternative_word.py:51
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
@@ -269,12 +277,12 @@ msgstr "Beschreibung"
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:82
+#: cms/models/discipline.py:33 cms/models/document.py:88
 #: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:86
+#: cms/models/discipline.py:36 cms/models/document.py:92
 #: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
@@ -291,27 +299,23 @@ msgstr "Wortart"
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:41
-msgid "plural"
-msgstr "Plural"
-
-#: cms/models/document.py:56
+#: cms/models/document.py:62
 msgid "example sentence"
 msgstr "Beispielsatz"
 
-#: cms/models/document.py:58 cms/models/group_api_key.py:65
+#: cms/models/document.py:64 cms/models/group_api_key.py:65
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:64
+#: cms/models/document.py:70
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:70
+#: cms/models/document.py:76
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:76
+#: cms/models/document.py:82
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -579,6 +583,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 msgid "help"
 msgstr "Hilfe"
 
+#~ msgid "article"
+#~ msgstr "Artikel"
+
 #~ msgid "assigned & unassigned"
 #~ msgstr "Zugewiesen & unzugewiesen"
 
@@ -608,9 +615,6 @@ msgstr "Hilfe"
 
 #~ msgid "Only required for substantives."
 #~ msgstr "Wird nur für Substantive benötigt"
-
-#~ msgid "plural article"
-#~ msgstr "Plural-Artikel"
 
 #~ msgid "icon_file"
 #~ msgstr "Icon"

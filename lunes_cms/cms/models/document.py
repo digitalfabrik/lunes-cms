@@ -31,16 +31,22 @@ class Document(models.Model):
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
-    article = models.IntegerField(
-        choices=Static.article_choices,
+    singular_article = models.IntegerField(
+        choices=Static.singular_article_choices,
         default="",
-        verbose_name=_("article"),
+        verbose_name=_("singular article"),
     )
     plural = models.CharField(
         max_length=255,
         verbose_name=_("plural"),
         blank=True,
         default="",
+    )
+    plural_article = models.IntegerField(
+        choices=Static.plural_article_choices,
+        verbose_name=_("plural article"),
+        blank=True,
+        null=True,
     )
     audio = models.FileField(
         upload_to=convert_umlaute_audio,

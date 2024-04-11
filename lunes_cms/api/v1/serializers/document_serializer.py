@@ -23,7 +23,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "word",
-            "article",
+            "singular_article",
             "audio",
             "word_type",
             "alternatives",

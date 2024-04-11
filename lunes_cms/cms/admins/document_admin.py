@@ -25,8 +25,8 @@ class DocumentAdmin(admin.ModelAdmin):
 
     fields = (
         "word_type",
-        ("article", "word"),
-        "plural",
+        ("singular_article", "word"),
+        ("plural_article", "plural"),
         "audio",
     )
     readonly_fields = ("created_by",)
@@ -36,7 +36,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = (
         "word",
         "word_type",
-        "article_display",
+        "singular_article_display",
         "related_training_set",
         "related_disciplines",
         "has_audio",
@@ -210,7 +210,7 @@ class DocumentAdmin(admin.ModelAdmin):
     has_image.short_description = _("image")
     has_image.admin_order_field = "image_sort"
 
-    def article_display(self, obj):
+    def singular_article_display(self, obj):
         """
         Include article of document in list display
 
@@ -220,9 +220,9 @@ class DocumentAdmin(admin.ModelAdmin):
         :return: Either static admin group or user group
         :rtype: str
         """
-        return obj.get_article_display()
+        return obj.get_singular_article_display()
 
-    article_display.short_description = _("article")
+    singular_article_display.short_description = _("singular article")
 
     def get_list_filter(self, request):
         """

@@ -11,10 +11,23 @@ class AlternativeWord(models.Model):
     """
 
     alt_word = models.CharField(max_length=255, verbose_name=_("alternative word"))
-    article = models.IntegerField(
-        choices=Static.article_choices,
+    singular_article = models.IntegerField(
+        choices=Static.singular_article_choices,
+        blank=True,
+        null=True,
+        verbose_name=_("singular article"),
+    )
+    plural = models.CharField(
+        max_length=255,
+        verbose_name=_("plural"),
+        blank=True,
         default="",
-        verbose_name=_("article"),
+    )
+    plural_article = models.IntegerField(
+        choices=Static.plural_article_choices,
+        verbose_name=_("plural article"),
+        blank=True,
+        null=True,
     )
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="alternatives"
