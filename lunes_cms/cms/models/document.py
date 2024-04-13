@@ -105,10 +105,11 @@ class Document(models.Model):
         new_path = file_path[:-4] + "-conv.mp3"
         mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
 
-        converted_audiofile = File(file=open(new_path, "rb"), name=Path(new_path))
-        converted_audiofile.name = Path(new_path).name
-        converted_audiofile.content_type = "audio/mpeg"
-        converted_audiofile.size = os.path.getsize(new_path)
+        with open(new_path, "rb") as file:
+            converted_audiofile = File(file=file, name=Path(new_path))
+            converted_audiofile.name = Path(new_path).name
+            converted_audiofile.content_type = "audio/mpeg"
+            converted_audiofile.size = os.path.getsize(new_path)
         os.remove(new_path)
         return converted_audiofile
 
