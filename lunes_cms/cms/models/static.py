@@ -11,12 +11,16 @@ class Static:
     """
 
     # Possible articles
-    article_choices = [
+    singular_article_choices = [
         (0, "keiner"),
         (1, "der"),
         (2, "die"),
         (3, "das"),
         (4, "die (Plural)"),
+    ]
+    plural_article_choices = [
+        (0, "keiner"),
+        (1, "die (Plural)"),
     ]
 
     # Possible word types

@@ -27,7 +27,7 @@ def public_upload(request):
                 image.save()
                 upload_success = True
     missing_images = Document.objects.values_list(
-        "id", "word", "article", "training_sets"
+        "id", "word", "singular_article", "training_sets"
     ).filter(document_image__isnull=True)
     training_sets = (
         TrainingSet.objects.values_list("id", "title")

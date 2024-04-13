@@ -15,4 +15,4 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
         """
 
         model = AlternativeWord
-        fields = ("alt_word", "article")
+        fields = ("alt_word", "singular_article")
