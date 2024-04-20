@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-06 10:40+0000\n"
+"POT-Creation-Date: 2024-05-22 08:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,20 +98,20 @@ msgstr "Bild"
 msgid "singular article"
 msgstr "Singular-Artikel"
 
-#: cms/admins/feedback_admin.py:32
+#: cms/admins/feedback_admin.py:34
 msgid "Mark as read"
 msgstr "Als gelesen markieren"
 
-#: cms/admins/feedback_admin.py:47
+#: cms/admins/feedback_admin.py:49
 msgid "The selected feedback entries were successfully marked as read."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als gelesen markiert."
 
-#: cms/admins/feedback_admin.py:51
+#: cms/admins/feedback_admin.py:53
 msgid "Mark as unread"
 msgstr "Als ungelesen markieren"
 
-#: cms/admins/feedback_admin.py:66
+#: cms/admins/feedback_admin.py:68
 msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."

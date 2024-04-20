@@ -58,7 +58,8 @@
         ["add_trainingset", "cms", "trainingset"],
         ["change_trainingset", "cms", "trainingset"],
         ["delete_trainingset", "cms", "trainingset"],
-        ["view_trainingset", "cms", "trainingset"]
+        ["view_trainingset", "cms", "trainingset"],
+        ["view_feedback", "cms", "feedback"]
       ]
     }
   },
@@ -24825,5 +24826,25 @@
     "model": "cms.sponsor",
     "pk": 2,
     "fields": { "name": "Bundesagentur für Arbeit", "url": "https://www.arbeitsagentur.de/", "logo": "" }
+  },
+  {
+    "model": "cms.feedback",
+    "pk": 1,
+    "fields": {
+      "content_type": 1,
+      "object_id": 15,
+      "comment": "Good",
+      "created_date": "2022-06-28T23:21:07.074Z"
+    }
+  },
+  {
+    "model": "cms.feedback",
+    "pk": 2,
+    "fields": {
+      "content_type": 2,
+      "object_id": 36,
+      "comment": "Nice",
+      "created_date": "2022-06-28T23:21:07.074Z"
+    }
   }
 ]
