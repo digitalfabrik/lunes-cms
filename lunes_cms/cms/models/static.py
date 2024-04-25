@@ -33,6 +33,15 @@ class Static:
         ("Adverb", "Adverb"),
     ]
 
+    # Possible grammatical genders
+    grammatical_genders = [
+        (0, "kein"),
+        (1, "Maskulinum"),
+        (2, "Femininum"),
+        (3, "Neutrum"),
+        (4, "Plural"),
+    ]
+
     # number of pixels used for box blur
     blurr_radius = 30
     # maximum (width, height) of images

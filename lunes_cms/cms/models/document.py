@@ -31,6 +31,12 @@ class Document(models.Model):
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
+    grammatical_gender = models.IntegerField(
+        choices=Static.grammatical_genders,
+        verbose_name=_("Grammatical gender"),
+        blank=True,
+        null=True,
+    )
     singular_article = models.IntegerField(
         choices=Static.singular_article_choices,
         default="",
