@@ -5,6 +5,7 @@ UNRELEASED
 * [ [#497](https://github.com/digitalfabrik/lunes-cms/issues/497) ] Mark words that have an image with icon in training sets view
 * [ [#477](https://github.com/digitalfabrik/lunes-cms/issues/477) ] Add definition field
 * [ [#516](https://github.com/digitalfabrik/lunes-cms/issues/516) ] Add fields for plural of alternative words and plural article
+* [ [#352](https://github.com/digitalfabrik/lunes-cms/issues/352) ] Highlight unread feedback entries in list
 
 
 2023.7.0
