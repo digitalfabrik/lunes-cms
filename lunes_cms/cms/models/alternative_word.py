@@ -11,6 +11,12 @@ class AlternativeWord(models.Model):
     """
 
     alt_word = models.CharField(max_length=255, verbose_name=_("alternative word"))
+    grammatical_gender = models.IntegerField(
+        choices=Static.grammatical_genders,
+        verbose_name=_("grammatical gender"),
+        blank=True,
+        null=True,
+    )
     singular_article = models.IntegerField(
         choices=Static.singular_article_choices,
         blank=True,
