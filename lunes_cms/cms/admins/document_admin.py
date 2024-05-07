@@ -29,6 +29,9 @@ class DocumentAdmin(admin.ModelAdmin):
         ("singular_article", "word"),
         ("plural_article", "plural"),
         "audio",
+        "definition",
+        "additional_meaning_1",
+        "additional_meaning_2",
     )
     readonly_fields = ("created_by",)
     search_fields = ["word", "alternatives__alt_word"]
