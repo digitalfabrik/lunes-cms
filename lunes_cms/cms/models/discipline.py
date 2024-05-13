@@ -1,9 +1,8 @@
-from django.db import models
-from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericRelation
+from django.db import models
+from django.db.models.deletion import CASCADE
 from django.utils.translation import ugettext_lazy as _
-
 from mptt.models import MPTTModel, TreeForeignKey
 
 from ..utils import get_child_count, get_image_tag
@@ -91,7 +90,7 @@ class Discipline(MPTTModel):
         :return: title of discipline instance
         :rtype: str
         """
-        return self.title
+        return str(self.title)
 
     class Meta:
         """

@@ -8,34 +8,48 @@ table {
   min-width: 1000px;
 }
 
+
+.table-striped tbody tr:nth-of-type(odd){
+  background-color: #ffffff;
+}
+
+thead th .text{
+  color: #001f3f;
+}
+
+thead tr {
+  background-color: #e2e1e1;
+  font-weight: bold;
+}
+
 /* Checkbox column */
 thead th:nth-child(1) {
-  width: 40px;
+  width: 3%;
 }
 
 /* Comment column */
 thead th:nth-child(2) {
-  width: auto;
+  width: 25%;
 }
 
 /* Related object column */
 thead th:nth-child(3) {
-  width: 250px;
+  width: 19%;
 }
 
 /* Related object type column */
 thead th:nth-child(4) {
-  width: 140px;
+  width: 15%;
 }
 
 /* Submission date column */
 thead th:nth-child(5) {
-  width: 185px;
+  width: 19%;
 }
 
 /* Read by column */
 thead th:nth-child(6) {
-  width: 230px;
+  width: 19%;
 }
 
 /* Truncate long comments and content object links */

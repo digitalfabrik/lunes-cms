@@ -5,15 +5,14 @@ from django.db.models import Case, Exists, IntegerField, OuterRef, Value, When
 from django.utils.translation import ugettext_lazy as _
 
 from ..list_filter import (
-    DocumentDisciplineListFilter,
-    DocumentTrainingSetListFilter,
     ApprovedImageListFilter,
     AssignedListFilter,
+    DocumentDisciplineListFilter,
+    DocumentTrainingSetListFilter,
 )
-from ..models import Static, DocumentImage
-from .document_image_admin import DocumentImageAdmin
+from ..models import DocumentImage, Static
 from .alternative_word_admin import AlternativeWordAdmin
-
+from .document_image_admin import DocumentImageAdmin
 
 SUPERUSER_ONLY_LIST_FILTERS = [ApprovedImageListFilter]
 
@@ -24,7 +23,16 @@ class DocumentAdmin(admin.ModelAdmin):
     Inheriting from `admin.ModelAdmin`.
     """
 
-    exclude = ("article_plural", "creator_is_admin")
+    fields = (
+        "word_type",
+        "grammatical_gender",
+        ("singular_article", "word"),
+        ("plural_article", "plural"),
+        "audio",
+        "definition",
+        "additional_meaning_1",
+        "additional_meaning_2",
+    )
     readonly_fields = ("created_by",)
     search_fields = ["word", "alternatives__alt_word"]
     inlines = [DocumentImageAdmin, AlternativeWordAdmin]
@@ -32,8 +40,9 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = (
         "word",
         "word_type",
-        "article_display",
+        "singular_article_display",
         "related_training_set",
+        "related_disciplines",
         "has_audio",
         "has_image",
         "creator_group",
@@ -70,7 +79,7 @@ class DocumentAdmin(admin.ModelAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
-    def get_action_choices(self, request):
+    def get_action_choices(self, request, default_choices=""):
         """
         Overwrite django built-in function to modify action choices. The first
         option is dropped since it is a place holder.
@@ -80,7 +89,7 @@ class DocumentAdmin(admin.ModelAdmin):
         :return: modified action choices
         :rtype: dict
         """
-        choices = super(DocumentAdmin, self).get_action_choices(request)
+        choices = super().get_action_choices(request)
         choices.pop(0)
         return choices
 
@@ -96,7 +105,7 @@ class DocumentAdmin(admin.ModelAdmin):
         :rtype: QuerySet
         """
         qs = (
-            super(DocumentAdmin, self)
+            super()
             .get_queryset(request)
             .annotate(
                 has_image=Exists(DocumentImage.objects.filter(document=OuterRef("pk"))),
@@ -130,6 +139,26 @@ class DocumentAdmin(admin.ModelAdmin):
 
     related_training_set.short_description = _("training set")
 
+    def related_disciplines(self, obj):
+        """
+        Display related desciplines in list display
+
+        :param obj: Document object
+        :type obj: models.Document
+        :return: comma seperated list of related training sets
+        :rtype: str
+        """
+        disciplines = []
+
+        for training_set in obj.training_sets.all():
+            disciplines += [
+                discipline.title for discipline in training_set.discipline.all()
+            ]
+
+        return ", ".join(disciplines)
+
+    related_disciplines.short_description = _("disciplines")
+
     def creator_group(self, obj):
         """
         Include creator group of discipline in list display
@@ -141,10 +170,9 @@ class DocumentAdmin(admin.ModelAdmin):
         """
         if obj.creator_is_admin:
             return Static.admin_group
-        elif obj.created_by:
+        if obj.created_by:
             return obj.created_by
-        else:
-            return None
+        return None
 
     creator_group.short_description = _("creator group")
     creator_group.admin_order_field = "created_by"
@@ -160,8 +188,7 @@ class DocumentAdmin(admin.ModelAdmin):
         """
         if obj.audio:
             return True
-        else:
-            return False
+        return False
 
     has_audio.boolean = True
     has_audio.short_description = _("audio")
@@ -187,7 +214,7 @@ class DocumentAdmin(admin.ModelAdmin):
     has_image.short_description = _("image")
     has_image.admin_order_field = "image_sort"
 
-    def article_display(self, obj):
+    def singular_article_display(self, obj):
         """
         Include article of document in list display
 
@@ -197,9 +224,9 @@ class DocumentAdmin(admin.ModelAdmin):
         :return: Either static admin group or user group
         :rtype: str
         """
-        return obj.get_article_display()
+        return obj.get_singular_article_display()
 
-    article_display.short_description = _("article")
+    singular_article_display.short_description = _("singular article")
 
     def get_list_filter(self, request):
         """
@@ -222,4 +249,12 @@ class DocumentAdmin(admin.ModelAdmin):
         return tuple(filters)
 
     class Media:
-        js = ("js/image_preview.js",)
+        """
+        Media class of admin interface for documents
+        """
+
+        css = {"all": ("css/document_form.css",)}
+        js = (
+            "js/image_preview.js",
+            "js/toggle_plural_field.js",
+        )

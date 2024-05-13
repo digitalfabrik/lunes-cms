@@ -1,6 +1,7 @@
-from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
 
 from ....cms.models import Feedback
 
@@ -26,7 +27,8 @@ class FeedbackSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         try:
             attrs["content_type"].model_class().objects.get(pk=attrs["object_id"])
-        except:
+        except ObjectDoesNotExist as e:
+            print(e)
             raise serializers.ValidationError(
                 {
                     "object_id": [
@@ -35,7 +37,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
                         ),
                     ]
                 }
-            )
+            ) from e
         return attrs
 
     class Meta:

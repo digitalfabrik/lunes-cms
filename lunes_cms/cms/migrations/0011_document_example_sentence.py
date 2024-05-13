@@ -4,6 +4,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file to add new field example sentence
+    """
+
     dependencies = [
         ("cms", "0010_sponsor_url"),
     ]

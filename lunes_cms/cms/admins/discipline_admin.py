@@ -1,15 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
-from django.db.models import Count, F, Q
+from django.db.models import Count, Q
 from django.db.models.functions import Greatest
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from mptt.admin import DraggableMPTTAdmin
 
-from ..models import Static, Discipline
+from ..models import Discipline, Static
 
 
 class DisciplineAdmin(DraggableMPTTAdmin):
@@ -56,7 +55,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :param request: current user request
         :type request: django.http.request
         :param obj: discipline object
-        :type obj: models.Discipline
+        :type obj: ~lunes_cms.cms.models.discipline.Discipline
         :param form: employed model form
         :type form: ModelForm
         :param change: True if change on existing model
@@ -71,7 +70,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
             obj.creator_is_admin = request.user.is_superuser
         obj.save()
 
-    def get_action_choices(self, request):
+    def get_action_choices(self, request, default_choices=""):
         """
         Overwrite django built-in function to modify action choices. The first
         option is dropped since it is a place holder.
@@ -82,7 +81,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :return: modified action choices
         :rtype: dict
         """
-        choices = super(DisciplineAdmin, self).get_action_choices(request)
+        choices = super().get_action_choices(request)
         choices.pop(0)
         return choices
 
@@ -207,7 +206,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
             ),
         )
 
-    def get_form(self, request, obj=None, **kwargs):
+    def get_form(self, request, obj=None, change=False, **kwargs):
         """
         Overwrite django built-in function to define custom choices
         in MPTT many to many selector for parent disciplines,
@@ -223,7 +222,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         :return: model form with adjusted querysets
         :rtype: ModelForm
         """
-        form = super(DisciplineAdmin, self).get_form(request, obj, **kwargs)
+        form = super().get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields["parent"].queryset = (
                 Discipline.objects.filter(
@@ -275,6 +274,15 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         ordering="modules_released_order",
     )
     def modules_released(self, obj):
+        """
+        returns HTML Tag of the link to released training sets related to the discipline
+
+        :param obj: Discipline object
+        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+
+        :return: HTML Tag of the link to released training sets related to the discipline
+        :rtype: str
+        """
         if not obj.is_leaf_node():
             return obj.children_modules_released
         trainingset_list = reverse("admin:cms_trainingset_changelist")
@@ -287,6 +295,15 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         ordering="modules_unreleased_order",
     )
     def modules_unreleased(self, obj):
+        """
+        returns HTML Tag of the link to unreleased training sets related to the discipline
+
+        :param obj: Discipline object
+        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+
+        :return: HTML Tag of the link to unreleased training sets related to the discipline
+        :rtype: str
+        """
         if not obj.is_leaf_node():
             return obj.children_modules_unreleased
         trainingset_list = reverse("admin:cms_trainingset_changelist")
@@ -299,6 +316,15 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         ordering="-words_released_order",
     )
     def words_released(self, obj):
+        """
+        returns HTML Tag of the link to released words in the relased training sets related to the descipline
+
+        :param obj: Discipline object
+        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+
+        :return:
+        :rtype: str
+        """
         if not obj.is_leaf_node():
             return obj.children_words_released
         document_list = reverse("admin:cms_document_changelist")
@@ -314,17 +340,20 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         Include creator group of discipline in list display
 
         :param obj: Discipline object
-        :type obj: models.Discipline
+        :type obj: ~lunes_cms.cms.models.discipline.Discipline
 
         :return: Either static admin group or user group
         :rtype: str
         """
         if obj.creator_is_admin:
             return Static.admin_group
-        elif obj.created_by:
+        if obj.created_by:
             return obj.created_by
-        else:
-            return None
+        return None
 
     class Media:
+        """
+        Media class for admin interface for disciplines
+        """
+
         js = ("js/image_preview.js",)

@@ -2,7 +2,7 @@
   {
     "id": 1733,
     "word": "Dachreling",
-    "article": 2,
+    "singular_article": 2,
     "audio": "http://testserver/media/audio/dachreling.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -17,7 +17,7 @@
   {
     "id": 1735,
     "word": "Fahrzeugfront",
-    "article": 2,
+    "singular_article": 2,
     "audio": "http://testserver/media/audio/fahrzeugfront.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -32,7 +32,7 @@
   {
     "id": 1736,
     "word": "Fahrzeugheck",
-    "article": 3,
+    "singular_article": 3,
     "audio": "http://testserver/media/audio/fahrzeugheck.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -47,7 +47,7 @@
   {
     "id": 1815,
     "word": "Führungslenker",
-    "article": 1,
+    "singular_article": 1,
     "audio": "http://testserver/media/audio/fuhrungslenker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -62,7 +62,7 @@
   {
     "id": 1739,
     "word": "Kotflügel",
-    "article": 1,
+    "singular_article": 1,
     "audio": "http://testserver/media/audio/kotflugel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -77,7 +77,7 @@
   {
     "id": 1744,
     "word": "Schweller",
-    "article": 1,
+    "singular_article": 1,
     "audio": "http://testserver/media/audio/schweller.mp3",
     "word_type": "Nomen",
     "alternatives": [],

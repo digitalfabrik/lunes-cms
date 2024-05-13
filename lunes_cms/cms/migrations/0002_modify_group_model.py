@@ -1,8 +1,13 @@
 from django.db import migrations, models
+
 import lunes_cms.cms.models.static
 
 
 class Migration(migrations.Migration):
+    """
+    Migration file for changing group model
+    """
+
     dependencies = [
         ("auth", "0012_alter_user_first_name_max_length"),
         ("cms", "0001_initial"),
@@ -29,7 +34,7 @@ class Migration(migrations.Migration):
         """
         app_label = self.app_label
         self.app_label = "auth"
-        state = super(Migration, self).mutate_state(project_state, preserve)
+        state = super().mutate_state(project_state, preserve)
         self.app_label = app_label
         return state
 
@@ -42,6 +47,6 @@ class Migration(migrations.Migration):
         """
         app_label = self.app_label
         self.app_label = "auth"
-        state = super(Migration, self).apply(project_state, schema_editor, collect_sql)
+        state = super().apply(project_state, schema_editor, collect_sql)
         self.app_label = app_label
         return state

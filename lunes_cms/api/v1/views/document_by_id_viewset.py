@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from ....cms.models import Document
@@ -30,6 +30,5 @@ class DocumentByIdViewSet(viewsets.ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Document.objects.none()
-        user = self.request.user
         queryset = Document.objects.filter(id=self.kwargs["document_id"])
         return queryset

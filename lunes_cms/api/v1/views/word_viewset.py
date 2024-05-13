@@ -1,7 +1,6 @@
 from django.db.models import Q
-
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 
 from ....cms.models import Document, GroupAPIKey
 from ...utils import get_key

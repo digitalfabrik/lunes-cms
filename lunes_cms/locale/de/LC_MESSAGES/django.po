@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-18 11:29+0000\n"
+"POT-Creation-Date: 2024-05-06 10:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,81 +21,82 @@ msgstr ""
 msgid "API"
 msgstr "API"
 
-#: api/v1/serializers/feedback_serializer.py:21
+#: api/v1/serializers/feedback_serializer.py:22
 msgid ""
 "The content type must be either 'discipline', 'training set' or 'document'."
 msgstr ""
 "Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
 "sein."
 
-#: api/v1/serializers/feedback_serializer.py:33
+#: api/v1/serializers/feedback_serializer.py:35
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:33 cms/admins/training_set_admin.py:335 cms/forms.py:48
-#: cms/forms.py:50 cms/list_filter.py:15 cms/models/discipline.py:102
+#: cms/admin.py:35 cms/admins/document_admin.py:160
+#: cms/admins/training_set_admin.py:359 cms/forms.py:46 cms/forms.py:48
+#: cms/list_filter.py:14 cms/models/discipline.py:101
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:34 cms/list_filter.py:104 cms/models/training_set.py:91
+#: cms/admin.py:36 cms/list_filter.py:103 cms/models/training_set.py:91
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:35 cms/forms.py:54 cms/forms.py:55 cms/models/document.py:115
-#: cms/models/document.py:116
+#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:148
+#: cms/models/document.py:149
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:36
+#: cms/admin.py:38
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:37 cms/models/feedback.py:85
+#: cms/admin.py:39 cms/models/feedback.py:89
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:247
+#: cms/admins/discipline_admin.py:246
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:260
+#: cms/admins/discipline_admin.py:259
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:274
+#: cms/admins/discipline_admin.py:273
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:286
+#: cms/admins/discipline_admin.py:294
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:298
+#: cms/admins/discipline_admin.py:315
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:310 cms/admins/document_admin.py:149
-#: cms/admins/training_set_admin.py:353
+#: cms/admins/discipline_admin.py:336 cms/admins/document_admin.py:177
+#: cms/admins/training_set_admin.py:376
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:131 cms/models/training_set.py:25
+#: cms/admins/document_admin.py:140 cms/models/training_set.py:25
 #: cms/models/training_set.py:90
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:167 cms/models/document.py:49
+#: cms/admins/document_admin.py:194 cms/models/document.py:66
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:187 cms/models/document_image.py:124
+#: cms/admins/document_admin.py:214 cms/models/document_image.py:123
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:202 cms/models/alternative_word.py:17
-#: cms/models/document.py:38
-msgid "article"
-msgstr "Artikel"
+#: cms/admins/document_admin.py:229 cms/models/alternative_word.py:24
+#: cms/models/document.py:43
+msgid "singular article"
+msgstr "Singular-Artikel"
 
 #: cms/admins/feedback_admin.py:32
 msgid "Mark as read"
@@ -115,7 +116,7 @@ msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/sponsor_admin.py:37 cms/models/sponsor.py:26
+#: cms/admins/sponsor_admin.py:36 cms/models/sponsor.py:26
 msgid "logo"
 msgstr "Logo"
 
@@ -169,11 +170,11 @@ msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 msgid "words"
 msgstr "Vokabeln"
 
-#: cms/admins/training_set_admin.py:305
+#: cms/admins/training_set_admin.py:313
 msgid "published words"
 msgstr "veröffentlichte Vokabeln"
 
-#: cms/admins/training_set_admin.py:315
+#: cms/admins/training_set_admin.py:331
 msgid "unpublished words"
 msgstr "unveröffentlichte Vokabeln"
 
@@ -181,7 +182,7 @@ msgstr "unveröffentlichte Vokabeln"
 msgid "vocabulary management"
 msgstr "Vokabelverwaltung"
 
-#: cms/forms.py:57
+#: cms/forms.py:55
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
@@ -190,7 +191,7 @@ msgstr ""
 "Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
 "Element auswählst."
 
-#: cms/forms.py:79
+#: cms/forms.py:77
 msgid ""
 "You can only release a training set that contains at least {} vocabulary "
 "words with confirmed images."
@@ -198,107 +199,135 @@ msgstr ""
 "Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
 "bestätigten Bildern enthalten."
 
-#: cms/list_filter.py:164
+#: cms/list_filter.py:163
 msgid "Images"
 msgstr "Bilder"
 
-#: cms/list_filter.py:185
+#: cms/list_filter.py:184
 msgid "At least one approved image"
 msgstr "Mind. ein bestätigtes Bild"
 
-#: cms/list_filter.py:186
+#: cms/list_filter.py:185
 msgid "At least one pending image"
 msgstr "Mind. ein unbestätigtes Bild"
 
-#: cms/list_filter.py:187
+#: cms/list_filter.py:186
 msgid "No approved images"
 msgstr "Keine bestätigten Bilder"
 
-#: cms/list_filter.py:188
+#: cms/list_filter.py:187
 msgid "No images"
 msgstr "Keine Bilder"
 
-#: cms/list_filter.py:230
+#: cms/list_filter.py:229
 msgid "Assignments"
 msgstr "Zuweisungen"
 
-#: cms/list_filter.py:251
+#: cms/list_filter.py:250
 msgid "Not assigned to any module"
 msgstr "Keinem Modul zugewiesen"
 
-#: cms/list_filter.py:252
+#: cms/list_filter.py:251
 msgid "Assigned to at least one module"
 msgstr "Mind. einem Modul zugewiesen"
 
-#: cms/list_filter.py:253
+#: cms/list_filter.py:252
 msgid "Assigned to released modules"
 msgstr "Veröffentlichten Modulen zugewiesen"
 
-#: cms/list_filter.py:256
+#: cms/list_filter.py:255
 msgid "Assigned to released modules in released disciplines"
 msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 
-#: cms/list_filter.py:258
+#: cms/list_filter.py:257
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py:13 cms/models/alternative_word.py:37
+#: cms/models/alternative_word.py:13 cms/models/alternative_word.py:56
 msgid "alternative word"
 msgstr "Alternatives Wort"
 
-#: cms/models/alternative_word.py:38
+#: cms/models/alternative_word.py:16
+msgid "grammatical gender"
+msgstr "Genus"
+
+#: cms/models/alternative_word.py:28 cms/models/document.py:47
+msgid "plural"
+msgstr "Plural"
+
+#: cms/models/alternative_word.py:34 cms/models/document.py:53
+msgid "plural article"
+msgstr "Plural-Artikel"
+
+#: cms/models/alternative_word.py:57
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: cms/models/discipline.py:21 cms/models/training_set.py:24
+#: cms/models/discipline.py:20 cms/models/training_set.py:24
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:22 cms/models/discipline.py:101
+#: cms/models/discipline.py:21 cms/models/discipline.py:100
 #: cms/models/training_set.py:36
 msgid "discipline"
 msgstr "Modulgruppe"
 
-#: cms/models/discipline.py:24 cms/models/training_set.py:27
+#: cms/models/discipline.py:23 cms/models/training_set.py:27
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:27 cms/models/group.py:10
+#: cms/models/discipline.py:26 cms/models/group.py:10
 #: cms/models/training_set.py:30
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:34 cms/models/document.py:59
+#: cms/models/discipline.py:33 cms/models/document.py:94
 #: cms/models/training_set.py:39
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:37 cms/models/document.py:63
+#: cms/models/discipline.py:36 cms/models/document.py:98
 #: cms/models/training_set.py:41
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:44 cms/models/training_set.py:48
+#: cms/models/discipline.py:43 cms/models/training_set.py:48
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:32
+#: cms/models/document.py:31
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:34
+#: cms/models/document.py:33
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:51
+#: cms/models/document.py:36
+msgid "Grammatical gender"
+msgstr "Genus"
+
+#: cms/models/document.py:68
 msgid "example sentence"
 msgstr "Beispielsatz"
 
-#: cms/models/document.py:53 cms/models/group_api_key.py:66
+#: cms/models/document.py:70 cms/models/group_api_key.py:65
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document_image.py:125
+#: cms/models/document.py:76
+msgid "definition"
+msgstr "Definition"
+
+#: cms/models/document.py:82
+msgid "additional meaning 1"
+msgstr "Zusätzliche Bedeutung 1"
+
+#: cms/models/document.py:88
+msgid "additional meaning 2"
+msgstr "Zusätzliche Bedeutung 2"
+
+#: cms/models/document_image.py:124
 msgid "images"
 msgstr "Bilder"
 
@@ -346,71 +375,71 @@ msgstr "übermittelt am"
 msgid "The time and date when the feedback was submitted."
 msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
 
-#: cms/models/feedback.py:87
+#: cms/models/feedback.py:91
 msgid "feedback entries"
 msgstr "Feedback-Einträge"
 
-#: cms/models/group_api_key.py:37
+#: cms/models/group_api_key.py:36
 msgid "group"
 msgstr "Gruppe"
 
-#: cms/models/group_api_key.py:43
+#: cms/models/group_api_key.py:42
 msgid "token"
 msgstr "Token"
 
-#: cms/models/group_api_key.py:44
+#: cms/models/group_api_key.py:43
 msgid "10-50 characters, only digits and upper case letters allowed."
 msgstr "10-50 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
 
-#: cms/models/group_api_key.py:48
+#: cms/models/group_api_key.py:47
 msgid "Only digits and upper case letters allowed"
 msgstr "Nur Ziffern und Großbuchstaben erlaubt"
 
-#: cms/models/group_api_key.py:56
+#: cms/models/group_api_key.py:55
 msgid "revoked"
 msgstr "widerrufen"
 
-#: cms/models/group_api_key.py:57
+#: cms/models/group_api_key.py:56
 msgid "If the API key is revoked, clients cannot use it anymore."
 msgstr ""
 "Wenn der API-Schlüssel widerrufen wird, können Clients ihn nicht mehr "
 "verwenden."
 
-#: cms/models/group_api_key.py:62
+#: cms/models/group_api_key.py:61
 msgid "expiration date"
 msgstr "Ablaufdatum"
 
-#: cms/models/group_api_key.py:63
+#: cms/models/group_api_key.py:62
 msgid "Once API key expires, clients cannot use it anymore."
 msgstr ""
 "Sobald der API-Schlüssel abläuft, können die Clients ihn nicht mehr "
 "verwenden."
 
-#: cms/models/group_api_key.py:79
+#: cms/models/group_api_key.py:78
 msgid "valid"
 msgstr "gültig"
 
-#: cms/models/group_api_key.py:111
+#: cms/models/group_api_key.py:110
 msgid "Download"
 msgstr "Herunterladen"
 
-#: cms/models/group_api_key.py:113 cms/models/group_api_key.py:131
+#: cms/models/group_api_key.py:112 cms/models/group_api_key.py:130
 msgid "QR code"
 msgstr "QR-Code"
 
-#: cms/models/group_api_key.py:125
+#: cms/models/group_api_key.py:124
 msgid "Download QR code"
 msgstr "QR-Code herunterladen"
 
-#: cms/models/group_api_key.py:148
+#: cms/models/group_api_key.py:156
 msgid "{}: Token for the group \"{}\""
 msgstr "{}: Token für die Gruppe \"{}\""
 
-#: cms/models/group_api_key.py:151
+#: cms/models/group_api_key.py:163
 msgid "API Key"
 msgstr "API-Key"
 
-#: cms/models/group_api_key.py:152
+#: cms/models/group_api_key.py:164
 msgid "API Keys"
 msgstr "API-Keys"
 
@@ -522,23 +551,23 @@ msgstr ""
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: cms/urls.py:48
+#: cms/urls.py:40
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:152
+#: cms/utils.py:163
 msgid "and"
 msgstr "und"
 
-#: cms/validators.py:20
+#: cms/validators.py:21
 msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
 msgstr "Unerlaubtes Dateiformat! Erlaubt: .mp3 .aac .wav .m4a .wma .ogg"
 
-#: cms/validators.py:35
+#: cms/validators.py:36
 msgid "File too large! Max. 5 MB"
 msgstr "Datei zu groß! Max. 5 MB"
 
-#: cms/validators.py:50
+#: cms/validators.py:51
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
@@ -550,17 +579,20 @@ msgstr "Englisch"
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:446 core/settings.py:447 core/settings.py:449
+#: core/settings.py:444 core/settings.py:445 core/settings.py:447
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:448
+#: core/settings.py:446
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "article"
+#~ msgstr "Artikel"
 
 #~ msgid "assigned & unassigned"
 #~ msgstr "Zugewiesen & unzugewiesen"
@@ -585,6 +617,12 @@ msgstr "Hilfe"
 
 #~ msgid "Released modules"
 #~ msgstr "Veröffentlichte Module"
+
+#~ msgid "This field is required for substantives."
+#~ msgstr "Dieses Feld is für Substantive ein Pflichtfeld."
+
+#~ msgid "Only required for substantives."
+#~ msgstr "Wird nur für Substantive benötigt"
 
 #~ msgid "icon_file"
 #~ msgstr "Icon"

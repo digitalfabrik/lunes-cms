@@ -3,9 +3,8 @@ from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from mptt.models import TreeForeignKey
 
-from .models import Document, TrainingSet, Discipline
+from .models import Discipline, Document, TrainingSet
 from .widgets import ManyToManyOverlay
 
 
@@ -22,8 +21,7 @@ class DisciplineChoiceField(forms.ModelMultipleChoiceField):
             ]
             ancestors.append(obj.title)
             return " \u2794 ".join(ancestors)
-        else:
-            return obj.title
+        return obj.title
 
 
 class TrainingSetForm(forms.ModelForm):

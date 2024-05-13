@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from django.utils.translation import ugettext_lazy as _
 
 from ..utils import get_image_tag
@@ -48,4 +47,8 @@ class SponsorAdmin(admin.ModelAdmin):
     image_tag.short_description = ""
 
     class Media:
+        """
+        Media class of Sponsor Admin
+        """
+
         js = ("js/image_preview.js",)

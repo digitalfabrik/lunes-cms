@@ -1,20 +1,20 @@
-from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.db.models.deletion import CASCADE
-from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
+from mptt.models import MPTTModel, TreeForeignKey
 
 from ..utils import get_image_tag
+from .discipline import Discipline
+from .document import Document
 from .feedback import Feedback
 from .static import convert_umlaute_images
-from .document import Document
-from .discipline import Discipline
 
 
-class TrainingSet(MPTTModel):  # pylint: disable=R0903
+class TrainingSet(MPTTModel):
     """
     Training sets are part of disciplines, have a title, a description
     an icon and relates to documents and disciplines.
@@ -66,7 +66,7 @@ class TrainingSet(MPTTModel):  # pylint: disable=R0903
         :return: title of training set instance
         :rtype: str
         """
-        return self.title
+        return str(self.title)
 
     def save(self, *args, **kwargs):
         """Overwrite djangos save function to assure
@@ -79,7 +79,7 @@ class TrainingSet(MPTTModel):  # pylint: disable=R0903
                 "It is not possible to create child elements for training sets (unlike disciplines)."
             )
             raise ValidationError(msg)
-        super(TrainingSet, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     # pylint: disable=R0903
     class Meta:
@@ -91,6 +91,11 @@ class TrainingSet(MPTTModel):  # pylint: disable=R0903
         verbose_name_plural = _("training sets")
 
     def style_description_field(self):
+        """
+        This function adds css classes to description field
+        :return: description field HTML code incl. CSS classes
+        :rtype: str
+        """
         return format_html(
             '<div style="overflow-wrap: break-word; max-width: 150px;" >{}</div>',
             self.description,

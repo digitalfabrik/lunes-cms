@@ -1,11 +1,10 @@
 import os
-
 from pathlib import Path
-from django.core.files import File
+
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.files import File
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from pydub import AudioSegment
 
 from ..utils import document_to_string
@@ -32,10 +31,28 @@ class Document(models.Model):
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
-    article = models.IntegerField(
-        choices=Static.article_choices,
+    grammatical_gender = models.IntegerField(
+        choices=Static.grammatical_genders,
+        verbose_name=_("Grammatical gender"),
+        blank=True,
+        null=True,
+    )
+    singular_article = models.IntegerField(
+        choices=Static.singular_article_choices,
         default="",
-        verbose_name=_("article"),
+        verbose_name=_("singular article"),
+    )
+    plural = models.CharField(
+        max_length=255,
+        verbose_name=_("plural"),
+        blank=True,
+        default="",
+    )
+    plural_article = models.IntegerField(
+        choices=Static.plural_article_choices,
+        verbose_name=_("plural article"),
+        blank=True,
+        null=True,
     )
     audio = models.FileField(
         upload_to=convert_umlaute_audio,
@@ -52,6 +69,24 @@ class Document(models.Model):
     creation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("creation date")
     )
+    definition = models.TextField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name=_("definition"),
+    )
+    additional_meaning_1 = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name=_("additional meaning 1"),
+    )
+    additional_meaning_2 = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name=_("additional meaning 2"),
+    )
     created_by = models.ForeignKey(
         max_length=255,
         null=True,
@@ -64,20 +99,18 @@ class Document(models.Model):
     feedback = GenericRelation(Feedback)
 
     @property
-    def converted(self, content_type="audio/mpeg"):
+    def converted(self):
         """
         Function that converts the uploaded audio to .mp3 and
         returns the converted file
 
         :param self: A handle to the :class:`models.Document`
         :type self: class: `models.Document`
-        :param content_type: content type of the converted file, defaults to "audio/mpeg"
-        :type request: content_type
 
         :return: File containing .mp3 audio
         :rtype: .mp3 File
         """
-        super(Document, self).save()
+        super().save()
         file_path = self.audio.path
         original_extension = file_path.split(".")[-1]
         mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
@@ -86,7 +119,7 @@ class Document(models.Model):
 
         converted_audiofile = File(file=open(new_path, "rb"), name=Path(new_path))
         converted_audiofile.name = Path(new_path).name
-        converted_audiofile.content_type = content_type
+        converted_audiofile.content_type = "audio/mpeg"
         converted_audiofile.size = os.path.getsize(new_path)
         os.remove(new_path)
         return converted_audiofile
@@ -97,7 +130,7 @@ class Document(models.Model):
         """
         if self.audio:
             self.audio = self.converted
-        super(Document, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         """String representation of Document instance

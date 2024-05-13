@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -11,12 +11,16 @@ class Static:
     """
 
     # Possible articles
-    article_choices = [
+    singular_article_choices = [
         (0, "keiner"),
         (1, "der"),
         (2, "die"),
         (3, "das"),
         (4, "die (Plural)"),
+    ]
+    plural_article_choices = [
+        (0, "keiner"),
+        (1, "die (Plural)"),
     ]
 
     # Possible word types
@@ -27,6 +31,15 @@ class Static:
         ("Numeral", "Numeral"),
         ("Pronomen", "Pronomen"),
         ("Adverb", "Adverb"),
+    ]
+
+    # Possible grammatical genders
+    grammatical_genders = [
+        (0, "kein"),
+        (1, "Maskulinum"),
+        (2, "Femininum"),
+        (3, "Neutrum"),
+        (4, "Plural"),
     ]
 
     # number of pixels used for box blur
@@ -110,3 +123,4 @@ def create_user_profile(sender, instance, created, **kwargs):
         if not created or not default_group:
             return False
         instance.groups.add(Group.objects.get(name=Static.default_group_name))
+    return True
