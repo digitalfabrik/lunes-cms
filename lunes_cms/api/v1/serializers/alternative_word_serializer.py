@@ -9,10 +9,12 @@ class AlternativeWordSerializer(serializers.ModelSerializer):
     `serializers.ModelSerializer`.
     """
 
+    article = serializers.IntegerField(source="singular_article")
+
     class Meta:
         """
         Define model and the corresponding fields
         """
 
         model = AlternativeWord
-        fields = ("alt_word", "singular_article")
+        fields = ("alt_word", "article")

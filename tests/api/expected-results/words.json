@@ -2,7 +2,7 @@
   {
     "id": 2,
     "word": "Schere",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schere.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -17,7 +17,7 @@
   {
     "id": 3,
     "word": "Schlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -32,7 +32,7 @@
   {
     "id": 4,
     "word": "Buch",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/buch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -47,7 +47,7 @@
   {
     "id": 6,
     "word": "Akkuschrauber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/akkuschrauber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -62,13 +62,13 @@
   {
     "id": 7,
     "word": "Bohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Metallbohrer",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -82,13 +82,13 @@
   {
     "id": 8,
     "word": "Bohrmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bohrmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Handbohrmaschine",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -102,7 +102,7 @@
   {
     "id": 9,
     "word": "Dübel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/dubel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -117,7 +117,7 @@
   {
     "id": 10,
     "word": "Feile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/feile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -132,7 +132,7 @@
   {
     "id": 11,
     "word": "Gerüst",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/gerust.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -147,7 +147,7 @@
   {
     "id": 12,
     "word": "Leiter",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/leiter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -162,7 +162,7 @@
   {
     "id": 13,
     "word": "Maßband",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/maband.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -177,7 +177,7 @@
   {
     "id": 14,
     "word": "Meißel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/meiel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -192,7 +192,7 @@
   {
     "id": 15,
     "word": "Messer",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/messer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -207,13 +207,13 @@
   {
     "id": 16,
     "word": "Schubkarre",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schubkarre.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Schubkarren",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -227,17 +227,17 @@
   {
     "id": 17,
     "word": "Zollstock",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zollstock.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Meterstab",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Gliedermaßstab",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -251,13 +251,13 @@
   {
     "id": 18,
     "word": "Arbeitshandschuh",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/arbeitshandschuh.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Handschuh",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -271,7 +271,7 @@
   {
     "id": 20,
     "word": "Besen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/besen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -286,7 +286,7 @@
   {
     "id": 21,
     "word": "Eimer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eimer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -301,7 +301,7 @@
   {
     "id": 22,
     "word": "Gehörschutz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gehorschutz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -316,7 +316,7 @@
   {
     "id": 23,
     "word": "Hammer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/hammer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -331,7 +331,7 @@
   {
     "id": 24,
     "word": "Kabeltrommel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kabeltrommel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -346,7 +346,7 @@
   {
     "id": 25,
     "word": "Klebeband",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/klebeband.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -361,7 +361,7 @@
   {
     "id": 26,
     "word": "Schraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -376,13 +376,13 @@
   {
     "id": 27,
     "word": "Schraubenzieher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schraubenzieher.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Schraubendreher",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -396,13 +396,13 @@
   {
     "id": 28,
     "word": "Schraubenschlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schraubenschlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Ring-Maulschlüssel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -416,13 +416,13 @@
   {
     "id": 29,
     "word": "Schutzbrille",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schutzbrille.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Sicherheitsbrille",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -436,7 +436,7 @@
   {
     "id": 30,
     "word": "Schutzhelm",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schutzhelm.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -451,7 +451,7 @@
   {
     "id": 31,
     "word": "Staubsauger",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/staubsauger.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -466,7 +466,7 @@
   {
     "id": 32,
     "word": "Wasserwaage",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/wasserwaage.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -481,7 +481,7 @@
   {
     "id": 33,
     "word": "Abisolierzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/abisolierzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -496,7 +496,7 @@
   {
     "id": 34,
     "word": "Bohrkrone",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bohrkrone.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -511,13 +511,13 @@
   {
     "id": 35,
     "word": "Crimpzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/crimpzange.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Aderendhülsenzange",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -531,13 +531,13 @@
   {
     "id": 49,
     "word": "Gipsbecher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gipsbecher.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Gipsbecher",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -551,7 +551,7 @@
   {
     "id": 66,
     "word": "Schleifpapier",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/schleifpapier.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -566,7 +566,7 @@
   {
     "id": 116,
     "word": "Seitenschneider",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/seitenschneider.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -581,13 +581,13 @@
   {
     "id": 117,
     "word": "Spannungsprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spannungsprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Duspol",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -601,7 +601,7 @@
   {
     "id": 118,
     "word": "Steckdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/steckdose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -616,7 +616,7 @@
   {
     "id": 119,
     "word": "Badewanne",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/badewanne.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -631,13 +631,13 @@
   {
     "id": 120,
     "word": "Doppelmaulschlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/doppelmaulschlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Maulschlüssel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -651,13 +651,13 @@
   {
     "id": 123,
     "word": "Toilette",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/toilette.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "WC",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -671,7 +671,7 @@
   {
     "id": 124,
     "word": "Waschbecken",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/waschbecken.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -686,13 +686,13 @@
   {
     "id": 125,
     "word": "Wasserhahn",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/wasserhahn.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Waschbeckenarmatur",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -706,7 +706,7 @@
   {
     "id": 126,
     "word": "Wasserpumpenzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/wasserpumpenzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -721,7 +721,7 @@
   {
     "id": 132,
     "word": "Elektrohammer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/elektrohammer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -736,17 +736,17 @@
   {
     "id": 133,
     "word": "Spachtel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spachtel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Spachtel",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Spachtel",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -760,7 +760,7 @@
   {
     "id": 135,
     "word": "Antennendose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/antennendose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -775,7 +775,7 @@
   {
     "id": 136,
     "word": "Kreuzerder",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kreuzerder.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -790,13 +790,13 @@
   {
     "id": 139,
     "word": "Leuchtmittel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/leuchtmittel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Glühbirne",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -810,7 +810,7 @@
   {
     "id": 140,
     "word": "Arbeitskleidung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/arbeitskleidung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -825,17 +825,17 @@
   {
     "id": 141,
     "word": "Putzlappen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/putzlappen.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Lappen",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Reinigungstuch",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -849,13 +849,13 @@
   {
     "id": 142,
     "word": "Mülleimer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/mulleimer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Papierkorb",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -869,7 +869,7 @@
   {
     "id": 143,
     "word": "Bleistift",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bleistift.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -884,13 +884,13 @@
   {
     "id": 144,
     "word": "Zimmermannsbleistift",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zimmermannsbleistift.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Bleistift",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -904,13 +904,13 @@
   {
     "id": 145,
     "word": "Werkzeugkiste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/werkzeugkiste.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Werkzeugkasten",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -924,7 +924,7 @@
   {
     "id": 146,
     "word": "Abdeckfolie",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/abdeckfolie.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -939,13 +939,13 @@
   {
     "id": 151,
     "word": "Föhn",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/fohn.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Haartrockner",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -959,7 +959,7 @@
   {
     "id": 156,
     "word": "Kamm",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kamm.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -974,7 +974,7 @@
   {
     "id": 157,
     "word": "Spiegel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spiegel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -989,13 +989,13 @@
   {
     "id": 160,
     "word": "Handbügelsäge",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/handbugelsage.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Säge",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1009,29 +1009,29 @@
   {
     "id": 161,
     "word": "Nageleisen",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/nageleisen.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Brechstange",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Kuhfuß",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Brecheisen",
-        "singular_article": 3
+        "article": 3
       },
       {
         "alt_word": "Hebeleisen",
-        "singular_article": 3
+        "article": 3
       },
       {
         "alt_word": "Ziegenfuß",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1045,17 +1045,17 @@
   {
     "id": 167,
     "word": "Winkel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/winkel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Schreinerwinkel",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Tischlerwinkel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1069,13 +1069,13 @@
   {
     "id": 175,
     "word": "Drehmomentschlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/drehmomentschlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Newtonmeterschlüssel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1089,13 +1089,13 @@
   {
     "id": 181,
     "word": "Ratsche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/ratsche.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Knarre",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1109,7 +1109,7 @@
   {
     "id": 183,
     "word": "Schweißgerät",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/schweigerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1124,7 +1124,7 @@
   {
     "id": 186,
     "word": "Schürze",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schurze.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1139,7 +1139,7 @@
   {
     "id": 187,
     "word": "Ofenhandschuh",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/ofenhandschuh.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1154,7 +1154,7 @@
   {
     "id": 188,
     "word": "Kittel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kittel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1169,7 +1169,7 @@
   {
     "id": 189,
     "word": "Backofen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/backofen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1184,29 +1184,29 @@
   {
     "id": 201,
     "word": "Cutter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/cutter.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Cuttermesser",
-        "singular_article": 3
+        "article": 3
       },
       {
         "alt_word": "Japanmesser",
-        "singular_article": 3
+        "article": 3
       },
       {
         "alt_word": "Teppichmesser",
-        "singular_article": 0
+        "article": 0
       },
       {
         "alt_word": "Tapetenmesser",
-        "singular_article": 3
+        "article": 3
       },
       {
         "alt_word": "Stanley-Messer",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -1220,7 +1220,7 @@
   {
     "id": 202,
     "word": "Betonmischer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/betonmischer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1235,7 +1235,7 @@
   {
     "id": 208,
     "word": "Schaufel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schaufel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1250,13 +1250,13 @@
   {
     "id": 211,
     "word": "Sackkarre",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/sackkarre.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Sackkarren",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1270,7 +1270,7 @@
   {
     "id": 214,
     "word": "Bügelmessschraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bugelmessschraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1285,7 +1285,7 @@
   {
     "id": 215,
     "word": "Drehwerkzeug",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/drehwerkzeug.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1300,21 +1300,21 @@
   {
     "id": 216,
     "word": "universelle Fräsmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/universelle-frasmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "universelle Fräse",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Universalfräsmaschine",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Universalfräse",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1328,7 +1328,7 @@
   {
     "id": 217,
     "word": "Grenzlehrdorn",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/grenzlehrdorn.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1343,13 +1343,13 @@
   {
     "id": 218,
     "word": "Körner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/korner.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Körner",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -1363,7 +1363,7 @@
   {
     "id": 219,
     "word": "Messschieber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/messschieber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1378,7 +1378,7 @@
   {
     "id": 220,
     "word": "Schweißgeschirr",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/schweigeschirr.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1393,7 +1393,7 @@
   {
     "id": 221,
     "word": "Dusche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/dusche.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1408,7 +1408,7 @@
   {
     "id": 223,
     "word": "Kreissäge",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kreissage.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1423,13 +1423,13 @@
   {
     "id": 224,
     "word": "Nagel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/nagel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Nägel",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -1443,7 +1443,7 @@
   {
     "id": 225,
     "word": "Pumpenzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/pumpenzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1458,7 +1458,7 @@
   {
     "id": 226,
     "word": "Stichsäge",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/stichsage.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1473,13 +1473,13 @@
   {
     "id": 227,
     "word": "Zange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/zange.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kneifzange",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1493,13 +1493,13 @@
   {
     "id": 228,
     "word": "Akku-Winkelschleifer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/akku-winkelschleifer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Akkuflex",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1513,13 +1513,13 @@
   {
     "id": 231,
     "word": "Filzstift",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/filzstift.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Edding",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1533,17 +1533,17 @@
   {
     "id": 237,
     "word": "Handfeger",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/handfeger.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Handbesen",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Kehrbesen",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1557,13 +1557,13 @@
   {
     "id": 238,
     "word": "Isolierband",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/isolierband.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Isolierbänder",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -1577,13 +1577,13 @@
   {
     "id": 260,
     "word": "Warnweste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/warnweste.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Sicherheitsweste",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1597,7 +1597,7 @@
   {
     "id": 261,
     "word": "Arbeitshose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/arbeitshose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1612,7 +1612,7 @@
   {
     "id": 262,
     "word": "Arbeitsjacke",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/arbeitsjacke.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1627,7 +1627,7 @@
   {
     "id": 263,
     "word": "Bohrstange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bohrstange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1642,7 +1642,7 @@
   {
     "id": 265,
     "word": "Flachsenker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/flachsenker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1657,7 +1657,7 @@
   {
     "id": 266,
     "word": "Gewindefräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gewindefraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1672,7 +1672,7 @@
   {
     "id": 267,
     "word": "Gewindeschneider",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gewindeschneider.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1687,13 +1687,13 @@
   {
     "id": 268,
     "word": "Handreibahle",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/handreibahle.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Reibahle",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -1707,13 +1707,13 @@
   {
     "id": 269,
     "word": "Industriestaubsauger",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/industriestaubsauger.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Nass-Trockensauger",
-        "singular_article": 0
+        "article": 0
       }
     ],
     "document_image": [
@@ -1727,7 +1727,7 @@
   {
     "id": 270,
     "word": "Kegelsenker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kegelsenker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1742,7 +1742,7 @@
   {
     "id": 271,
     "word": "Mülltonne",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/mulltonne.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1757,7 +1757,7 @@
   {
     "id": 272,
     "word": "Nutenfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/nutenfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1772,7 +1772,7 @@
   {
     "id": 274,
     "word": "Rändel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/randel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1787,7 +1787,7 @@
   {
     "id": 275,
     "word": "Rohrzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/rohrzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1802,7 +1802,7 @@
   {
     "id": 276,
     "word": "Schaftfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schaftfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1817,7 +1817,7 @@
   {
     "id": 277,
     "word": "Scheibenfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/scheibenfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1832,7 +1832,7 @@
   {
     "id": 280,
     "word": "Wendeschneidplatte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/wendeschneidplatte.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1847,7 +1847,7 @@
   {
     "id": 281,
     "word": "Winkelfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/winkelfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1862,7 +1862,7 @@
   {
     "id": 282,
     "word": "Zentrierbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zentrierbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1877,13 +1877,13 @@
   {
     "id": 284,
     "word": "zweipolige Phasenprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zweipolige-phasenprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Phasenprüfer",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1897,13 +1897,13 @@
   {
     "id": 285,
     "word": "LAN-Tester",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/lan-tester.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "LAN Tester",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1917,13 +1917,13 @@
   {
     "id": 286,
     "word": "digitale Messschieber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/digitale-messschieber.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Messschieber",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1937,13 +1937,13 @@
   {
     "id": 290,
     "word": "NC-Anbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/nc-anbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "NC Anbohrer",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -1957,7 +1957,7 @@
   {
     "id": 292,
     "word": "Schlagbohrmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schlagbohrmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1972,7 +1972,7 @@
   {
     "id": 300,
     "word": "Kreissägeblatt",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kreissageblatt.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -1987,7 +1987,7 @@
   {
     "id": 301,
     "word": "Schlangenbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schlangenbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2002,7 +2002,7 @@
   {
     "id": 302,
     "word": "Langbandschleifmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/langbandschleifmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2017,7 +2017,7 @@
   {
     "id": 303,
     "word": "Schleifigel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schleifigel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2032,7 +2032,7 @@
   {
     "id": 304,
     "word": "Schraubstock",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schraubstock.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2047,13 +2047,13 @@
   {
     "id": 309,
     "word": "Kehrblech",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kehrblech.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kehrschaufel",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -2067,7 +2067,7 @@
   {
     "id": 311,
     "word": "Säbelsägeblatt",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/sabelsageblatt.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2082,7 +2082,7 @@
   {
     "id": 315,
     "word": "Ständerbohrmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/standerbohrmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2097,7 +2097,7 @@
   {
     "id": 320,
     "word": "Breitbandschleifmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/breitbandschleifmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2112,13 +2112,13 @@
   {
     "id": 322,
     "word": "Winkelschleifer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/winkelschleifer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Flex",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -2132,13 +2132,13 @@
   {
     "id": 323,
     "word": "Bithalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bithalter.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Bitaufnahme",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -2152,13 +2152,13 @@
   {
     "id": 324,
     "word": "Bit",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bit.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Bit",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -2172,7 +2172,7 @@
   {
     "id": 335,
     "word": "Exzenterschleifer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/exzenterschleifer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2187,21 +2187,21 @@
   {
     "id": 337,
     "word": "Inbus",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/inbus.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Inbusschlüssel",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Innensechskantschlüssel",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Stiftschlüssel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -2215,7 +2215,7 @@
   {
     "id": 343,
     "word": "Locher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/locher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2230,13 +2230,13 @@
   {
     "id": 350,
     "word": "Desinfektionsmittel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/desinfektionsmittel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Hand-Desinfektionsmittel",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -2250,13 +2250,13 @@
   {
     "id": 360,
     "word": "Einweghandschuh",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/einweghandschuh.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Einmalhandschuh",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -2270,17 +2270,17 @@
   {
     "id": 361,
     "word": "Mund-Nase-Schutz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/mund-nase-schutz.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Mund-Nase-Bedeckung",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Mundschutz",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -2294,13 +2294,13 @@
   {
     "id": 401,
     "word": "Kabelentmantler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kabelentmantler.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Abmantelwerkzeug",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -2314,7 +2314,7 @@
   {
     "id": 402,
     "word": "Kabelmesser",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kabelmesser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2329,7 +2329,7 @@
   {
     "id": 403,
     "word": "Kabelschere",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kabelschere.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2344,7 +2344,7 @@
   {
     "id": 415,
     "word": "Ordner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/ordner.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2359,7 +2359,7 @@
   {
     "id": 418,
     "word": "Tacker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/tacker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2374,7 +2374,7 @@
   {
     "id": 419,
     "word": "Telefon",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/telefon.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2389,7 +2389,7 @@
   {
     "id": 425,
     "word": "Kugelschreiber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kugelschreiber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2404,7 +2404,7 @@
   {
     "id": 436,
     "word": "Halbrundfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/halbrundfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2419,13 +2419,13 @@
   {
     "id": 438,
     "word": "Metall-Bügelsäge",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/metall-bugelsage.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "PUK-Säge",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -2439,7 +2439,7 @@
   {
     "id": 441,
     "word": "Rundfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/rundfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2454,7 +2454,7 @@
   {
     "id": 473,
     "word": "Dreikantfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/dreikantfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2469,7 +2469,7 @@
   {
     "id": 474,
     "word": "Flachstumpffeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/flachstumpffeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2484,13 +2484,13 @@
   {
     "id": 476,
     "word": "Kombinationszange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kombinationszange.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kombizange",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -2504,7 +2504,7 @@
   {
     "id": 477,
     "word": "Kraft-Seitenschneider",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kraft-seitenschneider.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2519,7 +2519,7 @@
   {
     "id": 484,
     "word": "Schlosserhammer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schlosserhammer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2534,7 +2534,7 @@
   {
     "id": 508,
     "word": "Schwamm",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schwamm.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2549,7 +2549,7 @@
   {
     "id": 509,
     "word": "Spülmittel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/spulmittel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2564,7 +2564,7 @@
   {
     "id": 510,
     "word": "Küchentuch",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kuchentuch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2579,13 +2579,13 @@
   {
     "id": 511,
     "word": "Geschirrtuch",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/geschirrtuch.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Geschirrtücher",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -2599,7 +2599,7 @@
   {
     "id": 512,
     "word": "Spülbürste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spulburste.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2614,7 +2614,7 @@
   {
     "id": 513,
     "word": "Spülbecken",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/spulbecken.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2629,13 +2629,13 @@
   {
     "id": 514,
     "word": "Elektroherd",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/elektroherd.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Herd",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -2649,7 +2649,7 @@
   {
     "id": 515,
     "word": "Herdplatte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/herdplatte.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2664,7 +2664,7 @@
   {
     "id": 516,
     "word": "Suppe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/suppe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2679,7 +2679,7 @@
   {
     "id": 518,
     "word": "Butter",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/butter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2694,7 +2694,7 @@
   {
     "id": 522,
     "word": "Schüssel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schussel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2709,7 +2709,7 @@
   {
     "id": 523,
     "word": "Sieb",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/sieb.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2724,7 +2724,7 @@
   {
     "id": 524,
     "word": "Topf",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/topf.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2739,7 +2739,7 @@
   {
     "id": 525,
     "word": "Pfanne",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/pfanne.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2754,7 +2754,7 @@
   {
     "id": 528,
     "word": "Platte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/platte.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2769,7 +2769,7 @@
   {
     "id": 529,
     "word": "Salatbesteck",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/salatbesteck.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2784,7 +2784,7 @@
   {
     "id": 530,
     "word": "Schale",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schale.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2799,7 +2799,7 @@
   {
     "id": 531,
     "word": "Flaschenöffner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/flaschenoffner.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2814,7 +2814,7 @@
   {
     "id": 532,
     "word": "Besteck",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/besteck.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2829,7 +2829,7 @@
   {
     "id": 533,
     "word": "Löffel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/loffel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2844,7 +2844,7 @@
   {
     "id": 534,
     "word": "Gabel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/gabel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2859,7 +2859,7 @@
   {
     "id": 535,
     "word": "Geschirr",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/geschirr.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2874,7 +2874,7 @@
   {
     "id": 536,
     "word": "Tasse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/tasse.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2889,7 +2889,7 @@
   {
     "id": 537,
     "word": "Teller",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/teller.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2904,7 +2904,7 @@
   {
     "id": 538,
     "word": "Gedeck",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/gedeck.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2919,13 +2919,13 @@
   {
     "id": 539,
     "word": "Unterteller",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/unterteller.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Untertasse",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -2939,7 +2939,7 @@
   {
     "id": 540,
     "word": "Flasche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/flasche.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2954,7 +2954,7 @@
   {
     "id": 541,
     "word": "Glas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/glas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2969,7 +2969,7 @@
   {
     "id": 542,
     "word": "Bierglas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bierglas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2984,7 +2984,7 @@
   {
     "id": 543,
     "word": "Weinglas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/weinglas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -2999,7 +2999,7 @@
   {
     "id": 544,
     "word": "Sektglas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/sektglas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3014,7 +3014,7 @@
   {
     "id": 545,
     "word": "Schnapsglas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/schnapsglas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3029,7 +3029,7 @@
   {
     "id": 546,
     "word": "Eierbecher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eierbecher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3044,7 +3044,7 @@
   {
     "id": 547,
     "word": "Kanne",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kanne.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3059,13 +3059,13 @@
   {
     "id": 548,
     "word": "Krug",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/krug.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Karaffe",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -3079,7 +3079,7 @@
   {
     "id": 549,
     "word": "Serviette",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/serviette.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3094,7 +3094,7 @@
   {
     "id": 553,
     "word": "Gewindebohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gewindebohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3109,7 +3109,7 @@
   {
     "id": 559,
     "word": "Kreisschneider",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kreisschneider.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3124,7 +3124,7 @@
   {
     "id": 567,
     "word": "Spiralbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spiralbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3139,7 +3139,7 @@
   {
     "id": 568,
     "word": "Walzenstirnfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/walzenstirnfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3154,7 +3154,7 @@
   {
     "id": 589,
     "word": "Auflaufform",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/auflaufform.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3169,7 +3169,7 @@
   {
     "id": 595,
     "word": "Tischdecke",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/tischdecke.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3184,7 +3184,7 @@
   {
     "id": 596,
     "word": "Vase",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/vase.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3199,7 +3199,7 @@
   {
     "id": 599,
     "word": "Backblech",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/backblech.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3214,13 +3214,13 @@
   {
     "id": 613,
     "word": "Schneebesen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schneebesen.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Schaumschläger",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -3234,7 +3234,7 @@
   {
     "id": 617,
     "word": "Teigschaber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/teigschaber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3249,7 +3249,7 @@
   {
     "id": 636,
     "word": "Butterdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/butterdose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3264,7 +3264,7 @@
   {
     "id": 638,
     "word": "Zuckerspender",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zuckerspender.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3279,7 +3279,7 @@
   {
     "id": 641,
     "word": "GN-Behälter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gn-behalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3294,7 +3294,7 @@
   {
     "id": 646,
     "word": "Teeglas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/teeglas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3309,7 +3309,7 @@
   {
     "id": 649,
     "word": "Dosenöffner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/dosenoffner.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3324,7 +3324,7 @@
   {
     "id": 651,
     "word": "Pinsel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/pinsel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3339,7 +3339,7 @@
   {
     "id": 654,
     "word": "Backpapier",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/backpapier.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3354,13 +3354,13 @@
   {
     "id": 656,
     "word": "Dunstabzugshaube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/dunstabzugshaube.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Abzugshaube",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -3374,13 +3374,13 @@
   {
     "id": 667,
     "word": "Kaffeemaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kaffeemaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kaffeebereiter",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -3394,7 +3394,7 @@
   {
     "id": 668,
     "word": "Kühlschrank",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kuhlschrank.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3409,7 +3409,7 @@
   {
     "id": 670,
     "word": "Thermoskanne",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/thermoskanne.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3424,7 +3424,7 @@
   {
     "id": 671,
     "word": "Omelett",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/omelett.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3439,7 +3439,7 @@
   {
     "id": 673,
     "word": "Spiegelei",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/spiegelei.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3454,7 +3454,7 @@
   {
     "id": 674,
     "word": "Haferflocken",
-    "singular_article": 4,
+    "article": 4,
     "audio": "http://testserver/media/audio/haferflocken.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3469,7 +3469,7 @@
   {
     "id": 675,
     "word": "Rotwein",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/rotwein.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3484,7 +3484,7 @@
   {
     "id": 676,
     "word": "Weißwein",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/weiwein.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3499,7 +3499,7 @@
   {
     "id": 678,
     "word": "Bier",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bier.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3514,7 +3514,7 @@
   {
     "id": 679,
     "word": "Eistee",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eistee.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3529,7 +3529,7 @@
   {
     "id": 680,
     "word": "Saft",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/saft.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3544,7 +3544,7 @@
   {
     "id": 681,
     "word": "Eiswürfel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eiswurfel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3559,7 +3559,7 @@
   {
     "id": 682,
     "word": "Honig",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/honig.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3574,7 +3574,7 @@
   {
     "id": 683,
     "word": "Marmelade",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/marmelade.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3589,7 +3589,7 @@
   {
     "id": 685,
     "word": "Tee",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/tee.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3604,7 +3604,7 @@
   {
     "id": 686,
     "word": "Teebeutel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/teebeutel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3619,7 +3619,7 @@
   {
     "id": 687,
     "word": "Kaffee",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kaffee.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3634,7 +3634,7 @@
   {
     "id": 688,
     "word": "Kaffeefilter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kaffeefilter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3649,7 +3649,7 @@
   {
     "id": 689,
     "word": "Milch",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/milch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3664,7 +3664,7 @@
   {
     "id": 691,
     "word": "Öl",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/ol.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3679,7 +3679,7 @@
   {
     "id": 692,
     "word": "Müsli",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/musli.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3694,7 +3694,7 @@
   {
     "id": 693,
     "word": "Zahnstocher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zahnstocher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3709,7 +3709,7 @@
   {
     "id": 698,
     "word": "Korkenzieher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/korkenzieher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3724,7 +3724,7 @@
   {
     "id": 700,
     "word": "Chafing-Dish",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/chafing-dish.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3739,7 +3739,7 @@
   {
     "id": 701,
     "word": "Cocktailglas",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/cocktailglas.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3754,7 +3754,7 @@
   {
     "id": 702,
     "word": "Espressotasse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/espressotasse.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3769,7 +3769,7 @@
   {
     "id": 703,
     "word": "Kaffeelöffel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kaffeeloffel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3784,7 +3784,7 @@
   {
     "id": 704,
     "word": "Kuchengabel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kuchengabel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3799,7 +3799,7 @@
   {
     "id": 705,
     "word": "Kaffeeportionierer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kaffeeportionierer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3814,7 +3814,7 @@
   {
     "id": 706,
     "word": "Kuchenteller",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kuchenteller.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3829,13 +3829,13 @@
   {
     "id": 707,
     "word": "Schieferplatte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schieferplatte.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Schieferplatten",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -3849,7 +3849,7 @@
   {
     "id": 709,
     "word": "Suppenteller",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/suppenteller.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3864,7 +3864,7 @@
   {
     "id": 710,
     "word": "Kaffeetasse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kaffeetasse.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3879,7 +3879,7 @@
   {
     "id": 713,
     "word": "Bodenwischgerät",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bodenwischgerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3894,7 +3894,7 @@
   {
     "id": 714,
     "word": "Papierhandtuch",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/papierhandtuch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3909,7 +3909,7 @@
   {
     "id": 715,
     "word": "Papierhandtuchspender",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/papierhandtuchspender.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3924,7 +3924,7 @@
   {
     "id": 716,
     "word": "Reinigungsbürste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/reinigungsburste.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3939,13 +3939,13 @@
   {
     "id": 717,
     "word": "Reinigungshandschuh",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/reinigungshandschuh.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Spülhandschuh",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -3959,7 +3959,7 @@
   {
     "id": 718,
     "word": "Reinigungsmittel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/reinigungsmittel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3974,7 +3974,7 @@
   {
     "id": 719,
     "word": "Reinigungswagen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/reinigungswagen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -3989,7 +3989,7 @@
   {
     "id": 720,
     "word": "Seifenspender",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/seifenspender.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4004,7 +4004,7 @@
   {
     "id": 721,
     "word": "Sprühflasche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spruhflasche.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4019,7 +4019,7 @@
   {
     "id": 723,
     "word": "Staubsaugerbeutel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/staubsaugerbeutel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4034,7 +4034,7 @@
   {
     "id": 724,
     "word": "Wischbezug",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/wischbezug.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4049,7 +4049,7 @@
   {
     "id": 726,
     "word": "Bademantel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bademantel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4064,7 +4064,7 @@
   {
     "id": 727,
     "word": "Badezimmer",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/badezimmer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4079,7 +4079,7 @@
   {
     "id": 728,
     "word": "Balkon",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/balkon.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4094,7 +4094,7 @@
   {
     "id": 729,
     "word": "Bettdecke",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bettdecke.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4109,7 +4109,7 @@
   {
     "id": 730,
     "word": "Bettwäsche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bettwasche.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4124,7 +4124,7 @@
   {
     "id": 731,
     "word": "Doppelbett",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/doppelbett.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4139,7 +4139,7 @@
   {
     "id": 732,
     "word": "Duschkopf",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/duschkopf.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4154,7 +4154,7 @@
   {
     "id": 733,
     "word": "Einzelbett",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/einzelbett.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4169,7 +4169,7 @@
   {
     "id": 734,
     "word": "Fenster",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/fenster.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4184,7 +4184,7 @@
   {
     "id": 735,
     "word": "Fernbedienung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/fernbedienung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4199,7 +4199,7 @@
   {
     "id": 736,
     "word": "Fernseher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/fernseher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4214,7 +4214,7 @@
   {
     "id": 738,
     "word": "Garderobe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/garderobe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4229,7 +4229,7 @@
   {
     "id": 739,
     "word": "Gardine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/gardine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4244,7 +4244,7 @@
   {
     "id": 740,
     "word": "Handtuch",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/handtuch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4259,7 +4259,7 @@
   {
     "id": 741,
     "word": "Handtuchhalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/handtuchhalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4274,7 +4274,7 @@
   {
     "id": 742,
     "word": "Handtuchstange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/handtuchstange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4289,21 +4289,21 @@
   {
     "id": 743,
     "word": "Hoteltresor",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/hoteltresor.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Hotelsafe",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Zimmersafe",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Zimmertresor",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -4317,7 +4317,7 @@
   {
     "id": 745,
     "word": "Kleiderbügel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kleiderbugel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4332,7 +4332,7 @@
   {
     "id": 746,
     "word": "Kleiderschrank",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kleiderschrank.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4347,7 +4347,7 @@
   {
     "id": 747,
     "word": "Klimaanlagenregler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/klimaanlagenregler.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4362,7 +4362,7 @@
   {
     "id": 748,
     "word": "Kopfkissen",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kopfkissen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4377,7 +4377,7 @@
   {
     "id": 749,
     "word": "Minibar",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/minibar.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4392,13 +4392,13 @@
   {
     "id": 750,
     "word": "Nachttisch",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/nachttisch.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Nachtkästchen",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -4412,7 +4412,7 @@
   {
     "id": 751,
     "word": "Rasierapparat",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/rasierapparat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4427,7 +4427,7 @@
   {
     "id": 753,
     "word": "Toilettenbürste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/toilettenburste.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4442,7 +4442,7 @@
   {
     "id": 754,
     "word": "Toilettenpapier",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/toilettenpapier.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4457,7 +4457,7 @@
   {
     "id": 755,
     "word": "Toilettenpapierhalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/toilettenpapierhalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4472,7 +4472,7 @@
   {
     "id": 756,
     "word": "Wasserkocher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/wasserkocher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4487,7 +4487,7 @@
   {
     "id": 757,
     "word": "Zahnbürste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/zahnburste.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4502,7 +4502,7 @@
   {
     "id": 758,
     "word": "Zahnpasta",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/zahnpasta.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4517,13 +4517,13 @@
   {
     "id": 759,
     "word": "EC-Karte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/ec-karte.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "EC-Karten",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -4537,7 +4537,7 @@
   {
     "id": 761,
     "word": "Gepäck",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/gepack.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4552,7 +4552,7 @@
   {
     "id": 762,
     "word": "Gepäckwagen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gepackwagen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4567,7 +4567,7 @@
   {
     "id": 764,
     "word": "Koffer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/koffer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4582,13 +4582,13 @@
   {
     "id": 765,
     "word": "Kreditkarte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kreditkarte.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kreditkarten",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -4602,7 +4602,7 @@
   {
     "id": 766,
     "word": "Parkplatz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/parkplatz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4617,7 +4617,7 @@
   {
     "id": 767,
     "word": "Rezeption",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/rezeption.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4632,7 +4632,7 @@
   {
     "id": 768,
     "word": "Rezeptionsglocke",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/rezeptionsglocke.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4647,7 +4647,7 @@
   {
     "id": 769,
     "word": "Sicherheitsnadel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/sicherheitsnadel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4662,7 +4662,7 @@
   {
     "id": 771,
     "word": "Streichholz",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/streichholz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4677,7 +4677,7 @@
   {
     "id": 772,
     "word": "Tasche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/tasche.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4692,7 +4692,7 @@
   {
     "id": 773,
     "word": "Trolley",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/trolley.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4707,7 +4707,7 @@
   {
     "id": 776,
     "word": "Waschmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/waschmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4722,7 +4722,7 @@
   {
     "id": 778,
     "word": "Waschmittel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/waschmittel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4737,7 +4737,7 @@
   {
     "id": 779,
     "word": "Wäscheständer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/waschestander.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4752,7 +4752,7 @@
   {
     "id": 780,
     "word": "Wäscheklammer",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/wascheklammer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4767,7 +4767,7 @@
   {
     "id": 782,
     "word": "Waschgang",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/waschgang.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4782,7 +4782,7 @@
   {
     "id": 783,
     "word": "Schleuderzahl",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schleuderzahl.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4797,7 +4797,7 @@
   {
     "id": 784,
     "word": "Pflegeetikett",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/pflegeetikett.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4812,7 +4812,7 @@
   {
     "id": 786,
     "word": "Seife",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/seife.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4827,7 +4827,7 @@
   {
     "id": 908,
     "word": "Handtacker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/handtacker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4842,7 +4842,7 @@
   {
     "id": 909,
     "word": "Winkelmesser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/winkelmesser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4857,7 +4857,7 @@
   {
     "id": 912,
     "word": "Vorhängeschloss",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/vorhangeschloss.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4872,13 +4872,13 @@
   {
     "id": 932,
     "word": "Bogenzirkel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bogenzirkel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Zirkel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -4892,7 +4892,7 @@
   {
     "id": 937,
     "word": "Flachzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/flachzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4907,7 +4907,7 @@
   {
     "id": 938,
     "word": "Gripzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/gripzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4922,7 +4922,7 @@
   {
     "id": 945,
     "word": "Schlagschnur",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schlagschnur.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4937,7 +4937,7 @@
   {
     "id": 953,
     "word": "Schraubenziehersatz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schraubenziehersatz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4952,7 +4952,7 @@
   {
     "id": 954,
     "word": "Holzbock",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/holzbock.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4967,7 +4967,7 @@
   {
     "id": 955,
     "word": "Spitzzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spitzzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -4982,17 +4982,17 @@
   {
     "id": 958,
     "word": "Staubsaugerfilter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/staubsaugerfilter.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Filter",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Lamellenfilter",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -5006,7 +5006,7 @@
   {
     "id": 959,
     "word": "Schlauch",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schlauch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5021,7 +5021,7 @@
   {
     "id": 961,
     "word": "Anschlagwinkel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/anschlagwinkel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5036,13 +5036,13 @@
   {
     "id": 964,
     "word": "Drehmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/drehmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "konventionelle Drehmaschine",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -5056,7 +5056,7 @@
   {
     "id": 980,
     "word": "Bargeld",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bargeld.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5071,7 +5071,7 @@
   {
     "id": 1005,
     "word": "Erste-Hilfe-Koffer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/erste-hilfe-koffer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5086,7 +5086,7 @@
   {
     "id": 1006,
     "word": "Feuerlöscher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/feuerloscher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5101,7 +5101,7 @@
   {
     "id": 1023,
     "word": "Bett",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bett.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5116,7 +5116,7 @@
   {
     "id": 1034,
     "word": "Lichtschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/lichtschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5131,7 +5131,7 @@
   {
     "id": 1049,
     "word": "Geldschein",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/geldschein.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5146,7 +5146,7 @@
   {
     "id": 1050,
     "word": "Münze",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/munze.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5161,13 +5161,13 @@
   {
     "id": 1111,
     "word": "Backrost",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/backrost.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Rost",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -5181,13 +5181,13 @@
   {
     "id": 1113,
     "word": "Kaffeevollautomat",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kaffeevollautomat.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kaffeemaschine",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -5201,7 +5201,7 @@
   {
     "id": 1115,
     "word": "Servierteller",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/servierteller.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5216,7 +5216,7 @@
   {
     "id": 1116,
     "word": "Tumbler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/tumbler.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5231,7 +5231,7 @@
   {
     "id": 1117,
     "word": "Warmhalterost",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/warmhalterost.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5246,7 +5246,7 @@
   {
     "id": 1118,
     "word": "Desinfektionsmittelspender",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/desinfektionsmittelspender.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5261,7 +5261,7 @@
   {
     "id": 1119,
     "word": "Käsebrett",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kasebrett.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5276,7 +5276,7 @@
   {
     "id": 1122,
     "word": "Rührschüssel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/ruhrschussel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5291,7 +5291,7 @@
   {
     "id": 1123,
     "word": "Ceranfeldschaber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/ceranfeldschaber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5306,7 +5306,7 @@
   {
     "id": 1126,
     "word": "Topflappen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/topflappen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5321,7 +5321,7 @@
   {
     "id": 1127,
     "word": "Defibrillator",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/defibrillator.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5336,7 +5336,7 @@
   {
     "id": 1128,
     "word": "Notfallplan",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/notfallplan.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5351,7 +5351,7 @@
   {
     "id": 1129,
     "word": "Notausgang",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/notausgang.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5366,7 +5366,7 @@
   {
     "id": 1136,
     "word": "Garderobenständer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/garderobenstander.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5381,7 +5381,7 @@
   {
     "id": 1138,
     "word": "Telefonanlage",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/telefonanlage.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5396,7 +5396,7 @@
   {
     "id": 1139,
     "word": "Sitzgruppe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/sitzgruppe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5411,7 +5411,7 @@
   {
     "id": 1142,
     "word": "Fliese",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/fliese.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5426,7 +5426,7 @@
   {
     "id": 1143,
     "word": "Flurschild",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/flurschild.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5441,7 +5441,7 @@
   {
     "id": 1144,
     "word": "Kosmetikmülleimer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kosmetikmulleimer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5456,7 +5456,7 @@
   {
     "id": 1145,
     "word": "Schließzylinder",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schliezylinder.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5471,7 +5471,7 @@
   {
     "id": 1146,
     "word": "Sicherheitssteckdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/sicherheitssteckdose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5486,7 +5486,7 @@
   {
     "id": 1147,
     "word": "Waschtisch",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/waschtisch.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5501,7 +5501,7 @@
   {
     "id": 1148,
     "word": "Türschild",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/turschild.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5516,7 +5516,7 @@
   {
     "id": 1149,
     "word": "Badregal",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/badregal.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5531,7 +5531,7 @@
   {
     "id": 1197,
     "word": "Mikrowelle",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/mikrowelle.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5546,7 +5546,7 @@
   {
     "id": 1198,
     "word": "Küchenmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kuchenmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5561,7 +5561,7 @@
   {
     "id": 1199,
     "word": "Gasherd",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gasherd.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5576,7 +5576,7 @@
   {
     "id": 1200,
     "word": "Bierkrug",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bierkrug.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5591,7 +5591,7 @@
   {
     "id": 1203,
     "word": "Abstandschelle",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/abstandschelle.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5606,7 +5606,7 @@
   {
     "id": 1204,
     "word": "Abzweigdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/abzweigdose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5621,13 +5621,13 @@
   {
     "id": 1205,
     "word": "Aderendhülse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/aderendhulse.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Aderendhülsen",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -5641,7 +5641,7 @@
   {
     "id": 1206,
     "word": "Aderleitung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/aderleitung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5656,7 +5656,7 @@
   {
     "id": 1207,
     "word": "Alarmleuchte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/alarmleuchte.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5671,7 +5671,7 @@
   {
     "id": 1208,
     "word": "Analogmessgerät",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/analogmessgerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5686,7 +5686,7 @@
   {
     "id": 1209,
     "word": "Anlagenmessgerät",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/anlagenmessgerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5701,7 +5701,7 @@
   {
     "id": 1210,
     "word": "Anschlussdatenbezeichnung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/anschlussdatenbezeichnung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5716,7 +5716,7 @@
   {
     "id": 1211,
     "word": "Baustrahler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/baustrahler.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5731,7 +5731,7 @@
   {
     "id": 1212,
     "word": "Aufputzinstallation",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/aufputzinstallation.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5746,7 +5746,7 @@
   {
     "id": 1213,
     "word": "Aufputzinstallationsrohr",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/aufputzinstallationsrohr.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5761,7 +5761,7 @@
   {
     "id": 1214,
     "word": "Audiosignal",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/audiosignal.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5776,7 +5776,7 @@
   {
     "id": 1215,
     "word": "Außengewinde",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/auengewinde.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5791,7 +5791,7 @@
   {
     "id": 1216,
     "word": "Bananenstecker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bananenstecker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5806,7 +5806,7 @@
   {
     "id": 1217,
     "word": "Batterie",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/batterie.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5821,7 +5821,7 @@
   {
     "id": 1218,
     "word": "Baustromverteiler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/baustromverteiler.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5836,7 +5836,7 @@
   {
     "id": 1219,
     "word": "Bedienfeld",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bedienfeld.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5851,7 +5851,7 @@
   {
     "id": 1220,
     "word": "Betoninstallationsrohr",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/betoninstallationsrohr.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5866,7 +5866,7 @@
   {
     "id": 1221,
     "word": "Bohrfutter",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bohrfutter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5881,7 +5881,7 @@
   {
     "id": 1222,
     "word": "Bohrfutterschlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bohrfutterschlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5896,13 +5896,13 @@
   {
     "id": 1223,
     "word": "Bohrloch",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bohrloch.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Bohrlöcher",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -5916,7 +5916,7 @@
   {
     "id": 1224,
     "word": "Brandschutzschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/brandschutzschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5931,7 +5931,7 @@
   {
     "id": 1225,
     "word": "Brüstungskanal",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/brustungskanal.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5946,7 +5946,7 @@
   {
     "id": 1226,
     "word": "Bügelgehörschutz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bugelgehorschutz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5961,7 +5961,7 @@
   {
     "id": 1227,
     "word": "Dämmerungsschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/dammerungsschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5976,7 +5976,7 @@
   {
     "id": 1228,
     "word": "Deckenleuchte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/deckenleuchte.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -5991,7 +5991,7 @@
   {
     "id": 1229,
     "word": "Dimmer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/dimmer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6006,13 +6006,13 @@
   {
     "id": 1230,
     "word": "Dosenklemme",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/dosenklemme.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Dosenklemmen",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -6026,7 +6026,7 @@
   {
     "id": 1231,
     "word": "Draht",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/draht.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6041,7 +6041,7 @@
   {
     "id": 1232,
     "word": "Dreheisenmessgerät",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/dreheisenmessgerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6056,7 +6056,7 @@
   {
     "id": 1233,
     "word": "Drehfeldmessgerät",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/drehfeldmessgerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6071,7 +6071,7 @@
   {
     "id": 1234,
     "word": "Drehschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/drehschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6086,7 +6086,7 @@
   {
     "id": 1236,
     "word": "Druckschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/druckschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6101,7 +6101,7 @@
   {
     "id": 1237,
     "word": "Durchbruchbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/durchbruchbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6116,7 +6116,7 @@
   {
     "id": 1238,
     "word": "Durchgangsprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/durchgangsprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6131,17 +6131,17 @@
   {
     "id": 1239,
     "word": "E-Check",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/e-check.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Elektro-Check",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "elektrische Sicherheitsprüfung",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -6155,13 +6155,13 @@
   {
     "id": 1240,
     "word": "Elektrikergips",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/elektrikergips.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Elektriker-Gips",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -6175,21 +6175,21 @@
   {
     "id": 1241,
     "word": "elektrische Verteiler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/elektrische-verteiler.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Verteilung",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Sicherungskasten",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Verteilerkasten",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -6203,7 +6203,7 @@
   {
     "id": 1242,
     "word": "Elektroinstallation",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/elektroinstallation.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6218,7 +6218,7 @@
   {
     "id": 1243,
     "word": "Elektrosäge",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/elektrosage.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6233,7 +6233,7 @@
   {
     "id": 1244,
     "word": "Elektroschere",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/elektroschere.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6248,7 +6248,7 @@
   {
     "id": 1246,
     "word": "Entlötpumpe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/entlotpumpe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6263,7 +6263,7 @@
   {
     "id": 1247,
     "word": "Eurostecker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eurostecker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6278,7 +6278,7 @@
   {
     "id": 1249,
     "word": "Flachmeißel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/flachmeiel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6293,7 +6293,7 @@
   {
     "id": 1250,
     "word": "Flachrundzange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/flachrundzange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6308,17 +6308,17 @@
   {
     "id": 1252,
     "word": "Gehörstöpsel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gehorstopsel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Gehörschutzstöpsel",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Ohrenstöpsel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -6332,7 +6332,7 @@
   {
     "id": 1253,
     "word": "Heißklebepistole",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/heiklebepistole.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6347,7 +6347,7 @@
   {
     "id": 1254,
     "word": "Heißluftgebläse",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/heiluftgeblase.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6362,7 +6362,7 @@
   {
     "id": 1255,
     "word": "Hygrometer",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/hygrometer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6377,7 +6377,7 @@
   {
     "id": 1256,
     "word": "Infrarotstrahler",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/infrarotstrahler.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6392,7 +6392,7 @@
   {
     "id": 1257,
     "word": "Innengewinde",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/innengewinde.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6407,7 +6407,7 @@
   {
     "id": 1258,
     "word": "inverte Stromerzeuger",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/inverte-stromerzeuger.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6422,7 +6422,7 @@
   {
     "id": 1259,
     "word": "Kabel",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kabel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6437,7 +6437,7 @@
   {
     "id": 1260,
     "word": "Kabelbinder",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kabelbinder.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6452,7 +6452,7 @@
   {
     "id": 1261,
     "word": "Kabeleinziehsystem",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kabeleinziehsystem.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6467,7 +6467,7 @@
   {
     "id": 1263,
     "word": "Kraftstromsteckdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kraftstromsteckdose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6482,13 +6482,13 @@
   {
     "id": 1264,
     "word": "Kuparohr",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kuparohr.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kuparohre",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -6502,7 +6502,7 @@
   {
     "id": 1265,
     "word": "Litzenleitung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/litzenleitung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6517,7 +6517,7 @@
   {
     "id": 1266,
     "word": "Lochsäge",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/lochsage.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6532,7 +6532,7 @@
   {
     "id": 1267,
     "word": "Lötkolben",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/lotkolben.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6547,7 +6547,7 @@
   {
     "id": 1268,
     "word": "Lötset",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/lotset.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6562,7 +6562,7 @@
   {
     "id": 1270,
     "word": "Lötstation",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/lotstation.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6577,13 +6577,13 @@
   {
     "id": 1271,
     "word": "Lötstelle",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/lotstelle.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Lötstellen",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -6597,7 +6597,7 @@
   {
     "id": 1272,
     "word": "Lötzinn",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/lotzinn.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6612,13 +6612,13 @@
   {
     "id": 1273,
     "word": "LSA-Plus-Auflegewerkzeug",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/lsa-plus-auflegewerkzeug.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "LSA-Plus-Anlegewerkzeug",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -6632,7 +6632,7 @@
   {
     "id": 1274,
     "word": "Mauernutfräse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/mauernutfrase.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6647,7 +6647,7 @@
   {
     "id": 1275,
     "word": "Metalldetektor",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/metalldetektor.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6662,7 +6662,7 @@
   {
     "id": 1276,
     "word": "Netzteil",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/netzteil.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6677,7 +6677,7 @@
   {
     "id": 1277,
     "word": "Phasenprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/phasenprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6692,7 +6692,7 @@
   {
     "id": 1278,
     "word": "Doppelringschlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/doppelringschlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6707,13 +6707,13 @@
   {
     "id": 1279,
     "word": "Ringmaulschlüssel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/ringmaulschlussel.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Maulringschlüssel",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -6727,7 +6727,7 @@
   {
     "id": 1280,
     "word": "Schleifenimpedanzmessgerät",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/schleifenimpedanzmessgerat.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6742,7 +6742,7 @@
   {
     "id": 1281,
     "word": "Schraubenkopf",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schraubenkopf.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6757,13 +6757,13 @@
   {
     "id": 1282,
     "word": "Schraubenmutter",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schraubenmutter.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Mutter",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -6777,7 +6777,7 @@
   {
     "id": 1283,
     "word": "Schutzschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schutzschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6792,7 +6792,7 @@
   {
     "id": 1284,
     "word": "Signalband",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/signalband.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6807,7 +6807,7 @@
   {
     "id": 1286,
     "word": "Stabschrauber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/stabschrauber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6822,13 +6822,13 @@
   {
     "id": 1287,
     "word": "Starkstromleitung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/starkstromleitung.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Starkstromleitungen",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -6842,13 +6842,13 @@
   {
     "id": 1288,
     "word": "Steckverbinder",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/steckverbinder.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Steckverbinder",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -6862,7 +6862,7 @@
   {
     "id": 1289,
     "word": "Störlichtbogen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/storlichtbogen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6877,7 +6877,7 @@
   {
     "id": 1290,
     "word": "Strommesszange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/strommesszange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6892,7 +6892,7 @@
   {
     "id": 1291,
     "word": "Transformator",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/transformator.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6907,13 +6907,13 @@
   {
     "id": 1292,
     "word": "Trockenbauwand",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/trockenbauwand.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Unterputzinstallation",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -6927,7 +6927,7 @@
   {
     "id": 1293,
     "word": "Unterputzdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/unterputzdose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6942,7 +6942,7 @@
   {
     "id": 1297,
     "word": "Schaltplan",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schaltplan.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6957,13 +6957,13 @@
   {
     "id": 1298,
     "word": "Nut",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/nut.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Nute",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -6977,7 +6977,7 @@
   {
     "id": 1299,
     "word": "Kondensator",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kondensator.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -6992,7 +6992,7 @@
   {
     "id": 1300,
     "word": "Atom",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/atom.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7007,7 +7007,7 @@
   {
     "id": 1304,
     "word": "Atomstrom",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/atomstrom.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7022,7 +7022,7 @@
   {
     "id": 1306,
     "word": "Außenleiter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/auenleiter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7037,7 +7037,7 @@
   {
     "id": 1309,
     "word": "Neutralleiter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/neutralleiter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7052,7 +7052,7 @@
   {
     "id": 1328,
     "word": "Abfallstrom",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/abfallstrom.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7067,7 +7067,7 @@
   {
     "id": 1329,
     "word": "Amplitude",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/amplitude.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7082,7 +7082,7 @@
   {
     "id": 1330,
     "word": "Dreiphasenwechselstrom",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/dreiphasenwechselstrom.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7097,7 +7097,7 @@
   {
     "id": 1331,
     "word": "Gleichstrom",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gleichstrom.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7112,7 +7112,7 @@
   {
     "id": 1332,
     "word": "Wechselstrom",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/wechselstrom.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7127,7 +7127,7 @@
   {
     "id": 1333,
     "word": "Anode",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/anode.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7142,7 +7142,7 @@
   {
     "id": 1334,
     "word": "Kathode",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kathode.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7157,7 +7157,7 @@
   {
     "id": 1335,
     "word": "Leitung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/leitung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7172,7 +7172,7 @@
   {
     "id": 1337,
     "word": "Stromkreis",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/stromkreis.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7187,7 +7187,7 @@
   {
     "id": 1339,
     "word": "Verbraucher",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/verbraucher.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7202,7 +7202,7 @@
   {
     "id": 1375,
     "word": "Beipackzettel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/beipackzettel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7217,7 +7217,7 @@
   {
     "id": 1424,
     "word": "Schwingschleifer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schwingschleifer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7232,7 +7232,7 @@
   {
     "id": 1426,
     "word": "Sicherung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/sicherung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7247,7 +7247,7 @@
   {
     "id": 1428,
     "word": "Sondermüll",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/sondermull.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7262,7 +7262,7 @@
   {
     "id": 1446,
     "word": "Ader",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/ader.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7277,13 +7277,13 @@
   {
     "id": 1447,
     "word": "Notausschalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/notausschalter.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Notausschaltknopf",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -7297,7 +7297,7 @@
   {
     "id": 1449,
     "word": "Außengewindeschneider",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/auengewindeschneider.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7312,7 +7312,7 @@
   {
     "id": 1450,
     "word": "Bohrvorrichtung",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/bohrvorrichtung.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7327,7 +7327,7 @@
   {
     "id": 1452,
     "word": "Federscheibe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/federscheibe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7342,7 +7342,7 @@
   {
     "id": 1453,
     "word": "Flügelmutter",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/flugelmutter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7357,7 +7357,7 @@
   {
     "id": 1454,
     "word": "Handbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/handbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7372,7 +7372,7 @@
   {
     "id": 1455,
     "word": "Kegelreibahle",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kegelreibahle.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7387,7 +7387,7 @@
   {
     "id": 1456,
     "word": "Kühlmittelflasche",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kuhlmittelflasche.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7402,7 +7402,7 @@
   {
     "id": 1457,
     "word": "Manometer",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/manometer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7417,7 +7417,7 @@
   {
     "id": 1458,
     "word": "Maschinengewindebohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/maschinengewindebohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7432,13 +7432,13 @@
   {
     "id": 1459,
     "word": "Ölkanne",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/olkanne.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Ölkännchen",
-        "singular_article": 3
+        "article": 3
       }
     ],
     "document_image": [
@@ -7452,7 +7452,7 @@
   {
     "id": 1460,
     "word": "Radius",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/radius.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7467,7 +7467,7 @@
   {
     "id": 1461,
     "word": "Rändelschraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/randelschraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7482,17 +7482,17 @@
   {
     "id": 1463,
     "word": "Spax-Schraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spax-schraube.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Universalschraube",
-        "singular_article": 2
+        "article": 2
       },
       {
         "alt_word": "Spax",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -7506,7 +7506,7 @@
   {
     "id": 1464,
     "word": "Unterlegscheibe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/unterlegscheibe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7521,7 +7521,7 @@
   {
     "id": 1465,
     "word": "Zylinderkopfschraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/zylinderkopfschraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7536,7 +7536,7 @@
   {
     "id": 1466,
     "word": "CNC-Fräsmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/cnc-frasmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7551,7 +7551,7 @@
   {
     "id": 1467,
     "word": "Eckmesserkopf",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eckmesserkopf.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7566,7 +7566,7 @@
   {
     "id": 1468,
     "word": "Einstellring",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/einstellring.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7581,7 +7581,7 @@
   {
     "id": 1469,
     "word": "Formfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/formfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7596,7 +7596,7 @@
   {
     "id": 1470,
     "word": "Grenzrachenlehre",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/grenzrachenlehre.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7611,7 +7611,7 @@
   {
     "id": 1471,
     "word": "Kantentaster",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kantentaster.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7626,7 +7626,7 @@
   {
     "id": 1472,
     "word": "Messerkopf",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/messerkopf.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7641,7 +7641,7 @@
   {
     "id": 1473,
     "word": "Messuhr",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/messuhr.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7656,7 +7656,7 @@
   {
     "id": 1474,
     "word": "Radienfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/radienfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7671,7 +7671,7 @@
   {
     "id": 1475,
     "word": "Satzfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/satzfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7686,7 +7686,7 @@
   {
     "id": 1476,
     "word": "Schaftfräser mit Radius",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schaftfraser-mit-radius.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7701,7 +7701,7 @@
   {
     "id": 1477,
     "word": "T-Nutenfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/t-nutenfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7716,7 +7716,7 @@
   {
     "id": 1478,
     "word": "T-Nutenstein",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/t-nutenstein.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7731,7 +7731,7 @@
   {
     "id": 1479,
     "word": "Trapezantriebsspindel",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/trapezantriebsspindel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7746,7 +7746,7 @@
   {
     "id": 1480,
     "word": "Universaltaster",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/universaltaster.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7761,7 +7761,7 @@
   {
     "id": 1481,
     "word": "Walzenfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/walzenfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7776,7 +7776,7 @@
   {
     "id": 1482,
     "word": "Zahnradfräser",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zahnradfraser.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7791,7 +7791,7 @@
   {
     "id": 1483,
     "word": "Abstechdrehmeißel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/abstechdrehmeiel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7806,7 +7806,7 @@
   {
     "id": 1485,
     "word": "Bitsatz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bitsatz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7821,7 +7821,7 @@
   {
     "id": 1487,
     "word": "Bolzenschneider",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bolzenschneider.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7836,7 +7836,7 @@
   {
     "id": 1488,
     "word": "Bügelprisma",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/bugelprisma.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7851,7 +7851,7 @@
   {
     "id": 1489,
     "word": "Doppelkörner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/doppelkorner.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7866,7 +7866,7 @@
   {
     "id": 1491,
     "word": "Druckluftpistole",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/druckluftpistole.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7881,7 +7881,7 @@
   {
     "id": 1493,
     "word": "Einstechdrehmeißel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/einstechdrehmeiel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7896,7 +7896,7 @@
   {
     "id": 1494,
     "word": "Gegenschlag",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gegenschlag.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7911,7 +7911,7 @@
   {
     "id": 1495,
     "word": "Gewindestange",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/gewindestange.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7926,7 +7926,7 @@
   {
     "id": 1496,
     "word": "Gewindestift",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/gewindestift.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7941,7 +7941,7 @@
   {
     "id": 1501,
     "word": "Innendrehmeißel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/innendrehmeiel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -7956,21 +7956,21 @@
   {
     "id": 1502,
     "word": "Inbus mit Griff",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/inbus-mit-griff.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Inbusschlüssel mit Griff",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Stiftschlüssel mit Griff",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Innensechskantschlüssel mit Griff",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -7984,21 +7984,21 @@
   {
     "id": 1503,
     "word": "Inbussatz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/inbussatz.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Innensechskantschlüsselsatz",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Inbusschlüsselsatz",
-        "singular_article": 1
+        "article": 1
       },
       {
         "alt_word": "Stiftschlüsselsatz",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -8012,13 +8012,13 @@
   {
     "id": 1504,
     "word": "Klebekerze",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/klebekerze.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Klebekerzen",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -8032,7 +8032,7 @@
   {
     "id": 1505,
     "word": "Körnerplatte",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kornerplatte.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8047,7 +8047,7 @@
   {
     "id": 1506,
     "word": "Kugellager",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kugellager.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8062,13 +8062,13 @@
   {
     "id": 1507,
     "word": "Kraftmessdose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kraftmessdose.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kraftaufnehmer",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -8082,13 +8082,13 @@
   {
     "id": 1509,
     "word": "Akku-Ladestation",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/akku-ladestation.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Ladestation",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -8102,7 +8102,7 @@
   {
     "id": 1510,
     "word": "Lastenkran",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/lastenkran.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8117,7 +8117,7 @@
   {
     "id": 1511,
     "word": "mitlaufende Spitze",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/mitlaufende-spitze.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8132,7 +8132,7 @@
   {
     "id": 1512,
     "word": "O-Ring",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/o-ring.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8147,7 +8147,7 @@
   {
     "id": 1513,
     "word": "Passstift",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/passstift.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8162,7 +8162,7 @@
   {
     "id": 1514,
     "word": "Poliervlies",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/poliervlies.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8177,7 +8177,7 @@
   {
     "id": 1515,
     "word": "Prisma",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/prisma.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8192,7 +8192,7 @@
   {
     "id": 1517,
     "word": "Reduzieröse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/reduzierose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8207,7 +8207,7 @@
   {
     "id": 1518,
     "word": "Richtbank",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/richtbank.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8222,7 +8222,7 @@
   {
     "id": 1519,
     "word": "Rohrschere",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/rohrschere.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8237,7 +8237,7 @@
   {
     "id": 1520,
     "word": "Säulenbohrmaschine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/saulenbohrmaschine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8252,7 +8252,7 @@
   {
     "id": 1521,
     "word": "Schlauchschere",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schlauchschere.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8267,7 +8267,7 @@
   {
     "id": 1522,
     "word": "Schleifpapierhalter",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schleifpapierhalter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8282,7 +8282,7 @@
   {
     "id": 1523,
     "word": "Schnellspanner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schnellspanner.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8297,7 +8297,7 @@
   {
     "id": 1525,
     "word": "Schweißerkabine",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schweierkabine.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8312,7 +8312,7 @@
   {
     "id": 1526,
     "word": "Sicherungsring",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/sicherungsring.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8327,13 +8327,13 @@
   {
     "id": 1527,
     "word": "Spannfeder",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spannfeder.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Feder",
-        "singular_article": 2
+        "article": 2
       }
     ],
     "document_image": [
@@ -8347,7 +8347,7 @@
   {
     "id": 1528,
     "word": "Spannfutter",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/spannfutter.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8362,7 +8362,7 @@
   {
     "id": 1529,
     "word": "Spannhülse",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spannhulse.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8377,7 +8377,7 @@
   {
     "id": 1530,
     "word": "Spanntreppe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spanntreppe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8392,7 +8392,7 @@
   {
     "id": 1531,
     "word": "Tafelschere",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/tafelschere.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8407,7 +8407,7 @@
   {
     "id": 1532,
     "word": "Tiefenmaßstab",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/tiefenmastab.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8422,7 +8422,7 @@
   {
     "id": 1533,
     "word": "Trennstemmer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/trennstemmer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8437,7 +8437,7 @@
   {
     "id": 1534,
     "word": "Werkzeugwagen",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/werkzeugwagen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8452,7 +8452,7 @@
   {
     "id": 1536,
     "word": "Austreiber",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/austreiber.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8467,7 +8467,7 @@
   {
     "id": 1537,
     "word": "Feilenbürste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/feilenburste.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8482,7 +8482,7 @@
   {
     "id": 1538,
     "word": "Flachspanner",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/flachspanner.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8497,7 +8497,7 @@
   {
     "id": 1539,
     "word": "Haarwinkel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/haarwinkel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8512,7 +8512,7 @@
   {
     "id": 1540,
     "word": "Schlichtfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schlichtfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8527,7 +8527,7 @@
   {
     "id": 1541,
     "word": "Schlosserfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schlosserfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8542,7 +8542,7 @@
   {
     "id": 1542,
     "word": "Senkkopfschraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/senkkopfschraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8557,7 +8557,7 @@
   {
     "id": 1543,
     "word": "Schruppfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schruppfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8572,7 +8572,7 @@
   {
     "id": 1544,
     "word": "Spannpratze",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/spannpratze.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8587,7 +8587,7 @@
   {
     "id": 1545,
     "word": "Stahlmaßstab",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/stahlmastab.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8602,7 +8602,7 @@
   {
     "id": 1546,
     "word": "Vierkantfeile",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/vierkantfeile.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8617,7 +8617,7 @@
   {
     "id": 1547,
     "word": "Werkbank",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/werkbank.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8632,7 +8632,7 @@
   {
     "id": 1555,
     "word": "Kreide",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/kreide.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8647,7 +8647,7 @@
   {
     "id": 1556,
     "word": "Pinsel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/pinsel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8662,7 +8662,7 @@
   {
     "id": 1557,
     "word": "Schäferkiste",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schaferkiste.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8677,7 +8677,7 @@
   {
     "id": 1558,
     "word": "Spiritus",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spiritus.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8692,7 +8692,7 @@
   {
     "id": 1559,
     "word": "Sprühreiniger",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spruhreiniger.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8707,7 +8707,7 @@
   {
     "id": 1573,
     "word": "Sechskantschraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/sechskantschraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8722,7 +8722,7 @@
   {
     "id": 1594,
     "word": "Heftklammern",
-    "singular_article": 4,
+    "article": 4,
     "audio": "http://testserver/media/audio/heftklammern.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8737,7 +8737,7 @@
   {
     "id": 1596,
     "word": "Stempel",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/stempel.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8752,7 +8752,7 @@
   {
     "id": 1599,
     "word": "Stempelkissen",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/stempelkissen.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8767,7 +8767,7 @@
   {
     "id": 1623,
     "word": "Dose",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/dose.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8782,7 +8782,7 @@
   {
     "id": 1684,
     "word": "Brandmelder",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/brandmelder.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8797,7 +8797,7 @@
   {
     "id": 1685,
     "word": "Kapselgehörschutz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/kapselgehorschutz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8812,7 +8812,7 @@
   {
     "id": 1707,
     "word": "Werkzeugkoffer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/werkzeugkoffer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8827,7 +8827,7 @@
   {
     "id": 1799,
     "word": "Feder",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/feder.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8842,7 +8842,7 @@
   {
     "id": 1852,
     "word": "Mundschutz",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/mundschutz.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8857,7 +8857,7 @@
   {
     "id": 1857,
     "word": "Schleifset",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/schleifset.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8872,7 +8872,7 @@
   {
     "id": 1864,
     "word": "Bandschleifer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/bandschleifer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8887,7 +8887,7 @@
   {
     "id": 1874,
     "word": "Schleifscheibe",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schleifscheibe.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8902,7 +8902,7 @@
   {
     "id": 1875,
     "word": "Steinbohrer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/steinbohrer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8917,7 +8917,7 @@
   {
     "id": 1888,
     "word": "Schleifblock",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schleifblock.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8932,7 +8932,7 @@
   {
     "id": 1896,
     "word": "D3-Leim",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/d3-leim.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8947,7 +8947,7 @@
   {
     "id": 1897,
     "word": "Einschraubhaken",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/einschraubhaken.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8962,7 +8962,7 @@
   {
     "id": 1900,
     "word": "Schlossschraube",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/schlossschraube.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8977,7 +8977,7 @@
   {
     "id": 1973,
     "word": "Textmarker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/textmarker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -8992,13 +8992,13 @@
   {
     "id": 2139,
     "word": "Arbeitsschuh",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/arbeitsschuh.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Sicherheitsschuh",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
