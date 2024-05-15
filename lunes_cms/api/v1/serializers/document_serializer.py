@@ -14,6 +14,8 @@ class DocumentSerializer(serializers.ModelSerializer):
     alternatives = AlternativeWordSerializer(many=True, read_only=True)
     document_image = DocumentImageSerializer(many=True, read_only=True)
 
+    article = serializers.IntegerField(source="singular_article")
+
     class Meta:
         """
         Define model and the corresponding fields
@@ -23,7 +25,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "word",
-            "singular_article",
+            "article",
             "audio",
             "word_type",
             "alternatives",

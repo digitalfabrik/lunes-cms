@@ -1,7 +1,7 @@
 {
   "id": 170,
   "word": "Auto",
-  "singular_article": 3,
+  "article": 3,
   "audio": "http://testserver/media/audio/auto.mp3",
   "word_type": "Nomen",
   "alternatives": [],

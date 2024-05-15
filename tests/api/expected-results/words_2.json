@@ -1,7 +1,7 @@
 {
   "id": 2,
   "word": "Schere",
-  "singular_article": 2,
+  "article": 2,
   "audio": "http://testserver/media/audio/schere.mp3",
   "word_type": "Nomen",
   "alternatives": [],
