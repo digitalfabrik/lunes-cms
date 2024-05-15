@@ -2,7 +2,7 @@
   {
     "id": 1242,
     "word": "Elektroinstallation",
-    "singular_article": 2,
+    "article": 2,
     "audio": "http://testserver/media/audio/elektroinstallation.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -17,7 +17,7 @@
   {
     "id": 1247,
     "word": "Eurostecker",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/eurostecker.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -32,13 +32,13 @@
   {
     "id": 1264,
     "word": "Kuparohr",
-    "singular_article": 3,
+    "article": 3,
     "audio": "http://testserver/media/audio/kuparohr.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Kuparohre",
-        "singular_article": 4
+        "article": 4
       }
     ],
     "document_image": [
@@ -52,7 +52,7 @@
   {
     "id": 1277,
     "word": "Phasenprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/phasenprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -67,7 +67,7 @@
   {
     "id": 1297,
     "word": "Schaltplan",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/schaltplan.mp3",
     "word_type": "Nomen",
     "alternatives": [],
@@ -82,13 +82,13 @@
   {
     "id": 117,
     "word": "Spannungsprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/spannungsprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Duspol",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
@@ -102,13 +102,13 @@
   {
     "id": 284,
     "word": "zweipolige Phasenprüfer",
-    "singular_article": 1,
+    "article": 1,
     "audio": "http://testserver/media/audio/zweipolige-phasenprufer.mp3",
     "word_type": "Nomen",
     "alternatives": [
       {
         "alt_word": "Phasenprüfer",
-        "singular_article": 1
+        "article": 1
       }
     ],
     "document_image": [
