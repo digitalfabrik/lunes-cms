@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 09:04+0000\n"
+"POT-Creation-Date: 2024-06-11 15:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:35 cms/admins/document_admin.py:160
+#: cms/admin.py:35 cms/admins/document_admin.py:162
 #: cms/admins/training_set_admin.py:359 cms/forms.py:46 cms/forms.py:48
 #: cms/list_filter.py:14 cms/models/discipline.py:101
 msgid "disciplines"
@@ -79,25 +79,25 @@ msgstr "unveröffentlichte Module"
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:177
+#: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
 #: cms/admins/training_set_admin.py:376
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:140 cms/models/training_set.py:25
+#: cms/admins/document_admin.py:142 cms/models/training_set.py:25
 #: cms/models/training_set.py:90
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:194 cms/models/document.py:66
+#: cms/admins/document_admin.py:196 cms/models/document.py:66
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:214 cms/models/document_image.py:123
+#: cms/admins/document_admin.py:216 cms/models/document_image.py:123
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:229 cms/models/alternative_word.py:24
+#: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
 #: cms/models/document.py:43
 msgid "singular article"
 msgstr "Singular-Artikel"
