@@ -2,6 +2,7 @@ UNRELEASED
 ----------
 
 * [ [#512](https://github.com/digitalfabrik/lunes-cms/issues/512) ] Gender neutral language
+* [ [#532](https://github.com/digitalfabrik/lunes-cms/issues/532) ] Fix color of feedback list in dark mode
 
 
 2024.6.0
