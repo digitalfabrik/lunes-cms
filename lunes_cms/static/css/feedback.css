@@ -22,6 +22,28 @@ thead tr {
   font-weight: bold;
 }
 
+@media (prefers-color-scheme: dark) {
+
+  .table-striped tbody tr:nth-of-type(odd){
+    background-color: #000e38;
+  
+  }
+
+  .table-striped thead tr {
+    background-color: #47476e;
+    font-weight: bold;
+  }
+  
+  thead th .text {
+    color: #8ba6fa;
+  }
+
+  tbody {
+    color: #8ba6fa;
+  }
+
+}
+
 /* Checkbox column */
 thead th:nth-child(1) {
   width: 3%;
