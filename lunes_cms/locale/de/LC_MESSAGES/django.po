@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-11 15:29+0000\n"
+"POT-Creation-Date: 2024-06-19 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,30 @@ msgstr ""
 #: api/apps.py:13
 msgid "API"
 msgstr "API"
+
+#: api/utils.py:175
+msgid "This word is assigned to no training set."
+msgstr "Das word ist zu keinem Modul zugeordnet."
+
+#: api/utils.py:182
+msgid "This word is already registered in the system."
+msgstr "Das Wort ist schon im System hinterlegt."
+
+#: api/utils.py:184 api/utils.py:186
+msgid "Definition: "
+msgstr "Definition: "
+
+#: api/utils.py:186
+msgid "No definition is provided for this word."
+msgstr "Für dieses Wort ist keine Definition hinterlegt."
+
+#: api/utils.py:187
+msgid "Training sets: "
+msgstr "Module: "
+
+#: api/utils.py:191
+msgid "This word is not yet registered in the system"
+msgstr "Das Wort ist noch nicht im System hinterlegt."
 
 #: api/v1/serializers/feedback_serializer.py:22
 msgid ""

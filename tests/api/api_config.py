@@ -388,6 +388,26 @@ SPONSOR_ENDPOINTS = [
     },
 ]
 
+
+SEARCH_DUPLICATE_ENDPOINTS = [
+    {
+        "endpoint": "/api/search_duplicate/implementieren",
+        "expected_result": "tests/api/expected-results/duplicate_implementieren.json",
+    },
+    {
+        "endpoint": "/api/search_duplicate/Schere",
+        "expected_result": "tests/api/expected-results/duplicate_Schere.json",
+    },
+    {
+        "endpoint": "/api/search_duplicate/Ei",
+        "expected_result": "tests/api/expected-results/duplicate_Ei.json",
+    },
+    {
+        "endpoint": "/api/search_duplicate/neueswort",
+        "expected_result": "tests/api/expected-results/duplicate_neueswort.json",
+    },
+]
+
 #: The API endpoints
 API_ENDPOINTS = (
     DISCIPLINE_ENDPOINTS
@@ -396,6 +416,7 @@ API_ENDPOINTS = (
     + GROUP_ENDPOINTS
     + FEEDBACK_ENDPOINTS
     + SPONSOR_ENDPOINTS
+    + SEARCH_DUPLICATE_ENDPOINTS
 )
 
 #: Convert the dicts to tuples with a fixed length
