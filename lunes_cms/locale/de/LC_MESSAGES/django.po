@@ -497,11 +497,11 @@ msgstr "URL"
 
 #: cms/models/sponsor.py:43
 msgid "sponsor"
-msgstr "Sponsor"
+msgstr "Sponsor:in"
 
 #: cms/models/sponsor.py:44
 msgid "sponsors"
-msgstr "Sponsoren"
+msgstr "Sponsor:innen"
 
 #: cms/models/training_set.py:33
 msgid "document"
