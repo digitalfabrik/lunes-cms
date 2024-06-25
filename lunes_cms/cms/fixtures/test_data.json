@@ -58,7 +58,8 @@
         ["add_trainingset", "cms", "trainingset"],
         ["change_trainingset", "cms", "trainingset"],
         ["delete_trainingset", "cms", "trainingset"],
-        ["view_trainingset", "cms", "trainingset"]
+        ["view_trainingset", "cms", "trainingset"],
+        ["view_feedback", "cms", "feedback"]
       ]
     }
   },
@@ -6890,6 +6891,7 @@
       "word_type": "Nomen",
       "word": "Ei",
       "singular_article": 3,
+      "definition": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "audio": "audio/ei.mp3",
       "creation_date": "2021-08-09T13:52:38.131Z",
       "created_by": null,
@@ -13406,6 +13408,20 @@
       "singular_article": 2,
       "audio": "audio/hygiene.mp3",
       "creation_date": "2022-06-23T15:41:41.687Z",
+      "created_by": null,
+      "creator_is_admin": true
+    }
+  },
+  {
+    "model": "cms.document",
+    "pk": 2332,
+    "fields": {
+      "word_type": "Verb",
+      "word": "implementieren",
+      "singular_article": 0,
+      "definition": "in ein bestehendes Computersystem einsetzen, einbauen und so ein funktionsfähiges Programm erstellen",
+      "example_sentence": "eine neue Software implementieren",
+      "creation_date": "2021-04-13T15:58:10.468Z",
       "created_by": null,
       "creator_is_admin": true
     }
@@ -24825,5 +24841,25 @@
     "model": "cms.sponsor",
     "pk": 2,
     "fields": { "name": "Bundesagentur für Arbeit", "url": "https://www.arbeitsagentur.de/", "logo": "" }
+  },
+  {
+    "model": "cms.feedback",
+    "pk": 1,
+    "fields": {
+      "content_type": 1,
+      "object_id": 15,
+      "comment": "Good",
+      "created_date": "2022-06-28T23:21:07.074Z"
+    }
+  },
+  {
+    "model": "cms.feedback",
+    "pk": 2,
+    "fields": {
+      "content_type": 2,
+      "object_id": 36,
+      "comment": "Nice",
+      "created_date": "2022-06-28T23:21:07.074Z"
+    }
   }
 ]

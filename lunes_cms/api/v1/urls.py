@@ -4,7 +4,7 @@ URL patterns for the first version of the Lunes API
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from ..utils import OptionalSlashRouter
+from ..utils import OptionalSlashRouter, find_duplicates_for_word
 from . import views
 
 #: The namespace for this URL config (see :attr:`django.urls.ResolverMatch.app_name`)
@@ -58,5 +58,10 @@ urlpatterns = [
             template_name="swagger_ui.html", url_name="api:v1:schema"
         ),
         name="swagger-ui",
+    ),
+    path(
+        "search_duplicate/<word>",
+        find_duplicates_for_word,
+        name="search_duplicate",
     ),
 ]

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "pydub",
     "rest_framework",
     "qr_code",
+    "import_export",
 ]
 
 #: Activated middlewares (see :setting:`django:MIDDLEWARE`)

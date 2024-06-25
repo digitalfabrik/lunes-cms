@@ -2,6 +2,7 @@
 Context processors pass additional variables to templates (see :ref:`context-processors`).
 """
 from ..cms.models import Feedback
+from ..cms.feedback_filter import filter_feedback_by_creator
 
 
 def feedback_processor(request):
@@ -14,4 +15,11 @@ def feedback_processor(request):
     :return: The template context containing the number of unread feedback entries
     :rtype: dict
     """
-    return {"unread_feedback_cnt": Feedback.objects.filter(read_by=None).count()}
+    unread_feedback_entries = Feedback.objects.filter(read_by=None)
+
+    if not request.user.is_superuser:
+        unread_feedback_entries = filter_feedback_by_creator(
+            unread_feedback_entries, request.user
+        )
+
+    return {"unread_feedback_count": unread_feedback_entries.count()}

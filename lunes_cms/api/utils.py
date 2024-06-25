@@ -4,10 +4,13 @@ A collection of helper methods and classes
 
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import routers
 
-from ..cms.models import Discipline, GroupAPIKey
-from ..cms.utils import get_child_count
+from ..cms.models import Discipline, GroupAPIKey, Document
+from ..cms.utils import get_child_count, document_to_string
 
 
 class OptionalSlashRouter(routers.DefaultRouter):
@@ -151,3 +154,38 @@ def check_group_object_permissions(request, group_id):
     api_key_object = GroupAPIKey.get_from_token(key)
     if api_key_object.group_id != int(group_id):
         raise PermissionDenied()
+
+
+def find_duplicates_for_word(request, word):
+    """
+    Function to find existing words that match the input in the "word" field of document
+
+    :param request: current request
+    :type request: HttpRequest
+
+    :param group_id: input in the "word"field of document
+    :type group_id: str
+
+    :return: Whether any duplicate was found, and some details of the word if found
+    :rtype: JsonResponse
+
+    """
+
+    if duplicate := Document.objects.filter(word=word).first():
+        training_sets_description = _("This word is assigned to no training set.")
+        if training_sets := duplicate.training_sets.all():
+            training_sets_description = ", ".join(
+                str(training_set) for training_set in training_sets
+            )
+
+        result = {
+            "message": _("This word is already registered in the system."),
+            "word": document_to_string(duplicate) + " (" + duplicate.word_type + ")",
+            "definition": _("Definition: ") + duplicate.definition
+            if duplicate.definition
+            else _("Definition: ") + _("No definition is provided for this word."),
+            "training_sets": _("Training sets: ") + training_sets_description,
+        }
+
+        return JsonResponse(result)
+    return JsonResponse({"message": _("This word is not yet registered in the system")})

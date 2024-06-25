@@ -1,6 +1,8 @@
 from django.contrib import admin, messages
+
 from django.utils.translation import gettext_lazy as _
 
+from ..feedback_filter import filter_feedback_by_creator
 from ..models import Feedback
 
 
@@ -66,6 +68,14 @@ class FeedbackAdmin(admin.ModelAdmin):
                 "The selected feedback entries were successfully marked as unread.",
             ),
         )
+
+    def get_queryset(self, request):
+        feedback_entries = super().get_queryset(request)
+
+        if not request.user.is_superuser:
+            return filter_feedback_by_creator(feedback_entries, request.user)
+
+        return feedback_entries
 
     class Media:
         """

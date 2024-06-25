@@ -26,8 +26,10 @@ class DocumentAdmin(admin.ModelAdmin):
     fields = (
         "word_type",
         "grammatical_gender",
-        ("singular_article", "word"),
-        ("plural_article", "plural"),
+        "singular_article",
+        "word",
+        "plural_article",
+        "plural",
         "audio",
         "definition",
         "additional_meaning_1",

@@ -1,6 +1,11 @@
 UNRELEASED
 ----------
 
+* [ [#353](https://github.com/digitalfabrik/lunes-cms/issues/353) ] Filter feedback by creator of related objects
+* [ [#468](https://github.com/digitalfabrik/lunes-cms/issues/468) ] Excel list out of existing vocabulary in cms
+* [ [#534](https://github.com/digitalfabrik/lunes-cms/issues/534) ] Adjust form appearance for small screens
+* [ [#470](https://github.com/digitalfabrik/lunes-cms/issues/470) ] Inform users of word duplication in document form
+
 
 2024.5.1
 --------
