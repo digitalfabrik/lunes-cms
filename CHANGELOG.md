@@ -3,6 +3,7 @@ UNRELEASED
 
 * [ [#512](https://github.com/digitalfabrik/lunes-cms/issues/512) ] Gender neutral language
 * [ [#532](https://github.com/digitalfabrik/lunes-cms/issues/532) ] Fix color of feedback list in dark mode
+* [ [#544](https://github.com/digitalfabrik/lunes-cms/issues/544) ] Refactoring of toggle_plural_field.js
 
 
 2024.6.0
