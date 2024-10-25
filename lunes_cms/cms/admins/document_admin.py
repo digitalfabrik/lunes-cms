@@ -258,5 +258,5 @@ class DocumentAdmin(admin.ModelAdmin):
         css = {"all": ("css/document_form.css",)}
         js = (
             "js/image_preview.js",
-            "js/toggle_plural_field.js",
+            "js/toggle_document_form_fields.js",
         )
