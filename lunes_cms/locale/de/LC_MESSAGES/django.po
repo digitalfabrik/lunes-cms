@@ -432,7 +432,7 @@ msgid ""
 "The user who marked this feedback as read. If the feedback is unread, this "
 "field is empty."
 msgstr ""
-"Der Benutzer, der dieses Feedback als gelesen markiert hat. Wenn das "
+"Die nutzende Person, die dieses Feedback als gelesen markiert hat. Wenn das "
 "Feedback ungelesen ist, ist dieses Feld leer."
 
 #: cms/models/feedback.py:52
@@ -521,11 +521,11 @@ msgstr "URL"
 
 #: cms/models/sponsor.py:43
 msgid "sponsor"
-msgstr "Sponsor"
+msgstr "Sponsor:in"
 
 #: cms/models/sponsor.py:44
 msgid "sponsors"
-msgstr "Sponsoren"
+msgstr "Sponsor:innen"
 
 #: cms/models/training_set.py:33
 msgid "document"

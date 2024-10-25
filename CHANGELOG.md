@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#512](https://github.com/digitalfabrik/lunes-cms/issues/512) ] Gender neutral language
+
 
 2024.6.0
 --------
