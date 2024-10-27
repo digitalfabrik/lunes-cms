@@ -7,7 +7,7 @@ handles the url patterns described in the `README.md` file
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.i18n import JavaScriptCatalog
 
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)

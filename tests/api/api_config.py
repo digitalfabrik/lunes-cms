@@ -169,22 +169,30 @@ TRAINING_SET_ENDPOINTS = [
     },
     {
         "endpoint": "/api/training_set/15/",
-        "expected_result": "tests/api/expected-results/training_sets_by_discipline_15.json",
+        "expected_result": (
+            "tests/api/expected-results/training_sets_by_discipline_15.json"
+        ),
     },
     {
         "endpoint": "/api/training_set/15/",
         "api_key": "VALIDTOKEN",
-        "expected_result": "tests/api/expected-results/training_sets_by_discipline_15.json",
+        "expected_result": (
+            "tests/api/expected-results/training_sets_by_discipline_15.json"
+        ),
     },
     {
         "endpoint": "/api/training_set/15/",
         "api_key": "INVALIDTOKEN",
-        "expected_result": "tests/api/expected-results/training_sets_by_discipline_15.json",
+        "expected_result": (
+            "tests/api/expected-results/training_sets_by_discipline_15.json"
+        ),
     },
     {
         "endpoint": "/api/training_set/20/",
         "api_key": "VALIDTOKEN",
-        "expected_result": "tests/api/expected-results/training_sets_by_discipline_20.json",
+        "expected_result": (
+            "tests/api/expected-results/training_sets_by_discipline_20.json"
+        ),
     },
     {
         "endpoint": "/api/training_set/20/",
@@ -203,22 +211,30 @@ TRAINING_SET_ENDPOINTS = [
 VOCABULARY_ENDPOINTS = [
     {
         "endpoint": "/api/documents/7/",
-        "expected_result": "tests/api/expected-results/documents_by_training_set_7.json",
+        "expected_result": (
+            "tests/api/expected-results/documents_by_training_set_7.json"
+        ),
     },
     {
         "endpoint": "/api/documents/7/",
         "api_key": "VALIDTOKEN",
-        "expected_result": "tests/api/expected-results/documents_by_training_set_7.json",
+        "expected_result": (
+            "tests/api/expected-results/documents_by_training_set_7.json"
+        ),
     },
     {
         "endpoint": "/api/documents/7/",
         "api_key": "INVALIDTOKEN",
-        "expected_result": "tests/api/expected-results/documents_by_training_set_7.json",
+        "expected_result": (
+            "tests/api/expected-results/documents_by_training_set_7.json"
+        ),
     },
     {
         "endpoint": "/api/documents/108/",
         "api_key": "VALIDTOKEN",
-        "expected_result": "tests/api/expected-results/documents_by_training_set_108.json",
+        "expected_result": (
+            "tests/api/expected-results/documents_by_training_set_108.json"
+        ),
     },
     {
         "endpoint": "/api/documents/108/",
@@ -351,7 +367,9 @@ FEEDBACK_ENDPOINTS = [
     {
         "endpoint": "/api/feedback/",
         "post_data": {"comment": "invalid", "content_type": "invalid", "object_id": 1},
-        "expected_result": "tests/api/expected-results/feedback_invalid_content_type.json",
+        "expected_result": (
+            "tests/api/expected-results/feedback_invalid_content_type.json"
+        ),
         "expected_status_code": 400,
     },
     {
@@ -361,7 +379,9 @@ FEEDBACK_ENDPOINTS = [
             "content_type": "document",
             "object_id": 1,
         },
-        "expected_result": "tests/api/expected-results/feedback_document_not_found.json",
+        "expected_result": (
+            "tests/api/expected-results/feedback_document_not_found.json"
+        ),
         "expected_status_code": 400,
     },
 ]

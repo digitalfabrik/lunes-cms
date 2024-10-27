@@ -20,12 +20,10 @@ Including another URLconf
 
 """
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.templatetags.static import static as get_static_url
-from django.urls import include, path, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.urls import include, path, re_path, reverse_lazy
 from django.views.generic.base import RedirectView
 
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)
@@ -37,7 +35,7 @@ urlpatterns = [
     ),
     path("api/", include("lunes_cms.api.urls", namespace="api")),
     path("", include("lunes_cms.help.urls")),
-    url(r"^i18n/", include("django.conf.urls.i18n")),
+    re_path(r"^i18n/", include("django.conf.urls.i18n")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
 ]
 

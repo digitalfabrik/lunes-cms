@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from qr_code.qrcode.maker import make_qr_code_url_with_args
 
 
@@ -99,7 +99,8 @@ class GroupAPIKey(models.Model):
         :rtype: str
         """
         return mark_safe(
-            f'<a download="Lunes-QR-code-{escape(self.group.name)}.jpg" href="{escape(self.qr_code_url)}" title="{title or link}">{link}</a>'
+            f'<a download="Lunes-QR-code-{escape(self.group.name)}.jpg"'
+            f' href="{escape(self.qr_code_url)}" title="{title or link}">{link}</a>'
         )
 
     def qr_code_download_link(self):
@@ -119,7 +120,8 @@ class GroupAPIKey(models.Model):
         return (
             self.qr_code_link(
                 mark_safe(
-                    f'<img src="{escape(self.qr_code_url)}" width="330" height="auto" /></a>'
+                    f'<img src="{escape(self.qr_code_url)}" width="330" height="auto"'
+                    " /></a>"
                 ),
                 escape(_("Download QR code")),
             )

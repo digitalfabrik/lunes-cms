@@ -43,7 +43,8 @@ class Feedback(models.Model):
         related_name="feedback",
         verbose_name=_("marked as read by"),
         help_text=_(
-            "The user who marked this feedback as read. If the feedback is unread, this field is empty."
+            "The user who marked this feedback as read. If the feedback is unread, this"
+            " field is empty."
         ),
     )
 
