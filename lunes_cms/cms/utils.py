@@ -10,7 +10,7 @@ from html import escape
 
 from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 def create_resource_path(parent_dir, filename):
@@ -61,7 +61,7 @@ def document_to_string(doc):
     :rtype: str
     """
     alt_words = [str(elem) for elem in doc.alternatives.all()]
-    has_foto = "\U0001F4F7" if doc.document_image.all() else "\U000026A0"
+    has_foto = "\U0001f4f7" if doc.document_image.all() else "\U000026a0"
 
     if len(alt_words) > 0:
         alt_words = "(" + ", ".join(alt_words) + ")"

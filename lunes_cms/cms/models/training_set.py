@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 from ..utils import get_image_tag
@@ -76,7 +76,8 @@ class TrainingSet(MPTTModel):
         """
         if self.parent:
             msg = _(
-                "It is not possible to create child elements for training sets (unlike disciplines)."
+                "It is not possible to create child elements for training sets (unlike"
+                " disciplines)."
             )
             raise ValidationError(msg)
         super().save(*args, **kwargs)

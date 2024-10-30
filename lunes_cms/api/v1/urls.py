@@ -14,7 +14,7 @@ app_name = "v1"
 router = OptionalSlashRouter()
 router.register(r"disciplines", views.DisciplineViewSet, "disciplines")
 router.register(
-    "disciplines_by_level/",
+    "disciplines_by_level",
     views.DisciplineFilteredViewSet,
     "disciplines_overview",
 )
@@ -41,7 +41,9 @@ router.register(
 )
 
 router.register(
-    r"document_by_id/(?P<document_id>[0-9]+)", views.DocumentByIdViewSet, "documents"
+    r"document_by_id/(?P<document_id>[0-9]+)",
+    views.DocumentByIdViewSet,
+    "document_by_id",
 )
 router.register(r"words", views.WordViewSet, "words")
 router.register(r"group_info", views.GroupViewSet, "group_by_id")

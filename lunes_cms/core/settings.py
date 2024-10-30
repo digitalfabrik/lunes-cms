@@ -12,12 +12,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from distutils.util import strtobool
-
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .logging_formatter import ColorFormatter
+from .utils import strtobool
 
 ###################
 # CUSTOM SETTINGS #
@@ -137,7 +136,8 @@ try:
     }
 except KeyError as e:
     raise ImproperlyConfigured(
-        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not supported, must be one of {DATABASE_CHOICES.keys()}."
+        f"The database backend {os.environ.get('LUNES_CMS_DB_BACKEND')!r} is not"
+        f" supported, must be one of {DATABASE_CHOICES.keys()}."
     ) from e
 
 #: Default primary key field type to use for models that don’t have a field with primary_key=True.
@@ -171,7 +171,9 @@ SECRET_KEY = os.environ.get("LUNES_CMS_SECRET_KEY", "dummy" if DEBUG else "")
 #: See Password validation for more details. By default, no validation is performed and all passwords are accepted.
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        ),
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -333,7 +335,10 @@ LOGGING = {
             "style": "{",
         },
         "email": {
-            "format": "Date and time: {asctime}\nSeverity: {levelname}\nLogger: {name}\nMessage: {message}\nFile: {funcName}() in {pathname}:{lineno}",
+            "format": (
+                "Date and time: {asctime}\nSeverity: {levelname}\nLogger:"
+                " {name}\nMessage: {message}\nFile: {funcName}() in {pathname}:{lineno}"
+            ),
             "datefmt": "%Y-%m-%d %H:%M:%S",
             "style": "{",
         },
@@ -416,6 +421,7 @@ REST_FRAMEWORK = {
     "ALLOWED_VERSIONS": ("v1", "v2"),
     "DEFAULT_VERSION": "default",
     "DEFAULT_API_URL": "http://localhost:8080/api/",
+    "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
 }
 
 SPECTACULAR_SETTINGS = {

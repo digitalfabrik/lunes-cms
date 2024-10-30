@@ -6,7 +6,7 @@ from django.db.models import Count, F, Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ngettext
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 
 from ..forms import TrainingSetForm
@@ -217,8 +217,10 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
             messages.error(
                 request,
                 ngettext(
-                    "The training set {} could not be released because it contains less than {} vocabulary words with confirmed images.",
-                    "The training sets {} could not be released because they contain less than {} vocabulary words with confirmed images.",
+                    "The training set {} could not be released because it contains less"
+                    " than {} vocabulary words with confirmed images.",
+                    "The training sets {} could not be released because they contain"
+                    " less than {} vocabulary words with confirmed images.",
                     len(invalid_trainingsets),
                 ).format(
                     iter_to_string(invalid_trainingsets),

@@ -62,7 +62,10 @@ class Migration(migrations.Migration):
                     "read_by",
                     models.ForeignKey(
                         blank=True,
-                        help_text="The user who marked this feedback as read. If the feedback is unread, this field is empty.",
+                        help_text=(
+                            "The user who marked this feedback as read. If the feedback"
+                            " is unread, this field is empty."
+                        ),
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="feedback",

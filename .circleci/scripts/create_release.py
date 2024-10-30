@@ -34,9 +34,9 @@ def main():
     logo_url = "https://raw.githubusercontent.com/digitalfabrik/lunes-cms/c242f6b723da80e5d9f9ed7ca9c6f961bb095386/.github/logo.png"
     compare_url = "https://github.com/digitalfabrik/lunes-cms/compare"
     body = (
-        f"### ![]({logo_url}) lunes-cms `{args.tag}`"
-        f"\n\n### Changelog\n\n{args.changelog}\n\n"
-        f"Compare changes: [{args.prev_tag} → {args.tag}]({compare_url}/{args.prev_tag}...{args.tag})"
+        f"### ![]({logo_url}) lunes-cms `{args.tag}`\n\n###"
+        f" Changelog\n\n{args.changelog}\n\nCompare changes: [{args.prev_tag} →"
+        f" {args.tag}]({compare_url}/{args.prev_tag}...{args.tag})"
     )
 
     # Create release
