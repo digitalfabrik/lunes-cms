@@ -293,7 +293,7 @@ jobs:
           name: Publish lunes-cms package to (Test-)PyPI
           command: |
             source .venv/bin/activate
-            twine upload --non-interactive ./dist/lunes-cms-*.tar.gz
+            twine upload --non-interactive ./dist/lunes_cms-*.tar.gz
   create-release:
     docker:
       - image: cimg/python:3.11
