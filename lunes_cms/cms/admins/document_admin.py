@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 from django.db.models import Case, Exists, IntegerField, OuterRef, Value, When
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ..list_filter import (
     ApprovedImageListFilter,
@@ -258,5 +258,5 @@ class DocumentAdmin(admin.ModelAdmin):
         css = {"all": ("css/document_form.css",)}
         js = (
             "js/image_preview.js",
-            "js/toggle_plural_field.js",
+            "js/toggle_document_form_fields.js",
         )

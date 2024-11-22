@@ -22,7 +22,8 @@ def main():
         deliverino_private_key = os.environ["DELIVERINO_PRIVATE_KEY"]
     except KeyError as e:
         raise RuntimeError(
-            "Please make sure this step has access to the 'deliverino' CircleCI context."
+            "Please make sure this step has access to the 'deliverino' CircleCI"
+            " context."
         ) from e
 
     # Generate payload for the JWT

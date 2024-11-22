@@ -10,7 +10,7 @@ echo "Checking system requirements..." | print_info
 # Check if requirements are satisfied
 
 # Define the required python version
-required_python_version="8"
+required_python_version="11"
 if [[ ! -x "$(command -v python3)" ]]; then  echo "Python3 is not installed. Please install version 3.${required_python_version} or later manually and run this script again."  | print_error
     exit 1
 fi

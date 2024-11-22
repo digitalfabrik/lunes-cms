@@ -5,7 +5,7 @@ A collection of helper methods and classes
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
 from django.http import JsonResponse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import routers
 
@@ -181,9 +181,11 @@ def find_duplicates_for_word(request, word):
         result = {
             "message": _("This word is already registered in the system."),
             "word": document_to_string(duplicate) + " (" + duplicate.word_type + ")",
-            "definition": _("Definition: ") + duplicate.definition
-            if duplicate.definition
-            else _("Definition: ") + _("No definition is provided for this word."),
+            "definition": (
+                _("Definition: ") + duplicate.definition
+                if duplicate.definition
+                else _("Definition: ") + _("No definition is provided for this word.")
+            ),
             "training_sets": _("Training sets: ") + training_sets_description,
         }
 

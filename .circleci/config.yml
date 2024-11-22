@@ -5,7 +5,7 @@ orbs:
 jobs:
   install:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - restore_cache:
@@ -33,7 +33,7 @@ jobs:
             - lunes_cms.egg-info
   compile-translations:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -56,7 +56,7 @@ jobs:
             - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
   pylint:
     docker:
-      - image: "cimg/python:3.9"
+      - image: "cimg/python:3.11"
     steps:
       - checkout
       - attach_workspace:
@@ -84,7 +84,7 @@ jobs:
             - cc-test-reporter
   test:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
         environment:
           LUNES_CMS_SECRET_KEY: circleci-dummy-key
       - image: cimg/postgres:14.1
@@ -137,7 +137,7 @@ jobs:
             ./cc-test-reporter sum-coverage -o - coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
   black:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -149,7 +149,7 @@ jobs:
             black --check .
   check-translations:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -162,7 +162,7 @@ jobs:
           command: ./tools/check_translations.sh
   build-documentation:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -172,7 +172,7 @@ jobs:
           command: ./tools/build_documentation.sh
   bump-dev-version:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -217,7 +217,7 @@ jobs:
             - lunes_cms/__init__.py
   bump-version:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -267,7 +267,7 @@ jobs:
           command: git checkout develop && git merge main --commit --no-edit && git push
   build-package:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -284,7 +284,7 @@ jobs:
             - dist
   publish-package:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:
@@ -293,10 +293,10 @@ jobs:
           name: Publish lunes-cms package to (Test-)PyPI
           command: |
             source .venv/bin/activate
-            twine upload --non-interactive ./dist/lunes-cms-*.tar.gz
+            twine upload --non-interactive ./dist/lunes_cms-*.tar.gz
   create-release:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
     steps:
       - checkout
       - attach_workspace:

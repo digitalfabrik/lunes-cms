@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from PIL import Image, ImageFilter
 
 from ..utils import get_image_tag
@@ -44,6 +44,7 @@ class DocumentImage(models.Model):
         :rtype: None
         """
         name_elements = self.image.path.split(".")
+        new_path = ""
         for elem in name_elements:
             if elem != name_elements[-1]:
                 new_path = elem + "_"

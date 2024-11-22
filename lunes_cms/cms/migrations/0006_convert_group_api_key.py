@@ -60,7 +60,9 @@ class Migration(migrations.Migration):
             name="token",
             field=models.CharField(
                 default=lunes_cms.cms.models.group_api_key.generate_default_token,
-                help_text="10-50 characters, only digits and upper case letters allowed.",
+                help_text=(
+                    "10-50 characters, only digits and upper case letters allowed."
+                ),
                 max_length=50,
                 unique=True,
                 validators=[

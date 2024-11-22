@@ -19,7 +19,7 @@ This is the content management system for the vocabulary trainer app Lunes, whic
 
 Following packages are required before installing the project (install them with your package manager):
 
-* python3.8 or greater
+* python3.11 or greater
 * python3-pip
 * python3-venv
 * ffmpeg

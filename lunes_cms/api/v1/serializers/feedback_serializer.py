@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from ....cms.models import Feedback
@@ -19,7 +19,8 @@ class FeedbackSerializer(serializers.ModelSerializer):
         ),
         error_messages={
             "does_not_exist": _(
-                "The content type must be either 'discipline', 'training set' or 'document'."
+                "The content type must be either 'discipline', 'training set' or"
+                " 'document'."
             ),
         },
     )

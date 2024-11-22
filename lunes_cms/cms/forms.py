@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .models import Discipline, Document, TrainingSet
 from .widgets import ManyToManyOverlay
@@ -52,7 +52,9 @@ class TrainingSetForm(forms.ModelForm):
         widget=ManyToManyOverlay(verbose_name=(_("vocabulary")), is_stacked=False),
         label=_("vocabulary"),
         help_text=_(
-            "Please select some vocabularies for your training set. To see a preview of the corresponding image and audio files, press the alt key while selecting."
+            "Please select some vocabularies for your training set. To see a preview of"
+            " the corresponding image and audio files, press the alt key while"
+            " selecting."
         ),
     )
 
@@ -74,7 +76,8 @@ class TrainingSetForm(forms.ModelForm):
             self.add_error(
                 "released",
                 _(
-                    "You can only release a training set that contains at least {} vocabulary words with confirmed images."
+                    "You can only release a training set that contains at least {}"
+                    " vocabulary words with confirmed images."
                 ).format(settings.TRAININGSET_MIN_DOCS),
             )
         return cleaned_data

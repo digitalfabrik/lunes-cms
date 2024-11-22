@@ -242,7 +242,10 @@ class Migration(migrations.Migration):
                     "name",
                     models.CharField(
                         default=None,
-                        help_text="A free-form name for the API key. Need not be unique. 50 characters max.",
+                        help_text=(
+                            "A free-form name for the API key. Need not be unique. 50"
+                            " characters max."
+                        ),
                         max_length=50,
                     ),
                 ),
@@ -251,14 +254,19 @@ class Migration(migrations.Migration):
                     models.BooleanField(
                         blank=True,
                         default=False,
-                        help_text="If the API key is revoked, clients cannot use it anymore. (This cannot be undone.)",
+                        help_text=(
+                            "If the API key is revoked, clients cannot use it anymore."
+                            " (This cannot be undone.)"
+                        ),
                     ),
                 ),
                 (
                     "expiry_date",
                     models.DateTimeField(
                         blank=True,
-                        help_text="Once API key expires, clients cannot use it anymore.",
+                        help_text=(
+                            "Once API key expires, clients cannot use it anymore."
+                        ),
                         null=True,
                         verbose_name="Expires",
                     ),
