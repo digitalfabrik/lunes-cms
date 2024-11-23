@@ -14,8 +14,8 @@ from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 from tablib import Dataset
 
-from ..models import Discipline, Document, Static
-from .document_resource import DocumentResource
+from ..document import DocumentResource
+from ...models import Discipline, Document, Static
 
 
 class DisciplineAdmin(DraggableMPTTAdmin):

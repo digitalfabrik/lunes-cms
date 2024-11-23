@@ -5,14 +5,14 @@ from django.contrib import admin, messages
 from django.db.models import Count, F, Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.utils.translation import ngettext
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 from mptt.admin import DraggableMPTTAdmin
 
-from ..forms import TrainingSetForm
-from ..list_filter import DisciplineListFilter
-from ..models import Discipline, Document, Static
-from ..utils import iter_to_string
+from .form import TrainingSetForm
+from ..discipline import DisciplineListFilter
+from ...models import Static, Discipline, Document
+from ...utils import iter_to_string
 
 
 class TrainingSetAdmin(DraggableMPTTAdmin):

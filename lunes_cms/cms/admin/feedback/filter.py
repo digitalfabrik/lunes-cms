@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
-from .models import Discipline, TrainingSet, Document
+from ...models import Discipline, TrainingSet, Document
 
 
 def filter_feedback_by_creator(feedback_queryset, user):

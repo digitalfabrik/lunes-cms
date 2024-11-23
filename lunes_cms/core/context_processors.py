@@ -1,8 +1,8 @@
 """
 Context processors pass additional variables to templates (see :ref:`context-processors`).
 """
+from ..cms.admin.feedback import filter_feedback_by_creator # pylint: disable=no-name-in-module
 from ..cms.models import Feedback
-from ..cms.feedback_filter import filter_feedback_by_creator
 
 
 def feedback_processor(request):

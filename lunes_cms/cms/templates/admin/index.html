@@ -1,0 +1,55 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">
+                    {{ _("Duplicate vocabularies") }}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if duplicate_vocabularies %}
+                    <table class="table table-sm">
+                        <tbody>
+                            {% for v in duplicate_vocabularies %}
+                                <tr>
+                                    <td>
+                                        {{ v.word }}
+                                        <small>({{ v.word_type }})</small>
+                                    </td>
+                                    <td>
+                                        <ul class="m-0">
+                                            {% for document in v.documents %}
+                                                <li>
+                                                    <a href="{% url 'admin:cms_document_change' object_id=document.id %}">
+                                                        {{ document.word }} ({{ document.id }})
+                                                    </a>
+                                                    <div class="text-sm">
+                                                        <strong>{{ _("Training sets") }}:</strong>
+                                                        {% if document.training_sets %}
+                                                            {% for ts in document.training_sets %}
+                                                                {{ ts.title }}
+                                                                {% if not forloop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <i>{{ _("None") }}</i>
+                                                        {% endif %}
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    {{ _("No duplicate vocabularies available") }}.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {{ block.super }}
+{% endblock %}
