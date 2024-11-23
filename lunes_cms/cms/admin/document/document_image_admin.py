@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import DocumentImage
+from ...models import DocumentImage
 
 
 class DocumentImageAdmin(admin.StackedInline):

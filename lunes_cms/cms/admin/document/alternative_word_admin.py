@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import AlternativeWord
+from ...models import AlternativeWord
 
 
 class AlternativeWordAdmin(admin.StackedInline):

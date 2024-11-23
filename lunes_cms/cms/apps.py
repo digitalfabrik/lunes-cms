@@ -9,4 +9,4 @@ class CmsConfig(AppConfig):
     """
 
     name = "lunes_cms.cms"
-    verbose_name = _("vocabulary management")
+    verbose_name = _("Vocabulary management")

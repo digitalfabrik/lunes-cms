@@ -4,15 +4,15 @@ from django.contrib import admin
 from django.db.models import Case, Exists, IntegerField, OuterRef, Value, When
 from django.utils.translation import gettext_lazy as _
 
-from ..list_filter import (
+from .list_filter import (
     ApprovedImageListFilter,
-    AssignedListFilter,
     DocumentDisciplineListFilter,
     DocumentTrainingSetListFilter,
+    AssignedListFilter,
 )
-from ..models import DocumentImage, Static
 from .alternative_word_admin import AlternativeWordAdmin
 from .document_image_admin import DocumentImageAdmin
+from ...models import DocumentImage, Static
 
 SUPERUSER_ONLY_LIST_FILTERS = [ApprovedImageListFilter]
 

@@ -186,7 +186,7 @@ def find_duplicates_for_word(request, word):
                 if duplicate.definition
                 else _("Definition: ") + _("No definition is provided for this word.")
             ),
-            "training_sets": _("Training sets: ") + training_sets_description,
+            "training_sets": _("Training sets") + ": " + training_sets_description,
         }
 
         return JsonResponse(result)

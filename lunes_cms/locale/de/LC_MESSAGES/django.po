@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-27 22:23+0000\n"
+"POT-Creation-Date: 2024-11-23 10:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,9 +37,9 @@ msgstr "Definition: "
 msgid "No definition is provided for this word."
 msgstr "Für dieses Wort ist keine Definition hinterlegt."
 
-#: api/utils.py:189
-msgid "Training sets: "
-msgstr "Module: "
+#: api/utils.py:189 cms/templates/admin/index.html:29
+msgid "Training sets"
+msgstr "Module "
 
 #: api/utils.py:193
 msgid "This word is not yet registered in the system"
@@ -56,143 +56,209 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:35 cms/admins/document_admin.py:162
-#: cms/admins/training_set_admin.py:361 cms/forms.py:46 cms/forms.py:48
-#: cms/list_filter.py:14 cms/models/discipline.py:101
+#: cms/admin.py:56 cms/admin/discipline/list_filter.py:14
+#: cms/admin/document/document_admin.py:157 cms/admin/training_set/form.py:31
+#: cms/admin/training_set/form.py:33
+#: cms/admin/training_set/training_set_admin.py:361
+#: cms/models/discipline.py:101
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:36 cms/list_filter.py:103 cms/models/training_set.py:92
+#: cms/admin.py:57 cms/admin/document/list_filter.py:38
+#: cms/models/training_set.py:92
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:148
+#: cms/admin.py:58 cms/admin/training_set/form.py:37
+#: cms/admin/training_set/form.py:38 cms/models/document.py:148
 #: cms/models/document.py:149
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:38
+#: cms/admin.py:59
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:39 cms/models/feedback.py:90
+#: cms/admin.py:60 cms/models/feedback.py:90
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:258
+#: cms/admin/discipline/discipline_admin.py:258
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:271
+#: cms/admin/discipline/discipline_admin.py:271
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:284
+#: cms/admin/discipline/discipline_admin.py:284
 msgid "Export all vocabulary for this discipline to CSV"
 msgstr "Alle Vokabeln dieser Modulgruppe als CSV exportieren"
 
-#: cms/admins/discipline_admin.py:324
+#: cms/admin/discipline/discipline_admin.py:324
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:345
+#: cms/admin/discipline/discipline_admin.py:345
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:366
+#: cms/admin/discipline/discipline_admin.py:366
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378
+#: cms/admin/discipline/discipline_admin.py:387
+#: cms/admin/document/document_admin.py:174
+#: cms/admin/training_set/training_set_admin.py:378
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:142 cms/models/training_set.py:25
+#: cms/admin/document/document_admin.py:137 cms/models/training_set.py:25
 #: cms/models/training_set.py:91
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:196 cms/models/document.py:66
+#: cms/admin/document/document_admin.py:191 cms/models/document.py:66
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:216 cms/models/document_image.py:124
+#: cms/admin/document/document_admin.py:211 cms/models/document_image.py:124
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
+#: cms/admin/document/document_admin.py:226 cms/models/alternative_word.py:24
 #: cms/models/document.py:43
 msgid "singular article"
 msgstr "Singular-Artikel"
 
-#: cms/admins/document_resource.py:24
+#: cms/admin/document/document_resource.py:24
 msgid "Word"
 msgstr "Vokabel"
 
-#: cms/admins/document_resource.py:26
+#: cms/admin/document/document_resource.py:26
 msgid "Word type"
 msgstr "Wortart"
 
-#: cms/admins/document_resource.py:29
+#: cms/admin/document/document_resource.py:29
 msgid "Singular Article"
 msgstr "Singular Artikel"
 
-#: cms/admins/document_resource.py:43
+#: cms/admin/document/document_resource.py:43
 msgid "Plural Article"
 msgstr "Plural Artikel"
 
-#: cms/admins/document_resource.py:56
+#: cms/admin/document/document_resource.py:56
 msgid "Has audio?"
 msgstr "Audio"
 
-#: cms/admins/document_resource.py:63
+#: cms/admin/document/document_resource.py:63
 msgid "Yes"
 msgstr "Ja"
 
-#: cms/admins/document_resource.py:64
+#: cms/admin/document/document_resource.py:64
 msgid "No"
 msgstr "Nein"
 
-#: cms/admins/document_resource.py:67
+#: cms/admin/document/document_resource.py:67
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
-#: cms/admins/document_resource.py:71
+#: cms/admin/document/document_resource.py:71
 msgid "Creation date"
 msgstr "Erstellt am"
 
-#: cms/admins/document_resource.py:81
+#: cms/admin/document/document_resource.py:81
 msgid "Training Sets"
 msgstr "Module"
 
-#: cms/admins/feedback_admin.py:34
+#: cms/admin/document/list_filter.py:98
+msgid "Images"
+msgstr "Bilder"
+
+#: cms/admin/document/list_filter.py:119
+msgid "At least one approved image"
+msgstr "Mind. ein bestätigtes Bild"
+
+#: cms/admin/document/list_filter.py:120
+msgid "At least one pending image"
+msgstr "Mind. ein unbestätigtes Bild"
+
+#: cms/admin/document/list_filter.py:121
+msgid "No approved images"
+msgstr "Keine bestätigten Bilder"
+
+#: cms/admin/document/list_filter.py:122
+msgid "No images"
+msgstr "Keine Bilder"
+
+#: cms/admin/document/list_filter.py:164
+msgid "Assignments"
+msgstr "Zuweisungen"
+
+#: cms/admin/document/list_filter.py:185
+msgid "Not assigned to any module"
+msgstr "Keinem Modul zugewiesen"
+
+#: cms/admin/document/list_filter.py:186
+msgid "Assigned to at least one module"
+msgstr "Mind. einem Modul zugewiesen"
+
+#: cms/admin/document/list_filter.py:187
+msgid "Assigned to released modules"
+msgstr "Veröffentlichten Modulen zugewiesen"
+
+#: cms/admin/document/list_filter.py:190
+msgid "Assigned to released modules in released disciplines"
+msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
+
+#: cms/admin/document/list_filter.py:192
+msgid "Assigned to unreleased modules"
+msgstr "Unveröffentlichten Modulen zugewiesen"
+
+#: cms/admin/feedback/feedback_admin.py:34
 msgid "Mark as read"
 msgstr "Als gelesen markieren"
 
-#: cms/admins/feedback_admin.py:49
+#: cms/admin/feedback/feedback_admin.py:49
 msgid "The selected feedback entries were successfully marked as read."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als gelesen markiert."
 
-#: cms/admins/feedback_admin.py:53
+#: cms/admin/feedback/feedback_admin.py:53
 msgid "Mark as unread"
 msgstr "Als ungelesen markieren"
 
-#: cms/admins/feedback_admin.py:68
+#: cms/admin/feedback/feedback_admin.py:68
 msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/sponsor_admin.py:36 cms/models/sponsor.py:26
+#: cms/admin/sponsor/sponsor_admin.py:36 cms/models/sponsor.py:26
 msgid "logo"
 msgstr "Logo"
 
-#: cms/admins/training_set_admin.py:185
+#: cms/admin/training_set/form.py:40
+msgid ""
+"Please select some vocabularies for your training set. To see a preview of "
+"the corresponding image and audio files, press the alt key while selecting."
+msgstr ""
+"Bitte wähle ein paar Vokabeln für dein Modul aus. Um eine Vorschau der "
+"Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
+"Element auswählst."
+
+#: cms/admin/training_set/form.py:64
+msgid ""
+"You can only release a training set that contains at least {} vocabulary "
+"words with confirmed images."
+msgstr ""
+"Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
+"bestätigten Bildern enthalten."
+
+#: cms/admin/training_set/training_set_admin.py:185
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: cms/admins/training_set_admin.py:220
+#: cms/admin/training_set/training_set_admin.py:220
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -206,110 +272,49 @@ msgstr[1] ""
 "Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
 "Vokabeln mit bestätigten Bildern enthalten."
 
-#: cms/admins/training_set_admin.py:235
+#: cms/admin/training_set/training_set_admin.py:235
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
-#: cms/admins/training_set_admin.py:249
+#: cms/admin/training_set/training_set_admin.py:249
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
 msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
 
-#: cms/admins/training_set_admin.py:255
+#: cms/admin/training_set/training_set_admin.py:255
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
-#: cms/admins/training_set_admin.py:279
+#: cms/admin/training_set/training_set_admin.py:279
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
-#: cms/admins/training_set_admin.py:290
+#: cms/admin/training_set/training_set_admin.py:290
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
 msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 
-#: cms/admins/training_set_admin.py:297
+#: cms/admin/training_set/training_set_admin.py:297
 msgid "words"
 msgstr "Vokabeln"
 
-#: cms/admins/training_set_admin.py:315
+#: cms/admin/training_set/training_set_admin.py:315
 msgid "published words"
 msgstr "veröffentlichte Vokabeln"
 
-#: cms/admins/training_set_admin.py:333
+#: cms/admin/training_set/training_set_admin.py:333
 msgid "unpublished words"
 msgstr "unveröffentlichte Vokabeln"
 
 #: cms/apps.py:12
-msgid "vocabulary management"
+msgid "Vocabulary management"
 msgstr "Vokabelverwaltung"
-
-#: cms/forms.py:55
-msgid ""
-"Please select some vocabularies for your training set. To see a preview of "
-"the corresponding image and audio files, press the alt key while selecting."
-msgstr ""
-"Bitte wähle ein paar Vokabeln für dein Modul aus. Um eine Vorschau der "
-"Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
-"Element auswählst."
-
-#: cms/forms.py:79
-msgid ""
-"You can only release a training set that contains at least {} vocabulary "
-"words with confirmed images."
-msgstr ""
-"Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
-"bestätigten Bildern enthalten."
-
-#: cms/list_filter.py:163
-msgid "Images"
-msgstr "Bilder"
-
-#: cms/list_filter.py:184
-msgid "At least one approved image"
-msgstr "Mind. ein bestätigtes Bild"
-
-#: cms/list_filter.py:185
-msgid "At least one pending image"
-msgstr "Mind. ein unbestätigtes Bild"
-
-#: cms/list_filter.py:186
-msgid "No approved images"
-msgstr "Keine bestätigten Bilder"
-
-#: cms/list_filter.py:187
-msgid "No images"
-msgstr "Keine Bilder"
-
-#: cms/list_filter.py:229
-msgid "Assignments"
-msgstr "Zuweisungen"
-
-#: cms/list_filter.py:250
-msgid "Not assigned to any module"
-msgstr "Keinem Modul zugewiesen"
-
-#: cms/list_filter.py:251
-msgid "Assigned to at least one module"
-msgstr "Mind. einem Modul zugewiesen"
-
-#: cms/list_filter.py:252
-msgid "Assigned to released modules"
-msgstr "Veröffentlichten Modulen zugewiesen"
-
-#: cms/list_filter.py:255
-msgid "Assigned to released modules in released disciplines"
-msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
-
-#: cms/list_filter.py:257
-msgid "Assigned to unreleased modules"
-msgstr "Unveröffentlichten Modulen zugewiesen"
 
 #: cms/models/alternative_word.py:13 cms/models/alternative_word.py:56
 msgid "alternative word"
@@ -615,6 +620,18 @@ msgstr ""
 "Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, die allerdings geschützt sind:"
 
+#: cms/templates/admin/index.html:8
+msgid "Duplicate vocabularies"
+msgstr "Doppelte Vokabeln"
+
+#: cms/templates/admin/index.html:36
+msgid "None"
+msgstr "Keine"
+
+#: cms/templates/admin/index.html:48
+msgid "No duplicate vocabularies available"
+msgstr "Keine doppelten Vokabeln gefunden"
+
 #: cms/templates/admin/object_delete_summary.html:2
 msgid "Summary"
 msgstr "Zusammenfassung"
@@ -658,6 +675,12 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Training set"
+#~ msgstr "Module: "
+
+#~ msgid "Training sets: "
+#~ msgstr "Module: "
 
 #~ msgid "Article"
 #~ msgstr "Arikel"

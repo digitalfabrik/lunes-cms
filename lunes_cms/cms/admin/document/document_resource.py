@@ -2,8 +2,8 @@ from django.utils.translation import gettext_lazy as _
 from import_export import fields, resources
 from import_export.admin import ExportActionMixin
 
-from ..models import Document
-from ..models.static import Static
+from ...models import Document
+from ...models.static import Static
 
 
 class DocumentResource(resources.ModelResource):

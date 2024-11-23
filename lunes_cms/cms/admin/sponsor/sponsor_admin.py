@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from ..utils import get_image_tag
+from ...utils import get_image_tag
 
 
 class SponsorAdmin(admin.ModelAdmin):
