@@ -300,8 +300,8 @@ class DisciplineAdmin(DraggableMPTTAdmin):
 
             dataset = Dataset(
                 *(
-                    resource.export_resource(obj)
-                    for obj in Document.objects.filter(
+                    resource.export_resource(document)
+                    for document in Document.objects.filter(
                         training_sets__discipline=profession
                     )
                 ),
@@ -324,82 +324,82 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         description=_("released modules"),
         ordering="modules_released_order",
     )
-    def modules_released(self, obj):
+    def modules_released(self, discipline):
         """
         returns HTML Tag of the link to released training sets related to the discipline
 
-        :param obj: Discipline object
-        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+        :param discipline: Discipline object
+        :type discipline: ~lunes_cms.cms.models.discipline.Discipline
 
         :return: HTML Tag of the link to released training sets related to the discipline
         :rtype: str
         """
-        if not obj.is_leaf_node():
-            return obj.children_modules_released
+        if not discipline.is_leaf_node():
+            return discipline.children_modules_released
         trainingset_list = reverse("admin:cms_trainingset_changelist")
         return mark_safe(
-            f"<a href={trainingset_list}?disciplines={obj.id}&released__exact=1>{obj.modules_released}</a>"
+            f"<a href={trainingset_list}?disciplines={discipline.id}&released__exact=1>{discipline.modules_released}</a>"
         )
 
     @admin.display(
         description=_("unreleased modules"),
         ordering="modules_unreleased_order",
     )
-    def modules_unreleased(self, obj):
+    def modules_unreleased(self, discipline):
         """
         returns HTML Tag of the link to unreleased training sets related to the discipline
 
-        :param obj: Discipline object
-        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+        :param discipline: Discipline object
+        :type discipline: ~lunes_cms.cms.models.discipline.Discipline
 
         :return: HTML Tag of the link to unreleased training sets related to the discipline
         :rtype: str
         """
-        if not obj.is_leaf_node():
-            return obj.children_modules_unreleased
+        if not discipline.is_leaf_node():
+            return discipline.children_modules_unreleased
         trainingset_list = reverse("admin:cms_trainingset_changelist")
         return mark_safe(
-            f"<a href={trainingset_list}?disciplines={obj.id}&released__exact=0>{obj.modules_unreleased}</a>"
+            f"<a href={trainingset_list}?disciplines={discipline.id}&released__exact=0>{discipline.modules_unreleased}</a>"
         )
 
     @admin.display(
         description=_("published words in released modules"),
         ordering="-words_released_order",
     )
-    def words_released(self, obj):
+    def words_released(self, discipline):
         """
         returns HTML Tag of the link to released words in the relased training sets related to the descipline
 
-        :param obj: Discipline object
-        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+        :param discipline: Discipline object
+        :type discipline: ~lunes_cms.cms.models.discipline.Discipline
 
         :return:
         :rtype: str
         """
-        if not obj.is_leaf_node():
-            return obj.children_words_released
+        if not discipline.is_leaf_node():
+            return discipline.children_words_released
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
-            f"<a href={document_list}?disciplines={obj.id}&assigned=released&images=approved>{obj.words_released}</a>"
+            f"<a href={document_list}?disciplines={discipline.id}&assigned=released&images=approved>{discipline.words_released}</a>"
         )
 
     @admin.display(
         description=_("creator group"),
     )
-    def creator_group(self, obj):
+    def creator_group(self, discipline):
         """
         Include creator group of discipline in list display
 
-        :param obj: Discipline object
-        :type obj: ~lunes_cms.cms.models.discipline.Discipline
+        :param discipline: Discipline object
+        :type discipline: ~lunes_cms.cms.models.discipline.Discipline
 
         :return: Either static admin group or user group
         :rtype: str
         """
-        if obj.creator_is_admin:
+        if discipline.creator_is_admin:
             return Static.admin_group
-        if obj.created_by:
-            return obj.created_by
+        if discipline.created_by:
+            return discipline.created_by
         return None
 
     class Media:

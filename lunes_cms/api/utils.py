@@ -90,7 +90,7 @@ def get_overview_discipline_queryset():
             "training_sets", filter=Q(training_sets__released=True)
         ),
     )
-    queryset = [obj for obj in queryset if obj.is_root_node()]
+    queryset = [discipline for discipline in queryset if discipline.is_root_node()]
     queryset = get_non_empty_disciplines(queryset)
     return queryset
 
@@ -113,7 +113,11 @@ def get_discipline_by_group_queryset(discipline_view_set):
             "training_sets", filter=Q(training_sets__released=True)
         ),
     )
-    queryset = [obj for obj in queryset if obj.is_root_node() and obj.is_valid()]
+    queryset = [
+        discipline
+        for discipline in queryset
+        if discipline.is_root_node() and discipline.is_valid()
+    ]
     return queryset
 
 
@@ -128,10 +132,10 @@ def get_non_empty_disciplines(queryset):
     :rtype: QuerySet
     """
     queryset = [
-        obj
-        for obj in queryset
-        if get_child_count(obj) > 0
-        or obj.training_sets.filter(released=True).count() > 0
+        discipline
+        for discipline in queryset
+        if get_child_count(discipline) > 0
+        or discipline.training_sets.filter(released=True).count() > 0
     ]
     return queryset
 

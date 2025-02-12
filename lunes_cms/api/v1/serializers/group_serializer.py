@@ -27,16 +27,20 @@ class GroupSerializer(serializers.ModelSerializer):
             "total_discipline_children",
         )
 
-    def get_total_discipline_children(self, obj):
+    def get_total_discipline_children(self, group):
         """Returns the total child count of a group.
         A child itself or one of its sub-children needs to
         contain at least one training set.
 
-        :param disc: Discipline instance
-        :type disc: ~lunes_cms.cms.models.discipline.Discipline
+        :param group: Group instance
+        :type group: django.contrib.auth.models.Group
         :return: sum of children
         :rtype: int
         """
-        queryset = Discipline.objects.filter(released=True, created_by=obj.id)
-        queryset = [obj for obj in queryset if obj.is_root_node() and obj.is_valid()]
+        queryset = Discipline.objects.filter(released=True, created_by=group.id)
+        queryset = [
+            discipline
+            for discipline in queryset
+            if discipline.is_root_node() and discipline.is_valid()
+        ]
         return len(queryset)
