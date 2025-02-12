@@ -128,31 +128,31 @@ class DocumentAdmin(admin.ModelAdmin):
             return qs.filter(creator_is_admin=True)
         return qs.filter(created_by__in=request.user.groups.all())
 
-    def related_training_set(self, obj):
+    def related_training_set(self, document):
         """
         Display related training sets in list display
 
-        :param obj: Document object
-        :type obj: models.Document
+        :param document: Document object
+        :type document: models.Document
         :return: comma seperated list of related training sets
         :rtype: str
         """
-        return ", ".join([child.title for child in obj.training_sets.all()])
+        return ", ".join([child.title for child in document.training_sets.all()])
 
     related_training_set.short_description = _("training set")
 
-    def related_disciplines(self, obj):
+    def related_disciplines(self, document):
         """
         Display related desciplines in list display
 
-        :param obj: Document object
-        :type obj: models.Document
+        :param document: Document object
+        :type document: models.Document
         :return: comma seperated list of related training sets
         :rtype: str
         """
         disciplines = []
 
-        for training_set in obj.training_sets.all():
+        for training_set in document.training_sets.all():
             disciplines += [
                 discipline.title for discipline in training_set.discipline.all()
             ]
@@ -161,34 +161,34 @@ class DocumentAdmin(admin.ModelAdmin):
 
     related_disciplines.short_description = _("disciplines")
 
-    def creator_group(self, obj):
+    def creator_group(self, document):
         """
         Include creator group of discipline in list display
 
-        :param obj: Document object
-        :type obj: models.Document
+        :param document: Document object
+        :type document: models.Document
         :return: Either static admin group or user group
         :rtype: str
         """
-        if obj.creator_is_admin:
+        if document.creator_is_admin:
             return Static.admin_group
-        if obj.created_by:
-            return obj.created_by
+        if document.created_by:
+            return document.created_by
         return None
 
     creator_group.short_description = _("creator group")
     creator_group.admin_order_field = "created_by"
 
-    def has_audio(self, obj):
+    def has_audio(self, document):
         """
         Include in list display whether a document has an audio file.
 
-        :param obj: Document object
-        :type obj: models.Document
+        :param document: Document object
+        :type document: models.Document
         :return: Either static admin group or user group
         :rtype: str
         """
-        if obj.audio:
+        if document.audio:
             return True
         return False
 
@@ -196,19 +196,19 @@ class DocumentAdmin(admin.ModelAdmin):
     has_audio.short_description = _("audio")
     has_audio.admin_order_field = "audio"
 
-    def has_image(self, obj):
+    def has_image(self, document):
         """
         Include in list display whether a document has an image file.
 
-        :param obj: Document object
-        :type obj: models.Document
+        :param document: Document object
+        :type document: models.Document
 
         :return: Whether the document has at least one confirmed image
         :rtype: bool
         """
-        if obj.has_confirmed_image:
+        if document.has_confirmed_image:
             return True
-        if obj.has_image:
+        if document.has_image:
             return None
         return False
 
@@ -216,17 +216,17 @@ class DocumentAdmin(admin.ModelAdmin):
     has_image.short_description = _("image")
     has_image.admin_order_field = "image_sort"
 
-    def singular_article_display(self, obj):
+    def singular_article_display(self, document):
         """
         Include article of document in list display
 
-        :param obj: Document object
-        :type obj: models.Document
+        :param document: Document object
+        :type document: models.Document
 
         :return: Either static admin group or user group
         :rtype: str
         """
-        return obj.get_singular_article_display()
+        return document.get_singular_article_display()
 
     singular_article_display.short_description = _("singular article")
 

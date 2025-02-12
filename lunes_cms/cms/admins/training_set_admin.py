@@ -297,82 +297,82 @@ class TrainingSetAdmin(DraggableMPTTAdmin):
         description=_("words"),
         ordering="-words",
     )
-    def words(self, obj):
+    def words(self, training_set):
         """
         returns HTML tag of the link to the list of words related to the training set
 
-        :param obj: Training set object
-        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :param training_set: Training set object
+        :type training_set: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: HTML tag of the link to the list of words related to the training set
         :rtype: str
         """
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
-            f"<a href={document_list}?training+set={obj.id}>{obj.words}</a>"
+            f"<a href={document_list}?training+set={training_set.id}>{training_set.words}</a>"
         )
 
     @admin.display(
         description=_("published words"),
         ordering="-words_released",
     )
-    def words_released(self, obj):
+    def words_released(self, training_set):
         """
         returns HTML tag of the link to the list of released words related to the training set
 
-        :param obj: Training set object
-        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :param training_set: Training set object
+        :type training_set: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: HTML tag of the link to the list of released words related to the training set
         :rtype: str
         """
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
-            f"<a href={document_list}?training+set={obj.id}&images=approved>{obj.words_released}</a>"
+            f"<a href={document_list}?training+set={training_set.id}&images=approved>{training_set.words_released}</a>"
         )
 
     @admin.display(
         description=_("unpublished words"),
         ordering="-words_unreleased",
     )
-    def words_unreleased(self, obj):
+    def words_unreleased(self, training_set):
         """
         returns HTML tag of the Link to the list of unreleased words related to the training set
 
-        :param obj: Training set object
-        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :param training_set: Training set object
+        :type training_set: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: HTML tag of the Link to the list of unreleased words related to the training set
         :rtype: str
         """
         document_list = reverse("admin:cms_document_changelist")
         return mark_safe(
-            f"<a href={document_list}?training+set={obj.id}&images=no-approved>{obj.words_unreleased}</a>"
+            f"<a href={document_list}?training+set={training_set.id}&images=no-approved>{training_set.words_unreleased}</a>"
         )
 
-    def related_disciplines(self, obj):
+    def related_disciplines(self, training_set):
         """
         Display related disciplines in list display
 
-        :param obj: Training set object
-        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :param training_set: Training set object
+        :type training_set: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: comma separated list of related disciplines
         :rtype: str
         """
-        return ", ".join([child.title for child in obj.discipline.all()])
+        return ", ".join([child.title for child in training_set.discipline.all()])
 
     related_disciplines.short_description = _("disciplines")
 
-    def creator_group(self, obj):
+    def creator_group(self, training_set):
         """
         Include creator group of discipline in list display
 
-        :param obj: Training set object
-        :type obj: ~lunes_cms.cms.models.training_set.TrainingSet
+        :param training_set: Training set object
+        :type training_set: ~lunes_cms.cms.models.training_set.TrainingSet
         :return: Either static admin group or user group
         :rtype: str
         """
-        if obj.creator_is_admin:
+        if training_set.creator_is_admin:
             return Static.admin_group
-        if obj.created_by:
-            return obj.created_by
+        if training_set.created_by:
+            return training_set.created_by
         return None
 
     creator_group.short_description = _("creator group")

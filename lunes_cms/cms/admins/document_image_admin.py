@@ -19,7 +19,7 @@ class DocumentImageAdmin(admin.StackedInline):
 
     def get_fields(self, request, obj=None):
         """
-        Override djangos get_fields function
+        Override Django's get_fields function
         to add custom superuser fields to the
         admin interface if the user has the corresponding
         access rights.

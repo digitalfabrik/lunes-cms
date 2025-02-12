@@ -22,27 +22,31 @@ class SponsorAdmin(admin.ModelAdmin):
     ]
     list_per_page = 25
 
-    def has_logo(self, obj):
+    def has_logo(self, sponsor):
         """
         Additional field to display whether a logo is set for the sponsor in the list view.
 
+        :param sponsor: Sponsor object
+        :type sponsor: ~lunes_cms.cms.models.sponsor.Sponsor
         :return: Whether the sponsor has a logo
         :rtype: bool
         """
 
-        return bool(obj.logo)
+        return bool(sponsor.logo)
 
     has_logo.boolean = True
     has_logo.short_description = _("logo")
 
-    def image_tag(self, obj):
+    def image_tag(self, sponsor):
         """
         Image thumbnail to display a preview of a image in the form view.
 
+        :param sponsor: Sponsor object
+        :type sponsor: ~lunes_cms.cms.models.sponsor.Sponsor
         :return: img HTML tag to display an image thumbnail
         :rtype: str
         """
-        return get_image_tag(obj.logo)
+        return get_image_tag(sponsor.logo)
 
     image_tag.short_description = ""
 
