@@ -37,6 +37,7 @@ urlpatterns = [
     path("", include("lunes_cms.help.urls")),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
+    path("cmsv2/", include("lunes_cms.cmsv2.urls", namespace="cmsv2")),
 ]
 
 urlpatterns += i18n_patterns(path("", include("lunes_cms.cms.urls")))
