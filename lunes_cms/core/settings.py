@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Installed custom apps
     "lunes_cms.api",
     "lunes_cms.cms",
+    "lunes_cms.cmsv2",
     "lunes_cms.help",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
@@ -457,7 +458,7 @@ JAZZMIN_SETTINGS = {
     "login_logo": "images/logo-lunes.svg",
     "login_logo_dark": "images/logo-lunes-dark.svg",
     "site_logo_classes": "",
-    "changeform_format": "collapsible",
+    "changeform_format": "single",
     "language_chooser": True,
     "custom_css": "css/corporate_identity.css",
     "custom_js": "js/corporate_identity.js",
@@ -470,6 +471,9 @@ JAZZMIN_SETTINGS = {
         "cms.GroupAPIKey": "fas fa-key",
         "cms.Feedback": "fas fa-comment",
         "cms.Sponsor": "fas fa-star",
+        "cmsv2.Job": "fas fa-briefcase",
+        "cmsv2.Unit": "fas fa-book",
+        "cmsv2.Word": "fab fa-amilia",
     },
 }
 

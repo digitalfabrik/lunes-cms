@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-27 22:23+0000\n"
+"POT-Creation-Date: 2025-06-17 22:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,7 +104,8 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:102
+#: cmsv2/admins/word_admin.py:109
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -114,19 +115,22 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
+#: cmsv2/admins/word_admin.py:175 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
 #: cms/admins/document_admin.py:216 cms/models/document_image.py:124
+#: cmsv2/models/unit.py:29 cmsv2/models/word.py:111
 msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:325
+#: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
 
-#: cms/admins/document_resource.py:24
+#: cms/admins/document_resource.py:24 cmsv2/models/word.py:223
 msgid "Word"
 msgstr "Vokabel"
 
@@ -247,7 +251,7 @@ msgid "unpublished words"
 msgstr "unveröffentlichte Vokabeln"
 
 #: cms/apps.py:12
-msgid "vocabulary management"
+msgid "Vocabulary Management"
 msgstr "Vokabelverwaltung"
 
 #: cms/forms.py:55
@@ -320,10 +324,12 @@ msgid "grammatical gender"
 msgstr "Genus"
 
 #: cms/models/alternative_word.py:28 cms/models/document.py:47
+#: cmsv2/models/word.py:45
 msgid "plural"
 msgstr "Plural"
 
 #: cms/models/alternative_word.py:34 cms/models/document.py:53
+#: cmsv2/models/word.py:51
 msgid "plural article"
 msgstr "Plural-Artikel"
 
@@ -332,6 +338,7 @@ msgid "alternative words"
 msgstr "Alternative Wörter"
 
 #: cms/models/discipline.py:20 cms/models/training_set.py:24
+#: cmsv2/models/job.py:19 cmsv2/models/unit.py:122
 msgid "released"
 msgstr "veröffentlicht"
 
@@ -341,21 +348,25 @@ msgid "discipline"
 msgstr "Modulgruppe"
 
 #: cms/models/discipline.py:23 cms/models/training_set.py:27
+#: cmsv2/models/unit.py:125
 msgid "description"
 msgstr "Beschreibung"
 
 #: cms/models/discipline.py:26 cms/models/group.py:10
-#: cms/models/training_set.py:30
+#: cms/models/training_set.py:30 cmsv2/models/job.py:22
+#: cmsv2/models/unit.py:128
 msgid "icon"
 msgstr "Icon"
 
 #: cms/models/discipline.py:33 cms/models/document.py:94
-#: cms/models/training_set.py:39
+#: cms/models/training_set.py:39 cmsv2/models/job.py:29
+#: cmsv2/models/unit.py:135 cmsv2/models/word.py:105
 msgid "created by"
 msgstr "Erstellt von"
 
 #: cms/models/discipline.py:36 cms/models/document.py:98
-#: cms/models/training_set.py:41
+#: cms/models/training_set.py:41 cmsv2/models/job.py:32
+#: cmsv2/models/unit.py:137 cmsv2/models/word.py:109
 msgid "admin"
 msgstr "Admin"
 
@@ -363,35 +374,36 @@ msgstr "Admin"
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:31
+#: cms/models/document.py:31 cmsv2/models/word.py:29
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:33
+#: cms/models/document.py:33 cmsv2/models/unit.py:132 cmsv2/models/word.py:31
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:36
+#: cms/models/document.py:36 cmsv2/models/word.py:34
 msgid "Grammatical gender"
 msgstr "Genus"
 
-#: cms/models/document.py:68
+#: cms/models/document.py:68 cmsv2/models/word.py:78
 msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
+#: cmsv2/admins/word_admin.py:339 cmsv2/models/word.py:80
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:76
+#: cms/models/document.py:76 cmsv2/models/word.py:87
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:82
+#: cms/models/document.py:82 cmsv2/models/word.py:93
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:88
+#: cms/models/document.py:88 cmsv2/models/word.py:99
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -623,92 +635,116 @@ msgstr "Zusammenfassung"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:163
+#: cms/utils.py:163 cmsv2/utils.py:137
 msgid "and"
 msgstr "und"
 
-#: cms/validators.py:21
+#: cms/validators.py:21 cmsv2/validators.py:21
 msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
 msgstr "Unerlaubtes Dateiformat! Erlaubt: .mp3 .aac .wav .m4a .wma .ogg"
 
-#: cms/validators.py:36
+#: cms/validators.py:36 cmsv2/validators.py:36
 msgid "File too large! Max. 5 MB"
 msgstr "Datei zu groß! Max. 5 MB"
 
-#: cms/validators.py:51
+#: cms/validators.py:51 cmsv2/validators.py:51
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: core/settings.py:206
+#: cmsv2/admins/job_admin.py:74
+msgid "units"
+msgstr "Einheiten"
+
+#: cmsv2/admins/job_admin.py:88 cmsv2/admins/unit_admin.py:116
+#: cmsv2/models/job.py:33 cmsv2/models/unit.py:138
+msgid "created at"
+msgstr "Erstellt"
+
+#: cmsv2/admins/unit_admin.py:83
+msgid "jobs"
+msgstr "Berufe"
+
+#: cmsv2/admins/word_admin.py:311 cmsv2/models/unit.py:102
+msgid "Image"
+msgstr "Bilder"
+
+#: cmsv2/admins/word_admin.py:353 cmsv2/models/word.py:70
+msgid "audio check status"
+msgstr "Audio Prüfstatus"
+
+#: cmsv2/admins/word_admin.py:368 cmsv2/models/unit.py:35
+#: cmsv2/models/word.py:117
+msgid "image check status"
+msgstr "Bild Prüfstatus"
+
+#: cmsv2/apps.py:12
+msgid "Vocabulary Management v2"
+msgstr "Vokabelverwaltung v2"
+
+#: cmsv2/models/job.py:20 cmsv2/models/unit.py:130
+msgid "job"
+msgstr "Beruf"
+
+#: cmsv2/models/job.py:34 cmsv2/models/unit.py:139 cmsv2/models/word.py:82
+msgid "modified at"
+msgstr "zuletzt geändert"
+
+#: cmsv2/models/job.py:102 cmsv2/models/unit.py:183
+msgid "Icon"
+msgstr "Icon"
+
+#: cmsv2/models/job.py:115
+msgid "Job"
+msgstr "Beruf"
+
+#: cmsv2/models/job.py:116
+msgid "Jobs"
+msgstr "Berufe"
+
+#: cmsv2/models/unit.py:112
+msgid "Unit-Word Relation"
+msgstr "Einheit-Wort Beziehung"
+
+#: cmsv2/models/unit.py:113
+msgid "Unit-Word Relations"
+msgstr "Einheit-Wort Beziehungen"
+
+#: cmsv2/models/unit.py:123
+msgid "unit"
+msgstr "Einheit"
+
+#: cmsv2/models/unit.py:215
+msgid "Unit"
+msgstr "Einheit"
+
+#: cmsv2/models/unit.py:216
+msgid "Units"
+msgstr "Einheit"
+
+#: cmsv2/models/word.py:76
+msgid "audio checked identifier"
+msgstr "Audio Checked Identifier"
+
+#: cmsv2/models/word.py:224
+msgid "Words"
+msgstr "Vokabel"
+
+#: core/settings.py:207
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:207
+#: core/settings.py:208
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:451 core/settings.py:452 core/settings.py:454
+#: core/settings.py:452 core/settings.py:453 core/settings.py:455
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:453
+#: core/settings.py:454
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
-
-#~ msgid "Article"
-#~ msgstr "Arikel"
-
-#~ msgid "Export to CSV"
-#~ msgstr "Als CSV exportieren"
-
-#~ msgid "assigned & unassigned"
-#~ msgstr "Zugewiesen & unzugewiesen"
-
-#~ msgid "unassigned only"
-#~ msgstr "keinem Modul zugewiesen"
-
-#~ msgid "assigned only"
-#~ msgstr "Mind. einem Modul zugewiesen"
-
-#~ msgid "approved images"
-#~ msgstr "Bestätigte Bilder"
-
-#~ msgid "Assigned & unassigned"
-#~ msgstr "Zugewiesen & unzugewiesen"
-
-#~ msgid "Published words"
-#~ msgstr "Veröffentlichte Vokabeln"
-
-#~ msgid "Unpublished words"
-#~ msgstr "Unveröffentlichte Vokabeln"
-
-#~ msgid "Released modules"
-#~ msgstr "Veröffentlichte Module"
-
-#~ msgid "This field is required for substantives."
-#~ msgstr "Dieses Feld is für Substantive ein Pflichtfeld."
-
-#~ msgid "Only required for substantives."
-#~ msgstr "Wird nur für Substantive benötigt"
-
-#~ msgid "icon_file"
-#~ msgstr "Icon"
-
-#~ msgid "French"
-#~ msgstr "Französisch"
-
-#~ msgid "Relationships between training sets and documents"
-#~ msgstr "Beziehungen zwischen Modulen und Vokabeln"
-
-#~ msgid "Relationships between training sets and disciplines"
-#~ msgstr "Beziehungen zwischen Modulen und Modulgruppen"
-
-#~ msgid "Disciplines"
-#~ msgstr "Modulgruppen"
-
-#~ msgid "Vocabulary"
-#~ msgstr "Vokabeln"
