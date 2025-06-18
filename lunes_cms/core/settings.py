@@ -28,6 +28,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #: How many documents a training sets needs at least to get released
 TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 
+#: API Key for OpenAI
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 ########################
 # DJANGO CORE SETTINGS #
@@ -248,6 +250,9 @@ MEDIA_URL = "/media/"
 
 #: Absolute filesystem path to the directory that will hold user-uploaded files (see :setting:`django:MEDIA_ROOT`)
 MEDIA_ROOT = os.environ.get("LUNES_CMS_MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
+
+#: Directory for temporary audio files
+TEMP_AUDIO_DIR = os.path.join(MEDIA_ROOT, "temp_audio")
 
 
 ##########

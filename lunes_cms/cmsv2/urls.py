@@ -9,6 +9,21 @@ urlpatterns = [
         "jobs/<int:job_id>/update-icon/", views.update_job_icon, name="update_job_icon"
     ),
     path(
+        "words/<int:word_id>/:generate-audio",
+        views.word_generate_audio,
+        name="word_generate_audio"
+    ),
+    path(
+        "words/:generate-audio-via-openai",
+        views.word_generate_audio_via_openai,
+        name="word_generate_audio_via_openai"
+    ),
+    path(
+        "words/<int:word_id>/:store-generated-audio-permanently",
+        views.word_store_generated_audio_permanently,
+        name="word_store_generated_audio_permanently"
+    ),
+    path(
         "words/<int:word_id>/update-image/",
         views.update_word_image,
         name="update_word_image",
