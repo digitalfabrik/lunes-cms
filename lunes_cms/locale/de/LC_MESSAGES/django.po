@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 22:34+0000\n"
+"POT-Creation-Date: 2025-06-19 17:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,7 +105,7 @@ msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
 #: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:102
-#: cmsv2/admins/word_admin.py:109
+#: cmsv2/admins/word_admin.py:123
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -115,7 +115,7 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:175 cmsv2/models/word.py:64
+#: cmsv2/admins/word_admin.py:190 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
@@ -125,7 +125,7 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:325
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:348
 #: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
@@ -391,7 +391,7 @@ msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:339 cmsv2/models/word.py:80
+#: cmsv2/admins/word_admin.py:362 cmsv2/models/word.py:80
 msgid "creation date"
 msgstr "Erstellt am"
 
@@ -553,6 +553,7 @@ msgstr ""
 
 #: cms/templates/admin/delete_confirmation.html:16
 #: cms/templates/admin/delete_selected_confirmation.html:15
+#: cmsv2/templates/admin/word_generate_audio.html:8
 msgid "Home"
 msgstr "Home"
 
@@ -664,20 +665,20 @@ msgstr "Erstellt"
 msgid "jobs"
 msgstr "Berufe"
 
-#: cmsv2/admins/word_admin.py:311 cmsv2/models/unit.py:102
+#: cmsv2/admins/word_admin.py:334 cmsv2/models/unit.py:102
 msgid "Image"
 msgstr "Bilder"
 
-#: cmsv2/admins/word_admin.py:353 cmsv2/models/word.py:70
+#: cmsv2/admins/word_admin.py:376 cmsv2/models/word.py:70
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:368 cmsv2/models/unit.py:35
+#: cmsv2/admins/word_admin.py:391 cmsv2/models/unit.py:35
 #: cmsv2/models/word.py:117
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
-#: cmsv2/apps.py:12
+#: cmsv2/apps.py:12 cmsv2/templates/admin/word_generate_audio.html:9
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
@@ -725,23 +726,28 @@ msgstr "Einheit"
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:224
+#: cmsv2/models/word.py:224 cmsv2/templates/admin/word_generate_audio.html:10
 msgid "Words"
 msgstr "Vokabel"
 
-#: core/settings.py:207
+#: cmsv2/templates/admin/word_generate_audio.html:12
+#: cmsv2/templates/admin/word_generate_audio.html:16
+msgid "Generate Audio"
+msgstr ""
+
+#: core/settings.py:209
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:208
+#: core/settings.py:210
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:452 core/settings.py:453 core/settings.py:455
+#: core/settings.py:457 core/settings.py:458 core/settings.py:460
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:454
+#: core/settings.py:459
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
