@@ -186,15 +186,27 @@ jobs:
             echo "Install recent version of pip to make sure 'pip index' is available"
             pip install --upgrade pip
       - run:
-          name: Read next version
+          name: Check available versions
           command: |
-            NEXT_VERSION=$(head -n 1 next-version.txt)
-            NEXT_VERSION="${NEXT_VERSION}-alpha" # Append "-alpha"
-            echo "Next version: ${NEXT_VERSION}"
-            echo "export NEXT_VERSION=${NEXT_VERSION}" >> $BASH_ENV
+            echo "Check which versions of lunes-cms are available on the TestPyPI repository"
+            AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
+            echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
+            echo "export AVAILABLE_VERSIONS='${AVAILABLE_VERSIONS}'" >> $BASH_ENV
+      - run:
+          name: Get current alpha version
+          command: |
+            CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
+            echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
+            echo "export CURRENT_ALPHA_VERSION='${CURRENT_ALPHA_VERSION}'" >> $BASH_ENV
+      - run:
+          name: Parse current alpha version
+          command: |
+            CURRENT_ALPHA_VERSION_PARSED=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
+            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
+            echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
       - run:
           name: Bump version to current alpha version
-          command: bumpver update -n --set-version="${NEXT_VERSION}" --no-commit
+          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
       - run:
           name: Bump version to next alpha version
           command: bumpver update -n -t alpha --no-commit
