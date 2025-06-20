@@ -205,9 +205,6 @@ jobs:
             echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
             echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
       - run:
-          name: Bump version to current alpha version
-          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
-      - run:
           name: Bump version to next alpha version
           command: bumpver update -n -t alpha --no-commit
       - persist_to_workspace:
