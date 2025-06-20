@@ -208,10 +208,17 @@ jobs:
           name: Increase patch version
           command: |
             BASE_VERSION=$(echo "$CURRENT_ALPHA_VERSION_PARSED" | sed -E 's/[-\.]?[a-z]+[0-9]*$//')
-            echo "$BASE_VERSION" | IFS='.' read -r YEAR MONTH PATCH
+
+            IFS='.' set -- $BASE_VERSION
+            YEAR=$1
+            MONTH=$2
+            PATCH=$3
+      
             NEW_PATCH=$((PATCH + 1))
             NEW_VERSION="${YEAR}.${MONTH}.${NEW_PATCH}"
+      
             echo "New version: $NEW_VERSION"
+      
             echo "export NEW_PATCH_VERSION=$NEW_VERSION" >> "$BASH_ENV"
       - run:
           name: Bump version to current alpha version
