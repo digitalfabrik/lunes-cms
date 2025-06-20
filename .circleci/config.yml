@@ -274,7 +274,7 @@ jobs:
           command: mv lunes_cms/README.md .
       - run:
           name: Build lunes-cms package
-          command: python setup.py sdist bdist_wheel
+          command: python -m build
       - persist_to_workspace:
           root: .
           paths:
