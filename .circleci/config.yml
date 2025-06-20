@@ -273,6 +273,9 @@ jobs:
           name: Use alternative README.md file
           command: mv lunes_cms/README.md .
       - run:
+          name: Install build tool
+          command: pip install build
+      - run:
           name: Build lunes-cms package
           command: python -m build
       - persist_to_workspace:
