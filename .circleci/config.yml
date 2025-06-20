@@ -208,7 +208,7 @@ jobs:
           name: Increase patch version
           command: |
             BASE_VERSION=$(echo "$CURRENT_ALPHA_VERSION_PARSED" | sed -E 's/[-\.]?[a-z]+[0-9]*$//')
-            IFS='.' read -r YEAR MONTH PATCH <<< "$BASE_VERSION"
+            echo "$BASE_VERSION" | IFS='.' read -r YEAR MONTH PATCH
             NEW_PATCH=$((PATCH + 1))
             NEW_VERSION="${YEAR}.${MONTH}.${NEW_PATCH}"
             echo "New version: $NEW_VERSION"
