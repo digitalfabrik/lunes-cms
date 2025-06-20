@@ -276,12 +276,20 @@ jobs:
           name: Install build tool
           command: pip install build
       - run:
+          name: Debug
+          command: |
+            pwd
+            ls -la
+      - run:
           name: Build lunes-cms package
-          command: python -m build
+          command: python3 -m build
       - persist_to_workspace:
           root: .
           paths:
             - dist
+      - store_artifacts:
+          path: dist
+          destination: dist-files
   publish-package:
     docker:
       - image: cimg/python:3.11
