@@ -210,7 +210,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - setup.cfg
+            - pyproject.toml
             - lunes_cms/__init__.py
   bump-version:
     docker:
