@@ -277,9 +277,7 @@ jobs:
           command: pip install build
       - run:
           name: Build lunes-cms package
-          command: |
-            ls -la
-            python -m build
+          command: python -m build
       - persist_to_workspace:
           root: .
           paths:
@@ -294,9 +292,8 @@ jobs:
       - run:
           name: Publish lunes-cms package to (Test-)PyPI
           command: |
-            ls dist/
             source .venv/bin/activate
-            twine upload --non-interactive ./dist/*
+            twine upload --non-interactive ./dist/lunes_cms-*.tar.gz
   create-release:
     docker:
       - image: cimg/python:3.11
