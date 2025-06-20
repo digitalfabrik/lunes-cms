@@ -190,7 +190,7 @@ jobs:
           command: |
             NEXT_VERSION=$(head -n 1 next-version.txt)
             NEXT_VERSION="${NEXT_VERSION}-alpha" # Append "-alpha"
-            echo "Next version: NEXT_VERSION"
+            echo "Next version: ${NEXT_VERSION}"
             echo "export NEXT_VERSION=${NEXT_VERSION}" >> $BASH_ENV
       - run:
           name: Bump version to current alpha version
