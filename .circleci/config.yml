@@ -205,8 +205,17 @@ jobs:
             echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
             echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
       - run:
+          name: Increase patch version
+          command: |
+            BASE_VERSION=$(echo "$CURRENT_ALPHA_VERSION_PARSED" | sed -E 's/[-\.]?[a-z]+[0-9]*$//')
+            IFS='.' read -r YEAR MONTH PATCH <<< "$BASE_VERSION"
+            NEW_PATCH=$((PATCH + 1))
+            NEW_VERSION="${YEAR}.${MONTH}.${NEW_PATCH}"
+            echo "New version: $NEW_VERSION"
+            echo "export NEW_PATCH_VERSION=$NEW_VERSION" >> "$BASH_ENV"
+      - run:
           name: Bump version to current alpha version
-          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
+          command: bumpver update -n --set-version="${NEW_PATCH_VERSION}" --no-commit
       - run:
           name: Bump version to next alpha version
           command: bumpver update -n -t alpha --no-commit
