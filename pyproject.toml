@@ -98,6 +98,13 @@ tag = false
 push = false
 
 [tool.bumpver.file_patterns]
-"setup.cfg" = 'version = {version}'
-"lunes_cms/__init__.py" = '__version__ = "{version}"'
-"docs/src/conf.py" = 'release = "{version}"'
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"',
+]
+"lunes_cms/__init__.py" = [
+    '__version__ = "{version}"',
+]
+"docs/src/conf.py" = [
+    'release = "{version}"',
+]
