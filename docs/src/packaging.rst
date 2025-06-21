@@ -18,7 +18,7 @@ If you want to do the packaging process manually, follow these steps:
 2. Build the python with :doc:`setuptools <setuptools:index>`::
 
     pip3 install --upgrade pip setuptools wheel
-    python3 setup.py sdist bdist_wheel
+    python3 -m build
 
    Then, the built can be found in ``./dist/``.
 
