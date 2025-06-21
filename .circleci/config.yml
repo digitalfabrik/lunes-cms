@@ -282,6 +282,9 @@ jobs:
           root: .
           paths:
             - dist
+      - store_artifacts:
+          path: dist
+          destination: build_artifacts
   publish-package:
     docker:
       - image: cimg/python:3.11
