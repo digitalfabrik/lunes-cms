@@ -278,6 +278,17 @@ jobs:
       - run:
           name: Build lunes-cms package
           command: python3 -m build
+      - run:
+          name: Remove setup.cfg from tar.gz
+          command: |
+            FILE=$(ls ./dist/lunes_cms-*.tar.gz)
+            BASENAME=$(basename "$FILE")
+            mkdir tmp_extract
+            tar -xzf "$FILE" -C tmp_extract
+            find tmp_extract -name setup.cfg -delete
+            tar -czf "$BASENAME" -C tmp_extract .
+            mv -f "$BASENAME" dist/
+            rm -rf tmp_extract
       - persist_to_workspace:
           root: .
           paths:

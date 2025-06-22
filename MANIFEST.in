@@ -17,6 +17,3 @@ exclude lunes_cms/lunes-cms.log
 # Exclude source of translation files
 exclude lunes_cms/locale/de/LC_MESSAGES/django.po
 exclude lunes_cms/locale/de/LC_MESSAGES/djangojs.po
-
-# Exclude setup.cfg as it might gets created by setuptools internally during the build
-exclude setup.cfg
