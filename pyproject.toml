@@ -22,7 +22,6 @@ keywords = [
   "visual-vocabulary-trainer"
 ]
 license = { file = "LICENSE" }
-license-files = ["LICENSE", "NOTICE.md"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "License :: OSI Approved :: Apache Software License",
