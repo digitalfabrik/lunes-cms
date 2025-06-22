@@ -170,7 +170,9 @@ jobs:
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Bump version
-          command: bumpver update -n -t alpha --no-commit
+          command: |
+            pip install bumpver
+            bumpver update -n -t alpha --no-commit
       - persist_to_workspace:
           root: .
           paths:
