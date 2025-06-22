@@ -240,7 +240,9 @@ jobs:
           command: mv lunes_cms/README.md .
       - run:
           name: Build lunes-cms package
-          command: python setup.py sdist bdist_wheel
+          command: |
+            pip install wheel
+            python setup.py sdist bdist_wheel
       - persist_to_workspace:
           root: .
           paths:
@@ -256,6 +258,7 @@ jobs:
           name: Check via twine
           command: |
             source .venv/bin/activate
+            pip install twine
             twine check ./dist/lunes*.tar.gz
   create-release:
     docker:
