@@ -6,4 +6,7 @@ See setup.cfg for all setup configuration options.
 from setuptools import setup
 
 if __name__ == "__main__":
-    setup()
+    setup(
+        name="lunes-cms",
+        version="2025.6.0"
+    )
