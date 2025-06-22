@@ -289,11 +289,6 @@ jobs:
           command: |
             source .venv/bin/activate
             twine check ./dist/lunes_cms-*.tar.gz
-      - run:
-          name: Publish lunes-cms package to (Test-)PyPI
-          command: |
-            source .venv/bin/activate
-            twine upload --non-interactive ./dist/lunes_cms-*.tar.gz
   create-release:
     docker:
       - image: cimg/python:3.11
@@ -357,34 +352,6 @@ workflows:
           filters:
             branches:
               ignore: main
-      - compile-translations:
-          requires:
-            - install
-      - setup-test-reporter:
-          context: codeclimate-lunes-cms
-          filters:
-            branches:
-              ignore: main
-      - pylint:
-          requires:
-            - install
-      - test:
-          requires:
-            - compile-translations
-            - setup-test-reporter
-      - upload-test-coverage:
-          context: codeclimate-lunes-cms
-          requires:
-            - test
-      - black:
-          requires:
-            - install
-      - check-translations:
-          requires:
-            - install
-      - build-documentation:
-          requires:
-            - install
       - bump-dev-version:
           filters:
             branches:
@@ -397,7 +364,6 @@ workflows:
           name: build-dev-package
           requires:
             - bump-dev-version
-            - compile-translations
       - publish-package:
           name: publish-dev-package
           context: pypi-test
