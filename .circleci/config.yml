@@ -8,24 +8,12 @@ jobs:
       - image: cimg/python:3.11
     steps:
       - checkout
-      - restore_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v3
       - run:
           name: Creating virtual environment
           command: |
-            if [[ -d ".venv" ]]; then
-              echo "Virtual environment restored from cache, skipping pip install"
-            else
-              python3 -m venv .venv
-              source .venv/bin/activate
-              pip install -e .[dev,doc,test]
-            fi
-      - save_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v3
-          paths:
-            - .venv
-            - lunes_cms.egg-info
-            - /home/circleci/.cache/pip
+            python3 -m venv .venv
+            source .venv/bin/activate
+            pip install -e .[dev,doc,test]
       - persist_to_workspace:
           root: .
           paths:
