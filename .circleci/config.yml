@@ -285,10 +285,14 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Publish lunes-cms package to (Test-)PyPI
+          name: Check via twine
           command: |
             source .venv/bin/activate
             twine check ./dist/lunes_cms-*.tar.gz
+      - run:
+          name: Publish lunes-cms package to (Test-)PyPI
+          command: |
+            source .venv/bin/activate
             twine upload --non-interactive ./dist/lunes_cms-*.tar.gz
   create-release:
     docker:
