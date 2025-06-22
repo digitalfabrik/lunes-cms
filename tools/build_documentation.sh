@@ -30,12 +30,20 @@ fi
 
 # Generate .rst files
 echo -e "Scanning Python source code and generating reStructuredText files from it..." | print_info
-sphinx-apidoc --no-toc --module-first -o "${DOC_SRC_REF_DIR}" "${PACKAGE_DIR}" "${PACKAGE_DIR}/cms/migrations"
+sphinx-apidoc --no-toc --module-first -o "${DOC_SRC_REF_DIR}" "${PACKAGE_DIR}" "${PACKAGE_DIR}/cms/migrations" "${PACKAGE_DIR}/cmsv2/views/*.py"
 
 # Modify .rst files to remove unnecessary submodule- & subpackage-titles
 # At first, the 'find'-command returns all .rst files in the sphinx directory
 # The sed pattern replacement is divided into five stages explained below:
-find "${DOC_SRC_REF_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty sed --in-place \
+# Use different sed syntax for macOS (BSD) vs Linux (GNU)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    SED_INPLACE="sed -i ''"
+else
+    SED_INPLACE="sed -i"
+fi
+
+# shellcheck disable=SC2086
+find "${DOC_SRC_REF_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty $SED_INPLACE \
     -e '/Submodules\|Subpackages/{N;d;}' `# Remove Sub-Headings including their following lines` \
     -e 's/\( module\| package\)//' `# Remove module & package strings at the end of headings` \
     -e '/^[^ ]\+$/s/\(.*\.\)\?\([^\.]\+\)/\u\2/' `# Remove module path in headings (separated by dots) and make first letter uppercase` \
@@ -46,11 +54,11 @@ find "${DOC_SRC_REF_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-e
 cp CHANGELOG.md ${DOC_SRC_DIR}/changelog.rst
 
 # Add changelog heading
-sed --in-place '1s/^/Changelog\n=========\n\n/' ${DOC_SRC_DIR}/changelog.rst
+$SED_INPLACE '1s/^/Changelog\n=========\n\n/' ${DOC_SRC_DIR}/changelog.rst
 
 # Convert markdown-links to ReStructuredText-links
 # shellcheck disable=SC2016
-sed --in-place --regexp-extended 's|\[#([0-9]+)\]\(https://github\.com/digitalfabrik/lunes-cms/issues/([0-9]+)\)|:github:`#\1 <issues/\1>`|' ${DOC_SRC_DIR}/changelog.rst
+$SED_INPLACE -E 's|\[#([0-9]+)\](https://github\.com/digitalfabrik/lunes-cms/issues/([0-9]+))|:github:`#\1 <issues/\1>`|' ${DOC_SRC_DIR}/changelog.rst
 
 
 if [[ -z "$READTHEDOCS" ]]; then

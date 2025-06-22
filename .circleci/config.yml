@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   shellcheck: circleci/shellcheck@2.2.4
+  qlty: qltysh/qlty-orb@0.0.10
 jobs:
   install:
     docker:
@@ -9,7 +10,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v3
+          key: pip-{{ checksum "setup.cfg" }}-v6
       - run:
           name: Creating virtual environment
           command: |
@@ -21,7 +22,7 @@ jobs:
               pip install -e .[dev,doc,test]
             fi
       - save_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v3
+          key: pip-{{ checksum "setup.cfg" }}-v6
           paths:
             - .venv
             - lunes_cms.egg-info
@@ -62,26 +63,14 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Install pylint requirements
+          command: sudo apt-get update && sudo apt-get install ffmpeg
+      - run:
           name: Run pylint
-          command: ./tools/pylint.sh
-  setup-test-reporter:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install CodeClimate Test Reporter
           command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-      - run:
-          name: Notify CodeClimate of a pending report
-          command: ./cc-test-reporter before-build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - cc-test-reporter
+            source .venv/bin/activate
+            pip install pylint
+            ./tools/pylint.sh
   test:
     docker:
       - image: cimg/python:3.11
@@ -107,10 +96,7 @@ jobs:
           command: lunes-cms-cli migrate
       - run:
           name: Run tests
-          command: pytest --circleci-parallelize --disable-warnings --cov=lunes_cms --cov-report xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
-      - run:
-          name: Format test coverage
-          command: ./cc-test-reporter format-coverage -t coverage.py -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
+          command: pytest --circleci-parallelize --disable-warnings --cov=lunes_cms --cov-report=xml:coverage.xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
       - store_test_results:
           path: test-results
       - store_artifacts:
@@ -118,23 +104,15 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - cc-test-reporter
-            - coverage
+            - coverage.xml
   upload-test-coverage:
     docker:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
           at: .
-      - run:
-          name: Install CodeClimate Test Reporter
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-      - run:
-          name: Sum coverage data and upload to CodeClimate
-          command: |
-            ./cc-test-reporter sum-coverage -o - coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
+      - qlty/coverage_publish:
+          files: coverage.xml
   black:
     docker:
       - image: cimg/python:3.11
@@ -143,10 +121,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
           name: Check formatting of python files
-          command: |
-            source .venv/bin/activate
-            black --check .
+          command: black --check .
   check-translations:
     docker:
       - image: cimg/python:3.11
@@ -168,6 +147,12 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Install pylint requirements
+          command: sudo apt-get update && sudo apt-get install ffmpeg
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
           name: Build documentation
           command: ./tools/build_documentation.sh
   bump-dev-version:
@@ -181,35 +166,31 @@ jobs:
           name: Activate virtual environment
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
-          name: Upgrade pip
+          name: Bump version
           command: |
-            echo "Install recent version of pip to make sure 'pip index' is available"
+            pip install bumpver
+            # Install recent version of pip
+            echo "Upgrade pip to make sure 'pip index' is available"
             pip install --upgrade pip
-      - run:
-          name: Check available versions
-          command: |
-            echo "Check which versions of lunes-cms are available on the TestPyPI repository"
+            # Check which versions of lunes-cms are available on the TestPyPI repository
             AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
             echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
-            echo "export AVAILABLE_VERSIONS='${AVAILABLE_VERSIONS}'" >> $BASH_ENV
-      - run:
-          name: Get current alpha version
-          command: |
             CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
             echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
-            echo "export CURRENT_ALPHA_VERSION='${CURRENT_ALPHA_VERSION}'" >> $BASH_ENV
-      - run:
-          name: Parse current alpha version
-          command: |
-            CURRENT_ALPHA_VERSION_PARSED=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
-            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
-            echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
-      - run:
-          name: Bump version to current alpha version
-          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
-      - run:
-          name: Bump version to next alpha version
-          command: bumpver update -n -t alpha --no-commit
+            CURRENT_ALPHA_VERSION=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
+            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION}"
+            # Get current prod version
+            CURRENT_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
+            echo "Current production version: ${CURRENT_VERSION}"
+            # Bump version to current alpha version if it is newer
+            # Attention: exit(True) in Python means exit(1) which is False in Bash :)
+            if python -c "from bumpver.version import parse_version; exit(parse_version('${CURRENT_VERSION}') > parse_version('${CURRENT_ALPHA_VERSION}'))"; then
+              echo "Bump to the currently existing version"
+              bumpver update -n --set-version="${CURRENT_ALPHA_VERSION}" --no-commit
+            fi
+            # Bump version to next alpha version
+            echo "Bump to the next version"
+            bumpver update -n -t alpha --no-commit
       - persist_to_workspace:
           root: .
           paths:
@@ -277,7 +258,9 @@ jobs:
           command: mv lunes_cms/README.md .
       - run:
           name: Build lunes-cms package
-          command: python setup.py sdist bdist_wheel
+          command: |
+            pip install wheel
+            python setup.py sdist bdist_wheel
       - persist_to_workspace:
           root: .
           paths:
@@ -290,10 +273,17 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Check via twine
+          command: |
+            source .venv/bin/activate
+            pip install twine
+            twine check ./dist/lunes*.tar.gz
+      - run:
           name: Publish lunes-cms package to (Test-)PyPI
           command: |
             source .venv/bin/activate
-            twine upload --non-interactive ./dist/lunes_cms-*.tar.gz
+            pip install twine
+            twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
   create-release:
     docker:
       - image: cimg/python:3.11
@@ -360,18 +350,12 @@ workflows:
       - compile-translations:
           requires:
             - install
-      - setup-test-reporter:
-          context: codeclimate-lunes-cms
-          filters:
-            branches:
-              ignore: main
       - pylint:
           requires:
             - install
       - test:
           requires:
             - compile-translations
-            - setup-test-reporter
       - upload-test-coverage:
           context: codeclimate-lunes-cms
           requires:
@@ -397,7 +381,6 @@ workflows:
           name: build-dev-package
           requires:
             - bump-dev-version
-            - compile-translations
       - publish-package:
           name: publish-dev-package
           context: pypi-test

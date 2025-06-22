@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const replaceBtnClass = config.replaceBtnClass || `replace-${assetType}-btn`;
     const deleteBtnClass = config.deleteBtnClass || `delete-${assetType}-btn`;
     const fileInputClass = config.fileInputClass || `${assetType}-file-input`;
-    const updateEndpoint = config.updateEndpoint || `/cmsv2/${entityType}s/\${id}/update-${assetType}/`;
+    const updateEndpoint = config.updateEndpoint || `/en/admin/cmsv2/${entityType}s/\${id}/update-${assetType}/`;
     const errorMessages = config.errorMessages || {
         update: `An error occurred while updating the ${assetType}`,
         delete: `An error occurred while deleting the ${assetType}`

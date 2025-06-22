@@ -1,13 +1,46 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
-from django.utils.html import mark_safe
+from django.urls import reverse
+from django.utils.html import mark_safe, format_html, escape
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
+from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.static import Static
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.models.unit import UnitWordRelation, Unit
 from lunes_cms.cmsv2.utils import get_image_tag
+from lunes_cms.core import settings
+
+
+class UnitOrJobDropdownFilter(admin.SimpleListFilter):
+    """Filter for displaying units or jobs in the admin interface."""
+
+    title = _("Unit or Job")
+    parameter_name = "unit_or_job_choice"
+
+    def lookups(self, request, model_admin):
+        options = []
+        for unit in Unit.objects.all():
+            options.append((f"unit_{unit.pk}", f"Unit: {unit.title}"))
+        for job in Job.objects.all():
+            options.append((f"job_{job.pk}", f"Job: {job.name}"))
+        return options
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if not value:
+            return queryset
+
+        if value.startswith("unit_"):
+            unit_id = value.split("_", 1)[1]
+            return queryset.filter(units__id=unit_id).distinct()
+
+        if value.startswith("job_"):
+            job_id = value.split("_", 1)[1]
+            return queryset.filter(units__jobs__id=job_id).distinct()
+
+        return queryset
 
 
 class UnitInline(admin.TabularInline):
@@ -20,8 +53,14 @@ class UnitInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
-    fields = ["unit", "image", "list_image", "image_check_status"]
-    readonly_fields = ["list_image"]
+    fields = [
+        "unit",
+        "image",
+        "list_image",
+        "image_check_status",
+        "generate_image_link",
+    ]
+    readonly_fields = ["list_image", "generate_image_link"]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
@@ -45,15 +84,24 @@ class WordAdmin(BaseAdmin):
         "plural_article",
         "plural",
         "audio",
+        "audio_player",
+        "audio_generate",
         "audio_check_status",
         "image",
         "image_check_status",
+        "image_generate",
         "image_tag",
         "definition",
         "additional_meaning_1",
         "additional_meaning_2",
     )
-    readonly_fields = ("created_by", "image_tag")
+    readonly_fields = (
+        "audio_generate",
+        "audio_player",
+        "created_by",
+        "image_generate",
+        "image_tag",
+    )
     search_fields = ["word"]
     ordering = ["word", "creation_date"]
     inlines = [UnitInline]
@@ -66,7 +114,12 @@ class WordAdmin(BaseAdmin):
         "creator_group",
         "creation_date_display",
     )
-    list_filter = ["word_type", "audio_check_status", "image_check_status"]
+    list_filter = [
+        "word_type",
+        "audio_check_status",
+        "image_check_status",
+        UnitOrJobDropdownFilter,
+    ]
     list_per_page = 25
 
     class Media:
@@ -88,6 +141,59 @@ class WordAdmin(BaseAdmin):
             "js/image_check_status_update.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
+
+    def audio_generate(self, obj):
+        """
+        Generate HTML for the audio generation button.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the audio generation button
+        """
+        if obj.pk:
+            url = reverse("cmsv2:word_generate_audio", args=[obj.pk])
+            return format_html('<a class="button" href="{}">Generate Audio</a>', url)
+        return "Save to enable audio generation."
+
+    audio_generate.short_description = "Audio Generation"
+
+    def audio_player(self, obj):
+        """
+        Generate HTML for the audio player preview.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the audio player
+        """
+        if obj.audio:
+            return format_html(
+                "<audio controls id='audio_preview_player' src='{}'></audio>",
+                obj.audio.url,
+            )
+        return "No audio file uploaded."
+
+    audio_player.short_description = "Audio Preview"
+
+    def image_generate(self, obj):
+        """
+        Generate HTML for the image generation button.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the image generation button
+        """
+        if obj.pk:
+            url = reverse("cmsv2:word_generate_image", args=[obj.pk])
+            return format_html('<a class="button" href="{}">Generate Image</a>', url)
+        return "Save to enable image generation."
+
+    image_generate.short_description = "Image Generation"
 
     def creator_group(self, obj):
         """
@@ -163,12 +269,13 @@ class WordAdmin(BaseAdmin):
             selected = "selected" if obj.audio_check_status == value else ""
             options += f'<option value="{value}" {selected}>{display}</option>'
 
-        html = f"""
-        {word_audio_container}
-        <select name="audio_check_status_{obj.id}" data-word-id="{obj.id}" class="audio-check-status-select" style="margin-top: 8px;">
-            {options}
-        </select>
-        """
+        html = word_audio_container
+        if obj.audio:
+            html += f"""
+            <select name="audio_check_status_{obj.id}" data-word-id="{obj.id}" class="audio-check-status-select" style="margin-top: 8px;">
+                {options}
+            </select>
+            """
 
         return mark_safe(html)
 
@@ -209,7 +316,15 @@ class WordAdmin(BaseAdmin):
         Returns:
             str: HTML markup for the word's main image container
         """
-        image_html = get_image_tag(obj.image, 50)
+        if obj.image:
+            image_html = f"""<div class="image-hover-container">
+                <a href="{escape(f"{settings.MEDIA_URL}{obj.image}")}" target="_blank">{get_image_tag(obj.image, width=50)}</a>
+                <div class="image-hover-overlay">
+                    <img src="{escape(f"{settings.MEDIA_URL}{obj.image}")}" alt="{escape(obj.word)}">
+                </div>
+            </div>"""
+        else:
+            image_html = ""
 
         controls_html = f"""
         <div class="image-controls" data-word-id="{obj.id}">
@@ -237,7 +352,11 @@ class WordAdmin(BaseAdmin):
         </select>
         """
 
-        return f'<div class="word-image-container">{image_html}{controls_html}</div>{word_image_check_status_html}'
+        html = f'<div class="word-image-container">{image_html}{controls_html}</div>'
+        if obj.image:
+            html += word_image_check_status_html
+
+        return html
 
     def _generate_unit_word_images(self, obj):
         """
@@ -267,7 +386,15 @@ class WordAdmin(BaseAdmin):
             str: HTML markup for a single unit-word image container
         """
         unit_name = relation.unit.title
-        unit_image_html = get_image_tag(relation.image, 50)
+        if relation.image:
+            unit_image_html = f"""<div class="image-hover-container">
+                <a href="{escape(f"{settings.MEDIA_URL}{relation.image}")}" target="_blank">{get_image_tag(relation.image, width=50)}</a>
+                <div class="image-hover-overlay">
+                    <img src="{escape(f"{settings.MEDIA_URL}{relation.image}")}" alt="{escape(relation.unit.title)}">
+                </div>
+            </div>"""
+        else:
+            unit_image_html = ""
 
         unit_controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{relation.id}">
@@ -297,16 +424,20 @@ class WordAdmin(BaseAdmin):
 
         unit_name_html = f'<div class="unit-name">{unit_name}</div>'
 
-        return f"""
+        html = f"""
         <div class="unitword-image-wrapper">
             {unit_name_html}
             <div class="unitword-image-container">
                 {unit_image_html}
                 {unit_controls_html}
             </div>
-            {unit_image_check_status_html}
         </div>
         """
+
+        if relation.image:
+            html += unit_image_check_status_html
+
+        return html
 
     list_image.short_description = _("Image")
 
