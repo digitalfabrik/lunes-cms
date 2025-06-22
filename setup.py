@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 See pyproject.toml for all setup configuration options.
 """

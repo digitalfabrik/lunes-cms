@@ -1,16 +1,28 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lunes-cms"
-version = "2024.11.0"
 description = "Content Management System for the Lunes Vocabulary Trainer App"
-readme = { file = "README.md", content-type = "text/markdown" }
-license = { file = "LICENSE" }
+version = "2024.11.0"
 authors = [
   { name = "Tür an Tür – Digitalfabrik gGmbH", email = "tech@integreat-app.de" }
 ]
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = [
+  "lunes",
+  "cms",
+  "django",
+  "e-learning",
+  "vocabulary",
+  "trainer",
+  "vocabulary-trainer",
+  "visual-vocabulary-trainer"
+]
+license = { file = "LICENSE" }
+license-files = ["LICENSE", "NOTICE.md"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "License :: OSI Approved :: Apache Software License",
@@ -26,17 +38,6 @@ classifiers = [
   "Natural Language :: English",
   "Natural Language :: German"
 ]
-keywords = [
-  "lunes",
-  "cms",
-  "django",
-  "e-learning",
-  "vocabulary",
-  "trainer",
-  "vocabulary-trainer",
-  "visual-vocabulary-trainer"
-]
-requires-python = ">=3.8"
 dependencies = [
   "django==5.1.2",
   "django-import-export==4.2.0",
@@ -84,9 +85,10 @@ test = [
 "Release Notes" = "https://digitalfabrik.github.io/integreat-cms/changelog.html"
 
 [tool.setuptools]
-packages = ["lunes_cms"]
-include-package-data = true
 script-files = ["lunes_cms/lunes-cms-cli"]
+
+[tool.setuptools.packages.find]
+include = ["lunes_cms*"]
 
 [tool.bumpver]
 current_version = "2024.11.0"
