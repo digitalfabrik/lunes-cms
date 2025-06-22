@@ -178,38 +178,33 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Activate virtual environment
+          name: Enable virtual environment
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
-          name: Upgrade pip
+          name: Bump version
           command: |
-            echo "Install recent version of pip to make sure 'pip index' is available"
+            # Install recent version of pip
+            echo "Upgrade pip to make sure 'pip index' is available"
             pip install --upgrade pip
-      - run:
-          name: Check available versions
-          command: |
-            echo "Check which versions of lunes-cms are available on the TestPyPI repository"
+            # Check which versions of lunes-cms are available on the TestPyPI repository
             AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
             echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
-            echo "export AVAILABLE_VERSIONS='${AVAILABLE_VERSIONS}'" >> $BASH_ENV
-      - run:
-          name: Get current alpha version
-          command: |
             CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
             echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
-            echo "export CURRENT_ALPHA_VERSION='${CURRENT_ALPHA_VERSION}'" >> $BASH_ENV
-      - run:
-          name: Parse current alpha version
-          command: |
-            CURRENT_ALPHA_VERSION_PARSED=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
-            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION_PARSED}"
-            echo "export CURRENT_ALPHA_VERSION_PARSED='${CURRENT_ALPHA_VERSION_PARSED}'" >> $BASH_ENV
-      - run:
-          name: Bump version to current alpha version
-          command: bumpver update -n --set-version="${CURRENT_ALPHA_VERSION_PARSED}" --no-commit
-      - run:
-          name: Bump version to next alpha version
-          command: bumpver update -n -t alpha --no-commit
+            CURRENT_ALPHA_VERSION=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
+            echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION}"
+            # Get current prod version
+            CURRENT_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
+            echo "Current production version: ${CURRENT_VERSION}"
+            # Bump version to current alpha version if it is newer
+            # Attention: exit(True) in Python means exit(1) which is False in Bash :)
+            if python -c "from bumpver.version import parse_version; exit(parse_version('${CURRENT_VERSION}') > parse_version('${CURRENT_ALPHA_VERSION}'))"; then
+              echo "Bump to the currently existing version"
+              bumpver update -n --set-version="${CURRENT_ALPHA_VERSION}" --no-commit
+            fi
+            # Bump version to next alpha version
+            echo "Bump to the next version"
+            bumpver update -n -t alpha --no-commit
       - persist_to_workspace:
           root: .
           paths:
