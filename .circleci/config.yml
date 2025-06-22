@@ -186,15 +186,15 @@ jobs:
             # Install recent version of pip
             echo "Upgrade pip to make sure 'pip index' is available"
             pip install --upgrade pip
-            # Check which versions of integreat-cms are available on the TestPyPI repository
-            AVAILABLE_VERSIONS=$(pip index versions integreat-cms --pre -i https://test.pypi.org/simple/)
+            # Check which versions of lunes-cms are available on the TestPyPI repository
+            AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
             echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
             CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
             echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
-            CURRENT_ALPHA_VERSION=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/integreat-cms (\([^()]*\)a0)/\1-alpha/")
+            CURRENT_ALPHA_VERSION=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
             echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION}"
             # Get current prod version
-            CURRENT_VERSION=$(python -c "import integreat_cms; print(integreat_cms.__version__)")
+            CURRENT_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
             echo "Current production version: ${CURRENT_VERSION}"
             # Bump version to current alpha version if it is newer
             # Attention: exit(True) in Python means exit(1) which is False in Bash :)
