@@ -6,6 +6,7 @@ from openai import OpenAI
 
 from lunes_cms.core import settings
 
+
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
@@ -20,7 +21,7 @@ def generate_image_via_openai(request):
 
     word_text = request.POST.get("word_text")
     additional_info = request.POST.get("additional_info")
-    unit_name = request.POST.get("unit_name")
+    unit_title = request.POST.get("unit_title")
     if not word_text:
         return JsonResponse({"error": "No word_text provided."}, status=400)
 
@@ -34,8 +35,8 @@ def generate_image_via_openai(request):
         - Es soll nur der relevante Gegenstand oder die relevante Handlung zu sehen sein.
         - Keine zusätzlichen Objekte, kein Text, neutraler Hintergrund (z.B. weiß oder freigestellt).
     '''
-    if unit_name:
-        prompt += f'Der Begriff gehört zum Lernmodul: {unit_name}'
+    if unit_title:
+        prompt += f'Der Begriff gehört zum Lernmodul: {unit_title}'
     prompt += f'Erstelle ein passendes realistisches Foto zur Vokabel: "{word_text}"'
     if additional_info:
         prompt += f'Zusätzliche Hinweise zur Bildgestaltung: {additional_info}'

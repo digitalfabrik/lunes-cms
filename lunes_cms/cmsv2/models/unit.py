@@ -1,13 +1,14 @@
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.urls import reverse
 from django.utils.html import format_html, mark_safe, escape
 from django.utils.translation import gettext_lazy as _
 
-from ..utils import get_image_tag
-from .static import convert_umlaute_images, Static
 from .job import Job
+from .static import convert_umlaute_images, Static
 from .word import Word
+from ..utils import get_image_tag
 from ...core import settings
 
 
@@ -103,6 +104,15 @@ class UnitWordRelation(models.Model):
         )
 
     list_image.short_description = _("Image")
+
+    def generate_image_link(self):
+        # return format_html("<div>{}</div>", self.pk)
+        if (self.pk):
+            url = reverse("cmsv2:unitword_generate_image", args=[self.pk])
+            return format_html('<a class="button" href="{}">Generate Image</a>', url)
+        return "-"
+
+    generate_image_link.short_description = _("Generate Image")
 
     class Meta:
         """

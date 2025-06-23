@@ -9,32 +9,32 @@ urlpatterns = [
         "jobs/<int:job_id>/update-icon/", views.update_job_icon, name="update_job_icon"
     ),
     path(
-        "words/<int:word_id>/:generate-audio",
+        "words/<int:word_id>/generate-audio",
         views.word_generate_audio,
         name="word_generate_audio"
     ),
     path(
-        "words/:generate-audio-via-openai",
+        "words/generate-audio-via-openai",
         views.word_generate_audio_via_openai,
         name="word_generate_audio_via_openai"
     ),
     path(
-        "words/:generate-image-via-openai",
+        "words/generate-image-via-openai",
         views.generate_image_via_openai,
         name="generate_image_via_openai"
     ),
     path(
-        "words/<int:word_id>/:generate-image",
+        "words/<int:word_id>/generate-image",
         views.word_generate_image,
         name="word_generate_image"
     ),
     path(
-        "words/<int:word_id>/:store-generated-audio-permanently",
+        "words/<int:word_id>/store-generated-audio-permanently",
         views.word_store_generated_audio_permanently,
         name="word_store_generated_audio_permanently"
     ),
     path(
-        "words/<int:word_id>/:store-generated-image-permanently",
+        "words/<int:word_id>/store-generated-image-permanently",
         views.word_store_generated_image_permanently,
         name="word_store_generated_image_permanently"
     ),
@@ -77,5 +77,10 @@ urlpatterns = [
         "unitwordrelations/<int:unitword_id>/generate-image/",
         views.unitword_generate_image,
         name="unitword_generate_image",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/store-generated-image-permanently/",
+        views.unitword_store_generated_image_permanently,
+        name="unitword_store_generated_image_permanently",
     ),
 ]

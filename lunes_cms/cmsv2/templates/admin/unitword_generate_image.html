@@ -1,14 +1,17 @@
 {% extends "admin/base.html" %}
 {% load i18n static %}
 
-{% block title %}Generate Image for "{{ word_instance.word }}"{% endblock %}
+{% block title %}Generate Image for "{{ unitword_instance.word.word }}"{% endblock %}
 
 {% block breadcrumbs %}
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"><a href="{% url "admin:index" %}">{% translate "Home" %}</a></li>
     <li class="breadcrumb-item"><a href="{% url "admin:app_list" app_label="cmsv2" %}">{% translate "Vocabulary Management v2" %}</a></li>
-    <li class="breadcrumb-item"><a href="{% url "admin:cmsv2_word_changelist" %}">{% translate "Words" %}</a></li>
-    <li class="breadcrumb-item"><a href="{% url "admin:cmsv2_word_change" word_instance.pk %}">{{ word_instance.word }}</a></li>
+    <li class="breadcrumb-item">
+        <a href="{% url "admin:cmsv2_unit_change" unitword_instance.unit.pk %}">{{ unitword_instance.unit.title }}</a>
+        &harr;
+        <a href="{% url "admin:cmsv2_word_change" unitword_instance.word.pk %}">{{ unitword_instance.word.word }}</a>
+    </li>
     <li class="breadcrumb-item active">{% trans "Generate Image" %}</li>
 </ol>
 {% endblock %}
@@ -19,7 +22,10 @@
 <div id="content-main">
     <div class="module">
         <div>
-            <strong>Word Text:</strong> {{ word_text }}
+            <strong>Word Text:</strong> {{ unitword_instance.word.word }}
+        </div>
+        <div>
+            <strong>Unit Title:</strong> {{ unitword_instance.unit.title }}
         </div>
         <div style="margin-top: 16px; margin-bottom: 16px;">
             <label for="prompt-additional-info">
@@ -41,15 +47,13 @@
 
             <div>
                 <button type="button" class="button" id="regenerate_button">Re-generate</button>
-                <form method="post" action="{% url "cmsv2:word_store_generated_image_permanently" word_instance.pk %}" style="display:inline-block;">
+                <form method="post" action="{% url "cmsv2:unitword_store_generated_image_permanently" unitword_instance.pk %}" style="display:inline-block;">
                     {% csrf_token %}
                     <input type="hidden" name="temp_image_url" id="hidden_temp_image_url">
                     <button type="submit" class="button default" id="store_button">Store to Image Field</button>
                 </form>
             </div>
         </div>
-
-        <a href="{% url "admin:cmsv2_word_change" word_instance.pk %}" class="button">Back to Edit View</a>
     </div>
 </div>
 {% endblock %}
@@ -76,7 +80,6 @@
         const generateButton = document.getElementById("generate_button")
         const regenerateButton = document.getElementById("regenerate_button")
         const storeButton = document.getElementById("store_button")
-        const backButton = document.querySelector("a.button[href*='change']")
 
         const loadingSpinner = document.getElementById("loading_spinner")
         const messageArea = document.getElementById("message_area")
@@ -88,14 +91,8 @@
             generateButton.disabled = generating
             regenerateButton.disabled = generating
             storeButton.disabled = generating
-            if (generating) {
-                backButton.classList.add("disabled")
-            } else {
-                backButton.classList.remove("disabled")
-            }
         }
 
-        // Common generation logic
         function performGeneration() {
             setButtonsState(true)
             loadingSpinner.style.display = "inline-block"
@@ -104,9 +101,11 @@
             imagePreviewSection.style.display = "none"
             imagePreview.style.display = "none"
 
-            const wordText = "{{ word_text }}"
+            const wordText = "{{ unitword_instance.word.word }}"
+            const unitTitle = "{{ unitword_instance.unit.title }}"
             const formData = new FormData()
             formData.append("word_text", wordText)
+            formData.append("unit_title", unitTitle)
             const inputElement = document.getElementById("prompt-additional-info")
             formData.append("additional_info", inputElement.value)
             formData.append("csrfmiddlewaretoken", getCookie("csrftoken"))
