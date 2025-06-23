@@ -22,8 +22,8 @@ class UnitInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
-    fields = ["unit", "image", "list_image", "image_check_status"]
-    readonly_fields = ["list_image"]
+    fields = ["unit", "image", "list_image", "image_check_status", "generate_image_link"]
+    readonly_fields = ["list_image", "generate_image_link"]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
