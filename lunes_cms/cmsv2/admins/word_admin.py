@@ -52,12 +52,13 @@ class WordAdmin(BaseAdmin):
         "audio_check_status",
         "image",
         "image_check_status",
+        "image_generate",
         "image_tag",
         "definition",
         "additional_meaning_1",
         "additional_meaning_2",
     )
-    readonly_fields = ("audio_generate", "created_by", "image_tag")
+    readonly_fields = ("audio_generate", "created_by", "image_generate", "image_tag")
     search_fields = ["word"]
     ordering = ["word", "creation_date"]
     inlines = [UnitInline]
@@ -102,6 +103,16 @@ class WordAdmin(BaseAdmin):
         return "Save to enable audio generation."
 
     audio_generate.short_description = "Audio Generation"
+
+    def image_generate(self, obj):
+        if obj.pk:
+            url = reverse("cmsv2:word_generate_image", args=[obj.pk])
+            return format_html(
+                '<a class="button" href="{}">Generate Image</a>', url
+            )
+        return "Save to enable image generation."
+
+    image_generate.short_description = "Image Generation"
 
     def creator_group(self, obj):
         """
