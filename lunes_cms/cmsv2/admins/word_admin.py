@@ -2,13 +2,14 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 from django.urls import reverse
-from django.utils.html import mark_safe, format_html
+from django.utils.html import mark_safe, format_html, escape
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models.static import Static
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.utils import get_image_tag
+from lunes_cms.core import settings
 
 
 class UnitInline(admin.TabularInline):
@@ -48,6 +49,7 @@ class WordAdmin(BaseAdmin):
         "plural_article",
         "plural",
         "audio",
+        "audio_player",
         "audio_generate",
         "audio_check_status",
         "image",
@@ -58,7 +60,7 @@ class WordAdmin(BaseAdmin):
         "additional_meaning_1",
         "additional_meaning_2",
     )
-    readonly_fields = ("audio_generate", "created_by", "image_generate", "image_tag")
+    readonly_fields = ("audio_generate", "audio_player", "created_by", "image_generate", "image_tag")
     search_fields = ["word"]
     ordering = ["word", "creation_date"]
     inlines = [UnitInline]
@@ -103,6 +105,16 @@ class WordAdmin(BaseAdmin):
         return "Save to enable audio generation."
 
     audio_generate.short_description = "Audio Generation"
+
+    def audio_player(self, obj):
+        if obj.audio:
+            return format_html(
+                "<audio controls id='audio_preview_player' src={}/>",
+                obj.audio.url
+            )
+        return "No audio file uploaded."
+
+    audio_player.short_description = "Audio Preview"
 
     def image_generate(self, obj):
         if obj.pk:
@@ -235,7 +247,7 @@ class WordAdmin(BaseAdmin):
         Returns:
             str: HTML markup for the word's main image container
         """
-        image_html = get_image_tag(obj.image, 50)
+        image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{obj.image}")}" target="_blank">{get_image_tag(obj.image, width=50)}</a>'
 
         controls_html = f"""
         <div class="image-controls" data-word-id="{obj.id}">
@@ -297,7 +309,7 @@ class WordAdmin(BaseAdmin):
             str: HTML markup for a single unit-word image container
         """
         unit_name = relation.unit.title
-        unit_image_html = get_image_tag(relation.image, 50)
+        unit_image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{relation.image}")}" target="_blank">{get_image_tag(relation.image, width=50)}</a>'
 
         unit_controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{relation.id}">

@@ -8,6 +8,8 @@ from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
 from django.utils.translation import gettext as _
 
+from lunes_cms.core import settings
+
 
 def create_resource_path(parent_dir, filename):
     """
@@ -114,7 +116,7 @@ def get_image_tag(image, width=330):
         and image.storage.exists(image.name)
         and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png"])
     ):
-        src = escape(f"/media/{image}")
+        src = escape(f"{settings.MEDIA_URL}{image}")
     html_cls = "" if src else 'class="hidden"'
     return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
 

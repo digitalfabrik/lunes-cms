@@ -68,6 +68,7 @@ class Word(models.Model):
         choices=Static.check_status_choices,
         null=True,
         verbose_name=_("audio check status"),
+        default="NOT_CHECKED",
     )
     audio_checked_identifier = models.CharField(
         max_length=255,
@@ -115,6 +116,7 @@ class Word(models.Model):
         choices=Static.check_status_choices,
         null=True,
         verbose_name=_("image check status"),
+        default="NOT_CHECKED",
     )
 
     @property
