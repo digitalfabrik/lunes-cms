@@ -1,13 +1,14 @@
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.utils.html import format_html, mark_safe
+from django.utils.html import format_html, mark_safe, escape
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import get_image_tag
 from .static import convert_umlaute_images, Static
 from .job import Job
 from .word import Word
+from ...core import settings
 
 
 class UnitWordRelation(models.Model):
@@ -33,6 +34,7 @@ class UnitWordRelation(models.Model):
         choices=Static.check_status_choices,
         null=True,
         verbose_name=_("image check status"),
+        default="NOT_CHECKED",
     )
 
     def image_tag(self):
@@ -78,7 +80,8 @@ class UnitWordRelation(models.Model):
         Returns:
             str: HTML markup for displaying the image with controls
         """
-        image_html = get_image_tag(self.image, width=75)
+
+        image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{self.image}")}" target="_blank">{get_image_tag(self.image, width=75)}</a>'
 
         controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{self.id}">
