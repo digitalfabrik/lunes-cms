@@ -8,7 +8,7 @@ window.audioAssetManagerConfig = {
     replaceBtnClass: "replace-audio-btn",
     deleteBtnClass: "delete-audio-btn",
     fileInputClass: "audio-file-input",
-    updateEndpoint: "/cmsv2/words/${id}/update-audio/",
+    updateEndpoint: "/en/admin/cmsv2/words/${id}/update-audio/",
     successMessages: {
         update: "Audio updated successfully",
         delete: "Audio deleted successfully"

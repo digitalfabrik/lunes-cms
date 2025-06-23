@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const formData = new FormData();
             formData.append("image_check_status", select.value);
 
-            fetch(`/cmsv2/words/${wordId}/update-image-check-status/`, {
+            fetch(`/en/admin/cmsv2/words/${wordId}/update-image-check-status/`, {
                 method: "POST",
                 body: formData,
                 headers: {
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const formData = new FormData();
             formData.append("image_check_status", select.value);
 
-            fetch(`/cmsv2/unitwords/${unitwordId}/update-image-check-status/`, {
+            fetch(`/en/admin/cmsv2/unitwords/${unitwordId}/update-image-check-status/`, {
                 method: "POST",
                 body: formData,
                 headers: {

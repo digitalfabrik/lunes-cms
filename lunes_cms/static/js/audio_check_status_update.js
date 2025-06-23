@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const formData = new FormData();
             formData.append("audio_check_status", select.value);
 
-            fetch(`/cmsv2/words/${wordId}/update-audio-check-status/`, {
+            fetch(`/en/admin/cmsv2/words/${wordId}/update-audio-check-status/`, {
                 method: "POST",
                 body: formData,
                 headers: {
