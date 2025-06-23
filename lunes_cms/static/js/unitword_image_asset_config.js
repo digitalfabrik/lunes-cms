@@ -9,7 +9,7 @@ window.assetManagerConfigs.push({
     replaceBtnClass: "replace-unitword-image-btn",
     deleteBtnClass: "delete-unitword-image-btn",
     fileInputClass: "unitword-image-file-input",
-    updateEndpoint: "/cmsv2/unitwordrelations/${id}/update-image/",
+    updateEndpoint: "/en/admin/cmsv2/unitwordrelations/${id}/update-image/",
     successMessages: {
         update: "Image updated successfully",
         delete: "Image deleted successfully"
