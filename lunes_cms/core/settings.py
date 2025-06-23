@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 
 #: API Key for OpenAI
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
 ########################
 # DJANGO CORE SETTINGS #
