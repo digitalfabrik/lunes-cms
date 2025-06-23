@@ -1,5 +1,5 @@
-import os
 import urllib
+import uuid
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
@@ -9,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models import Word
-from lunes_cms.core import settings
 
 
 @staff_member_required
@@ -30,13 +29,12 @@ def word_generate_image(request, word_id):
     return render(request, "admin/word_generate_image.html", context)
 
 
-
 @staff_member_required
 @csrf_exempt
 @require_POST
 def word_store_generated_image_permanently(request, word_id):
     """
-    Moves the temporary audio file to the Word instance's audio field
+    Downloads and save the image to the Word instance's image field
     and redirects back to the edit view.
     """
 
@@ -50,7 +48,7 @@ def word_store_generated_image_permanently(request, word_id):
 
             image_data = response.read()
 
-        file_name = "generated_image.png"  # You could generate a unique name if preferred
+        file_name = f"{uuid.uuid4()}.png"
         word_instance.image.save(file_name, ContentFile(image_data), save=True)
 
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
