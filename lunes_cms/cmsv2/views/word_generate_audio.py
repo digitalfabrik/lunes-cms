@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
@@ -11,7 +12,6 @@ from openai import OpenAI
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.core import settings
-
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -27,7 +27,7 @@ def word_generate_audio(request, word_id):
     context = admin.site.each_context(request)
     context.update({
         "word_instance": word_instance,
-        "word_text": word_instance.word,
+        "word_text": f'{word_instance.get_singular_article_display()} {word_instance.word}',
         "temp_audio_url": None,
         "temp_audio_filename": None,
     })
@@ -53,11 +53,10 @@ def word_generate_audio_via_openai(request):
     try:
         response = client.audio.speech.create(
             model="tts-1-hd",
-            voice="alloy",
+            voice="nova",
             input=word_text,
         )
 
-        import uuid
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)
 
