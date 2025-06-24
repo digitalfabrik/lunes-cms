@@ -99,9 +99,8 @@
             audioPreviewSection.style.display = "none"
             audioPlayer.src = ""
 
-            const wordText = "{{ word_text }}"
             const formData = new FormData()
-            formData.append("word_text", wordText)
+            formData.append("word_text", "{{ word_text }}")
             formData.append("csrfmiddlewaretoken", getCookie("csrftoken"))
 
             fetch("{% url "cmsv2:word_generate_audio_via_openai" %}", {
