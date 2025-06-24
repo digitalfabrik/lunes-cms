@@ -27,6 +27,15 @@
             </label>
             <input id="prompt-additional-info" type="text" style="width: 100%"/>
         </div>
+        <div style="margin-top: 16px; margin-bottom: 16px;">
+            <label for="model">
+                <strong>Model:</strong>
+            </label>
+            <select id="model" style="width: 100%; padding: 8px;">
+                <option value="dall-e-3">dall-e-3 (&asymp; 0.04$ per generation)</option>
+                <option value="gpt-image-1">gpt-image-1 (&asymp; 0.18$ per generation)</option>
+            </select>
+        </div>
 
         <div class="form-row">
             <button type="button" class="button" id="generate_button">Generate Image</button>
@@ -38,12 +47,13 @@
             <hr>
             <h2>Generated Image Preview:</h2>
             <img src="" id="image-preview" alt="Generated image" style="display: none; max-width: min(400px, 100%);"/>
+            <p>Temporary Filename: <span id="temp_filename_display"></span></p>
 
             <div>
                 <button type="button" class="button" id="regenerate_button">Re-generate</button>
                 <form method="post" action="{% url "cmsv2:word_store_generated_image_permanently" word_instance.pk %}" style="display:inline-block;">
                     {% csrf_token %}
-                    <input type="hidden" name="temp_image_url" id="hidden_temp_image_url">
+                    <input type="hidden" name="temp_filename" id="hidden_temp_filename">
                     <button type="submit" class="button default" id="store_button">Store to Image Field</button>
                 </form>
             </div>
@@ -82,7 +92,8 @@
         const messageArea = document.getElementById("message_area")
         const imagePreviewSection = document.getElementById("image_preview_section")
         const imagePreview = document.getElementById("image-preview")
-        const hiddenTempImageUrl = document.getElementById("hidden_temp_image_url")
+        const tempFilenameDisplay = document.getElementById("temp_filename_display")
+        const hiddenTempFilename = document.getElementById("hidden_temp_filename")
 
         function setButtonsState(generating) {
             generateButton.disabled = generating
@@ -108,6 +119,8 @@
             formData.append("word_text", wordText)
             const inputElement = document.getElementById("prompt-additional-info")
             formData.append("additional_info", inputElement.value)
+            const modelSelectElement = document.getElementById("model")
+            formData.append("model", modelSelectElement.value)
             formData.append("csrfmiddlewaretoken", getCookie("csrftoken"))
 
             fetch("{% url "cmsv2:generate_image_via_openai" %}", {
@@ -135,7 +148,8 @@
                     imagePreviewSection.style.display = "block"
                     imagePreview.style.display = "block"
                     imagePreview.src = data.temp_image_url
-                    hiddenTempImageUrl.value = data.temp_image_url
+                    tempFilenameDisplay.textContent = data.temp_image_filename
+                    hiddenTempFilename.value = data.temp_image_filename
                 }
             })
             .catch(error => {
