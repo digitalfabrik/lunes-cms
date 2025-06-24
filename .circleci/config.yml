@@ -286,7 +286,7 @@ jobs:
           command: |
             source .venv/bin/activate
             pip install twine
-            twine upload --non-interactive ./dist/lunes*.tar.gz
+            twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
   create-release:
     docker:
       - image: cimg/python:3.11
