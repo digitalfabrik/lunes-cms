@@ -109,7 +109,7 @@ class WordAdmin(BaseAdmin):
     def audio_player(self, obj):
         if obj.audio:
             return format_html(
-                "<audio controls id='audio_preview_player' src={}/>",
+                "<audio controls id='audio_preview_player' src='{}'></audio>",
                 obj.audio.url
             )
         return "No audio file uploaded."
