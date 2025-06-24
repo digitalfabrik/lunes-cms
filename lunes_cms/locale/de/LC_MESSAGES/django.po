@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 17:16+0000\n"
+"POT-Creation-Date: 2025-06-24 08:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,7 +105,7 @@ msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
 #: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:102
-#: cmsv2/admins/word_admin.py:123
+#: cmsv2/admins/word_admin.py:146
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -115,22 +115,22 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:190 cmsv2/models/word.py:64
+#: cmsv2/admins/word_admin.py:213 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
 #: cms/admins/document_admin.py:216 cms/models/document_image.py:124
-#: cmsv2/models/unit.py:29 cmsv2/models/word.py:111
+#: cmsv2/models/unit.py:31 cmsv2/models/word.py:112
 msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:348
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:371
 #: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
 
-#: cms/admins/document_resource.py:24 cmsv2/models/word.py:223
+#: cms/admins/document_resource.py:24 cmsv2/models/word.py:225
 msgid "Word"
 msgstr "Vokabel"
 
@@ -338,7 +338,7 @@ msgid "alternative words"
 msgstr "Alternative Wörter"
 
 #: cms/models/discipline.py:20 cms/models/training_set.py:24
-#: cmsv2/models/job.py:19 cmsv2/models/unit.py:122
+#: cmsv2/models/job.py:19 cmsv2/models/unit.py:135
 msgid "released"
 msgstr "veröffentlicht"
 
@@ -348,25 +348,25 @@ msgid "discipline"
 msgstr "Modulgruppe"
 
 #: cms/models/discipline.py:23 cms/models/training_set.py:27
-#: cmsv2/models/unit.py:125
+#: cmsv2/models/unit.py:138
 msgid "description"
 msgstr "Beschreibung"
 
 #: cms/models/discipline.py:26 cms/models/group.py:10
 #: cms/models/training_set.py:30 cmsv2/models/job.py:22
-#: cmsv2/models/unit.py:128
+#: cmsv2/models/unit.py:141
 msgid "icon"
 msgstr "Icon"
 
 #: cms/models/discipline.py:33 cms/models/document.py:94
 #: cms/models/training_set.py:39 cmsv2/models/job.py:29
-#: cmsv2/models/unit.py:135 cmsv2/models/word.py:105
+#: cmsv2/models/unit.py:148 cmsv2/models/word.py:106
 msgid "created by"
 msgstr "Erstellt von"
 
 #: cms/models/discipline.py:36 cms/models/document.py:98
 #: cms/models/training_set.py:41 cmsv2/models/job.py:32
-#: cmsv2/models/unit.py:137 cmsv2/models/word.py:109
+#: cmsv2/models/unit.py:150 cmsv2/models/word.py:110
 msgid "admin"
 msgstr "Admin"
 
@@ -378,7 +378,7 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:33 cmsv2/models/unit.py:132 cmsv2/models/word.py:31
+#: cms/models/document.py:33 cmsv2/models/unit.py:145 cmsv2/models/word.py:31
 msgid "word"
 msgstr "Wort"
 
@@ -386,24 +386,24 @@ msgstr "Wort"
 msgid "Grammatical gender"
 msgstr "Genus"
 
-#: cms/models/document.py:68 cmsv2/models/word.py:78
+#: cms/models/document.py:68 cmsv2/models/word.py:79
 msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:362 cmsv2/models/word.py:80
+#: cmsv2/admins/word_admin.py:385 cmsv2/models/word.py:81
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:76 cmsv2/models/word.py:87
+#: cms/models/document.py:76 cmsv2/models/word.py:88
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:82 cmsv2/models/word.py:93
+#: cms/models/document.py:82 cmsv2/models/word.py:94
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:88 cmsv2/models/word.py:99
+#: cms/models/document.py:88 cmsv2/models/word.py:100
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -553,7 +553,9 @@ msgstr ""
 
 #: cms/templates/admin/delete_confirmation.html:16
 #: cms/templates/admin/delete_selected_confirmation.html:15
+#: cmsv2/templates/admin/unitword_generate_image.html:8
 #: cmsv2/templates/admin/word_generate_audio.html:8
+#: cmsv2/templates/admin/word_generate_image.html:8
 msgid "Home"
 msgstr "Home"
 
@@ -636,7 +638,7 @@ msgstr "Zusammenfassung"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:163 cmsv2/utils.py:137
+#: cms/utils.py:163 cmsv2/utils.py:139
 msgid "and"
 msgstr "und"
 
@@ -657,7 +659,7 @@ msgid "units"
 msgstr "Einheiten"
 
 #: cmsv2/admins/job_admin.py:88 cmsv2/admins/unit_admin.py:116
-#: cmsv2/models/job.py:33 cmsv2/models/unit.py:138
+#: cmsv2/models/job.py:33 cmsv2/models/unit.py:151
 msgid "created at"
 msgstr "Erstellt"
 
@@ -665,32 +667,34 @@ msgstr "Erstellt"
 msgid "jobs"
 msgstr "Berufe"
 
-#: cmsv2/admins/word_admin.py:334 cmsv2/models/unit.py:102
+#: cmsv2/admins/word_admin.py:357 cmsv2/models/unit.py:106
 msgid "Image"
 msgstr "Bilder"
 
-#: cmsv2/admins/word_admin.py:376 cmsv2/models/word.py:70
+#: cmsv2/admins/word_admin.py:399 cmsv2/models/word.py:70
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:391 cmsv2/models/unit.py:35
-#: cmsv2/models/word.py:117
+#: cmsv2/admins/word_admin.py:414 cmsv2/models/unit.py:37
+#: cmsv2/models/word.py:118
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
-#: cmsv2/apps.py:12 cmsv2/templates/admin/word_generate_audio.html:9
+#: cmsv2/apps.py:12 cmsv2/templates/admin/unitword_generate_image.html:9
+#: cmsv2/templates/admin/word_generate_audio.html:9
+#: cmsv2/templates/admin/word_generate_image.html:9
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
-#: cmsv2/models/job.py:20 cmsv2/models/unit.py:130
+#: cmsv2/models/job.py:20 cmsv2/models/unit.py:143
 msgid "job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:34 cmsv2/models/unit.py:139 cmsv2/models/word.py:82
+#: cmsv2/models/job.py:34 cmsv2/models/unit.py:152 cmsv2/models/word.py:83
 msgid "modified at"
 msgstr "zuletzt geändert"
 
-#: cmsv2/models/job.py:102 cmsv2/models/unit.py:183
+#: cmsv2/models/job.py:102 cmsv2/models/unit.py:196
 msgid "Icon"
 msgstr "Icon"
 
@@ -702,31 +706,40 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/unit.py:112
+#: cmsv2/models/unit.py:115
+#: cmsv2/templates/admin/unitword_generate_image.html:15
+#: cmsv2/templates/admin/unitword_generate_image.html:19
+#: cmsv2/templates/admin/word_generate_image.html:12
+#: cmsv2/templates/admin/word_generate_image.html:16
+msgid "Generate Image"
+msgstr ""
+
+#: cmsv2/models/unit.py:125
 msgid "Unit-Word Relation"
 msgstr "Einheit-Wort Beziehung"
 
-#: cmsv2/models/unit.py:113
+#: cmsv2/models/unit.py:126
 msgid "Unit-Word Relations"
 msgstr "Einheit-Wort Beziehungen"
 
-#: cmsv2/models/unit.py:123
+#: cmsv2/models/unit.py:136
 msgid "unit"
 msgstr "Einheit"
 
-#: cmsv2/models/unit.py:215
+#: cmsv2/models/unit.py:228
 msgid "Unit"
 msgstr "Einheit"
 
-#: cmsv2/models/unit.py:216
+#: cmsv2/models/unit.py:229
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/models/word.py:76
+#: cmsv2/models/word.py:77
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:224 cmsv2/templates/admin/word_generate_audio.html:10
+#: cmsv2/models/word.py:226 cmsv2/templates/admin/word_generate_audio.html:10
+#: cmsv2/templates/admin/word_generate_image.html:10
 msgid "Words"
 msgstr "Vokabel"
 

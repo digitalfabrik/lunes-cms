@@ -1,3 +1,7 @@
+import base64
+import os
+import uuid
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -5,7 +9,6 @@ from django.views.decorators.http import require_POST
 from openai import OpenAI
 
 from lunes_cms.core import settings
-
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -20,10 +23,13 @@ def generate_image_via_openai(request):
     """
 
     word_text = request.POST.get("word_text")
-    additional_info = request.POST.get("additional_info")
-    unit_title = request.POST.get("unit_title")
     if not word_text:
         return JsonResponse({"error": "No word_text provided."}, status=400)
+    additional_info = request.POST.get("additional_info")
+    unit_title = request.POST.get("unit_title")
+    model = request.POST.get("model")
+    if not model:
+        return JsonResponse({"error": "No model provided."}, status=400)
 
     prompt = f'''Du bist Content-Manager für eine Vokabel-Lern-App namens "Lunes". Die App richtet sich an Zugewanderte, die in Deutschland eine Ausbildung machen oder bereits beruflich tätig sind. Sie lernen Deutsch als Fremdsprache und benötigen spezifischen Fachwortschatz, der in regulären Sprachkursen nicht vermittelt wird.
 
@@ -43,16 +49,37 @@ def generate_image_via_openai(request):
     prompt += "Ziel ist es, dass die Vokabel durch das Bild eindeutig verstanden werden kann – auch ohne Text oder Erklärung."
 
     try:
-        response = client.images.generate(
-            model="dall-e-3",
-            prompt=prompt,
-            size="1024x1024",
-            n=1
-        )
+        if model == "gpt-image-1":
+            response = client.images.generate(
+                model=model,
+                prompt=prompt,
+                size="1024x1024",
+                n=1
+            )
+        else:
+            response = client.images.generate(
+                model=model,
+                prompt=prompt,
+                response_format="b64_json",
+                size="1024x1024",
+                n=1
+            )
+
+        b64_image = response.data[0].b64_json
+        image_data = base64.b64decode(b64_image)
+
+        temp_filename = f"temp_image_{uuid.uuid4().hex}.png"
+        temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
+
+        with open(temp_filepath, "wb") as f:
+            f.write(image_data)
+
+        temp_image_url = os.path.join(settings.MEDIA_URL, "temp_image", temp_filename)
 
         return JsonResponse({
             "message": "Image generated!",
-            "temp_image_url": response.data[0].url
+            "temp_image_url": temp_image_url,
+            "temp_image_filename": temp_filename
         })
 
     except Exception as e:

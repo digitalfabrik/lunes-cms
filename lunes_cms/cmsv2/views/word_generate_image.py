@@ -1,5 +1,4 @@
-import urllib
-import uuid
+import os
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
@@ -9,12 +8,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models import Word
+from lunes_cms.core import settings
 
 
 @staff_member_required
 def word_generate_image(request, word_id):
     """
-    Dedicated view for generating audio for a specific Word instance.
+    Dedicated view for generating image for a specific Word instance.
     """
 
     word_instance = get_object_or_404(Word, pk=word_id)
@@ -39,17 +39,23 @@ def word_store_generated_image_permanently(request, word_id):
     """
 
     word_instance = get_object_or_404(Word, pk=word_id)
-    image_url = request.POST.get("temp_image_url")
+    temp_filename = request.POST.get("temp_filename")
+
+    if not temp_filename:
+        return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
+
+    temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
+
+    if not os.path.exists(temp_filepath):
+        return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
 
     try:
-        with urllib.request.urlopen(image_url) as response:
-            if response.status != 200:
-                raise Exception(f"Failed to download image: {response.status}")
+        with open(temp_filepath, "rb") as f:
+            content_file = ContentFile(f.read(), name=f'{word_instance.word.replace(" ", "_")}.png')
+            word_instance.image.save(content_file.name, content_file)
+        word_instance.save()
 
-            image_data = response.read()
-
-        file_name = f"{uuid.uuid4()}.png"
-        word_instance.image.save(file_name, ContentFile(image_data), save=True)
+        os.remove(temp_filepath)
 
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
 

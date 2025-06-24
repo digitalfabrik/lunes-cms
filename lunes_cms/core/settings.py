@@ -251,8 +251,9 @@ MEDIA_URL = "/media/"
 #: Absolute filesystem path to the directory that will hold user-uploaded files (see :setting:`django:MEDIA_ROOT`)
 MEDIA_ROOT = os.environ.get("LUNES_CMS_MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
 
-#: Directory for audio files
+#: Directory for temporary files
 TEMP_AUDIO_DIR = os.path.join(MEDIA_ROOT, "temp_audio")
+TEMP_IMAGE_DIR = os.path.join(MEDIA_ROOT, "temp_image")
 
 
 ##########
