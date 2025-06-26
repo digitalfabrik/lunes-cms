@@ -194,6 +194,16 @@ class Word(models.Model):
         """
         return self.audio.url if self.audio else None
 
+    def singular_article_for_audio_generation(self):
+        if self.singular_article == 0:
+            return ""
+        if self.singular_article == 4:
+            return "die"
+        for num, article in Static.singular_article_choices:
+            if num == self.singular_article:
+                return article
+        return ""
+
     def image_tag(self, width=120):
         """
         Generates an HTML image tag for the word's associated image.
