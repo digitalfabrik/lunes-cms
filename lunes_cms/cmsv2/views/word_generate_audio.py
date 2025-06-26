@@ -27,7 +27,7 @@ def word_generate_audio(request, word_id):
     context = admin.site.each_context(request)
     context.update({
         "word_instance": word_instance,
-        "word_text": f'{word_instance.get_singular_article_display()} {word_instance.word}',
+        "word_text": f'{word_instance.singular_article_for_audio_generation()} {word_instance.word}',
         "temp_audio_url": None,
         "temp_audio_filename": None,
     })
