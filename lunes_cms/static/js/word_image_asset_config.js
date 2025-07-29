@@ -9,7 +9,7 @@ window.assetManagerConfigs.push({
     replaceBtnClass: "replace-image-btn",
     deleteBtnClass: "delete-image-btn",
     fileInputClass: "image-file-input",
-    updateEndpoint: "/cmsv2/words/${id}/update-image/",
+    updateEndpoint: "/en/admin/cmsv2/words/${id}/update-image/",
     successMessages: {
         update: "Image updated successfully",
         delete: "Image deleted successfully"

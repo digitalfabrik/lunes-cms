@@ -1,0 +1,160 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}Generate Audio for "{{ word_instance.word }}"{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="{% url "admin:index" %}">{% translate "Home" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url "admin:app_list" app_label="cmsv2" %}">{% translate "Vocabulary Management v2" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url "admin:cmsv2_word_changelist" %}">{% translate "Words" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url "admin:cmsv2_word_change" word_instance.pk %}">{{ word_instance.word }}</a></li>
+    <li class="breadcrumb-item active">{% trans "Generate Audio" %}</li>
+</ol>
+{% endblock %}
+
+{% block content_title %}{% trans "Generate Audio" %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module">
+        <strong>Word Text:</strong> {{ word_text }}
+
+        <div class="form-row">
+            <button type="button" class="button" id="generate_button">Generate Audio</button>
+            <span class="loading-spinner" id="loading_spinner" style="display: none;"></span>
+            <span class="message-area" id="message_area"></span>
+        </div>
+
+        <div id="audio_preview_section" style="display: none;">
+            <hr>
+            <h2>Generated Audio Preview:</h2>
+            <audio controls id="audio_preview_player"></audio>
+            <p>Temporary Filename: <span id="temp_filename_display"></span></p>
+
+            <div>
+                <button type="button" class="button" id="regenerate_button">Re-generate</button>
+                <form method="post" action="{% url "cmsv2:word_store_generated_audio_permanently" word_instance.pk %}" style="display:inline-block;">
+                    {% csrf_token %}
+                    <input type="hidden" name="temp_audio_filename" id="hidden_temp_audio_filename">
+                    <button type="submit" class="button default" id="store_button">Store to Audio Field</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url "admin:cmsv2_word_change" word_instance.pk %}" class="button">Back to Edit View</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";")
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim()
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                    break
+                }
+            }
+        }
+        return cookieValue
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const generateButton = document.getElementById("generate_button")
+        const regenerateButton = document.getElementById("regenerate_button")
+        const storeButton = document.getElementById("store_button")
+        const backButton = document.querySelector("a.button[href*='change']")
+
+        const loadingSpinner = document.getElementById("loading_spinner")
+        const messageArea = document.getElementById("message_area")
+        const audioPreviewSection = document.getElementById("audio_preview_section")
+        const audioPlayer = document.getElementById("audio_preview_player")
+        const tempFilenameDisplay = document.getElementById("temp_filename_display")
+        const hiddenTempAudioFilename = document.getElementById("hidden_temp_audio_filename")
+
+        let currentTempAudioFilename = null
+
+        function setButtonsState(generating) {
+            generateButton.disabled = generating
+            regenerateButton.disabled = generating
+            storeButton.disabled = generating
+            if (generating) {
+                backButton.classList.add("disabled")
+            } else {
+                backButton.classList.remove("disabled")
+            }
+        }
+
+        function performGeneration() {
+            setButtonsState(true)
+            loadingSpinner.style.display = "inline-block"
+            messageArea.textContent = "Generating audio..."
+            messageArea.style.color = "inherit"
+            audioPreviewSection.style.display = "none"
+            audioPlayer.src = ""
+
+            const formData = new FormData()
+            formData.append("word_text", "{{ word_text }}")
+            formData.append("csrfmiddlewaretoken", getCookie("csrftoken"))
+
+            fetch("{% url "cmsv2:word_generate_audio_via_openai" %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`)
+                }
+                return response.json()
+            })
+            .then(data => {
+                if (data.error) {
+                    messageArea.textContent = `Error: ${data.error}`
+                    messageArea.style.color = "red"
+                    audioPreviewSection.style.display = "none"
+                } else {
+                    messageArea.textContent = data.message
+                    messageArea.style.color = "green"
+                    audioPlayer.src = data.temp_audio_url
+                    tempFilenameDisplay.textContent = data.temp_audio_filename
+                    hiddenTempAudioFilename.value = data.temp_audio_filename
+                    audioPreviewSection.style.display = "block"
+                    currentTempAudioFilename = data.temp_audio_filename
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error)
+                messageArea.textContent = `Network error: ${error.message}`
+                messageArea.style.color = "red"
+                audioPreviewSection.style.display = "none"
+            })
+            .finally(() => {
+                loadingSpinner.style.display = "none"
+                setButtonsState(false)
+            })
+        }
+
+        generateButton.addEventListener("click", performGeneration)
+        regenerateButton.addEventListener("click", performGeneration)
+
+        setButtonsState(false)
+        regenerateButton.disabled = true
+        storeButton.disabled = true
+        audioPreviewSection.style.display = "none"
+
+        audioPlayer.addEventListener("loadeddata", () => {
+            regenerateButton.disabled = false
+            storeButton.disabled = false
+        })
+    })
+</script>
+{% endblock %}
