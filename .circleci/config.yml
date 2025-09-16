@@ -8,12 +8,24 @@ jobs:
       - image: cimg/python:3.11
     steps:
       - checkout
+      - restore_cache:
+          key: pip-{{ checksum "setup.cfg" }}-v3
       - run:
           name: Creating virtual environment
           command: |
-            python3 -m venv .venv
-            source .venv/bin/activate
-            pip install -e .
+            if [[ -d ".venv" ]]; then
+              echo "Virtual environment restored from cache, skipping pip install"
+            else
+              python3 -m venv .venv
+              source .venv/bin/activate
+              pip install -e .
+            fi
+      - save_cache:
+          key: pip-{{ checksum "setup.cfg" }}-v3
+          paths:
+            - .venv
+            - lunes_cms.egg-info
+            - /home/circleci/.cache/pip
       - persist_to_workspace:
           root: .
           paths:
@@ -166,7 +178,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Enable virtual environment
+          name: Activate virtual environment
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Bump version
@@ -350,6 +362,34 @@ workflows:
           filters:
             branches:
               ignore: main
+      - compile-translations:
+          requires:
+            - install
+      - setup-test-reporter:
+          context: codeclimate-lunes-cms
+          filters:
+            branches:
+              ignore: main
+      - pylint:
+          requires:
+            - install
+      - test:
+          requires:
+            - compile-translations
+            - setup-test-reporter
+      - upload-test-coverage:
+          context: codeclimate-lunes-cms
+          requires:
+            - test
+      - black:
+          requires:
+            - install
+      - check-translations:
+          requires:
+            - install
+      - build-documentation:
+          requires:
+            - install
       - bump-dev-version:
           filters:
             branches:
