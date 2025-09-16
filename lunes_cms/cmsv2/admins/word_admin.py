@@ -6,10 +6,39 @@ from django.utils.html import mark_safe, format_html, escape
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
+from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.static import Static
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.models.unit import UnitWordRelation, Unit
 from lunes_cms.cmsv2.utils import get_image_tag
 from lunes_cms.core import settings
+
+
+class UnitOrJobDropdownFilter(admin.SimpleListFilter):
+    title = _("Unit or Job")
+    parameter_name = "unit_or_job_choice"
+
+    def lookups(self, request, model_admin):
+        options = []
+        for unit in Unit.objects.all():
+            options.append((f"unit_{unit.pk}", f"Unit: {unit.title}"))
+        for job in Job.objects.all():
+            options.append((f"job_{job.pk}", f"Job: {job.name}"))
+        return options
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if not value:
+            return queryset
+
+        if value.startswith("unit_"):
+            unit_id = value.split("_", 1)[1]
+            return queryset.filter(units__id=unit_id).distinct()
+
+        if value.startswith("job_"):
+            job_id = value.split("_", 1)[1]
+            return queryset.filter(units__jobs__id=job_id).distinct()
+
+        return queryset
 
 
 class UnitInline(admin.TabularInline):
@@ -73,7 +102,7 @@ class WordAdmin(BaseAdmin):
         "creator_group",
         "creation_date_display",
     )
-    list_filter = ["word_type", "audio_check_status", "image_check_status"]
+    list_filter = ["word_type", "audio_check_status", "image_check_status", UnitOrJobDropdownFilter]
     list_per_page = 25
 
     class Media:
