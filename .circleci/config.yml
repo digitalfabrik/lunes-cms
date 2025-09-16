@@ -62,8 +62,14 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Install pylint requirements
+          command: sudo apt-get update && sudo apt-get install ffmpeg
+      - run:
           name: Run pylint
-          command: ./tools/pylint.sh
+          command: |
+            source .venv/bin/activate
+            pip install pylint
+            ./tools/pylint.sh
   setup-test-reporter:
     docker:
       - image: cimg/base:stable
