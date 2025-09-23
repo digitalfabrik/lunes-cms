@@ -42,6 +42,7 @@ else
     SED_INPLACE="sed -i"
 fi
 
+# shellcheck disable=SC2086
 find "${DOC_SRC_REF_DIR}" -type f -name "*.rst" -print0 | xargs -0 --no-run-if-empty $SED_INPLACE \
     -e '/Submodules\|Subpackages/{N;d;}' `# Remove Sub-Headings including their following lines` \
     -e 's/\( module\| package\)//' `# Remove module & package strings at the end of headings` \
