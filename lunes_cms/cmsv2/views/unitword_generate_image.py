@@ -1,6 +1,4 @@
 import os
-import urllib
-import uuid
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
@@ -59,6 +57,6 @@ def unitword_store_generated_image_permanently(request, unitword_id):
 
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
-    except Exception as e:
+    except (ValueError, FileNotFoundError, OSError) as e:
         print(f"Error storing generated image: {e}")
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)

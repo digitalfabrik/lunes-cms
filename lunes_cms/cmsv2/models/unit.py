@@ -106,8 +106,9 @@ class UnitWordRelation(models.Model):
     list_image.short_description = _("Image")
 
     def generate_image_link(self):
+        """Generate link for image generation."""
         # return format_html("<div>{}</div>", self.pk)
-        if (self.pk):
+        if self.pk:
             url = reverse("cmsv2:unitword_generate_image", args=[self.pk])
             return format_html('<a class="button" href="{}">Generate Image</a>', url)
         return "-"

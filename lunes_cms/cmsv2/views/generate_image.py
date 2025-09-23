@@ -31,7 +31,7 @@ def generate_image_via_openai(request):
     if not model:
         return JsonResponse({"error": "No model provided."}, status=400)
 
-    prompt = f'''Du bist Content-Manager für eine Vokabel-Lern-App namens "Lunes". Die App richtet sich an Zugewanderte, die in Deutschland eine Ausbildung machen oder bereits beruflich tätig sind. Sie lernen Deutsch als Fremdsprache und benötigen spezifischen Fachwortschatz, der in regulären Sprachkursen nicht vermittelt wird.
+    prompt = '''Du bist Content-Manager für eine Vokabel-Lern-App namens "Lunes". Die App richtet sich an Zugewanderte, die in Deutschland eine Ausbildung machen oder bereits beruflich tätig sind. Sie lernen Deutsch als Fremdsprache und benötigen spezifischen Fachwortschatz, der in regulären Sprachkursen nicht vermittelt wird.
 
         Die App zeigt Fachbegriffe aus dem Berufsfeld in Form von Bildern. Alle Vokabeln werden einsprachig (nur auf Deutsch) vermittelt – durch realistische Fotos, die das Wort eindeutig visuell darstellen.
         
@@ -82,7 +82,7 @@ def generate_image_via_openai(request):
             "temp_image_filename": temp_filename
         })
 
-    except Exception as e:
+    except (ValueError, ConnectionError, TimeoutError) as e:
         print("Exception!")
         print(e)
         return JsonResponse({"error": str(e)}, status=500)

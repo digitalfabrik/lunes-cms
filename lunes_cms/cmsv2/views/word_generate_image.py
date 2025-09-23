@@ -59,6 +59,6 @@ def word_store_generated_image_permanently(request, word_id):
 
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
 
-    except Exception as e:
+    except (ValueError, FileNotFoundError, OSError) as e:
         print(f"Error storing generated image: {e}")
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)

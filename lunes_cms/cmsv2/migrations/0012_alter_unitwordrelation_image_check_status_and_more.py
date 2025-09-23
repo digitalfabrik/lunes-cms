@@ -4,6 +4,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """Migration to alter unitwordrelation image check status and more."""
     dependencies = [
         ("cmsv2", "0011_unitwordrelation_image_check_status_and_more"),
     ]

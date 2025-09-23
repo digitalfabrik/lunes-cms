@@ -14,6 +14,7 @@ from lunes_cms.core import settings
 
 
 class UnitOrJobDropdownFilter(admin.SimpleListFilter):
+    """Filter for displaying units or jobs in the admin interface."""
     title = _("Unit or Job")
     parameter_name = "unit_or_job_choice"
 
@@ -67,8 +68,6 @@ class WordAdmin(BaseAdmin):
     including their attributes, audio files, images, and relationships with units.
     It includes custom display methods for showing and managing assets.
     """
-
-    audio_generate = ""
 
     fields = (
         "word_type",
@@ -126,6 +125,15 @@ class WordAdmin(BaseAdmin):
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 
     def audio_generate(self, obj):
+        """
+        Generate HTML for the audio generation button.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the audio generation button
+        """
         if obj.pk:
             url = reverse("cmsv2:word_generate_audio", args=[obj.pk])
             return format_html(
@@ -136,6 +144,15 @@ class WordAdmin(BaseAdmin):
     audio_generate.short_description = "Audio Generation"
 
     def audio_player(self, obj):
+        """
+        Generate HTML for the audio player preview.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the audio player
+        """
         if obj.audio:
             return format_html(
                 "<audio controls id='audio_preview_player' src='{}'></audio>",
@@ -146,6 +163,15 @@ class WordAdmin(BaseAdmin):
     audio_player.short_description = "Audio Preview"
 
     def image_generate(self, obj):
+        """
+        Generate HTML for the image generation button.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the image generation button
+        """
         if obj.pk:
             url = reverse("cmsv2:word_generate_image", args=[obj.pk])
             return format_html(

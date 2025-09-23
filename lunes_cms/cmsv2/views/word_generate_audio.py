@@ -72,7 +72,7 @@ def word_generate_audio_via_openai(request):
             "temp_audio_filename": temp_filename
         })
 
-    except Exception as e:
+    except (ValueError, ConnectionError, TimeoutError) as e:
         return JsonResponse({"error": str(e)}, status=500)
 
 
@@ -106,6 +106,6 @@ def word_store_generated_audio_permanently(request, word_id):
 
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
 
-    except Exception as e:
+    except (ValueError, FileNotFoundError, OSError) as e:
         print(f"Error storing generated audio: {e}")
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)

@@ -195,6 +195,7 @@ class Word(models.Model):
         return self.audio.url if self.audio else None
 
     def singular_article_for_audio_generation(self):
+        """Get singular article for audio generation."""
         if self.singular_article == 0:
             return ""
         if self.singular_article == 4:
