@@ -149,10 +149,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
           name: Check formatting of python files
-          command: |
-            source .venv/bin/activate
-            black --check .
+          command: black --check .
   check-translations:
     docker:
       - image: cimg/python:3.11
@@ -173,6 +174,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - run:
+          name: Install pylint requirements
+          command: sudo apt-get update && sudo apt-get install ffmpeg
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Build documentation
           command: ./tools/build_documentation.sh
