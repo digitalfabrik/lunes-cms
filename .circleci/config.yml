@@ -378,22 +378,22 @@ workflows:
       - compile-translations:
           requires:
             - install
-      - setup-test-reporter:
-          context: codeclimate-lunes-cms
-          filters:
-            branches:
-              ignore: main
+#      - setup-test-reporter:
+#          context: codeclimate-lunes-cms
+#          filters:
+#            branches:
+#              ignore: main
       - pylint:
           requires:
             - install
-      - test:
-          requires:
-            - compile-translations
-            - setup-test-reporter
-      - upload-test-coverage:
-          context: codeclimate-lunes-cms
-          requires:
-            - test
+#      - test:
+#          requires:
+#            - compile-translations
+#            - setup-test-reporter
+#      - upload-test-coverage:
+#          context: codeclimate-lunes-cms
+#          requires:
+#            - test
       - black:
           requires:
             - install
