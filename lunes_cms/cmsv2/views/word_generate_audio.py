@@ -8,12 +8,10 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from openai import OpenAI
 
 from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
-
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
 @staff_member_required
@@ -53,6 +51,8 @@ def word_generate_audio_via_openai(request):
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
+        client = get_openai_client()
+
         response = client.audio.speech.create(
             model="tts-1-hd",
             voice="nova",
@@ -76,6 +76,8 @@ def word_generate_audio_via_openai(request):
             }
         )
 
+    except OpenAIConfigurationError as e:
+        return JsonResponse({"error": str(e)}, status=503)
     except (ValueError, ConnectionError, TimeoutError) as e:
         return JsonResponse({"error": str(e)}, status=500)
 

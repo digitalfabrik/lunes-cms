@@ -6,11 +6,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from openai import OpenAI
 
+from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
-
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
 @staff_member_required
@@ -49,6 +47,8 @@ def generate_image_via_openai(request):
     prompt += "Ziel ist es, dass die Vokabel durch das Bild eindeutig verstanden werden kann – auch ohne Text oder Erklärung."
 
     try:
+        client = get_openai_client()
+
         if model == "gpt-image-1":
             response = client.images.generate(
                 model=model, prompt=prompt, size="1024x1024", n=1
@@ -81,6 +81,8 @@ def generate_image_via_openai(request):
             }
         )
 
+    except OpenAIConfigurationError as e:
+        return JsonResponse({"error": str(e)}, status=503)
     except (ValueError, ConnectionError, TimeoutError) as e:
         print("Exception!")
         print(e)
