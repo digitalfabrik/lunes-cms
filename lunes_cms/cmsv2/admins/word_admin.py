@@ -276,7 +276,15 @@ class WordAdmin(BaseAdmin):
         Returns:
             str: HTML markup for the word's main image container
         """
-        image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{obj.image}")}" target="_blank">{get_image_tag(obj.image, width=50)}</a>'
+        if obj.image:
+            image_html = f'''<div class="image-hover-container">
+                <a href="{escape(f"{settings.MEDIA_URL}{obj.image}")}" target="_blank">{get_image_tag(obj.image, width=50)}</a>
+                <div class="image-hover-overlay">
+                    <img src="{escape(f"{settings.MEDIA_URL}{obj.image}")}" alt="{escape(obj.word)}">
+                </div>
+            </div>'''
+        else:
+            image_html = ""
 
         controls_html = f"""
         <div class="image-controls" data-word-id="{obj.id}">
@@ -338,7 +346,15 @@ class WordAdmin(BaseAdmin):
             str: HTML markup for a single unit-word image container
         """
         unit_name = relation.unit.title
-        unit_image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{relation.image}")}" target="_blank">{get_image_tag(relation.image, width=50)}</a>'
+        if relation.image:
+            unit_image_html = f'''<div class="image-hover-container">
+                <a href="{escape(f"{settings.MEDIA_URL}{relation.image}")}" target="_blank">{get_image_tag(relation.image, width=50)}</a>
+                <div class="image-hover-overlay">
+                    <img src="{escape(f"{settings.MEDIA_URL}{relation.image}")}" alt="{escape(relation.unit.title)}">
+                </div>
+            </div>'''
+        else:
+            unit_image_html = ""
 
         unit_controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{relation.id}">

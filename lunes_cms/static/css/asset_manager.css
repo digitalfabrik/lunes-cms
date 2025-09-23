@@ -120,3 +120,41 @@
 .unitword-image-file-input {
     display: none;
 }
+
+/* Image hover preview styles */
+.image-hover-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image-hover-container img {
+    transition: opacity 0.2s ease-in-out;
+}
+
+.image-hover-container:hover .image-hover-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.image-hover-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 9999;
+    transition: opacity 0.2s ease-in-out;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+.image-hover-overlay img {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 4px;
+    display: block;
+}
