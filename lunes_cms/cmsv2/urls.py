@@ -11,32 +11,32 @@ urlpatterns = [
     path(
         "words/<int:word_id>/generate-audio",
         views.word_generate_audio,
-        name="word_generate_audio"
+        name="word_generate_audio",
     ),
     path(
         "words/generate-audio-via-openai",
         views.word_generate_audio_via_openai,
-        name="word_generate_audio_via_openai"
+        name="word_generate_audio_via_openai",
     ),
     path(
         "words/generate-image-via-openai",
         views.generate_image_via_openai,
-        name="generate_image_via_openai"
+        name="generate_image_via_openai",
     ),
     path(
         "words/<int:word_id>/generate-image",
         views.word_generate_image,
-        name="word_generate_image"
+        name="word_generate_image",
     ),
     path(
         "words/<int:word_id>/store-generated-audio-permanently",
         views.word_store_generated_audio_permanently,
-        name="word_store_generated_audio_permanently"
+        name="word_store_generated_audio_permanently",
     ),
     path(
         "words/<int:word_id>/store-generated-image-permanently",
         views.word_store_generated_image_permanently,
-        name="word_store_generated_image_permanently"
+        name="word_store_generated_image_permanently",
     ),
     path(
         "words/<int:word_id>/update-image/",

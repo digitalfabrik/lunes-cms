@@ -20,11 +20,13 @@ def word_generate_image(request, word_id):
     word_instance = get_object_or_404(Word, pk=word_id)
 
     context = admin.site.each_context(request)
-    context.update({
-        "word_instance": word_instance,
-        "word_text": word_instance.word,
-        "temp_image_url": None,
-    })
+    context.update(
+        {
+            "word_instance": word_instance,
+            "word_text": word_instance.word,
+            "temp_image_url": None,
+        }
+    )
 
     return render(request, "admin/word_generate_image.html", context)
 
@@ -51,7 +53,9 @@ def word_store_generated_image_permanently(request, word_id):
 
     try:
         with open(temp_filepath, "rb") as f:
-            content_file = ContentFile(f.read(), name=f'{word_instance.word.replace(" ", "_")}.png')
+            content_file = ContentFile(
+                f.read(), name=f'{word_instance.word.replace(" ", "_")}.png'
+            )
             word_instance.image.save(content_file.name, content_file)
         word_instance.save()
 

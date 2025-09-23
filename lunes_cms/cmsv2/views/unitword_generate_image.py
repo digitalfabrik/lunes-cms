@@ -20,10 +20,12 @@ def unitword_generate_image(request, unitword_id):
     unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
 
     context = admin.site.each_context(request)
-    context.update({
-        "unitword_instance": unitword_instance,
-        "temp_image_url": None,
-    })
+    context.update(
+        {
+            "unitword_instance": unitword_instance,
+            "temp_image_url": None,
+        }
+    )
 
     return render(request, "admin/unitword_generate_image.html", context)
 
@@ -50,7 +52,10 @@ def unitword_store_generated_image_permanently(request, unitword_id):
 
     try:
         with open(temp_filepath, "rb") as f:
-            content_file = ContentFile(f.read(), name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}.png')
+            content_file = ContentFile(
+                f.read(),
+                name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}.png',
+            )
             unitword_instance.image.save(content_file.name, content_file)
 
         os.remove(temp_filepath)

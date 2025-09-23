@@ -15,6 +15,7 @@ from lunes_cms.core import settings
 
 class UnitOrJobDropdownFilter(admin.SimpleListFilter):
     """Filter for displaying units or jobs in the admin interface."""
+
     title = _("Unit or Job")
     parameter_name = "unit_or_job_choice"
 
@@ -52,7 +53,13 @@ class UnitInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
-    fields = ["unit", "image", "list_image", "image_check_status", "generate_image_link"]
+    fields = [
+        "unit",
+        "image",
+        "list_image",
+        "image_check_status",
+        "generate_image_link",
+    ]
     readonly_fields = ["list_image", "generate_image_link"]
 
     def get_formset(self, request, obj=None, **kwargs):
@@ -88,7 +95,13 @@ class WordAdmin(BaseAdmin):
         "additional_meaning_1",
         "additional_meaning_2",
     )
-    readonly_fields = ("audio_generate", "audio_player", "created_by", "image_generate", "image_tag")
+    readonly_fields = (
+        "audio_generate",
+        "audio_player",
+        "created_by",
+        "image_generate",
+        "image_tag",
+    )
     search_fields = ["word"]
     ordering = ["word", "creation_date"]
     inlines = [UnitInline]
@@ -101,7 +114,12 @@ class WordAdmin(BaseAdmin):
         "creator_group",
         "creation_date_display",
     )
-    list_filter = ["word_type", "audio_check_status", "image_check_status", UnitOrJobDropdownFilter]
+    list_filter = [
+        "word_type",
+        "audio_check_status",
+        "image_check_status",
+        UnitOrJobDropdownFilter,
+    ]
     list_per_page = 25
 
     class Media:
@@ -136,9 +154,7 @@ class WordAdmin(BaseAdmin):
         """
         if obj.pk:
             url = reverse("cmsv2:word_generate_audio", args=[obj.pk])
-            return format_html(
-                '<a class="button" href="{}">Generate Audio</a>', url
-            )
+            return format_html('<a class="button" href="{}">Generate Audio</a>', url)
         return "Save to enable audio generation."
 
     audio_generate.short_description = "Audio Generation"
@@ -156,7 +172,7 @@ class WordAdmin(BaseAdmin):
         if obj.audio:
             return format_html(
                 "<audio controls id='audio_preview_player' src='{}'></audio>",
-                obj.audio.url
+                obj.audio.url,
             )
         return "No audio file uploaded."
 
@@ -174,9 +190,7 @@ class WordAdmin(BaseAdmin):
         """
         if obj.pk:
             url = reverse("cmsv2:word_generate_image", args=[obj.pk])
-            return format_html(
-                '<a class="button" href="{}">Generate Image</a>', url
-            )
+            return format_html('<a class="button" href="{}">Generate Image</a>', url)
         return "Save to enable image generation."
 
     image_generate.short_description = "Image Generation"
@@ -303,12 +317,12 @@ class WordAdmin(BaseAdmin):
             str: HTML markup for the word's main image container
         """
         if obj.image:
-            image_html = f'''<div class="image-hover-container">
+            image_html = f"""<div class="image-hover-container">
                 <a href="{escape(f"{settings.MEDIA_URL}{obj.image}")}" target="_blank">{get_image_tag(obj.image, width=50)}</a>
                 <div class="image-hover-overlay">
                     <img src="{escape(f"{settings.MEDIA_URL}{obj.image}")}" alt="{escape(obj.word)}">
                 </div>
-            </div>'''
+            </div>"""
         else:
             image_html = ""
 
@@ -373,12 +387,12 @@ class WordAdmin(BaseAdmin):
         """
         unit_name = relation.unit.title
         if relation.image:
-            unit_image_html = f'''<div class="image-hover-container">
+            unit_image_html = f"""<div class="image-hover-container">
                 <a href="{escape(f"{settings.MEDIA_URL}{relation.image}")}" target="_blank">{get_image_tag(relation.image, width=50)}</a>
                 <div class="image-hover-overlay">
                     <img src="{escape(f"{settings.MEDIA_URL}{relation.image}")}" alt="{escape(relation.unit.title)}">
                 </div>
-            </div>'''
+            </div>"""
         else:
             unit_image_html = ""
 

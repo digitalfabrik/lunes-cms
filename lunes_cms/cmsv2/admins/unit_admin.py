@@ -17,7 +17,13 @@ class WordInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
-    fields = ["word", "image", "list_image", "image_check_status", "generate_image_link"]
+    fields = [
+        "word",
+        "image",
+        "list_image",
+        "image_check_status",
+        "generate_image_link",
+    ]
     readonly_fields = ["list_image", "generate_image_link"]
 
     def get_formset(self, request, obj=None, **kwargs):

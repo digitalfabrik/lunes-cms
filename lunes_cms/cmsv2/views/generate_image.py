@@ -31,7 +31,7 @@ def generate_image_via_openai(request):
     if not model:
         return JsonResponse({"error": "No model provided."}, status=400)
 
-    prompt = '''Du bist Content-Manager für eine Vokabel-Lern-App namens "Lunes". Die App richtet sich an Zugewanderte, die in Deutschland eine Ausbildung machen oder bereits beruflich tätig sind. Sie lernen Deutsch als Fremdsprache und benötigen spezifischen Fachwortschatz, der in regulären Sprachkursen nicht vermittelt wird.
+    prompt = """Du bist Content-Manager für eine Vokabel-Lern-App namens "Lunes". Die App richtet sich an Zugewanderte, die in Deutschland eine Ausbildung machen oder bereits beruflich tätig sind. Sie lernen Deutsch als Fremdsprache und benötigen spezifischen Fachwortschatz, der in regulären Sprachkursen nicht vermittelt wird.
 
         Die App zeigt Fachbegriffe aus dem Berufsfeld in Form von Bildern. Alle Vokabeln werden einsprachig (nur auf Deutsch) vermittelt – durch realistische Fotos, die das Wort eindeutig visuell darstellen.
         
@@ -40,21 +40,18 @@ def generate_image_via_openai(request):
         - Das Bildmotiv muss eindeutig dem jeweiligen Fachbegriff zuzuordnen sein.
         - Es soll nur der relevante Gegenstand oder die relevante Handlung zu sehen sein.
         - Keine zusätzlichen Objekte, kein Text, neutraler Hintergrund (z.B. weiß oder freigestellt).
-    '''
+    """
     if unit_title:
-        prompt += f'Der Begriff gehört zum Lernmodul: {unit_title}'
+        prompt += f"Der Begriff gehört zum Lernmodul: {unit_title}"
     prompt += f'Erstelle ein passendes realistisches Foto zur Vokabel: "{word_text}"'
     if additional_info:
-        prompt += f'Zusätzliche Hinweise zur Bildgestaltung: {additional_info}'
+        prompt += f"Zusätzliche Hinweise zur Bildgestaltung: {additional_info}"
     prompt += "Ziel ist es, dass die Vokabel durch das Bild eindeutig verstanden werden kann – auch ohne Text oder Erklärung."
 
     try:
         if model == "gpt-image-1":
             response = client.images.generate(
-                model=model,
-                prompt=prompt,
-                size="1024x1024",
-                n=1
+                model=model, prompt=prompt, size="1024x1024", n=1
             )
         else:
             response = client.images.generate(
@@ -62,7 +59,7 @@ def generate_image_via_openai(request):
                 prompt=prompt,
                 response_format="b64_json",
                 size="1024x1024",
-                n=1
+                n=1,
             )
 
         b64_image = response.data[0].b64_json
@@ -76,11 +73,13 @@ def generate_image_via_openai(request):
 
         temp_image_url = os.path.join(settings.MEDIA_URL, "temp_image", temp_filename)
 
-        return JsonResponse({
-            "message": "Image generated!",
-            "temp_image_url": temp_image_url,
-            "temp_image_filename": temp_filename
-        })
+        return JsonResponse(
+            {
+                "message": "Image generated!",
+                "temp_image_url": temp_image_url,
+                "temp_image_filename": temp_filename,
+            }
+        )
 
     except (ValueError, ConnectionError, TimeoutError) as e:
         print("Exception!")

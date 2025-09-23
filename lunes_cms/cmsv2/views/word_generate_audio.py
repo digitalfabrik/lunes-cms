@@ -25,12 +25,14 @@ def word_generate_audio(request, word_id):
     word_instance = get_object_or_404(Word, pk=word_id)
 
     context = admin.site.each_context(request)
-    context.update({
-        "word_instance": word_instance,
-        "word_text": f'{word_instance.singular_article_for_audio_generation()} {word_instance.word}',
-        "temp_audio_url": None,
-        "temp_audio_filename": None,
-    })
+    context.update(
+        {
+            "word_instance": word_instance,
+            "word_text": f"{word_instance.singular_article_for_audio_generation()} {word_instance.word}",
+            "temp_audio_url": None,
+            "temp_audio_filename": None,
+        }
+    )
 
     return render(request, "admin/word_generate_audio.html", context)
 
@@ -66,11 +68,13 @@ def word_generate_audio_via_openai(request):
 
         temp_audio_url = os.path.join(settings.MEDIA_URL, "temp_audio", temp_filename)
 
-        return JsonResponse({
-            "message": "Audio generated and saved temporarily!",
-            "temp_audio_url": temp_audio_url,
-            "temp_audio_filename": temp_filename
-        })
+        return JsonResponse(
+            {
+                "message": "Audio generated and saved temporarily!",
+                "temp_audio_url": temp_audio_url,
+                "temp_audio_filename": temp_filename,
+            }
+        )
 
     except (ValueError, ConnectionError, TimeoutError) as e:
         return JsonResponse({"error": str(e)}, status=500)
@@ -98,7 +102,9 @@ def word_store_generated_audio_permanently(request, word_id):
 
     try:
         with open(temp_filepath, "rb") as f:
-            content_file = ContentFile(f.read(), name=f'{word_instance.word.replace(" ", "_")}.mp3')
+            content_file = ContentFile(
+                f.read(), name=f'{word_instance.word.replace(" ", "_")}.mp3'
+            )
             word_instance.audio.save(content_file.name, content_file)
         word_instance.save()
 
