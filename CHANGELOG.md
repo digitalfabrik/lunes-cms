@@ -2,6 +2,12 @@ UNRELEASED
 ----------
 
 
+2025.9.0
+---------
+
+* [ [#594](https://github.com/digitalfabrik/lunes-cms/pull/594/) ] New data model (cmsv2), Audio and image generation via OpenAI, Job Unit Filter
+
+
 2024.11.0
 ---------
 
