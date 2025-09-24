@@ -68,6 +68,7 @@ class Word(models.Model):
         choices=Static.check_status_choices,
         null=True,
         verbose_name=_("audio check status"),
+        default="NOT_CHECKED",
     )
     audio_checked_identifier = models.CharField(
         max_length=255,
@@ -115,6 +116,7 @@ class Word(models.Model):
         choices=Static.check_status_choices,
         null=True,
         verbose_name=_("image check status"),
+        default="NOT_CHECKED",
     )
 
     @property
@@ -191,6 +193,17 @@ class Word(models.Model):
             str or None: The URL of the audio file if it exists, otherwise None.
         """
         return self.audio.url if self.audio else None
+
+    def singular_article_for_audio_generation(self):
+        """Get singular article for audio generation."""
+        if self.singular_article == 0:
+            return ""
+        if self.singular_article == 4:
+            return "die"
+        for num, article in Static.singular_article_choices:
+            if num == self.singular_article:
+                return article
+        return ""
 
     def image_tag(self, width=120):
         """

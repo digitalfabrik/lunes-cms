@@ -1,12 +1,23 @@
+import logging
 import os
 import pathlib
 import string
 import uuid
+import warnings
 from html import escape
 
 from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
 from django.utils.translation import gettext as _
+from openai import OpenAI
+
+from lunes_cms.core import settings
+
+logger = logging.getLogger(__name__)
+
+
+class OpenAIConfigurationError(Exception):
+    """Exception raised when OpenAI API is not properly configured."""
 
 
 def create_resource_path(parent_dir, filename):
@@ -114,7 +125,7 @@ def get_image_tag(image, width=330):
         and image.storage.exists(image.name)
         and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png"])
     ):
-        src = escape(f"/media/{image}")
+        src = escape(f"{settings.MEDIA_URL}{image}")
     html_cls = "" if src else 'class="hidden"'
     return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
 
@@ -136,3 +147,38 @@ def iter_to_string(iter):
     if last_element:
         list_str += " " + _("and") + f' "{last_element}"'
     return list_str
+
+
+def get_openai_client():
+    """
+    Get OpenAI client if API key is available.
+
+    Returns:
+        OpenAI client instance if API key is available.
+
+    Raises:
+        OpenAIConfigurationError: If OpenAI API key is not configured.
+    """
+    if not settings.OPENAI_API_KEY:
+        raise OpenAIConfigurationError(
+            "OpenAI API key is not configured. Set the LUNES_CMS_OPENAI_API_KEY environment variable."
+        )
+
+    return OpenAI(api_key=settings.OPENAI_API_KEY)
+
+
+def check_openai_availability():
+    """
+    Check if OpenAI functionality is available and issue warnings if not.
+
+    This function should be called during app startup to warn about missing configuration.
+    """
+    if not settings.OPENAI_API_KEY:
+        warning_message = (
+            "OpenAI API key is not configured. Image and audio generation features will be disabled. "
+            "Set the LUNES_CMS_OPENAI_API_KEY environment variable to enable these features."
+        )
+        warnings.warn(warning_message, UserWarning)
+        logger.warning(warning_message)
+        return False
+    return True
