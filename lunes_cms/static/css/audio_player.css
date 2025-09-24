@@ -1,0 +1,44 @@
+.audio-player-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.minimal-audio-player {
+    display: none;
+}
+
+.play-btn,
+.pause-btn {
+    display: flex;
+    align-items: center;
+}
+
+.play-btn > div,
+.pause-btn > div {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s ease;
+}
+
+.play-btn > div:hover,
+.pause-btn > div:hover {
+    background-color: #e9ecef;
+}
+
+.play-btn i,
+.pause-btn i {
+    font-size: 14px;
+    color: #495057;
+}
+
+.play-btn i {
+    margin-left: 2px;
+}

@@ -39,6 +39,9 @@ urlpatterns = [
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
 ]
 
+urlpatterns += i18n_patterns(
+    path("admin/cmsv2/", include("lunes_cms.cmsv2.urls", namespace="cmsv2"))
+)
 urlpatterns += i18n_patterns(path("", include("lunes_cms.cms.urls")))
 
 if settings.DEBUG:

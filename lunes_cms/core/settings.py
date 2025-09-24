@@ -28,6 +28,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #: How many documents a training sets needs at least to get released
 TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 
+#: API Key for OpenAI
+OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
 ########################
 # DJANGO CORE SETTINGS #
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     # Installed custom apps
     "lunes_cms.api",
     "lunes_cms.cms",
+    "lunes_cms.cmsv2",
     "lunes_cms.help",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
@@ -247,6 +250,10 @@ MEDIA_URL = "/media/"
 
 #: Absolute filesystem path to the directory that will hold user-uploaded files (see :setting:`django:MEDIA_ROOT`)
 MEDIA_ROOT = os.environ.get("LUNES_CMS_MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
+
+#: Directory for temporary files
+TEMP_AUDIO_DIR = os.path.join(MEDIA_ROOT, "temp_audio")
+TEMP_IMAGE_DIR = os.path.join(MEDIA_ROOT, "temp_image")
 
 
 ##########
@@ -457,7 +464,7 @@ JAZZMIN_SETTINGS = {
     "login_logo": "images/logo-lunes.svg",
     "login_logo_dark": "images/logo-lunes-dark.svg",
     "site_logo_classes": "",
-    "changeform_format": "collapsible",
+    "changeform_format": "single",
     "language_chooser": True,
     "custom_css": "css/corporate_identity.css",
     "custom_js": "js/corporate_identity.js",
@@ -470,6 +477,9 @@ JAZZMIN_SETTINGS = {
         "cms.GroupAPIKey": "fas fa-key",
         "cms.Feedback": "fas fa-comment",
         "cms.Sponsor": "fas fa-star",
+        "cmsv2.Job": "fas fa-briefcase",
+        "cmsv2.Unit": "fas fa-book",
+        "cmsv2.Word": "fab fa-amilia",
     },
 }
 
