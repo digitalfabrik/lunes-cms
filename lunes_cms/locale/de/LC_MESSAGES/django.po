@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 07:29+0000\n"
+"POT-Creation-Date: 2025-10-07 08:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,7 +105,7 @@ msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
 #: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:108
-#: cmsv2/admins/word_admin.py:215
+#: cmsv2/admins/word_admin.py:236
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -115,7 +115,7 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:282 cmsv2/models/word.py:64
+#: cmsv2/admins/word_admin.py:303 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
@@ -125,7 +125,7 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:456
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:477
 #: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
@@ -150,11 +150,11 @@ msgstr "Plural Artikel"
 msgid "Has audio?"
 msgstr "Audio"
 
-#: cms/admins/document_resource.py:63
+#: cms/admins/document_resource.py:63 cmsv2/admins/word_admin.py:24
 msgid "Yes"
 msgstr "Ja"
 
-#: cms/admins/document_resource.py:64
+#: cms/admins/document_resource.py:64 cmsv2/admins/word_admin.py:25
 msgid "No"
 msgstr "Nein"
 
@@ -391,7 +391,7 @@ msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:470 cmsv2/models/word.py:81
+#: cmsv2/admins/word_admin.py:491 cmsv2/models/word.py:81
 msgid "creation date"
 msgstr "Erstellt am"
 
@@ -668,18 +668,22 @@ msgid "jobs"
 msgstr "Berufe"
 
 #: cmsv2/admins/word_admin.py:19
+msgid "Has Image"
+msgstr "Hat Bild"
+
+#: cmsv2/admins/word_admin.py:39
 msgid "Unit or Job"
 msgstr "Einheit oder Job"
 
-#: cmsv2/admins/word_admin.py:442 cmsv2/models/unit.py:106
+#: cmsv2/admins/word_admin.py:463 cmsv2/models/unit.py:106
 msgid "Image"
 msgstr "Bilder"
 
-#: cmsv2/admins/word_admin.py:484 cmsv2/models/word.py:70
+#: cmsv2/admins/word_admin.py:505 cmsv2/models/word.py:70
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:499 cmsv2/models/unit.py:37
+#: cmsv2/admins/word_admin.py:520 cmsv2/models/unit.py:37
 #: cmsv2/models/word.py:118
 msgid "image check status"
 msgstr "Bild Prüfstatus"

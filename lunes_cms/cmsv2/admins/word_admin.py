@@ -13,6 +13,26 @@ from lunes_cms.cmsv2.utils import get_image_tag
 from lunes_cms.core import settings
 
 
+class HasImageFilter(admin.SimpleListFilter):
+    """Filter for displaying words with or without images."""
+
+    title = _("Has Image")
+    parameter_name = "has_image"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("yes", _("Yes")),
+            ("no", _("No")),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == "yes":
+            return queryset.exclude(image="")
+        if self.value() == "no":
+            return queryset.filter(image="")
+        return queryset
+
+
 class UnitOrJobDropdownFilter(admin.SimpleListFilter):
     """Filter for displaying units or jobs in the admin interface."""
 
@@ -118,6 +138,7 @@ class WordAdmin(BaseAdmin):
         "word_type",
         "audio_check_status",
         "image_check_status",
+        HasImageFilter,
         UnitOrJobDropdownFilter,
     ]
     list_per_page = 25

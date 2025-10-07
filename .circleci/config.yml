@@ -147,7 +147,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Install pylint requirements
+          name: Install requirements
           command: sudo apt-get update && sudo apt-get install ffmpeg
       - run:
           name: Activate virtual environment
