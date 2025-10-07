@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2025.10.0
+---------
+
 * [ [#599](https://github.com/digitalfabrik/lunes-cms/pull/599) ] Has image filter in word overview
 
 
