@@ -1,6 +1,7 @@
 """
 URL patterns for the first version of the Lunes API
 """
+
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 

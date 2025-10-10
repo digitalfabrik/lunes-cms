@@ -1,6 +1,7 @@
 """
 Context processors pass additional variables to templates (see :ref:`context-processors`).
 """
+
 from ..cms.models import Feedback
 from ..cms.feedback_filter import filter_feedback_by_creator
 
