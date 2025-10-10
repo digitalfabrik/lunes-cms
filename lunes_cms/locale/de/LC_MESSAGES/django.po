@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 08:08+0000\n"
+"POT-Creation-Date: 2025-10-10 14:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,26 +56,26 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: cms/admin.py:35 cms/admins/document_admin.py:162
+#: cms/admin.py:36 cms/admins/document_admin.py:162
 #: cms/admins/training_set_admin.py:361 cms/forms.py:46 cms/forms.py:48
 #: cms/list_filter.py:14 cms/models/discipline.py:101
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:36 cms/list_filter.py:103 cms/models/training_set.py:92
+#: cms/admin.py:37 cms/list_filter.py:103 cms/models/training_set.py:92
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:37 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:148
+#: cms/admin.py:38 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:148
 #: cms/models/document.py:149
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:38
+#: cms/admin.py:39
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:39 cms/models/feedback.py:90
+#: cms/admin.py:40 cms/models/feedback.py:90
 msgid "feedback"
 msgstr "Feedback"
 

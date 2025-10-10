@@ -260,8 +260,8 @@ jobs:
           name: Build lunes-cms package
           command: |
             source .venv/bin/activate
-            pip install wheel
-            python setup.py sdist bdist_wheel
+            pip install .
+            python -m build .
       - persist_to_workspace:
           root: .
           paths:
@@ -284,6 +284,7 @@ jobs:
           command: |
             source .venv/bin/activate
             pip install twine
+            ls -lh ./dist/*
             twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
   create-release:
     docker:

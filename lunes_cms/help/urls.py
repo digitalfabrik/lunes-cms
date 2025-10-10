@@ -3,6 +3,7 @@ Map paths to view functions.
 Defines custom schema views and a router that
 handles the url patterns described in the `README.md` file
 """
+
 from django.urls import path
 
 from . import views

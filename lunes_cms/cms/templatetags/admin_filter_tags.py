@@ -1,6 +1,7 @@
 """
 This is a collection of admin filter tags and filters
 """
+
 import logging
 from collections import defaultdict
 
