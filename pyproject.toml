@@ -104,7 +104,7 @@ dev-pinned = [
 	"sphinx-rtd-theme==3.0.1",
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
-	"twine==5.1.1",
+	"twine==6.1.0",
 ]
 
 [project.urls]
