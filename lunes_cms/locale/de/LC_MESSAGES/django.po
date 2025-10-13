@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 12:35+0000\n"
+"POT-Creation-Date: 2025-10-13 13:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,27 +21,27 @@ msgstr ""
 msgid "API"
 msgstr "API"
 
-#: api/utils.py:175
+#: api/utils.py:179
 msgid "This word is assigned to no training set."
 msgstr "Das word ist zu keinem Modul zugeordnet."
 
-#: api/utils.py:182
+#: api/utils.py:186
 msgid "This word is already registered in the system."
 msgstr "Das Wort ist schon im System hinterlegt."
 
-#: api/utils.py:185 api/utils.py:187
+#: api/utils.py:189 api/utils.py:191
 msgid "Definition: "
 msgstr "Definition: "
 
-#: api/utils.py:187
+#: api/utils.py:191
 msgid "No definition is provided for this word."
 msgstr "Für dieses Wort ist keine Definition hinterlegt."
 
-#: api/utils.py:189
+#: api/utils.py:193
 msgid "Training sets: "
 msgstr "Module: "
 
-#: api/utils.py:193
+#: api/utils.py:197
 msgid "This word is not yet registered in the system"
 msgstr "Das Wort ist noch nicht im System hinterlegt."
 
@@ -188,7 +188,7 @@ msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/sponsor_admin.py:36 cms/models/sponsor.py:26
+#: cms/admins/sponsor_admin.py:38 cms/models/sponsor.py:26
 msgid "logo"
 msgstr "Logo"
 
