@@ -219,6 +219,15 @@ class Word(models.Model):
 
     image_tag.short_description = ""
 
+    @property
+    def singular_article_as_text(self):
+        """
+        Returns:
+            str: The singular article of this word as text
+        """
+        # pylint: disable=invalid-sequence-index
+        return Static.singular_article_choices[self.singular_article][1]
+
     def __str__(self):
         """
         Returns a string representation of the Word instance, which is its actual word.
