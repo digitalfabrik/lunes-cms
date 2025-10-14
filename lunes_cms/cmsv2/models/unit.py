@@ -141,6 +141,7 @@ class Unit(models.Model):
     icon = models.ImageField(
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
+    v1_id = models.IntegerField(null=True, blank=True, editable=False)
     jobs = models.ManyToManyField(Job, related_name="units", verbose_name=_("job"))
     words = models.ManyToManyField(
         Word, through="UnitWordRelation", related_name="units", verbose_name=_("word")
