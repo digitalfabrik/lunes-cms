@@ -118,6 +118,7 @@ class Word(models.Model):
         verbose_name=_("image check status"),
         default="NOT_CHECKED",
     )
+    v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
     @property
     def converted(self):
