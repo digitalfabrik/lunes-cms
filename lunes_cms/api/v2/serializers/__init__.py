@@ -3,3 +3,4 @@ This module contains the model serializers, see :doc:`django:topics/serializatio
 """
 
 from .word_serializer import WordSerializer
+from .job_serializer import JobSerializer

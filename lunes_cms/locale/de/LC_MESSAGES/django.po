@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-20 15:06+0000\n"
+"POT-Creation-Date: 2025-10-21 06:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,15 +702,15 @@ msgstr "Beruf"
 msgid "modified at"
 msgstr "zuletzt geändert"
 
-#: cmsv2/models/job.py:103 cmsv2/models/unit.py:198
+#: cmsv2/models/job.py:98 cmsv2/models/unit.py:198
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py:116
+#: cmsv2/models/job.py:111
 msgid "Job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:117
+#: cmsv2/models/job.py:112
 msgid "Jobs"
 msgstr "Berufe"
 
