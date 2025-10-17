@@ -194,6 +194,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
+            - pyproject.toml
             - setup.cfg
             - lunes_cms/__init__.py
   bump-version:
