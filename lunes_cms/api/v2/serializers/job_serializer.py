@@ -8,7 +8,7 @@ class JobSerializer(serializers.ModelSerializer):
     Serializer for Jobs.
     """
 
-    number_units = serializers.IntegerField(source="number_released_units")
+    number_units = serializers.IntegerField()
 
     class Meta:
         """

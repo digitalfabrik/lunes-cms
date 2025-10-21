@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from rest_framework import viewsets
 
 from ....cmsv2.models import Job
@@ -24,5 +25,5 @@ class JobViewSet(viewsets.ModelViewSet):
 
         queryset = Job.objects.filter(
             released=True,
-        )
+        ).annotate(number_units=Count("units", filter=Q(units__released=True)))
         return queryset.order_by("name")

@@ -46,13 +46,6 @@ class Job(models.Model):
         """
         return get_child_count(self) > 0 or self.units.filter(released=True).count() > 0
 
-    def number_released_units(self):
-        """
-        Returns:
-            int: Total number of released units associated with this job
-        """
-        return len(self.units.filter(released=True))
-
     def image_tag(self):
         """
         Generate an HTML image tag for the job's icon.
