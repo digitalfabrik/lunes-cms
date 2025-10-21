@@ -46,18 +46,6 @@ class Job(models.Model):
         """
         return get_child_count(self) > 0 or self.units.filter(released=True).count() > 0
 
-    def get_nested_units(self):
-        """
-        Get all units associated with this job and its descendants.
-
-        Returns:
-            set: A set of unit IDs that are associated with this job or its descendants
-        """
-        units = []
-        for child in self.get_descendants(include_self=True):
-            units += child.units.filter(released=True).values_list("id", flat=True)
-        return set(units)
-
     def image_tag(self):
         """
         Generate an HTML image tag for the job's icon.
