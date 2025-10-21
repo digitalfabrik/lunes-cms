@@ -1,0 +1,30 @@
+{% extends "admin/generate_audio_base.html" %}
+{% load i18n %}
+
+{% block audio_title %}Generate Audio for Example Sentence - "{{ word_instance.word }}"{% endblock %}
+
+{% block audio_content_title %}{% trans "Generate Example Sentence Audio" %}{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item"><a href="{% url "admin:cmsv2_word_changelist" %}">{% translate "Words" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url "admin:cmsv2_word_change" word_instance.pk %}">{{ word_instance.word }}</a></li>
+    <li class="breadcrumb-item active">{% trans "Generate Example Sentence Audio" %}</li>
+{% endblock %}
+
+{% block audio_info %}
+    <strong>Example Sentence:</strong> {{ example_sentence_text }}
+{% endblock %}
+
+{% block store_url %}{% url "cmsv2:word_store_generated_example_sentence_audio_permanently" word_instance.pk %}{% endblock %}
+
+{% block store_button_text %}Store to Example Sentence Audio Field{% endblock %}
+
+{% block back_buttons %}
+    <a href="{% url "admin:cmsv2_word_change" word_instance.pk %}" class="button">Back to Edit View</a>
+{% endblock %}
+
+{% block generate_url %}{% url "cmsv2:word_generate_example_sentence_audio_via_openai" %}{% endblock %}
+
+{% block text_field_name %}example_sentence_text{% endblock %}
+
+{% block text_value %}"{{ example_sentence_text }}"{% endblock %}

@@ -77,6 +77,17 @@ class Word(models.Model):
         verbose_name=_("audio checked identifier"),
     )
     example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
+    example_sentence_audio = models.FileField(
+        upload_to=convert_umlaute_audio,
+        validators=[
+            validate_file_extension,
+            validate_file_size,
+            validate_multiple_extensions,
+        ],
+        blank=True,
+        null=True,
+        verbose_name=_("example sentence audio"),
+    )
     creation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("creation date")
     )
@@ -161,6 +172,18 @@ class Word(models.Model):
         image_updated = (not self.pk and self.image) or (
             self.pk and previous_word and previous_word.image != self.image
         )
+
+        # Delete example_sentence_audio if example_sentence has changed and audio exists
+        example_sentence_changed = (
+            self.pk
+            and previous_word
+            and previous_word.example_sentence != self.example_sentence
+            and previous_word.example_sentence_audio
+        )
+        if example_sentence_changed:
+            # Delete the old audio file from storage
+            previous_word.example_sentence_audio.delete(save=False)
+            self.example_sentence_audio = None
 
         if audio_updated:
             self.audio = self.converted

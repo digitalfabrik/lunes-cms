@@ -1,0 +1,33 @@
+{% extends "admin/generate_audio_base.html" %}
+{% load i18n %}
+
+{% block audio_title %}Generate Audio for Example Sentence - "{{ unitword_instance.word.word }}" ({{ unitword_instance.unit.title }}){% endblock %}
+
+{% block audio_content_title %}{% trans "Generate Example Sentence Audio" %}{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item active">{% trans "Generate Example Sentence Audio" %}</li>
+{% endblock %}
+
+{% block audio_info %}
+    <p><strong>Word:</strong> {{ unitword_instance.word.word }}</p>
+    <p><strong>Unit:</strong> {{ unitword_instance.unit.title }}</p>
+    <p><strong>Example Sentence:</strong> {{ example_sentence_text }}</p>
+{% endblock %}
+
+{% block store_url %}{% url "cmsv2:unitword_store_generated_example_sentence_audio_permanently" unitword_instance.pk %}{% endblock %}
+
+{% block store_button_text %}Store to Example Sentence Audio Field{% endblock %}
+
+{% block back_buttons %}
+    <div style="margin-top: 20px;">
+        <a href="{% url "admin:cmsv2_word_change" unitword_instance.word.pk %}" class="button">Back to Word</a>
+        <a href="{% url "admin:cmsv2_unit_change" unitword_instance.unit.pk %}" class="button">Back to Unit</a>
+    </div>
+{% endblock %}
+
+{% block generate_url %}{% url "cmsv2:unitword_generate_example_sentence_audio_via_openai" %}{% endblock %}
+
+{% block text_field_name %}example_sentence_text{% endblock %}
+
+{% block text_value %}"{{ example_sentence_text }}"{% endblock %}
