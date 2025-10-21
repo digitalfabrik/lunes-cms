@@ -1,0 +1,78 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% block image_title %}Generate Image{% endblock %}{% endblock %}
+
+{% block breadcrumbs %}
+{% block image_breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="{% url "admin:index" %}">{% translate "Home" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url "admin:app_list" app_label="cmsv2" %}">{% translate "Vocabulary Management v2" %}</a></li>
+    {% block breadcrumb_items %}{% endblock %}
+</ol>
+{% endblock %}
+{% endblock %}
+
+{% block content_title %}{% block image_content_title %}{% trans "Generate Image" %}{% endblock %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module">
+        {% block image_info %}{% endblock %}
+
+        <div style="margin-top: 16px; margin-bottom: 16px;">
+            <label for="prompt-additional-info">
+               <strong>Additional Info (optional):</strong>
+            </label>
+            <input id="prompt-additional-info" type="text" style="width: 100%"/>
+        </div>
+        <div style="margin-top: 16px; margin-bottom: 16px;">
+            <label for="model">
+                <strong>Model:</strong>
+            </label>
+            <select id="model" style="width: 100%; padding: 8px;">
+                <option value="gpt-image-1">gpt-image-1 (&asymp; 0.18$ per generation)</option>
+                <option value="dall-e-3">dall-e-3 (&asymp; 0.04$ per generation)</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <button type="button" class="button" id="generate_button">Generate Image</button>
+            <span class="loading-spinner" id="loading_spinner" style="display: none;"></span>
+            <span class="message-area" id="message_area"></span>
+        </div>
+
+        <div id="image_preview_section" style="display: none;">
+            <hr>
+            <h2>Generated Image Preview:</h2>
+            <img src="" id="image-preview" alt="Generated image" style="display: none; max-width: min(400px, 100%);"/>
+            <p>Temporary Filename: <span id="temp_filename_display"></span></p>
+
+            <div>
+                <button type="button" class="button" id="regenerate_button">Re-generate</button>
+                <form method="post" action="{% block store_url %}{% endblock %}" style="display:inline-block;">
+                    {% csrf_token %}
+                    <input type="hidden" name="temp_filename" id="hidden_temp_filename">
+                    <button type="submit" class="button default" id="store_button">{% block store_button_text %}Store Image{% endblock %}</button>
+                </form>
+            </div>
+        </div>
+
+        {% block back_buttons %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'js/generate_image.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const config = {
+            generateUrl: "{% block generate_url %}{% endblock %}",
+            formDataBuilder: {% block form_data_builder %}null{% endblock %}
+        }
+
+        initImageGenerator(config)
+    })
+</script>
+{% endblock %}

@@ -34,6 +34,21 @@ urlpatterns = [
         name="word_store_generated_audio_permanently",
     ),
     path(
+        "words/<int:word_id>/generate-example-sentence-audio",
+        views.word_generate_example_sentence_audio,
+        name="word_generate_example_sentence_audio",
+    ),
+    path(
+        "words/generate-example-sentence-audio-via-openai",
+        views.word_generate_example_sentence_audio_via_openai,
+        name="word_generate_example_sentence_audio_via_openai",
+    ),
+    path(
+        "words/<int:word_id>/store-generated-example-sentence-audio-permanently",
+        views.word_store_generated_example_sentence_audio_permanently,
+        name="word_store_generated_example_sentence_audio_permanently",
+    ),
+    path(
         "words/<int:word_id>/store-generated-image-permanently",
         views.word_store_generated_image_permanently,
         name="word_store_generated_image_permanently",
@@ -82,5 +97,20 @@ urlpatterns = [
         "unitwordrelations/<int:unitword_id>/store-generated-image-permanently/",
         views.unitword_store_generated_image_permanently,
         name="unitword_store_generated_image_permanently",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/generate-example-sentence-audio",
+        views.unitword_generate_example_sentence_audio,
+        name="unitword_generate_example_sentence_audio",
+    ),
+    path(
+        "unitwordrelations/generate-example-sentence-audio-via-openai",
+        views.unitword_generate_example_sentence_audio_via_openai,
+        name="unitword_generate_example_sentence_audio_via_openai",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/store-generated-example-sentence-audio-permanently",
+        views.unitword_store_generated_example_sentence_audio_permanently,
+        name="unitword_store_generated_example_sentence_audio_permanently",
     ),
 ]

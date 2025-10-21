@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.html import mark_safe, format_html, escape
 from django.utils.translation import gettext_lazy as _
@@ -9,7 +10,7 @@ from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.static import Static
 from lunes_cms.cmsv2.models.unit import UnitWordRelation, Unit
-from lunes_cms.cmsv2.utils import get_image_tag
+from lunes_cms.cmsv2.utils import get_image_tag, is_not_blank
 from lunes_cms.core import settings
 
 
@@ -63,24 +64,65 @@ class UnitOrJobDropdownFilter(admin.SimpleListFilter):
         return queryset
 
 
+class HasCompleteExampleSentenceFilter(admin.SimpleListFilter):
+    """Filter for displaying words that have a complete example sentence package."""
+
+    title = _("Has Complete Example Sentence")
+    parameter_name = "has_complete_example_sentence"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("yes", _("Yes")),
+            ("no", _("No")),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == "yes":
+            # Filter words that HAVE a complete example sentence package
+            # (check status is CONFIRMED AND sentence audio file exists)
+            return (
+                queryset.filter(
+                    example_sentence__isnull=False,
+                    example_sentence_check_status="CONFIRMED",
+                )
+                .exclude(
+                    Q(example_sentence="")
+                    | Q(example_sentence_audio="")
+                    | Q(example_sentence_audio__isnull=True)
+                )
+                .distinct()
+            )
+        if self.value() == "no":
+            # Filter words that DO NOT have a complete example sentence package
+            # (no example sentence at all OR check status is NOT CONFIRMED OR sentence audio file is missing)
+            return queryset.filter(
+                Q(example_sentence__isnull=True)
+                | Q(example_sentence="")
+                | ~Q(example_sentence_check_status="CONFIRMED")
+                | Q(example_sentence_audio="")
+                | Q(example_sentence_audio__isnull=True)
+            ).distinct()
+        return queryset
+
+
 class UnitInline(admin.TabularInline):
     """
     Inline admin for UnitWordRelation model.
 
     This inline allows editing unit-word relationships directly from the Word admin page,
-    including the ability to add/edit images for each unit-word relation.
+    including the ability to add/edit images and audio for each unit-word relation.
     """
 
     model = UnitWordRelation
     extra = 1
     fields = [
         "unit",
-        "image",
-        "list_image",
-        "image_check_status",
-        "generate_image_link",
+        "image_with_controls",
+        "example_sentence",
+        "example_sentence_check_status",
+        "example_sentence_audio_player",
     ]
-    readonly_fields = ["list_image", "generate_image_link"]
+    readonly_fields = ["image_with_controls", "example_sentence_audio_player"]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
@@ -96,28 +138,70 @@ class WordAdmin(BaseAdmin):
     It includes custom display methods for showing and managing assets.
     """
 
-    fields = (
-        "word_type",
-        "grammatical_gender",
-        "singular_article",
-        "word",
-        "plural_article",
-        "plural",
-        "audio",
-        "audio_player",
-        "audio_generate",
-        "audio_check_status",
-        "image",
-        "image_check_status",
-        "image_generate",
-        "image_tag",
-        "definition",
-        "additional_meaning_1",
-        "additional_meaning_2",
+    fieldsets = (
+        (
+            _("Word Information"),
+            {
+                "fields": (
+                    "word_type",
+                    "grammatical_gender",
+                    "singular_article",
+                    "word",
+                    "plural_article",
+                    "plural",
+                )
+            },
+        ),
+        (
+            _("Audio"),
+            {
+                "fields": (
+                    "audio",
+                    "audio_player",
+                    "audio_generate",
+                    "audio_check_status",
+                )
+            },
+        ),
+        (
+            _("Image"),
+            {
+                "fields": (
+                    "image",
+                    "image_check_status",
+                    "image_generate",
+                    "image_tag",
+                )
+            },
+        ),
+        (
+            _("Example Sentence"),
+            {
+                "fields": (
+                    "example_sentence",
+                    "example_sentence_check_status",
+                    "example_sentence_audio",
+                    "example_sentence_audio_player",
+                    "example_sentence_audio_generate",
+                )
+            },
+        ),
+        (
+            _("Miscellaneous"),
+            {
+                "fields": (
+                    "definition",
+                    "additional_meaning_1",
+                    "additional_meaning_2",
+                )
+            },
+        ),
     )
     readonly_fields = (
         "audio_generate",
         "audio_player",
+        "example_sentence_audio_generate",
+        "example_sentence_audio_player",
         "created_by",
         "image_generate",
         "image_tag",
@@ -140,6 +224,7 @@ class WordAdmin(BaseAdmin):
         "image_check_status",
         HasImageFilter,
         UnitOrJobDropdownFilter,
+        HasCompleteExampleSentenceFilter,
     ]
     list_per_page = 25
 
@@ -198,6 +283,71 @@ class WordAdmin(BaseAdmin):
         return "No audio file uploaded."
 
     audio_player.short_description = "Audio Preview"
+
+    def example_sentence_audio_generate(self, obj):
+        """
+        Generate HTML for the example sentence audio generation button.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the audio generation button
+        """
+        if obj.pk and is_not_blank(obj.example_sentence):
+            url = reverse("cmsv2:word_generate_example_sentence_audio", args=[obj.pk])
+            return format_html('<a class="button" href="{}">Generate Audio</a>', url)
+        return "Save to enable audio generation."
+
+    example_sentence_audio_generate.short_description = (
+        "Example Sentence Audio Generation"
+    )
+
+    def example_sentence_audio_player(self, obj):
+        """
+        Generate HTML for the example sentence audio player preview.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the audio player
+        """
+        if obj.example_sentence_audio:
+            return format_html(
+                "<audio controls id='example_sentence_audio_preview_player' src='{}'></audio>",
+                obj.example_sentence_audio.url,
+            )
+        return "No audio file uploaded."
+
+    example_sentence_audio_player.short_description = "Example Sentence Audio Preview"
+
+    def image_tag(self, obj):
+        """
+        Generate HTML for displaying the word's image with hover-to-enlarge functionality.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the image with hover overlay
+        """
+        if obj.image:
+            return format_html(
+                """<div class="image-hover-container">
+                    <a href="{}" target="_blank">{}</a>
+                    <div class="image-hover-overlay">
+                        <img src="{}" alt="{}">
+                    </div>
+                </div>""",
+                f"{settings.MEDIA_URL}{obj.image}",
+                mark_safe(get_image_tag(obj.image, width=120)),
+                f"{settings.MEDIA_URL}{obj.image}",
+                escape(obj.word),
+            )
+        return "No image uploaded."
+
+    image_tag.short_description = _("Image Preview")
 
     def image_generate(self, obj):
         """
