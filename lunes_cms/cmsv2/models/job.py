@@ -21,6 +21,7 @@ class Job(models.Model):
     icon = models.ImageField(
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
+    v1_id = models.IntegerField(null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         Group,
         on_delete=CASCADE,
