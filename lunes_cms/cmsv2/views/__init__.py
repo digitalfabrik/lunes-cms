@@ -3,6 +3,11 @@ from .unitword_generate_image import (
     unitword_generate_image,
     unitword_store_generated_image_permanently,
 )
+from .unitword_generate_example_sentence_audio import (
+    unitword_generate_example_sentence_audio,
+    unitword_generate_example_sentence_audio_via_openai,
+    unitword_store_generated_example_sentence_audio_permanently,
+)
 from .update_job_icon import update_job_icon
 from .update_unit_icon import update_unit_icon
 from .update_unitword_image import update_unitword_image
@@ -16,6 +21,11 @@ from .word_generate_audio import (
     word_generate_audio_via_openai,
     word_store_generated_audio_permanently,
 )
+from .word_generate_example_sentence_audio import (
+    word_generate_example_sentence_audio,
+    word_generate_example_sentence_audio_via_openai,
+    word_store_generated_example_sentence_audio_permanently,
+)
 from .word_generate_image import (
     word_generate_image,
     word_store_generated_image_permanently,
@@ -25,6 +35,9 @@ __all__ = [
     "generate_image_via_openai",
     "unitword_generate_image",
     "unitword_store_generated_image_permanently",
+    "unitword_generate_example_sentence_audio",
+    "unitword_generate_example_sentence_audio_via_openai",
+    "unitword_store_generated_example_sentence_audio_permanently",
     "update_job_icon",
     "update_unit_icon",
     "update_unitword_image",
@@ -35,7 +48,10 @@ __all__ = [
     "update_word_image_check_status",
     "word_generate_audio",
     "word_generate_audio_via_openai",
+    "word_generate_example_sentence_audio",
+    "word_generate_example_sentence_audio_via_openai",
     "word_generate_image",
     "word_store_generated_audio_permanently",
+    "word_store_generated_example_sentence_audio_permanently",
     "word_store_generated_image_permanently",
 ]
