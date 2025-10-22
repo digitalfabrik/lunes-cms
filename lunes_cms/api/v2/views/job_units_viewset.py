@@ -39,7 +39,10 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
                     unit_word_relations__word__audio_check_status="CONFIRMED",
                 )
                 & (
-                    Q(unit_word_relations__word__image_check_status="CONFIRMED")
+                    Q(
+                        unit_word_relations__image="",
+                        unit_word_relations__word__image_check_status="CONFIRMED",
+                    )
                     | Q(unit_word_relations__image_check_status="CONFIRMED")
                 ),
             )

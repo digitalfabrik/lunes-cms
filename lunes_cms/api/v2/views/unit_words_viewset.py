@@ -40,7 +40,7 @@ class UnitWordViewSet(viewsets.ModelViewSet):
             )
             .filter(
                 Q(image_check_status="CONFIRMED")
-                | Q(word__image_check_status="CONFIRMED")
+                | Q(image="", word__image_check_status="CONFIRMED")
             )
         )
         return queryset

@@ -121,6 +121,8 @@ class UnitWordRelation(models.Model):
         Returns:
             str: The url to the public image of this unit word relation
         """
+        if self.image and self.image_check_status != "CONFIRMED":
+            return ""
         if self.image and self.image_check_status == "CONFIRMED":
             return self.image
         if self.word.image and self.word.image_check_status == "CONFIRMED":
