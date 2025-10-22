@@ -115,6 +115,20 @@ class UnitWordRelation(models.Model):
 
     generate_image_link.short_description = _("Generate Image")
 
+    @property
+    def effective_public_image(self):
+        """
+        Returns:
+            str: The url to the public image of this unit word relation
+        """
+        if self.image and self.image_check_status != "CONFIRMED":
+            return ""
+        if self.image and self.image_check_status == "CONFIRMED":
+            return self.image
+        if self.word.image and self.word.image_check_status == "CONFIRMED":
+            return self.word.image
+        return ""
+
     class Meta:
         """
         Meta class for the UnitWordRelation model.
