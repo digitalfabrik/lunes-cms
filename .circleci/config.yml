@@ -280,7 +280,8 @@ jobs:
           command: |
             source .venv/bin/activate
             pip install .
-            python -m build .
+            python -m build --sdist .
+            python -m build --wheel .
       - persist_to_workspace:
           root: .
           paths:

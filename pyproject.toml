@@ -53,7 +53,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
 	"black",
-  "build",
+    "build",
 	"bumpver",
 	"pre-commit",
 	"pyjwt",
@@ -70,6 +70,7 @@ dev = [
 	"sphinx-last-updated-by-git",
 	"sphinxcontrib-django",
 	"twine",
+    "wheel"
 ]
 pinned = [
 	"django==5.1.2",
@@ -88,7 +89,7 @@ pinned = [
 ]
 dev-pinned = [
 	"black==25.1.0",
-  "build<=0.10.0",
+    "build<=0.10.0",
 	"bumpver==2023.1129",
 	"pre-commit==4.0.1",
 	"pyjwt==2.9.0",
@@ -105,6 +106,7 @@ dev-pinned = [
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
 	"twine==6.1.0",
+	"wheel==0.45.1",
 ]
 
 [project.urls]
