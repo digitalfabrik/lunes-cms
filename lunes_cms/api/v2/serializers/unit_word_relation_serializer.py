@@ -11,7 +11,9 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="word.id")
     word = serializers.CharField(source="word.word")
     article = serializers.CharField(source="word.singular_article_as_text")
-    image = serializers.ImageField(source="effective_public_image")
+    images = serializers.ListSerializer(
+        child=serializers.ImageField(), source="effective_public_images"
+    )
     audio = serializers.FileField(source="word.audio")
 
     class Meta:
@@ -24,6 +26,6 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
-            "image",
+            "images",
             "audio",
         )
