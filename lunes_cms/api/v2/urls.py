@@ -5,7 +5,6 @@ URL patterns for the second version of the Lunes API
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from .views import JobViewSet
 from ..utils import OptionalSlashRouter
 from . import views
 
@@ -14,7 +13,8 @@ app_name = "v2"
 
 #: Router for dynamic url patterns
 router = OptionalSlashRouter()
-router.register(r"jobs", JobViewSet, "jobs")
+router.register(r"feedback", views.CreateFeedbackViewSet, basename="feedback")
+router.register(r"jobs", views.JobViewSet, "jobs")
 router.register(r"jobs/(?P<job_id>[0-9]+)/units", views.JobUnitsViewSet, "units-of-job")
 router.register(r"sponsors", views.SponsorsViewSet, "sponsors")
 router.register(

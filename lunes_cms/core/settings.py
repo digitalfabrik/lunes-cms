@@ -94,6 +94,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "lunes_cms.core.context_processors.feedback_processor",
+                "lunes_cms.core.context_processors.feedbackv2_processor",
             ],
         },
     },
@@ -480,6 +481,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Job": "fas fa-briefcase",
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",
+        "cmsv2.Feedback": "fas fa-comment",
     },
 }
 
