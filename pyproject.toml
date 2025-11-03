@@ -91,7 +91,7 @@ dev-pinned = [
 	"black==25.9.0",
     "build<=0.10.0",
 	"bumpver==2023.1129",
-	"pre-commit==4.0.1",
+	"pre-commit==4.3.0",
 	"pyjwt==2.9.0",
 	"pylint-django==2.6.1",
 	"pylint-runner==0.7.0",
