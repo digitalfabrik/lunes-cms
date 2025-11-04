@@ -16,6 +16,7 @@ app_name = "v2"
 router = OptionalSlashRouter()
 router.register(r"jobs", JobViewSet, "jobs")
 router.register(r"jobs/(?P<job_id>[0-9]+)/units", views.JobUnitsViewSet, "units-of-job")
+router.register(r"sponsors", views.SponsorsViewSet, "sponsors")
 router.register(
     r"units/(?P<unit_id>[0-9]+)/words", views.UnitWordViewSet, "words-of-units"
 )
