@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import viewsets
 
 from ....cmsv2.models import Word
@@ -27,5 +28,10 @@ class WordViewSet(viewsets.ModelViewSet):
             unit_word_relations__unit__jobs__released=True,
             audio_check_status="CONFIRMED",
             image_check_status="CONFIRMED",
+        ).filter(
+            Q(example_sentence="")
+            | Q(
+                example_sentence_check_status="CONFIRMED", example_sentence_audio__gt=""
+            )
         )
         return queryset.distinct().order_by("word")

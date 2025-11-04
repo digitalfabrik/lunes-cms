@@ -182,3 +182,10 @@ def check_openai_availability():
         logger.warning(warning_message)
         return False
     return True
+
+
+def is_not_blank(s):
+    """
+    Checks if s is not an empty string.
+    """
+    return s is not None and s.strip() != ""

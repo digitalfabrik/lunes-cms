@@ -1,0 +1,63 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% block audio_title %}Generate Audio{% endblock %}{% endblock %}
+
+{% block breadcrumbs %}
+{% block audio_breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="{% url "admin:index" %}">{% translate "Home" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url "admin:app_list" app_label="cmsv2" %}">{% translate "Vocabulary Management v2" %}</a></li>
+    {% block breadcrumb_items %}{% endblock %}
+</ol>
+{% endblock %}
+{% endblock %}
+
+{% block content_title %}{% block audio_content_title %}{% trans "Generate Audio" %}{% endblock %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module">
+        {% block audio_info %}{% endblock %}
+
+        <div class="form-row">
+            <button type="button" class="button" id="generate_button">Generate Audio</button>
+            <span class="loading-spinner" id="loading_spinner" style="display: none;"></span>
+            <span class="message-area" id="message_area"></span>
+        </div>
+
+        <div id="audio_preview_section" style="display: none;">
+            <hr>
+            <h2>Generated Audio Preview:</h2>
+            <audio controls id="audio_preview_player"></audio>
+            <p>Temporary Filename: <span id="temp_filename_display"></span></p>
+
+            <div>
+                <button type="button" class="button" id="regenerate_button">Re-generate</button>
+                <form method="post" action="{% block store_url %}{% endblock %}" style="display:inline-block;">
+                    {% csrf_token %}
+                    <input type="hidden" name="temp_audio_filename" id="hidden_temp_audio_filename">
+                    <button type="submit" class="button default" id="store_button">{% block store_button_text %}Store Audio{% endblock %}</button>
+                </form>
+            </div>
+        </div>
+
+        {% block back_buttons %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'js/generate_audio.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const config = {
+            generateUrl: "{% block generate_url %}{% endblock %}",
+            textFieldName: "{% block text_field_name %}text{% endblock %}",
+            textValue: {% block text_value %}"{{ text }}"{% endblock %},
+        }
+
+        initAudioGenerator(config)
+    })
+</script>
+{% endblock %}

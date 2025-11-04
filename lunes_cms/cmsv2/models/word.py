@@ -77,6 +77,24 @@ class Word(models.Model):
         verbose_name=_("audio checked identifier"),
     )
     example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
+    example_sentence_audio = models.FileField(
+        upload_to=convert_umlaute_audio,
+        validators=[
+            validate_file_extension,
+            validate_file_size,
+            validate_multiple_extensions,
+        ],
+        blank=True,
+        null=True,
+        verbose_name=_("example sentence audio"),
+    )
+    example_sentence_check_status = models.CharField(
+        max_length=20,
+        choices=Static.check_status_choices,
+        null=True,
+        verbose_name=_("example sentence check status"),
+        default="NOT_CHECKED",
+    )
     creation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("creation date")
     )
@@ -162,6 +180,19 @@ class Word(models.Model):
             self.pk and previous_word and previous_word.image != self.image
         )
 
+        example_sentence_changed = (
+            self.pk
+            and previous_word
+            and previous_word.example_sentence != self.example_sentence
+        )
+        if example_sentence_changed:
+            if previous_word.example_sentence_audio:
+                # Delete the old audio file from storage
+                previous_word.example_sentence_audio.delete(save=False)
+                self.example_sentence_audio = None
+            # Reset example sentence check status when example sentence changes
+            self.example_sentence_check_status = "NOT_CHECKED"
+
         if audio_updated:
             self.audio = self.converted
             self.audio_check_status = "NOT_CHECKED"
@@ -182,6 +213,9 @@ class Word(models.Model):
 
         if not self.image:
             self.image_check_status = None
+
+        if not self.example_sentence or not self.example_sentence.strip():
+            self.example_sentence_check_status = None
 
         super().save(*args, **kwargs)
 

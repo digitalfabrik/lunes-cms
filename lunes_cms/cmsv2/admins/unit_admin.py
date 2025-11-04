@@ -12,19 +12,19 @@ class WordInline(admin.TabularInline):
     Inline admin for UnitWordRelation model.
 
     This inline allows editing word relationships directly from the Unit admin page,
-    including the ability to add/edit images for each unit-word relation.
+    including the ability to add/edit images and audio for each unit-word relation.
     """
 
     model = UnitWordRelation
     extra = 1
     fields = [
         "word",
-        "image",
-        "list_image",
-        "image_check_status",
-        "generate_image_link",
+        "image_with_controls",
+        "example_sentence",
+        "example_sentence_check_status",
+        "example_sentence_audio_player",
     ]
-    readonly_fields = ["list_image", "generate_image_link"]
+    readonly_fields = ["image_with_controls", "example_sentence_audio_player"]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)

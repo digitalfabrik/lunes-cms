@@ -42,6 +42,18 @@ class UnitWordViewSet(viewsets.ModelViewSet):
                 Q(image_check_status="CONFIRMED")
                 | Q(image="", word__image_check_status="CONFIRMED")
             )
+            .filter(
+                Q(example_sentence="")
+                | Q(
+                    example_sentence_check_status="CONFIRMED",
+                    example_sentence_audio__gt="",
+                )
+                | Q(
+                    word__example_sentence__gt="",
+                    word__example_sentence_check_status="CONFIRMED",
+                    word__example_sentence_audio__gt="",
+                )
+            )
             .order_by("word__word")
         )
         return queryset

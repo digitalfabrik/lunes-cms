@@ -12,6 +12,11 @@ class WordSerializer(serializers.ModelSerializer):
     images = serializers.ListSerializer(
         child=serializers.ImageField(), source="images_for_api"
     )
+    example_sentence = serializers.SerializerMethodField()
+
+    def get_example_sentence(self, obj):
+        """Return None for empty example sentences instead of empty string."""
+        return obj.example_sentence if obj.example_sentence else None
 
     class Meta:
         """
@@ -25,4 +30,6 @@ class WordSerializer(serializers.ModelSerializer):
             "article",
             "images",
             "audio",
+            "example_sentence",
+            "example_sentence_audio",
         )

@@ -65,6 +65,8 @@ def generate_image_via_openai(request):
         b64_image = response.data[0].b64_json
         image_data = base64.b64decode(b64_image)
 
+        os.makedirs(settings.TEMP_IMAGE_DIR, exist_ok=True)
+
         temp_filename = f"temp_image_{uuid.uuid4().hex}.png"
         temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
 

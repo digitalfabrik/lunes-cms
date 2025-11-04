@@ -37,13 +37,28 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         if not job.released:
             raise PermissionDenied()
 
-        unit_word_relations = UnitWordRelation.objects.filter(
-            unit__released=True,
-            unit__jobs=job,
-            word__audio_check_status="CONFIRMED",
-        ).filter(
-            Q(image_check_status="CONFIRMED")
-            | Q(image="", word__image_check_status="CONFIRMED")
+        unit_word_relations = (
+            UnitWordRelation.objects.filter(
+                unit__released=True,
+                unit__jobs=job,
+                word__audio_check_status="CONFIRMED",
+            )
+            .filter(
+                Q(image_check_status="CONFIRMED")
+                | Q(image="", word__image_check_status="CONFIRMED")
+            )
+            .filter(
+                Q(example_sentence="")
+                | Q(
+                    example_sentence_check_status="CONFIRMED",
+                    example_sentence_audio__gt="",
+                )
+                | Q(
+                    word__example_sentence__gt="",
+                    word__example_sentence_check_status="CONFIRMED",
+                    word__example_sentence_audio__gt="",
+                )
+            )
         )
         queryset = (
             Word.objects.filter(
