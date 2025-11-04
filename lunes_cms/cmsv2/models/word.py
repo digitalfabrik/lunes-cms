@@ -220,6 +220,24 @@ class Word(models.Model):
 
     image_tag.short_description = ""
 
+    def images_for_api(self):
+        """
+        Returns all images that belong to this word to be returned in the api.
+        By default, this only includes the default image of this word, if it is checked.
+        If the unit word relations for this word have been set, their images will be used as well.
+
+        Returns:
+            list[str]: A list of images that belong to this word.
+        """
+        images = [
+            relation.image
+            for relation in getattr(self, "unit_word_relations_of_job", [])
+        ]
+        if self.image_check_status == "CONFIRMED":
+            images.append(self.image)
+
+        return images
+
     @property
     def singular_article_as_text(self):
         """

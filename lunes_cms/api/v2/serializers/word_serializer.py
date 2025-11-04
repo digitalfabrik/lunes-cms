@@ -9,6 +9,9 @@ class WordSerializer(serializers.ModelSerializer):
     """
 
     article = serializers.CharField(source="singular_article_as_text")
+    images = serializers.ListSerializer(
+        child=serializers.ImageField(), source="images_for_api"
+    )
 
     class Meta:
         """
@@ -20,6 +23,6 @@ class WordSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
-            "image",
+            "images",
             "audio",
         )

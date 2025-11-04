@@ -42,5 +42,6 @@ class UnitWordViewSet(viewsets.ModelViewSet):
                 Q(image_check_status="CONFIRMED")
                 | Q(image="", word__image_check_status="CONFIRMED")
             )
+            .order_by("word__word")
         )
         return queryset
