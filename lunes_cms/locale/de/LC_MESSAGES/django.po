@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 13:00+0000\n"
+"POT-Creation-Date: 2025-11-04 10:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,8 +53,13 @@ msgstr ""
 "sein."
 
 #: api/v1/serializers/feedback_serializer.py:36
+#: api/v2/serializers/feedback_serializer.py:35
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
+
+#: api/v2/serializers/feedback_serializer.py:22
+msgid "The content type must be either 'job', 'unit' or 'word'."
+msgstr "Der Inhaltstyp muss entweder 'job', 'unit' oder 'word' sein."
 
 #: cms/admin.py:36 cms/admins/document_admin.py:162
 #: cms/admins/training_set_admin.py:361 cms/forms.py:46 cms/forms.py:48
@@ -75,7 +80,7 @@ msgstr "Vokabeln"
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:40 cms/models/feedback.py:90
+#: cms/admin.py:40 cms/models/feedback.py:90 cmsv2/models/feedback.py:89
 msgid "feedback"
 msgstr "Feedback"
 
@@ -170,20 +175,20 @@ msgstr "Erstellt am"
 msgid "Training Sets"
 msgstr "Module"
 
-#: cms/admins/feedback_admin.py:34
+#: cms/admins/feedback_admin.py:34 cmsv2/admins/feedback_admin.py:34
 msgid "Mark as read"
 msgstr "Als gelesen markieren"
 
-#: cms/admins/feedback_admin.py:49
+#: cms/admins/feedback_admin.py:49 cmsv2/admins/feedback_admin.py:49
 msgid "The selected feedback entries were successfully marked as read."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als gelesen markiert."
 
-#: cms/admins/feedback_admin.py:53
+#: cms/admins/feedback_admin.py:53 cmsv2/admins/feedback_admin.py:53
 msgid "Mark as unread"
 msgstr "Als ungelesen markieren"
 
-#: cms/admins/feedback_admin.py:68
+#: cms/admins/feedback_admin.py:68 cmsv2/admins/feedback_admin.py:68
 msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
@@ -411,35 +416,36 @@ msgstr "Zusätzliche Bedeutung 2"
 msgid "images"
 msgstr "Bilder"
 
-#: cms/models/feedback.py:24
+#: cms/models/feedback.py:24 cmsv2/models/feedback.py:22
 msgid "content type"
 msgstr "Inhaltstyp"
 
-#: cms/models/feedback.py:25
+#: cms/models/feedback.py:25 cmsv2/models/feedback.py:23
 msgid "The content type this feedback entry refers to."
 msgstr "Der Inhaltstyp, auf den sich dieser Feedback-Eintrag bezieht."
 
-#: cms/models/feedback.py:28
+#: cms/models/feedback.py:28 cmsv2/models/feedback.py:27
 msgid "object id"
 msgstr "Objekt-ID"
 
-#: cms/models/feedback.py:29
+#: cms/models/feedback.py:29 cmsv2/models/feedback.py:28
 msgid "The id of the object this feedback entry refers to."
 msgstr "Die ID des Objekts, auf das sich dieser Feedback-Eintrag bezieht."
 
 #: cms/models/feedback.py:32 cms/models/feedback.py:73
+#: cmsv2/models/feedback.py:31 cmsv2/models/feedback.py:72
 msgid "refers to"
 msgstr "bezieht sich auf"
 
-#: cms/models/feedback.py:35
+#: cms/models/feedback.py:35 cmsv2/models/feedback.py:34
 msgid "comment"
 msgstr "Kommentar"
 
-#: cms/models/feedback.py:44
+#: cms/models/feedback.py:44 cmsv2/models/feedback.py:43
 msgid "marked as read by"
 msgstr "als gelesen markiert von"
 
-#: cms/models/feedback.py:46
+#: cms/models/feedback.py:46 cmsv2/models/feedback.py:45
 msgid ""
 "The user who marked this feedback as read. If the feedback is unread, this "
 "field is empty."
@@ -447,15 +453,15 @@ msgstr ""
 "Die nutzende Person, die dieses Feedback als gelesen markiert hat. Wenn das "
 "Feedback ungelesen ist, ist dieses Feld leer."
 
-#: cms/models/feedback.py:53
+#: cms/models/feedback.py:53 cmsv2/models/feedback.py:52
 msgid "submitted on"
 msgstr "übermittelt am"
 
-#: cms/models/feedback.py:54
+#: cms/models/feedback.py:54 cmsv2/models/feedback.py:53
 msgid "The time and date when the feedback was submitted."
 msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
 
-#: cms/models/feedback.py:92
+#: cms/models/feedback.py:92 cmsv2/models/feedback.py:91
 msgid "feedback entries"
 msgstr "Feedback-Einträge"
 
@@ -756,19 +762,19 @@ msgstr "Vokabel"
 msgid "Generate Audio"
 msgstr "Audio generieren"
 
-#: core/settings.py:209
+#: core/settings.py:210
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:210
+#: core/settings.py:211
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:458 core/settings.py:459 core/settings.py:461
+#: core/settings.py:459 core/settings.py:460 core/settings.py:462
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:460
+#: core/settings.py:461
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

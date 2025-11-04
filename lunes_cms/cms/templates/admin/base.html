@@ -17,5 +17,22 @@
             // Fix position of counter when sidebar is collapsed
             feedbackNavItem.find("p").width("auto");
         }
+
+        // Same for the new feedback
+        let unread_feedbackv2_count = {{ unread_feedbackv2_count }};
+        // Get the navigation item for the feedback menu entry
+        let feedbackv2NavItem = $("#jazzy-sidebar a.nav-link[href$='/admin/cmsv2/feedback/']");
+        // If unread feedback exists, show counter
+        if (feedbackv2NavItem && unread_feedbackv2_count > 0) {
+            // Create span element for counter
+            let counterSpan = $(document.createElement("span"));
+            counterSpan.text(unread_feedbackv2_count);
+            counterSpan.addClass("position-absolute text-center rounded-circle bg-danger ml-2 px-1");
+            counterSpan.css("min-width", "22.5px");
+            // Append counter to the feedback link
+            feedbackv2NavItem.append(counterSpan);
+            // Fix position of counter when sidebar is collapsed
+            feedbackv2NavItem.find("p").width("auto");
+        }
     </script>
 {% endblock %}
