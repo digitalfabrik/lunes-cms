@@ -194,11 +194,11 @@ jobs:
       - run:
           name: Generate SBOM
           command: |
-            CURRENT_ALPHA_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-            curl -Lo ./.venv/bin/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
-            chmod +x .venv/bin/sbom-tool
-            rm -rf lunes_cms/_manifest
-            sbom-tool generate -b ./lunes_cms -bc ./ -pn lunes-cms -pv ${CURRENT_ALPHA_VERSION} -ps "Tür an Tür Digitalfabrik gGmbH" -nsb "https://tuerantuer.org"
+            curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+            export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
+            export SYFT_SOURCE_NAME="integreat-cms"
+            export SYFT_FORMAT_SPDX_JSON_PRETTY=true
+            syft scan . -o spdx-json=integreat_cms/_manifest/spdx_2.2/manifest.spdx.json
       - persist_to_workspace:
           root: .
           paths:
@@ -248,11 +248,11 @@ jobs:
       - run:
           name: Generate SBOM
           command: |
-            CURRENT_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-            curl -Lo ./.venv/bin/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
-            chmod +x .venv/bin/sbom-tool
-            rm -rf lunes_cms/_manifest
-            sbom-tool generate -b ./lunes_cms -bc ./ -pn lunes-cms -pv ${CURRENT_VERSION} -ps "Tür an Tür Digitalfabrik gGmbH" -nsb "https://tuerantuer.org"
+            curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+            export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
+            export SYFT_SOURCE_NAME="integreat-cms"
+            export SYFT_FORMAT_SPDX_JSON_PRETTY=true
+            syft scan . -o spdx-json=integreat_cms/_manifest/spdx_2.2/manifest.spdx.json
             git add lunes_cms/_manifest
             git commit --amend --no-edit
       - run:
