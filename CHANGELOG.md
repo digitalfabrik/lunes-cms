@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2025.11.0
+---------
+
 * [ [#601](https://github.com/digitalfabrik/lunes-cms/pull/601) ] Create APIv2 with words endpoint
 * [ [#607](https://github.com/digitalfabrik/lunes-cms/pull/607) ] Add endpoint for jobs
 * [ [#610](https://github.com/digitalfabrik/lunes-cms/pull/610) ] Add endpoint for units of a job
