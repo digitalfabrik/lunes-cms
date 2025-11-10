@@ -1,6 +1,20 @@
 UNRELEASED
 ----------
 
+* [ [#601](https://github.com/digitalfabrik/lunes-cms/pull/601) ] Create APIv2 with words endpoint
+* [ [#607](https://github.com/digitalfabrik/lunes-cms/pull/607) ] Add endpoint for jobs
+* [ [#610](https://github.com/digitalfabrik/lunes-cms/pull/610) ] Add endpoint for units of a job
+* [ [#611](https://github.com/digitalfabrik/lunes-cms/pull/611) ] Add endpoint to get all words of a unit
+* [ [#616](https://github.com/digitalfabrik/lunes-cms/pull/616) ] Add API endpoint for all words of a given job
+* [ [#618](https://github.com/digitalfabrik/lunes-cms/pull/618) ] Add sponsors endpoint to api v2
+* [ [#619](https://github.com/digitalfabrik/lunes-cms/pull/619) ] Add cms v2 Feedback model and api v2 feedback endpoint
+* [ [#612](https://github.com/digitalfabrik/lunes-cms/pull/612) ] Add example sentence to Word and Unit-Word relationship
+* [ [#606](https://github.com/digitalfabrik/lunes-cms/pull/606) ] Add v1_id column for cmsv2 models migration
+* [ [#556](https://github.com/digitalfabrik/lunes-cms/pull/556) ] Fix overflow in sidebar
+* [ [#603](https://github.com/digitalfabrik/lunes-cms/pull/603) ] Replace setup.cfg with pyproject.toml
+* [ [#609](https://github.com/digitalfabrik/lunes-cms/pull/609) ] Add SBOM in dev and prod releases
+* [ [#578](https://github.com/digitalfabrik/lunes-cms/pull/578) ] Create SECURITY.md
+
 
 2025.10.0
 ---------
