@@ -21,6 +21,7 @@ class Job(models.Model):
     icon = models.ImageField(
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
+    v1_id = models.IntegerField(null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         Group,
         on_delete=CASCADE,
@@ -44,18 +45,6 @@ class Job(models.Model):
             bool: True if the job is valid, False otherwise
         """
         return get_child_count(self) > 0 or self.units.filter(released=True).count() > 0
-
-    def get_nested_units(self):
-        """
-        Get all units associated with this job and its descendants.
-
-        Returns:
-            set: A set of unit IDs that are associated with this job or its descendants
-        """
-        units = []
-        for child in self.get_descendants(include_self=True):
-            units += child.units.filter(released=True).values_list("id", flat=True)
-        return set(units)
 
     def image_tag(self):
         """

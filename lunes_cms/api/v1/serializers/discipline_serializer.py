@@ -36,14 +36,14 @@ class DisciplineSerializer(FallbackIconSerializer):
             "nested_training_sets",
         )
 
-    def get_total_discipline_children(self, obj):
+    def get_total_discipline_children(self, discipline):
         """Returns the total child count by calling
-        utils.get_child_count(obj).
+        utils.get_child_count(discipline).
 
 
-        :param disc: Discipline instance
-        :type disc: ~lunes_cms.cms.models.discipline.Discipline
+        :param discipline: Discipline instance
+        :type discipline: ~lunes_cms.cms.models.discipline.Discipline
         :return: sum of children
         :rtype: int
         """
-        return get_child_count(obj)
+        return get_child_count(discipline)

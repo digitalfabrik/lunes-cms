@@ -1,6 +1,7 @@
 """
 This module contains shared fixtures for pytest
 """
+
 import pytest
 from django.core.management import call_command
 

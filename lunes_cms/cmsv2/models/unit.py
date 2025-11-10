@@ -6,9 +6,14 @@ from django.utils.html import format_html, mark_safe, escape
 from django.utils.translation import gettext_lazy as _
 
 from .job import Job
-from .static import convert_umlaute_images, Static
+from .static import convert_umlaute_images, convert_umlaute_audio, Static
 from .word import Word
 from ..utils import get_image_tag
+from ..validators import (
+    validate_file_extension,
+    validate_file_size,
+    validate_multiple_extensions,
+)
 from ...core import settings
 
 
@@ -37,6 +42,25 @@ class UnitWordRelation(models.Model):
         verbose_name=_("image check status"),
         default="NOT_CHECKED",
     )
+    example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
+    example_sentence_audio = models.FileField(
+        upload_to=convert_umlaute_audio,
+        validators=[
+            validate_file_extension,
+            validate_file_size,
+            validate_multiple_extensions,
+        ],
+        blank=True,
+        null=True,
+        verbose_name=_("example sentence audio"),
+    )
+    example_sentence_check_status = models.CharField(
+        max_length=20,
+        choices=Static.check_status_choices,
+        null=True,
+        verbose_name=_("example sentence check status"),
+        default="NOT_CHECKED",
+    )
 
     def image_tag(self):
         """
@@ -63,11 +87,27 @@ class UnitWordRelation(models.Model):
             self.pk and previous_relation and previous_relation.image != self.image
         )
 
+        example_sentence_changed = (
+            self.pk
+            and previous_relation
+            and previous_relation.example_sentence != self.example_sentence
+        )
+        if example_sentence_changed:
+            if previous_relation.example_sentence_audio:
+                # Delete the old audio file from storage
+                previous_relation.example_sentence_audio.delete(save=False)
+                self.example_sentence_audio = None
+            # Reset example sentence check status when example sentence changes
+            self.example_sentence_check_status = "NOT_CHECKED"
+
         if image_updated:
             self.image_check_status = "NOT_CHECKED"
 
         if not self.image:
             self.image_check_status = None
+
+        if not self.example_sentence or not self.example_sentence.strip():
+            self.example_sentence_check_status = None
 
         super().save(*args, **kwargs)
 
@@ -111,9 +151,131 @@ class UnitWordRelation(models.Model):
         if self.pk:
             url = reverse("cmsv2:unitword_generate_image", args=[self.pk])
             return format_html('<a class="button" href="{}">Generate Image</a>', url)
-        return "-"
+        return "Save to enable image generation."
 
     generate_image_link.short_description = _("Generate Image")
+
+    def effective_public_images(self):
+        """
+        Returns:
+            list[str]: The url to the public images of this unit word relation
+        """
+        if self.image and self.image_check_status != "CONFIRMED":
+            return []
+        if self.image and self.image_check_status == "CONFIRMED":
+            return [self.image]
+        if self.word.image and self.word.image_check_status == "CONFIRMED":
+            return [self.word.image]
+        return []
+
+    def generate_example_sentence_audio_link(self):
+        """Generate link for example sentence audio generation."""
+        if self.pk and self.example_sentence and self.example_sentence.strip():
+            url = reverse(
+                "cmsv2:unitword_generate_example_sentence_audio", args=[self.pk]
+            )
+            return format_html('<a class="button" href="{}">Generate Audio</a>', url)
+        return "-"
+
+    generate_example_sentence_audio_link.short_description = _(
+        "Generate Example Sentence Audio"
+    )
+
+    def example_sentence_audio_with_player(self):
+        """Display audio player and generate button in a single column."""
+        audio_html = ""
+        if self.example_sentence_audio:
+            audio_html = format_html(
+                '<audio controls style="max-width: 100%;"><source src="{}" type="audio/mpeg"></audio><br>',
+                self.example_sentence_audio.url,
+            )
+
+        generate_html = ""
+        if self.pk and self.example_sentence and self.example_sentence.strip():
+            url = reverse(
+                "cmsv2:unitword_generate_example_sentence_audio", args=[self.pk]
+            )
+            generate_html = format_html(
+                '<a class="button" href="{}">Generate Audio</a>', url
+            )
+
+        if audio_html or generate_html:
+            return mark_safe(audio_html + generate_html)
+        return "-"
+
+    example_sentence_audio_with_player.short_description = _("example sentence audio")
+
+    def image_with_controls(self):
+        """Display image, upload controls, check status, and generate button in a single column."""
+        image_html = ""
+        if self.image:
+            image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{self.image}")}" target="_blank">{get_image_tag(self.image, width=100)}</a><br>'
+
+        controls_html = f"""
+        <div class="unitword-image-controls" data-unitword-id="{self.id}" style="margin-top: 5px;">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};">
+                <span class="unitword-image-add">+</span>
+            </button>
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
+                <span class="unitword-image-replace">↻</span>
+            </button>
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
+                <span class="unitword-image-delete">×</span>
+            </button>
+            <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
+        </div>
+        """
+
+        status_html = ""
+        if self.image and self.image_check_status:
+            status_options = ""
+            for value, display in Static.check_status_choices:
+                selected = "selected" if self.image_check_status == value else ""
+                status_options += (
+                    f'<option value="{value}" {selected}>{display}</option>'
+                )
+            status_html = f"""
+            <div style="margin-top: 12px;">
+            <select name="unitword_image_check_status_{self.id}" data-unitword-id="{self.id}" class="unitword-image-check-status-select" style="width: 100%;">
+                {status_options}
+            </select>
+            </div>
+            """
+
+        generate_html = ""
+        if self.pk:
+            url = reverse("cmsv2:unitword_generate_image", args=[self.pk])
+            generate_html = f'<a class="button" href="{url}" style="display: inline-block; margin-top: 8px;">Generate Image</a>'
+
+        return mark_safe(
+            f"<div>{image_html}{controls_html}{status_html}{generate_html}</div>"
+        )
+
+    image_with_controls.short_description = _("Image")
+
+    def example_sentence_audio_player(self):
+        """Display an audio player for the example sentence audio and a button to generate it."""
+        audio_html = ""
+        if self.example_sentence_audio:
+            audio_html = format_html(
+                '<audio controls style="max-width: 100%; margin-bottom: 8px;"><source src="{}" type="audio/mpeg"></audio>',
+                self.example_sentence_audio.url,
+            )
+
+        generate_html = ""
+        if self.pk and self.example_sentence and self.example_sentence.strip():
+            url = reverse(
+                "cmsv2:unitword_generate_example_sentence_audio", args=[self.pk]
+            )
+            generate_html = format_html(
+                '<div><a class="button" href="{}">Generate Audio</a></div>', url
+            )
+
+        if audio_html or generate_html:
+            return mark_safe(audio_html + generate_html)
+        return "Save to enable audio generation."
+
+    example_sentence_audio_player.short_description = _("example sentence audio")
 
     class Meta:
         """
@@ -141,6 +303,7 @@ class Unit(models.Model):
     icon = models.ImageField(
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
+    v1_id = models.IntegerField(null=True, blank=True, editable=False)
     jobs = models.ManyToManyField(Job, related_name="units", verbose_name=_("job"))
     words = models.ManyToManyField(
         Word, through="UnitWordRelation", related_name="units", verbose_name=_("word")

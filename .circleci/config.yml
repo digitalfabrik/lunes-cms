@@ -191,11 +191,20 @@ jobs:
             # Bump version to next alpha version
             echo "Bump to the next version"
             bumpver update -n -t alpha --no-commit
+      - run:
+          name: Generate SBOM
+          command: |
+            curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+            export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
+            export SYFT_SOURCE_NAME="integreat-cms"
+            export SYFT_FORMAT_SPDX_JSON_PRETTY=true
+            syft scan . -o spdx-json=integreat_cms/_manifest/spdx_2.2/manifest.spdx.json
       - persist_to_workspace:
           root: .
           paths:
-            - setup.cfg
+            - pyproject.toml
             - lunes_cms/__init__.py
+            - lunes_cms/_manifest
   bump-version:
     docker:
       - image: cimg/python:3.11
@@ -237,6 +246,16 @@ jobs:
             git add CHANGELOG.md
             git commit --amend --no-edit
       - run:
+          name: Generate SBOM
+          command: |
+            curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+            export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
+            export SYFT_SOURCE_NAME="integreat-cms"
+            export SYFT_FORMAT_SPDX_JSON_PRETTY=true
+            syft scan . -o spdx-json=integreat_cms/_manifest/spdx_2.2/manifest.spdx.json
+            git add lunes_cms/_manifest
+            git commit --amend --no-edit
+      - run:
           name: Tag and push commit
           command: |
             # Get most recent changelog (split by 3 sequential new lines and print the second record except the first three lines)
@@ -260,8 +279,9 @@ jobs:
           name: Build lunes-cms package
           command: |
             source .venv/bin/activate
-            pip install wheel
-            python setup.py sdist bdist_wheel
+            pip install .
+            python -m build --sdist .
+            python -m build --wheel .
       - persist_to_workspace:
           root: .
           paths:
@@ -284,6 +304,7 @@ jobs:
           command: |
             source .venv/bin/activate
             pip install twine
+            ls -lh ./dist/*
             twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
   create-release:
     docker:
