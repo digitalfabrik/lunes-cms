@@ -105,6 +105,46 @@ class HasCompleteExampleSentenceFilter(admin.SimpleListFilter):
         return queryset
 
 
+class MigratedFilter(admin.SimpleListFilter):
+    """
+    Admin filter for migration status.
+
+    Allows filtering words by whether they were migrated from v1 or created in v2.
+    """
+
+    title = _("migration status")
+    parameter_name = "migrated"
+
+    def lookups(self, request, model_admin):
+        """
+        Return the filter options.
+
+        Returns:
+            list: A list of tuples containing (value, label) pairs for the filter options
+        """
+        return [
+            ("yes", _("Migrated from old data model")),
+            ("no", _("Not migrated from old data model")),
+        ]
+
+    def queryset(self, request, queryset):
+        """
+        Filter the queryset based on the selected option.
+
+        Args:
+            request: The HTTP request
+            queryset: The queryset to filter
+
+        Returns:
+            QuerySet: The filtered queryset
+        """
+        if self.value() == "yes":
+            return queryset.filter(v1_id__isnull=False)
+        if self.value() == "no":
+            return queryset.filter(v1_id__isnull=True)
+        return queryset
+
+
 class UnitInline(admin.TabularInline):
     """
     Inline admin for UnitWordRelation model.
@@ -211,6 +251,7 @@ class WordAdmin(BaseAdmin):
     inlines = [UnitInline]
     list_display = (
         "word",
+        "migrated_status",
         "word_type",
         "singular_article_display",
         "list_audio",
@@ -225,6 +266,7 @@ class WordAdmin(BaseAdmin):
         HasImageFilter,
         UnitOrJobDropdownFilter,
         HasCompleteExampleSentenceFilter,
+        MigratedFilter,
     ]
     list_per_page = 25
 
@@ -639,6 +681,28 @@ class WordAdmin(BaseAdmin):
         return obj.creation_date.date()
 
     creation_date_display.short_description = _("creation date")
+
+    def migrated_status(self, obj):
+        """
+        Display a badge indicating whether the word was migrated from v1 or created in v2.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML formatted badge showing migration status
+        """
+        if obj.v1_id is not None:
+            return format_html(
+                '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
+                'border-radius: 3px; font-size: 11px; font-weight: 500;">Migrated</span>'
+            )
+        return format_html(
+            '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
+            'border-radius: 3px; font-size: 11px; font-weight: 500;">New</span>'
+        )
+
+    migrated_status.short_description = _("migrated")
 
     def audio_check_status_display(self, obj):
         """

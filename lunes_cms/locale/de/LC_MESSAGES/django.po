@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 08:25+0000\n"
+"POT-Creation-Date: 2025-11-22 08:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,8 +110,8 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:108
-#: cmsv2/admins/word_admin.py:386
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:150
+#: cmsv2/admins/word_admin.py:428
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -121,7 +121,7 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:453 cmsv2/models/word.py:64
+#: cmsv2/admins/word_admin.py:495 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
@@ -131,7 +131,7 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:627
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:669
 #: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
@@ -405,7 +405,7 @@ msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:641 cmsv2/models/word.py:99
+#: cmsv2/admins/word_admin.py:683 cmsv2/models/word.py:99
 msgid "creation date"
 msgstr "Erstellt am"
 
@@ -669,16 +669,36 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/job_admin.py:74
+#: cmsv2/admins/job_admin.py:29 cmsv2/admins/unit_admin.py:42
+#: cmsv2/admins/word_admin.py:115
+msgid "migration status"
+msgstr "Ablaufdatum"
+
+#: cmsv2/admins/job_admin.py:40 cmsv2/admins/unit_admin.py:53
+#: cmsv2/admins/word_admin.py:126
+msgid "Migrated from old data model"
+msgstr "Migriert aus altem Datenmodell"
+
+#: cmsv2/admins/job_admin.py:41 cmsv2/admins/unit_admin.py:54
+#: cmsv2/admins/word_admin.py:127
+msgid "Not migrated from old data model"
+msgstr "Nicht migriert aus altem Datenmodell"
+
+#: cmsv2/admins/job_admin.py:116
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:88 cmsv2/admins/unit_admin.py:122
+#: cmsv2/admins/job_admin.py:130 cmsv2/admins/unit_admin.py:164
 #: cmsv2/models/job.py:34 cmsv2/models/unit.py:315
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/unit_admin.py:89
+#: cmsv2/admins/job_admin.py:152 cmsv2/admins/unit_admin.py:186
+#: cmsv2/admins/word_admin.py:705
+msgid "migrated"
+msgstr "Migriert"
+
+#: cmsv2/admins/unit_admin.py:131
 msgid "jobs"
 msgstr "Berufe"
 
@@ -694,36 +714,36 @@ msgstr "Einheit oder Job"
 msgid "Has Complete Example Sentence"
 msgstr "Hat vollständigen Beispielsatz"
 
-#: cmsv2/admins/word_admin.py:143
+#: cmsv2/admins/word_admin.py:183
 msgid "Word Information"
 msgstr "Wort Informationen"
 
-#: cmsv2/admins/word_admin.py:156
+#: cmsv2/admins/word_admin.py:196
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py:167 cmsv2/admins/word_admin.py:613
+#: cmsv2/admins/word_admin.py:207 cmsv2/admins/word_admin.py:655
 #: cmsv2/models/unit.py:146 cmsv2/models/unit.py:254
 msgid "Image"
 msgstr "Bilder"
 
-#: cmsv2/admins/word_admin.py:178
+#: cmsv2/admins/word_admin.py:218
 msgid "Example Sentence"
 msgstr "Beispielsatz"
 
-#: cmsv2/admins/word_admin.py:190
+#: cmsv2/admins/word_admin.py:230
 msgid "Miscellaneous"
 msgstr "Verschiedene"
 
-#: cmsv2/admins/word_admin.py:350
+#: cmsv2/admins/word_admin.py:392
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
-#: cmsv2/admins/word_admin.py:655 cmsv2/models/word.py:70
+#: cmsv2/admins/word_admin.py:719 cmsv2/models/word.py:70
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:670 cmsv2/models/unit.py:42
+#: cmsv2/admins/word_admin.py:734 cmsv2/models/unit.py:42
 #: cmsv2/models/word.py:136
 msgid "image check status"
 msgstr "Bild Prüfstatus"
