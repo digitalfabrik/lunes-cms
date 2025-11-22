@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-04 13:18+0000\n"
+"POT-Creation-Date: 2025-11-22 08:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgstr ""
 
 #: api/v1/serializers/feedback_serializer.py:36
 #: api/v2/serializers/feedback_serializer.py:35
+#, python-brace-format
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
@@ -204,6 +205,7 @@ msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
 #: cms/admins/training_set_admin.py:220
+#, python-brace-format
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -218,12 +220,14 @@ msgstr[1] ""
 "Vokabeln mit bestätigten Bildern enthalten."
 
 #: cms/admins/training_set_admin.py:235
+#, python-brace-format
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
 #: cms/admins/training_set_admin.py:249
+#, python-brace-format
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
@@ -234,12 +238,14 @@ msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
 #: cms/admins/training_set_admin.py:279
+#, python-brace-format
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
 #: cms/admins/training_set_admin.py:290
+#, python-brace-format
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
@@ -271,6 +277,7 @@ msgstr ""
 "Element auswählst."
 
 #: cms/forms.py:79
+#, python-brace-format
 msgid ""
 "You can only release a training set that contains at least {} vocabulary "
 "words with confirmed images."
@@ -520,6 +527,7 @@ msgid "Download QR code"
 msgstr "QR-Code herunterladen"
 
 #: cms/models/group_api_key.py:158
+#, python-brace-format
 msgid "{}: Token for the group \"{}\""
 msgstr "{}: Token für die Gruppe \"{}\""
 

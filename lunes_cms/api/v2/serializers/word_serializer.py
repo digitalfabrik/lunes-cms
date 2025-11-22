@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from ....cmsv2.models import Word
@@ -13,10 +15,16 @@ class WordSerializer(serializers.ModelSerializer):
         child=serializers.ImageField(), source="images_for_api"
     )
     example_sentence = serializers.SerializerMethodField()
+    migrated = serializers.SerializerMethodField()
 
     def get_example_sentence(self, obj):
         """Return None for empty example sentences instead of empty string."""
         return obj.example_sentence if obj.example_sentence else None
+
+    @extend_schema_field(OpenApiTypes.BOOL)
+    def get_migrated(self, obj):
+        """Return True if the word was migrated from the old data model """
+        return obj.v1_id is not None
 
     class Meta:
         """
@@ -32,4 +40,5 @@ class WordSerializer(serializers.ModelSerializer):
             "audio",
             "example_sentence",
             "example_sentence_audio",
+            "migrated",
         )
