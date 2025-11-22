@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2025.11.1
+---------
+
 * [ [#632](https://github.com/digitalfabrik/lunes-cms/pull/632) ] Indicate in API and CMS if a job, unit or word was migrated from the old data model
 
 
