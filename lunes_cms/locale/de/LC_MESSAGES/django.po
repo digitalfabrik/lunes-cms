@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 08:54+0000\n"
+"POT-Creation-Date: 2025-11-22 08:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,6 @@ msgstr ""
 
 #: api/v1/serializers/feedback_serializer.py:36
 #: api/v2/serializers/feedback_serializer.py:35
-#, python-brace-format
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
@@ -110,8 +109,8 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:150
-#: cmsv2/admins/word_admin.py:428
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:151
+#: cmsv2/admins/word_admin.py:430
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -121,7 +120,7 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:495 cmsv2/models/word.py:64
+#: cmsv2/admins/word_admin.py:497 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
@@ -131,7 +130,7 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:669
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:671
 #: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
@@ -205,7 +204,6 @@ msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
 #: cms/admins/training_set_admin.py:220
-#, python-brace-format
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -220,14 +218,12 @@ msgstr[1] ""
 "Vokabeln mit bestätigten Bildern enthalten."
 
 #: cms/admins/training_set_admin.py:235
-#, python-brace-format
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
 #: cms/admins/training_set_admin.py:249
-#, python-brace-format
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
@@ -238,14 +234,12 @@ msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
 #: cms/admins/training_set_admin.py:279
-#, python-brace-format
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
 #: cms/admins/training_set_admin.py:290
-#, python-brace-format
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
@@ -277,7 +271,6 @@ msgstr ""
 "Element auswählst."
 
 #: cms/forms.py:79
-#, python-brace-format
 msgid ""
 "You can only release a training set that contains at least {} vocabulary "
 "words with confirmed images."
@@ -405,7 +398,7 @@ msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:683 cmsv2/models/word.py:99
+#: cmsv2/admins/word_admin.py:685 cmsv2/models/word.py:99
 msgid "creation date"
 msgstr "Erstellt am"
 
@@ -527,7 +520,6 @@ msgid "Download QR code"
 msgstr "QR-Code herunterladen"
 
 #: cms/models/group_api_key.py:158
-#, python-brace-format
 msgid "{}: Token for the group \"{}\""
 msgstr "{}: Token für die Gruppe \"{}\""
 
@@ -684,21 +676,21 @@ msgstr "Migriert aus altem Datenmodell"
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:116
+#: cmsv2/admins/job_admin.py:117
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:130 cmsv2/admins/unit_admin.py:164
+#: cmsv2/admins/job_admin.py:131 cmsv2/admins/unit_admin.py:165
 #: cmsv2/models/job.py:34 cmsv2/models/unit.py:315
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:152 cmsv2/admins/unit_admin.py:186
-#: cmsv2/admins/word_admin.py:705
+#: cmsv2/admins/job_admin.py:153 cmsv2/admins/unit_admin.py:187
+#: cmsv2/admins/word_admin.py:707
 msgid "migrated"
 msgstr "Migriert"
 
-#: cmsv2/admins/unit_admin.py:131
+#: cmsv2/admins/unit_admin.py:132
 msgid "jobs"
 msgstr "Berufe"
 
@@ -718,32 +710,32 @@ msgstr "Hat vollständigen Beispielsatz"
 msgid "Word Information"
 msgstr "Wort Informationen"
 
-#: cmsv2/admins/word_admin.py:196
+#: cmsv2/admins/word_admin.py:197
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py:207 cmsv2/admins/word_admin.py:655
+#: cmsv2/admins/word_admin.py:208 cmsv2/admins/word_admin.py:657
 #: cmsv2/models/unit.py:146 cmsv2/models/unit.py:254
 msgid "Image"
 msgstr "Bilder"
 
-#: cmsv2/admins/word_admin.py:218
+#: cmsv2/admins/word_admin.py:219
 msgid "Example Sentence"
 msgstr "Beispielsatz"
 
-#: cmsv2/admins/word_admin.py:230
+#: cmsv2/admins/word_admin.py:231
 msgid "Miscellaneous"
 msgstr "Verschiedene"
 
-#: cmsv2/admins/word_admin.py:392
+#: cmsv2/admins/word_admin.py:394
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
-#: cmsv2/admins/word_admin.py:719 cmsv2/models/word.py:70
+#: cmsv2/admins/word_admin.py:721 cmsv2/models/word.py:70
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:734 cmsv2/models/unit.py:42
+#: cmsv2/admins/word_admin.py:736 cmsv2/models/unit.py:42
 #: cmsv2/models/word.py:136
 msgid "image check status"
 msgstr "Bild Prüfstatus"

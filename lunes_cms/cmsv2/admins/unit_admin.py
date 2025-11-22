@@ -82,6 +82,7 @@ class UnitAdmin(BaseAdmin):
 
     fields = [
         "title",
+        "migrated_status",
         "description",
         "icon",
         "image_tag",
@@ -89,7 +90,7 @@ class UnitAdmin(BaseAdmin):
         "created_by",
         "released",
     ]
-    readonly_fields = ["created_by", "image_tag"]
+    readonly_fields = ["created_by", "image_tag", "migrated_status"]
     inlines = [WordInline]
     search_fields = ["title"]
     list_display = [
@@ -176,11 +177,11 @@ class UnitAdmin(BaseAdmin):
         if obj.v1_id is not None:
             return format_html(
                 '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
-                'border-radius: 3px; font-size: 11px; font-weight: 500;">Migrated</span>'
+                'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
             )
         return format_html(
             '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
-            'border-radius: 3px; font-size: 11px; font-weight: 500;">New</span>'
+            'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
 
     migrated_status.short_description = _("migrated")

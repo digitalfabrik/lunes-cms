@@ -23,7 +23,7 @@ class WordSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.BOOL)
     def get_migrated(self, obj):
-        """Return True if the word was migrated from the old data model """
+        """Return True if the word was migrated from the old data model"""
         return obj.v1_id is not None
 
     class Meta:
