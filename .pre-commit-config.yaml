@@ -16,3 +16,12 @@ repos:
         entry: tools/check_translations.sh
         language: script
         pass_filenames: false
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint (custom script)
+        entry: ./tools/pylint.sh
+        args: [ "--as-precommit" ]
+        types_or: [ "python", "pyi" ]
+        language: script
+        pass_filenames: true
