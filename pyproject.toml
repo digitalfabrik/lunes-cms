@@ -73,7 +73,7 @@ dev = [
     "wheel"
 ]
 pinned = [
-	"django==5.1.2",
+	"django==5.2",
 	"django-import-export==4.3.13",
 	"django-jazzmin==3.0.1",
 	"django-mptt==0.18.0",
