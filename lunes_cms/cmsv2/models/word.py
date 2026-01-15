@@ -138,31 +138,24 @@ class Word(models.Model):
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
-    @property
-    def converted(self):
+    def convert_audio(self):
         """
-        Converts the uploaded audio file to MP3 format and returns it as a Django File object.
-        This method is a property, so it can be accessed like an attribute.
-
-        Returns:
-            django.core.files.File or None: The converted MP3 audio file as a Django File object,
-                                            or None if no audio file is associated.
+        Converts the uploaded audio file to MP3 format and sets, but doesn't save, it as a Django File object.
         """
-        if self.audio:
-            super().save()
-            file_path = self.audio.path
-            original_extension = file_path.split(".")[-1]
-            mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
-            new_path = file_path[:-4] + "-conv.mp3"
-            mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
+        if not self.audio:
+            return
 
-            converted_audiofile = File(file=open(new_path, "rb"), name=Path(new_path))
-            converted_audiofile.name = Path(new_path).name
-            converted_audiofile.content_type = "audio/mpeg"
-            converted_audiofile.size = os.path.getsize(new_path)
-            os.remove(new_path)
-            return converted_audiofile
-        return None
+        file_path = self.audio.path
+        original_extension = file_path.split(".")[-1]
+        mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
+        new_path = file_path[:-4] + "-conv.mp3"
+        mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
+
+        with open(new_path, "rb") as file:
+            converted_audiofile = File(file, name=Path(new_path).name)
+            self.audio.save(converted_audiofile.name, converted_audiofile, save=False)
+
+        os.remove(new_path)
 
     def save(self, *args, **kwargs):
         """
@@ -194,7 +187,7 @@ class Word(models.Model):
             self.example_sentence_check_status = "NOT_CHECKED"
 
         if audio_updated:
-            self.audio = self.converted
+            self.convert_audio()
             self.audio_check_status = "NOT_CHECKED"
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
 

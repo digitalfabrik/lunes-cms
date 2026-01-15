@@ -8,6 +8,5 @@ disable=missing-module-docstring,
         too-few-public-methods,
         too-many-ancestors,
         duplicate-code,
-        consider-using-with
 
 enable = useless-suppression
