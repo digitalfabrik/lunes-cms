@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#630](https://github.com/digitalfabrik/lunes-cms/pull/630) ] Fix API output of example_sentence
+
 
 2025.11.1
 ---------
