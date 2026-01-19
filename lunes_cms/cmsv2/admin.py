@@ -10,7 +10,6 @@ from django.contrib import admin
 from .admins import JobAdmin, WordAdmin, UnitAdmin, FeedbackAdmin
 from .models import Job, Word, Unit, Feedback
 
-
 admin.site.register(Job, JobAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(Word, WordAdmin)
