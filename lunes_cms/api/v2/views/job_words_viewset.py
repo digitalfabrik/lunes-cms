@@ -10,7 +10,7 @@ from ....cmsv2.models.unit import UnitWordRelation
 class JobWordsViewSet(viewsets.ModelViewSet):
     """
     Retrieve the list of all words of a job.
-    A word is returned if it public in at least one unit that belongs to the job.
+    A word is returned if it's public in at least one unit that belongs to the job.
     All public images that belong to a public unit of that job will be returned.
     Images of relations are ordered alphabetically by their unit title
     and the default image of the word always comes last.
@@ -37,28 +37,13 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         if not job.released:
             raise PermissionDenied()
 
-        unit_word_relations = (
-            UnitWordRelation.objects.filter(
-                unit__released=True,
-                unit__jobs=job,
-                word__audio_check_status="CONFIRMED",
-            )
-            .filter(
-                Q(image_check_status="CONFIRMED")
-                | Q(image="", word__image_check_status="CONFIRMED")
-            )
-            .filter(
-                Q(example_sentence="")
-                | Q(
-                    example_sentence_check_status="CONFIRMED",
-                    example_sentence_audio__gt="",
-                )
-                | Q(
-                    word__example_sentence__gt="",
-                    word__example_sentence_check_status="CONFIRMED",
-                    word__example_sentence_audio__gt="",
-                )
-            )
+        unit_word_relations = UnitWordRelation.objects.filter(
+            unit__released=True,
+            unit__jobs=job,
+            word__audio_check_status="CONFIRMED",
+        ).filter(
+            Q(image_check_status="CONFIRMED")
+            | Q(image="", word__image_check_status="CONFIRMED")
         )
         queryset = (
             Word.objects.filter(
