@@ -94,6 +94,10 @@ pylint
 
 This job executes ``pylint_runner``, which checks whether the :ref:`pylint` throws any errors or warnings.
 
+mypy
+------
+This job executes ``mypy . --scripts-are-modules | sort``, which checks the static type of our variables.
+
 shellcheck/check
 ----------------
 

@@ -25,3 +25,12 @@ repos:
         types_or: [ "python", "pyi" ]
         language: script
         pass_filenames: true
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy (custom script)
+        entry: ./tools/mypy.sh
+        args: [ "--as-precommit" ]
+        types_or: [ "python", "pyi" ]
+        language: script
+        pass_filenames: true

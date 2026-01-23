@@ -307,7 +307,7 @@ class WordAdmin(BaseAdmin):
             return format_html('<a class="button" href="{}">Generate Audio</a>', url)
         return "Save to enable audio generation."
 
-    audio_generate.short_description = "Audio Generation"
+    audio_generate.short_description = "Audio Generation"  # type: ignore[attr-defined]
 
     def audio_player(self, obj):
         """
@@ -326,7 +326,7 @@ class WordAdmin(BaseAdmin):
             )
         return "No audio file uploaded."
 
-    audio_player.short_description = "Audio Preview"
+    audio_player.short_description = "Audio Preview"  # type: ignore[attr-defined]
 
     def example_sentence_audio_generate(self, obj):
         """
@@ -343,9 +343,7 @@ class WordAdmin(BaseAdmin):
             return format_html('<a class="button" href="{}">Generate Audio</a>', url)
         return "Save to enable audio generation."
 
-    example_sentence_audio_generate.short_description = (
-        "Example Sentence Audio Generation"
-    )
+    example_sentence_audio_generate.short_description = "Example Sentence Audio Generation"  # type: ignore[attr-defined]
 
     def example_sentence_audio_player(self, obj):
         """
@@ -364,7 +362,7 @@ class WordAdmin(BaseAdmin):
             )
         return "No audio file uploaded."
 
-    example_sentence_audio_player.short_description = "Example Sentence Audio Preview"
+    example_sentence_audio_player.short_description = "Example Sentence Audio Preview"  # type: ignore[attr-defined]
 
     def image_tag(self, obj):
         """
@@ -391,7 +389,7 @@ class WordAdmin(BaseAdmin):
             )
         return "No image uploaded."
 
-    image_tag.short_description = _("Image Preview")
+    image_tag.short_description = _("Image Preview")  # type: ignore[attr-defined]
 
     def image_generate(self, obj):
         """
@@ -408,7 +406,7 @@ class WordAdmin(BaseAdmin):
             return format_html('<a class="button" href="{}">Generate Image</a>', url)
         return "Save to enable image generation."
 
-    image_generate.short_description = "Image Generation"
+    image_generate.short_description = "Image Generation"  # type: ignore[attr-defined]
 
     def creator_group(self, obj):
         """
@@ -427,7 +425,7 @@ class WordAdmin(BaseAdmin):
             return obj.created_by
         return None
 
-    creator_group.short_description = _("creator group")
+    creator_group.short_description = _("creator group")  # type: ignore[attr-defined]
 
     def list_audio(self, obj):
         """
@@ -494,7 +492,7 @@ class WordAdmin(BaseAdmin):
 
         return mark_safe(html)
 
-    list_audio.short_description = _("audio")
+    list_audio.short_description = _("audio")  # type: ignore[attr-defined]
 
     def list_image(self, obj):
         """
@@ -654,7 +652,7 @@ class WordAdmin(BaseAdmin):
 
         return html
 
-    list_image.short_description = _("Image")
+    list_image.short_description = _("Image")  # type: ignore[attr-defined]
 
     def singular_article_display(self, obj):
         """
@@ -668,7 +666,7 @@ class WordAdmin(BaseAdmin):
         """
         return obj.get_singular_article_display()
 
-    singular_article_display.short_description = _("singular article")
+    singular_article_display.short_description = _("singular article")  # type: ignore[attr-defined]
 
     def creation_date_display(self, obj):
         """
@@ -682,7 +680,7 @@ class WordAdmin(BaseAdmin):
         """
         return obj.creation_date.date()
 
-    creation_date_display.short_description = _("creation date")
+    creation_date_display.short_description = _("creation date")  # type: ignore[attr-defined]
 
     def migrated_status(self, obj):
         """
@@ -704,7 +702,7 @@ class WordAdmin(BaseAdmin):
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
 
-    migrated_status.short_description = _("migrated")
+    migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
 
     def audio_check_status_display(self, obj):
         """
@@ -718,8 +716,8 @@ class WordAdmin(BaseAdmin):
         """
         return obj.get_audio_check_status_display()
 
-    audio_check_status_display.short_description = _("audio check status")
-    audio_check_status_display.admin_order_field = "audio_check_status"
+    audio_check_status_display.short_description = _("audio check status")  # type: ignore[attr-defined]
+    audio_check_status_display.admin_order_field = "audio_check_status"  # type: ignore[attr-defined]
 
     def image_check_status_display(self, obj):
         """
@@ -733,5 +731,5 @@ class WordAdmin(BaseAdmin):
         """
         return obj.get_image_check_status_display()
 
-    image_check_status_display.short_description = _("image check status")
-    image_check_status_display.admin_order_field = "image_check_status"
+    image_check_status_display.short_description = _("image check status")  # type: ignore[attr-defined]
+    image_check_status_display.admin_order_field = "image_check_status"  # type: ignore[attr-defined]

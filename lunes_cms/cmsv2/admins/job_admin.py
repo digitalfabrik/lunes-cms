@@ -114,7 +114,7 @@ class JobAdmin(BaseAdmin):
         """
         return ", ".join([unit.title for unit in obj.units.all()])
 
-    related_units.short_description = _("units")
+    related_units.short_description = _("units")  # type: ignore[attr-defined]
 
     def created_at_date(self, obj):
         """
@@ -128,7 +128,7 @@ class JobAdmin(BaseAdmin):
         """
         return obj.created_at.date()
 
-    created_at_date.short_description = _("created at")
+    created_at_date.short_description = _("created at")  # type: ignore[attr-defined]
 
     def migrated_status(self, obj):
         """
@@ -150,4 +150,4 @@ class JobAdmin(BaseAdmin):
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
 
-    migrated_status.short_description = _("migrated")
+    migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]

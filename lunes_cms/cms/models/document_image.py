@@ -31,7 +31,7 @@ class DocumentImage(models.Model):
         """
         return get_image_tag(self.image)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def save_original_img(self):
         """

@@ -71,6 +71,18 @@ jobs:
             source .venv/bin/activate
             pip install pylint
             ./tools/pylint.sh
+  mypy:
+    docker:
+      - image: "cimg/python:3.11"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run mypy
+          command: |
+            source .venv/bin/activate
+            ./tools/mypy.sh
   test:
     docker:
       - image: cimg/python:3.11
@@ -383,6 +395,9 @@ workflows:
           requires:
             - test
       - black:
+          requires:
+            - install
+      - mypy:
           requires:
             - install
       - check-translations:
