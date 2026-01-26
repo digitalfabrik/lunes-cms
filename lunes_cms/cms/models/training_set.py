@@ -58,7 +58,7 @@ class TrainingSet(MPTTModel):
         """
         return get_image_tag(self.icon)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def __str__(self):
         """String representation of TrainingSet instance
@@ -102,4 +102,4 @@ class TrainingSet(MPTTModel):
             self.description,
         )
 
-    style_description_field.short_description = "description"
+    style_description_field.short_description = "description"  # type: ignore[attr-defined]

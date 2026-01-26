@@ -81,7 +81,7 @@ class Discipline(MPTTModel):
         """
         return get_image_tag(self.icon)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def __str__(self):
         """

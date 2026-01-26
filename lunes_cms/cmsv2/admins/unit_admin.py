@@ -129,7 +129,7 @@ class UnitAdmin(BaseAdmin):
         """
         return ", ".join([job.name for job in obj.jobs.all()])
 
-    related_jobs.short_description = _("jobs")
+    related_jobs.short_description = _("jobs")  # type: ignore[attr-defined]
 
     def creator_group(self, obj):
         """
@@ -148,7 +148,7 @@ class UnitAdmin(BaseAdmin):
             return obj.created_by
         return None
 
-    creator_group.short_description = _("creator group")
+    creator_group.short_description = _("creator group")  # type: ignore[attr-defined]
 
     def created_at_date(self, obj):
         """
@@ -162,7 +162,7 @@ class UnitAdmin(BaseAdmin):
         """
         return obj.created_at.date()
 
-    created_at_date.short_description = _("created at")
+    created_at_date.short_description = _("created at")  # type: ignore[attr-defined]
 
     def migrated_status(self, obj):
         """
@@ -184,4 +184,4 @@ class UnitAdmin(BaseAdmin):
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
 
-    migrated_status.short_description = _("migrated")
+    migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]

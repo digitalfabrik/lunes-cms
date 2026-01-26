@@ -245,7 +245,7 @@ class Word(models.Model):
         """
         return get_image_tag(self.image, width)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def images_for_api(self):
         """

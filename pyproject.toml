@@ -55,6 +55,7 @@ dev = [
 	"black",
     "build",
 	"bumpver",
+	"mypy",
 	"pre-commit",
 	"pyjwt",
 	"pylint-django",
@@ -153,3 +154,14 @@ exclude_also = [
     "raise NotImplementedError",
 ]
 
+[tool.mypy]
+python_version = "3.11"
+exclude = [
+    '^lunes_cms/cms/',
+    '^tests/api/',
+]
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = false
+disallow_untyped_defs = false

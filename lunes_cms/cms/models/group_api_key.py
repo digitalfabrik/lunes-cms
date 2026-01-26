@@ -74,8 +74,8 @@ class GroupAPIKey(models.Model):
         """
         return not self.revoked and (not self.expiry_date or self.expiry_date > now())
 
-    is_valid.boolean = True
-    is_valid.short_description = _("valid")
+    is_valid.boolean = True  # type: ignore[attr-defined]
+    is_valid.short_description = _("valid")  # type: ignore[attr-defined]
 
     @property
     def qr_code_url(self):
@@ -110,7 +110,7 @@ class GroupAPIKey(models.Model):
         """
         return self.qr_code_link(escape(_("Download"))) if self.is_valid() else None
 
-    qr_code_download_link.short_description = _("QR code")
+    qr_code_download_link.short_description = _("QR code")  # type: ignore[attr-defined]
 
     def qr_code(self):
         """
@@ -129,7 +129,7 @@ class GroupAPIKey(models.Model):
             else "-"
         )
 
-    qr_code.short_description = _("QR code")
+    qr_code.short_description = _("QR code")  # type: ignore[attr-defined]
 
     @classmethod
     def get_from_token(cls, token):
