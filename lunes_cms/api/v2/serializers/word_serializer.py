@@ -39,7 +39,11 @@ class WordSerializer(serializers.ModelSerializer):
             and obj.example_sentence
             and obj.example_sentence_check_status == "CONFIRMED"
         ):
-            return obj.example_sentence_audio
+            return (
+                obj.example_sentence_audio.url
+                if hasattr(obj.example_sentence_audio, "url")
+                else obj.example_sentence_audio
+            )
         return None
 
     @extend_schema_field(OpenApiTypes.BOOL)
