@@ -12,4 +12,5 @@ urlpatterns = [
     path("", include("lunes_cms.api.v1.urls", namespace="default")),
     path("v1/", include("lunes_cms.api.v1.urls", namespace="v1")),
     path("v2/", include("lunes_cms.api.v2.urls", namespace="v2")),
+    path("analytics/", include("lunes_cms.analytics.api.urls", namespace="analytics")),
 ]
