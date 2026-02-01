@@ -82,7 +82,7 @@ pinned = [
 	"djangorestframework==3.16.1",
 	"drf-spectacular==0.29.0",
 	"ipython==9.9.0",
-	"openai==2.15.0",
+	"openai==2.16.0",
 	"pillow==12.1.0",
 	"psycopg2==2.9.11",
 	"pydub==0.25.1",
@@ -93,7 +93,7 @@ dev-pinned = [
     "build<=1.4.0",
 	"bumpver==2025.1131",
 	"pre-commit==4.5.1",
-	"pyjwt==2.10.1",
+	"pyjwt==2.11.0",
 	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
 	"pytest-circleci-parallelized==0.1.0",
@@ -107,7 +107,7 @@ dev-pinned = [
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
-	"wheel==0.45.1",
+	"wheel==0.46.3",
 ]
 
 [project.urls]
