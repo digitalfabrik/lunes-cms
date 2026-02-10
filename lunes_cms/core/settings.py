@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "lunes_cms.cms",
     "lunes_cms.cmsv2",
     "lunes_cms.help",
+    "lunes_cms.analytics",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
     # Installed Django apps
@@ -430,6 +431,10 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSION": "default",
     "DEFAULT_API_URL": "http://localhost:8080/api/",
     "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
+    "DEFAULT_THROTTLE_RATES": {
+        "installation": "100/min",
+        "user": "1000/day",
+    },
 }
 
 SPECTACULAR_SETTINGS = {
