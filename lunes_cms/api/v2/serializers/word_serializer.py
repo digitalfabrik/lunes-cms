@@ -2,6 +2,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from ...utils import build_absolute_url
 from ....cmsv2.models import Word
 
 
@@ -39,11 +40,12 @@ class WordSerializer(serializers.ModelSerializer):
             and obj.example_sentence
             and obj.example_sentence_check_status == "CONFIRMED"
         ):
-            return (
+            url = (
                 obj.example_sentence_audio.url
                 if hasattr(obj.example_sentence_audio, "url")
                 else obj.example_sentence_audio
             )
+            return build_absolute_url(self.context, url)
         return None
 
     @extend_schema_field(OpenApiTypes.BOOL)

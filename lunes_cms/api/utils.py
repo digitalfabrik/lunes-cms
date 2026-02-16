@@ -160,6 +160,19 @@ def check_group_object_permissions(request, group_id):
         raise PermissionDenied()
 
 
+def build_absolute_url(context, url):
+    """
+    Convert a relative URL to an absolute URL using the request from serializer context.
+
+    :param context: Serializer context dict (typically self.context)
+    :param url: Relative URL string or None
+    :return: Absolute URL if request available, otherwise the original URL
+    """
+    if url and (request := context.get("request")):
+        return request.build_absolute_uri(url)
+    return url
+
+
 def find_duplicates_for_word(request, word):
     """
     Function to find existing words that match the input in the "word" field of document
