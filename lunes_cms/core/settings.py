@@ -453,6 +453,10 @@ SPECTACULAR_SETTINGS = {
         presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
         layout: "StandaloneLayout",
     }""",
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "lunes_cms.api.v2.schema.add_tracking_headers",
+    ],
 }
 
 ##################
