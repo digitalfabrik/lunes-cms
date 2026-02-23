@@ -2,8 +2,9 @@ from django.db.models import Q, OuterRef, Prefetch, Exists
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
-from ....cmsv2.models import Job, Word
+from ..matomo_tracking import matomo_tracking
 from ..serializers import WordSerializer
+from ....cmsv2.models import Job, Word
 from ....cmsv2.models.unit import UnitWordRelation
 
 
@@ -19,6 +20,16 @@ class JobWordsViewSet(viewsets.ModelViewSet):
     serializer_class = WordSerializer
     http_method_names = ["get"]
 
+    @matomo_tracking(action_name="All words of job", resource_id="job_id")
+    def list(self, request, *args, **kwargs):
+        """List all words of a job with Matomo tracking."""
+        return super().list(request, *args, **kwargs)
+
+    @matomo_tracking(action_name="Word", resource_id="pk")
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a single word with Matomo tracking."""
+        return super().retrieve(request, *args, **kwargs)
+
     def get_queryset(self):
         """
         Get the queryset of words
@@ -30,7 +41,7 @@ class JobWordsViewSet(viewsets.ModelViewSet):
             return Word.objects.none()
 
         try:
-            job = Job.objects.get(id=self.kwargs["job_id"])
+            job = Job.objects.get(resource_id=self.kwargs["job_id"])
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
@@ -47,7 +58,7 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         )
         queryset = (
             Word.objects.filter(
-                Exists(unit_word_relations.filter(word__id=OuterRef("id")))
+                Exists(unit_word_relations.filter(word__resource_id=OuterRef("id")))
             )
             .prefetch_related(
                 Prefetch(

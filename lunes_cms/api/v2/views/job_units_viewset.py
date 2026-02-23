@@ -2,6 +2,7 @@ from django.db.models import Q, Count
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
+from ..matomo_tracking import matomo_tracking
 from ..serializers import UnitSerializer
 from ....cmsv2.models import Unit, Job
 
@@ -14,6 +15,16 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
     serializer_class = UnitSerializer
     http_method_names = ["get"]
 
+    @matomo_tracking(action_name="All units of job", resource_id="job_id")
+    def list(self, request, *args, **kwargs):
+        """List all units of a job with Matomo tracking."""
+        return super().list(request, *args, **kwargs)
+
+    @matomo_tracking(action_name="Unit", resource_id="pk")
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a single unit with Matomo tracking."""
+        return super().retrieve(request, *args, **kwargs)
+
     def get_queryset(self):
         """
         Get the queryset of all released units of a job
@@ -25,14 +36,16 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
             return Unit.objects.none()
 
         try:
-            job = Job.objects.get(id=self.kwargs["job_id"])
+            job = Job.objects.get(resource_id=self.kwargs["job_id"])
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
         if not job.released:
             raise PermissionDenied()
 
-        queryset = Unit.objects.filter(jobs__id=job.id, released=True).annotate(
+        queryset = Unit.objects.filter(
+            jobs__resource_id=job.id, released=True
+        ).annotate(
             number_words=Count(
                 "unit_word_relations",
                 filter=Q(
