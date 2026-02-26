@@ -74,16 +74,16 @@ dev = [
     "wheel"
 ]
 pinned = [
-	"django==5.2.10",
+	"django==5.2.11",
 	"django-import-export==4.4.0",
-	"django-jazzmin==3.0.1",
+	"django-jazzmin==3.0.3",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.16.1",
 	"drf-spectacular==0.29.0",
-	"ipython==9.9.0",
-	"openai==2.15.0",
-	"pillow==12.1.0",
+	"ipython==9.10.0",
+	"openai==2.24.0",
+	"pillow==12.1.1",
 	"psycopg2==2.9.11",
 	"pydub==0.25.1",
 
@@ -93,12 +93,12 @@ dev-pinned = [
     "build<=1.4.0",
 	"bumpver==2025.1131",
 	"pre-commit==4.5.1",
-	"pyjwt==2.10.1",
+	"pyjwt==2.11.0",
 	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
 	"pytest-circleci-parallelized==0.1.0",
 	"pytest-cov==7.0.0",
-	"pytest-django==4.11.1",
+	"pytest-django==4.12.0",
 	"pytest-icdiff==0.9",
 	"pytest-xdist==3.8.0",
 	"shellcheck-py==0.11.0.1",
@@ -107,7 +107,7 @@ dev-pinned = [
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
-	"wheel==0.45.1",
+	"wheel==0.46.3",
 ]
 
 [project.urls]
