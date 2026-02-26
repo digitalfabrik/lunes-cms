@@ -2,8 +2,9 @@ from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
-from ....cmsv2.models import Unit
+from ..matomo_tracking import matomo_tracking
 from ..serializers import UnitWordRelationSerializer
+from ....cmsv2.models import Unit
 from ....cmsv2.models.unit import UnitWordRelation
 
 
@@ -14,6 +15,16 @@ class UnitWordViewSet(viewsets.ModelViewSet):
 
     serializer_class = UnitWordRelationSerializer
     http_method_names = ["get"]
+
+    @matomo_tracking(action_name="All words of unit", resource_id="unit_id")
+    def list(self, request, *args, **kwargs):
+        """List all words of a unit with Matomo tracking."""
+        return super().list(request, *args, **kwargs)
+
+    @matomo_tracking(action_name="Word", resource_id="pk")
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a single word with Matomo tracking."""
+        return super().retrieve(request, *args, **kwargs)
 
     def get_queryset(self):
         """
@@ -26,7 +37,7 @@ class UnitWordViewSet(viewsets.ModelViewSet):
             return UnitWordRelation.objects.none()
 
         units = Unit.objects.filter(
-            id=self.kwargs["unit_id"], released=True, jobs__released=True
+            resource_id=self.kwargs["unit_id"], released=True, jobs__released=True
         ).distinct()
         if len(units) != 1:
             raise PermissionDenied()

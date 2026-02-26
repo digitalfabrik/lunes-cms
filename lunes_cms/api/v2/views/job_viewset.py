@@ -1,8 +1,9 @@
 from django.db.models import Count, Q
 from rest_framework import viewsets
 
-from ....cmsv2.models import Job
+from ..matomo_tracking import matomo_tracking
 from ..serializers import JobSerializer
+from ....cmsv2.models import Job
 
 
 class JobViewSet(viewsets.ModelViewSet):
@@ -12,6 +13,11 @@ class JobViewSet(viewsets.ModelViewSet):
 
     serializer_class = JobSerializer
     http_method_names = ["get"]
+
+    @matomo_tracking(action_name="All jobs")
+    def list(self, request, *args, **kwargs):
+        """List all jobs with Matomo tracking."""
+        return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
         """

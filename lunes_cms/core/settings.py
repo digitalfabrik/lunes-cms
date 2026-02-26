@@ -31,6 +31,22 @@ TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
+###################
+# MATOMO TRACKING #
+###################
+
+#: Whether Matomo tracking is enabled
+MATOMO_TRACKING = bool(strtobool(os.environ.get("LUNES_CMS_MATOMO_ENABLED", "False")))
+
+#: URL of the Matomo instance (e.g., "https://matomo.example.com")
+MATOMO_URL = os.environ.get("LUNES_CMS_MATOMO_URL", "")
+
+#: Site ID in Matomo
+MATOMO_SITE_ID = os.environ.get("LUNES_CMS_MATOMO_SITE_ID", "")
+
+#: Authentication token for Matomo API
+MATOMO_TOKEN = os.environ.get("LUNES_CMS_MATOMO_TOKEN", "")
+
 ########################
 # DJANGO CORE SETTINGS #
 ########################
