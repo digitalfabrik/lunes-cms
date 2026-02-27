@@ -10,7 +10,7 @@ def custom_exception_handler(exc, context):
 
     response = exception_handler(exc, context)
 
-    if response.status_code == status.HTTP_404_NOT_FOUND:
+    if getattr(response, "status_code", None) == status.HTTP_404_NOT_FOUND:
         response.data["detail"] = "Not found."
 
     return response
