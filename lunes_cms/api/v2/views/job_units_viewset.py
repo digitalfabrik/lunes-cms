@@ -43,9 +43,7 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
         if not job.released:
             raise PermissionDenied()
 
-        queryset = Unit.objects.filter(
-            jobs__pk=job.pk, released=True
-        ).annotate(
+        queryset = Unit.objects.filter(jobs__pk=job.pk, released=True).annotate(
             number_words=Count(
                 "unit_word_relations",
                 filter=Q(
