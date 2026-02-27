@@ -37,7 +37,7 @@ class UnitWordViewSet(viewsets.ModelViewSet):
             return UnitWordRelation.objects.none()
 
         units = Unit.objects.filter(
-            resource_id=self.kwargs["unit_id"], released=True, jobs__released=True
+            pk=self.kwargs["unit_id"], released=True, jobs__released=True
         ).distinct()
         if len(units) != 1:
             raise PermissionDenied()
