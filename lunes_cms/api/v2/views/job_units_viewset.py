@@ -36,7 +36,7 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
             return Unit.objects.none()
 
         try:
-            job = Job.objects.get(resource_id=self.kwargs["job_id"])
+            job = Job.objects.get(pk=self.kwargs["job_id"])
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
@@ -44,7 +44,7 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
             raise PermissionDenied()
 
         queryset = Unit.objects.filter(
-            jobs__resource_id=job.id, released=True
+            jobs__pk=job.pk, released=True
         ).annotate(
             number_words=Count(
                 "unit_word_relations",

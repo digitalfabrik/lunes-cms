@@ -41,7 +41,7 @@ class JobWordsViewSet(viewsets.ModelViewSet):
             return Word.objects.none()
 
         try:
-            job = Job.objects.get(resource_id=self.kwargs["job_id"])
+            job = Job.objects.get(pk=self.kwargs["job_id"])
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
@@ -58,7 +58,7 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         )
         queryset = (
             Word.objects.filter(
-                Exists(unit_word_relations.filter(word__resource_id=OuterRef("id")))
+                Exists(unit_word_relations.filter(word__pk=OuterRef("pk")))
             )
             .prefetch_related(
                 Prefetch(
