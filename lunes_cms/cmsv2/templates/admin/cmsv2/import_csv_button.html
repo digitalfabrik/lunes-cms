@@ -1,0 +1,9 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <a href="{% url 'cmsv2:import_csv' %}" class="btn {{ jazzmin_ui.button_classes.success }} float-right">
+        <i class="fa fa-file-import"></i> &nbsp; {% trans "Import CSV" %}
+    </a>
+{% endblock %}

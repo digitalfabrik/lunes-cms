@@ -1,4 +1,5 @@
 from .generate_image import generate_image_via_openai
+from .import_csv_view import import_from_csv
 from .unitword_generate_example_sentence_audio import (
     unitword_generate_example_sentence_audio,
     unitword_generate_example_sentence_audio_via_openai,
@@ -32,6 +33,7 @@ from .word_generate_image import (
 )
 
 __all__ = [
+    "import_from_csv",
     "generate_image_via_openai",
     "unitword_generate_image",
     "unitword_store_generated_image_permanently",
