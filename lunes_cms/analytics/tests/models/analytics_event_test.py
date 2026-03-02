@@ -9,7 +9,7 @@ class AnalyticsEventTests(APITestCase):
     Test class for AnalyticsEvent
     """
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """
         Setup test client
         :return:
