@@ -1,0 +1,204 @@
+import logging
+from dataclasses import dataclass
+from typing import Optional
+
+from django.utils.translation import gettext_lazy as _
+from tablib import Dataset
+
+from ..models import Job, Static, Unit, Word
+
+logger = logging.getLogger(__name__)
+
+
+COLUMN_MAPPING: dict[str, str] = {
+    "Einheit": "unit",
+    "Sinneseinheit": "unit",
+    "Fachbegriff": "word",
+    "Vokabel": "word",
+    "Artikel": "article",
+    "Beispielsatz": "example",
+}
+
+
+@dataclass(frozen=True)
+class ParsedRow:
+    """
+    Clean dataset of a single parsed row
+    """
+
+    unit: str
+    word: str
+    article: str
+    example: str = ""
+
+
+@dataclass
+class RowResult:
+    """
+    Return object of a single row
+    """
+
+    created: int = 0
+    updated: int = 0
+    error: Optional[str] = None
+
+
+def import_words_from_csv(dataset: Dataset, job: Job) -> tuple[int, int, list[str]]:
+    """
+    Imports words from a tablib Dataset into the given job.
+
+    Expected CSV columns: "Einheit", "Artikel" (der/die/das), "Vokabel", "Beispielsatz"
+
+    Returns:
+        A tuple of (created_count, updated_count, error_messages)
+    """
+    total_created = 0
+    total_updated = 0
+    error_messages: list[str] = []
+
+    for row_number, raw_row in enumerate(dataset.dict, start=1):
+        parsed_or_error = parse_row(raw_row, row_number)
+
+        if isinstance(parsed_or_error, RowResult):
+            if parsed_or_error.error:
+                error_messages.append(parsed_or_error.error)
+            continue
+
+        result = process_row(parsed_or_error, job)
+
+        if result.error:
+            error_messages.append(
+                _("Row %(n)s: %(msg)s") % {"n": row_number, "msg": result.error}
+            )
+            continue
+
+        total_created += result.created
+        total_updated += result.updated
+
+    return total_created, total_updated, error_messages
+
+
+def count_created_or_updated_words(
+    is_new_word, created_count: int, updated_count: int
+) -> tuple[int, int]:
+    """
+    This method counts the created or updated words
+    """
+    if is_new_word:
+        created_count += 1
+    else:
+        updated_count += 1
+
+    return created_count, updated_count
+
+
+def map_article_to_int(article: str) -> int:
+    """
+    Convert article string into article int for DB
+    """
+
+    ARTICLE_MAP: dict[str, int] = {
+        label.lower(): value for value, label in Static.singular_article_choices
+    } | {"": 0}
+    return ARTICLE_MAP.get(article, 0)
+
+
+def get_or_create_unit(unit_title: str, job: Job) -> Unit:
+    """
+    Gets a unit if exists or creates it, if it didn't yet exist. This way we avoid duplicates.
+    """
+
+    unit, _ = Unit.objects.get_or_create(title=unit_title)
+    unit.jobs.add(job)
+    return unit
+
+
+def get_or_create_word(
+    word_text: str, article_int: int, example: str
+) -> tuple[Word, bool]:
+    """
+    Gets a word if exists or creates it, if it didn't yet exist. This way we avoid duplicates.
+    Also returns a flag which case it was.
+    """
+    defaults = {"singular_article": article_int, "example_sentence": example}
+    word, created = Word.objects.get_or_create(word=word_text, defaults=defaults)
+    return word, created
+
+
+def update_or_add_example_sentence(created_word, word_obj, word_defaults) -> None:
+    """
+    Method to either update or add an example sentence. We want to do it this way to avoid duplicates.
+    """
+    if (
+        not created_word
+        and word_obj.example_sentence != word_defaults["example_sentence"]
+    ):
+        word_obj.example_sentence = word_defaults["example_sentence"]
+        word_obj.save(update_fields=["example_sentence"])
+
+
+def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
+    """
+    Parses a single CSV row and either returns a ParsedRow if everything is okay, or RowResult if there is an error.
+    """
+
+    try:
+        mapped = {
+            COLUMN_MAPPING[key.strip()]: (
+                value.strip() if isinstance(value, str) else value
+            )
+            for key, value in raw_row.items()
+            if key and COLUMN_MAPPING.get(key.strip())
+        }
+
+        unit = mapped.get("unit", "")
+        if not unit:
+            return RowResult(
+                error=_("Row %(n)s: Unit column is empty, row will be skipped.")
+                % {"n": row_number}
+            )
+
+        word = mapped.get("word", "")
+        if not word:
+            return RowResult(
+                error=_("Row %(n)s: Vocabulary column is empty, row will be skipped.")
+                % {"n": row_number}
+            )
+
+        article = mapped.get("article", "").lower()
+        example = mapped.get("example", "")
+
+        return ParsedRow(unit=unit, word=word, article=article, example=example)
+
+    except ValueError as exc:
+        logger.exception("Error while parsing row %s", row_number)
+        return RowResult(
+            error=_("Row %(n)s: Unexpected parsing error - %(e)s")
+            % {"n": row_number, "e": exc}
+        )
+
+
+def process_row(parsed: ParsedRow, job: Job) -> RowResult:
+    """
+    Makes all DB operations for one row.
+    """
+
+    try:
+        unit = get_or_create_unit(parsed.unit, job)
+
+        article_int = map_article_to_int(parsed.article)
+
+        word, is_new = get_or_create_word(parsed.word, article_int, parsed.example)
+
+        update_or_add_example_sentence(
+            is_new, word, {"example_sentence": parsed.example}
+        )
+
+        unit.words.add(word)
+
+        created, updated = count_created_or_updated_words(is_new, 0, 0)
+        return RowResult(created=created, updated=updated)
+
+    except ValueError as exc:
+        logger.exception("Unexpected error processing row with word=%s", parsed.word)
+        return RowResult(error=_("Unexpected error - %(e)s") % {"e": exc})
