@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-23 12:36+0000\n"
+"POT-Creation-Date: 2026-03-02 11:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,27 +21,27 @@ msgstr ""
 msgid "API"
 msgstr "API"
 
-#: api/utils.py:192
+#: api/utils.py:191
 msgid "This word is assigned to no training set."
 msgstr "Das word ist zu keinem Modul zugeordnet."
 
-#: api/utils.py:199
+#: api/utils.py:198
 msgid "This word is already registered in the system."
 msgstr "Das Wort ist schon im System hinterlegt."
 
-#: api/utils.py:202 api/utils.py:204
+#: api/utils.py:201 api/utils.py:203
 msgid "Definition: "
 msgstr "Definition: "
 
-#: api/utils.py:204
+#: api/utils.py:203
 msgid "No definition is provided for this word."
 msgstr "Für dieses Wort ist keine Definition hinterlegt."
 
-#: api/utils.py:206
+#: api/utils.py:205
 msgid "Training sets: "
 msgstr "Module: "
 
-#: api/utils.py:210
+#: api/utils.py:209
 msgid "This word is not yet registered in the system"
 msgstr "Das Wort ist noch nicht im System hinterlegt."
 
@@ -177,20 +177,20 @@ msgstr "Erstellt am"
 msgid "Training Sets"
 msgstr "Module"
 
-#: cms/admins/feedback_admin.py:34 cmsv2/admins/feedback_admin.py:34
+#: cms/admins/feedback_admin.py:33 cmsv2/admins/feedback_admin.py:33
 msgid "Mark as read"
 msgstr "Als gelesen markieren"
 
-#: cms/admins/feedback_admin.py:49 cmsv2/admins/feedback_admin.py:49
+#: cms/admins/feedback_admin.py:48 cmsv2/admins/feedback_admin.py:48
 msgid "The selected feedback entries were successfully marked as read."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als gelesen markiert."
 
-#: cms/admins/feedback_admin.py:53 cmsv2/admins/feedback_admin.py:53
+#: cms/admins/feedback_admin.py:52 cmsv2/admins/feedback_admin.py:52
 msgid "Mark as unread"
 msgstr "Als ungelesen markieren"
 
-#: cms/admins/feedback_admin.py:68 cmsv2/admins/feedback_admin.py:68
+#: cms/admins/feedback_admin.py:67 cmsv2/admins/feedback_admin.py:67
 msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
@@ -842,3 +842,6 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Start import"
+#~ msgstr "Import starten"

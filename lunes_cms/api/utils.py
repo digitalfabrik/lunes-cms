@@ -6,11 +6,10 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import routers
 
-from ..cms.models import Discipline, GroupAPIKey, Document
-from ..cms.utils import get_child_count, document_to_string
+from ..cms.models import Discipline, Document, GroupAPIKey
+from ..cms.utils import document_to_string, get_child_count
 
 
 class OptionalSlashRouter(routers.DefaultRouter):

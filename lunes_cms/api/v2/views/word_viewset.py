@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 
+from ....cmsv2.models import Word
 from ..matomo_tracking import matomo_tracking
 from ..serializers import WordSerializer
-from ....cmsv2.models import Word
 
 
 class WordViewSet(viewsets.ModelViewSet):

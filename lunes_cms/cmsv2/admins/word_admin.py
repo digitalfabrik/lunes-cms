@@ -3,13 +3,13 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
 from django.db.models import Q
 from django.urls import reverse
-from django.utils.html import mark_safe, format_html, escape
+from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.static import Static
-from lunes_cms.cmsv2.models.unit import UnitWordRelation, Unit
+from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.utils import get_image_tag, is_not_blank
 from lunes_cms.core import settings
 

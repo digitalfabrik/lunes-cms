@@ -2,12 +2,12 @@
 Context processors pass additional variables to templates (see :ref:`context-processors`).
 """
 
-from ..cms.models import Feedback
 from ..cms.feedback_filter import filter_feedback_by_creator
-from ..cmsv2.models import Feedback as FeedbackV2
+from ..cms.models import Feedback
 from ..cmsv2.feedback_filter import (
     filter_feedback_by_creator as filter_feedbackv2_by_creator,
 )
+from ..cmsv2.models import Feedback as FeedbackV2
 
 
 def feedback_processor(request):
