@@ -304,7 +304,9 @@ class WordAdmin(BaseAdmin):
         """
         if obj.pk:
             url = reverse("cmsv2:word_generate_audio", args=[obj.pk])
-            return format_html('<a class="button" href="{}">Generate Audio</a>', url)
+            return format_html(
+                '<a class="btn btn-primary btn-sm" href="{}">Generate Audio</a>', url
+            )
         return "Save to enable audio generation."
 
     audio_generate.short_description = "Audio Generation"  # type: ignore[attr-defined]
@@ -340,7 +342,9 @@ class WordAdmin(BaseAdmin):
         """
         if obj.pk and is_not_blank(obj.example_sentence):
             url = reverse("cmsv2:word_generate_example_sentence_audio", args=[obj.pk])
-            return format_html('<a class="button" href="{}">Generate Audio</a>', url)
+            return format_html(
+                '<a class="btn btn-primary btn-sm" href="{}">Generate Audio</a>', url
+            )
         return "Save to enable audio generation."
 
     example_sentence_audio_generate.short_description = "Example Sentence Audio Generation"  # type: ignore[attr-defined]
@@ -403,7 +407,9 @@ class WordAdmin(BaseAdmin):
         """
         if obj.pk:
             url = reverse("cmsv2:word_generate_image", args=[obj.pk])
-            return format_html('<a class="button" href="{}">Generate Image</a>', url)
+            return format_html(
+                '<a class="btn btn-primary btn-sm" href="{}">Generate Image</a>', url
+            )
         return "Save to enable image generation."
 
     image_generate.short_description = "Image Generation"  # type: ignore[attr-defined]
