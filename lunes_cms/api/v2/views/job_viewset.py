@@ -1,9 +1,9 @@
 from django.db.models import Count, Q
 from rest_framework import viewsets
 
+from ....cmsv2.models import Job
 from ..matomo_tracking import matomo_tracking
 from ..serializers import JobSerializer
-from ....cmsv2.models import Job
 
 
 class JobViewSet(viewsets.ModelViewSet):

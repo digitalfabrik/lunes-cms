@@ -2,10 +2,10 @@ from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
-from ..matomo_tracking import matomo_tracking
-from ..serializers import UnitWordRelationSerializer
 from ....cmsv2.models import Unit
 from ....cmsv2.models.unit import UnitWordRelation
+from ..matomo_tracking import matomo_tracking
+from ..serializers import UnitWordRelationSerializer
 
 
 class UnitWordViewSet(viewsets.ModelViewSet):

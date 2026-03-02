@@ -1,11 +1,11 @@
-from django.db.models import Q, OuterRef, Prefetch, Exists
+from django.db.models import Exists, OuterRef, Prefetch, Q
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
-from ..matomo_tracking import matomo_tracking
-from ..serializers import WordSerializer
 from ....cmsv2.models import Job, Word
 from ....cmsv2.models.unit import UnitWordRelation
+from ..matomo_tracking import matomo_tracking
+from ..serializers import WordSerializer
 
 
 class JobWordsViewSet(viewsets.ModelViewSet):

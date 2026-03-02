@@ -1,12 +1,12 @@
 from .generate_image import generate_image_via_openai
-from .unitword_generate_image import (
-    unitword_generate_image,
-    unitword_store_generated_image_permanently,
-)
 from .unitword_generate_example_sentence_audio import (
     unitword_generate_example_sentence_audio,
     unitword_generate_example_sentence_audio_via_openai,
     unitword_store_generated_example_sentence_audio_permanently,
+)
+from .unitword_generate_image import (
+    unitword_generate_image,
+    unitword_store_generated_image_permanently,
 )
 from .update_job_icon import update_job_icon
 from .update_unit_icon import update_unit_icon

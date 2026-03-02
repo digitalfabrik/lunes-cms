@@ -1,10 +1,10 @@
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
+from ....cmsv2.models import Job, Unit
 from ..matomo_tracking import matomo_tracking
 from ..serializers import UnitSerializer
-from ....cmsv2.models import Unit, Job
 
 
 class JobUnitsViewSet(viewsets.ModelViewSet):

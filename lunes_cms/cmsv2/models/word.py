@@ -7,13 +7,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from pydub import AudioSegment
 
-from .static import Static, convert_umlaute_audio, convert_umlaute_images
-from ..utils import word_to_string, get_image_tag
+from ..utils import get_image_tag, word_to_string
 from ..validators import (
     validate_file_extension,
     validate_file_size,
     validate_multiple_extensions,
 )
+from .static import Static, convert_umlaute_audio, convert_umlaute_images
 
 
 class Word(models.Model):

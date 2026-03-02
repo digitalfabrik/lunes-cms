@@ -2,19 +2,19 @@ from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.urls import reverse
-from django.utils.html import format_html, mark_safe, escape
+from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from .job import Job
-from .static import convert_umlaute_images, convert_umlaute_audio, Static
-from .word import Word
+from ...core import settings
 from ..utils import get_image_tag
 from ..validators import (
     validate_file_extension,
     validate_file_size,
     validate_multiple_extensions,
 )
-from ...core import settings
+from .job import Job
+from .static import Static, convert_umlaute_audio, convert_umlaute_images
+from .word import Word
 
 
 class UnitWordRelation(models.Model):

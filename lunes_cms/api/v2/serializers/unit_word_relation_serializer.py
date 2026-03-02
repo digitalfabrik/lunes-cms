@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from ...utils import build_absolute_url
 from ....cmsv2.models.unit import UnitWordRelation
+from ...utils import build_absolute_url
 
 
 class UnitWordRelationSerializer(serializers.ModelSerializer):

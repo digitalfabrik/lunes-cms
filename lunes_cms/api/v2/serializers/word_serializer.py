@@ -2,8 +2,8 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from ...utils import build_absolute_url
 from ....cmsv2.models import Word
+from ...utils import build_absolute_url
 
 
 class WordSerializer(serializers.ModelSerializer):

@@ -4,8 +4,8 @@ from django.db.models.deletion import CASCADE
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from .static import convert_umlaute_images
 from ..utils import get_child_count, get_image_tag
+from .static import convert_umlaute_images
 
 
 class Job(models.Model):

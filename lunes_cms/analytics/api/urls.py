@@ -1,9 +1,9 @@
 from typing import List, Union
 
-from django.urls import path, URLPattern, URLResolver, include
+from django.urls import URLPattern, URLResolver, include, path
 
-from .views import AnalyticsEventViewSet
 from ...api.utils import OptionalSlashRouter
+from .views import AnalyticsEventViewSet
 
 app_name = "analytics"
 
