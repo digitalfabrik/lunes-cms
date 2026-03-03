@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-02 11:13+0000\n"
+"POT-Creation-Date: 2026-03-03 13:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,7 +110,7 @@ msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
 #: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:151
-#: cmsv2/admins/word_admin.py:428
+#: cmsv2/admins/word_admin.py:434
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -120,7 +120,7 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:495 cmsv2/models/word.py:64
+#: cmsv2/admins/word_admin.py:501 cmsv2/models/word.py:64
 msgid "audio"
 msgstr "Audio"
 
@@ -130,7 +130,7 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:669
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:675
 #: cmsv2/models/word.py:41
 msgid "singular article"
 msgstr "Singular-Artikel"
@@ -398,7 +398,7 @@ msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:683 cmsv2/models/word.py:99
+#: cmsv2/admins/word_admin.py:689 cmsv2/models/word.py:99
 msgid "creation date"
 msgstr "Erstellt am"
 
@@ -686,7 +686,7 @@ msgid "created at"
 msgstr "Erstellt"
 
 #: cmsv2/admins/job_admin.py:153 cmsv2/admins/unit_admin.py:187
-#: cmsv2/admins/word_admin.py:705
+#: cmsv2/admins/word_admin.py:711
 msgid "migrated"
 msgstr "Migriert"
 
@@ -714,7 +714,7 @@ msgstr "Wort Informationen"
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py:208 cmsv2/admins/word_admin.py:655
+#: cmsv2/admins/word_admin.py:208 cmsv2/admins/word_admin.py:661
 #: cmsv2/models/unit.py:146 cmsv2/models/unit.py:252
 msgid "Image"
 msgstr "Bilder"
@@ -727,15 +727,15 @@ msgstr "Beispielsatz"
 msgid "Miscellaneous"
 msgstr "Verschiedene"
 
-#: cmsv2/admins/word_admin.py:392
+#: cmsv2/admins/word_admin.py:396
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
-#: cmsv2/admins/word_admin.py:719 cmsv2/models/word.py:70
+#: cmsv2/admins/word_admin.py:725 cmsv2/models/word.py:70
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:734 cmsv2/models/unit.py:42
+#: cmsv2/admins/word_admin.py:740 cmsv2/models/unit.py:42
 #: cmsv2/models/word.py:136
 msgid "image check status"
 msgstr "Bild Prüfstatus"
@@ -845,3 +845,12 @@ msgstr "Hilfe"
 
 #~ msgid "Start import"
 #~ msgstr "Import starten"
+
+#~ msgid "Import vocabulary for this discipline from CSV"
+#~ msgstr "Alle Vokabeln dieser Modulgruppe aus CSV importieren"
+
+#~ msgid "Import was successful!"
+#~ msgstr "Import war erfolgreich"
+
+#~ msgid "Import csv file"
+#~ msgstr "CSV Datei importieren"
