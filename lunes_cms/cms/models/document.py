@@ -15,7 +15,7 @@ from ..validators import (
 )
 from .feedback import Feedback
 from .group import Group
-from .static import Static, convert_umlaute_audio
+from .static import convert_umlaute_audio, Static
 
 
 class Document(models.Model):

@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from django.urls import URLPattern, URLResolver, include, path
+from django.urls import include, path, URLPattern, URLResolver
 
 from ...api.utils import OptionalSlashRouter
 from .views import AnalyticsEventViewSet

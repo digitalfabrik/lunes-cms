@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
-from lunes_cms.cmsv2.utils import OpenAIConfigurationError, get_openai_client
+from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
 
 
