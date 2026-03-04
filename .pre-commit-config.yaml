@@ -34,3 +34,7 @@ repos:
         types_or: [ "python", "pyi" ]
         language: script
         pass_filenames: true
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
