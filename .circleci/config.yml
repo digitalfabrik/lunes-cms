@@ -151,7 +151,7 @@ jobs:
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Check isort code style
-          command: isort --check .
+          command: isort . --skip-glob "**/migrations/**"
   check-translations:
     docker:
       - image: cimg/python:3.11
@@ -413,7 +413,7 @@ workflows:
             - install
       - isort:
           requires:
-            - pip-install
+            - install
       - mypy:
           requires:
             - install
