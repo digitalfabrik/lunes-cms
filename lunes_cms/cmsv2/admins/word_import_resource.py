@@ -12,8 +12,10 @@ logger = logging.getLogger(__name__)
 
 COLUMN_MAPPING: dict[str, str] = {
     "Einheit": "unit",
+    "Sinneinheit": "unit",
     "Sinneseinheit": "unit",
     "Fachbegriff": "word",
+    "Begriff": "word",
     "Vokabel": "word",
     "Artikel": "article",
     "Beispielsatz": "example",
@@ -30,6 +32,12 @@ class ParsedRow:
     word: str
     article: str
     example: str = ""
+
+
+class InvalidRowError(ValueError):
+    """
+    Raised when a CSV row does not contain any of the expected columns.
+    """
 
 
 @dataclass
@@ -117,7 +125,7 @@ def get_or_create_word(
     word_text: str, article_int: int, example: str
 ) -> tuple[Word, bool]:
     """
-    Gets a word if exists or creates it, if it didn't yet exist. This way we avoid duplicates.
+    Gets a word if it exists or creates it if it didn't yet exist. This way we avoid duplicates.
     Also returns a flag which case it was.
     """
     defaults = {"singular_article": article_int, "example_sentence": example}
@@ -151,6 +159,22 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             if key and COLUMN_MAPPING.get(key.strip())
         }
 
+        if not mapped:
+            raise InvalidRowError(
+                _("Row %(n)s: No recognised columns – row will be skipped.")
+                % {"n": row_number}
+            )
+
+        unknown_keys = {
+            k.strip() for k in raw_row.keys() if k and not COLUMN_MAPPING.get(k.strip())
+        }
+        if unknown_keys:
+            logger.info(
+                "Row %s contains unexpected columns: %s",
+                row_number,
+                ", ".join(sorted(unknown_keys)),
+            )
+
         unit = mapped.get("unit", "")
         if not unit:
             return RowResult(
@@ -170,10 +194,20 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
 
         return ParsedRow(unit=unit, word=word, article=article, example=example)
 
-    except ValueError as exc:
-        logger.exception("Error while parsing row %s", row_number)
+    except (AttributeError, TypeError) as exc:
+        logger.warning("Row %s – malformed column data: %s", row_number, exc)
         return RowResult(
-            error=_("Row %(n)s: Unexpected parsing error - %(e)s")
+            error=_("Row %(n)s: Malformed column data – %(e)s")
+            % {"n": row_number, "e": exc}
+        )
+    except InvalidRowError as exc:
+        logger.info("Row %s skipped: %s", row_number, exc)
+        return RowResult(error=str(exc))
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+        # we want to catch any unexpected error here to avoid breaking the whole import
+        logger.exception("Unexpected error while parsing row %s", row_number)
+        return RowResult(
+            error=_("Row %(n)s: Unexpected parsing error – %(e)s")
             % {"n": row_number, "e": exc}
         )
 

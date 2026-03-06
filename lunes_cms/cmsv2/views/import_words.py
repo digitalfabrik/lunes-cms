@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
+from tablib.exceptions import InvalidDimensions
 
 from ..admins.word_import_resource import import_words_from_csv
 from ..models import Job
@@ -95,11 +96,23 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
                 % {"created": created_count, "updated": updated_count},
             )
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))
-    except ValueError as e:
+
+    except InvalidDimensions:
+        messages.error(
+            request,
+            _(
+                "Import failed. The size of the column or row doesn't fit the table dimensions. Please adjust your table and try again."
+            ),
+        )
+        return render(
+            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
+        )
+    except (AttributeError, TypeError, ValueError) as e:
         messages.error(
             request,
             _("Import failed: %(e)s") % {"e": e},
         )
+
         return render(
             request, "admin/csv_form.html", _build_context(request, form, job, job_id)
         )

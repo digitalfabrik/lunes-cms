@@ -75,7 +75,7 @@ class WordExportResource(resources.ModelResource):
         """
         Only show first 16 characters of date (date, and hours & minutes).
         """
-        return str(word.creation_date)[:16]
+        return word.creation_date.strftime("%d.%m.%Y %H:%M")
 
     units = fields.Field(column_name=_("Units"), attribute="units")
 

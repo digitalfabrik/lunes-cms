@@ -1,4 +1,5 @@
 from .generate_image import generate_image_via_openai
+from .import_words import import_from_csv
 from .unitword_generate_example_sentence_audio import (
     unitword_generate_example_sentence_audio,
     unitword_generate_example_sentence_audio_via_openai,
@@ -26,7 +27,6 @@ from .word_generate_example_sentence_audio import (
     word_generate_example_sentence_audio_via_openai,
     word_store_generated_example_sentence_audio_permanently,
 )
-from .import_words import import_from_csv
 from .word_generate_image import (
     word_generate_image,
     word_store_generated_image_permanently,

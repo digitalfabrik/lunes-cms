@@ -3,11 +3,11 @@
 
 {% block submit_buttons_bottom %}
     {{ block.super }}
-    <div class="form-group">
+    <div class="{% if not job %}mt-3{% endif %} form-group">
         <input
             type="submit"
             class="btn {{ jazzmin_ui.button_classes.info }} form-control"
-            value="{% trans 'Save and import vocabulary' %}"
+            value="{% trans 'Save and import words' %}"
             name="_save_and_import"
         >
     </div>

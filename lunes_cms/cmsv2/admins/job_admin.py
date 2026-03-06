@@ -168,7 +168,7 @@ class JobAdmin(BaseAdmin):
     @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
     def export_to_csv(self, request, queryset):
         """
-        Export the words of the selected disciplines.
+        Export the words of the selected jobs.
 
         :param request: current user request
         :type request: django.http.request

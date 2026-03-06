@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-04 11:14+0000\n"
+"POT-Creation-Date: 2026-03-06 13:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -750,27 +750,37 @@ msgstr "Bild Prüfstatus"
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/admins/word_import_resource.py:71
+#: cmsv2/admins/word_import_resource.py:79
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
 
-#: cmsv2/admins/word_import_resource.py:157
+#: cmsv2/admins/word_import_resource.py:164
+#, python-format
+msgid "Row %(n)s: No recognised columns – row will be skipped."
+msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
+
+#: cmsv2/admins/word_import_resource.py:181
 #, python-format
 msgid "Row %(n)s: Unit column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:164
+#: cmsv2/admins/word_import_resource.py:188
 #, python-format
 msgid "Row %(n)s: Vocabulary column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Vokabel ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:176
+#: cmsv2/admins/word_import_resource.py:200
 #, python-format
-msgid "Row %(n)s: Unexpected parsing error - %(e)s"
+msgid "Row %(n)s: Malformed column data – %(e)s"
+msgstr "Zeile %(n)s: Fehlerhafte Spaltendaten – %(e)s"
+
+#: cmsv2/admins/word_import_resource.py:210
+#, python-format
+msgid "Row %(n)s: Unexpected parsing error – %(e)s"
 msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:204
+#: cmsv2/admins/word_import_resource.py:238
 #, python-format
 msgid "Unexpected error - %(e)s"
 msgstr "Unerwarteter Fehler - %(e)s"
@@ -792,7 +802,7 @@ msgstr "zuletzt geändert"
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py:104 cmsv2/views/import_words.py:21
+#: cmsv2/models/job.py:104 cmsv2/views/import_words.py:22
 msgid "Job"
 msgstr "Beruf"
 
@@ -850,8 +860,8 @@ msgid "Words"
 msgstr "Vokabel"
 
 #: cmsv2/templates/admin/cmsv2/job_change_form.html:10
-msgid "Save and import vocabulary"
-msgstr "Speichern und Vokabeln importieren"
+msgid "Save and import words"
+msgstr "Sichern und Wörter importieren"
 
 #: cmsv2/templates/admin/cmsv2/job_change_list.html:7
 #: cmsv2/templates/admin/csv_form.html:4 cmsv2/templates/admin/csv_form.html:13
@@ -873,11 +883,11 @@ msgstr "Abbrechen"
 msgid "Generate Audio"
 msgstr "Audio generieren"
 
-#: cmsv2/views/import_words.py:25
+#: cmsv2/views/import_words.py:26
 msgid "Select CSV file"
 msgstr "CSV Datei auswählen"
 
-#: cmsv2/views/import_words.py:27
+#: cmsv2/views/import_words.py:28
 msgid ""
 "The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
 "and \"Beispielsatz\"."
@@ -885,23 +895,29 @@ msgstr ""
 "Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
 "\"Beispielsatz\" enthalten."
 
-#: cmsv2/views/import_words.py:47
+#: cmsv2/views/import_words.py:48
 msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
-#: cmsv2/views/import_words.py:88
+#: cmsv2/views/import_words.py:89
 #, python-format
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
-#: cmsv2/views/import_words.py:94
+#: cmsv2/views/import_words.py:95
 #, python-format
 msgid "Import successful! %(created)s new entries, %(updated)s updated."
 msgstr ""
 "Import erfolgreich! %(created)s neue Einträge, %(updated)s wurden "
 "aktualisiert."
 
-#: cmsv2/views/import_words.py:101
+#: cmsv2/views/import_words.py:104
+msgid ""
+"Import failed. The size of the column or row doesn't fit the table "
+"dimensions. Please adjust your table and try again."
+msgstr "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
+
+#: cmsv2/views/import_words.py:113
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
