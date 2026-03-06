@@ -138,6 +138,20 @@ jobs:
       - run:
           name: Check formatting of python files
           command: black --check .
+  isort:
+    docker:
+      - image: cimg/python:3.11
+    resource_class: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Check isort code style
+          command: isort --check .
   check-translations:
     docker:
       - image: cimg/python:3.11
@@ -397,6 +411,9 @@ workflows:
       - black:
           requires:
             - install
+      - isort:
+          requires:
+            - pip-install
       - mypy:
           requires:
             - install

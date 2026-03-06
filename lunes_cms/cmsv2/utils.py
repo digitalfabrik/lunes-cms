@@ -4,7 +4,6 @@ import pathlib
 import string
 import uuid
 import warnings
-
 from html import escape
 from typing import Optional
 

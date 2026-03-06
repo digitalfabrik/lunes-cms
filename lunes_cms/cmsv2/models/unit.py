@@ -13,7 +13,7 @@ from ..validators import (
     validate_multiple_extensions,
 )
 from .job import Job
-from .static import Static, convert_umlaute_audio, convert_umlaute_images
+from .static import convert_umlaute_audio, convert_umlaute_images, Static
 from .word import Word
 
 

@@ -4,8 +4,8 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from .base import BaseAdmin
 from ..models import Unit
+from .base import BaseAdmin
 
 
 class UnitInline(admin.TabularInline):

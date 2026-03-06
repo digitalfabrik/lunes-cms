@@ -55,6 +55,7 @@ dev = [
 	"black",
     "build",
 	"bumpver",
+	"isort",
 	"mypy",
 	"pre-commit",
 	"pyjwt",
@@ -165,3 +166,7 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 check_untyped_defs = false
 disallow_untyped_defs = false
+
+[tool.isort]
+profile = "black"
+order_by_type = false

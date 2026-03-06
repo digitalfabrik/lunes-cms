@@ -13,7 +13,7 @@ from ..validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
-from .static import Static, convert_umlaute_audio, convert_umlaute_images
+from .static import convert_umlaute_audio, convert_umlaute_images, Static
 
 
 class Word(models.Model):

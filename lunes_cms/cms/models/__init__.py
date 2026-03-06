@@ -6,7 +6,7 @@ from .document_image import DocumentImage
 from .feedback import Feedback
 from .group_api_key import GroupAPIKey
 from .sponsor import Sponsor
-from .static import Static, convert_umlaute_audio, convert_umlaute_images
+from .static import convert_umlaute_audio, convert_umlaute_images, Static
 from .training_set import TrainingSet
 
 __all__ = [
