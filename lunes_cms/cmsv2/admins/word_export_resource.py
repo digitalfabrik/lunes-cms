@@ -34,9 +34,9 @@ class WordExportResource(resources.ModelResource):
         """
         Method to show the actual singular article and not their integer.
         """
-        for x in Static.singular_article_choices:
-            if x[0] == word.singular_article:
-                return x[1]
+        for article_choice in Static.singular_article_choices:
+            if article_choice[0] == word.singular_article:
+                return article_choice[1]
         return "-"
 
     plural_article = fields.Field(
@@ -48,9 +48,9 @@ class WordExportResource(resources.ModelResource):
         """
         Method to show the actual plural article and not their integer.
         """
-        for x in Static.plural_article_choices:
-            if x[0] == word.plural_article:
-                return x[1]
+        for article_choice in Static.plural_article_choices:
+            if article_choice[0] == word.plural_article:
+                return article_choice[1]
         return "-"
 
     has_audio = fields.Field(column_name=_("Has audio?"), attribute="word")
