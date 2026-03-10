@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:00+0000\n"
+"POT-Creation-Date: 2026-03-10 10:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,9 +92,9 @@ msgstr "Ausgewählte Modulgruppen veröffentlichen"
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:284 cmsv2/admins/job_admin.py:168
-msgid "Export all vocabulary for these jobs to CSV"
-msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
+#: cms/admins/discipline_admin.py:284
+msgid "Export all vocabulary for this disciplines to CSV"
+msgstr "Alle Vokabeln dieser Modulgruppe aus CSV importieren"
 
 #: cms/admins/discipline_admin.py:324
 msgid "released modules"
@@ -692,6 +692,10 @@ msgstr "Erstellt"
 msgid "migrated"
 msgstr "Migriert"
 
+#: cmsv2/admins/job_admin.py:168
+msgid "Export all vocabulary for these jobs to CSV"
+msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
+
 #: cmsv2/admins/job_admin.py:221
 msgid "Import"
 msgstr "Import"
@@ -915,7 +919,9 @@ msgstr ""
 msgid ""
 "Import failed. The size of the column or row doesn't fit the table "
 "dimensions. Please adjust your table and try again."
-msgstr "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
+msgstr ""
+"Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen "
+"nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
 
 #: cmsv2/views/import_words.py:113
 #, python-format
@@ -954,9 +960,6 @@ msgstr "Hilfe"
 
 #~ msgid "Import was successful"
 #~ msgstr "Import war erfolgreich"
-
-#~ msgid "Import vocabulary for this discipline from CSV"
-#~ msgstr "Alle Vokabeln dieser Modulgruppe aus CSV importieren"
 
 #~ msgid "Import csv file"
 #~ msgstr "CSV Datei importieren"

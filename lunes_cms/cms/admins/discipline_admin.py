@@ -281,10 +281,10 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         """
         queryset.update(released=False)
 
-    @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
+    @admin.action(description=_("Export all vocabulary for this disciplines to CSV"))
     def make_export_to_CSV(self, request, queryset):
         """
-        Export the documents of the selected jobs.
+        Export the documents of the selected disciplines.
 
         :param request: current user request
         :type request: django.http.request
