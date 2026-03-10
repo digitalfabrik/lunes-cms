@@ -11,3 +11,6 @@ updates:
       dependencies:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "django-jazzmin"
+        # Pinned to 3.0.1 due to compatibility issues with newer versions
