@@ -8,7 +8,7 @@ from ..models.static import Static
 
 class WordExportResource(resources.ModelResource):
     """
-    Resource to export words from the discipline view.
+    Resource to export words from the job view.
     """
 
     # pylint: disable=pointless-statement
