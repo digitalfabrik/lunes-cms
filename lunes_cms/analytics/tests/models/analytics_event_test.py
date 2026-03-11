@@ -1,5 +1,5 @@
 from django.urls import reverse
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APITestCase
 
 
 class AnalyticsEventTests(APITestCase):
@@ -8,7 +8,6 @@ class AnalyticsEventTests(APITestCase):
     """
 
     def setUp(self) -> None:
-        self.client = APIClient()
         self.url = reverse("api:v2:analytics:analytics_event-list")
 
     def test_unknown_event_type(self) -> None:
