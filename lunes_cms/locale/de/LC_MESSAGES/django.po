@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 09:37+0000\n"
+"POT-Creation-Date: 2026-03-11 09:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -863,15 +863,15 @@ msgstr "Audio Checked Identifier"
 msgid "Words"
 msgstr "Vokabel"
 
-#: cmsv2/templates/admin/cmsv2/job_change_form.html:10
-msgid "Save and import words"
-msgstr "Sichern und Wörter importieren"
-
-#: cmsv2/templates/admin/cmsv2/job_change_list.html:7
+#: cmsv2/templates/admin/cmsv2/import_csv_button.html:7
 #: cmsv2/templates/admin/csv_form.html:4 cmsv2/templates/admin/csv_form.html:13
 #: cmsv2/templates/admin/csv_form.html:17
 msgid "Import CSV"
 msgstr "CSV importieren"
+
+#: cmsv2/templates/admin/cmsv2/save_and_import_button.html:10
+msgid "Save and import words"
+msgstr "Sichern und Wörter importieren"
 
 #: cmsv2/templates/admin/csv_form.html:49
 msgid "Start import"

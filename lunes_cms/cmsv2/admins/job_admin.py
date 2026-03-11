@@ -101,8 +101,8 @@ class JobAdmin(BaseAdmin):
     actions = ["export_to_csv"]
     list_per_page = 25
     ordering = ["name"]
-    change_list_template = "admin/cmsv2/job_change_list.html"
-    change_form_template = "admin/cmsv2/job_change_form.html"
+    change_list_template = "admin/cmsv2/import_csv_button.html"
+    change_form_template = "admin/cmsv2/save_and_import_button.html"
 
     class Media:
         """
