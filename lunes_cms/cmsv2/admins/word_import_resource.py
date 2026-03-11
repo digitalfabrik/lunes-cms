@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
@@ -51,6 +51,14 @@ class RowResult:
     error: Optional[str] = None
 
 
+@dataclass
+class AdjustmentLog:
+    row_number: int
+    original: Dict[str, Any]
+    adjusted: Dict[str, Any]
+    action: str
+
+
 def import_words_from_csv(dataset: Dataset, job: Job) -> tuple[int, int, list[str]]:
     """
     Imports words from a tablib Dataset into the given job.
@@ -62,20 +70,32 @@ def import_words_from_csv(dataset: Dataset, job: Job) -> tuple[int, int, list[st
     """
     total_created = 0
     total_updated = 0
-    error_messages: list[str] = []
+    errors: list[str] = []
+    adjustments: list[AdjustmentLog] = []
 
+    EXPECTED_COLUMNS = len(COLUMN_MAPPING)
     for row_number, raw_row in enumerate(dataset.dict, start=1):
-        parsed_or_error = parse_row(raw_row, row_number)
-
+        adjusted_row, changed, action = adjust_row_dimensions(
+            raw_row, EXPECTED_COLUMNS, pad_value=""
+        )
+        if changed:
+            adjustments.append(
+                AdjustmentLog(
+                    row_number=row_number,
+                    original=raw_row,
+                    adjusted=adjusted_row,
+                    action=action,
+                )
+            )
+        parsed_or_error = parse_row(adjusted_row, row_number)
         if isinstance(parsed_or_error, RowResult):
-            if parsed_or_error.error:
-                error_messages.append(parsed_or_error.error)
+            errors.append(parsed_or_error.error)
             continue
 
         result = process_row(parsed_or_error, job)
 
         if result.error:
-            error_messages.append(
+            errors.append(
                 _("Row %(n)s: %(msg)s") % {"n": row_number, "msg": result.error}
             )
             continue
@@ -107,15 +127,13 @@ def create_unit(unit_title: str, job: Job) -> Unit:
     return unit
 
 
-def get_or_create_word(
-    word_text: str, article_int: int, example: str
-) -> tuple[Word, bool]:
+def create_word(word_text: str, article_int: int, example: str) -> tuple[Word, bool]:
     """
     Gets a word if it exists or creates it if it didn't yet exist. This way we avoid duplicates.
     Also returns a flag which case it was.
     """
     defaults = {"singular_article": article_int, "example_sentence": example}
-    word, created = Word.objects.get_or_create(word=word_text, defaults=defaults)
+    word, created = Word.objects.create(word=word_text, defaults=defaults)
     return word, created
 
 
@@ -129,6 +147,35 @@ def update_or_add_example_sentence(created_word, word_obj, word_defaults) -> Non
     ):
         word_obj.example_sentence = word_defaults["example_sentence"]
         word_obj.save(update_fields=["example_sentence"])
+
+
+def adjust_row_dimensions(
+    row: dict, expected_len: int, *, pad_value: str = ""
+) -> tuple[dict, bool, str]:
+    """
+    Correct number of count
+
+    Returns
+    -------
+    tuple
+        (adjusted_row, changed, action)
+        - adjusted_row: ggf. korrigiertes dict
+        - changed:        True, wenn etwas geändert wurde
+        - action:         "padded" | "truncated" | ""
+    """
+    keys = list(row.keys())
+    values = list(row.values())
+
+    if len(values) == expected_len:
+        return row, False, ""
+
+    if len(values) > expected_len:
+        keys = keys[:expected_len]
+        values = values[:expected_len]
+        action = "truncated"
+
+    adjusted_row = dict(zip(keys, values))
+    return adjusted_row, True, action
 
 
 def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
@@ -210,7 +257,7 @@ def process_row(parsed: ParsedRow, job: Job) -> RowResult:
 
         article_int = map_article_to_int(parsed.article)
 
-        word, is_new = get_or_create_word(parsed.word, article_int, parsed.example)
+        word, is_new = create_word(parsed.word, article_int, parsed.example)
 
         update_or_add_example_sentence(
             is_new, word, {"example_sentence": parsed.example}
