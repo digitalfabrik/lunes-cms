@@ -86,20 +86,6 @@ def import_words_from_csv(dataset: Dataset, job: Job) -> tuple[int, int, list[st
     return total_created, total_updated, error_messages
 
 
-def count_created_or_updated_words(
-    is_new_word, created_count: int, updated_count: int
-) -> tuple[int, int]:
-    """
-    This method counts the created or updated words
-    """
-    if is_new_word:
-        created_count += 1
-    else:
-        updated_count += 1
-
-    return created_count, updated_count
-
-
 def map_article_to_int(article: str) -> int:
     """
     Convert article string into article int for DB
@@ -216,6 +202,8 @@ def process_row(parsed: ParsedRow, job: Job) -> RowResult:
     """
     Makes all DB operations for one row.
     """
+    created = 0
+    updated = 0
 
     try:
         unit = get_or_create_unit(parsed.unit, job)
@@ -230,7 +218,10 @@ def process_row(parsed: ParsedRow, job: Job) -> RowResult:
 
         unit.words.add(word)
 
-        created, updated = count_created_or_updated_words(is_new, 0, 0)
+        if is_new:
+            created += 1
+        else:
+            updated += 1
         return RowResult(created=created, updated=updated)
 
     except ValueError as exc:
