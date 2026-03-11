@@ -6,12 +6,20 @@ class AnalyticsEvent(models.Model):
     Analytics event
     """
 
+    class EventType(models.TextChoices):
+        """
+        Supported analytics event types
+        """
+
+        JOB_SELECTED = "job_selected"
+
     installation_id = models.CharField(
         max_length=255,
         db_index=True,
     )
     event_type = models.CharField(
         max_length=100,
+        choices=EventType.choices,
         db_index=True,
     )
     timestamp = models.DateTimeField()
