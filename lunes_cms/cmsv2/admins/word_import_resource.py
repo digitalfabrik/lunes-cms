@@ -97,12 +97,12 @@ def map_article_to_int(article: str) -> int:
     return ARTICLE_MAP.get(article, 0)
 
 
-def get_or_create_unit(unit_title: str, job: Job) -> Unit:
+def create_unit(unit_title: str, job: Job) -> Unit:
     """
-    Gets a unit if exists or creates it, if it didn't yet exist. This way we avoid duplicates.
+    Creates a new unit, even if one of the same name already exists. This is intended.
+    Words with the same title are considered less harming than having a unit in your job that only partially fits your learning interest.
     """
-
-    unit, _ = Unit.objects.get_or_create(title=unit_title)
+    unit = Unit.objects.create(title=unit_title)
     unit.jobs.add(job)
     return unit
 
@@ -206,7 +206,7 @@ def process_row(parsed: ParsedRow, job: Job) -> RowResult:
     updated = 0
 
     try:
-        unit = get_or_create_unit(parsed.unit, job)
+        unit = create_unit(parsed.unit, job)
 
         article_int = map_article_to_int(parsed.article)
 
