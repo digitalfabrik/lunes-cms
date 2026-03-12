@@ -1,6 +1,7 @@
 import logging
 import os
 import pathlib
+import re
 import string
 import uuid
 import warnings
@@ -190,3 +191,10 @@ def is_not_blank(s):
     Checks if s is not an empty string.
     """
     return s is not None and s.strip() != ""
+
+
+def make_safe_filename(unsafe):
+    """
+    Method to create a safe filename with regex.
+    """
+    return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)

@@ -5,6 +5,12 @@ from . import views
 app_name = "cmsv2"
 
 urlpatterns = [
+    path("jobs/import-csv/", views.import_from_csv, name="import_csv"),
+    path(
+        "jobs/<int:job_id>/import-csv/",
+        views.import_from_csv,
+        name="import_csv_for_job",
+    ),
     path(
         "jobs/<int:job_id>/update-icon/", views.update_job_icon, name="update_job_icon"
     ),

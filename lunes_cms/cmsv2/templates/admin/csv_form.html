@@ -1,0 +1,68 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block title %}{% trans "Import CSV" %}{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'admin:cmsv2_job_changelist' %}">{% trans 'Jobs' %}</a></li>
+    {% if job %}
+    <li class="breadcrumb-item"><a href="{% url 'admin:cmsv2_job_change' job.pk %}">{{ job.name }}</a></li>
+    {% endif %}
+    <li class="breadcrumb-item active">{% trans "Import CSV" %}</li>
+</ol>
+{% endblock %}
+
+{% block content_title %}{% trans "Import CSV" %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="col-12">
+    <form method="post" enctype="multipart/form-data" action="{{ import_csv_url }}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-12 col-lg-9">
+                <div class="card">
+                    <div class="card-body">
+                        {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {% if forloop.first and job %}
+                            <b>{{ job.name }}</b>
+                            {% endif %}
+                            {{ field }}
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <div class="{{ jazzmin_ui.actions_classes }}">
+                    <div class="form-group">
+                        <button type="submit" class="btn {{ jazzmin_ui.button_classes.success }} form-control">
+                            {% trans "Start import" %}
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        {% if job %}
+                        <a href="{% url 'admin:cmsv2_job_change' job.pk %}" class="btn {{ jazzmin_ui.button_classes.danger }} form-control">
+                            {% trans "Cancel" %}
+                        </a>
+                        {% else %}
+                        <a href="{% url 'admin:cmsv2_job_changelist' %}" class="btn {{ jazzmin_ui.button_classes.danger }} form-control">
+                            {% trans "Cancel" %}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
