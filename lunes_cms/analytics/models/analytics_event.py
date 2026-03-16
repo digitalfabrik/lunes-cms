@@ -34,7 +34,6 @@ class AnalyticsEvent(models.Model):
         """
 
         indexes = [
-            models.Index(fields=["installation_id", "event_type"]),
             models.Index(fields=["timestamp"]),
         ]
         ordering = ["-timestamp"]
