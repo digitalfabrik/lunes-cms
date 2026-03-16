@@ -5,9 +5,17 @@ from rest_framework import serializers
 from ..models import AnalyticsEvent
 
 
-class JobSelectedPayloadSerializer(
-    serializers.Serializer
-):  # pylint: disable=abstract-method
+class PayloadSerializer(serializers.Serializer):
+    """Common base class for all payload serializers"""
+
+    def update(self, instance, validated_data):
+        raise RuntimeError("Should not be called on a payload serializer")
+
+    def create(self, validated_data):
+        raise RuntimeError("Should not be called on a payload serializer")
+
+
+class JobSelectedPayloadSerializer(PayloadSerializer):
     """
     Validates the payload of a job_selected analytics event
     """
@@ -16,8 +24,31 @@ class JobSelectedPayloadSerializer(
     action = serializers.ChoiceField(choices=["add", "remove"])
 
 
+class SessionStartPayloadSerializer(PayloadSerializer):
+    """Validates the payload of a session start analytics event"""
+
+    session_id = serializers.CharField(max_length=32)
+
+
+class SessionEndPayloadSerializer(PayloadSerializer):
+    """Validates the payload of a session end analytics event"""
+
+    session_id = serializers.CharField(max_length=32)
+
+
+class ModuleDurationPayloadSerializer(PayloadSerializer):
+    """Validates the payload of a module duration analytics event"""
+
+    exercise_type = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
+    duration_seconds = serializers.IntegerField()
+
+
 EVENT_PAYLOAD_SERIALIZERS: dict[str, type[serializers.Serializer]] = {
     AnalyticsEvent.EventType.JOB_SELECTED: JobSelectedPayloadSerializer,
+    AnalyticsEvent.EventType.SESSION_START: SessionStartPayloadSerializer,
+    AnalyticsEvent.EventType.SESSION_END: SessionEndPayloadSerializer,
+    AnalyticsEvent.EventType.MODULE_DURATION: ModuleDurationPayloadSerializer,
 }
 
 
