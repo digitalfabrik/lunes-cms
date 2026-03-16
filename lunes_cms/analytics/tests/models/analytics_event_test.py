@@ -1,7 +1,5 @@
 from django.urls import reverse
-from rest_framework.test import APIClient, APITestCase
-
-from lunes_cms.analytics.models import AnalyticsEvent
+from rest_framework.test import APITestCase
 
 
 class AnalyticsEventTests(APITestCase):
@@ -10,25 +8,18 @@ class AnalyticsEventTests(APITestCase):
     """
 
     def setUp(self) -> None:
-        """
-        Setup test client
-        :return:
-        """
-        self.client = APIClient()
         self.url = reverse("api:v2:analytics:analytics_event-list")
-        self.valid_payload = {
-            "installation_id": "test123",
-            "event_type": "start",
-            "timestamp": "2026-01-30T12:34:56Z",
-            "payload": {"foo": "bar"},
-        }
 
-    def test_create_valid_event(self) -> None:
-        """
-        Test creating an event
-        """
-        response = self.client.post(self.url, data=self.valid_payload, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(AnalyticsEvent.objects.count(), 1)
-        event = AnalyticsEvent.objects.first()
-        self.assertEqual(event.installation_id, "test123")
+    def test_unknown_event_type(self) -> None:
+        """Test that an unknown event type is rejected"""
+        response = self.client.post(
+            self.url,
+            data={
+                "installation_id": "test123",
+                "event_type": "unknown_event",
+                "timestamp": "2026-01-30T12:34:56Z",
+                "payload": {},
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
