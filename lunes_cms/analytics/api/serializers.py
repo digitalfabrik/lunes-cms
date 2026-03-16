@@ -5,9 +5,17 @@ from rest_framework import serializers
 from ..models import AnalyticsEvent
 
 
-class JobSelectedPayloadSerializer(
-    serializers.Serializer
-):  # pylint: disable=abstract-method
+class PayloadSerializer(serializers.Serializer):
+    """Common base class for all payload serializers"""
+
+    def update(self, instance, validated_data):
+        raise RuntimeError("Should not be called on a payload serializer")
+
+    def create(self, validated_data):
+        raise RuntimeError("Should not be called on a payload serializer")
+
+
+class JobSelectedPayloadSerializer(PayloadSerializer):
     """
     Validates the payload of a job_selected analytics event
     """
