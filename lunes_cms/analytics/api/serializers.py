@@ -24,8 +24,25 @@ class JobSelectedPayloadSerializer(PayloadSerializer):
     action = serializers.ChoiceField(choices=["add", "remove"])
 
 
+class SessionStartPayloadSerializer(PayloadSerializer):
+    session_id = serializers.CharField(max_length=32)
+
+
+class SessionEndPayloadSerializer(PayloadSerializer):
+    session_id = serializers.CharField(max_length=32)
+
+
+class ModuleDurationPayloadSerializer(PayloadSerializer):
+    exercise_type = serializers.CharField(max_length=32)
+    unit_id = serializers.IntegerField()
+    duration_seconds = serializers.IntegerField()
+
+
 EVENT_PAYLOAD_SERIALIZERS: dict[str, type[serializers.Serializer]] = {
     AnalyticsEvent.EventType.JOB_SELECTED: JobSelectedPayloadSerializer,
+    AnalyticsEvent.EventType.SESSION_START: SessionStartPayloadSerializer,
+    AnalyticsEvent.EventType.SESSION_END: SessionEndPayloadSerializer,
+    AnalyticsEvent.EventType.MODULE_DURATION: ModuleDurationPayloadSerializer,
 }
 
 
