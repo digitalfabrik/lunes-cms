@@ -6,11 +6,10 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import routers
 
-from ..cms.models import Discipline, GroupAPIKey, Document
-from ..cms.utils import get_child_count, document_to_string
+from ..cms.models import Discipline, Document, GroupAPIKey
+from ..cms.utils import document_to_string, get_child_count
 
 
 class OptionalSlashRouter(routers.DefaultRouter):
@@ -158,6 +157,19 @@ def check_group_object_permissions(request, group_id):
     api_key_object = GroupAPIKey.get_from_token(key)
     if api_key_object.group_id != int(group_id):
         raise PermissionDenied()
+
+
+def build_absolute_url(context, url):
+    """
+    Convert a relative URL to an absolute URL using the request from serializer context.
+
+    :param context: Serializer context dict (typically self.context)
+    :param url: Relative URL string or None
+    :return: Absolute URL if request available, otherwise the original URL
+    """
+    if url and (request := context.get("request")):
+        return request.build_absolute_uri(url)
+    return url
 
 
 def find_duplicates_for_word(request, word):

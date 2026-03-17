@@ -1,16 +1,17 @@
-from django.db.models import Q, OuterRef, Prefetch, Exists
+from django.db.models import Exists, OuterRef, Prefetch, Q
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 
 from ....cmsv2.models import Job, Word
-from ..serializers import WordSerializer
 from ....cmsv2.models.unit import UnitWordRelation
+from ..matomo_tracking import matomo_tracking
+from ..serializers import WordSerializer
 
 
 class JobWordsViewSet(viewsets.ModelViewSet):
     """
     Retrieve the list of all words of a job.
-    A word is returned if it public in at least one unit that belongs to the job.
+    A word is returned if it's public in at least one unit that belongs to the job.
     All public images that belong to a public unit of that job will be returned.
     Images of relations are ordered alphabetically by their unit title
     and the default image of the word always comes last.
@@ -18,6 +19,16 @@ class JobWordsViewSet(viewsets.ModelViewSet):
 
     serializer_class = WordSerializer
     http_method_names = ["get"]
+
+    @matomo_tracking(action_name="All words of job", resource_id="job_id")
+    def list(self, request, *args, **kwargs):
+        """List all words of a job with Matomo tracking."""
+        return super().list(request, *args, **kwargs)
+
+    @matomo_tracking(action_name="Word", resource_id="pk")
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a single word with Matomo tracking."""
+        return super().retrieve(request, *args, **kwargs)
 
     def get_queryset(self):
         """
@@ -30,39 +41,24 @@ class JobWordsViewSet(viewsets.ModelViewSet):
             return Word.objects.none()
 
         try:
-            job = Job.objects.get(id=self.kwargs["job_id"])
+            job = Job.objects.get(pk=self.kwargs["job_id"])
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
         if not job.released:
             raise PermissionDenied()
 
-        unit_word_relations = (
-            UnitWordRelation.objects.filter(
-                unit__released=True,
-                unit__jobs=job,
-                word__audio_check_status="CONFIRMED",
-            )
-            .filter(
-                Q(image_check_status="CONFIRMED")
-                | Q(image="", word__image_check_status="CONFIRMED")
-            )
-            .filter(
-                Q(example_sentence="")
-                | Q(
-                    example_sentence_check_status="CONFIRMED",
-                    example_sentence_audio__gt="",
-                )
-                | Q(
-                    word__example_sentence__gt="",
-                    word__example_sentence_check_status="CONFIRMED",
-                    word__example_sentence_audio__gt="",
-                )
-            )
+        unit_word_relations = UnitWordRelation.objects.filter(
+            unit__released=True,
+            unit__jobs=job,
+            word__audio_check_status="CONFIRMED",
+        ).filter(
+            Q(image_check_status="CONFIRMED")
+            | Q(image="", word__image_check_status="CONFIRMED")
         )
         queryset = (
             Word.objects.filter(
-                Exists(unit_word_relations.filter(word__id=OuterRef("id")))
+                Exists(unit_word_relations.filter(word__pk=OuterRef("pk")))
             )
             .prefetch_related(
                 Prefetch(

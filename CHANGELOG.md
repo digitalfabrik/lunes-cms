@@ -1,6 +1,30 @@
 UNRELEASED
 ----------
 
+* [ [#691](https://github.com/digitalfabrik/lunes-cms/pull/691) ] Bump the dependencies group with 4 updates
+* [ [#690](https://github.com/digitalfabrik/lunes-cms/pull/690) ] 662 Profession selection tracking
+* [ [#689](https://github.com/digitalfabrik/lunes-cms/pull/689) ] Pin django-jazzmin to 3.0.1 as it breaks the admin layout
+* [ [#688](https://github.com/digitalfabrik/lunes-cms/pull/688) ] 674: Replace tts-1-hd with gpt-4o-mini-tts and add intonation instructions for example sentence audio generation
+* [ [#686](https://github.com/digitalfabrik/lunes-cms/pull/686) ] Fix pipeline
+* [ [#685](https://github.com/digitalfabrik/lunes-cms/pull/685) ] Add `isort`
+* [ [#683](https://github.com/digitalfabrik/lunes-cms/pull/683) ] 467: Add csv import and export
+* [ [#682](https://github.com/digitalfabrik/lunes-cms/pull/682) ] Maintenance: Change order of imports
+* [ [#681](https://github.com/digitalfabrik/lunes-cms/pull/681) ] Maintenance: Fix button for generating audio and image
+* [ [#680](https://github.com/digitalfabrik/lunes-cms/pull/680) ] Fix queries
+* [ [#679](https://github.com/digitalfabrik/lunes-cms/pull/679) ] Bump the dependencies group across 1 directory with 8 updates
+* [ [#673](https://github.com/digitalfabrik/lunes-cms/pull/673) ] Basic request tracking in Matomo
+* [ [#672](https://github.com/digitalfabrik/lunes-cms/pull/672) ] Document the tracking headers
+* [ [#671](https://github.com/digitalfabrik/lunes-cms/pull/671) ] Return absolute url for example sentence audio in api v2
+* [ [#669](https://github.com/digitalfabrik/lunes-cms/pull/669) ] 661: Add analytics models and api
+* [ [#659](https://github.com/digitalfabrik/lunes-cms/pull/659) ] Fix example sentence serialization error
+* [ [#656](https://github.com/digitalfabrik/lunes-cms/pull/656) ] Add `Mypy`
+* [ [#654](https://github.com/digitalfabrik/lunes-cms/pull/654) ] Update black to 26.1.0 to fit the version in the CI/CD pipeline
+* [ [#653](https://github.com/digitalfabrik/lunes-cms/pull/653) ] Fix API output of example_sentence
+* [ [#652](https://github.com/digitalfabrik/lunes-cms/pull/652) ] Bump the dependencies group across 1 directory with 11 updates
+* [ [#639](https://github.com/digitalfabrik/lunes-cms/pull/639) ] Add pylint to precommits
+* [ [#638](https://github.com/digitalfabrik/lunes-cms/pull/638) ] Update to Django5.2
+* [ [#503](https://github.com/digitalfabrik/lunes-cms/pull/503) ] Enable pylint `with` rule
+
 
 2025.11.1
 ---------

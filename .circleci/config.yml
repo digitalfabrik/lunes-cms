@@ -71,6 +71,18 @@ jobs:
             source .venv/bin/activate
             pip install pylint
             ./tools/pylint.sh
+  mypy:
+    docker:
+      - image: "cimg/python:3.11"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run mypy
+          command: |
+            source .venv/bin/activate
+            ./tools/mypy.sh
   test:
     docker:
       - image: cimg/python:3.11
@@ -126,6 +138,20 @@ jobs:
       - run:
           name: Check formatting of python files
           command: black --check .
+  isort:
+    docker:
+      - image: cimg/python:3.11
+    resource_class: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - run:
+          name: Check isort code style
+          command: isort . --skip-glob "**/migrations/**"
   check-translations:
     docker:
       - image: cimg/python:3.11
@@ -383,6 +409,12 @@ workflows:
           requires:
             - test
       - black:
+          requires:
+            - install
+      - isort:
+          requires:
+            - install
+      - mypy:
           requires:
             - install
       - check-translations:

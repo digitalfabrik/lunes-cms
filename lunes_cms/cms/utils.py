@@ -7,6 +7,7 @@ import pathlib
 import string
 import uuid
 from html import escape
+from typing import Optional
 
 from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
@@ -28,7 +29,7 @@ def create_resource_path(parent_dir, filename):
     return os.path.join(parent_dir, str(uuid.uuid1()) + pathlib.Path(filename).suffix)
 
 
-def get_random_key(length: int = 10, excluded_chars: list = None) -> str:
+def get_random_key(length: int = 10, excluded_chars: Optional[list[str]] = None) -> str:
     """
     Auxiliary function that creates a random key based on latin letters and digits using
     the passed length. Optionally, it is possible to exclude characters like l and 1.

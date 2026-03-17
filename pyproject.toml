@@ -55,6 +55,8 @@ dev = [
 	"black",
     "build",
 	"bumpver",
+	"isort",
+	"mypy",
 	"pre-commit",
 	"pyjwt",
 	"pylint-django",
@@ -73,40 +75,40 @@ dev = [
     "wheel"
 ]
 pinned = [
-	"django==5.1.2",
-	"django-import-export==4.3.13",
+	"django==5.2.12",
+	"django-import-export==4.4.0",
 	"django-jazzmin==3.0.1",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.16.1",
 	"drf-spectacular==0.29.0",
-	"ipython==9.6.0",
-	"openai==2.6.1",
-	"pillow==12.0.0",
+	"ipython==9.10.0",
+	"openai==2.28.0",
+	"pillow==12.1.1",
 	"psycopg2==2.9.11",
 	"pydub==0.25.1",
 
 ]
 dev-pinned = [
-	"black==25.9.0",
-    "build<=1.3.0",
+	"black==26.3.1",
+    "build<=1.4.0",
 	"bumpver==2025.1131",
-	"pre-commit==4.3.0",
-	"pyjwt==2.10.1",
-	"pylint-django==2.6.1",
+	"pre-commit==4.5.1",
+	"pyjwt==2.12.1",
+	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
 	"pytest-circleci-parallelized==0.1.0",
 	"pytest-cov==7.0.0",
-	"pytest-django==4.11.1",
+	"pytest-django==4.12.0",
 	"pytest-icdiff==0.9",
 	"pytest-xdist==3.8.0",
 	"shellcheck-py==0.11.0.1",
-	"sphinx==8.2.3",
-	"sphinx-rtd-theme==3.0.2",
+	"sphinx==9.0.4",
+	"sphinx-rtd-theme==3.1.0",
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
-	"wheel==0.45.1",
+	"wheel==0.46.3",
 ]
 
 [project.urls]
@@ -153,3 +155,18 @@ exclude_also = [
     "raise NotImplementedError",
 ]
 
+[tool.mypy]
+python_version = "3.11"
+exclude = [
+    '^lunes_cms/cms/',
+    '^tests/api/',
+]
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = false
+disallow_untyped_defs = false
+
+[tool.isort]
+profile = "black"
+order_by_type = false

@@ -5,7 +5,7 @@ from PIL import Image, ImageFilter
 from ..utils import get_image_tag
 from ..validators import validate_multiple_extensions
 from .document import Document
-from .static import Static, convert_umlaute_images
+from .static import convert_umlaute_images, Static
 
 
 class DocumentImage(models.Model):
@@ -31,7 +31,7 @@ class DocumentImage(models.Model):
         """
         return get_image_tag(self.image)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def save_original_img(self):
         """

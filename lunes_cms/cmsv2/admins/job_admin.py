@@ -1,11 +1,20 @@
 from __future__ import absolute_import, unicode_literals
 
+import io
+from zipfile import ZipFile
+
 from django.contrib import admin
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from tablib import Dataset
 
+from ..models import Unit, Word
+from ..utils import make_safe_filename
 from .base import BaseAdmin
-from ..models import Unit
+from .word_export_resource import WordExportResource
 
 
 class UnitInline(admin.TabularInline):
@@ -74,8 +83,9 @@ class JobAdmin(BaseAdmin):
         "image_tag",
         "created_by",
         "released",
+        "import_csv_link",
     ]
-    readonly_fields = ["created_by", "image_tag", "migrated_status"]
+    readonly_fields = ["created_by", "image_tag", "migrated_status", "import_csv_link"]
     inlines = [UnitInline]
     search_fields = ["name"]
     list_display = [
@@ -88,8 +98,11 @@ class JobAdmin(BaseAdmin):
     ]
     list_display_links = ["name"]
     list_filter = ["released", MigratedFilter]
+    actions = ["export_to_csv"]
     list_per_page = 25
     ordering = ["name"]
+    change_list_template = "admin/cmsv2/import_csv_button.html"
+    change_form_template = "admin/cmsv2/save_and_import_button.html"
 
     class Media:
         """
@@ -114,7 +127,7 @@ class JobAdmin(BaseAdmin):
         """
         return ", ".join([unit.title for unit in obj.units.all()])
 
-    related_units.short_description = _("units")
+    related_units.short_description = _("units")  # type: ignore[attr-defined]
 
     def created_at_date(self, obj):
         """
@@ -128,7 +141,7 @@ class JobAdmin(BaseAdmin):
         """
         return obj.created_at.date()
 
-    created_at_date.short_description = _("created at")
+    created_at_date.short_description = _("created at")  # type: ignore[attr-defined]
 
     def migrated_status(self, obj):
         """
@@ -150,4 +163,59 @@ class JobAdmin(BaseAdmin):
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
 
-    migrated_status.short_description = _("migrated")
+    migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
+
+    @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
+    def export_to_csv(self, request, queryset):
+        """
+        Export the words of the selected jobs.
+
+        :param request: current user request
+        :type request: django.http.request
+        :param queryset: current queryset
+        :type queryset: QuerySet
+        """
+        csvs = {}
+
+        for profession in queryset:
+            resource = WordExportResource()
+            units = Unit.objects.filter(jobs=profession)
+            words = Word.objects.filter(units__in=units).distinct()
+
+            dataset = Dataset(
+                *(resource.export_resource(word) for word in words),
+                headers=resource.export().headers,
+            )
+
+            csvs[profession] = dataset.csv
+
+        zip_buffer = io.BytesIO()
+
+        with ZipFile(zip_buffer, "w") as zipfile:
+            for profession, csv in csvs.items():
+                zipfile.writestr(f"{make_safe_filename(profession.name)}.csv", csv)
+
+        response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+        response["Content-Disposition"] = 'attachment; filename="Lunes_vocabulary.zip"'
+        return response
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_save_and_import" in request.POST:
+            return redirect(reverse("cmsv2:import_csv_for_job", args=[obj.pk]))
+        return super().response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj):
+        if "_save_and_import" in request.POST:
+            return redirect(reverse("cmsv2:import_csv_for_job", args=[obj.pk]))
+        return super().response_change(request, obj)
+
+    def import_csv_link(self, obj) -> str:
+        """
+        Add link/button for importing csv files from job list view
+        """
+        if obj.pk:
+            url = reverse("cmsv2:import_csv_for_job", args=[obj.pk])
+            return format_html('<a class="button" href="{}">Import CSV</a>', url)
+        return "—"
+
+    import_csv_link.short_description = _("Import")  # type: ignore[attr-defined]

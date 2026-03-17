@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    <div class="{% if not job %}mt-3{% endif %} form-group">
+        <input
+            type="submit"
+            class="btn {{ jazzmin_ui.button_classes.info }} form-control"
+            value="{% trans 'Save and import words' %}"
+            name="_save_and_import"
+        >
+    </div>
+{% endblock %}

@@ -4,8 +4,8 @@ from django.db.models.deletion import CASCADE
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from .static import convert_umlaute_images
 from ..utils import get_child_count, get_image_tag
+from .static import convert_umlaute_images
 
 
 class Job(models.Model):
@@ -55,7 +55,7 @@ class Job(models.Model):
         """
         return get_image_tag(self.icon, width=120)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def list_icon(self):
         """
@@ -88,7 +88,7 @@ class Job(models.Model):
             f'<div class="job-icon-container">{image_html}{controls_html}</div>'
         )
 
-    list_icon.short_description = _("Icon")
+    list_icon.short_description = _("Icon")  # type: ignore[attr-defined]
 
     def __str__(self):
         return str(self.name)

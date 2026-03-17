@@ -5,7 +5,7 @@ URL patterns for the first version of the Lunes API
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from ..utils import OptionalSlashRouter, find_duplicates_for_word
+from ..utils import find_duplicates_for_word, OptionalSlashRouter
 from . import views
 
 #: The namespace for this URL config (see :attr:`django.urls.ResolverMatch.app_name`)

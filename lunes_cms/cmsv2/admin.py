@@ -7,9 +7,8 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 
-from .admins import JobAdmin, WordAdmin, UnitAdmin, FeedbackAdmin
-from .models import Job, Word, Unit, Feedback
-
+from .admins import FeedbackAdmin, JobAdmin, UnitAdmin, WordAdmin
+from .models import Feedback, Job, Unit, Word
 
 admin.site.register(Job, JobAdmin)
 admin.site.register(Unit, UnitAdmin)

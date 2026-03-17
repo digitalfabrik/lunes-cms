@@ -11,4 +11,4 @@ class Migration(migrations.Migration):
         ("cmsv2", "0016_unitwordrelation_example_sentence_audio"),
     ]
 
-    operations = []
+    operations: list = []

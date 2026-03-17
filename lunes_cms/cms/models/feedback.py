@@ -70,7 +70,7 @@ class Feedback(models.Model):
         # Mark string as safe to allow html link tag
         return mark_safe(f"<a href={admin_edit_link}>{escaped_label}</a>")
 
-    content_object_link.short_description = _("refers to")
+    content_object_link.short_description = _("refers to")  # type: ignore[attr-defined]
 
     def __str__(self):
         """

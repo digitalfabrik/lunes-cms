@@ -3,7 +3,7 @@ import os
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 

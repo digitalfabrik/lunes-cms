@@ -2,19 +2,19 @@ from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.urls import reverse
-from django.utils.html import format_html, mark_safe, escape
+from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from .job import Job
-from .static import convert_umlaute_images, convert_umlaute_audio, Static
-from .word import Word
+from ...core import settings
 from ..utils import get_image_tag
 from ..validators import (
     validate_file_extension,
     validate_file_size,
     validate_multiple_extensions,
 )
-from ...core import settings
+from .job import Job
+from .static import convert_umlaute_audio, convert_umlaute_images, Static
+from .word import Word
 
 
 class UnitWordRelation(models.Model):
@@ -61,6 +61,13 @@ class UnitWordRelation(models.Model):
         verbose_name=_("example sentence check status"),
         default="NOT_CHECKED",
     )
+    example_sentence_audio_regenerated = models.BooleanField(
+        default=False,
+        verbose_name=_("example sentence audio regenerated"),
+        help_text=_(
+            "Indicates whether the audio has been regenerated with the new TTS model."
+        ),
+    )
 
     def image_tag(self):
         """
@@ -71,7 +78,7 @@ class UnitWordRelation(models.Model):
         """
         return get_image_tag(self.image)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def save(self, *args, **kwargs):
         """
@@ -143,7 +150,7 @@ class UnitWordRelation(models.Model):
             f'<div class="unitword-image-container">{image_html}{controls_html}</div>'
         )
 
-    list_image.short_description = _("Image")
+    list_image.short_description = _("Image")  # type: ignore[attr-defined]
 
     def generate_image_link(self):
         """Generate link for image generation."""
@@ -153,7 +160,7 @@ class UnitWordRelation(models.Model):
             return format_html('<a class="button" href="{}">Generate Image</a>', url)
         return "Save to enable image generation."
 
-    generate_image_link.short_description = _("Generate Image")
+    generate_image_link.short_description = _("Generate Image")  # type: ignore[attr-defined]
 
     def effective_public_images(self):
         """
@@ -177,9 +184,7 @@ class UnitWordRelation(models.Model):
             return format_html('<a class="button" href="{}">Generate Audio</a>', url)
         return "-"
 
-    generate_example_sentence_audio_link.short_description = _(
-        "Generate Example Sentence Audio"
-    )
+    generate_example_sentence_audio_link.short_description = _("Generate Example Sentence Audio")  # type: ignore[attr-defined]
 
     def example_sentence_audio_with_player(self):
         """Display audio player and generate button in a single column."""
@@ -203,7 +208,7 @@ class UnitWordRelation(models.Model):
             return mark_safe(audio_html + generate_html)
         return "-"
 
-    example_sentence_audio_with_player.short_description = _("example sentence audio")
+    example_sentence_audio_with_player.short_description = _("example sentence audio")  # type: ignore[attr-defined]
 
     def image_with_controls(self):
         """Display image, upload controls, check status, and generate button in a single column."""
@@ -251,7 +256,7 @@ class UnitWordRelation(models.Model):
             f"<div>{image_html}{controls_html}{status_html}{generate_html}</div>"
         )
 
-    image_with_controls.short_description = _("Image")
+    image_with_controls.short_description = _("Image")  # type: ignore[attr-defined]
 
     def example_sentence_audio_player(self):
         """Display an audio player for the example sentence audio and a button to generate it."""
@@ -275,7 +280,7 @@ class UnitWordRelation(models.Model):
             return mark_safe(audio_html + generate_html)
         return "Save to enable audio generation."
 
-    example_sentence_audio_player.short_description = _("example sentence audio")
+    example_sentence_audio_player.short_description = _("example sentence audio")  # type: ignore[attr-defined]
 
     class Meta:
         """
@@ -324,7 +329,7 @@ class Unit(models.Model):
         """
         return get_image_tag(self.icon)
 
-    image_tag.short_description = ""
+    image_tag.short_description = ""  # type: ignore[attr-defined]
 
     def list_icon(self):
         """
@@ -357,7 +362,7 @@ class Unit(models.Model):
             f'<div class="unit-icon-container">{image_html}{controls_html}</div>'
         )
 
-    list_icon.short_description = _("Icon")
+    list_icon.short_description = _("Icon")  # type: ignore[attr-defined]
 
     def __str__(self):
         """
@@ -382,7 +387,7 @@ class Unit(models.Model):
             self.description,
         )
 
-    style_description_field.short_description = "description"
+    style_description_field.short_description = "description"  # type: ignore[attr-defined]
 
     class Meta:
         """

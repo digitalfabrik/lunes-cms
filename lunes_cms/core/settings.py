@@ -31,6 +31,22 @@ TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
+###################
+# MATOMO TRACKING #
+###################
+
+#: Whether Matomo tracking is enabled
+MATOMO_TRACKING = bool(strtobool(os.environ.get("LUNES_CMS_MATOMO_ENABLED", "False")))
+
+#: URL of the Matomo instance (e.g., "https://matomo.example.com")
+MATOMO_URL = os.environ.get("LUNES_CMS_MATOMO_URL", "")
+
+#: Site ID in Matomo
+MATOMO_SITE_ID = os.environ.get("LUNES_CMS_MATOMO_SITE_ID", "")
+
+#: Authentication token for Matomo API
+MATOMO_TOKEN = os.environ.get("LUNES_CMS_MATOMO_TOKEN", "")
+
 ########################
 # DJANGO CORE SETTINGS #
 ########################
@@ -48,6 +64,7 @@ INSTALLED_APPS = [
     "lunes_cms.cms",
     "lunes_cms.cmsv2",
     "lunes_cms.help",
+    "lunes_cms.analytics",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
     # Installed Django apps
@@ -430,6 +447,10 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSION": "default",
     "DEFAULT_API_URL": "http://localhost:8080/api/",
     "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
+    "DEFAULT_THROTTLE_RATES": {
+        "installation": "100/min",
+        "user": "1000/day",
+    },
 }
 
 SPECTACULAR_SETTINGS = {
@@ -448,6 +469,10 @@ SPECTACULAR_SETTINGS = {
         presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
         layout: "StandaloneLayout",
     }""",
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "lunes_cms.api.v2.schema.add_tracking_headers",
+    ],
 }
 
 ##################

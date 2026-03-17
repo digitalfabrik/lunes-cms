@@ -27,6 +27,7 @@ router.register(r"words", views.WordViewSet, "words")
 urlpatterns = [
     path("", include(router.urls)),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("analytics/", include("lunes_cms.analytics.api.urls", namespace="analytics")),
     path(
         "docs/",
         SpectacularSwaggerView.as_view(

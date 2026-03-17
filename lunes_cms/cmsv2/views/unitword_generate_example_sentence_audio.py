@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -55,10 +55,17 @@ def unitword_generate_example_sentence_audio_via_openai(request):
     try:
         client = get_openai_client()
 
+        # Determine instruction based on sentence ending
+        if example_sentence_text.strip().endswith("?"):
+            instruction = "Read this sentence as a question with rising intonation."
+        else:
+            instruction = "Read this sentence as a declarative statement with neutral, falling intonation."
+
         response = client.audio.speech.create(
-            model="tts-1-hd",
+            model="gpt-4o-mini-tts",
             voice="nova",
             input=example_sentence_text,
+            instructions=instruction,
         )
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
@@ -121,6 +128,7 @@ def unitword_store_generated_example_sentence_audio_permanently(request, unitwor
             unitword_instance.example_sentence_audio.save(
                 content_file.name, content_file
             )
+        unitword_instance.example_sentence_audio_regenerated = True
         unitword_instance.save()
 
         os.remove(temp_filepath)

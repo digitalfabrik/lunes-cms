@@ -1,5 +1,4 @@
 from django.contrib import admin, messages
-
 from django.utils.translation import gettext_lazy as _
 
 from ..feedback_filter import filter_feedback_by_creator
