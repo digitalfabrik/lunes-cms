@@ -236,6 +236,12 @@ jobs:
       - image: cimg/python:3.11
     steps:
       - checkout
+      - run:
+          name: Skip if already a version bump
+          command: |
+            if git log -1 --pretty=%s | grep -q "^Bump version to"; then
+              circleci-agent step halt
+            fi
       - attach_workspace:
           at: .
       - run:
