@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2026.3.0
+--------
+
 * [ [#691](https://github.com/digitalfabrik/lunes-cms/pull/691) ] Bump the dependencies group with 4 updates
 * [ [#690](https://github.com/digitalfabrik/lunes-cms/pull/690) ] 662 Profession selection tracking
 * [ [#689](https://github.com/digitalfabrik/lunes-cms/pull/689) ] Pin django-jazzmin to 3.0.1 as it breaks the admin layout

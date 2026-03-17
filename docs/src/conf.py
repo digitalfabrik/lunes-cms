@@ -38,7 +38,7 @@ copyright = "Tür an Tür – Digitalfabrik gGmbH"
 #: The project author
 author = "Lunes"
 #: The full version, including alpha/beta/rc tags
-release = "2025.11.1"
+release = "2026.3.0"
 #: GitHub username
 github_username = "digitalfabrik"
 #: GitHub repository name
