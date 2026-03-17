@@ -222,9 +222,9 @@ jobs:
           command: |
             curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
             export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-            export SYFT_SOURCE_NAME="integreat-cms"
+            export SYFT_SOURCE_NAME="lunes-cms"
             export SYFT_FORMAT_SPDX_JSON_PRETTY=true
-            syft scan . -o spdx-json=integreat_cms/_manifest/spdx_2.2/manifest.spdx.json
+            syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
       - persist_to_workspace:
           root: .
           paths:
@@ -243,7 +243,9 @@ jobs:
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Request installation access token to authorize as Deliverino app
-          command: echo "export DELIVERINO_ACCESS_TOKEN=$(./.circleci/scripts/get_access_token.py)" >> $BASH_ENV
+          command: |
+            TOKEN=$(./.circleci/scripts/get_access_token.py)
+            echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
       - run:
           name: Config git repository to commit & push as Deliverino app
           command: |
@@ -276,9 +278,9 @@ jobs:
           command: |
             curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
             export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-            export SYFT_SOURCE_NAME="integreat-cms"
+            export SYFT_SOURCE_NAME="lunes-cms"
             export SYFT_FORMAT_SPDX_JSON_PRETTY=true
-            syft scan . -o spdx-json=integreat_cms/_manifest/spdx_2.2/manifest.spdx.json
+            syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
             git add lunes_cms/_manifest
             git commit --amend --no-edit
       - run:
@@ -344,7 +346,9 @@ jobs:
           command: echo "source .venv/bin/activate" >> $BASH_ENV
       - run:
           name: Request installation access token to authorize as Deliverino app
-          command: echo "export DELIVERINO_ACCESS_TOKEN=$(./.circleci/scripts/get_access_token.py)" >> $BASH_ENV
+          command: |
+            TOKEN=$(./.circleci/scripts/get_access_token.py)
+            echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
       - run:
           name: Assemble release body
           command: |
