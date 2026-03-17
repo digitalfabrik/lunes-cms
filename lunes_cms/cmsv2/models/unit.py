@@ -61,6 +61,13 @@ class UnitWordRelation(models.Model):
         verbose_name=_("example sentence check status"),
         default="NOT_CHECKED",
     )
+    example_sentence_audio_regenerated = models.BooleanField(
+        default=False,
+        verbose_name=_("example sentence audio regenerated"),
+        help_text=_(
+            "Indicates whether the audio has been regenerated with the new TTS model."
+        ),
+    )
 
     def image_tag(self):
         """
