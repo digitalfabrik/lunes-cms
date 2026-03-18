@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import logging
 from abc import ABC, abstractmethod
 from datetime import UTC
 
+from django.core.management import CommandParser
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
 from django.db.models import Count, F, Q, QuerySet
@@ -10,6 +12,8 @@ from django.db.models.fields.json import KT
 from django.db.models.functions import TruncDate
 
 from lunes_cms.analytics.models import AnalyticsEvent, JobSelectionAggregate
+
+logger = logging.getLogger(__name__)
 
 
 class EventAggregator(ABC):
@@ -52,7 +56,7 @@ class JobSelectionAggregator(EventAggregator):
         )
 
         for stat in daily_stats:
-            JobSelectionAggregate.objects.update_or_create(
+            aggregate, _created = JobSelectionAggregate.objects.update_or_create(
                 job_id=stat["job_id"],
                 date=stat["event_date"],
                 defaults={
@@ -60,6 +64,7 @@ class JobSelectionAggregator(EventAggregator):
                 },
                 create_defaults={"selection_count": stat["selection_count"]},
             )
+            logger.info(f"Created or updated aggregate %r", aggregate)
 
 
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
@@ -74,14 +79,23 @@ class Command(BaseCommand):
 
     help = "Aggregate analytics events into daily summaries and delete the raw events."
 
-    def handle(self, *args: object, **options: object) -> None:
+    def add_arguments(self, parser: CommandParser) -> None:
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="Run the full aggregation pipeline but roll back all changes.",
+        )
+
+    def handle(self, *args, **options) -> None:
+        dry_run: bool = options["dry_run"]
         for aggregator_class in EVENT_AGGREGATORS:
-            self._aggregate_event_type(aggregator_class)
+            self._aggregate_event_type(aggregator_class, dry_run)
 
     @transaction.atomic
     def _aggregate_event_type(
         self,
         aggregator_class: type[EventAggregator],
+        dry_run: bool,
     ) -> None:
         event_type = aggregator_class.event_type
 
@@ -104,6 +118,15 @@ class Command(BaseCommand):
         aggregator_class.aggregate(events)
 
         count, _ = events.delete()
-        self.stdout.write(
-            self.style.SUCCESS(f"Aggregated and deleted {count} {event_type} events.")
-        )
+
+        if dry_run:
+            transaction.set_rollback(True)
+            self.stdout.write(
+                f"[DRY RUN] Would aggregate and delete {count} {event_type} events."
+            )
+        else:
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Aggregated and deleted {count} {event_type} events."
+                )
+            )
