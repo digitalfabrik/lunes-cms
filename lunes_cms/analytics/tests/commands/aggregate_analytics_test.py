@@ -3,13 +3,17 @@ from datetime import datetime, timezone
 from django.core.management import call_command
 from django.test import TestCase
 
-from lunes_cms.analytics.models import AnalyticsEvent, JobSelectionAggregate
+from lunes_cms.analytics.models import (
+    AnalyticsEvent,
+    JobSelectionAggregate,
+    SessionAggregate,
+)
 from lunes_cms.cmsv2.models.job import Job
 
 
-class AggregateAnalyticsCommandTests(TestCase):
+class JobSelectionAggregateTests(TestCase):
     """
-    Tests for the aggregate_analytics management command.
+    Tests for job selection event aggregation.
     """
 
     def setUp(self) -> None:
@@ -98,3 +102,169 @@ class AggregateAnalyticsCommandTests(TestCase):
 
         agg = JobSelectionAggregate.objects.get(job_id=self.job1.id)
         self.assertEqual(agg.selection_count, -2)
+
+
+class SessionAggregateTests(TestCase):
+    """
+    Tests for session event aggregation.
+    """
+
+    def _create_session_event(
+        self, session_id: str, event_type: str, timestamp: str
+    ) -> AnalyticsEvent:
+        return AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type=event_type,
+            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
+            payload={"session_id": session_id},
+        )
+
+    def _create_session(
+        self, session_id: str, start: str, end: str
+    ) -> tuple[AnalyticsEvent, AnalyticsEvent]:
+        return (
+            self._create_session_event(session_id, "session_start", start),
+            self._create_session_event(session_id, "session_end", end),
+        )
+
+    def test_valid_session_creates_aggregate(self) -> None:
+        """A single valid session pair creates a SessionAggregate"""
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 1)
+        self.assertEqual(agg.total_duration_seconds, 30)
+        self.assertEqual(agg.duration_buckets, {"0-1": 1})
+
+    def test_multiple_sessions_same_day(self) -> None:
+        """Multiple valid sessions on the same day are aggregated together"""
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
+        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:10:00")
+
+        call_command("aggregate_analytics")
+
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 2)
+        self.assertEqual(agg.total_duration_seconds, 630)
+        self.assertEqual(agg.duration_buckets, {"0-1": 1, "5-15": 1})
+
+    def test_sessions_on_different_days(self) -> None:
+        """Sessions on different days create separate aggregates"""
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:02:00")
+        self._create_session("s2", "2026-01-16T10:00:00", "2026-01-16T10:02:00")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(SessionAggregate.objects.count(), 2)
+
+    def test_increments_existing_aggregate(self) -> None:
+        """Running the command twice increments existing aggregates"""
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
+        call_command("aggregate_analytics")
+
+        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:00:30")
+        call_command("aggregate_analytics")
+
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 2)
+        self.assertEqual(agg.total_duration_seconds, 60)
+        self.assertEqual(agg.duration_buckets, {"0-1": 2})
+
+    def test_increments_different_buckets(self) -> None:
+        """Running the command twice with different buckets updates both"""
+        # 30 seconds -> bucket "0-1"
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
+        call_command("aggregate_analytics")
+
+        # 10 minutes -> bucket "5-15"
+        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:10:00")
+        call_command("aggregate_analytics")
+
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 2)
+        self.assertEqual(agg.duration_buckets, {"0-1": 1, "5-15": 1})
+
+    def test_ignores_start_without_end(self) -> None:
+        """A session_start without a matching session_end is ignored"""
+        self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(SessionAggregate.objects.count(), 0)
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+
+    def test_ignores_end_without_start(self) -> None:
+        """A session_end without a matching session_start is ignored"""
+        self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(SessionAggregate.objects.count(), 0)
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+
+    def test_ignores_duplicate_start_events(self) -> None:
+        """A session_id with two start events and one end event is ignored"""
+        self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
+        self._create_session_event("s1", "session_start", "2026-01-15T10:01:00")
+        self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(SessionAggregate.objects.count(), 0)
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+
+    def test_ignores_duplicate_end_events(self) -> None:
+        """A session_id with one start event and two end events is ignored"""
+        self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
+        self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
+        self._create_session_event("s1", "session_end", "2026-01-15T10:06:00")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(SessionAggregate.objects.count(), 0)
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+
+    def test_invalid_sessions_dont_affect_valid_ones(self) -> None:
+        """Invalid sessions are discarded but valid ones are still aggregated"""
+        # Valid session
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:02:00")
+        # Invalid: start without end
+        self._create_session_event("s2", "session_start", "2026-01-15T11:00:00")
+        # Invalid: duplicate starts
+        self._create_session_event("s3", "session_start", "2026-01-15T12:00:00")
+        self._create_session_event("s3", "session_start", "2026-01-15T12:01:00")
+        self._create_session_event("s3", "session_end", "2026-01-15T12:05:00")
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 1)
+        self.assertEqual(agg.total_duration_seconds, 120)
+
+    def test_duration_bucket_boundaries(self) -> None:
+        """Test that durations land in the correct buckets"""
+        # Exactly 1 minute -> bucket "0-1"
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:01:00")
+        # 1 minute 1 second -> bucket "1-5"
+        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:01:01")
+        # Exactly 5 minutes -> bucket "1-5"
+        self._create_session("s3", "2026-01-15T12:00:00", "2026-01-15T12:05:00")
+        # 5 minutes 1 second -> bucket "5-15"
+        self._create_session("s4", "2026-01-15T13:00:00", "2026-01-15T13:05:01")
+        # 30 minutes -> bucket "15-30"
+        self._create_session("s5", "2026-01-15T14:00:00", "2026-01-15T14:30:00")
+        # 31 minutes -> bucket "30-"
+        self._create_session("s6", "2026-01-15T15:00:00", "2026-01-15T15:31:00")
+
+        call_command("aggregate_analytics")
+
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 6)
+        self.assertEqual(
+            agg.duration_buckets,
+            {"0-1": 1, "1-5": 2, "5-15": 1, "15-30": 1, "30-": 1},
+        )

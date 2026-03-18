@@ -25,14 +25,20 @@ class JobSelectedPayloadSerializer(PayloadSerializer):
 
 
 class SessionStartPayloadSerializer(PayloadSerializer):
+    """Validates the payload of a session start analytics event"""
+
     session_id = serializers.CharField(max_length=32)
 
 
 class SessionEndPayloadSerializer(PayloadSerializer):
+    """Validates the payload of a session end analytics event"""
+
     session_id = serializers.CharField(max_length=32)
 
 
 class ModuleDurationPayloadSerializer(PayloadSerializer):
+    """Validates the payload of a module duration analytics event"""
+
     exercise_type = serializers.CharField(max_length=32)
     unit_id = serializers.IntegerField()
     duration_seconds = serializers.IntegerField()
