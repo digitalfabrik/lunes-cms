@@ -12,6 +12,7 @@ class AnalyticsEvent(models.Model):
         """
 
         JOB_SELECTED = "job_selected"
+        EXERCISE_START = "exercise_start"
 
     installation_id = models.CharField(
         max_length=255,
