@@ -87,7 +87,7 @@ class SessionAggregator(EventAggregator):
     """
     Aggregates session_start and session_end events into daily SessionAggregate records.
     Pairs events by session_id to compute duration, then buckets the durations.
-    This command ignores invalid sessions (for example session that have not been complete yet and
+    This command ignores invalid sessions (for example session that have not been completed yet and
     thus only have a session_start, but no session_end event). These invalid or not yet completed sessions
     will be deleted after aggregation.
     Sessions ending on a different day than they started will be attributed to their start day.
@@ -162,11 +162,8 @@ class SessionAggregator(EventAggregator):
         # For example, a session that was started but not ended, or ended multiple times.
         # This still leaves some invalid data, like sessions that were ended twice or started twice.
         possibly_valid_sessions = (
-            (
-                events.values("payload__session_id").annotate(
-                    num_session_ids=Count("payload__session_id")
-                )
-            )
+            events.values("payload__session_id")
+            .annotate(num_session_ids=Count("pk"))
             .filter(num_session_ids=2)
             .values("payload__session_id")
         )
