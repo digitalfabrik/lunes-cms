@@ -6,6 +6,7 @@ from django.test import TestCase
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
     JobSelectionAggregate,
+    ModuleDurationAggregate,
     SessionAggregate,
 )
 from lunes_cms.cmsv2.models.job import Job
@@ -268,3 +269,101 @@ class SessionAggregateTests(TestCase):
             agg.duration_buckets,
             {"0-1": 1, "1-5": 2, "5-15": 1, "15-30": 1, "30-": 1},
         )
+
+
+class ModuleDurationAggregateTests(TestCase):
+    """
+    Tests for module duration event aggregation.
+    """
+
+    def _create_event(
+        self, exercise_type: int, unit_id: int, timestamp: str, duration_seconds: int
+    ) -> AnalyticsEvent:
+        return AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type="module_duration",
+            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
+            payload={
+                "exercise_type": exercise_type,
+                "unit_id": unit_id,
+                "duration_seconds": duration_seconds,
+            },
+        )
+
+    def test_aggregates_single_day(self) -> None:
+        """Test basic aggregation of module duration events into a single day"""
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-15T11:00:00", 90)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        agg = ModuleDurationAggregate.objects.get(
+            exercise_type=1, unit_id=10, date="2026-01-15"
+        )
+        self.assertEqual(agg.total_sessions, 2)
+        self.assertEqual(agg.total_duration_seconds, 150)
+
+    def test_aggregates_multiple_days(self) -> None:
+        """Test that events on different days create separate aggregates"""
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-16T10:00:00", 60)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
+
+    def test_aggregates_different_exercise_types(self) -> None:
+        """Test that different exercise types create separate aggregates"""
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(2, 10, "2026-01-15T10:00:00", 60)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
+        self.assertEqual(
+            ModuleDurationAggregate.objects.get(
+                exercise_type=1, unit_id=10
+            ).total_sessions,
+            1,
+        )
+        self.assertEqual(
+            ModuleDurationAggregate.objects.get(
+                exercise_type=2, unit_id=10
+            ).total_sessions,
+            1,
+        )
+
+    def test_aggregates_different_units(self) -> None:
+        """Test that different unit IDs create separate aggregates"""
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 20, "2026-01-15T10:00:00", 90)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
+        self.assertEqual(
+            ModuleDurationAggregate.objects.get(unit_id=10).total_duration_seconds, 60
+        )
+        self.assertEqual(
+            ModuleDurationAggregate.objects.get(unit_id=20).total_duration_seconds, 90
+        )
+
+    def test_increments_existing_aggregate(self) -> None:
+        """Test that running twice updates existing aggregates"""
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        call_command("aggregate_analytics")
+
+        self._create_event(1, 10, "2026-01-15T14:00:00", 40)
+        call_command("aggregate_analytics")
+
+        agg = ModuleDurationAggregate.objects.get(
+            exercise_type=1, unit_id=10, date="2026-01-15"
+        )
+        self.assertEqual(agg.total_sessions, 2)
+        self.assertEqual(agg.total_duration_seconds, 100)
+
+    def test_no_events(self) -> None:
+        """Test that running with no events does nothing"""
+        call_command("aggregate_analytics")
+        self.assertEqual(ModuleDurationAggregate.objects.count(), 0)

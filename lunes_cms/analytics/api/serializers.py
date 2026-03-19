@@ -39,7 +39,7 @@ class SessionEndPayloadSerializer(PayloadSerializer):
 class ModuleDurationPayloadSerializer(PayloadSerializer):
     """Validates the payload of a module duration analytics event"""
 
-    exercise_type = serializers.CharField(max_length=32)
+    exercise_type = serializers.IntegerField()
     unit_id = serializers.IntegerField()
     duration_seconds = serializers.IntegerField()
 

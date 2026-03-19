@@ -9,13 +9,14 @@ from typing import Any
 from django.core.management import CommandParser
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
-from django.db.models import Count, F, OuterRef, Q, QuerySet, Subquery
+from django.db.models import Count, F, OuterRef, Q, QuerySet, Subquery, Sum
 from django.db.models.fields.json import KT
 from django.db.models.functions import TruncDate
 
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
     JobSelectionAggregate,
+    ModuleDurationAggregate,
     SessionAggregate,
 )
 
@@ -184,9 +185,46 @@ class SessionAggregator(EventAggregator):
         )
 
 
+class ModuleDurationAggregator(EventAggregator):
+    """
+    Aggregates module duration events.
+    """
+
+    event_types = [AnalyticsEvent.EventType.MODULE_DURATION]
+
+    @staticmethod
+    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+        aggregated_events = (
+            events.annotate(duration_seconds=KT("payload__duration_seconds"))
+            .values("event_date", "payload__exercise_type", "payload__unit_id")
+            .annotate(
+                total_duration_seconds=Sum("duration_seconds"),
+                total_sessions=Count("pk"),
+            )
+        )
+
+        for event in aggregated_events:
+            aggregate, _created = ModuleDurationAggregate.objects.update_or_create(
+                date=event["event_date"],
+                exercise_type=event["payload__exercise_type"],
+                unit_id=event["payload__unit_id"],
+                defaults={
+                    "total_duration_seconds": F("total_duration_seconds")
+                    + event["total_duration_seconds"],
+                    "total_sessions": F("total_sessions") + event["total_sessions"],
+                },
+                create_defaults={
+                    "total_duration_seconds": event["total_duration_seconds"],
+                    "total_sessions": event["total_sessions"],
+                },
+            )
+            logger.info("Created or updated aggregate %r", aggregate)
+
+
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
     JobSelectionAggregator,
     SessionAggregator,
+    ModuleDurationAggregator,
 ]
 
 
