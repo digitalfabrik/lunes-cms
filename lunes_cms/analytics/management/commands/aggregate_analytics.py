@@ -9,9 +9,18 @@ from typing import Any
 from django.core.management import CommandParser
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
-from django.db.models import Count, F, OuterRef, Q, QuerySet, Subquery, Sum
+from django.db.models import (
+    Count,
+    F,
+    IntegerField,
+    OuterRef,
+    Q,
+    QuerySet,
+    Subquery,
+    Sum,
+)
 from django.db.models.fields.json import KT
-from django.db.models.functions import TruncDate
+from django.db.models.functions import Cast, TruncDate
 
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
@@ -195,7 +204,11 @@ class ModuleDurationAggregator(EventAggregator):
     @staticmethod
     def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
         aggregated_events = (
-            events.annotate(duration_seconds=KT("payload__duration_seconds"))
+            events.annotate(
+                duration_seconds=Cast(
+                    KT("payload__duration_seconds"), output_field=IntegerField()
+                )
+            )
             .values("event_date", "payload__exercise_type", "payload__unit_id")
             .annotate(
                 total_duration_seconds=Sum("duration_seconds"),
