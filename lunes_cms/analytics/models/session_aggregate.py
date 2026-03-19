@@ -19,4 +19,4 @@ class SessionAggregate(models.Model):
         """
 
     def __str__(self) -> str:
-        return f"Session aggregate {self.date} | {self.total_sessions} | {self.total_duration_seconds} | {self.duration_buckets}"
+        return f"Session aggregate ({self.date}): {self.total_sessions} | {self.total_duration_seconds} | {self.duration_buckets}"

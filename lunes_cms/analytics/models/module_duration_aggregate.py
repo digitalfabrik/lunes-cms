@@ -27,4 +27,4 @@ class ModuleDurationAggregate(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"Module duration aggregate {self.date} | {self.exercise_type} | {self.unit_id} | {self.total_sessions} | {self.total_duration_seconds}"
+        return f"Module duration aggregate ({self.date}, {self.exercise_type}, {self.unit_id}): {self.total_sessions} | {self.total_duration_seconds}"
