@@ -9,7 +9,7 @@ from ..models import Word
 @staff_member_required
 @csrf_exempt
 @require_POST
-def update_word_audio_check_status(request, word_id):
+def update_word_audio_check_status(request: HttpRequest, word_id: int) -> JsonResponse:
     """
     Update the audio check status for a word.
 

@@ -69,7 +69,7 @@ class UnitWordRelation(models.Model):
         ),
     )
 
-    def image_tag(self):
+    def image_tag(self) -> str:
         """
         Generate an HTML image tag for the relation's image.
 
@@ -80,7 +80,7 @@ class UnitWordRelation(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: list, **kwargs: object) -> None:
         """
         Override the save method to handle image check status.
 
@@ -118,7 +118,7 @@ class UnitWordRelation(models.Model):
 
         super().save(*args, **kwargs)
 
-    def list_image(self):
+    def list_image(self) -> str:
         """
         Generate HTML for displaying the relation's image with controls in the admin list view.
 
@@ -152,7 +152,7 @@ class UnitWordRelation(models.Model):
 
     list_image.short_description = _("Image")  # type: ignore[attr-defined]
 
-    def generate_image_link(self):
+    def generate_image_link(self) -> str:
         """Generate link for image generation."""
         # return format_html("<div>{}</div>", self.pk)
         if self.pk:
@@ -162,7 +162,7 @@ class UnitWordRelation(models.Model):
 
     generate_image_link.short_description = _("Generate Image")  # type: ignore[attr-defined]
 
-    def effective_public_images(self):
+    def effective_public_images(self) -> list[str]:
         """
         Returns:
             list[str]: The url to the public images of this unit word relation
@@ -175,7 +175,7 @@ class UnitWordRelation(models.Model):
             return [self.word.image]
         return []
 
-    def generate_example_sentence_audio_link(self):
+    def generate_example_sentence_audio_link(self) -> str:
         """Generate link for example sentence audio generation."""
         if self.pk and self.example_sentence and self.example_sentence.strip():
             url = reverse(
@@ -186,7 +186,7 @@ class UnitWordRelation(models.Model):
 
     generate_example_sentence_audio_link.short_description = _("Generate Example Sentence Audio")  # type: ignore[attr-defined]
 
-    def example_sentence_audio_with_player(self):
+    def example_sentence_audio_with_player(self) -> str:
         """Display audio player and generate button in a single column."""
         audio_html = ""
         if self.example_sentence_audio:
@@ -210,7 +210,7 @@ class UnitWordRelation(models.Model):
 
     example_sentence_audio_with_player.short_description = _("example sentence audio")  # type: ignore[attr-defined]
 
-    def image_with_controls(self):
+    def image_with_controls(self) -> str:
         """Display image, upload controls, check status, and generate button in a single column."""
         image_html = ""
         if self.image:
@@ -258,7 +258,7 @@ class UnitWordRelation(models.Model):
 
     image_with_controls.short_description = _("Image")  # type: ignore[attr-defined]
 
-    def example_sentence_audio_player(self):
+    def example_sentence_audio_player(self) -> str:
         """Display an audio player for the example sentence audio and a button to generate it."""
         audio_html = ""
         if self.example_sentence_audio:
@@ -320,7 +320,7 @@ class Unit(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
-    def image_tag(self):
+    def image_tag(self) -> str:
         """
         Generates an HTML image tag for the unit's icon.
 
@@ -331,7 +331,7 @@ class Unit(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def list_icon(self):
+    def list_icon(self) -> str:
         """
         Generates an HTML representation of the unit's icon along with controls
         for adding, replacing, and deleting the icon. This is intended for display
@@ -364,7 +364,7 @@ class Unit(models.Model):
 
     list_icon.short_description = _("Icon")  # type: ignore[attr-defined]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns a string representation of the Unit, which is its title.
 
@@ -373,7 +373,7 @@ class Unit(models.Model):
         """
         return str(self.title)
 
-    def style_description_field(self):
+    def style_description_field(self) -> str:
         """
         Formats the description field for display, ensuring text wraps and
         has a maximum width. This is useful for displaying descriptions in

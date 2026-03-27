@@ -9,7 +9,7 @@ from ..models import Job
 @staff_member_required
 @csrf_exempt
 @require_POST
-def update_job_icon(request, job_id):
+def update_job_icon(request: HttpRequest, job_id: int) -> JsonResponse:
     """
     Update the icon for a job.
 

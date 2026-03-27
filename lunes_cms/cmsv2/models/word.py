@@ -145,7 +145,7 @@ class Word(models.Model):
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
-    def convert_audio(self):
+    def convert_audio(self) -> None:
         """
         Converts the uploaded audio file to MP3 format and sets, but doesn't save, it as a Django File object.
         """
@@ -164,7 +164,7 @@ class Word(models.Model):
 
         os.remove(new_path)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: list, **kwargs: object) -> None:
         """
         Overrides the default save method to handle audio conversion and
         update check statuses for audio and image files.
@@ -219,7 +219,7 @@ class Word(models.Model):
 
         super().save(*args, **kwargs)
 
-    def assemble_audio_checked_identifier(self):
+    def assemble_audio_checked_identifier(self) -> str | None:
         """
         Assembles an identifier for the audio file, typically its URL,
         used to track changes for audio checking.
@@ -229,7 +229,7 @@ class Word(models.Model):
         """
         return self.audio.url if self.audio else None
 
-    def singular_article_for_audio_generation(self):
+    def singular_article_for_audio_generation(self) -> str:
         """Get singular article for audio generation."""
         if self.singular_article == 0:
             return ""
@@ -240,7 +240,7 @@ class Word(models.Model):
                 return article
         return ""
 
-    def image_tag(self, width=120):
+    def image_tag(self, width: int = 120) -> str:
         """
         Generates an HTML image tag for the word's associated image.
 
@@ -254,7 +254,7 @@ class Word(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def images_for_api(self):
+    def images_for_api(self) -> list[str]:
         """
         Returns all images that belong to this word to be returned in the api.
         By default, this only includes the default image of this word, if it is checked.
@@ -272,8 +272,9 @@ class Word(models.Model):
 
         return images
 
+    # TODO: Check, if pylint can be enabled
     @property
-    def singular_article_as_text(self):
+    def singular_article_as_text(self) -> str:
         """
         Returns:
             str: The singular article of this word as text
@@ -281,7 +282,7 @@ class Word(models.Model):
         # pylint: disable=invalid-sequence-index
         return Static.singular_article_choices[self.singular_article][1]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns a string representation of the Word instance, which is its actual word.
 

@@ -9,7 +9,7 @@ from ..models import Unit
 @staff_member_required
 @csrf_exempt
 @require_POST
-def update_unit_icon(request, unit_id):
+def update_unit_icon(request: HttpRequest, unit_id: int) -> JsonResponse:
     """
     Update the icon for a unit.
 

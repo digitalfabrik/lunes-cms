@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import os
+from typing import TYPE_CHECKING
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -10,9 +14,13 @@ from django.views.decorators.http import require_POST
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.core import settings
 
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
+
+# TODO: Is return type really a response
 @staff_member_required
-def unitword_generate_image(request, unitword_id):
+def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpResponse:
     """
     Dedicated view for generating image for a specific Unit<>Word relation.
     """
@@ -30,10 +38,13 @@ def unitword_generate_image(request, unitword_id):
     return render(request, "admin/unitword_generate_image.html", context)
 
 
+# TODO: Also here: double check HTTP Response
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_store_generated_image_permanently(request, unitword_id):
+def unitword_store_generated_image_permanently(
+    request: HttpRequest, unitword_id: int
+) -> HttpResponse:
     """
     Downloads and save the image to the Unittword instance's image field
     and redirects back to the edit view.

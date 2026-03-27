@@ -13,6 +13,7 @@ from django.utils.html import mark_safe
 from django.utils.translation import gettext as _
 from openai import OpenAI
 
+from lunes_cms.cmsv2.models import Word
 from lunes_cms.core import settings
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class OpenAIConfigurationError(Exception):
     """Exception raised when OpenAI API is not properly configured."""
 
 
-def create_resource_path(parent_dir, filename):
+def create_resource_path(parent_dir: str, filename: str) -> str:
     """
     Create a unique path for a resource file.
 
@@ -56,7 +57,7 @@ def get_random_key(length: int = 10, excluded_chars: Optional[list[str]] = None)
     return key
 
 
-def word_to_string(word):
+def word_to_string(word: Word) -> str:
     """
     Convert a word object to a formatted string representation.
 
@@ -77,7 +78,7 @@ def word_to_string(word):
     )
 
 
-def get_child_count(disc):
+def get_child_count(disc: object) -> int:
     """
     Count the number of released children with training sets.
 
@@ -94,23 +95,23 @@ def get_child_count(disc):
     return children_counter
 
 
-def get_training_set_count(disc):
+def get_training_set_count(disc: object) -> int:
     """
-    Count the total number of training sets for an object and its descendants.
+    Count the total number of units for an object and its descendants.
 
     Args:
-        disc: The object whose training sets will be counted
+        disc: The object whose units will be counted
 
     Returns:
-        int: The total count of training sets
+        int: The total count of units
     """
-    training_set_counter = 0
+    unit_counter = 0
     for child in disc.get_descendants(include_self=True):
-        training_set_counter += child.training_sets.count()
-    return training_set_counter
+        unit_counter += child.units.count()
+    return unit_counter
 
 
-def get_image_tag(image, width=330):
+def get_image_tag(image: object, width: int = 330) -> str:
     """
     Generate an HTML image tag for the given image.
 
@@ -132,8 +133,9 @@ def get_image_tag(image, width=330):
     return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
 
 
+# TODO: Refactoring target
 # pylint: disable=redefined-builtin
-def iter_to_string(iter):
+def iter_to_string(iter: object) -> str:
     """
     Convert an iterable to a formatted string with quotes and conjunctions.
 
@@ -151,7 +153,7 @@ def iter_to_string(iter):
     return list_str
 
 
-def get_openai_client():
+def get_openai_client() -> OpenAI:
     """
     Get OpenAI client if API key is available.
 
@@ -169,7 +171,7 @@ def get_openai_client():
     return OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
-def check_openai_availability():
+def check_openai_availability() -> bool:
     """
     Check if OpenAI functionality is available and issue warnings if not.
 
@@ -186,14 +188,15 @@ def check_openai_availability():
     return True
 
 
-def is_not_blank(s):
+# TODO: Refactoring target
+def is_not_blank(s: str) -> bool:
     """
     Checks if s is not an empty string.
     """
-    return s is not None and s.strip() != ""
+    return s is not None and s.strip() != ""  # type: ignore[union-attr]
 
 
-def make_safe_filename(unsafe):
+def make_safe_filename(unsafe: str) -> str:
     """
     Method to create a safe filename with regex.
     """

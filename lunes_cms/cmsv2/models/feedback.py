@@ -53,7 +53,7 @@ class Feedback(models.Model):
         help_text=_("The time and date when the feedback was submitted."),
     )
 
-    def content_object_link(self):
+    def content_object_link(self) -> str:
         """
         Include a link to the edit form of the content object in list display
 
@@ -71,7 +71,7 @@ class Feedback(models.Model):
 
     content_object_link.short_description = _("refers to")  # type: ignore[attr-defined]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         String representation of feedback instance
 

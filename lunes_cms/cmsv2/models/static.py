@@ -60,7 +60,7 @@ class Static:
     default_group_name = None
 
 
-def convert_umlaute_images(instance, filename):
+def convert_umlaute_images(instance: object, filename: str) -> str:
     """
     Convert file name of images to handle all kind of characters (including "Umlaute" etc.).
 
@@ -76,7 +76,7 @@ def convert_umlaute_images(instance, filename):
     return create_resource_path("images", filename)
 
 
-def convert_umlaute_audio(instance, filename):
+def convert_umlaute_audio(instance: object, filename: str) -> str:
     """
     Convert file name of audios to handle all kind of
     characters (including "Umlaute" etc.).
@@ -92,7 +92,7 @@ def convert_umlaute_audio(instance, filename):
     return create_resource_path("audio", filename)
 
 
-def upload_sponsor_logos(instance, filename):
+def upload_sponsor_logos(instance: object, filename: str) -> str:
     """
     Upload path for sponsor logos
 
@@ -108,8 +108,11 @@ def upload_sponsor_logos(instance, filename):
     return create_resource_path("sponsors", filename)
 
 
+# TODO: **kwargs has to be defined in more detail
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(
+    sender: User, instance: User, created: bool, **kwargs: object
+) -> bool:
     """
     Automatically adds a group when creating a new user
     if group name given in Static module

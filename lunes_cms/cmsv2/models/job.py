@@ -34,7 +34,7 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
-    def is_valid(self):
+    def is_valid(self) -> bool:
         """
         Check if the job is valid for display.
 
@@ -46,7 +46,7 @@ class Job(models.Model):
         """
         return get_child_count(self) > 0 or self.units.filter(released=True).count() > 0
 
-    def image_tag(self):
+    def image_tag(self) -> str:
         """
         Generate an HTML image tag for the job's icon.
 
@@ -57,7 +57,7 @@ class Job(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def list_icon(self):
+    def list_icon(self) -> str:
         """
         Generate HTML for displaying the job's icon with controls in the admin list view.
 
@@ -90,7 +90,7 @@ class Job(models.Model):
 
     list_icon.short_description = _("Icon")  # type: ignore[attr-defined]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.name)
 
     class Meta:

@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 
-def validate_file_extension(value):
+def validate_file_extension(value: object) -> None:
     """
     Validate that the file has an allowed audio file extension.
 
@@ -22,7 +22,7 @@ def validate_file_extension(value):
         )
 
 
-def validate_file_size(value):
+def validate_file_size(value: object) -> None:
     """
     Validate that the file size is within the allowed limit.
 
@@ -36,7 +36,7 @@ def validate_file_size(value):
         raise ValidationError(_("File too large! Max. 5 MB"))
 
 
-def validate_multiple_extensions(value):
+def validate_multiple_extensions(value: object) -> None:
     """
     Validate that the file has only one extension.
 

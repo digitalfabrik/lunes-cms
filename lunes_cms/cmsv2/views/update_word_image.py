@@ -9,7 +9,7 @@ from ..models import Word
 @staff_member_required
 @csrf_exempt
 @require_POST
-def update_word_image(request, word_id):
+def update_word_image(request: HttpRequest, word_id: int) -> JsonResponse:
     """
     Update the image for a word.
 

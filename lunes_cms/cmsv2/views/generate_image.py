@@ -3,7 +3,7 @@ import os
 import uuid
 
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -14,7 +14,7 @@ from lunes_cms.core import settings
 @staff_member_required
 @csrf_exempt
 @require_POST
-def generate_image_via_openai(request):
+def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
     """
     AJAX endpoint to generate image using OpenAI and save it temporarily.
     Returns the URL/path to the temporary file.

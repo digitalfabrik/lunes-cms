@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -5,11 +9,14 @@ from django.views.decorators.http import require_POST
 
 from ..models.unit import UnitWordRelation
 
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
 
 @staff_member_required
 @csrf_exempt
 @require_POST
-def update_unitword_image(request, unitword_id):
+def update_unitword_image(request: HttpRequest, unitword_id: int) -> JsonResponse:
     """
     Update the image for a unit-word relation.
 

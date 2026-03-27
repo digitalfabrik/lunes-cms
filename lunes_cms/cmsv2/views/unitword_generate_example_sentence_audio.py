@@ -14,8 +14,11 @@ from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
 
 
+# TODO: Should require import?
 @staff_member_required
-def unitword_generate_example_sentence_audio(request, unitword_id):
+def unitword_generate_example_sentence_audio(
+    request: HttpRequest, unitword_id: int
+) -> HttpResponse:
     """
     Dedicated view for generating audio for a unit-word relation's example sentence.
     """
@@ -37,10 +40,13 @@ def unitword_generate_example_sentence_audio(request, unitword_id):
     )
 
 
+# Is HttpRequest required?
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_generate_example_sentence_audio_via_openai(request):
+def unitword_generate_example_sentence_audio_via_openai(
+    request: HttpRequest,
+) -> JsonResponse:
     """
     AJAX endpoint to generate example sentence audio using OpenAI and save it temporarily.
     Returns the URL/path to the temporary file.
@@ -91,10 +97,13 @@ def unitword_generate_example_sentence_audio_via_openai(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+# TODO: same here - imports required?
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_store_generated_example_sentence_audio_permanently(request, unitword_id):
+def unitword_store_generated_example_sentence_audio_permanently(
+    request: HttpRequest, unitword_id: int
+) -> HttpResponse:
     """
     Moves the temporary audio file to the UnitWordRelation instance's example_sentence_audio field
     and redirects back to the appropriate admin view.
