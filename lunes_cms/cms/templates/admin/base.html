@@ -1,5 +1,13 @@
 {% extends 'admin/base.html' %}
 
+{% block footer %}
+    {% if not is_popup %}
+        <footer class="main-footer {{ jazzmin_ui.footer_classes }}">
+            <strong>Tür an Tür Digitalfabrik gGmbH</strong>
+        </footer>
+    {% endif %}
+{% endblock %}
+
 {% block extrajs %}
     <script>
         let unread_feedback_count = {{ unread_feedback_count }};
