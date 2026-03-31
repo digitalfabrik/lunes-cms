@@ -493,7 +493,6 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "single",
     "language_chooser": True,
     "custom_css": "css/corporate_identity.css",
-    "custom_js": "js/corporate_identity.js",
     "icons": {
         "auth.user": "fas fa-user-edit",
         "auth.Group": "fas fa-users",
