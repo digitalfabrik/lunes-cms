@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 09:18+0000\n"
+"POT-Creation-Date: 2026-03-31 11:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -825,8 +825,7 @@ msgstr "Beispielsatz Audio neu generiert"
 #: cmsv2/models/unit.py:68 cmsv2/models/word.py:102
 msgid ""
 "Indicates whether the audio has been regenerated with the new TTS model."
-msgstr ""
-"Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
+msgstr "Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
 
 #: cmsv2/models/unit.py:163 cmsv2/templates/admin/generate_image_base.html:16
 #: cmsv2/templates/admin/unitword_generate_image.html:12
@@ -941,11 +940,11 @@ msgstr "Englisch"
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:484 core/settings.py:485 core/settings.py:487
+#: core/settings.py:485 core/settings.py:486 core/settings.py:488
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:486
+#: core/settings.py:487
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
