@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 09:18+0000\n"
+"POT-Creation-Date: 2026-04-01 10:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgstr ""
 
 #: api/v1/serializers/feedback_serializer.py:36
 #: api/v2/serializers/feedback_serializer.py:35
+#, python-brace-format
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
@@ -205,6 +206,7 @@ msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
 #: cms/admins/training_set_admin.py:220
+#, python-brace-format
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -219,12 +221,14 @@ msgstr[1] ""
 "Vokabeln mit bestätigten Bildern enthalten."
 
 #: cms/admins/training_set_admin.py:235
+#, python-brace-format
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
 #: cms/admins/training_set_admin.py:249
+#, python-brace-format
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
@@ -235,12 +239,14 @@ msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
 #: cms/admins/training_set_admin.py:279
+#, python-brace-format
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
 #: cms/admins/training_set_admin.py:290
+#, python-brace-format
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
@@ -272,6 +278,7 @@ msgstr ""
 "Element auswählst."
 
 #: cms/forms.py:79
+#, python-brace-format
 msgid ""
 "You can only release a training set that contains at least {} vocabulary "
 "words with confirmed images."
@@ -521,6 +528,7 @@ msgid "Download QR code"
 msgstr "QR-Code herunterladen"
 
 #: cms/models/group_api_key.py:158
+#, python-brace-format
 msgid "{}: Token for the group \"{}\""
 msgstr "{}: Token für die Gruppe \"{}\""
 
@@ -825,8 +833,7 @@ msgstr "Beispielsatz Audio neu generiert"
 #: cmsv2/models/unit.py:68 cmsv2/models/word.py:102
 msgid ""
 "Indicates whether the audio has been regenerated with the new TTS model."
-msgstr ""
-"Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
+msgstr "Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
 
 #: cmsv2/models/unit.py:163 cmsv2/templates/admin/generate_image_base.html:16
 #: cmsv2/templates/admin/unitword_generate_image.html:12
@@ -933,19 +940,19 @@ msgstr ""
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
 
-#: core/settings.py:227
+#: core/settings.py:228
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:228
+#: core/settings.py:229
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:484 core/settings.py:485 core/settings.py:487
+#: core/settings.py:485 core/settings.py:486 core/settings.py:488
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:486
+#: core/settings.py:487
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

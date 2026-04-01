@@ -16,8 +16,33 @@ class JobSelectedPayloadSerializer(
     action = serializers.ChoiceField(choices=["add", "remove"])
 
 
+class ModuleDurationPayloadSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    """
+    Validates the payload of a module_duration analytics event
+    """
+
+    exercise_type = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
+    duration_seconds = serializers.IntegerField()
+
+
+class SessionPayloadSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    """
+    Validates the payload of a session_start or session_end analytics event
+    """
+
+    session_id = serializers.CharField()
+
+
 EVENT_PAYLOAD_SERIALIZERS: dict[str, type[serializers.Serializer]] = {
     AnalyticsEvent.EventType.JOB_SELECTED: JobSelectedPayloadSerializer,
+    AnalyticsEvent.EventType.MODULE_DURATION: ModuleDurationPayloadSerializer,
+    AnalyticsEvent.EventType.SESSION_START: SessionPayloadSerializer,
+    AnalyticsEvent.EventType.SESSION_END: SessionPayloadSerializer,
 }
 
 

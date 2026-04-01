@@ -12,6 +12,9 @@ class AnalyticsEvent(models.Model):
         """
 
         JOB_SELECTED = "job_selected"
+        MODULE_DURATION = "module_duration"
+        SESSION_START = "session_start"
+        SESSION_END = "session_end"
 
     installation_id = models.CharField(
         max_length=255,
