@@ -39,7 +39,9 @@ class SessionEndPayloadSerializer(PayloadSerializer):
 class ModuleDurationPayloadSerializer(PayloadSerializer):
     """Validates the payload of a module duration analytics event"""
 
-    exercise_type = serializers.IntegerField()
+    exercise_type = serializers.ChoiceField(
+        choices=AnalyticsEvent.ExerciseType.choices,
+    )
     unit_id = serializers.IntegerField()
     duration_seconds = serializers.IntegerField()
 
@@ -55,12 +57,27 @@ class ExerciseDropoutPayloadSerializer(PayloadSerializer):
     total = serializers.IntegerField()
 
 
+class ExerciseRepetitionPayloadSerializer(PayloadSerializer):
+    """
+    Validates the payload of an exercise_repetition analytics event
+    """
+
+    exercise_type = serializers.ChoiceField(
+        choices=AnalyticsEvent.ExerciseType.choices,
+    )
+    unit_id = serializers.IntegerField()
+    repetition_count = serializers.IntegerField()
+    start_count = serializers.IntegerField()
+    date = serializers.DateField()
+
+
 EVENT_PAYLOAD_SERIALIZERS: dict[str, type[serializers.Serializer]] = {
     AnalyticsEvent.EventType.JOB_SELECTED: JobSelectedPayloadSerializer,
     AnalyticsEvent.EventType.SESSION_START: SessionStartPayloadSerializer,
     AnalyticsEvent.EventType.SESSION_END: SessionEndPayloadSerializer,
     AnalyticsEvent.EventType.MODULE_DURATION: ModuleDurationPayloadSerializer,
     AnalyticsEvent.EventType.EXERCISE_DROPOUT: ExerciseDropoutPayloadSerializer,
+    AnalyticsEvent.EventType.EXERCISE_REPETITION: ExerciseRepetitionPayloadSerializer,
 }
 
 

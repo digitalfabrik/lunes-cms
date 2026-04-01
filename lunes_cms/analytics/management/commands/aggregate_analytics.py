@@ -19,12 +19,14 @@ from django.db.models import (
     Subquery,
     Sum,
 )
+from django.db.models.fields import DateField
 from django.db.models.fields.json import KT
 from django.db.models.functions import Cast, TruncDate
 
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
     DropoutAggregate,
+    ExerciseRepetitionAggregate,
     JobSelectionAggregate,
     ModuleDurationAggregate,
     SessionAggregate,
@@ -269,11 +271,59 @@ class DropoutAggregator(EventAggregator):
             logger.info("Created or updated aggregate %r", aggregate)
 
 
+class ExerciseRepetitionAggregator(EventAggregator):
+    """
+    Aggregates exercise_repetition events into per-session ExerciseRepetitionAggregate records.
+    start_count = number of times the same exercise/unit combo was started in a session.
+    """
+
+    event_types = [AnalyticsEvent.EventType.EXERCISE_REPETITION]
+
+    @staticmethod
+    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+        aggregated_events = (
+            events.annotate(
+                _unit_id=Cast(KT("payload__unit_id"), output_field=IntegerField()),
+                _exercise_type=KT("payload__exercise_type"),
+                _date=Cast(KT("payload__date"), output_field=DateField()),
+                _repetition_count=Cast(
+                    KT("payload__repetition_count"), output_field=IntegerField()
+                ),
+                _start_count=Cast(
+                    KT("payload__start_count"), output_field=IntegerField()
+                ),
+            )
+            .values("_unit_id", "_exercise_type", "_date")
+            .annotate(
+                total_repetition_count=Sum("_repetition_count"),
+                total_start_count=Sum("_start_count"),
+            )
+        )
+
+        for stat in aggregated_events:
+            aggregate, _ = ExerciseRepetitionAggregate.objects.update_or_create(
+                unit_id=stat["_unit_id"],
+                exercise_type=stat["_exercise_type"],
+                date=stat["_date"],
+                defaults={
+                    "repetition_count": F("repetition_count")
+                    + stat["total_repetition_count"],
+                    "start_count": F("start_count") + stat["total_start_count"],
+                },
+                create_defaults={
+                    "repetition_count": stat["total_repetition_count"],
+                    "start_count": stat["total_start_count"],
+                },
+            )
+            logger.info("Created or updated aggregate %r", aggregate)
+
+
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
     JobSelectionAggregator,
     SessionAggregator,
     ModuleDurationAggregator,
     DropoutAggregator,
+    ExerciseRepetitionAggregator,
 ]
 
 
