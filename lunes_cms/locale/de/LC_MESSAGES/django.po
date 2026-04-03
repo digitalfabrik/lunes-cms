@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-08 09:04+0000\n"
+"POT-Creation-Date: 2026-04-14 19:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -441,6 +441,7 @@ msgid "refers to"
 msgstr "bezieht sich auf"
 
 #: cms/models/feedback.py:35 cmsv2/models/feedback.py:34
+#: cmsv2/models/review.py:94
 msgid "comment"
 msgstr "Kommentar"
 
@@ -683,7 +684,7 @@ msgid "units"
 msgstr "Einheiten"
 
 #: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:165
-#: cmsv2/models/job.py:34 cmsv2/models/unit.py:327
+#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:327
 msgid "created at"
 msgstr "Erstellt"
 
@@ -809,6 +810,80 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
+#: cmsv2/models/review.py:26 cmsv2/models/unit.py:311
+msgid "unit"
+msgstr "Einheit"
+
+#: cmsv2/models/review.py:32 cmsv2/models/review.py:86
+msgid "reviewer"
+msgstr "Kontrolleur:in"
+
+#: cmsv2/models/review.py:39
+msgid "assigned by"
+msgstr "Zugewiesen von"
+
+#: cmsv2/models/review.py:41
+msgid "assigned at"
+msgstr "Zuwiesen am"
+
+#: cmsv2/models/review.py:43
+msgid "completed at"
+msgstr "Erstellt am"
+
+#: cmsv2/models/review.py:56
+msgid "Review Assignment"
+msgstr "Kontroll Zuweisung"
+
+#: cmsv2/models/review.py:57
+msgid "Review Assignments"
+msgstr "Kontroll Zuweisungen"
+
+#: cmsv2/models/review.py:73
+msgid "unit-word relation"
+msgstr "Einheit-Wort Beziehung"
+
+#: cmsv2/models/review.py:77
+msgid "unit-specific image"
+msgstr "Einheit spezifisches Bild"
+
+#: cmsv2/models/review.py:79
+msgid "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
+msgstr ""
+"Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, Falsch "
+"wenn ein Bild aus dem Wort kontrolliert wird"
+
+#: cmsv2/models/review.py:92
+msgid "status"
+msgstr "Status"
+
+#: cmsv2/models/review.py:99
+msgid "suggested image"
+msgstr "Vorgeschlagenes Bild"
+
+#: cmsv2/models/review.py:100
+msgid "Alternative image suggested by reviewer"
+msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
+
+#: cmsv2/models/review.py:103
+msgid "updated at"
+msgstr "Erstellt am"
+
+#: cmsv2/models/review.py:115
+msgid "Image Review"
+msgstr "Bild Kontrolle"
+
+#: cmsv2/models/review.py:116
+msgid "Image Reviews"
+msgstr "Bild Kontrollen"
+
+#: cmsv2/models/static.py:57
+msgid "Pending Review"
+msgstr "Freigabe ausstehend"
+
+#: cmsv2/models/static.py:58
+msgid "Approved"
+msgstr "Genehmigt"
+
 #: cmsv2/models/unit.py:60 cmsv2/models/unit.py:218 cmsv2/models/unit.py:290
 #: cmsv2/models/word.py:94
 msgid "example sentence audio"
@@ -848,10 +923,6 @@ msgstr "Einheit-Wort Beziehung"
 #: cmsv2/models/unit.py:301
 msgid "Unit-Word Relations"
 msgstr "Einheit-Wort Beziehungen"
-
-#: cmsv2/models/unit.py:311
-msgid "unit"
-msgstr "Einheit"
 
 #: cmsv2/models/unit.py:404
 msgid "Unit"
