@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group, User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
 
@@ -48,6 +49,12 @@ class Static:
         ("CONFIRMED", "Confirmed"),
     ]
 
+    # Review status choices
+    review_status_choices = [
+        ("PENDING", _("Pending Review")),
+        ("APPROVED", _("Approved")),
+    ]
+
     # number of pixels used for box blur
     blurr_radius = 30
     # maximum (width, height) of images
@@ -58,6 +65,9 @@ class Static:
 
     # default group name
     default_group_name = None
+
+
+REVIEW_STATUS_CHOICES = Static.review_status_choices
 
 
 def convert_umlaute_images(instance, filename):
