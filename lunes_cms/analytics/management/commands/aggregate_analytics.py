@@ -24,6 +24,7 @@ from django.db.models.functions import Cast, TruncDate
 
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
+    DropoutAggregate,
     JobSelectionAggregate,
     ModuleDurationAggregate,
     SessionAggregate,
@@ -231,10 +232,48 @@ class ModuleDurationAggregator(EventAggregator):
             logger.info("Created or updated aggregate %r", aggregate)
 
 
+class DropoutAggregator(EventAggregator):
+    """
+    Aggregates exercise dropout events into daily DropoutAggregate records.
+    Groups by (date, exercise_type, unit_id, position, total) and sums dropout counts.
+    """
+
+    event_types = [AnalyticsEvent.EventType.EXERCISE_DROPOUT]
+
+    @staticmethod
+    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+        aggregated_events = events.values(
+            "event_date",
+            "payload__exercise_type",
+            "payload__unit_id",
+            "payload__position",
+            "payload__total",
+        ).annotate(
+            dropout_count=Count("pk"),
+        )
+
+        for event in aggregated_events:
+            aggregate, _created = DropoutAggregate.objects.update_or_create(
+                date=event["event_date"],
+                exercise_type=event["payload__exercise_type"],
+                unit_id=event["payload__unit_id"],
+                dropout_position=event["payload__position"],
+                total_items=event["payload__total"],
+                defaults={
+                    "dropout_count": F("dropout_count") + event["dropout_count"],
+                },
+                create_defaults={
+                    "dropout_count": event["dropout_count"],
+                },
+            )
+            logger.info("Created or updated aggregate %r", aggregate)
+
+
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
     JobSelectionAggregator,
     SessionAggregator,
     ModuleDurationAggregator,
+    DropoutAggregator,
 ]
 
 

@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
+    DropoutAggregate,
     JobSelectionAggregate,
     ModuleDurationAggregate,
     SessionAggregate,
@@ -367,3 +368,202 @@ class ModuleDurationAggregateTests(TestCase):
         """Test that running with no events does nothing"""
         call_command("aggregate_analytics")
         self.assertEqual(ModuleDurationAggregate.objects.count(), 0)
+
+
+class DropoutAggregateTests(TestCase):
+    """
+    Tests for exercise dropout event aggregation.
+    """
+
+    def _create_event(  # pylint: disable=too-many-arguments
+        self,
+        *,
+        exercise_type: str,
+        unit_id: int | None,
+        position: int,
+        total: int,
+        timestamp: str,
+    ) -> AnalyticsEvent:
+        return AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type="exercise_dropout",
+            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
+            payload={
+                "exercise_type": exercise_type,
+                "unit_id": unit_id,
+                "position": position,
+                "total": total,
+            },
+        )
+
+    def test_aggregates_single_day(self) -> None:
+        """Test basic aggregation of dropout events into a single day"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T11:00:00",
+        )
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        agg = DropoutAggregate.objects.get(
+            exercise_type="word_choice", unit_id=10, dropout_position=3, total_items=10
+        )
+        self.assertEqual(agg.dropout_count, 2)
+
+    def test_aggregates_multiple_days(self) -> None:
+        """Test that events on different days create separate aggregates"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-16T10:00:00",
+        )
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(DropoutAggregate.objects.count(), 2)
+
+    def test_aggregates_different_positions(self) -> None:
+        """Test that different dropout positions create separate aggregates"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=2,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=5,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(DropoutAggregate.objects.count(), 2)
+        self.assertEqual(
+            DropoutAggregate.objects.get(dropout_position=2).dropout_count, 1
+        )
+        self.assertEqual(
+            DropoutAggregate.objects.get(dropout_position=5).dropout_count, 1
+        )
+
+    def test_aggregates_different_exercise_types(self) -> None:
+        """Test that different exercise types create separate aggregates"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        self._create_event(
+            exercise_type="article_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(DropoutAggregate.objects.count(), 2)
+
+    def test_aggregates_null_unit_id(self) -> None:
+        """Test aggregation with null unit_id"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=None,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=None,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T11:00:00",
+        )
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(DropoutAggregate.objects.count(), 1)
+        agg = DropoutAggregate.objects.get()
+        self.assertIsNone(agg.unit_id)
+        self.assertEqual(agg.dropout_count, 2)
+
+    def test_null_and_non_null_unit_id_separate(self) -> None:
+        """Test that null and non-null unit_ids create separate aggregates"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=None,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(DropoutAggregate.objects.count(), 2)
+
+    def test_increments_existing_aggregate(self) -> None:
+        """Test that running twice increments existing aggregates"""
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+        call_command("aggregate_analytics")
+
+        self._create_event(
+            exercise_type="word_choice",
+            unit_id=10,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T14:00:00",
+        )
+        call_command("aggregate_analytics")
+
+        agg = DropoutAggregate.objects.get(
+            exercise_type="word_choice",
+            unit_id=10,
+            dropout_position=3,
+            total_items=10,
+        )
+        self.assertEqual(agg.dropout_count, 2)
+
+    def test_no_events(self) -> None:
+        """Test that running with no events does nothing"""
+        call_command("aggregate_analytics")
+        self.assertEqual(DropoutAggregate.objects.count(), 0)
