@@ -13,7 +13,12 @@ from ..validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
-from .static import convert_umlaute_audio, convert_umlaute_images, Static
+from .static import (
+    convert_image_to_webp,
+    convert_umlaute_audio,
+    convert_umlaute_images,
+    Static,
+)
 
 
 class Word(models.Model):
@@ -218,6 +223,8 @@ class Word(models.Model):
             self.example_sentence_check_status = None
 
         super().save(*args, **kwargs)
+        if image_updated and convert_image_to_webp(self.image):
+            super().save(update_fields=["image"])
 
     def assemble_audio_checked_identifier(self):
         """

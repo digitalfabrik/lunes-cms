@@ -1,6 +1,9 @@
+import os
+
 from django.contrib.auth.models import Group, User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from PIL import Image
 
 from ..utils import create_resource_path
 
@@ -58,6 +61,37 @@ class Static:
 
     # default group name
     default_group_name = None
+
+
+def convert_image_to_webp(image_field):
+    """
+    Converts an ImageField's file to WebP format in-place.
+
+    Opens the existing file, saves it as WebP with quality=85, removes the
+    original file if the extension changed, and updates image_field.name.
+
+    :param image_field: An ImageField (FieldFile) whose file is already saved to disk.
+    :type image_field: django.db.models.fields.files.FieldFile
+
+    :return: True if the file was converted and renamed, False if already WebP.
+    :rtype: bool
+    """
+    if not image_field:
+        return False
+
+    old_path = image_field.path
+    old_name = image_field.name
+    new_path = os.path.splitext(old_path)[0] + ".webp"
+    new_name = os.path.splitext(old_name)[0] + ".webp"
+
+    if old_path == new_path:
+        return False
+
+    img = Image.open(old_path)
+    img.save(new_path, format="WEBP", quality=85)
+    os.remove(old_path)
+    image_field.name = new_name
+    return True
 
 
 def convert_umlaute_images(instance, filename):
