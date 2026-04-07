@@ -163,3 +163,89 @@ class AnalyticsEventTests(APITestCase):
         assert event is not None
         self.assertEqual(event.event_type, "session_end")
         self.assertEqual(event.payload["session_id"], "abc123")
+
+    def test_create_exercise_dropout_event(self) -> None:
+        """Test creating a valid exercise_dropout event"""
+        response = self.client.post(
+            self.url,
+            data={
+                "installation_id": "test123",
+                "event_type": "exercise_dropout",
+                "timestamp": "2026-01-30T12:34:56Z",
+                "payload": {
+                    "exercise_type": "word_choice",
+                    "unit_id": 5,
+                    "position": 3,
+                    "total": 10,
+                },
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(AnalyticsEvent.objects.count(), 1)
+        event = AnalyticsEvent.objects.first()
+        assert event is not None
+        self.assertEqual(event.event_type, "exercise_dropout")
+        self.assertEqual(event.payload["exercise_type"], "word_choice")
+        self.assertEqual(event.payload["unit_id"], 5)
+        self.assertEqual(event.payload["position"], 3)
+        self.assertEqual(event.payload["total"], 10)
+
+    def test_create_exercise_dropout_event_null_unit(self) -> None:
+        """Test creating an exercise_dropout event with null unit_id"""
+        response = self.client.post(
+            self.url,
+            data={
+                "installation_id": "test123",
+                "event_type": "exercise_dropout",
+                "timestamp": "2026-01-30T12:34:56Z",
+                "payload": {
+                    "exercise_type": "article_choice",
+                    "unit_id": None,
+                    "position": 1,
+                    "total": 5,
+                },
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        event = AnalyticsEvent.objects.first()
+        assert event is not None
+        self.assertIsNone(event.payload["unit_id"])
+
+    def test_exercise_dropout_invalid_exercise_type(self) -> None:
+        """Test that an invalid exercise_type is rejected"""
+        response = self.client.post(
+            self.url,
+            data={
+                "installation_id": "test123",
+                "event_type": "exercise_dropout",
+                "timestamp": "2026-01-30T12:34:56Z",
+                "payload": {
+                    "exercise_type": "invalid_type",
+                    "unit_id": 5,
+                    "position": 3,
+                    "total": 10,
+                },
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_exercise_dropout_missing_position(self) -> None:
+        """Test that a missing position field is rejected"""
+        response = self.client.post(
+            self.url,
+            data={
+                "installation_id": "test123",
+                "event_type": "exercise_dropout",
+                "timestamp": "2026-01-30T12:34:56Z",
+                "payload": {
+                    "exercise_type": "word_choice",
+                    "unit_id": 5,
+                    "total": 10,
+                },
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
