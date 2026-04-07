@@ -1,7 +1,10 @@
-from rest_framework import mixins, viewsets
+from django.db.models import QuerySet
+from rest_framework import mixins, status, viewsets
 from rest_framework.request import Request
-from rest_framework.throttling import SimpleRateThrottle
+from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
 
+from ..models import AnalyticsEvent
 from .serializers import AnalyticsEventSerializer
 
 
@@ -29,3 +32,23 @@ class AnalyticsEventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     throttle_classes = [InstallationRateThrottle]
     serializer_class = AnalyticsEventSerializer
+
+
+class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """View class for viewing and deleting personal data"""
+
+    serializer_class = AnalyticsEventSerializer
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "gdpr"
+
+    def get_queryset(self) -> QuerySet[AnalyticsEvent]:
+        return AnalyticsEvent.objects.filter(
+            installation_id=self.kwargs["installation_id"]
+        )
+
+    def destroy(self, request: Request, *args, **kwargs) -> Response:
+        """
+        Deletes all events with a matching installation_id
+        """
+        self.get_queryset().delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
