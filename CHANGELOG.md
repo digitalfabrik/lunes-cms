@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#700](https://github.com/digitalfabrik/lunes-cms/issues/700) ] Add job filter to CMS
+
 
 2026.3.1
 --------
