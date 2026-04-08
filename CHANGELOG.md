@@ -1,6 +1,10 @@
 UNRELEASED
 ----------
 
+
+2026.4.0
+--------
+
 * [ [#700](https://github.com/digitalfabrik/lunes-cms/issues/700) ] 700: Add job filter to CMS
 * [ [#704](https://github.com/digitalfabrik/lunes-cms/issues/704) ] 704: Convert images to WebP in order to decrease loading times
 * [ [#664](https://github.com/digitalfabrik/lunes-cms/issues/664) ] 664: Dropout tracking
