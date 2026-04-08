@@ -2,7 +2,7 @@ UNRELEASED
 ----------
 
 * [ [#700](https://github.com/digitalfabrik/lunes-cms/issues/700) ] 700: Add job filter to CMS
-* [ [#690](https://github.com/digitalfabrik/lunes-cms/issues/690) ] 704: Convert images to WebP in order to decrease loading times
+* [ [#704](https://github.com/digitalfabrik/lunes-cms/issues/704) ] 704: Convert images to WebP in order to decrease loading times
 * [ [#664](https://github.com/digitalfabrik/lunes-cms/issues/664) ] 664: Dropout tracking
 * [ [#668](https://github.com/digitalfabrik/lunes-cms/issues/668) ] Add GDPR data controls
 * [ [#591](https://github.com/digitalfabrik/lunes-cms/issues/591) ] 591: Remove copyright
