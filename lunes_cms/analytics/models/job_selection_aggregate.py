@@ -26,4 +26,4 @@ class JobSelectionAggregate(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"Job {self.job_id} | {self.date} | {self.selection_count}"
+        return f"Job aggregate ({self.job_id}, {self.date}): {self.selection_count}"

@@ -1,0 +1,30 @@
+from django.db import models
+
+
+class ModuleDurationAggregate(models.Model):
+    """
+    Aggregate of module duration events
+    """
+
+    date = models.DateField(db_index=True)
+    exercise_type = models.IntegerField()
+    unit_id = models.IntegerField()
+
+    # aggregated fields
+    total_sessions = models.IntegerField(default=0)
+    total_duration_seconds = models.IntegerField(default=0)
+
+    class Meta:
+        """
+        Meta class
+        """
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["date", "exercise_type", "unit_id"],
+                name="unique_module_duration_key",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"Module duration aggregate ({self.date}, {self.exercise_type}, {self.unit_id}): {self.total_sessions} | {self.total_duration_seconds}"

@@ -103,7 +103,7 @@ class UnitAdmin(BaseAdmin):
         "created_at_date",
     ]
     list_display_links = ["title"]
-    list_filter = ["released", MigratedFilter]
+    list_filter = ["released", MigratedFilter, "jobs"]
     list_per_page = 25
 
     class Media:

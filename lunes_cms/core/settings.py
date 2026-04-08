@@ -449,6 +449,7 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
     "DEFAULT_THROTTLE_RATES": {
         "installation": "100/min",
+        "gdpr": "10/hour",
         "user": "1000/day",
     },
 }
@@ -493,7 +494,6 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "single",
     "language_chooser": True,
     "custom_css": "css/corporate_identity.css",
-    "custom_js": "js/corporate_identity.js",
     "icons": {
         "auth.user": "fas fa-user-edit",
         "auth.Group": "fas fa-users",

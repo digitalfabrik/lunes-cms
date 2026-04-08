@@ -13,7 +13,12 @@ from ..validators import (
     validate_multiple_extensions,
 )
 from .job import Job
-from .static import convert_umlaute_audio, convert_umlaute_images, Static
+from .static import (
+    convert_image_to_webp,
+    convert_umlaute_audio,
+    convert_umlaute_images,
+    Static,
+)
 from .word import Word
 
 
@@ -117,6 +122,8 @@ class UnitWordRelation(models.Model):
             self.example_sentence_check_status = None
 
         super().save(*args, **kwargs)
+        if image_updated and convert_image_to_webp(self.image):
+            super().save(update_fields=["image"])
 
     def list_image(self):
         """

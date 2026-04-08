@@ -125,7 +125,7 @@ def get_image_tag(image, width=330):
     if (
         image
         and image.storage.exists(image.name)
-        and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png"])
+        and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png", ".webp"])
     ):
         src = escape(f"{settings.MEDIA_URL}{image}")
     html_cls = "" if src else 'class="hidden"'
