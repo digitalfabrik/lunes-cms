@@ -110,7 +110,7 @@ class AnalyticsEventTests(APITestCase):
                 "event_type": "module_duration",
                 "timestamp": "2026-01-30T12:34:56Z",
                 "payload": {
-                    "exercise_type": 1,
+                    "exercise_type": "word_choice",
                     "unit_id": 1,
                     "duration_seconds": 10,
                 },
@@ -122,7 +122,7 @@ class AnalyticsEventTests(APITestCase):
         event = AnalyticsEvent.objects.first()
         assert event is not None
         self.assertEqual(event.event_type, "module_duration")
-        self.assertEqual(event.payload["exercise_type"], 1)
+        self.assertEqual(event.payload["exercise_type"], "word_choice")
         self.assertEqual(event.payload["unit_id"], 1)
         self.assertEqual(event.payload["duration_seconds"], 10)
 
@@ -200,7 +200,7 @@ class AnalyticsEventTests(APITestCase):
                 "event_type": "exercise_dropout",
                 "timestamp": "2026-01-30T12:34:56Z",
                 "payload": {
-                    "exercise_type": "article_choice",
+                    "exercise_type": "word_choice",
                     "unit_id": None,
                     "position": 1,
                     "total": 5,
