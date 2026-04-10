@@ -463,49 +463,39 @@ workflows:
             branches:
               only: main
       - bump-version:
+          name: bump-version-main
           context: deliverino
           requires:
             - install-main
-  deploy:
-    jobs:
-      - install:
-          name: install-deploy
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore: /.*/
       - compile-translations:
           name: compile-translations-deploy
           requires:
-            - install-deploy
+            - bump-version-main
           filters:
-            tags:
-              only: /.*/
+            branches:
+              only: main
       - build-package:
           requires:
             - compile-translations-deploy
           filters:
-            tags:
-              only: /.*/
       - publish-package:
           context: pypi
           requires:
             - build-package
           filters:
-            tags:
-              only: /.*/
+            branches:
+              only: main
       - create-release:
           context: deliverino
           requires:
             - publish-package
           filters:
-            tags:
-              only: /.*/
+            branches:
+              only: main
       - notify-mattermost:
           context: mattermost
           requires:
             - create-release
           filters:
-            tags:
-              only: /.*/
+            branches:
+              only: main
