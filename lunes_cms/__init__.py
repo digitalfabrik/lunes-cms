@@ -2,4 +2,4 @@
 Content Management System for the Lunes Vocabulary Trainer App
 """
 
-__version__ = "2026.4.3"
+__version__ = "2026.4.4"
