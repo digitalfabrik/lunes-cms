@@ -63,7 +63,7 @@ The API usage documentation is available here:
 
 ## License
 
-Copyright © 2020 [Tür an Tür - Digitalfabrik gGmbH](https://github.com/digitalfabrik) and [individual contributors](https://github.com/digitalfabrik/lunes-cms/graphs/contributors).
+Copyright © 2026 [Tür an Tür - Digitalfabrik gGmbH](https://github.com/digitalfabrik) and [individual contributors](https://github.com/digitalfabrik/lunes-cms/graphs/contributors).
 All rights reserved.
 
 This project is licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0), see [LICENSE](./LICENSE) and [NOTICE.md](./NOTICE.md).
