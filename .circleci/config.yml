@@ -478,6 +478,8 @@ workflows:
           requires:
             - compile-translations-deploy
           filters:
+            branches:
+              only: main
       - publish-package:
           context: pypi
           requires:
