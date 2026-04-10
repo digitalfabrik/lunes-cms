@@ -364,7 +364,7 @@ jobs:
             echo "export CHANGELOG=\"${CHANGELOG}\"" >> $BASH_ENV
       - run:
           name: Create release as Deliverino app
-          command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes-cms-*.tar.gz
+          command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
   notify-mattermost:
     docker:
       - image: cimg/base:stable
