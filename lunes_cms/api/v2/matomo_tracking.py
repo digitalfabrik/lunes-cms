@@ -20,10 +20,10 @@ logger = logging.getLogger(__name__)
 
 # Module-level thread pool executor for Matomo tracking requests.
 # Reuses threads instead of creating new ones for each request.
-_executor = ThreadPoolExecutor(max_workers=10, thread_name_prefix="matomo_tracking")
+executor = ThreadPoolExecutor(max_workers=10, thread_name_prefix="matomo_tracking")
 
 # Ensure clean shutdown of the thread pool when the application exits
-atexit.register(_executor.shutdown, wait=False)
+atexit.register(executor.shutdown, wait=False)
 
 
 @dataclass
@@ -158,7 +158,7 @@ def matomo_tracking(
             )
 
             # Send tracking request asynchronously using the thread pool
-            _executor.submit(send_matomo_tracking, tracking_data)
+            executor.submit(send_matomo_tracking, tracking_data)
 
             return response
 

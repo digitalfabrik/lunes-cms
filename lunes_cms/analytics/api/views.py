@@ -4,6 +4,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
 
+from ..matomo_event_tracking import forward_analytics_event_to_matomo
 from ..models import AnalyticsEvent
 from .serializers import AnalyticsEventSerializer
 
@@ -32,6 +33,14 @@ class AnalyticsEventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     throttle_classes = [InstallationRateThrottle]
     serializer_class = AnalyticsEventSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+        forward_analytics_event_to_matomo(
+            event_type=serializer.validated_data["event_type"],
+            payload=serializer.validated_data["payload"],
+            request=self.request,
+        )
 
 
 class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
