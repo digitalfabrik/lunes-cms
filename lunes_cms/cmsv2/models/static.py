@@ -65,9 +65,46 @@ class Static:
 
     # super admin group name
     admin_group = "Lunes"
+    reviewer_group = _("Reviewer")
 
     # default group name
     default_group_name = None
+    STAFF_PERMISSIONS = [
+        "add_job",
+        "change_job",
+        "delete_job",
+        "view_job",
+        "add_word",
+        "change_word",
+        "delete_word",
+        "view_word",
+        "add_unit",
+        "change_unit",
+        "delete_unit",
+        "view_unit",
+        "add_image",
+        "change_image",
+        "delete_image",
+        "view_image",
+        "add_feedback",
+        "change_feedback",
+        "delete_feedback",
+        "view_feedback",
+        "add_unitwordrelation",
+        "change_unitwordrelation",
+        "delete_unitwordrelation",
+        "view_unitwordrelation",
+    ]
+    REVIEW_PERMISSIONS = [
+        "add_imagereview",
+        "change_imagereview",
+        "delete_imagereview",
+        "view_imagereview",
+        "add_reviewassignment",
+        "change_reviewassignment",
+        "delete_reviewassignment",
+        "view_reviewassignment",
+    ]
 
 
 REVIEW_STATUS_CHOICES = Static.review_status_choices
@@ -174,3 +211,10 @@ def create_user_profile(sender, instance, created, **kwargs):
             return False
         instance.groups.add(Group.objects.get(name=Static.default_group_name))
     return True
+
+
+def is_reviewer(user: User) -> bool:
+    """
+    Check if the user is a reviewer.
+    """
+    return user.groups.filter(name=Static.admin_group).exists()

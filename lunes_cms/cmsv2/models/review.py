@@ -107,6 +107,10 @@ class ImageReview(models.Model):
         Meta class for ImageReview model.
         """
 
+        permissions = [
+            ("can_review_images", "Can review and approve images"),
+            ("can_suggest_images", "Can suggest alternative images"),
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["unit_word_relation", "reviewer"], name="unique_image_review"
