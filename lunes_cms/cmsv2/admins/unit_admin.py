@@ -1,10 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+from django.template.response import TemplateResponse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
+from lunes_cms.cmsv2.models.review import ReviewAssignment
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -30,6 +34,30 @@ class WordInline(admin.TabularInline):
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         return formset
+
+
+class ReviewAssignmentInline(admin.TabularInline):
+    """
+    Inline admin for ReviewAssignment.
+    """
+
+    model = ReviewAssignment
+    fk_name = "unit"
+    extra = 0
+    fields = ["reviewer", "assigned_by", "assigned_at"]
+    readonly_fields = ["assigned_by", "assigned_at"]
+    autocomplete_fields = ["reviewer"]
+    verbose_name = _("assigned user")
+    verbose_name_plural = _("assigned users")
+
+    def has_add_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
 
 
 class MigratedFilter(admin.SimpleListFilter):
@@ -91,7 +119,7 @@ class UnitAdmin(BaseAdmin):
         "released",
     ]
     readonly_fields = ["created_by", "image_tag", "migrated_status"]
-    inlines = [WordInline]
+    inlines = [WordInline, ReviewAssignmentInline]
     search_fields = ["title"]
     list_display = [
         "title",
@@ -105,6 +133,7 @@ class UnitAdmin(BaseAdmin):
     list_display_links = ["title"]
     list_filter = ["released", MigratedFilter, "jobs"]
     list_per_page = 25
+    actions = ["assign_to_user"]
 
     class Media:
         """
@@ -116,6 +145,66 @@ class UnitAdmin(BaseAdmin):
 
         js = ["js/unit_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model is ReviewAssignment:
+            instances = formset.save(commit=False)
+            for obj in formset.deleted_objects:
+                obj.delete()
+            for instance in instances:
+                if instance.assigned_by_id is None:
+                    instance.assigned_by = request.user
+                instance.save()
+            formset.save_m2m()
+        else:
+            super().save_formset(request, form, formset, change)
+
+    @admin.action(description=_("Assign selected units to user"))
+    def assign_to_user(self, request, queryset):
+        """
+        Bulk-create ReviewAssignments linking each selected unit to a chosen
+        user. Superusers only. Units already assigned to the target user are
+        silently skipped via the (unit, reviewer) unique constraint.
+        """
+        if not request.user.is_superuser:
+            raise PermissionDenied
+
+        if "apply" not in request.POST:
+            return TemplateResponse(
+                request,
+                "admin/cmsv2/assign_units_to_user.html",
+                {
+                    **self.admin_site.each_context(request),
+                    "units": queryset,
+                    "users": User.objects.order_by("username"),
+                    "action": "assign_to_user",
+                    "selected_action": queryset.values_list("pk", flat=True),
+                    "title": _("Assign selected units to user"),
+                },
+            )
+
+        user = User.objects.get(pk=request.POST["user"])
+        existing_unit_ids = set(
+            ReviewAssignment.objects.filter(
+                reviewer=user, unit__in=queryset
+            ).values_list("unit_id", flat=True)
+        )
+        to_create = [
+            ReviewAssignment(unit=unit, reviewer=user, assigned_by=request.user)
+            for unit in queryset
+            if unit.pk not in existing_unit_ids
+        ]
+        ReviewAssignment.objects.bulk_create(to_create, ignore_conflicts=True)
+        self.message_user(
+            request,
+            _("Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned).")
+            % {
+                "new": len(to_create),
+                "skipped": len(existing_unit_ids),
+                "user": user,
+            },
+        )
+        return None
 
     def related_jobs(self, obj):
         """
