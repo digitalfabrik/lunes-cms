@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 14:13+0000\n"
+"POT-Creation-Date: 2026-05-11 19:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -709,6 +709,22 @@ msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
 #: cmsv2/admins/job_admin.py:235
 msgid "Import"
 msgstr "Import"
+
+#: cmsv2/admins/review_admin.py:60
+msgid "Image '{unitword.word}' was marked as confirmed."
+msgstr "Bild '{unitword.word}' wurde als bestätigt markiert."
+
+#: cmsv2/admins/review_admin.py:64
+msgid "Approvals"
+msgstr "Freigaben"
+
+#: cmsv2/admins/review_admin.py:69
+msgid "Rejections"
+msgstr "Ablehnungen"
+
+#: cmsv2/admins/review_admin.py:74
+msgid "actions"
+msgstr "Aktionen"
 
 #: cmsv2/admins/unit_admin.py:50
 msgid "assigned user"

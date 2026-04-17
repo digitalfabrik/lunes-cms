@@ -507,6 +507,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
+        "cmsv2.Reviews": "fas fa-tasks",
     },
 }
 
