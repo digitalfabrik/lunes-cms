@@ -5,6 +5,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
+from lunes_cms.cmsv2.models.review import ReviewAssignment
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -30,6 +31,30 @@ class WordInline(admin.TabularInline):
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         return formset
+
+
+class ReviewAssignmentInline(admin.TabularInline):
+    """
+    Inline admin for ReviewAssignment.
+    """
+
+    model = ReviewAssignment
+    fk_name = "unit"
+    extra = 0
+    fields = ["reviewer", "assigned_by", "assigned_at"]
+    readonly_fields = ["assigned_by", "assigned_at"]
+    autocomplete_fields = ["reviewer"]
+    verbose_name = _("assigned user")
+    verbose_name_plural = _("assigned users")
+
+    def has_add_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
 
 
 class MigratedFilter(admin.SimpleListFilter):
@@ -91,7 +116,7 @@ class UnitAdmin(BaseAdmin):
         "released",
     ]
     readonly_fields = ["created_by", "image_tag", "migrated_status"]
-    inlines = [WordInline]
+    inlines = [WordInline, ReviewAssignmentInline]
     search_fields = ["title"]
     list_display = [
         "title",
@@ -116,6 +141,19 @@ class UnitAdmin(BaseAdmin):
 
         js = ["js/unit_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model is ReviewAssignment:
+            instances = formset.save(commit=False)
+            for obj in formset.deleted_objects:
+                obj.delete()
+            for instance in instances:
+                if instance.assigned_by_id is None:
+                    instance.assigned_by = request.user
+                instance.save()
+            formset.save_m2m()
+        else:
+            super().save_formset(request, form, formset, change)
 
     def related_jobs(self, obj):
         """

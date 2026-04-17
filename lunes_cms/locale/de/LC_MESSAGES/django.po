@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-24 16:18+0000\n"
+"POT-Creation-Date: 2026-04-26 11:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:151
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:189
 #: cmsv2/admins/word_admin.py:434
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -664,17 +664,17 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:42
+#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:67
 #: cmsv2/admins/word_admin.py:115
 msgid "migration status"
 msgstr "Ablaufdatum"
 
-#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:53
+#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:78
 #: cmsv2/admins/word_admin.py:126
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:54
+#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:79
 #: cmsv2/admins/word_admin.py:127
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
@@ -683,12 +683,12 @@ msgstr "Nicht migriert aus altem Datenmodell"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:165
+#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:203
 #: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:327
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:187
+#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:225
 #: cmsv2/admins/word_admin.py:711
 msgid "migrated"
 msgstr "Migriert"
@@ -701,9 +701,25 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 msgid "Import"
 msgstr "Import"
 
-#: cmsv2/admins/unit_admin.py:132
+#: cmsv2/admins/unit_admin.py:47
+msgid "assigned user"
+msgstr "Zugewiesene Person"
+
+#: cmsv2/admins/unit_admin.py:48
+msgid "assigned users"
+msgstr "Zugewiesene Personen"
+
+#: cmsv2/admins/unit_admin.py:170
 msgid "jobs"
 msgstr "Berufe"
+
+#: cmsv2/admins/user_admin.py:21
+msgid "assigned unit"
+msgstr "Zugewiesene Einheit"
+
+#: cmsv2/admins/user_admin.py:22
+msgid "assigned units"
+msgstr "Zugewiesene Einheiten"
 
 #: cmsv2/admins/word_admin.py:20
 msgid "Has Image"
