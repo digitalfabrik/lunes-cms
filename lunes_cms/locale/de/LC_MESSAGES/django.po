@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 19:49+0000\n"
+"POT-Creation-Date: 2026-04-17 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -868,11 +868,11 @@ msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
 msgid "updated at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:115
+#: cmsv2/models/review.py:119
 msgid "Image Review"
 msgstr "Bild Kontrolle"
 
-#: cmsv2/models/review.py:116
+#: cmsv2/models/review.py:120
 msgid "Image Reviews"
 msgstr "Bild Kontrollen"
 
@@ -883,6 +883,10 @@ msgstr "Freigabe ausstehend"
 #: cmsv2/models/static.py:58
 msgid "Approved"
 msgstr "Genehmigt"
+
+#: cmsv2/models/static.py:68
+msgid "Reviewer"
+msgstr "Expert:in"
 
 #: cmsv2/models/unit.py:60 cmsv2/models/unit.py:218 cmsv2/models/unit.py:290
 #: cmsv2/models/word.py:94

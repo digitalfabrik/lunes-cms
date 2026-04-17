@@ -47987,5 +47987,85 @@
       "example_sentence_check_status": null,
       "example_sentence_audio_regenerated": false
     }
+  },
+  {
+    "model": "auth.user",
+    "fields": {
+      "password": "pbkdf2_sha256$260000$tX360jOwBEnw2Ia8XAn0au$aLj/XCWIIqNKbv1UayRjYQA/CUo0AsFto5HuGUZBHPs=",
+      "last_login": "2026-06-28T23:17:49.927Z",
+      "is_superuser": false,
+      "username": "rebecca.redakteurin",
+      "first_name": "Rebecca",
+      "last_name": "Redakteurin",
+      "email": "rebecca.redakteurin@lunes.app",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-06-28T23:02:40Z",
+      "groups": [["Vokabelverwalter:innen"]],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "fields": {
+      "password": "pbkdf2_sha256$260000$tX360jOwBEnw2Ia8XAn0au$aLj/XCWIIqNKbv1UayRjYQA/CUo0AsFto5HuGUZBHPs=",
+      "last_login": "2026-06-28T23:17:49.927Z",
+      "is_superuser": false,
+      "username": "elisa.expertin",
+      "first_name": "Elisa",
+      "last_name": "Expertin",
+      "email": "elisa.expertin@fliesenlegerinnen-verein.de",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-06-28T23:02:40Z",
+      "groups": [["Expert:innen"]],
+      "user_permissions": []
+    }
+  }, 
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "Vokabelverwalter:innen",
+      "icon": "",
+      "permissions": [
+        ["add_job", "cmsv2", "job"],
+        ["change_job", "cmsv2", "job"],
+        ["delete_job", "cmsv2", "job"],
+        ["view_job", "cmsv2", "job"],
+        ["add_word", "cmsv2", "word"],
+        ["change_word", "cmsv2", "word"],
+        ["delete_word", "cmsv2", "word"],
+        ["view_word", "cmsv2", "word"],
+        ["add_unit", "cmsv2", "unit"],
+        ["change_unit", "cmsv2", "unit"],
+        ["delete_unit", "cmsv2", "unit"],
+        ["view_unit", "cmsv2", "unit"],
+        ["add_feedback", "cmsv2", "feedback"],
+        ["change_feedback", "cmsv2", "feedback"],
+        ["delete_feedback", "cmsv2", "feedback"],
+        ["view_feedback", "cmsv2", "feedback"],
+        ["add_unitwordrelation", "cmsv2", "unitwordrelation"],
+        ["change_unitwordrelation", "cmsv2", "unitwordrelation"],
+        ["delete_unitwordrelation", "cmsv2", "unitwordrelation"],
+        ["view_unitwordrelation", "cmsv2", "unitwordrelation"]
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "Expert:innen",
+      "icon": "",
+      "permissions": [
+        ["add_reviewassignment", "cmsv2", "reviewassignment"],
+        ["change_reviewassignment", "cmsv2", "reviewassignment"],
+        ["delete_reviewassignment", "cmsv2", "reviewassignment"],
+        ["view_reviewassignment", "cmsv2", "reviewassignment"],
+        ["add_imagereview", "cmsv2", "imagereview"],
+        ["change_imagereview", "cmsv2", "imagereview"],
+        ["delete_imagereview", "cmsv2", "imagereview"],
+        ["view_imagereview", "cmsv2", "imagereview"]
+      ]
+    }
   }
 ]
