@@ -11,10 +11,8 @@ class AnalyticsEvent(models.Model):
         Exercise types matching the app's ExerciseKeys.
         """
 
-        VOCABULARY_LIST = "vocabulary_list", "Vocabulary List"
+        WORD_LIST = "word_list", "Word List"
         WORD_CHOICE = "word_choice", "Word Choice"
-        ARTICLE_CHOICE = "article_choice", "Article Choice"
-        WRITE = "write", "Write"
 
     class EventType(models.TextChoices):
         """
@@ -26,6 +24,7 @@ class AnalyticsEvent(models.Model):
         SESSION_END = "session_end"
         MODULE_DURATION = "module_duration"
         EXERCISE_DROPOUT = "exercise_dropout"
+        EXERCISE_REPETITION = "exercise_repetition"
 
     installation_id = models.CharField(
         max_length=255,

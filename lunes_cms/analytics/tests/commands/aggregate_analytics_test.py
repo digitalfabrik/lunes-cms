@@ -472,14 +472,14 @@ class DropoutAggregateTests(TestCase):
     def test_aggregates_different_exercise_types(self) -> None:
         """Test that different exercise types create separate aggregates"""
         self._create_event(
-            exercise_type="word_choice",
+            exercise_type="word_list",
             unit_id=10,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
         self._create_event(
-            exercise_type="article_choice",
+            exercise_type="word_choice",
             unit_id=10,
             position=3,
             total=10,

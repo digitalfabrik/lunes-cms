@@ -1,5 +1,7 @@
 from django.db import models
 
+from lunes_cms.analytics.models.analytics_event import AnalyticsEvent
+
 
 class ModuleDurationAggregate(models.Model):
     """
@@ -7,7 +9,10 @@ class ModuleDurationAggregate(models.Model):
     """
 
     date = models.DateField(db_index=True)
-    exercise_type = models.IntegerField()
+    exercise_type = models.CharField(
+        max_length=50,
+        choices=AnalyticsEvent.ExerciseType.choices,
+    )
     unit_id = models.IntegerField()
 
     # aggregated fields
