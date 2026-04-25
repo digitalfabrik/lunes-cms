@@ -3,14 +3,26 @@ version: 2.1
 orbs:
   shellcheck: circleci/shellcheck@2.2.4
   qlty: qltysh/qlty-orb@0.0.10
-jobs:
-  install:
+
+executors:
+  python:
     docker:
       - image: cimg/python:3.11
+
+commands:
+  activate-venv:
+    steps:
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
+
+jobs:
+  install:
+    executor: python
     steps:
       - checkout
       - restore_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v6
+          key: pip-{{ checksum "pyproject.toml" }}-v2
       - run:
           name: Creating virtual environment
           command: |
@@ -19,10 +31,10 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install -e .[dev,doc,test]
+              pip install -e .[dev,pinned,dev-pinned]
             fi
       - save_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v6
+          key: pip-{{ checksum "pyproject.toml" }}-v2
           paths:
             - .venv
             - lunes_cms.egg-info
@@ -33,8 +45,7 @@ jobs:
             - .venv
             - lunes_cms.egg-info
   compile-translations:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
@@ -56,8 +67,7 @@ jobs:
             - lunes_cms/locale/de/LC_MESSAGES/django.mo
             - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
   pylint:
-    docker:
-      - image: "cimg/python:3.11"
+    executor: python
     steps:
       - checkout
       - attach_workspace:
@@ -65,24 +75,20 @@ jobs:
       - run:
           name: Install pylint requirements
           command: sudo apt-get update && sudo apt-get install ffmpeg
+      - activate-venv
       - run:
           name: Run pylint
-          command: |
-            source .venv/bin/activate
-            pip install pylint
-            ./tools/pylint.sh
+          command: make pylint
   mypy:
-    docker:
-      - image: "cimg/python:3.11"
+    executor: python
     steps:
       - checkout
       - attach_workspace:
           at: .
+      - activate-venv
       - run:
           name: Run mypy
-          command: |
-            source .venv/bin/activate
-            ./tools/mypy.sh
+          command: make mypy
   test:
     docker:
       - image: cimg/python:3.11
@@ -97,9 +103,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Check for missing migrations
           command: lunes-cms-cli makemigrations cms --check
@@ -126,35 +130,28 @@ jobs:
       - qlty/coverage_publish:
           files: coverage.xml
   black:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Check formatting of python files
           command: black --check .
   isort:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Check isort code style
           command: isort . --skip-glob "**/migrations/**"
   check-translations:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
@@ -162,12 +159,12 @@ jobs:
       - run:
           name: Install translation requirements
           command: sudo apt-get update && sudo apt-get install gettext pcregrep
+      - activate-venv
       - run:
           name: Check translation file for missing or empty entries
-          command: ./tools/check_translations.sh
+          command: make check-translations
   build-documentation:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
@@ -175,22 +172,17 @@ jobs:
       - run:
           name: Install requirements
           command: sudo apt-get update && sudo apt-get install ffmpeg
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Build documentation
-          command: ./tools/build_documentation.sh
+          command: make docs
   bump-dev-version:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Bump version
           command: |
@@ -232,8 +224,7 @@ jobs:
             - lunes_cms/__init__.py
             - lunes_cms/_manifest
   bump-version:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - run:
@@ -244,9 +235,7 @@ jobs:
             fi
       - attach_workspace:
           at: .
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Request installation access token to authorize as Deliverino app
           command: |
@@ -300,8 +289,7 @@ jobs:
           name: Merge version bump into develop
           command: git checkout develop && git merge main --commit --no-edit && git push
   build-package:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
@@ -321,35 +309,34 @@ jobs:
           paths:
             - dist
   publish-package:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
           at: .
       - run:
-          name: Check via twine
+          name: Install twine
           command: |
             source .venv/bin/activate
             pip install twine
+      - run:
+          name: Check via twine
+          command: |
+            source .venv/bin/activate
             twine check ./dist/lunes*.tar.gz
       - run:
           name: Publish lunes-cms package to (Test-)PyPI
           command: |
             source .venv/bin/activate
-            pip install twine
             ls -lh ./dist/*
             twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
   create-release:
-    docker:
-      - image: cimg/python:3.11
+    executor: python
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run:
-          name: Activate virtual environment
-          command: echo "source .venv/bin/activate" >> $BASH_ENV
+      - activate-venv
       - run:
           name: Request installation access token to authorize as Deliverino app
           command: |
