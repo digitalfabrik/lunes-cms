@@ -197,7 +197,7 @@ class UnitAdmin(BaseAdmin):
         ReviewAssignment.objects.bulk_create(to_create, ignore_conflicts=True)
         self.message_user(
             request,
-            _("Assigned %(new)d unit(s) to %(user)s " "(%(skipped)d already assigned).")
+            _("Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned).")
             % {
                 "new": len(to_create),
                 "skipped": len(existing_unit_ids),
