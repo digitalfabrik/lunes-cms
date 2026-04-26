@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-24 16:18+0000\n"
+"POT-Creation-Date: 2026-04-26 11:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:151
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:240
 #: cmsv2/admins/word_admin.py:434
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -563,6 +563,7 @@ msgstr ""
 
 #: cms/templates/admin/delete_confirmation.html:16
 #: cms/templates/admin/delete_selected_confirmation.html:15
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:8
 #: cmsv2/templates/admin/csv_form.html:8
 #: cmsv2/templates/admin/generate_audio_base.html:9
 #: cmsv2/templates/admin/generate_image_base.html:9
@@ -664,17 +665,17 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:42
+#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:70
 #: cmsv2/admins/word_admin.py:115
 msgid "migration status"
 msgstr "Ablaufdatum"
 
-#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:53
+#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:81
 #: cmsv2/admins/word_admin.py:126
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:54
+#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:82
 #: cmsv2/admins/word_admin.py:127
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
@@ -683,12 +684,12 @@ msgstr "Nicht migriert aus altem Datenmodell"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:165
+#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:254
 #: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:327
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:187
+#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:276
 #: cmsv2/admins/word_admin.py:711
 msgid "migrated"
 msgstr "Migriert"
@@ -701,9 +702,38 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 msgid "Import"
 msgstr "Import"
 
-#: cmsv2/admins/unit_admin.py:132
+#: cmsv2/admins/unit_admin.py:50
+msgid "assigned user"
+msgstr "Zugewiesene Person"
+
+#: cmsv2/admins/unit_admin.py:51
+msgid "assigned users"
+msgstr "Zugewiesene Personen"
+
+#: cmsv2/admins/unit_admin.py:162 cmsv2/admins/unit_admin.py:182
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:4
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:14
+msgid "Assign selected units to user"
+msgstr "Ausgewählten Einheiten zuweisen"
+
+#: cmsv2/admins/unit_admin.py:200
+#, python-format
+msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
+msgstr ""
+"%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
+"zugewiesen)."
+
+#: cmsv2/admins/unit_admin.py:221
 msgid "jobs"
 msgstr "Berufe"
+
+#: cmsv2/admins/user_admin.py:21
+msgid "assigned unit"
+msgstr "Zugewiesene Einheit"
+
+#: cmsv2/admins/user_admin.py:22
+msgid "assigned units"
+msgstr "Zugewiesene Einheiten"
 
 #: cmsv2/admins/word_admin.py:20
 msgid "Has Image"
@@ -752,6 +782,7 @@ msgid "image check status"
 msgstr "Bild Prüfstatus"
 
 #: cmsv2/admins/word_export_resource.py:80 cmsv2/models/unit.py:405
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:9
 msgid "Units"
 msgstr "Einheit"
 
@@ -942,6 +973,40 @@ msgstr "Audio Checked Identifier"
 msgid "Words"
 msgstr "Vokabel"
 
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:10
+msgid "Assign to user"
+msgstr "zuweisen"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:31
+#, python-format
+msgid "You are about to assign %(counter)s unit to a single user."
+msgid_plural "You are about to assign %(counter)s units to a single user."
+msgstr[0] "Du bist dabei, %(counter)s Einheit einer Person zuzuweisen."
+msgstr[1] "Du bist dabei, %(counter)s Einheiten einer Person zuzuweisen."
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:39
+msgid "User"
+msgstr "Nutzer"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:47
+msgid "Units already assigned to this user will be skipped."
+msgstr ""
+"Einheiten, die dieser Person bereits zugewiesen sind, werden übersprungen."
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:52
+msgid "Selected units"
+msgstr "Ausgewählte Einheiten"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:66
+msgid "Assign"
+msgstr "Zuweisen"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:71
+#: cmsv2/templates/admin/csv_form.html:55
+#: cmsv2/templates/admin/csv_form.html:59
+msgid "Cancel"
+msgstr "Abbrechen"
+
 #: cmsv2/templates/admin/cmsv2/import_csv_button.html:7
 #: cmsv2/templates/admin/csv_form.html:4 cmsv2/templates/admin/csv_form.html:13
 #: cmsv2/templates/admin/csv_form.html:17
@@ -955,11 +1020,6 @@ msgstr "Sichern und Wörter importieren"
 #: cmsv2/templates/admin/csv_form.html:49
 msgid "Start import"
 msgstr "Import starten"
-
-#: cmsv2/templates/admin/csv_form.html:55
-#: cmsv2/templates/admin/csv_form.html:59
-msgid "Cancel"
-msgstr "Abbrechen"
 
 #: cmsv2/templates/admin/generate_audio_base.html:16
 #: cmsv2/templates/admin/word_generate_audio.html:9
