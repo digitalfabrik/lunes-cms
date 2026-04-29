@@ -37,17 +37,34 @@ cat requirements.system | xargs sudo apt-get install
 ```
 git clone git@github.com:digitalfabrik/lunes-cms.git
 cd lunes-cms
-./tools/install.sh
+make install
 ```
 
 ### Run development server
 
 ```
-./tools/run.sh
+make run
 ```
 
 * Go to your browser and open the URL `http://localhost:8080`
 * Default user is "lunes" with password "lunes".
+
+### Common make targets
+
+Run `make help` to list them. Frequently used:
+
+| Target                  | What it does                                  |
+| ----------------------- | --------------------------------------------- |
+| `make install`          | Install CMS into local venv                   |
+| `make run`              | Start dev server                              |
+| `make run-fast`         | Start dev server, skip migrate/translate      |
+| `make test`             | Run pytest with coverage                      |
+| `make format`           | `black` + `isort`                             |
+| `make lint`             | `pylint` + `mypy`                             |
+| `make translate`        | Regenerate + compile translation file         |
+| `make docs`             | Build Sphinx documentation                    |
+
+The underlying scripts still live in `tools/` and can be invoked directly if needed.
 
 ## Development documentation
 
