@@ -52,6 +52,10 @@ class AnalyticsEvent(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+    aggregated_at = models.DateTimeField(
+        null=True,
+        db_index=True,
+    )
 
     class Meta:
         """

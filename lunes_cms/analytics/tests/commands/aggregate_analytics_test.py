@@ -38,7 +38,10 @@ class JobSelectionAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
+        self.assertEqual(AnalyticsEvent.objects.count(), 3)
         agg = JobSelectionAggregate.objects.get(job_id=self.job1.id)
         self.assertEqual(agg.selection_count, 1)
 
@@ -89,7 +92,9 @@ class JobSelectionAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
         self.assertEqual(JobSelectionAggregate.objects.count(), 2)
         self.assertEqual(
             JobSelectionAggregate.objects.get(job_id=99999).selection_count, 1
@@ -135,11 +140,13 @@ class SessionAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
+        self.assertEqual(AnalyticsEvent.objects.count(), 2)
         agg = SessionAggregate.objects.get(date="2026-01-15")
         self.assertEqual(agg.total_sessions, 1)
         self.assertEqual(agg.total_duration_seconds, 30)
-        self.assertEqual(agg.duration_buckets, {"0-1": 1})
 
     def test_multiple_sessions_same_day(self) -> None:
         """Multiple valid sessions on the same day are aggregated together"""
@@ -151,7 +158,6 @@ class SessionAggregateTests(TestCase):
         agg = SessionAggregate.objects.get(date="2026-01-15")
         self.assertEqual(agg.total_sessions, 2)
         self.assertEqual(agg.total_duration_seconds, 630)
-        self.assertEqual(agg.duration_buckets, {"0-1": 1, "5-15": 1})
 
     def test_sessions_on_different_days(self) -> None:
         """Sessions on different days create separate aggregates"""
@@ -173,42 +179,63 @@ class SessionAggregateTests(TestCase):
         agg = SessionAggregate.objects.get(date="2026-01-15")
         self.assertEqual(agg.total_sessions, 2)
         self.assertEqual(agg.total_duration_seconds, 60)
-        self.assertEqual(agg.duration_buckets, {"0-1": 2})
 
-    def test_increments_different_buckets(self) -> None:
-        """Running the command twice with different buckets updates both"""
-        # 30 seconds -> bucket "0-1"
+    def test_does_not_double_count_on_rerun(self) -> None:
+        """Re-running on already-aggregated data does not double count"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
         call_command("aggregate_analytics")
-
-        # 10 minutes -> bucket "5-15"
-        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:10:00")
         call_command("aggregate_analytics")
 
         agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.duration_buckets, {"0-1": 1, "5-15": 1})
+        self.assertEqual(agg.total_sessions, 1)
+        self.assertEqual(agg.total_duration_seconds, 30)
+
+    def test_pairs_session_across_runs(self) -> None:
+        """A session_start in run N and session_end in run N+1 still get paired"""
+        self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
+        call_command("aggregate_analytics")
+
+        # Start arrived but no matching end yet -> no aggregate, event left unmarked
+        self.assertEqual(SessionAggregate.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
+        )
+
+        self._create_session_event("s1", "session_end", "2026-01-15T10:00:30")
+        call_command("aggregate_analytics")
+
+        agg = SessionAggregate.objects.get(date="2026-01-15")
+        self.assertEqual(agg.total_sessions, 1)
+        self.assertEqual(agg.total_duration_seconds, 30)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
 
     def test_ignores_start_without_end(self) -> None:
-        """A session_start without a matching session_end is ignored"""
+        """A session_start without a matching session_end produces no aggregate"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
 
         call_command("aggregate_analytics")
 
         self.assertEqual(SessionAggregate.objects.count(), 0)
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        # Unpaired start is left unmarked so a later run can still pair it
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
+        )
 
     def test_ignores_end_without_start(self) -> None:
-        """A session_end without a matching session_start is ignored"""
+        """A session_end without a matching session_start produces no aggregate"""
         self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
 
         call_command("aggregate_analytics")
 
         self.assertEqual(SessionAggregate.objects.count(), 0)
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
+        )
 
     def test_ignores_duplicate_start_events(self) -> None:
-        """A session_id with two start events and one end event is ignored"""
+        """A session_id with two start events and one end event produces no aggregate"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
         self._create_session_event("s1", "session_start", "2026-01-15T10:01:00")
         self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
@@ -216,10 +243,12 @@ class SessionAggregateTests(TestCase):
         call_command("aggregate_analytics")
 
         self.assertEqual(SessionAggregate.objects.count(), 0)
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 3
+        )
 
     def test_ignores_duplicate_end_events(self) -> None:
-        """A session_id with one start event and two end events is ignored"""
+        """A session_id with one start event and two end events produces no aggregate"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
         self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
         self._create_session_event("s1", "session_end", "2026-01-15T10:06:00")
@@ -227,7 +256,9 @@ class SessionAggregateTests(TestCase):
         call_command("aggregate_analytics")
 
         self.assertEqual(SessionAggregate.objects.count(), 0)
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 3
+        )
 
     def test_invalid_sessions_dont_affect_valid_ones(self) -> None:
         """Invalid sessions are discarded but valid ones are still aggregated"""
@@ -242,34 +273,32 @@ class SessionAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
         agg = SessionAggregate.objects.get(date="2026-01-15")
         self.assertEqual(agg.total_sessions, 1)
         self.assertEqual(agg.total_duration_seconds, 120)
+        # The two valid pair events are marked, the four invalid ones remain unmarked
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 4
+        )
 
-    def test_duration_bucket_boundaries(self) -> None:
-        """Test that durations land in the correct buckets"""
-        # Exactly 1 minute -> bucket "0-1"
-        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:01:00")
-        # 1 minute 1 second -> bucket "1-5"
-        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:01:01")
-        # Exactly 5 minutes -> bucket "1-5"
-        self._create_session("s3", "2026-01-15T12:00:00", "2026-01-15T12:05:00")
-        # 5 minutes 1 second -> bucket "5-15"
-        self._create_session("s4", "2026-01-15T13:00:00", "2026-01-15T13:05:01")
-        # 30 minutes -> bucket "15-30"
-        self._create_session("s5", "2026-01-15T14:00:00", "2026-01-15T14:30:00")
-        # 31 minutes -> bucket "30-"
-        self._create_session("s6", "2026-01-15T15:00:00", "2026-01-15T15:31:00")
+    def test_varied_durations_sum_correctly(self) -> None:
+        """Sessions with very different durations all contribute to total_duration_seconds"""
+        self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:01:00")  # 60s
+        self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:01:01")  # 61s
+        self._create_session("s3", "2026-01-15T12:00:00", "2026-01-15T12:05:00")  # 300s
+        self._create_session("s4", "2026-01-15T13:00:00", "2026-01-15T13:05:01")  # 301s
+        self._create_session(
+            "s5", "2026-01-15T14:00:00", "2026-01-15T14:30:00"
+        )  # 1800s
+        self._create_session(
+            "s6", "2026-01-15T15:00:00", "2026-01-15T15:31:00"
+        )  # 1860s
 
         call_command("aggregate_analytics")
 
         agg = SessionAggregate.objects.get(date="2026-01-15")
         self.assertEqual(agg.total_sessions, 6)
-        self.assertEqual(
-            agg.duration_buckets,
-            {"0-1": 1, "1-5": 2, "5-15": 1, "15-30": 1, "30-": 1},
-        )
+        self.assertEqual(agg.total_duration_seconds, 60 + 61 + 300 + 301 + 1800 + 1860)
 
 
 class ModuleDurationAggregateTests(TestCase):
@@ -318,7 +347,9 @@ class ModuleDurationAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
         agg = ModuleDurationAggregate.objects.get(
             exercise_type="word_choice", unit_id=10, date="2026-01-15"
         )
@@ -520,7 +551,9 @@ class DropoutAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
         agg = DropoutAggregate.objects.get(
             exercise_type="word_choice", unit_id=10, dropout_position=3, total_items=10
         )
