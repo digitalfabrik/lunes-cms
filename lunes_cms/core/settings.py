@@ -524,7 +524,11 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
+        "analytics.SessionDurationReport": "fas fa-chart-line",
     },
+    # Render the Analytics app section directly below Dashboard. Jazzmin's
+    # sidebar lists apps in this order; anything not mentioned trails after.
+    "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
 }
 
 #: UI tweaks for Django Jazzmin
