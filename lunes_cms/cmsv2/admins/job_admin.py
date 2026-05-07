@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import io
 from zipfile import ZipFile
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -98,7 +98,7 @@ class JobAdmin(BaseAdmin):
     ]
     list_display_links = ["name"]
     list_filter = ["released", MigratedFilter]
-    actions = ["export_to_csv"]
+    actions = ["export_to_csv", "duplicate_jobs"]
     list_per_page = 25
     ordering = ["name"]
     change_list_template = "admin/cmsv2/import_csv_button.html"
@@ -198,6 +198,20 @@ class JobAdmin(BaseAdmin):
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
         response["Content-Disposition"] = 'attachment; filename="Lunes_vocabulary.zip"'
         return response
+
+    @admin.action(description=_("Duplicate selected jobs"))
+    def duplicate_jobs(self, request, queryset):
+        """Duplicate the selected jobs, including their related units."""
+        for job in queryset:
+            units = list(job.units.all())
+            job.pk = None
+            job.v1_id = None
+            job.released = False
+            job.name = f"{job.name} ({_('New')})"
+            job.created_by = request.user.groups.first()
+            job.save()
+            job.units.set(units)
+        messages.success(request, _("Selected jobs have been duplicated successfully."))
 
     def response_add(self, request, obj, post_url_continue=None):
         if "_save_and_import" in request.POST:
