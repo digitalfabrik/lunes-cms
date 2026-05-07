@@ -1,6 +1,7 @@
 UNRELEASED
 ----------
 
+* [ [375](https://github.com/digitalfabrik/lunes-cms/issues/375) ] 375: Add created by filter to CMS
 
 2026.4.7
 --------
