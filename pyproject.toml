@@ -74,6 +74,11 @@ dev = [
 	"twine",
     "wheel"
 ]
+e2e = [
+	"mkdocs>=1.5,<2.0",
+	"mkdocs-material>=9.0,<10.0",
+	"pytest-playwright",
+]
 pinned = [
 	"django==5.2.13",
 	"django-import-export==4.4.0",
