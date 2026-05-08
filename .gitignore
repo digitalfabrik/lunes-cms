@@ -15,3 +15,4 @@ docs/src/changelog.rst
 lunes_cms/lunes-cms.log
 .python-version
 .env.local
+user_docs_site
