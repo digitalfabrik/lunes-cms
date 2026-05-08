@@ -6,7 +6,6 @@ db.sqlite3
 *.egg-info
 build
 dist
-.idea
 .vscode
 .coverage
 docs/dist/
