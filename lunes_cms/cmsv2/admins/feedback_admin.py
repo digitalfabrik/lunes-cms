@@ -24,7 +24,7 @@ class FeedbackAdmin(admin.ModelAdmin):
     sortable_by = ["content_type", "created_date", "read_by"]
     actions = ["mark_as_read", "mark_as_unread"]
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request, _obj=None):
         return False
 
     def has_change_permission(self, request, obj=None):

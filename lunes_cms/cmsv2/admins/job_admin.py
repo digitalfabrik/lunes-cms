@@ -166,12 +166,11 @@ class JobAdmin(BaseAdmin):
     migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
 
     @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
-    def export_to_csv(self, request, queryset):
+    def export_to_csv(self, _, queryset):
         """
         Export the words of the selected jobs.
 
         :param request: current user request
-        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
         """

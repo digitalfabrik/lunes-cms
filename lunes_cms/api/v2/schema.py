@@ -29,7 +29,7 @@ TRACKING_HEADERS = [
 TRACKING_HEADER_METHODS = {"get", "post"}
 
 
-def add_tracking_headers(result, generator, request, public, **kwargs):
+def add_tracking_headers(result, _generator, _request, _public, **_kwargs):
     """
     Hook into schema generation to add the tracking headers to all endpoints in `/api/v2`
     """
