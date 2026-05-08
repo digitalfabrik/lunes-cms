@@ -40,6 +40,9 @@ mkdocs build
 
 # Live preview at http://127.0.0.1:8000
 mkdocs serve
+
+# Run tests and deploy to GitHub Pages: https://digitalfabrik.github.io/lunes-cms/
+pytest e2e-tests/ && mkdocs gh-deploy --remote-branch gh-pages-user-docs
 ```
 
 ## Writing a new test

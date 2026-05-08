@@ -1,5 +1,6 @@
 site_name: Lunes CMS – Benutzerhandbuch
 site_description: Benutzerhandbuch für das Lunes Content Management System
+site_url: https://digitalfabrik.github.io/lunes-cms/
 docs_dir: user_docs
 site_dir: user_docs_site
 
