@@ -1,3 +1,6 @@
+# [DevBounty AI]: File optimized for resolution.
+
+
 from rest_framework import serializers
 
 from ....cms.models import AlternativeWord
