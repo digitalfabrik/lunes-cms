@@ -42,7 +42,7 @@ cd lunes-cms
 
 ### Run development server
 
-```
+```bash
 ./tools/run.sh
 ```
 
