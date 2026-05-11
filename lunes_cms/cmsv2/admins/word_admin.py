@@ -269,6 +269,7 @@ class WordAdmin(BaseAdmin):
         UnitOrJobDropdownFilter,
         HasCompleteExampleSentenceFilter,
         MigratedFilter,
+        "created_by",
     ]
     list_per_page = 25
 
