@@ -49,7 +49,7 @@ It automatically activates the Python virtual environment (`.venv`) when opening
 
 ### Run development server
 
-```
+```bash
 ./tools/run.sh
 ```
 
