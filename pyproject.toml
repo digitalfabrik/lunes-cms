@@ -74,6 +74,11 @@ dev = [
 	"twine",
     "wheel"
 ]
+e2e = [
+	"mkdocs>=1.5,<2.0",
+	"mkdocs-material>=9.0,<10.0",
+	"pytest-playwright",
+]
 pinned = [
 	"django==5.2.14",
 	"django-import-export==4.4.0",
@@ -144,6 +149,10 @@ push = false
     'release = "{version}"',
 ]
 
+# Exclude e2e tests temporarily in pytest, will be removed in #747
+[tool.pytest.ini_options]
+norecursedirs = ["e2e-tests"]
+
 [tool.coverage.report]
 exclude_also = [
     "def __repr__",
@@ -162,6 +171,9 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 check_untyped_defs = false
 disallow_untyped_defs = false
+
+[tool.black]
+target-version = ["py311"]
 
 [tool.isort]
 profile = "black"
