@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 19:28+0000\n"
+"POT-Creation-Date: 2026-05-11 19:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -710,11 +710,7 @@ msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
 msgid "Import"
 msgstr "Import"
 
-#: cmsv2/admins/review_admin.py:60
-msgid "Image '{unitword.word}' was marked as confirmed."
-msgstr "Bild '{unitword.word}' wurde als bestätigt markiert."
-
-#: cmsv2/admins/review_admin.py:64
+#: cmsv2/admins/review_admin.py:39
 msgid "Approvals"
 msgstr "Freigaben"
 
@@ -1107,12 +1103,11 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 msgid "help"
 msgstr "Hilfe"
 
-#~ msgid "Rejected"
-#~ msgstr "Ablehnungen"
-
-#, python-brace-format
 #~ msgid "Image '{unitword.word}' was marked as confirmed."
 #~ msgstr "Bild '{unitword.word}' wurde als bestätigt markiert."
+
+#~ msgid "Rejected"
+#~ msgstr "Ablehnungen"
 
 #, python-format
 #~ msgid "%(name)s (New)"
