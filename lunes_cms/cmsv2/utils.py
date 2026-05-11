@@ -77,39 +77,6 @@ def word_to_string(word):
     )
 
 
-def get_child_count(disc):
-    """
-    Count the number of released children with training sets.
-
-    Args:
-        disc: The parent object whose children will be counted
-
-    Returns:
-        int: The count of released children with at least one training set
-    """
-    children_counter = 0
-    for child in disc.get_children():
-        if child.released and get_training_set_count(child) > 0:
-            children_counter += 1
-    return children_counter
-
-
-def get_training_set_count(disc):
-    """
-    Count the total number of training sets for an object and its descendants.
-
-    Args:
-        disc: The object whose training sets will be counted
-
-    Returns:
-        int: The total count of training sets
-    """
-    training_set_counter = 0
-    for child in disc.get_descendants(include_self=True):
-        training_set_counter += child.training_sets.count()
-    return training_set_counter
-
-
 def get_image_tag(image, width=330):
     """
     Generate an HTML image tag for the given image.

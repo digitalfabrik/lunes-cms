@@ -4,7 +4,7 @@ from django.db.models.deletion import CASCADE
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from ..utils import get_child_count, get_image_tag
+from ..utils import get_image_tag
 from .static import convert_umlaute_images
 
 
@@ -33,18 +33,6 @@ class Job(models.Model):
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
-
-    def is_valid(self):
-        """
-        Check if the job is valid for display.
-
-        A job is considered valid if it has at least one child with training sets
-        or at least one released unit.
-
-        Returns:
-            bool: True if the job is valid, False otherwise
-        """
-        return get_child_count(self) > 0 or self.units.filter(released=True).count() > 0
 
     def image_tag(self):
         """

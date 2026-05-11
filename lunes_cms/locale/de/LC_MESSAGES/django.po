@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 20:13+0000\n"
+"POT-Creation-Date: 2026-05-11 11:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -649,7 +649,7 @@ msgstr "Zusammenfassung"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:164 cmsv2/utils.py:150
+#: cms/utils.py:164 cmsv2/utils.py:117
 msgid "and"
 msgstr "und"
 
@@ -829,15 +829,15 @@ msgstr "Beruf"
 msgid "modified at"
 msgstr "zuletzt geändert"
 
-#: cmsv2/models/job.py:91 cmsv2/models/unit.py:372
+#: cmsv2/models/job.py:79 cmsv2/models/unit.py:372
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py:104 cmsv2/views/import_csv_view.py:22
+#: cmsv2/models/job.py:92 cmsv2/views/import_csv_view.py:22
 msgid "Job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:105 cmsv2/templates/admin/csv_form.html:9
+#: cmsv2/models/job.py:93 cmsv2/templates/admin/csv_form.html:9
 msgid "Jobs"
 msgstr "Berufe"
 
