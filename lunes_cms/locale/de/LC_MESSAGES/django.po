@@ -441,7 +441,7 @@ msgid "refers to"
 msgstr "bezieht sich auf"
 
 #: cms/models/feedback.py:35 cmsv2/models/feedback.py:34
-#: cmsv2/models/review.py:94
+#: cmsv2/models/review.py:95
 msgid "comment"
 msgstr "Kommentar"
 
@@ -685,7 +685,7 @@ msgid "units"
 msgstr "Einheiten"
 
 #: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:254
-#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:327
+#: cmsv2/models/job.py:34 cmsv2/models/review.py:103 cmsv2/models/unit.py:327
 msgid "created at"
 msgstr "Erstellt"
 
@@ -718,13 +718,9 @@ msgstr "Bild '{unitword.word}' wurde als bestätigt markiert."
 msgid "Approvals"
 msgstr "Freigaben"
 
-#: cmsv2/admins/review_admin.py:69
+#: cmsv2/admins/review_admin.py:44
 msgid "Rejections"
 msgstr "Ablehnungen"
-
-#: cmsv2/admins/review_admin.py:74
-msgid "actions"
-msgstr "Aktionen"
 
 #: cmsv2/admins/unit_admin.py:50
 msgid "assigned user"
@@ -865,69 +861,69 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py:26 cmsv2/models/unit.py:311
+#: cmsv2/models/review.py:27 cmsv2/models/unit.py:311
 msgid "unit"
 msgstr "Einheit"
 
-#: cmsv2/models/review.py:32 cmsv2/models/review.py:86
+#: cmsv2/models/review.py:33 cmsv2/models/review.py:87
 msgid "reviewer"
 msgstr "Kontrolleur:in"
 
-#: cmsv2/models/review.py:39
+#: cmsv2/models/review.py:40
 msgid "assigned by"
 msgstr "Zugewiesen von"
 
-#: cmsv2/models/review.py:41
+#: cmsv2/models/review.py:42
 msgid "assigned at"
 msgstr "Zuwiesen am"
 
-#: cmsv2/models/review.py:43
+#: cmsv2/models/review.py:44
 msgid "completed at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:56
+#: cmsv2/models/review.py:57
 msgid "Review Assignment"
 msgstr "Kontroll Zuweisung"
 
-#: cmsv2/models/review.py:57
+#: cmsv2/models/review.py:58
 msgid "Review Assignments"
 msgstr "Kontroll Zuweisungen"
 
-#: cmsv2/models/review.py:73
+#: cmsv2/models/review.py:74
 msgid "unit-word relation"
 msgstr "Einheit-Wort Beziehung"
 
-#: cmsv2/models/review.py:77
+#: cmsv2/models/review.py:78
 msgid "unit-specific image"
 msgstr "Einheit spezifisches Bild"
 
-#: cmsv2/models/review.py:79
+#: cmsv2/models/review.py:80
 msgid "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
 msgstr ""
 "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, Falsch "
 "wenn ein Bild aus dem Wort kontrolliert wird"
 
-#: cmsv2/models/review.py:92
+#: cmsv2/models/review.py:93
 msgid "status"
 msgstr "Status"
 
-#: cmsv2/models/review.py:99
+#: cmsv2/models/review.py:100
 msgid "suggested image"
 msgstr "Vorgeschlagenes Bild"
 
-#: cmsv2/models/review.py:100
+#: cmsv2/models/review.py:101
 msgid "Alternative image suggested by reviewer"
 msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
 
-#: cmsv2/models/review.py:103
+#: cmsv2/models/review.py:104
 msgid "updated at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:119
+#: cmsv2/models/review.py:120 cmsv2/models/review.py:152
 msgid "Image Review"
 msgstr "Bild Kontrolle"
 
-#: cmsv2/models/review.py:120
+#: cmsv2/models/review.py:121 cmsv2/models/review.py:153
 msgid "Image Reviews"
 msgstr "Bild Kontrollen"
 
@@ -1110,6 +1106,13 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Rejected"
+#~ msgstr "Ablehnungen"
+
+#, python-brace-format
+#~ msgid "Image '{unitword.word}' was marked as confirmed."
+#~ msgstr "Bild '{unitword.word}' wurde als bestätigt markiert."
 
 #, python-format
 #~ msgid "%(name)s (New)"

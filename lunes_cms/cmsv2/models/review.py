@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
 from .static import REVIEW_STATUS_CHOICES
+from .unit import UnitWordRelation
 
 
 def upload_review_suggestions(instance, filename):
@@ -139,3 +140,14 @@ class ImageReview(models.Model):
         if self.is_unit_specific_image:
             return self.unit_word_relation.image
         return self.unit_word_relation.word.image
+
+
+class ImageReviewSummary(UnitWordRelation):
+    """Proxy model for showing aggregated image review counts per unit-word relation in admin."""
+
+    class Meta:
+        """Meta class for ImageReviewSummary proxy model."""
+
+        proxy = True
+        verbose_name = _("Image Review")
+        verbose_name_plural = _("Image Reviews")

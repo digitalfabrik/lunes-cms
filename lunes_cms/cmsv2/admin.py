@@ -16,7 +16,7 @@ from .admins import (
     UnitAdmin,
     WordAdmin,
 )
-from .models import Feedback, Job, Unit, UnitWordRelation, Word
+from .models import Feedback, ImageReviewSummary, Job, Unit, Word
 
 admin.site.register(Job, JobAdmin)
 admin.site.register(Unit, UnitAdmin)
@@ -24,4 +24,4 @@ admin.site.register(Word, WordAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.unregister(User)
 admin.site.register(User, LunesUserAdmin)
-admin.site.register(UnitWordRelation, ReviewAdmin)
+admin.site.register(ImageReviewSummary, ReviewAdmin)
