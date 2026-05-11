@@ -14,11 +14,11 @@ TRANSLATION_FILE="lunes_cms/locale/de/LC_MESSAGES/django.po"
 echo "Resolving translation conflicts..." | print_info
 
 # Remove git conflict markers
-sed --in-place --regexp-extended -e '/^<<<<<<< .+$/d' -e '/^=======$/d' -e '/^>>>>>>> .+$/d' "$TRANSLATION_FILE"
+sed -i '' -E -e '/^<<<<<<< .+$/d' -e '/^=======$/d' -e '/^>>>>>>> .+$/d' "$TRANSLATION_FILE"
 
 # Remove duplicated translations and show error if this is not possible
 if ! msguniq --output-file "$TRANSLATION_FILE" "$TRANSLATION_FILE" 2>&1 \
-  | sed --regexp-extended -e "s|^(${TRANSLATION_FILE}):([0-9]+):[0-9]+?:? (.+)$|\1 \x1b[1m(line \2) \x1b[1;31m\3\x1b[0;39m|g" -e "$ d"; then
+  | sed -E -e "s|^(${TRANSLATION_FILE}):([0-9]+):[0-9]+:? (.+)$|\1 \x1b[1m(line \2) \x1b[1;31m\3\x1b[0;39m|g" -e "$ d"; then
     echo -e "\n❌ Not all conflicts could be solved automatically" | print_error
     echo "Please fix the mentioned problem(s) manually and run this script again." | print_bold
     exit 1
