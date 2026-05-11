@@ -17,6 +17,9 @@ TRANSLATION_FILE="locale/de/LC_MESSAGES/django.po"
 # Re-generating translation file
 lunes-cms-cli makemessages -l de > /dev/null
 
+# Remove python-brace-format flags added by xgettext, as they vary between gettext versions and cause CI diffs
+tmp=$(mktemp) && grep -v '^#, python-brace-format$' "$TRANSLATION_FILE" > "$tmp" && mv "$tmp" "$TRANSLATION_FILE"
+
 # Check if translation file is up to date
 TRANSLATION_DIFF=$(git diff --shortstat $TRANSLATION_FILE)
 # The translation file is up to date if the diff is either empty (which means the last change was less than a minute ago)
