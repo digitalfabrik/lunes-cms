@@ -199,7 +199,6 @@ class Word(models.Model):
             self.example_sentence_check_status = "NOT_CHECKED"
 
         if audio_updated:
-            self.convert_audio()
             self.audio_check_status = "NOT_CHECKED"
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
 
@@ -223,6 +222,9 @@ class Word(models.Model):
             self.example_sentence_check_status = None
 
         super().save(*args, **kwargs)
+        if audio_updated:
+            self.convert_audio()
+            super().save(update_fields=["audio"])
         if image_updated and convert_image_to_webp(self.image):
             super().save(update_fields=["image"])
 
