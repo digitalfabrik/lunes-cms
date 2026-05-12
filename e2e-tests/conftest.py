@@ -58,7 +58,7 @@ def pytest_configure(config: pytest.Config) -> None:
         "markers", "e2e: end-to-end test that generates user manual entries"
     )
     config.addinivalue_line(
-        "markers", "xdist_group: group tests to run on the same worker"
+        "markers", "xdist_group: group tests to run on the same xdist worker"
     )
 
 
