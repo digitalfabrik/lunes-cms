@@ -2,10 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/</loc>
-         <lastmod>2026-05-08</lastmod>
+         <lastmod>2026-05-12</lastmod>
+    </url>
+    <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/add_job/</loc>
+         <lastmod>2026-05-12</lastmod>
+    </url>
+    <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/delete_job/</loc>
+         <lastmod>2026-05-12</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/login/</loc>
-         <lastmod>2026-05-08</lastmod>
+         <lastmod>2026-05-12</lastmod>
     </url>
 </urlset>
