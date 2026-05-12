@@ -146,6 +146,9 @@ class UnitAdmin(BaseAdmin):
         js = ["js/unit_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("jobs")
+
     def save_formset(self, request, form, formset, change):
         if formset.model is ReviewAssignment:
             instances = formset.save(commit=False)
