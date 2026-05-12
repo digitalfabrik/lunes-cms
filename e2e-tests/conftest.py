@@ -18,13 +18,14 @@ from __future__ import annotations
 import contextlib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Generator
+from typing import Callable, Generator
 
 import pytest
 from playwright.sync_api import Page
 
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
 SCREENSHOTS_DIR = DOCS_DIR / "screenshots"
+ASSETS_DIR = Path(__file__).parent / "assets"
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -44,6 +45,41 @@ def base_url() -> str:
     return "http://localhost:8080"
 
 
+
+@pytest.fixture
+def login(page: Page, base_url: str) -> None:
+    """Logs into the CMS admin. Declare as a test dependency to ensure authentication."""
+    page.goto(f"{base_url}")
+    page.fill("[name=username]", "lunes")
+    page.fill("[name=password]", "lunes")
+    page.click("[type=submit]")
+    page.wait_for_url(f"{base_url}/en/admin/")
+
+
+@pytest.fixture
+def add_job(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that creates a job by name from the CMS admin."""
+    def _add(job_name: str) -> None:
+        page.goto(f"{base_url}/en/admin/cmsv2/job/add/")
+        page.fill("[name=name]", job_name)
+        page.set_input_files("[name=icon]", str(ASSETS_DIR / "tester.png"))
+        page.click("[name=_save]")
+
+    return _add
+
+
+@pytest.fixture
+def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that deletes a job by name from the CMS admin."""
+    def _delete(job_name: str) -> None:
+        page.goto(f"{base_url}/en/admin/cmsv2/job/")
+        page.locator("th.field-name a", has_text=job_name).click()
+        page.get_by_role("link", name="Delete").click()
+        page.locator("input[type=submit]").click()
+
+    return _delete
+
+
 @dataclass
 class DocPage:
     """Collects documented steps and writes them as a markdown user manual page."""
@@ -57,14 +93,14 @@ class DocPage:
     def step(
         self, title: str, description: str = "", screenshot: bool = True
     ) -> Generator[None, None, None]:
-        """Context manager for a documented step. Takes a screenshot after the block."""
-        yield
+        """Context manager for a documented step. Takes a screenshot before the block."""
         step_data: dict = {"title": title, "description": description}
         if screenshot:
             idx = len(self._steps) + 1
             img_name = f"{self.filename}_step{idx:02d}.png"
             self.page.screenshot(path=str(SCREENSHOTS_DIR / img_name), full_page=False)
             step_data["screenshot"] = f"screenshots/{img_name}"
+        yield
         self._steps.append(step_data)
 
     def save(self) -> None:
