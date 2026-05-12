@@ -165,7 +165,6 @@ class DocPage:
     page: Page
     title: str
     filename: str
-    take_screenshots: bool = True
     _steps: list[dict] = field(default_factory=list)
 
     @contextlib.contextmanager
