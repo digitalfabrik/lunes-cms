@@ -16,3 +16,5 @@ theme:
     - navigation.top
     - content.action.view
 
+markdown_extensions:
+  - pymdownx.magiclink
