@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 from django.contrib.auth.models import Group
 from django.core.files import File
@@ -7,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from pydub import AudioSegment
 
-from ..utils import get_image_tag, word_to_string
+from ..utils import get_image_tag, make_safe_filename, word_to_string
 from ..validators import (
     validate_file_extension,
     validate_file_size,
@@ -157,15 +156,26 @@ class Word(models.Model):
         if not self.audio:
             return
 
+        original_name = self.audio.name
         file_path = self.audio.path
         original_extension = file_path.split(".")[-1]
         mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
         new_path = file_path[:-4] + "-conv.mp3"
         mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
 
+        # Store the re-encoded file under a deterministic, word-derived name.
+        # Drop the just-uploaded source file and any stale file already sitting
+        # at the target name, so the result is exactly one "<word>.mp3" with no
+        # random suffix and no orphan left behind.
+        target_filename = f"{make_safe_filename(self.word) or 'audio'}.mp3"
+        target_name = self.audio.field.generate_filename(self, target_filename)
+        storage = self.audio.storage
+        storage.delete(original_name)
+        if storage.exists(target_name):
+            storage.delete(target_name)
+
         with open(new_path, "rb") as file:
-            converted_audiofile = File(file, name=Path(new_path).name)
-            self.audio.save(converted_audiofile.name, converted_audiofile, save=False)
+            self.audio.save(target_filename, File(file), save=False)
 
         os.remove(new_path)
 
