@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run e2e Tests" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="pytest e2e-tests/ -n auto --dist=loadgroup -m e2e" />
     <option name="SCRIPT_TEXT" value="pytest e2e-tests/ -n 4 --dist=loadgroup -m e2e" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
