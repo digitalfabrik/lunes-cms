@@ -150,6 +150,34 @@ def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
 
 
 @pytest.fixture
+def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], None]:
+    """Returns a function that creates a word from the CMS admin.
+    Args: word, plural, unit_name, word_type_label, article_label"""
+    def _add(word: str, plural: str, unit_name: str, word_type_label: str = "Substantiv", article_label: str = "die") -> None:
+        page.goto(f"{base_url}/de/admin/cmsv2/word/")
+        page.fill("#searchbar", word)
+        page.get_by_role("button", name="Suchen").click()
+        expect(page.locator("th.field-word a", has_text=word)).to_have_count(0)
+        page.goto(f"{base_url}/de/admin/cmsv2/word/add/")
+        page.locator("[name=word_type]").select_option(label=word_type_label, force=True)
+        page.locator("[name=grammatical_gender]").select_option(label="Femininum", force=True)
+        page.locator("[name=singular_article]").select_option(label=article_label, force=True)
+        page.fill("[name=word]", word)
+        page.locator("[name=plural_article]").select_option(label="die (Plural)", force=True)
+        page.fill("[name=plural]", plural)
+        page.locator("[name=audio]").scroll_into_view_if_needed()
+        page.set_input_files("[name=audio]", str(ASSETS_DIR / "test_sound.mp3"))
+        page.locator("[name=image]").scroll_into_view_if_needed()
+        page.set_input_files("[name=image]", str(ASSETS_DIR / "tester.png"))
+        page.locator("[name='unit_word_relations-0-unit']").scroll_into_view_if_needed()
+        page.locator("[name='unit_word_relations-0-unit']").select_option(label=unit_name, force=True)
+        page.locator("[name=_save]").scroll_into_view_if_needed()
+        page.click("[name=_save]")
+
+    return _add
+
+
+@pytest.fixture
 def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a word by its singular form from the CMS admin."""
     def _delete(word: str) -> None:

@@ -31,6 +31,8 @@ nav:
     - Mehrere Einheiten löschen: bulk_delete_units.md
   - Wörter:
     - Wort hinzufügen: add_word.md
+    - Wort bearbeiten: edit_word.md
+    - Wort löschen: delete_word.md
 
 markdown_extensions:
   - pymdownx.magiclink

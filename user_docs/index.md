@@ -17,3 +17,5 @@ Willkommen im Benutzerhandbuch für das **Lunes CMS** – das Content Management
     4. [Mehrere Einheiten löschen](bulk_delete_units.md) — Mehrere Einheiten gleichzeitig entfernen
 4. Wörter
     1. [Wort hinzufügen](add_word.md) — Neues Vokabelwort mit Audio und Bild anlegen
+    2. [Wort bearbeiten](edit_word.md) — Bestehendes Vokabelwort ändern
+    3. [Wort löschen](delete_word.md) — Bestehendes Vokabelwort entfernen
