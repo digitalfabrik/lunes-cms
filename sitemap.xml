@@ -13,7 +13,19 @@
          <lastmod>2026-05-13</lastmod>
     </url>
     <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/add_word/</loc>
+         <lastmod>2026-05-13</lastmod>
+    </url>
+    <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/bulk_delete_jobs/</loc>
+         <lastmod>2026-05-13</lastmod>
+    </url>
+    <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/bulk_delete_units/</loc>
+         <lastmod>2026-05-13</lastmod>
+    </url>
+    <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/bulk_delete_words/</loc>
          <lastmod>2026-05-13</lastmod>
     </url>
     <url>
@@ -25,11 +37,19 @@
          <lastmod>2026-05-13</lastmod>
     </url>
     <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/delete_word/</loc>
+         <lastmod>2026-05-13</lastmod>
+    </url>
+    <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/edit_job/</loc>
          <lastmod>2026-05-13</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/edit_unit/</loc>
+         <lastmod>2026-05-13</lastmod>
+    </url>
+    <url>
+         <loc>https://digitalfabrik.github.io/lunes-cms/edit_word/</loc>
          <lastmod>2026-05-13</lastmod>
     </url>
     <url>
