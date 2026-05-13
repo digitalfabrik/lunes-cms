@@ -4,9 +4,12 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration to add a database index on the Unit.released field to speed up filtered queries.
+    """
 
     dependencies = [
-        ("cmsv2", "0020_unitwordrelation_example_sentence_audio_regenerated"),
+        ("cmsv2", "0022_alter_imagereview_options"),
     ]
 
     operations = [

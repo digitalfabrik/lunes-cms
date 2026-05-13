@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 14:13+0000\n"
+"POT-Creation-Date: 2026-05-13 13:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:240
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:243
 #: cmsv2/admins/word_admin.py:435
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -346,7 +346,7 @@ msgid "alternative words"
 msgstr "Alternative Wörter"
 
 #: cms/models/discipline.py:20 cms/models/training_set.py:24
-#: cmsv2/models/job.py:19 cmsv2/models/unit.py:310
+#: cmsv2/models/job.py:19 cmsv2/models/unit.py:311
 msgid "released"
 msgstr "veröffentlicht"
 
@@ -356,25 +356,25 @@ msgid "discipline"
 msgstr "Modulgruppe"
 
 #: cms/models/discipline.py:23 cms/models/training_set.py:27
-#: cmsv2/models/unit.py:313
+#: cmsv2/models/unit.py:315
 msgid "description"
 msgstr "Beschreibung"
 
 #: cms/models/discipline.py:26 cms/models/group.py:10
 #: cms/models/training_set.py:30 cmsv2/models/job.py:22
-#: cmsv2/models/unit.py:316
+#: cmsv2/models/unit.py:318
 msgid "icon"
 msgstr "Icon"
 
 #: cms/models/discipline.py:33 cms/models/document.py:94
 #: cms/models/training_set.py:39 cmsv2/models/job.py:30
-#: cmsv2/models/unit.py:324 cmsv2/models/word.py:136
+#: cmsv2/models/unit.py:326 cmsv2/models/word.py:136
 msgid "created by"
 msgstr "Erstellt von"
 
 #: cms/models/discipline.py:36 cms/models/document.py:98
 #: cms/models/training_set.py:41 cmsv2/models/job.py:33
-#: cmsv2/models/unit.py:326 cmsv2/models/word.py:140
+#: cmsv2/models/unit.py:328 cmsv2/models/word.py:140
 msgid "admin"
 msgstr "Admin"
 
@@ -386,7 +386,7 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:33 cmsv2/models/unit.py:321 cmsv2/models/word.py:36
+#: cms/models/document.py:33 cmsv2/models/unit.py:323 cmsv2/models/word.py:36
 msgid "word"
 msgstr "Wort"
 
@@ -684,12 +684,12 @@ msgstr "Nicht migriert aus altem Datenmodell"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:254
-#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:327
+#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:257
+#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:329
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:276
+#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:279
 #: cmsv2/admins/word_admin.py:712
 msgid "migrated"
 msgstr "Migriert"
@@ -718,20 +718,20 @@ msgstr "Zugewiesene Person"
 msgid "assigned users"
 msgstr "Zugewiesene Personen"
 
-#: cmsv2/admins/unit_admin.py:162 cmsv2/admins/unit_admin.py:182
+#: cmsv2/admins/unit_admin.py:165 cmsv2/admins/unit_admin.py:185
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:4
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:14
 msgid "Assign selected units to user"
 msgstr "Ausgewählte Einheiten zuweisen"
 
-#: cmsv2/admins/unit_admin.py:200
+#: cmsv2/admins/unit_admin.py:203
 #, python-format
 msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
 "%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
-#: cmsv2/admins/unit_admin.py:221
+#: cmsv2/admins/unit_admin.py:224
 msgid "jobs"
 msgstr "Berufe"
 
@@ -789,7 +789,7 @@ msgstr "Audio Prüfstatus"
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
-#: cmsv2/admins/word_export_resource.py:80 cmsv2/models/unit.py:405
+#: cmsv2/admins/word_export_resource.py:80 cmsv2/models/unit.py:407
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:9
 msgid "Units"
 msgstr "Einheit"
@@ -829,15 +829,15 @@ msgstr "Zeile %(n)s: %(msg)s"
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
-#: cmsv2/models/job.py:20 cmsv2/models/unit.py:319
+#: cmsv2/models/job.py:20 cmsv2/models/unit.py:321
 msgid "job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:35 cmsv2/models/unit.py:328 cmsv2/models/word.py:113
+#: cmsv2/models/job.py:35 cmsv2/models/unit.py:330 cmsv2/models/word.py:113
 msgid "modified at"
 msgstr "zuletzt geändert"
 
-#: cmsv2/models/job.py:79 cmsv2/models/unit.py:372
+#: cmsv2/models/job.py:79 cmsv2/models/unit.py:374
 msgid "Icon"
 msgstr "Icon"
 
@@ -849,7 +849,7 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py:26 cmsv2/models/unit.py:311
+#: cmsv2/models/review.py:26 cmsv2/models/unit.py:313
 msgid "unit"
 msgstr "Einheit"
 
@@ -967,7 +967,7 @@ msgstr "Einheit-Wort Beziehung"
 msgid "Unit-Word Relations"
 msgstr "Einheit-Wort Beziehungen"
 
-#: cmsv2/models/unit.py:404
+#: cmsv2/models/unit.py:406
 msgid "Unit"
 msgstr "Einheit"
 
