@@ -62,6 +62,11 @@ def pytest_configure(config: pytest.Config) -> None:
     )
 
 
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args: dict) -> dict:
+    return {**browser_context_args, "locale": "de-DE"}
+
+
 @pytest.fixture(scope="session", autouse=True)
 def prepare_output_dirs() -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
