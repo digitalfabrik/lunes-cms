@@ -16,6 +16,7 @@ Run mkdocs to build HTML: mkdocs build
 from __future__ import annotations
 
 import contextlib
+import re
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -157,7 +158,7 @@ def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], N
         page.goto(f"{base_url}/de/admin/cmsv2/word/")
         page.fill("#searchbar", word)
         page.get_by_role("button", name="Suchen").click()
-        expect(page.locator("th.field-word a", has_text=word)).to_have_count(0)
+        expect(page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))).to_have_count(0)
         page.goto(f"{base_url}/de/admin/cmsv2/word/add/")
         page.locator("[name=word_type]").select_option(label=word_type_label, force=True)
         page.locator("[name=grammatical_gender]").select_option(label="Femininum", force=True)
@@ -173,6 +174,7 @@ def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], N
         page.locator("[name='unit_word_relations-0-unit']").select_option(label=unit_name, force=True)
         page.locator("[name=_save]").scroll_into_view_if_needed()
         page.click("[name=_save]")
+        expect(page.locator(".alert-success")).to_be_visible()
 
     return _add
 
@@ -184,7 +186,7 @@ def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
         page.goto(f"{base_url}/de/admin/cmsv2/word/")
         page.fill("#searchbar", word)
         page.get_by_role("button", name="Suchen").click()
-        page.locator("th.field-word a", has_text=word).first.click()
+        page.locator("th.field-word a", has_text=re.compile(f"^{word}$")).first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 

@@ -33,6 +33,7 @@ nav:
     - Wort hinzufügen: add_word.md
     - Wort bearbeiten: edit_word.md
     - Wort löschen: delete_word.md
+    - Mehrere Wörter löschen: bulk_delete_words.md
 
 markdown_extensions:
   - pymdownx.magiclink
