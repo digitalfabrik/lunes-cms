@@ -86,7 +86,7 @@ def login(page: Page, base_url: str) -> None:
     page.fill("[name=username]", "lunes")
     page.fill("[name=password]", "lunes")
     page.click("[type=submit]")
-    page.wait_for_url(f"{base_url}/en/admin/")
+    page.wait_for_url(f"{base_url}/de/admin/")
 
 
 
@@ -95,11 +95,11 @@ def add_job(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that creates a job by name from the CMS admin.
     Asserts the job does not already exist before creating it."""
     def _add(job_name: str) -> None:
-        page.goto(f"{base_url}/en/admin/cmsv2/job/")
+        page.goto(f"{base_url}/de/admin/cmsv2/job/")
         page.fill("#searchbar", job_name)
-        page.get_by_role("button", name="Search").click()
+        page.get_by_role("button", name="Suchen").click()
         expect(page.locator("th.field-name a", has_text=job_name)).to_have_count(0)
-        page.goto(f"{base_url}/en/admin/cmsv2/job/add/")
+        page.goto(f"{base_url}/de/admin/cmsv2/job/add/")
         page.fill("[name=name]", job_name)
         page.set_input_files("[name=icon]", str(ASSETS_DIR / "tester.png"))
         page.click("[name=_save]")
@@ -112,11 +112,11 @@ def add_unit(page: Page, base_url: str) -> Callable[[str, str, str], None]:
     """Returns a function that creates a unit by title, description and job name.
     Asserts the unit does not already exist before creating it."""
     def _add(title: str, description: str, job_name: str) -> None:
-        page.goto(f"{base_url}/en/admin/cmsv2/unit/")
+        page.goto(f"{base_url}/de/admin/cmsv2/unit/")
         page.fill("#searchbar", title)
-        page.get_by_role("button", name="Search").click()
+        page.get_by_role("button", name="Suchen").click()
         expect(page.locator("th.field-title a", has_text=title)).to_have_count(0)
-        page.goto(f"{base_url}/en/admin/cmsv2/unit/add/")
+        page.goto(f"{base_url}/de/admin/cmsv2/unit/add/")
         page.fill("[name=title]", title)
         page.fill("[name=description]", description)
         page.locator("#id_jobs").select_option(label=job_name, force=True)
@@ -129,9 +129,9 @@ def add_unit(page: Page, base_url: str) -> Callable[[str, str, str], None]:
 def delete_unit(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a unit by title from the CMS admin."""
     def _delete(title: str) -> None:
-        page.goto(f"{base_url}/en/admin/cmsv2/unit/")
+        page.goto(f"{base_url}/de/admin/cmsv2/unit/")
         page.locator("th.field-title a", has_text=title).first.click()
-        page.get_by_role("link", name="Delete").click()
+        page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
     return _delete
@@ -141,9 +141,9 @@ def delete_unit(page: Page, base_url: str) -> Callable[[str], None]:
 def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a job by name from the CMS admin."""
     def _delete(job_name: str) -> None:
-        page.goto(f"{base_url}/en/admin/cmsv2/job/")
+        page.goto(f"{base_url}/de/admin/cmsv2/job/")
         page.locator("th.field-name a", has_text=job_name).first.click()
-        page.get_by_role("link", name="Delete").click()
+        page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
     return _delete
@@ -153,11 +153,11 @@ def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
 def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a word by its singular form from the CMS admin."""
     def _delete(word: str) -> None:
-        page.goto(f"{base_url}/en/admin/cmsv2/word/")
+        page.goto(f"{base_url}/de/admin/cmsv2/word/")
         page.fill("#searchbar", word)
-        page.get_by_role("button", name="Search").click()
+        page.get_by_role("button", name="Suchen").click()
         page.locator("th.field-word a", has_text=word).first.click()
-        page.get_by_role("link", name="Delete").click()
+        page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
     return _delete
