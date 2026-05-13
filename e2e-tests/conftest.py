@@ -79,7 +79,6 @@ def base_url() -> str:
     return "http://localhost:8080"
 
 
-
 @pytest.fixture
 def login(page: Page, base_url: str) -> None:
     """Logs into the CMS admin. Declare as a test dependency to ensure authentication."""
@@ -90,11 +89,11 @@ def login(page: Page, base_url: str) -> None:
     page.wait_for_url(f"{base_url}/de/admin/")
 
 
-
 @pytest.fixture
 def add_job(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that creates a job by name from the CMS admin.
     Asserts the job does not already exist before creating it."""
+
     def _add(job_name: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/job/")
         page.fill("#searchbar", job_name)
@@ -112,6 +111,7 @@ def add_job(page: Page, base_url: str) -> Callable[[str], None]:
 def add_unit(page: Page, base_url: str) -> Callable[[str, str, str], None]:
     """Returns a function that creates a unit by title, description and job name.
     Asserts the unit does not already exist before creating it."""
+
     def _add(title: str, description: str, job_name: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/unit/")
         page.fill("#searchbar", title)
@@ -129,6 +129,7 @@ def add_unit(page: Page, base_url: str) -> Callable[[str, str, str], None]:
 @pytest.fixture
 def delete_unit(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a unit by title from the CMS admin."""
+
     def _delete(title: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/unit/")
         page.locator("th.field-title a", has_text=title).first.click()
@@ -141,6 +142,7 @@ def delete_unit(page: Page, base_url: str) -> Callable[[str], None]:
 @pytest.fixture
 def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a job by name from the CMS admin."""
+
     def _delete(job_name: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/job/")
         page.locator("th.field-name a", has_text=job_name).first.click()
@@ -154,24 +156,43 @@ def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
 def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], None]:
     """Returns a function that creates a word from the CMS admin.
     Args: word, plural, unit_name, word_type_label, article_label"""
-    def _add(word: str, plural: str, unit_name: str, word_type_label: str = "Substantiv", article_label: str = "die") -> None:
+
+    def _add(
+        word: str,
+        plural: str,
+        unit_name: str,
+        word_type_label: str = "Substantiv",
+        article_label: str = "die",
+    ) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/word/")
         page.fill("#searchbar", word)
         page.get_by_role("button", name="Suchen").click()
-        expect(page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))).to_have_count(0)
+        expect(
+            page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))
+        ).to_have_count(0)
         page.goto(f"{base_url}/de/admin/cmsv2/word/add/")
-        page.locator("[name=word_type]").select_option(label=word_type_label, force=True)
-        page.locator("[name=grammatical_gender]").select_option(label="Femininum", force=True)
-        page.locator("[name=singular_article]").select_option(label=article_label, force=True)
+        page.locator("[name=word_type]").select_option(
+            label=word_type_label, force=True
+        )
+        page.locator("[name=grammatical_gender]").select_option(
+            label="Femininum", force=True
+        )
+        page.locator("[name=singular_article]").select_option(
+            label=article_label, force=True
+        )
         page.fill("[name=word]", word)
-        page.locator("[name=plural_article]").select_option(label="die (Plural)", force=True)
+        page.locator("[name=plural_article]").select_option(
+            label="die (Plural)", force=True
+        )
         page.fill("[name=plural]", plural)
         page.locator("[name=audio]").scroll_into_view_if_needed()
         page.set_input_files("[name=audio]", str(ASSETS_DIR / "test_sound.mp3"))
         page.locator("[name=image]").scroll_into_view_if_needed()
         page.set_input_files("[name=image]", str(ASSETS_DIR / "tester.png"))
         page.locator("[name='unit_word_relations-0-unit']").scroll_into_view_if_needed()
-        page.locator("[name='unit_word_relations-0-unit']").select_option(label=unit_name, force=True)
+        page.locator("[name='unit_word_relations-0-unit']").select_option(
+            label=unit_name, force=True
+        )
         page.locator("[name=_save]").scroll_into_view_if_needed()
         page.click("[name=_save]")
         expect(page.locator(".alert-success")).to_be_visible()
@@ -182,6 +203,7 @@ def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], N
 @pytest.fixture
 def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a word by its singular form from the CMS admin."""
+
     def _delete(word: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/word/")
         page.fill("#searchbar", word)
@@ -250,10 +272,12 @@ def document(
         take_screenshots = True
     else:
         changed = _changed_test_files()
-        test_file = Path(request.fspath).relative_to(REPO_ROOT).as_posix()
+        test_file = Path(request.path).relative_to(REPO_ROOT).as_posix()
         take_screenshots = test_file in changed
 
-    doc = DocPage(page=page, title=title, filename=filename, take_screenshots=take_screenshots)
+    doc = DocPage(
+        page=page, title=title, filename=filename, take_screenshots=take_screenshots
+    )
     yield doc
     if take_screenshots:
         doc.save()
