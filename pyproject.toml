@@ -151,7 +151,7 @@ push = false
 
 # Exclude e2e tests temporarily in pytest, will be removed in #747
 [tool.pytest.ini_options]
-norecursedirs = ["e2e-tests"]
+addopts = "--ignore=e2e-tests"
 
 [tool.coverage.report]
 exclude_also = [
