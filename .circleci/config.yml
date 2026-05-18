@@ -3,6 +3,16 @@ version: 2.1
 orbs:
   shellcheck: circleci/shellcheck@2.2.4
   qlty: qltysh/qlty-orb@0.0.10
+executors:
+  python:
+    docker:
+      - image: cimg/python:3.11
+commands:
+  activate-venv:
+    steps:
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
 jobs:
   install:
     docker:
@@ -365,6 +375,59 @@ jobs:
       - run:
           name: Create release as Deliverino app
           command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
+  e2e:
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          LUNES_CMS_SECRET_KEY: circleci-dummy-key
+          LUNES_CMS_DEBUG: "True"
+      - image: cimg/postgres:14.1
+        environment:
+          POSTGRES_USER: lunes
+          POSTGRES_DB: lunes
+          POSTGRES_PASSWORD: password
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
+      - activate-venv
+      - run:
+          name: Install e2e dependencies
+          command: pip install -e ".[e2e]"
+      - run:
+          name: Install system dependencies
+          command: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run:
+          name: Install Playwright system dependencies
+          command: sudo .venv/bin/python -m playwright install-deps chromium
+      - run:
+          name: Install Playwright browser
+          command: python -m playwright install chromium
+      - save_cache:
+          key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
+          paths:
+            - .venv
+            - /home/circleci/.cache/ms-playwright
+      - run:
+          name: Migrate database
+          command: lunes-cms-cli migrate
+      - run:
+          name: Load basic test data
+          command: lunes-cms-cli loaddata lunes_cms/cms/fixtures/test_data.json
+      - run:
+          name: Start Django server
+          command: lunes-cms-cli runserver --noreload 0.0.0.0:8080
+          background: true
+      - run:
+          name: Wait for Django server
+          command: dockerize -wait http://localhost:8080 -timeout 120s
+      - run:
+          name: Run e2e tests
+          command: pytest e2e-tests/ -m e2e --generate=all --junitxml=test-results/e2e-junit.xml
+      - store_test_results:
+          path: test-results
   notify-mattermost:
     docker:
       - image: cimg/base:stable
@@ -455,6 +518,18 @@ workflows:
                 - /.*-publish-dev-package/
           requires:
             - build-dev-package
+  commit_develop:
+    jobs:
+      - install:
+          filters:
+            branches:
+              only: develop
+      - compile-translations:
+          requires:
+            - install
+      - e2e:
+          requires:
+            - compile-translations
   main:
     jobs:
       - install:
