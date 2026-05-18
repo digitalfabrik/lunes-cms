@@ -376,6 +376,10 @@ jobs:
           name: Create release as Deliverino app
           command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
   e2e:
+    parameters:
+      persist_docs:
+        type: boolean
+        default: false
     docker:
       - image: cimg/python:3.11
         environment:
@@ -428,6 +432,38 @@ jobs:
           command: pytest e2e-tests/ -m e2e --generate=all --junitxml=test-results/e2e-junit.xml
       - store_test_results:
           path: test-results
+      - when:
+          condition: << parameters.persist_docs >>
+          steps:
+            - persist_to_workspace:
+                root: .
+                paths:
+                  - user_docs
+  deploy-user-manual:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - activate-venv
+      - run:
+          name: Install e2e dependencies
+          command: pip install -e ".[e2e]"
+      - run:
+          name: Request installation access token to authorize as Deliverino app
+          command: |
+            TOKEN=$(./.circleci/scripts/get_access_token.py)
+            echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+      - run:
+          name: Configure git to push as Deliverino app
+          command: |
+            git config user.name "deliverino[bot]"
+            git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
+            git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
+      - run:
+          name: Deploy user manual to GitHub Pages
+          command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
   notify-mattermost:
     docker:
       - image: cimg/base:stable
@@ -496,6 +532,14 @@ workflows:
       - build-documentation:
           requires:
             - install
+      - e2e:
+          persist_docs: true
+          requires:
+            - compile-translations
+      - deploy-user-manual:
+          context: deliverino
+          requires:
+            - e2e
       - bump-dev-version:
           filters:
             branches:
@@ -584,3 +628,22 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - e2e:
+          name: e2e-deploy
+          persist_docs: true
+          requires:
+            - compile-translations-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - deploy-user-manual:
+          context: deliverino
+          requires:
+            - e2e-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
