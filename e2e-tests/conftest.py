@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Callable, Generator
 
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Browser, Page, expect
 
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
 SCREENSHOTS_DIR = DOCS_DIR / "screenshots"
@@ -64,8 +64,20 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 @pytest.fixture(scope="session")
-def browser_context_args(browser_context_args: dict) -> dict:
-    return {**browser_context_args, "locale": "de-DE"}
+def browser_context_args(
+    browser_context_args: dict, browser: Browser, base_url: str
+) -> dict:
+    """Login once per session and embed auth state into every test context."""
+    context = browser.new_context(locale="de-DE")
+    page = context.new_page()
+    page.goto(f"{base_url}/de/admin/login/")
+    page.fill("[name=username]", "lunes")
+    page.fill("[name=password]", "lunes")
+    page.click("[type=submit]")
+    page.wait_for_url(f"{base_url}/de/admin/")
+    state = context.storage_state()
+    context.close()
+    return {**browser_context_args, "locale": "de-DE", "storage_state": state}
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -81,12 +93,8 @@ def base_url() -> str:
 
 @pytest.fixture
 def login(page: Page, base_url: str) -> None:
-    """Logs into the CMS admin. Declare as a test dependency to ensure authentication."""
-    page.goto(f"{base_url}")
-    page.fill("[name=username]", "lunes")
-    page.fill("[name=password]", "lunes")
-    page.click("[type=submit]")
-    page.wait_for_url(f"{base_url}/de/admin/")
+    """Navigate to the admin dashboard (context already has auth state)."""
+    page.goto(f"{base_url}/de/admin/")
 
 
 @pytest.fixture
