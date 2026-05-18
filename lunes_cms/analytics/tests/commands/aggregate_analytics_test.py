@@ -277,51 +277,38 @@ class ModuleDurationAggregateTests(TestCase):
     Tests for module duration event aggregation.
     """
 
-    def _create_standard_event(
-        self, exercise_type: str, unit_id: int, timestamp: str, duration_seconds: int
+    def _create_event(
+        self, exercise_type: int, unit_id: int, timestamp: str, duration_seconds: int
     ) -> AnalyticsEvent:
         return AnalyticsEvent.objects.create(
             installation_id="test-install",
             event_type="module_duration",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": {"type": "exercise", "exercise_type": exercise_type, "unit_id": unit_id},
-                "duration_seconds": duration_seconds,
-            },
-        )
-
-    def _create_training_event(
-        self, exercise_type: str, job_id: int, timestamp: str, duration_seconds: int
-    ) -> AnalyticsEvent:
-        return AnalyticsEvent.objects.create(
-            installation_id="test-install",
-            event_type="module_duration",
-            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
-            payload={
-                "exercise_key": {"type": "training", "exercise_type": exercise_type, "job_id": job_id},
+                "exercise_type": exercise_type,
+                "unit_id": unit_id,
                 "duration_seconds": duration_seconds,
             },
         )
 
     def test_aggregates_single_day(self) -> None:
-        """Test basic aggregation of standard module duration events into a single day"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 10, "2026-01-15T11:00:00", 90)
+        """Test basic aggregation of module duration events into a single day"""
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-15T11:00:00", 90)
 
         call_command("aggregate_analytics")
 
         self.assertEqual(AnalyticsEvent.objects.count(), 0)
         agg = ModuleDurationAggregate.objects.get(
-            exercise_type="word_choice", unit_id=10, date="2026-01-15"
+            exercise_type=1, unit_id=10, date="2026-01-15"
         )
         self.assertEqual(agg.total_sessions, 2)
         self.assertEqual(agg.total_duration_seconds, 150)
-        self.assertIsNone(agg.job_id)
 
     def test_aggregates_multiple_days(self) -> None:
         """Test that events on different days create separate aggregates"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 10, "2026-01-16T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-16T10:00:00", 60)
 
         call_command("aggregate_analytics")
 
@@ -329,25 +316,29 @@ class ModuleDurationAggregateTests(TestCase):
 
     def test_aggregates_different_exercise_types(self) -> None:
         """Test that different exercise types create separate aggregates"""
-        self._create_standard_event("word_list", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(2, 10, "2026-01-15T10:00:00", 60)
 
         call_command("aggregate_analytics")
 
         self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
         self.assertEqual(
-            ModuleDurationAggregate.objects.get(exercise_type="word_list", unit_id=10).total_sessions,
+            ModuleDurationAggregate.objects.get(
+                exercise_type=1, unit_id=10
+            ).total_sessions,
             1,
         )
         self.assertEqual(
-            ModuleDurationAggregate.objects.get(exercise_type="word_choice", unit_id=10).total_sessions,
+            ModuleDurationAggregate.objects.get(
+                exercise_type=2, unit_id=10
+            ).total_sessions,
             1,
         )
 
     def test_aggregates_different_units(self) -> None:
         """Test that different unit IDs create separate aggregates"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 20, "2026-01-15T10:00:00", 90)
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 20, "2026-01-15T10:00:00", 90)
 
         call_command("aggregate_analytics")
 
@@ -361,14 +352,14 @@ class ModuleDurationAggregateTests(TestCase):
 
     def test_increments_existing_aggregate(self) -> None:
         """Test that running twice updates existing aggregates"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
+        self._create_event(1, 10, "2026-01-15T10:00:00", 60)
         call_command("aggregate_analytics")
 
-        self._create_standard_event("word_choice", 10, "2026-01-15T14:00:00", 40)
+        self._create_event(1, 10, "2026-01-15T14:00:00", 40)
         call_command("aggregate_analytics")
 
         agg = ModuleDurationAggregate.objects.get(
-            exercise_type="word_choice", unit_id=10, date="2026-01-15"
+            exercise_type=1, unit_id=10, date="2026-01-15"
         )
         self.assertEqual(agg.total_sessions, 2)
         self.assertEqual(agg.total_duration_seconds, 100)
@@ -378,68 +369,13 @@ class ModuleDurationAggregateTests(TestCase):
         call_command("aggregate_analytics")
         self.assertEqual(ModuleDurationAggregate.objects.count(), 0)
 
-    def test_aggregates_training_exercise(self) -> None:
-        """Test aggregation of training module duration events"""
-        self._create_training_event("image", 5, "2026-01-15T10:00:00", 120)
-        self._create_training_event("image", 5, "2026-01-15T11:00:00", 80)
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
-        agg = ModuleDurationAggregate.objects.get(
-            exercise_type="image", job_id=5, date="2026-01-15"
-        )
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.total_duration_seconds, 200)
-        self.assertIsNone(agg.unit_id)
-
-    def test_aggregates_different_training_types(self) -> None:
-        """Test that different training exercise types create separate aggregates"""
-        self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
-        self._create_training_event("sentence", 5, "2026-01-15T10:00:00", 60)
-        self._create_training_event("speech", 5, "2026-01-15T10:00:00", 60)
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 3)
-
-    def test_aggregates_different_jobs(self) -> None:
-        """Test that different job IDs create separate training aggregates"""
-        self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
-        self._create_training_event("image", 6, "2026-01-15T10:00:00", 90)
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(job_id=5).total_duration_seconds, 60
-        )
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(job_id=6).total_duration_seconds, 90
-        )
-
-    def test_standard_and_training_create_separate_aggregates(self) -> None:
-        """Test that standard and training exercises never share an aggregate"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
-        standard_agg = ModuleDurationAggregate.objects.get(exercise_type="word_choice")
-        self.assertEqual(standard_agg.unit_id, 10)
-        self.assertIsNone(standard_agg.job_id)
-        training_agg = ModuleDurationAggregate.objects.get(exercise_type="image")
-        self.assertIsNone(training_agg.unit_id)
-        self.assertEqual(training_agg.job_id, 5)
-
 
 class DropoutAggregateTests(TestCase):
     """
     Tests for exercise dropout event aggregation.
     """
 
-    def _create_standard_event(  # pylint: disable=too-many-arguments
+    def _create_event(  # pylint: disable=too-many-arguments
         self,
         *,
         exercise_type: str,
@@ -448,52 +384,28 @@ class DropoutAggregateTests(TestCase):
         total: int,
         timestamp: str,
     ) -> AnalyticsEvent:
-        exercise_key: dict = {"type": "exercise", "exercise_type": exercise_type}
-        if unit_id is not None:
-            exercise_key["unit_id"] = unit_id
         return AnalyticsEvent.objects.create(
             installation_id="test-install",
             event_type="exercise_dropout",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": exercise_key,
+                "exercise_type": exercise_type,
+                "unit_id": unit_id,
                 "position": position,
                 "total": total,
-            },
-        )
-
-    def _create_training_event(  # pylint: disable=too-many-arguments
-        self,
-        *,
-        exercise_type: str,
-        job_id: int,
-        position: int,
-        total: int,
-        timestamp: str,
-        vocabulary_item_id: int = 100,
-    ) -> AnalyticsEvent:
-        return AnalyticsEvent.objects.create(
-            installation_id="test-install",
-            event_type="exercise_dropout",
-            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
-            payload={
-                "exercise_key": {"type": "training", "exercise_type": exercise_type, "job_id": job_id},
-                "position": position,
-                "total": total,
-                "vocabulary_item_id": vocabulary_item_id,
             },
         )
 
     def test_aggregates_single_day(self) -> None:
         """Test basic aggregation of dropout events into a single day"""
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
@@ -508,18 +420,17 @@ class DropoutAggregateTests(TestCase):
             exercise_type="word_choice", unit_id=10, dropout_position=3, total_items=10
         )
         self.assertEqual(agg.dropout_count, 2)
-        self.assertIsNone(agg.job_id)
 
     def test_aggregates_multiple_days(self) -> None:
         """Test that events on different days create separate aggregates"""
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
@@ -533,14 +444,14 @@ class DropoutAggregateTests(TestCase):
 
     def test_aggregates_different_positions(self) -> None:
         """Test that different dropout positions create separate aggregates"""
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=2,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=5,
@@ -560,14 +471,14 @@ class DropoutAggregateTests(TestCase):
 
     def test_aggregates_different_exercise_types(self) -> None:
         """Test that different exercise types create separate aggregates"""
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_list",
             unit_id=10,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
@@ -580,15 +491,15 @@ class DropoutAggregateTests(TestCase):
         self.assertEqual(DropoutAggregate.objects.count(), 2)
 
     def test_aggregates_null_unit_id(self) -> None:
-        """Test aggregation with null unit_id for standard exercises"""
-        self._create_standard_event(
+        """Test aggregation with null unit_id"""
+        self._create_event(
             exercise_type="word_choice",
             unit_id=None,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=None,
             position=3,
@@ -605,14 +516,14 @@ class DropoutAggregateTests(TestCase):
 
     def test_null_and_non_null_unit_id_separate(self) -> None:
         """Test that null and non-null unit_ids create separate aggregates"""
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=None,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
@@ -626,7 +537,7 @@ class DropoutAggregateTests(TestCase):
 
     def test_increments_existing_aggregate(self) -> None:
         """Test that running twice increments existing aggregates"""
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
@@ -635,7 +546,7 @@ class DropoutAggregateTests(TestCase):
         )
         call_command("aggregate_analytics")
 
-        self._create_standard_event(
+        self._create_event(
             exercise_type="word_choice",
             unit_id=10,
             position=3,
@@ -656,80 +567,3 @@ class DropoutAggregateTests(TestCase):
         """Test that running with no events does nothing"""
         call_command("aggregate_analytics")
         self.assertEqual(DropoutAggregate.objects.count(), 0)
-
-    def test_aggregates_training_dropout(self) -> None:
-        """Test aggregation of dropout events for training exercises"""
-        self._create_training_event(
-            exercise_type="image",
-            job_id=5,
-            position=2,
-            total=8,
-            timestamp="2026-01-15T10:00:00",
-            vocabulary_item_id=99,
-        )
-        self._create_training_event(
-            exercise_type="image",
-            job_id=5,
-            position=2,
-            total=8,
-            timestamp="2026-01-15T11:00:00",
-            vocabulary_item_id=99,
-        )
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
-        agg = DropoutAggregate.objects.get(
-            exercise_type="image", job_id=5, dropout_position=2, total_items=8
-        )
-        self.assertEqual(agg.dropout_count, 2)
-        self.assertIsNone(agg.unit_id)
-        self.assertEqual(agg.vocabulary_item_id, 99)
-
-    def test_different_vocabulary_items_create_separate_aggregates(self) -> None:
-        """Test that dropouts on different vocabulary items create separate aggregates"""
-        self._create_training_event(
-            exercise_type="image",
-            job_id=5,
-            position=2,
-            total=8,
-            timestamp="2026-01-15T10:00:00",
-            vocabulary_item_id=10,
-        )
-        self._create_training_event(
-            exercise_type="image",
-            job_id=5,
-            position=2,
-            total=8,
-            timestamp="2026-01-15T11:00:00",
-            vocabulary_item_id=20,
-        )
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertEqual(DropoutAggregate.objects.get(vocabulary_item_id=10).dropout_count, 1)
-        self.assertEqual(DropoutAggregate.objects.get(vocabulary_item_id=20).dropout_count, 1)
-
-    def test_standard_and_training_dropout_separate(self) -> None:
-        """Test that standard and training dropouts never share an aggregate"""
-        self._create_standard_event(
-            exercise_type="word_choice",
-            unit_id=10,
-            position=3,
-            total=10,
-            timestamp="2026-01-15T10:00:00",
-        )
-        self._create_training_event(
-            exercise_type="image",
-            job_id=5,
-            position=3,
-            total=10,
-            timestamp="2026-01-15T10:00:00",
-            vocabulary_item_id=99,
-        )
-
-        call_command("aggregate_analytics")
-
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertIsNone(DropoutAggregate.objects.get(exercise_type="word_choice").vocabulary_item_id)

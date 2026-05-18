@@ -194,68 +194,31 @@ class SessionAggregator(EventAggregator):
 
 class ModuleDurationAggregator(EventAggregator):
     """
-    Aggregates module duration events for both standard and training exercises.
+    Aggregates module duration events.
     """
 
     event_types = [AnalyticsEvent.EventType.MODULE_DURATION]
 
     @staticmethod
     def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
-        standard_events = events.filter(payload__exercise_key__type="exercise")
-        training_events = events.filter(payload__exercise_key__type="training")
-
-        standard_aggregated = (
-            standard_events.annotate(
-                exercise_type=KT("payload__exercise_key__exercise_type"),
-                unit_id=KT("payload__exercise_key__unit_id"),
+        aggregated_events = (
+            events.annotate(
                 duration_seconds=Cast(
                     KT("payload__duration_seconds"), output_field=IntegerField()
-                ),
+                )
             )
-            .values("event_date", "exercise_type", "unit_id")
+            .values("event_date", "payload__exercise_type", "payload__unit_id")
             .annotate(
                 total_duration_seconds=Sum("duration_seconds"),
                 total_sessions=Count("pk"),
             )
         )
-        for event in standard_aggregated:
-            aggregate, _created = ModuleDurationAggregate.objects.update_or_create(
-                date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=event["unit_id"],
-                job_id=None,
-                defaults={
-                    "total_duration_seconds": F("total_duration_seconds")
-                    + event["total_duration_seconds"],
-                    "total_sessions": F("total_sessions") + event["total_sessions"],
-                },
-                create_defaults={
-                    "total_duration_seconds": event["total_duration_seconds"],
-                    "total_sessions": event["total_sessions"],
-                },
-            )
-            logger.info("Created or updated aggregate %r", aggregate)
 
-        training_aggregated = (
-            training_events.annotate(
-                exercise_type=KT("payload__exercise_key__exercise_type"),
-                job_id=KT("payload__exercise_key__job_id"),
-                duration_seconds=Cast(
-                    KT("payload__duration_seconds"), output_field=IntegerField()
-                ),
-            )
-            .values("event_date", "exercise_type", "job_id")
-            .annotate(
-                total_duration_seconds=Sum("duration_seconds"),
-                total_sessions=Count("pk"),
-            )
-        )
-        for event in training_aggregated:
+        for event in aggregated_events:
             aggregate, _created = ModuleDurationAggregate.objects.update_or_create(
                 date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=None,
-                job_id=event["job_id"],
+                exercise_type=event["payload__exercise_type"],
+                unit_id=event["payload__unit_id"],
                 defaults={
                     "total_duration_seconds": F("total_duration_seconds")
                     + event["total_duration_seconds"],
@@ -271,66 +234,29 @@ class ModuleDurationAggregator(EventAggregator):
 
 class DropoutAggregator(EventAggregator):
     """
-    Aggregates exercise dropout events into daily DropoutAggregate records
-    for both standard and training exercises.
-    Groups standard events by (date, exercise_type, unit_id, dropout_position, total_items).
-    Groups training events by (date, exercise_type, job_id, vocabulary_item_id, dropout_position, total_items).
+    Aggregates exercise dropout events into daily DropoutAggregate records.
+    Groups by (date, exercise_type, unit_id, position, total) and sums dropout counts.
     """
 
     event_types = [AnalyticsEvent.EventType.EXERCISE_DROPOUT]
 
     @staticmethod
     def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
-        standard_events = events.filter(payload__exercise_key__type="exercise")
-        training_events = events.filter(payload__exercise_key__type="training")
-
-        standard_aggregated = (
-            standard_events.annotate(
-                exercise_type=KT("payload__exercise_key__exercise_type"),
-                unit_id=KT("payload__exercise_key__unit_id"),
-            )
-            .values(
-                "event_date", "exercise_type", "unit_id",
-                "payload__position", "payload__total", "payload__vocabulary_item_id",
-            )
-            .annotate(dropout_count=Count("pk"))
+        aggregated_events = events.values(
+            "event_date",
+            "payload__exercise_type",
+            "payload__unit_id",
+            "payload__position",
+            "payload__total",
+        ).annotate(
+            dropout_count=Count("pk"),
         )
-        for event in standard_aggregated:
+
+        for event in aggregated_events:
             aggregate, _created = DropoutAggregate.objects.update_or_create(
                 date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=event["unit_id"],
-                job_id=None,
-                vocabulary_item_id=event["payload__vocabulary_item_id"],
-                dropout_position=event["payload__position"],
-                total_items=event["payload__total"],
-                defaults={
-                    "dropout_count": F("dropout_count") + event["dropout_count"],
-                },
-                create_defaults={
-                    "dropout_count": event["dropout_count"],
-                },
-            )
-            logger.info("Created or updated aggregate %r", aggregate)
-
-        training_aggregated = (
-            training_events.annotate(
-                exercise_type=KT("payload__exercise_key__exercise_type"),
-                job_id=KT("payload__exercise_key__job_id"),
-            )
-            .values(
-                "event_date", "exercise_type", "job_id",
-                "payload__position", "payload__total", "payload__vocabulary_item_id",
-            )
-            .annotate(dropout_count=Count("pk"))
-        )
-        for event in training_aggregated:
-            aggregate, _created = DropoutAggregate.objects.update_or_create(
-                date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=None,
-                job_id=event["job_id"],
-                vocabulary_item_id=event["payload__vocabulary_item_id"],
+                exercise_type=event["payload__exercise_type"],
+                unit_id=event["payload__unit_id"],
                 dropout_position=event["payload__position"],
                 total_items=event["payload__total"],
                 defaults={

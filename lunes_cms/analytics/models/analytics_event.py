@@ -13,9 +13,6 @@ class AnalyticsEvent(models.Model):
 
         WORD_LIST = "word_list", "Word List"
         WORD_CHOICE = "word_choice", "Word Choice"
-        IMAGE = "image", "Image Training"
-        SENTENCE = "sentence", "Sentence Training"
-        SPEECH = "speech", "Speech Training"
 
     class EventType(models.TextChoices):
         """
