@@ -6,6 +6,10 @@ The DB itself is the queue: a Word with empty ``audio`` (or empty
 A worker thread picks pending rows, calls OpenAI TTS, saves the file.
 Idempotent — already-populated rows are filtered out, so re-runs are free.
 
+The drain is scoped to the word IDs just created by a CSV import (passed via
+``word_ids``); it never touches words created elsewhere. So an import only
+generates audio for its own rows, not for the whole table.
+
 The OpenAI call (several seconds) is made *outside* any DB transaction, so a
 slow request never holds a write lock. An in-process lock makes the drain
 single-flight, so two imports in quick succession don't kick off overlapping
@@ -97,17 +101,25 @@ def _generate_for_word(word: Word) -> None:
         )
 
 
-def _pending_filter() -> Q:
+def _pending_filter(word_ids: list[int] | None = None) -> Q:
     needs_word_audio = Q(audio="") | Q(audio__isnull=True)
     needs_sentence_audio = ~Q(example_sentence="") & (
         Q(example_sentence_audio="") | Q(example_sentence_audio__isnull=True)
     )
-    return (needs_word_audio | needs_sentence_audio) & ~Q(word="")
+    pending = (needs_word_audio | needs_sentence_audio) & ~Q(word="")
+    if word_ids is not None:
+        pending &= Q(pk__in=word_ids)
+    return pending
 
 
-def drain_pending_audio(throttle_seconds: float = 1.0) -> None:
+def drain_pending_audio(
+    word_ids: list[int] | None = None, throttle_seconds: float = 1.0
+) -> None:
     """
     Process Words that need audio, one at a time, until none remain.
+
+    ``word_ids`` restricts the drain to those Word rows (the ones a CSV
+    import just created). Without it the whole table is scanned.
 
     Single-flight within the process: if another thread already holds the
     drain lock this call returns immediately (that thread will pick up
@@ -120,16 +132,18 @@ def drain_pending_audio(throttle_seconds: float = 1.0) -> None:
     if not _drain_lock.acquire(blocking=False):  # pylint: disable=consider-using-with
         return
     failed_pks: set[int] = set()
+    scope = Q(pk__in=word_ids) if word_ids is not None else Q()
     try:
         missing_word_audio = Word.objects.filter(
-            (Q(audio="") | Q(audio__isnull=True)) & ~Q(word="")
+            (Q(audio="") | Q(audio__isnull=True)) & ~Q(word="") & scope
         ).count()
         missing_sentence_audio = Word.objects.filter(
             ~Q(example_sentence="")
             & (Q(example_sentence_audio="") | Q(example_sentence_audio__isnull=True))
             & ~Q(word="")
+            & scope
         ).count()
-        pending = Word.objects.filter(_pending_filter()).count()
+        pending = Word.objects.filter(_pending_filter(word_ids)).count()
         logger.info(
             "Audio drain starting: %s word(s) pending "
             "(%s missing word audio, %s missing example-sentence audio) — "
@@ -141,7 +155,7 @@ def drain_pending_audio(throttle_seconds: float = 1.0) -> None:
         )
         while True:
             word = (
-                Word.objects.filter(_pending_filter())
+                Word.objects.filter(_pending_filter(word_ids))
                 .exclude(pk__in=failed_pks)
                 .first()
             )

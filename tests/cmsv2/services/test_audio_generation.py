@@ -39,7 +39,7 @@ def fast_worker(transactional_db):
         yield
 
 
-def _run_drain():
+def _run_drain(word_ids=None):
     """
     Run the worker in a thread, like it runs in production.
 
@@ -49,7 +49,8 @@ def _run_drain():
     thread sees committed data.
     """
     thread = threading.Thread(
-        target=audio_generation.drain_pending_audio, kwargs={"throttle_seconds": 0}
+        target=audio_generation.drain_pending_audio,
+        kwargs={"word_ids": word_ids, "throttle_seconds": 0},
     )
     thread.start()
     thread.join(timeout=10)
@@ -207,6 +208,23 @@ def test_drain_does_not_repick_a_failed_row(fast_worker):
     word.refresh_from_db()
     assert not word.audio
     # Tried exactly once this pass, then parked in failed_pks (no money-burning loop).
+    assert word_audio_call.call_count == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_only_processes_given_word_ids(fast_worker):
+    imported = _make_word(word="Hammer")
+    other = _make_word(word="Säge")
+
+    with mock.patch.object(
+        audio_generation, "openai_word_audio_bytes", return_value=b"mp3"
+    ) as word_audio_call:
+        _run_drain(word_ids=[imported.pk])
+
+    imported.refresh_from_db()
+    other.refresh_from_db()
+    assert imported.audio.read() == b"mp3"
+    assert not other.audio
     assert word_audio_call.call_count == 1
 
 

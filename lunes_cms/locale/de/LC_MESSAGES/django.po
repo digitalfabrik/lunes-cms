@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-14 10:24+0000\n"
+"POT-Creation-Date: 2026-05-18 09:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -794,32 +794,32 @@ msgstr "Bild Prüfstatus"
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/admins/word_import_resource.py:106
+#: cmsv2/admins/word_import_resource.py:107
 #, python-format
 msgid "Row %(n)s: No recognised columns – row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:123
+#: cmsv2/admins/word_import_resource.py:124
 #, python-format
 msgid "Row %(n)s: Unit column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:130
+#: cmsv2/admins/word_import_resource.py:131
 #, python-format
 msgid "Row %(n)s: Vocabulary column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Vokabel ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:142
+#: cmsv2/admins/word_import_resource.py:143
 #, python-format
 msgid "Row %(n)s: Malformed column data – %(e)s"
 msgstr "Zeile %(n)s: Fehlerhafte Spaltendaten – %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:151
+#: cmsv2/admins/word_import_resource.py:152
 #, python-format
 msgid "Row %(n)s: Unexpected parsing error – %(e)s"
 msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:221
+#: cmsv2/admins/word_import_resource.py:226
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
@@ -1050,12 +1050,12 @@ msgstr ""
 msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
-#: cmsv2/views/import_csv_view.py:92
+#: cmsv2/views/import_csv_view.py:94
 #, python-format
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
-#: cmsv2/views/import_csv_view.py:99
+#: cmsv2/views/import_csv_view.py:101
 #, python-format
 msgid ""
 "Import successful! %(created)s new entries, %(updated)s updated. Audio is "
@@ -1064,7 +1064,7 @@ msgstr ""
 "Import erfolgreich! %(created)s neue Einträge, %(updated)s wurden "
 "aktualisiert. Audio wird im Hintergrund generiert."
 
-#: cmsv2/views/import_csv_view.py:112
+#: cmsv2/views/import_csv_view.py:119
 msgid ""
 "Import failed. The size of the column or row doesn't fit the table "
 "dimensions. Please adjust your table and try again."
@@ -1072,7 +1072,7 @@ msgstr ""
 "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen "
 "nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
 
-#: cmsv2/views/import_csv_view.py:121
+#: cmsv2/views/import_csv_view.py:128
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
