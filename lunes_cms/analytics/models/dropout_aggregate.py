@@ -15,6 +15,8 @@ class DropoutAggregate(models.Model):
         choices=AnalyticsEvent.ExerciseType.choices,
     )
     unit_id = models.IntegerField(null=True)
+    job_id = models.IntegerField(null=True)
+    vocabulary_item_id = models.IntegerField(null=True)
     dropout_position = models.IntegerField()
     total_items = models.IntegerField()
 
@@ -32,6 +34,8 @@ class DropoutAggregate(models.Model):
                     "date",
                     "exercise_type",
                     "unit_id",
+                    "job_id",
+                    "vocabulary_item_id",
                     "dropout_position",
                     "total_items",
                 ],
@@ -43,6 +47,6 @@ class DropoutAggregate(models.Model):
     def __str__(self) -> str:
         return (
             f"Dropout aggregate ({self.date}, type={self.exercise_type}, "
-            f"unit={self.unit_id}, pos={self.dropout_position}/{self.total_items}): "
-            f"{self.dropout_count}"
+            f"unit={self.unit_id}, job={self.job_id}, vocab={self.vocabulary_item_id}, "
+            f"pos={self.dropout_position}/{self.total_items}): {self.dropout_count}"
         )
