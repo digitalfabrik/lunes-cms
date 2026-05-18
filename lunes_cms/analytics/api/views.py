@@ -37,9 +37,11 @@ class AnalyticsEventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         event = serializer.save()
         if event.event_type == AnalyticsEvent.EventType.EXERCISE_REPETITION:
             payload = event.payload
+            exercise_key = payload["exercise_key"]
             ExerciseRepetitionAggregate.objects.update_or_create(
-                unit_id=payload["unit_id"],
-                exercise_type=payload["exercise_type"],
+                unit_id=exercise_key.get("unit_id"),
+                job_id=exercise_key.get("job_id"),
+                exercise_type=exercise_key["exercise_type"],
                 session_id=payload["session_id"],
                 defaults={"repetition_count": F("repetition_count") + 1},
                 create_defaults={"repetition_count": 1},
