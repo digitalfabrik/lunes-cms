@@ -44,7 +44,9 @@ class ExerciseRepetitionEventTests(APITestCase):
     def test_create_valid_standard_event(self) -> None:
         """Test creating a valid standard exercise_repetition event"""
         self.assertEqual(AnalyticsEvent.objects.count(), 0)
-        response = self.client.post(self.url, data=self.valid_standard_payload, format="json")
+        response = self.client.post(
+            self.url, data=self.valid_standard_payload, format="json"
+        )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(AnalyticsEvent.objects.count(), 1)
         event = AnalyticsEvent.objects.first()
@@ -56,7 +58,9 @@ class ExerciseRepetitionEventTests(APITestCase):
 
     def test_creates_standard_aggregate_immediately(self) -> None:
         """Test that posting a standard event immediately creates an aggregate"""
-        response = self.client.post(self.url, data=self.valid_standard_payload, format="json")
+        response = self.client.post(
+            self.url, data=self.valid_standard_payload, format="json"
+        )
         self.assertEqual(response.status_code, 201)
         aggregate = ExerciseRepetitionAggregate.objects.get(
             unit_id=1, job_id=None, exercise_type="word_choice", session_id="session-1"
@@ -77,7 +81,9 @@ class ExerciseRepetitionEventTests(APITestCase):
 
     def test_create_valid_training_event(self) -> None:
         """Test creating a valid training exercise_repetition event"""
-        response = self.client.post(self.url, data=self.valid_training_payload, format="json")
+        response = self.client.post(
+            self.url, data=self.valid_training_payload, format="json"
+        )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(AnalyticsEvent.objects.count(), 1)
         event = AnalyticsEvent.objects.first()
@@ -87,7 +93,9 @@ class ExerciseRepetitionEventTests(APITestCase):
 
     def test_creates_training_aggregate_immediately(self) -> None:
         """Test that posting a training event immediately creates an aggregate"""
-        response = self.client.post(self.url, data=self.valid_training_payload, format="json")
+        response = self.client.post(
+            self.url, data=self.valid_training_payload, format="json"
+        )
         self.assertEqual(response.status_code, 201)
         aggregate = ExerciseRepetitionAggregate.objects.get(
             unit_id=None, job_id=42, exercise_type="image", session_id="session-1"
@@ -117,7 +125,10 @@ class ExerciseRepetitionEventTests(APITestCase):
         self.client.post(self.url, data=self.valid_standard_payload, format="json")
         payload_session2 = {
             **self.valid_standard_payload,
-            "payload": {**self.valid_standard_payload["payload"], "session_id": "session-2"},
+            "payload": {
+                **self.valid_standard_payload["payload"],
+                "session_id": "session-2",
+            },
         }
         self.client.post(self.url, data=payload_session2, format="json")
 
@@ -130,7 +141,10 @@ class ExerciseRepetitionEventTests(APITestCase):
             **self.valid_standard_payload,
             "payload": {
                 **self.valid_standard_payload["payload"],
-                "exercise_key": {**self.valid_standard_payload["payload"]["exercise_key"], "unit_id": 2},
+                "exercise_key": {
+                    **self.valid_standard_payload["payload"]["exercise_key"],
+                    "unit_id": 2,
+                },
             },
         }
         self.client.post(self.url, data=payload_unit2, format="json")
@@ -152,7 +166,11 @@ class ExerciseRepetitionEventTests(APITestCase):
         payload = {
             **self.valid_standard_payload,
             "payload": {
-                "exercise_key": {"type": "unknown", "exercise_type": "word_choice", "unit_id": 1},
+                "exercise_key": {
+                    "type": "unknown",
+                    "exercise_type": "word_choice",
+                    "unit_id": 1,
+                },
                 "session_id": "session-1",
             },
         }

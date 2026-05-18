@@ -103,7 +103,10 @@ class ExerciseDropoutPayloadSerializer(PayloadSerializer):
     vocabulary_item_id = serializers.IntegerField(required=False, allow_null=True)
 
     def validate(self, attrs: dict) -> dict:
-        if attrs["exercise_key"]["type"] == "training" and attrs.get("vocabulary_item_id") is None:
+        if (
+            attrs["exercise_key"]["type"] == "training"
+            and attrs.get("vocabulary_item_id") is None
+        ):
             raise serializers.ValidationError(
                 {"vocabulary_item_id": "This field is required for training exercises."}
             )

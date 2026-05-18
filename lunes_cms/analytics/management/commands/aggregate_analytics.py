@@ -290,8 +290,12 @@ class DropoutAggregator(EventAggregator):
                 unit_id=KT("payload__exercise_key__unit_id"),
             )
             .values(
-                "event_date", "exercise_type", "unit_id",
-                "payload__position", "payload__total", "payload__vocabulary_item_id",
+                "event_date",
+                "exercise_type",
+                "unit_id",
+                "payload__position",
+                "payload__total",
+                "payload__vocabulary_item_id",
             )
             .annotate(dropout_count=Count("pk"))
         )
@@ -319,8 +323,12 @@ class DropoutAggregator(EventAggregator):
                 job_id=KT("payload__exercise_key__job_id"),
             )
             .values(
-                "event_date", "exercise_type", "job_id",
-                "payload__position", "payload__total", "payload__vocabulary_item_id",
+                "event_date",
+                "exercise_type",
+                "job_id",
+                "payload__position",
+                "payload__total",
+                "payload__vocabulary_item_id",
             )
             .annotate(dropout_count=Count("pk"))
         )

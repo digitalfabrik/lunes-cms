@@ -285,7 +285,11 @@ class ModuleDurationAggregateTests(TestCase):
             event_type="module_duration",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": {"type": "exercise", "exercise_type": exercise_type, "unit_id": unit_id},
+                "exercise_key": {
+                    "type": "exercise",
+                    "exercise_type": exercise_type,
+                    "unit_id": unit_id,
+                },
                 "duration_seconds": duration_seconds,
             },
         )
@@ -298,7 +302,11 @@ class ModuleDurationAggregateTests(TestCase):
             event_type="module_duration",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": {"type": "training", "exercise_type": exercise_type, "job_id": job_id},
+                "exercise_key": {
+                    "type": "training",
+                    "exercise_type": exercise_type,
+                    "job_id": job_id,
+                },
                 "duration_seconds": duration_seconds,
             },
         )
@@ -336,11 +344,15 @@ class ModuleDurationAggregateTests(TestCase):
 
         self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
         self.assertEqual(
-            ModuleDurationAggregate.objects.get(exercise_type="word_list", unit_id=10).total_sessions,
+            ModuleDurationAggregate.objects.get(
+                exercise_type="word_list", unit_id=10
+            ).total_sessions,
             1,
         )
         self.assertEqual(
-            ModuleDurationAggregate.objects.get(exercise_type="word_choice", unit_id=10).total_sessions,
+            ModuleDurationAggregate.objects.get(
+                exercise_type="word_choice", unit_id=10
+            ).total_sessions,
             1,
         )
 
@@ -477,7 +489,11 @@ class DropoutAggregateTests(TestCase):
             event_type="exercise_dropout",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": {"type": "training", "exercise_type": exercise_type, "job_id": job_id},
+                "exercise_key": {
+                    "type": "training",
+                    "exercise_type": exercise_type,
+                    "job_id": job_id,
+                },
                 "position": position,
                 "total": total,
                 "vocabulary_item_id": vocabulary_item_id,
@@ -708,8 +724,12 @@ class DropoutAggregateTests(TestCase):
         call_command("aggregate_analytics")
 
         self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertEqual(DropoutAggregate.objects.get(vocabulary_item_id=10).dropout_count, 1)
-        self.assertEqual(DropoutAggregate.objects.get(vocabulary_item_id=20).dropout_count, 1)
+        self.assertEqual(
+            DropoutAggregate.objects.get(vocabulary_item_id=10).dropout_count, 1
+        )
+        self.assertEqual(
+            DropoutAggregate.objects.get(vocabulary_item_id=20).dropout_count, 1
+        )
 
     def test_standard_and_training_dropout_separate(self) -> None:
         """Test that standard and training dropouts never share an aggregate"""
@@ -732,4 +752,6 @@ class DropoutAggregateTests(TestCase):
         call_command("aggregate_analytics")
 
         self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertIsNone(DropoutAggregate.objects.get(exercise_type="word_choice").vocabulary_item_id)
+        self.assertIsNone(
+            DropoutAggregate.objects.get(exercise_type="word_choice").vocabulary_item_id
+        )
