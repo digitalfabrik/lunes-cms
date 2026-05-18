@@ -532,14 +532,6 @@ workflows:
       - build-documentation:
           requires:
             - install
-      - e2e:
-          persist_docs: true
-          requires:
-            - compile-translations
-      - deploy-user-manual:
-          context: deliverino
-          requires:
-            - e2e
       - bump-dev-version:
           filters:
             branches:
