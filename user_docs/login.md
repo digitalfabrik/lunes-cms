@@ -2,7 +2,7 @@
 
 ## Schritt 1: Lunes CMS im Browser aufrufen
 
-Rufen Sie folgende URL auf: http://localhost:8080
+Rufen Sie folgende URL auf: https://lunes.tuerantuer.org/
 
 ## Schritt 2: Anmeldedaten eingeben
 

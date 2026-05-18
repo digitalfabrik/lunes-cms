@@ -19,7 +19,7 @@ def context(browser):
 def test_login(page: Page, document, base_url: str) -> None:
     with document.step(
         "Lunes CMS im Browser aufrufen",
-        description=f"Rufen Sie folgende URL auf: {base_url}",
+        description=f"Rufen Sie folgende URL auf: https://lunes.tuerantuer.org/",
         screenshot=False,
     ):
         page.goto(f"{base_url}")
