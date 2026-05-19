@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["ES2018", "DOM"],
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "rootDir": "lunes_cms/src",
+    "outDir": "lunes_cms/static/js",
+    "noEmit": false
+  },
+  "include": ["lunes_cms/src/**/*"]
+}
