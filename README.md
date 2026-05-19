@@ -25,6 +25,7 @@ Following packages are required before installing the project (install them with
 * `libpq-dev` to compile psycopg2
 * `gettext` and `pcregrep` to use the translation features
 * `ffmpeg` for audio processing
+* `node` and `npm` to build the TypeScript frontend
 
 E.g. on Debian-based distributions, use:
 
