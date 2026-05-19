@@ -10,7 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models import Word
-from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
+from lunes_cms.cmsv2.services.audio_generation import openai_word_audio_bytes
+from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
 
 
@@ -51,20 +52,13 @@ def word_generate_audio_via_openai(request):
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
-        client = get_openai_client()
-
-        response = client.audio.speech.create(
-            model="tts-1-hd",
-            voice="nova",
-            input=word_text,
-        )
+        audio_bytes = openai_word_audio_bytes(word_text)
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)
 
         with open(temp_filepath, "wb") as f:
-            for chunk in response.iter_bytes(chunk_size=4096):
-                f.write(chunk)
+            f.write(audio_bytes)
 
         temp_audio_url = os.path.join(settings.MEDIA_URL, "temp_audio", temp_filename)
 

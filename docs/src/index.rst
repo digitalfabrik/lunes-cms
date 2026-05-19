@@ -35,10 +35,12 @@ Basic Concepts
     internationalization
     documentation
     continous-integration
+    audio-generation
 
 * :doc:`internationalization`: Internationalization (i18n)
 * :doc:`documentation`: Documentation (Sphinx)
 * :doc:`continous-integration`: Continous Integration (Circle CI)
+* :doc:`audio-generation`: OpenAI audio generation for vocabulary
 
 Deployment
 ==========
