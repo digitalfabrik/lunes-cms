@@ -19,6 +19,12 @@ else
     activate_venv
 fi
 
+# Kill background processes when this script exits
+trap 'kill $(jobs -p) 2>/dev/null' EXIT
+
+# Watch and recompile TypeScript files on change
+npm run watch &
+
 # Show success message once dev server is up
 listen_for_devserver &
 
