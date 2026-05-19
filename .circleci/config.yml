@@ -98,7 +98,7 @@ jobs:
       - image: cimg/python:3.11
         environment:
           LUNES_CMS_SECRET_KEY: circleci-dummy-key
-      - image: cimg/postgres:14.1
+      - image: cimg/postgres:15.1
         environment:
           POSTGRES_USER: lunes
           POSTGRES_DB: lunes
@@ -385,7 +385,7 @@ jobs:
         environment:
           LUNES_CMS_SECRET_KEY: circleci-dummy-key
           LUNES_CMS_DEBUG: "True"
-      - image: cimg/postgres:14.1
+      - image: cimg/postgres:15.1
         environment:
           POSTGRES_USER: lunes
           POSTGRES_DB: lunes
