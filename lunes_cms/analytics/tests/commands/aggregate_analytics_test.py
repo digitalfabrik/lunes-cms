@@ -455,20 +455,17 @@ class DropoutAggregateTests(TestCase):
         self,
         *,
         exercise_type: str,
-        unit_id: int | None,
+        unit_id: int,
         position: int,
         total: int,
         timestamp: str,
     ) -> AnalyticsEvent:
-        exercise_key: dict = {"type": "exercise", "exercise_type": exercise_type}
-        if unit_id is not None:
-            exercise_key["unit_id"] = unit_id
         return AnalyticsEvent.objects.create(
             installation_id="test-install",
             event_type="exercise_dropout",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": exercise_key,
+                "exercise_key": {"type": "exercise", "exercise_type": exercise_type, "unit_id": unit_id},
                 "position": position,
                 "total": total,
             },
@@ -595,21 +592,23 @@ class DropoutAggregateTests(TestCase):
 
         self.assertEqual(DropoutAggregate.objects.count(), 2)
 
-    def test_aggregates_null_unit_id(self) -> None:
-        """Test aggregation with null unit_id for standard exercises"""
-        self._create_standard_event(
-            exercise_type="word_choice",
-            unit_id=None,
+    def test_aggregates_training_events_grouped(self) -> None:
+        """Test that training events with the same job_id are grouped into one aggregate"""
+        self._create_training_event(
+            exercise_type="image",
+            job_id=5,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
+            vocabulary_item_id=99,
         )
-        self._create_standard_event(
-            exercise_type="word_choice",
-            unit_id=None,
+        self._create_training_event(
+            exercise_type="image",
+            job_id=5,
             position=3,
             total=10,
             timestamp="2026-01-15T11:00:00",
+            vocabulary_item_id=99,
         )
 
         call_command("aggregate_analytics")
@@ -617,13 +616,14 @@ class DropoutAggregateTests(TestCase):
         self.assertEqual(DropoutAggregate.objects.count(), 1)
         agg = DropoutAggregate.objects.get()
         self.assertIsNone(agg.unit_id)
+        self.assertEqual(agg.job_id, 5)
         self.assertEqual(agg.dropout_count, 2)
 
-    def test_null_and_non_null_unit_id_separate(self) -> None:
-        """Test that null and non-null unit_ids create separate aggregates"""
-        self._create_standard_event(
-            exercise_type="word_choice",
-            unit_id=None,
+    def test_training_and_standard_events_separate(self) -> None:
+        """Test that training events (job_id) and standard events (unit_id) create separate aggregates"""
+        self._create_training_event(
+            exercise_type="image",
+            job_id=5,
             position=3,
             total=10,
             timestamp="2026-01-15T10:00:00",
