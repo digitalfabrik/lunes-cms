@@ -58,18 +58,7 @@ make run
 
 ### Common make targets
 
-Run `make help` to list them. Frequently used:
-
-| Target                  | What it does                                  |
-| ----------------------- | --------------------------------------------- |
-| `make install`          | Install CMS into local venv                   |
-| `make run`              | Start dev server                              |
-| `make run-fast`         | Start dev server, skip migrate/translate      |
-| `make test`             | Run pytest with coverage                      |
-| `make format`           | `black` + `isort`                             |
-| `make lint`             | `pylint` + `mypy`                             |
-| `make translate`        | Regenerate + compile translation file         |
-| `make docs`             | Build Sphinx documentation                    |
+Run `make help` to list all available targets.
 
 The underlying scripts still live in `tools/` and can be invoked directly if needed.
 
