@@ -260,6 +260,40 @@ def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
     return _delete
 
 
+@pytest.fixture
+def add_user(page: Page, base_url: str) -> Callable[[str, str], None]:
+    """Returns a function that creates a user from the Django admin.
+    Asserts the user does not already exist before creating it."""
+
+    def _add(username: str, password: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/user/")
+        page.fill("#searchbar", username)
+        page.get_by_role("button", name="Suchen").click()
+        expect(page.get_by_role("link", name=username)).to_have_count(0)
+        page.goto(f"{base_url}/de/admin/auth/user/add/")
+        page.fill("[name=username]", username)
+        page.fill("[name=password1]", password)
+        page.fill("[name=password2]", password)
+        page.click("[name=_save]")
+
+    return _add
+
+
+@pytest.fixture
+def delete_user(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that deletes a user by username from the Django admin."""
+
+    def _delete(username: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/user/")
+        page.fill("#searchbar", username)
+        page.get_by_role("button", name="Suchen").click()
+        page.get_by_role("link", name=username).first.click()
+        page.get_by_role("link", name="Löschen").click()
+        page.locator("input[type=submit]").click()
+
+    return _delete
+
+
 @dataclass
 class DocPage:
     """Collects documented steps and writes them as a markdown user manual page."""

@@ -29,6 +29,11 @@ nav:
     - Einheit bearbeiten: edit_unit.md
     - Einheit löschen: delete_unit.md
     - Mehrere Einheiten löschen: bulk_delete_units.md
+  - Benutzer:innen:
+    - Benutzer:in anlegen: add_user.md
+    - Benutzer:in bearbeiten (Informationen): edit_user_information.md
+    - Benutzer:in bearbeiten (Berechtigungen): edit_user_permissions.md
+    - Benutzer:in löschen: delete_user.md
   - Wörter:
     - Wort hinzufügen: add_word.md
     - Wort-Audio und -Bild generieren: generate_word_audio_and_image.md

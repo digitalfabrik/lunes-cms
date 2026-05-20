@@ -15,7 +15,12 @@ Willkommen im Benutzerhandbuch für das **Lunes CMS** – das Content Management
     2. [Einheit bearbeiten](edit_unit.md) — Bestehende Einheit ändern
     3. [Einheit löschen](delete_unit.md) — Bestehende Einheit entfernen
     4. [Mehrere Einheiten löschen](bulk_delete_units.md) — Mehrere Einheiten gleichzeitig entfernen
-4. Wörter
+4. Benutzer:innen
+    1. [Benutzer:in anlegen](add_user.md) — Neues Benutzerkonto anlegen
+    2. [Benutzer:in bearbeiten (Informationen)](edit_user_information.md) — Persönliche Informationen eines Benutzerkontos bearbeiten
+    3. [Benutzer:in bearbeiten (Berechtigungen)](edit_user_permissions.md) — Gruppenberechtigungen eines Benutzerkontos bearbeiten
+    4. [Benutzer:in löschen](delete_user.md) — Bestehendes Benutzerkonto entfernen
+5. Wörter
     1. [Wort hinzufügen](add_word.md) — Neues Vokabelwort mit Audio und Bild anlegen
     2. [Wort-Audio und -Bild generieren](generate_word_audio_and_image.md) — Audio und Bild per KI generieren und speichern
     3. [Wort bearbeiten](edit_word.md) — Bestehendes Vokabelwort ändern
