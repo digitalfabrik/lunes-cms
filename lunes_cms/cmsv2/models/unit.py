@@ -307,7 +307,9 @@ class Unit(models.Model):
     Represents a unit in the system, which can be linked to jobs and words.
     """
 
-    released = models.BooleanField(default=False, verbose_name=_("released"))
+    released = models.BooleanField(
+        default=False, db_index=True, verbose_name=_("released")
+    )
     title = models.CharField(max_length=255, verbose_name=_("unit"))
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")

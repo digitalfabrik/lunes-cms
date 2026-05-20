@@ -14,6 +14,8 @@ cd "${PACKAGE_DIR}" || exit 1
 # Re-generating translation file
 echo "Scanning Python and HTML source code and extracting translatable strings from it..." | print_info
 lunes-cms-cli makemessages -l de
+# Remove python-brace-format flags added by xgettext, as they vary between gettext versions and cause CI diffs
+tmp=$(mktemp) && grep -v '^#, python-brace-format$' "locale/de/LC_MESSAGES/django.po" > "$tmp" && mv "$tmp" "locale/de/LC_MESSAGES/django.po"
 
 # Ignore POT-Creation-Date of otherwise unchanged translation file
 if git diff --shortstat locale/de/LC_MESSAGES/django.po | grep -q "1 file changed, 1 insertion(+), 1 deletion(-)"; then

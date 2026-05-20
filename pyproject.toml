@@ -74,26 +74,31 @@ dev = [
 	"twine",
     "wheel"
 ]
+e2e = [
+	"mkdocs>=1.5,<2.0",
+	"mkdocs-material>=9.0,<10.0",
+	"pytest-playwright",
+]
 pinned = [
-	"django==5.2.12",
+	"django==5.2.14",
 	"django-import-export==4.4.0",
 	"django-jazzmin==3.0.1",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.17.1",
 	"drf-spectacular==0.29.0",
-	"ipython==9.10.1",
-	"openai==2.30.0",
-	"pillow==12.1.1",
-	"psycopg2==2.9.11",
+	"ipython==9.13.0",
+	"openai==2.33.0",
+	"pillow==12.2.0",
+	"psycopg2==2.9.12",
 	"pydub==0.25.1",
 
 ]
 dev-pinned = [
 	"black==26.3.1",
-    "build<=1.4.2",
+    "build<=1.5.0",
 	"bumpver==2025.1131",
-	"pre-commit==4.5.1",
+	"pre-commit==4.6.0",
 	"pyjwt==2.12.1",
 	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
@@ -108,7 +113,7 @@ dev-pinned = [
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
-	"wheel==0.46.3",
+	"wheel==0.47.0",
 ]
 
 [project.urls]
@@ -144,6 +149,10 @@ push = false
     'release = "{version}"',
 ]
 
+# Exclude e2e tests temporarily in pytest, will be removed in #747
+[tool.pytest.ini_options]
+addopts = "--ignore=e2e-tests"
+
 [tool.coverage.report]
 exclude_also = [
     "def __repr__",
@@ -162,6 +171,9 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 check_untyped_defs = false
 disallow_untyped_defs = false
+
+[tool.black]
+target-version = ["py311"]
 
 [tool.isort]
 profile = "black"

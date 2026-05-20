@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-24 16:18+0000\n"
+"POT-Creation-Date: 2026-05-18 09:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,8 +109,8 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:151
-#: cmsv2/admins/word_admin.py:434
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:243
+#: cmsv2/admins/word_admin.py:435
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -120,23 +120,23 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:66
-#: cmsv2/admins/word_admin.py:501 cmsv2/models/word.py:69
+#: cmsv2/admins/word_admin.py:502 cmsv2/models/word.py:68
 msgid "audio"
 msgstr "Audio"
 
 #: cms/admins/document_admin.py:216 cms/models/document_image.py:124
-#: cmsv2/models/unit.py:41 cmsv2/models/word.py:142
+#: cmsv2/models/unit.py:41 cmsv2/models/word.py:141
 msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:43 cmsv2/admins/word_admin.py:675
-#: cmsv2/models/word.py:46
+#: cms/models/document.py:43 cmsv2/admins/word_admin.py:676
+#: cmsv2/models/word.py:45
 msgid "singular article"
 msgstr "Singular-Artikel"
 
 #: cms/admins/document_resource.py:24 cmsv2/admins/word_export_resource.py:24
-#: cmsv2/models/word.py:305
+#: cmsv2/models/word.py:317
 msgid "Word"
 msgstr "Vokabel"
 
@@ -332,12 +332,12 @@ msgid "grammatical gender"
 msgstr "Genus"
 
 #: cms/models/alternative_word.py:28 cms/models/document.py:47
-#: cmsv2/models/word.py:50
+#: cmsv2/models/word.py:49
 msgid "plural"
 msgstr "Plural"
 
 #: cms/models/alternative_word.py:34 cms/models/document.py:53
-#: cmsv2/models/word.py:56
+#: cmsv2/models/word.py:55
 msgid "plural article"
 msgstr "Plural-Artikel"
 
@@ -346,7 +346,7 @@ msgid "alternative words"
 msgstr "Alternative Wörter"
 
 #: cms/models/discipline.py:20 cms/models/training_set.py:24
-#: cmsv2/models/job.py:19 cmsv2/models/unit.py:310
+#: cmsv2/models/job.py:19 cmsv2/models/unit.py:311
 msgid "released"
 msgstr "veröffentlicht"
 
@@ -356,25 +356,25 @@ msgid "discipline"
 msgstr "Modulgruppe"
 
 #: cms/models/discipline.py:23 cms/models/training_set.py:27
-#: cmsv2/models/unit.py:313
+#: cmsv2/models/unit.py:315
 msgid "description"
 msgstr "Beschreibung"
 
 #: cms/models/discipline.py:26 cms/models/group.py:10
 #: cms/models/training_set.py:30 cmsv2/models/job.py:22
-#: cmsv2/models/unit.py:316
+#: cmsv2/models/unit.py:318
 msgid "icon"
 msgstr "Icon"
 
 #: cms/models/discipline.py:33 cms/models/document.py:94
 #: cms/models/training_set.py:39 cmsv2/models/job.py:30
-#: cmsv2/models/unit.py:324 cmsv2/models/word.py:136
+#: cmsv2/models/unit.py:326 cmsv2/models/word.py:135
 msgid "created by"
 msgstr "Erstellt von"
 
 #: cms/models/discipline.py:36 cms/models/document.py:98
 #: cms/models/training_set.py:41 cmsv2/models/job.py:33
-#: cmsv2/models/unit.py:326 cmsv2/models/word.py:140
+#: cmsv2/models/unit.py:328 cmsv2/models/word.py:139
 msgid "admin"
 msgstr "Admin"
 
@@ -382,36 +382,36 @@ msgstr "Admin"
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:31 cmsv2/models/word.py:34
+#: cms/models/document.py:31 cmsv2/models/word.py:33
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:33 cmsv2/models/unit.py:321 cmsv2/models/word.py:36
+#: cms/models/document.py:33 cmsv2/models/unit.py:323 cmsv2/models/word.py:35
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:36 cmsv2/models/word.py:39
+#: cms/models/document.py:36 cmsv2/models/word.py:38
 msgid "Grammatical gender"
 msgstr "Genus"
 
-#: cms/models/document.py:68 cmsv2/models/unit.py:50 cmsv2/models/word.py:84
+#: cms/models/document.py:68 cmsv2/models/unit.py:50 cmsv2/models/word.py:83
 msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:70 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:689 cmsv2/models/word.py:111
+#: cmsv2/admins/word_admin.py:690 cmsv2/models/word.py:110
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:76 cmsv2/models/word.py:118
+#: cms/models/document.py:76 cmsv2/models/word.py:117
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:82 cmsv2/models/word.py:124
+#: cms/models/document.py:82 cmsv2/models/word.py:123
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:88 cmsv2/models/word.py:130
+#: cms/models/document.py:88 cmsv2/models/word.py:129
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -563,6 +563,7 @@ msgstr ""
 
 #: cms/templates/admin/delete_confirmation.html:16
 #: cms/templates/admin/delete_selected_confirmation.html:15
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:8
 #: cmsv2/templates/admin/csv_form.html:8
 #: cmsv2/templates/admin/generate_audio_base.html:9
 #: cmsv2/templates/admin/generate_image_base.html:9
@@ -648,7 +649,7 @@ msgstr "Zusammenfassung"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:164 cmsv2/utils.py:150
+#: cms/utils.py:164 cmsv2/utils.py:117
 msgid "and"
 msgstr "und"
 
@@ -664,17 +665,17 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:42
+#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:70
 #: cmsv2/admins/word_admin.py:115
 msgid "migration status"
 msgstr "Ablaufdatum"
 
-#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:53
+#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:81
 #: cmsv2/admins/word_admin.py:126
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:54
+#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:82
 #: cmsv2/admins/word_admin.py:127
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
@@ -683,13 +684,13 @@ msgstr "Nicht migriert aus altem Datenmodell"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:165
-#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:327
+#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:257
+#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:329
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:187
-#: cmsv2/admins/word_admin.py:711
+#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:279
+#: cmsv2/admins/word_admin.py:712
 msgid "migrated"
 msgstr "Migriert"
 
@@ -697,13 +698,50 @@ msgstr "Migriert"
 msgid "Export all vocabulary for these jobs to CSV"
 msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 
-#: cmsv2/admins/job_admin.py:221
+#: cmsv2/admins/job_admin.py:202
+msgid "Duplicate selected jobs"
+msgstr "Ausgewählte Berufe duplizieren"
+
+#: cmsv2/admins/job_admin.py:214
+msgid "Selected jobs have been duplicated successfully."
+msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
+
+#: cmsv2/admins/job_admin.py:235
 msgid "Import"
 msgstr "Import"
 
-#: cmsv2/admins/unit_admin.py:132
+#: cmsv2/admins/unit_admin.py:50
+msgid "assigned user"
+msgstr "Zugewiesene Person"
+
+#: cmsv2/admins/unit_admin.py:51
+msgid "assigned users"
+msgstr "Zugewiesene Personen"
+
+#: cmsv2/admins/unit_admin.py:165 cmsv2/admins/unit_admin.py:185
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:4
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:14
+msgid "Assign selected units to user"
+msgstr "Ausgewählte Einheiten zuweisen"
+
+#: cmsv2/admins/unit_admin.py:203
+#, python-format
+msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
+msgstr ""
+"%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
+"zugewiesen)."
+
+#: cmsv2/admins/unit_admin.py:224
 msgid "jobs"
 msgstr "Berufe"
+
+#: cmsv2/admins/user_admin.py:21
+msgid "assigned unit"
+msgstr "Zugewiesene Einheit"
+
+#: cmsv2/admins/user_admin.py:22
+msgid "assigned units"
+msgstr "Zugewiesene Einheiten"
 
 #: cmsv2/admins/word_admin.py:20
 msgid "Has Image"
@@ -725,7 +763,7 @@ msgstr "Wort Informationen"
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py:208 cmsv2/admins/word_admin.py:661
+#: cmsv2/admins/word_admin.py:208 cmsv2/admins/word_admin.py:662
 #: cmsv2/models/unit.py:160 cmsv2/models/unit.py:266
 msgid "Image"
 msgstr "Bilder"
@@ -738,49 +776,50 @@ msgstr "Beispielsatz"
 msgid "Miscellaneous"
 msgstr "Verschiedene"
 
-#: cmsv2/admins/word_admin.py:396
+#: cmsv2/admins/word_admin.py:397
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
-#: cmsv2/admins/word_admin.py:725 cmsv2/models/word.py:75
+#: cmsv2/admins/word_admin.py:726 cmsv2/models/word.py:74
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:740 cmsv2/models/unit.py:47
-#: cmsv2/models/word.py:148
+#: cmsv2/admins/word_admin.py:741 cmsv2/models/unit.py:47
+#: cmsv2/models/word.py:147
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
-#: cmsv2/admins/word_export_resource.py:80 cmsv2/models/unit.py:405
+#: cmsv2/admins/word_export_resource.py:80 cmsv2/models/unit.py:407
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:9
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/admins/word_import_resource.py:106
+#: cmsv2/admins/word_import_resource.py:107
 #, python-format
 msgid "Row %(n)s: No recognised columns – row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:123
+#: cmsv2/admins/word_import_resource.py:124
 #, python-format
 msgid "Row %(n)s: Unit column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:130
+#: cmsv2/admins/word_import_resource.py:131
 #, python-format
 msgid "Row %(n)s: Vocabulary column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Vokabel ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:142
+#: cmsv2/admins/word_import_resource.py:143
 #, python-format
 msgid "Row %(n)s: Malformed column data – %(e)s"
 msgstr "Zeile %(n)s: Fehlerhafte Spaltendaten – %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:151
+#: cmsv2/admins/word_import_resource.py:152
 #, python-format
 msgid "Row %(n)s: Unexpected parsing error – %(e)s"
 msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:221
+#: cmsv2/admins/word_import_resource.py:226
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
@@ -790,27 +829,27 @@ msgstr "Zeile %(n)s: %(msg)s"
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
-#: cmsv2/models/job.py:20 cmsv2/models/unit.py:319
+#: cmsv2/models/job.py:20 cmsv2/models/unit.py:321
 msgid "job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:35 cmsv2/models/unit.py:328 cmsv2/models/word.py:113
+#: cmsv2/models/job.py:35 cmsv2/models/unit.py:330 cmsv2/models/word.py:112
 msgid "modified at"
 msgstr "zuletzt geändert"
 
-#: cmsv2/models/job.py:91 cmsv2/models/unit.py:372
+#: cmsv2/models/job.py:79 cmsv2/models/unit.py:374
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py:104 cmsv2/views/import_csv_view.py:22
+#: cmsv2/models/job.py:92 cmsv2/views/import_csv_view.py:25
 msgid "Job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:105 cmsv2/templates/admin/csv_form.html:9
+#: cmsv2/models/job.py:93 cmsv2/templates/admin/csv_form.html:9
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py:26 cmsv2/models/unit.py:311
+#: cmsv2/models/review.py:26 cmsv2/models/unit.py:313
 msgid "unit"
 msgstr "Einheit"
 
@@ -889,19 +928,19 @@ msgid "Reviewer"
 msgstr "Expert:in"
 
 #: cmsv2/models/unit.py:60 cmsv2/models/unit.py:218 cmsv2/models/unit.py:290
-#: cmsv2/models/word.py:94
+#: cmsv2/models/word.py:93
 msgid "example sentence audio"
 msgstr "Beispielsatz Audio"
 
-#: cmsv2/models/unit.py:66 cmsv2/models/word.py:100
+#: cmsv2/models/unit.py:66 cmsv2/models/word.py:99
 msgid "example sentence check status"
 msgstr "Beispielsatz Check Status"
 
-#: cmsv2/models/unit.py:71 cmsv2/models/word.py:105
+#: cmsv2/models/unit.py:71 cmsv2/models/word.py:104
 msgid "example sentence audio regenerated"
 msgstr "Beispielsatz Audio neu generiert"
 
-#: cmsv2/models/unit.py:73 cmsv2/models/word.py:107
+#: cmsv2/models/unit.py:73 cmsv2/models/word.py:106
 msgid ""
 "Indicates whether the audio has been regenerated with the new TTS model."
 msgstr "Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
@@ -928,19 +967,53 @@ msgstr "Einheit-Wort Beziehung"
 msgid "Unit-Word Relations"
 msgstr "Einheit-Wort Beziehungen"
 
-#: cmsv2/models/unit.py:404
+#: cmsv2/models/unit.py:406
 msgid "Unit"
 msgstr "Einheit"
 
-#: cmsv2/models/word.py:82
+#: cmsv2/models/word.py:81
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:306 cmsv2/templates/admin/word_generate_audio.html:7
+#: cmsv2/models/word.py:318 cmsv2/templates/admin/word_generate_audio.html:7
 #: cmsv2/templates/admin/word_generate_example_sentence_audio.html:9
 #: cmsv2/templates/admin/word_generate_image.html:7
 msgid "Words"
 msgstr "Vokabel"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:10
+msgid "Assign to user"
+msgstr "An nutzende Person zuweisen"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:31
+#, python-format
+msgid "You are about to assign %(counter)s unit to a single user."
+msgid_plural "You are about to assign %(counter)s units to a single user."
+msgstr[0] "Du bist dabei, %(counter)s Einheit einer Person zuzuweisen."
+msgstr[1] "Du bist dabei, %(counter)s Einheiten einer Person zuzuweisen."
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:39
+msgid "User"
+msgstr "Nutzende Person"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:47
+msgid "Units already assigned to this user will be skipped."
+msgstr ""
+"Einheiten, die dieser Person bereits zugewiesen sind, werden übersprungen."
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:52
+msgid "Selected units"
+msgstr "Ausgewählte Einheiten"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:66
+msgid "Assign"
+msgstr "Zuweisen"
+
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:71
+#: cmsv2/templates/admin/csv_form.html:55
+#: cmsv2/templates/admin/csv_form.html:59
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: cmsv2/templates/admin/cmsv2/import_csv_button.html:7
 #: cmsv2/templates/admin/csv_form.html:4 cmsv2/templates/admin/csv_form.html:13
@@ -956,21 +1029,16 @@ msgstr "Sichern und Wörter importieren"
 msgid "Start import"
 msgstr "Import starten"
 
-#: cmsv2/templates/admin/csv_form.html:55
-#: cmsv2/templates/admin/csv_form.html:59
-msgid "Cancel"
-msgstr "Abbrechen"
-
 #: cmsv2/templates/admin/generate_audio_base.html:16
 #: cmsv2/templates/admin/word_generate_audio.html:9
 msgid "Generate Audio"
 msgstr "Audio generieren"
 
-#: cmsv2/views/import_csv_view.py:26
+#: cmsv2/views/import_csv_view.py:29
 msgid "Select CSV file"
 msgstr "CSV Datei auswählen"
 
-#: cmsv2/views/import_csv_view.py:28
+#: cmsv2/views/import_csv_view.py:31
 msgid ""
 "The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
 "and \"Beispielsatz\"."
@@ -978,23 +1046,25 @@ msgstr ""
 "Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
 "\"Beispielsatz\" enthalten."
 
-#: cmsv2/views/import_csv_view.py:48
+#: cmsv2/views/import_csv_view.py:51
 msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
-#: cmsv2/views/import_csv_view.py:89
+#: cmsv2/views/import_csv_view.py:94
 #, python-format
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
-#: cmsv2/views/import_csv_view.py:95
+#: cmsv2/views/import_csv_view.py:101
 #, python-format
-msgid "Import successful! %(created)s new entries, %(updated)s updated."
+msgid ""
+"Import successful! %(created)s new entries, %(updated)s updated. Audio is "
+"being generated in the background."
 msgstr ""
 "Import erfolgreich! %(created)s neue Einträge, %(updated)s wurden "
-"aktualisiert."
+"aktualisiert. Audio wird im Hintergrund generiert."
 
-#: cmsv2/views/import_csv_view.py:104
+#: cmsv2/views/import_csv_view.py:119
 msgid ""
 "Import failed. The size of the column or row doesn't fit the table "
 "dimensions. Please adjust your table and try again."
@@ -1002,30 +1072,34 @@ msgstr ""
 "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen "
 "nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
 
-#: cmsv2/views/import_csv_view.py:113
+#: cmsv2/views/import_csv_view.py:128
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
 
-#: core/settings.py:227
+#: core/settings.py:238
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:228
+#: core/settings.py:239
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:485 core/settings.py:486 core/settings.py:488
+#: core/settings.py:496 core/settings.py:497 core/settings.py:499
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:487
+#: core/settings.py:498
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#, python-format
+#~ msgid "%(name)s (New)"
+#~ msgstr "%(name)s (Neu)"
 
 #, python-format
 #~ msgid "Unexpected error - %(e)s"

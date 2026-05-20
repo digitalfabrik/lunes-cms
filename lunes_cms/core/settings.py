@@ -31,6 +31,17 @@ TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
+#: OpenAI model used for single-word/term text-to-speech
+OPENAI_TTS_WORD_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_WORD_MODEL", "tts-1-hd")
+
+#: OpenAI model used for example-sentence text-to-speech
+OPENAI_TTS_SENTENCE_MODEL = os.environ.get(
+    "LUNES_CMS_OPENAI_TTS_SENTENCE_MODEL", "gpt-4o-mini-tts"
+)
+
+#: OpenAI voice used for text-to-speech
+OPENAI_TTS_VOICE = os.environ.get("LUNES_CMS_OPENAI_TTS_VOICE", "nova")
+
 ###################
 # MATOMO TRACKING #
 ###################
@@ -518,7 +529,7 @@ JAZZMIN_UI_TWEAKS = {
     "brand_small_text": True,
     "brand_colour": "navbar-dark",
     "accent": "accent-navy",
-    "dark_mode_theme": "darkly",
+    "dark_mode_theme": None,
     "navbar": "navbar-primary navbar-dark",
     "no_navbar_border": True,
     "navbar_fixed": False,

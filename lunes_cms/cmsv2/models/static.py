@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
-from ..utils import create_resource_path
+from ..utils import create_resource_path, make_safe_filename
 
 
 class Static:
@@ -170,7 +170,12 @@ def convert_umlaute_audio(instance, filename):
     :return: file path of converted audio
     :rtype: str
     """
-    return create_resource_path("audio", filename)
+    stem = os.path.splitext(os.path.basename(filename))[0]
+    # convert_audio() re-saves the file as "<name>-conv.mp3"; keep the base name.
+    if stem.endswith("-conv"):
+        stem = stem[: -len("-conv")]
+    safe_stem = make_safe_filename(stem) or "audio"
+    return os.path.join("audio", f"{safe_stem}.mp3")
 
 
 def upload_sponsor_logos(instance, filename):
