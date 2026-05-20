@@ -20,11 +20,11 @@ E2E tests using pytest-playwright that automatically generate a user manual (Mar
 ```
 
 ```bash
-# Run all tests in parallel, regenerate screenshots only for changed tests (default)
-pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup
+# Run all tests in sequence, regenerate screenshots only for changed tests (default)
+pytest e2e-tests/ -m e2e
 
-# Run all tests in parallel, regenerate screenshots
-pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup --generate=all
+# Run all tests in sequence, regenerate screenshots
+pytest e2e-tests/ -m e2e --generate=all
 
 # With visible browser (for debugging)
 pytest e2e-tests/ -m e2e --headed
