@@ -31,6 +31,7 @@ nav:
     - Mehrere Einheiten löschen: bulk_delete_units.md
   - Wörter:
     - Wort hinzufügen: add_word.md
+    - Wort-Audio und -Bild generieren: generate_word_audio_and_image.md
     - Wort bearbeiten: edit_word.md
     - Wort löschen: delete_word.md
     - Mehrere Wörter löschen: bulk_delete_words.md
