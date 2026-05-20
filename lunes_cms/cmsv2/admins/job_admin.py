@@ -207,7 +207,7 @@ class JobAdmin(BaseAdmin):
             job.pk = None
             job.v1_id = None
             job.released = False
-            job.name = f"{job.name} ({_('New')})"
+            job.name = _("%(name)s (New)") % {"name": job.name}
             job.created_by = request.user.groups.first()
             job.save()
             job.units.set(units)
