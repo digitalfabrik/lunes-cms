@@ -1,11 +1,12 @@
 import os
-import subprocess
 from pathlib import Path
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.files import File
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from lunes_cms.core.audio import run_ffmpeg, validate_audio_upload
 
 from ..utils import document_to_string
 from ..validators import (
@@ -98,6 +99,13 @@ class Document(models.Model):
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     feedback = GenericRelation(Feedback)
 
+    def clean(self):
+        """Validate the audio file with ffmpeg before saving to prevent storing invalid audio."""
+        super().clean()
+        if not self.audio:
+            return
+        validate_audio_upload(self.audio.file)
+
     @property
     def converted(self):
         """
@@ -113,11 +121,7 @@ class Document(models.Model):
         super().save()
         file_path = self.audio.path
         new_path = file_path[:-4] + "-conv.mp3"
-        subprocess.run(
-            ["ffmpeg", "-i", file_path, "-b:a", "44.1k", new_path],
-            check=True,
-            capture_output=True,
-        )
+        run_ffmpeg("-i", file_path, "-b:a", "44.1k", new_path)
 
         with open(new_path, "rb") as file:
             converted_audiofile = File(file, name=Path(new_path).name)
