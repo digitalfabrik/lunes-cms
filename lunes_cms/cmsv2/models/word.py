@@ -1,10 +1,10 @@
 import os
+import subprocess
 
 from django.contrib.auth.models import Group
 from django.core.files import File
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from pydub import AudioSegment
 
 from ..utils import get_image_tag, make_safe_filename, word_to_string
 from ..validators import (
@@ -158,10 +158,12 @@ class Word(models.Model):
 
         original_name = self.audio.name
         file_path = self.audio.path
-        original_extension = file_path.split(".")[-1]
-        mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
         new_path = file_path[:-4] + "-conv.mp3"
-        mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
+        subprocess.run(
+            ["ffmpeg", "-i", file_path, "-b:a", "44.1k", new_path],
+            check=True,
+            capture_output=True,
+        )
 
         # Store the re-encoded file under a deterministic, word-derived name.
         # Drop the just-uploaded source file and any stale file already sitting

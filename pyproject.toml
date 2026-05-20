@@ -47,7 +47,6 @@ dependencies = [
 	"openai",
 	"pillow",
 	"psycopg2",
-	"pydub",
 ]
 
 [project.optional-dependencies]
@@ -91,8 +90,6 @@ pinned = [
 	"openai==2.33.0",
 	"pillow==12.2.0",
 	"psycopg2==2.9.12",
-	"pydub==0.25.1",
-
 ]
 dev-pinned = [
 	"black==26.3.1",

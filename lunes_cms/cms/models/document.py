@@ -1,11 +1,11 @@
 import os
+import subprocess
 from pathlib import Path
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.files import File
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from pydub import AudioSegment
 
 from ..utils import document_to_string
 from ..validators import (
@@ -112,10 +112,12 @@ class Document(models.Model):
         """
         super().save()
         file_path = self.audio.path
-        original_extension = file_path.split(".")[-1]
-        mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
         new_path = file_path[:-4] + "-conv.mp3"
-        mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
+        subprocess.run(
+            ["ffmpeg", "-i", file_path, "-b:a", "44.1k", new_path],
+            check=True,
+            capture_output=True,
+        )
 
         with open(new_path, "rb") as file:
             converted_audiofile = File(file, name=Path(new_path).name)

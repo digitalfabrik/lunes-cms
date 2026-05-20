@@ -88,7 +88,6 @@ INSTALLED_APPS = [
     # Installed third-party-apps
     "drf_spectacular",
     "mptt",
-    "pydub",
     "rest_framework",
     "qr_code",
     "import_export",
