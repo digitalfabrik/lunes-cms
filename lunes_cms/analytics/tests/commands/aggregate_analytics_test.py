@@ -465,7 +465,11 @@ class DropoutAggregateTests(TestCase):
             event_type="exercise_dropout",
             timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
             payload={
-                "exercise_key": {"type": "exercise", "exercise_type": exercise_type, "unit_id": unit_id},
+                "exercise_key": {
+                    "type": "exercise",
+                    "exercise_type": exercise_type,
+                    "unit_id": unit_id,
+                },
                 "position": position,
                 "total": total,
             },
