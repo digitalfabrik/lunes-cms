@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-18 09:18+0000\n"
+"POT-Creation-Date: 2026-05-20 08:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,8 +71,8 @@ msgstr "Modulgruppen"
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:38 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:148
-#: cms/models/document.py:149
+#: cms/admin.py:38 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:150
+#: cms/models/document.py:151
 msgid "vocabulary"
 msgstr "Vokabeln"
 
@@ -136,7 +136,7 @@ msgid "singular article"
 msgstr "Singular-Artikel"
 
 #: cms/admins/document_resource.py:24 cmsv2/admins/word_export_resource.py:24
-#: cmsv2/models/word.py:317
+#: cmsv2/models/word.py:319
 msgid "Word"
 msgstr "Vokabel"
 
@@ -702,6 +702,10 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
+#: cmsv2/admins/job_admin.py:210
+msgid "New"
+msgstr "Neu"
+
 #: cmsv2/admins/job_admin.py:214
 msgid "Selected jobs have been duplicated successfully."
 msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
@@ -975,7 +979,7 @@ msgstr "Einheit"
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:318 cmsv2/templates/admin/word_generate_audio.html:7
+#: cmsv2/models/word.py:320 cmsv2/templates/admin/word_generate_audio.html:7
 #: cmsv2/templates/admin/word_generate_example_sentence_audio.html:9
 #: cmsv2/templates/admin/word_generate_image.html:7
 msgid "Words"
@@ -1077,19 +1081,19 @@ msgstr ""
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
 
-#: core/settings.py:238
+#: core/settings.py:237
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:239
+#: core/settings.py:238
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:496 core/settings.py:497 core/settings.py:499
+#: core/settings.py:495 core/settings.py:496 core/settings.py:498
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:498
+#: core/settings.py:497
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
