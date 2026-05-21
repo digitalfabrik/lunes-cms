@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 16:25+0000\n"
+"POT-Creation-Date: 2026-06-11 10:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -849,7 +849,7 @@ msgstr "zuletzt geändert"
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py:92 cmsv2/views/import_csv_view.py:25
+#: cmsv2/models/job.py:92 cmsv2/views/import_csv_view.py:26
 msgid "Job"
 msgstr "Beruf"
 
@@ -1042,11 +1042,11 @@ msgstr "Import starten"
 msgid "Generate Audio"
 msgstr "Audio generieren"
 
-#: cmsv2/views/import_csv_view.py:29
+#: cmsv2/views/import_csv_view.py:30
 msgid "Select CSV file"
 msgstr "CSV Datei auswählen"
 
-#: cmsv2/views/import_csv_view.py:31
+#: cmsv2/views/import_csv_view.py:32
 msgid ""
 "The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
 "and \"Beispielsatz\"."
@@ -1054,25 +1054,26 @@ msgstr ""
 "Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
 "\"Beispielsatz\" enthalten."
 
-#: cmsv2/views/import_csv_view.py:51
+#: cmsv2/views/import_csv_view.py:52
 msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
-#: cmsv2/views/import_csv_view.py:94
+#: cmsv2/views/import_csv_view.py:95
 #, python-format
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
-#: cmsv2/views/import_csv_view.py:101
+#: cmsv2/views/import_csv_view.py:102
 #, python-format
 msgid ""
-"Import successful! %(created)s new entries, %(updated)s updated. Audio is "
-"being generated in the background."
+"Import successful! %(created)s new entries, %(updated)s updated. Audio and "
+"images are being generated in the background. This may take a few minutes..."
 msgstr ""
 "Import erfolgreich! %(created)s neue Einträge, %(updated)s wurden "
-"aktualisiert. Audio wird im Hintergrund generiert."
+"aktualisiert. Audio und Bilder werden im Hintergrund generiert. Dies kann "
+"einige Minuten dauern..."
 
-#: cmsv2/views/import_csv_view.py:119
+#: cmsv2/views/import_csv_view.py:126
 msgid ""
 "Import failed. The size of the column or row doesn't fit the table "
 "dimensions. Please adjust your table and try again."
@@ -1080,7 +1081,7 @@ msgstr ""
 "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen "
 "nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
 
-#: cmsv2/views/import_csv_view.py:128
+#: cmsv2/views/import_csv_view.py:135
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
@@ -1093,19 +1094,19 @@ msgstr "Ungültige Audiodatei"
 msgid "Could not measure audio loudness"
 msgstr "Die Lautstärke der Audiodatei konnte nicht gemessen werden."
 
-#: core/settings.py:239
+#: core/settings.py:244
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:240
+#: core/settings.py:245
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:497 core/settings.py:498 core/settings.py:500
+#: core/settings.py:502 core/settings.py:503 core/settings.py:505
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:499
+#: core/settings.py:504
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

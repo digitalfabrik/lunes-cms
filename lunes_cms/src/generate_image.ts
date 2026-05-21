@@ -58,8 +58,6 @@ window.initImageGenerator = function (config: ImageGeneratorConfig): void {
 
         const inputElement = document.getElementById("prompt-additional-info") as HTMLInputElement
         formData.append("additional_info", inputElement.value)
-        const modelSelectElement = document.getElementById("model") as HTMLSelectElement
-        formData.append("model", modelSelectElement.value)
         formData.append("csrfmiddlewaretoken", _getImageCookie("csrftoken") ?? "")
 
         fetch(config.generateUrl, {
