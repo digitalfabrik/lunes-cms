@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-18 09:18+0000\n"
+"POT-Creation-Date: 2026-05-20 11:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,6 +702,11 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
+#: cmsv2/admins/job_admin.py:210
+#, python-format
+msgid "%(name)s (New)"
+msgstr "%(name)s (Neu)"
+
 #: cmsv2/admins/job_admin.py:214
 msgid "Selected jobs have been duplicated successfully."
 msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
@@ -1096,10 +1101,6 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
-
-#, python-format
-#~ msgid "%(name)s (New)"
-#~ msgstr "%(name)s (Neu)"
 
 #, python-format
 #~ msgid "Unexpected error - %(e)s"
