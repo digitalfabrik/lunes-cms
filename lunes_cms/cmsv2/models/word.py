@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from django.contrib.auth.models import Group
 from django.core.files import File
@@ -173,7 +174,7 @@ class Word(models.Model):
 
         original_name = self.audio.name
         file_path = self.audio.path
-        new_path = file_path[:-4] + "-conv.mp3"
+        new_path = str(Path(file_path).with_suffix("")) + "-conv.mp3"
         run_ffmpeg("-i", file_path, "-b:a", "44.1k", new_path)
 
         # Store the re-encoded file under a deterministic, word-derived name.

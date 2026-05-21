@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-21 09:42+0000\n"
+"POT-Creation-Date: 2026-05-21 10:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,23 +120,23 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py:196 cms/models/document.py:67
-#: cmsv2/admins/word_admin.py:502 cmsv2/models/word.py:69
+#: cmsv2/admins/word_admin.py:502 cmsv2/models/word.py:70
 msgid "audio"
 msgstr "Audio"
 
 #: cms/admins/document_admin.py:216 cms/models/document_image.py:124
-#: cmsv2/models/unit.py:41 cmsv2/models/word.py:142
+#: cmsv2/models/unit.py:41 cmsv2/models/word.py:143
 msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
 #: cms/models/document.py:44 cmsv2/admins/word_admin.py:676
-#: cmsv2/models/word.py:46
+#: cmsv2/models/word.py:47
 msgid "singular article"
 msgstr "Singular-Artikel"
 
 #: cms/admins/document_resource.py:24 cmsv2/admins/word_export_resource.py:24
-#: cmsv2/models/word.py:330
+#: cmsv2/models/word.py:331
 msgid "Word"
 msgstr "Vokabel"
 
@@ -332,12 +332,12 @@ msgid "grammatical gender"
 msgstr "Genus"
 
 #: cms/models/alternative_word.py:28 cms/models/document.py:48
-#: cmsv2/models/word.py:50
+#: cmsv2/models/word.py:51
 msgid "plural"
 msgstr "Plural"
 
 #: cms/models/alternative_word.py:34 cms/models/document.py:54
-#: cmsv2/models/word.py:56
+#: cmsv2/models/word.py:57
 msgid "plural article"
 msgstr "Plural-Artikel"
 
@@ -368,13 +368,13 @@ msgstr "Icon"
 
 #: cms/models/discipline.py:33 cms/models/document.py:95
 #: cms/models/training_set.py:39 cmsv2/models/job.py:30
-#: cmsv2/models/unit.py:326 cmsv2/models/word.py:136
+#: cmsv2/models/unit.py:326 cmsv2/models/word.py:137
 msgid "created by"
 msgstr "Erstellt von"
 
 #: cms/models/discipline.py:36 cms/models/document.py:99
 #: cms/models/training_set.py:41 cmsv2/models/job.py:33
-#: cmsv2/models/unit.py:328 cmsv2/models/word.py:140
+#: cmsv2/models/unit.py:328 cmsv2/models/word.py:141
 msgid "admin"
 msgstr "Admin"
 
@@ -382,36 +382,36 @@ msgstr "Admin"
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:32 cmsv2/models/word.py:34
+#: cms/models/document.py:32 cmsv2/models/word.py:35
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:34 cmsv2/models/unit.py:323 cmsv2/models/word.py:36
+#: cms/models/document.py:34 cmsv2/models/unit.py:323 cmsv2/models/word.py:37
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:37 cmsv2/models/word.py:39
+#: cms/models/document.py:37 cmsv2/models/word.py:40
 msgid "Grammatical gender"
 msgstr "Genus"
 
-#: cms/models/document.py:69 cmsv2/models/unit.py:50 cmsv2/models/word.py:84
+#: cms/models/document.py:69 cmsv2/models/unit.py:50 cmsv2/models/word.py:85
 msgid "example sentence"
 msgstr "Beispielsatz"
 
 #: cms/models/document.py:71 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:690 cmsv2/models/word.py:111
+#: cmsv2/admins/word_admin.py:690 cmsv2/models/word.py:112
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:77 cmsv2/models/word.py:118
+#: cms/models/document.py:77 cmsv2/models/word.py:119
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:83 cmsv2/models/word.py:124
+#: cms/models/document.py:83 cmsv2/models/word.py:125
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:89 cmsv2/models/word.py:130
+#: cms/models/document.py:89 cmsv2/models/word.py:131
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -703,10 +703,8 @@ msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
 #: cmsv2/admins/job_admin.py:211
-#, fuzzy
-#| msgid "%(name)s (New)"
 msgid "%(name)s %(label)"
-msgstr "%(name)s (Neu)"
+msgstr "%(name)s %(label)"
 
 #: cmsv2/admins/job_admin.py:215
 msgid "Selected jobs have been duplicated successfully."
@@ -786,12 +784,12 @@ msgstr "Verschiedene"
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
-#: cmsv2/admins/word_admin.py:726 cmsv2/models/word.py:75
+#: cmsv2/admins/word_admin.py:726 cmsv2/models/word.py:76
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
 #: cmsv2/admins/word_admin.py:741 cmsv2/models/unit.py:47
-#: cmsv2/models/word.py:148
+#: cmsv2/models/word.py:149
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
@@ -839,7 +837,7 @@ msgstr "Vokabelverwaltung v2"
 msgid "job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:35 cmsv2/models/unit.py:330 cmsv2/models/word.py:113
+#: cmsv2/models/job.py:35 cmsv2/models/unit.py:330 cmsv2/models/word.py:114
 msgid "modified at"
 msgstr "zuletzt geändert"
 
@@ -934,19 +932,19 @@ msgid "Reviewer"
 msgstr "Expert:in"
 
 #: cmsv2/models/unit.py:60 cmsv2/models/unit.py:218 cmsv2/models/unit.py:290
-#: cmsv2/models/word.py:94
+#: cmsv2/models/word.py:95
 msgid "example sentence audio"
 msgstr "Beispielsatz Audio"
 
-#: cmsv2/models/unit.py:66 cmsv2/models/word.py:100
+#: cmsv2/models/unit.py:66 cmsv2/models/word.py:101
 msgid "example sentence check status"
 msgstr "Beispielsatz Check Status"
 
-#: cmsv2/models/unit.py:71 cmsv2/models/word.py:105
+#: cmsv2/models/unit.py:71 cmsv2/models/word.py:106
 msgid "example sentence audio regenerated"
 msgstr "Beispielsatz Audio neu generiert"
 
-#: cmsv2/models/unit.py:73 cmsv2/models/word.py:107
+#: cmsv2/models/unit.py:73 cmsv2/models/word.py:108
 msgid ""
 "Indicates whether the audio has been regenerated with the new TTS model."
 msgstr "Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
@@ -977,11 +975,11 @@ msgstr "Einheit-Wort Beziehungen"
 msgid "Unit"
 msgstr "Einheit"
 
-#: cmsv2/models/word.py:82
+#: cmsv2/models/word.py:83
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:331 cmsv2/templates/admin/word_generate_audio.html:7
+#: cmsv2/models/word.py:332 cmsv2/templates/admin/word_generate_audio.html:7
 #: cmsv2/templates/admin/word_generate_example_sentence_audio.html:9
 #: cmsv2/templates/admin/word_generate_image.html:7
 msgid "Words"

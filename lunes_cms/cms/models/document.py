@@ -100,9 +100,9 @@ class Document(models.Model):
     feedback = GenericRelation(Feedback)
 
     def clean(self):
-        """Validate the audio file with ffmpeg before saving to prevent storing invalid audio."""
+        """Validate new audio uploads with ffmpeg before saving to prevent storing invalid audio."""
         super().clean()
-        if not self.audio:
+        if not self.audio or self.audio._committed:  # pylint: disable=protected-access
             return
         validate_audio_upload(self.audio.file)
 
@@ -120,7 +120,7 @@ class Document(models.Model):
         """
         super().save()
         file_path = self.audio.path
-        new_path = file_path[:-4] + "-conv.mp3"
+        new_path = str(Path(file_path).with_suffix("")) + "-conv.mp3"
         run_ffmpeg("-i", file_path, "-b:a", "44.1k", new_path)
 
         with open(new_path, "rb") as file:

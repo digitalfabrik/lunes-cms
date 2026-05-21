@@ -16,7 +16,7 @@ from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 @pytest.fixture(autouse=True)
 def _bypass_audio_conversion():
     """
-    Word.save() runs ``convert_audio()`` (pydub re-encodes the mp3) when an
+    Word.save() runs ``convert_audio()`` (ffmpeg re-encodes the mp3) when an
     audio file is set. We feed dummy bytes through the worker, so skip the
     conversion step in tests.
     """
