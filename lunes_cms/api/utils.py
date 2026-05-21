@@ -172,7 +172,7 @@ def build_absolute_url(context, url):
     return url
 
 
-def find_duplicates_for_word(request, word):
+def find_duplicates_for_word(_request, word):
     """
     Function to find existing words that match the input in the "word" field of document
 
