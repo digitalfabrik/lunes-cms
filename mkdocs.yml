@@ -16,3 +16,24 @@ theme:
     - navigation.top
     - content.action.view
 
+nav:
+  - Startseite: index.md
+  - Anmelden: login.md
+  - Jobs:
+    - Job hinzufügen: add_job.md
+    - Job bearbeiten: edit_job.md
+    - Job löschen: delete_job.md
+    - Mehrere Jobs löschen: bulk_delete_jobs.md
+  - Einheiten:
+    - Einheit hinzufügen: add_unit.md
+    - Einheit bearbeiten: edit_unit.md
+    - Einheit löschen: delete_unit.md
+    - Mehrere Einheiten löschen: bulk_delete_units.md
+  - Wörter:
+    - Wort hinzufügen: add_word.md
+    - Wort bearbeiten: edit_word.md
+    - Wort löschen: delete_word.md
+    - Mehrere Wörter löschen: bulk_delete_words.md
+
+markdown_extensions:
+  - pymdownx.magiclink

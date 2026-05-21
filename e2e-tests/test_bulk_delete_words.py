@@ -1,0 +1,101 @@
+"""
+E2E test: Mehrere Wörter löschen — generates user_docs/bulk_delete_words.md
+"""
+
+from typing import Callable
+
+import re
+
+import pytest
+from playwright.sync_api import Page, expect
+
+JOB_NAME = "Warentester/-in"
+UNIT_NAME = "Hardware"
+UNIT_DESCRIPTION = f"Vokabeln zu {UNIT_NAME}"
+WORDS = [
+    ("Abdeckung", "Abdeckungen"),
+    ("Adapter", "Adapter"),
+    ("Akku", "Akkus"),
+]
+
+
+@pytest.mark.e2e
+@pytest.mark.xdist_group("vocabulary_management")
+def test_bulk_delete_words(
+    page: Page,
+    document,
+    base_url: str,
+    login,
+    add_job: Callable,
+    add_unit: Callable,
+    add_word: Callable,
+    delete_unit: Callable,
+    delete_job: Callable,
+) -> None:
+    add_job(JOB_NAME)
+    add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
+    for word, plural in WORDS:
+        add_word(word, plural, UNIT_NAME)
+
+    page.locator(
+        "a.nav-link[href='/de/admin/cmsv2/word/']"
+    ).scroll_into_view_if_needed()
+    page.locator("a.nav-link[href='/de/admin/cmsv2/word/']").click()
+    expect(page).to_have_url(f"{base_url}/de/admin/cmsv2/word/")
+    page.locator(
+        "a.nav-link[href='/de/admin/cmsv2/word/']"
+    ).scroll_into_view_if_needed()
+    with document.step(
+        "Vokabel-Bereich öffnen",
+        description="Scrollen Sie im linken Navigationsmenü zu **Vokabel** und klicken Sie darauf.",
+    ):
+        pass
+
+    for word, _ in WORDS:
+        page.locator(
+            "tr", has=page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))
+        ).locator("input[type=checkbox]").check()
+    page.locator(
+        "th.field-word a", has_text=re.compile(f"^{WORDS[0][0]}$")
+    ).scroll_into_view_if_needed()
+    with document.step(
+        "Vokabeln auswählen",
+        description=f'Aktivieren Sie die Checkboxen neben den Vokabeln **„{WORDS[0][0]}"**, **„{WORDS[1][0]}"** und **„{WORDS[2][0]}"**.',
+    ):
+        pass
+
+    page.locator("button[name=index][value='0']").scroll_into_view_if_needed()
+    page.evaluate("""
+        const select = document.querySelector('select[name=action]');
+        select.value = 'delete_selected';
+        $(select).trigger('change');
+    """)
+    with document.step(
+        'Aktion "Ausgewählte Vokabeln löschen" auswählen und ausführen',
+        description='Wählen Sie im Aktions-Dropdown **"Ausgewählte Vokabeln löschen"** aus und klicken Sie auf **„Ausführen"**.',
+    ):
+        page.click("button[name=index][value='0']")
+
+    with document.step(
+        "Löschung bestätigen",
+        description='Bestätigen Sie die Löschung mit einem Klick auf **„Ja, ich bin sicher"**.',
+    ):
+        expect(
+            page.locator("tr", has=page.get_by_text("Vokabel", exact=True))
+            .locator("td")
+            .nth(1)
+        ).to_have_text(str(len(WORDS)))
+        page.locator("input[type=submit]").click()
+        expect(page).to_have_url(f"{base_url}/de/admin/cmsv2/word/")
+
+    with document.step(
+        "Erfolg — Vokabeln wurden gelöscht",
+        description="Alle drei Vokabeln sind nicht mehr in der Übersicht vorhanden.",
+    ):
+        for word, _ in WORDS:
+            expect(
+                page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))
+            ).to_have_count(0)
+
+    delete_unit(UNIT_NAME)
+    delete_job(JOB_NAME)
