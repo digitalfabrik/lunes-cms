@@ -7,8 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-20 11:21+0000\n"
-"POT-Creation-Date: 2026-05-20 10:33+0000\n"
+"POT-Creation-Date: 2026-05-21 13:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -704,16 +703,14 @@ msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
 #: cmsv2/admins/job_admin.py:210
-#, python-format
-msgid "%(name)s (New)"
+msgid "%(name)s %(label)"
 msgstr "%(name)s (Neu)"
 
 #: cmsv2/admins/job_admin.py:214
-#: cmsv2/admins/job_admin.py:213
 msgid "Selected jobs have been duplicated successfully."
 msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
 
-#: cmsv2/admins/job_admin.py:234
+#: cmsv2/admins/job_admin.py:235
 msgid "Import"
 msgstr "Import"
 
