@@ -13,6 +13,7 @@ from tablib.exceptions import InvalidDimensions
 from ..admins.word_import_resource import import_words_from_csv
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
+from ..services.image_generation import drain_pending_images
 
 
 class ImportCSVForm(forms.Form):
@@ -99,7 +100,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
                 request,
                 _(
                     "Import successful! %(created)s new entries, %(updated)s updated. "
-                    "Audio is being generated in the background."
+                    "Audio and images are being generated in the background."
                 )
                 % {"created": created_count, "updated": updated_count},
             )
@@ -107,6 +108,11 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
         if imported_word_ids:
             threading.Thread(
                 target=drain_pending_audio,
+                args=(imported_word_ids,),
+                daemon=True,
+            ).start()
+            threading.Thread(
+                target=drain_pending_images,
                 args=(imported_word_ids,),
                 daemon=True,
             ).start()

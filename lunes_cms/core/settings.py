@@ -42,6 +42,12 @@ OPENAI_TTS_SENTENCE_MODEL = os.environ.get(
 #: OpenAI voice used for text-to-speech
 OPENAI_TTS_VOICE = os.environ.get("LUNES_CMS_OPENAI_TTS_VOICE", "nova")
 
+#: OpenAI model used for word image generation
+OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-1")
+
+#: OpenAI image quality tier (low/medium/high)
+OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
+
 ###################
 # MATOMO TRACKING #
 ###################
