@@ -235,8 +235,8 @@ LANGUAGE_CODE = "en"
 
 #: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`django:topics/i18n/index`)
 LANGUAGES = [
-    ("en", _("English")),
     ("de", _("German")),
+    ("en", _("English")),
 ]
 
 #: A string representing the time zone for this installation
