@@ -6,7 +6,7 @@
 */
 
 var Overlay = (function(){
-  function Overlay(options){
+  function Overlay(options) {
     var overlay = document.createElement("div");
     overlay.className = "overlay";
     var open = false;
@@ -95,7 +95,7 @@ var Overlay = (function(){
 
   Overlay.CLOSING_DURATION = 500; //ms
 
-  function getProperty(options, opt, def){
+  function getProperty(options, opt, def) {
     if(typeof options[opt] !== "undefined"){
       return options[opt];
     }else{
@@ -103,7 +103,7 @@ var Overlay = (function(){
     }
   }
 
-  function isDescendant(parent, node){
+  function isDescendant(parent, node) {
     while(node != parent && node != document.body){
       node = node.parentElement;
     }
@@ -178,7 +178,7 @@ var OverlayManager = (function(){
     };
   }
 
-  function open(pos){
+  function open(pos) {
     if(overlays[pos] instanceof Overlay){
       if(opened != -1){
         if(overlays[opened].close() !== false){
@@ -196,7 +196,7 @@ var OverlayManager = (function(){
     }
   }
 
-  function close(pos, force){
+  function close(pos, force) {
     if(overlays[pos] instanceof Overlay){
       if(opened == pos){
         if(overlays[pos].close(force) !== false){

@@ -11,11 +11,11 @@ window.audioAssetManagerConfig = {
     updateEndpoint: "/en/admin/cmsv2/words/${id}/update-audio/",
     successMessages: {
         update: "Audio updated successfully",
-        delete: "Audio deleted successfully"
+        delete: "Audio deleted successfully",
     },
     errorMessages: {
         update: "An error occurred while updating the audio",
-        delete: "An error occurred while deleting the audio"
+        delete: "An error occurred while deleting the audio",
     },
-    urlResponseKey: "audio_url"
+    urlResponseKey: "audio_url",
 }

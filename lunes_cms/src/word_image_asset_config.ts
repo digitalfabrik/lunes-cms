@@ -12,11 +12,11 @@ window.assetManagerConfigs.push({
     updateEndpoint: "/en/admin/cmsv2/words/${id}/update-image/",
     successMessages: {
         update: "Image updated successfully",
-        delete: "Image deleted successfully"
+        delete: "Image deleted successfully",
     },
     errorMessages: {
         update: "An error occurred while updating the image",
-        delete: "An error occurred while deleting the image"
+        delete: "An error occurred while deleting the image",
     },
-    urlResponseKey: "image_url"
+    urlResponseKey: "image_url",
 })
