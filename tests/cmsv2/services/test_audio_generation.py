@@ -256,7 +256,7 @@ def test_drain_is_single_flight(fast_worker):
     ],
 )
 def test_word_audio_text_includes_article_and_word(
-    _, singular_article, word, expected_text
+    fast_worker, singular_article, word, expected_text
 ):
     _make_word(word=word, singular_article=singular_article)
 
