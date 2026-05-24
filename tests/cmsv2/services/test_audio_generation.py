@@ -244,6 +244,31 @@ def test_drain_is_single_flight(fast_worker):
         audio_generation._drain_lock.release()  # pylint: disable=protected-access
 
 
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize(
+    "singular_article, word, expected_text",
+    [
+        (1, "Hammer", "der Hammer"),
+        (2, "Säge", "die Säge"),
+        (3, "Brot", "das Brot"),
+        (4, "Hände", "die Hände"),
+        (0, "Schere", "Schere"),
+    ],
+)
+def test_word_audio_text_includes_article_and_word(
+    _, singular_article, word, expected_text
+):
+    _make_word(word=word, singular_article=singular_article)
+
+    with mock.patch.object(
+        audio_generation, "openai_word_audio_bytes", return_value=b"fake-mp3"
+    ) as tts_call:
+        _run_drain()
+
+    assert tts_call.call_count == 1
+    assert tts_call.call_args[0][0] == expected_text
+
+
 @pytest.mark.parametrize(
     "filename, expected",
     [
