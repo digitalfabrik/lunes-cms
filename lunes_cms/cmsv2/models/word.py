@@ -1,10 +1,12 @@
 import os
+from pathlib import Path
 
 from django.contrib.auth.models import Group
 from django.core.files import File
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from pydub import AudioSegment
+
+from lunes_cms.core.audio import run_ffmpeg, validate_audio_upload
 
 from ..utils import get_image_tag, make_safe_filename, word_to_string
 from ..validators import (
@@ -149,6 +151,20 @@ class Word(models.Model):
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
+    def clean(self):
+        """Validate changed audio with ffmpeg before saving to prevent storing invalid audio."""
+        super().clean()
+        if not self.audio:
+            return
+        previous = Word.objects.filter(pk=self.pk).first() if self.pk else None
+        audio_will_convert = not previous or (
+            previous.assemble_audio_checked_identifier()
+            != self.assemble_audio_checked_identifier()
+        )
+        if not audio_will_convert:
+            return
+        validate_audio_upload(self.audio.file)
+
     def convert_audio(self):
         """
         Converts the uploaded audio file to MP3 format and sets, but doesn't save, it as a Django File object.
@@ -158,10 +174,8 @@ class Word(models.Model):
 
         original_name = self.audio.name
         file_path = self.audio.path
-        original_extension = file_path.split(".")[-1]
-        mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
-        new_path = file_path[:-4] + "-conv.mp3"
-        mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
+        new_path = str(Path(file_path).with_suffix("")) + "-conv.mp3"
+        run_ffmpeg("-i", file_path, "-b:a", "44.1k", new_path)
 
         # Store the re-encoded file under a deterministic, word-derived name.
         # Drop the just-uploaded source file and any stale file already sitting
