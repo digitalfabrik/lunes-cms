@@ -6,7 +6,7 @@ from ..utils import create_resource_path
 from .static import REVIEW_STATUS_CHOICES
 
 
-def upload_review_suggestions(instance, filename):
+def upload_review_suggestions(_, filename):
     """
     Upload path for reviewer-suggested images.
     """

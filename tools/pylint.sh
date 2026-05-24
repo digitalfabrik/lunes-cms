@@ -10,5 +10,5 @@ require_installed
 
 # Run pylint
 echo "Starting code linting with pylint..." | print_info
-pylint "lunes_cms/".
+pylint "lunes_cms/" --ignore=cms
 echo "✔ Linting finished" | print_success

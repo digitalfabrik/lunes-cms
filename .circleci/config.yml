@@ -464,6 +464,47 @@ jobs:
       - run:
           name: Deploy user manual to GitHub Pages
           command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
+  build-js:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+      - run:
+          name: Install npm dependencies
+          command: npm install
+      - save_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+          paths:
+            - node_modules
+      - run:
+          name: Build TypeScript
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - lunes_cms/static/js
+  lint-ts:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+      - run:
+          name: Install npm dependencies
+          command: npm install
+      - save_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+          paths:
+            - node_modules
+      - run:
+          name: Lint TypeScript
+          command: npm run lint
+      - run:
+          name: Check TypeScript formatting
+          command: npm run format:check
   notify-mattermost:
     docker:
       - image: cimg/base:stable
@@ -501,6 +542,14 @@ workflows:
             branches:
               ignore: main
       - install:
+          filters:
+            branches:
+              ignore: main
+      - lint-ts:
+          filters:
+            branches:
+              ignore: main
+      - build-js:
           filters:
             branches:
               ignore: main
@@ -593,9 +642,17 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - build-js:
+          name: build-js-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
       - build-package:
           requires:
             - compile-translations-deploy
+            - build-js-deploy
           filters:
             tags:
               only: /.*/
