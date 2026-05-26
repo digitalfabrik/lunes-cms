@@ -1,0 +1,31 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="col-12 mb-5">
+    <ul class="nav nav-tabs" style="border-bottom: none;">
+        <li class="nav-item">
+            <a class="nav-link{% if not request.GET.status or request.GET.status == 'PENDING' %} active{% endif %}"
+               href="?status=PENDING">
+                {% trans "Pending Review" %}
+                <span class="ml-2 badge badge-secondary">{{ status_counts.PENDING }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if request.GET.status == 'APPROVED' %} active{% endif %}"
+               href="?status=APPROVED">
+                {% trans "Approved" %}
+                <span class="ml-2 badge badge-secondary">{{ status_counts.APPROVED }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if request.GET.status == 'REJECTED' %} active{% endif %}"
+               href="?status=REJECTED">
+                {% trans "Rejected" %}
+                <span class="ml-2 badge badge-secondary">{{ status_counts.REJECTED }}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+{{ block.super }}
+{% endblock %}

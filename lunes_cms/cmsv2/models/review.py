@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
-from .static import REVIEW_STATUS_CHOICES
+from .static import PENDING_REVIEW_STATUSES, REVIEW_STATUS_CHOICES
 
 
 def upload_review_suggestions(_, filename):
@@ -134,8 +136,36 @@ class ImageReview(models.Model):
         return self.unit_word_relation.unit
 
     @property
+    def status_summary(self):
+        """
+        Returns 'PENDING' for all statuses that are awaiting approval,
+        otherwise returns the actual status value.
+        """
+        if self.status in PENDING_REVIEW_STATUSES:
+            return "PENDING"
+        return self.status
+
+    @property
     def reviewed_image(self):
         """Returns the actual image being reviewed."""
         if self.is_unit_specific_image:
             return self.unit_word_relation.image
         return self.unit_word_relation.word.image
+
+
+@receiver(post_save, sender=ReviewAssignment)
+def create_image_reviews_for_assignment(
+    sender, instance, created, **kwargs
+):  # pylint: disable=unused-argument
+    """
+    Automatically create one ImageReview per word when a ReviewAssignment is created.
+    Uses get_or_create to safely handle duplicate signals or re-saves.
+    """
+    if not created:
+        return
+    for unit_word_relation in instance.unit.unit_word_relations.all():
+        ImageReview.objects.get_or_create(
+            unit_word_relation=unit_word_relation,
+            reviewer=instance.reviewer,
+            defaults={"is_unit_specific_image": False},
+        )

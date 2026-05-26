@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 14:12+0000\n"
+"POT-Creation-Date: 2026-05-26 15:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -386,7 +386,8 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:34 cmsv2/models/unit.py:323 cmsv2/models/word.py:37
+#: cms/models/document.py:34 cmsv2/admins/image_review_admin.py:120
+#: cmsv2/models/unit.py:323 cmsv2/models/word.py:37
 msgid "word"
 msgstr "Wort"
 
@@ -441,7 +442,7 @@ msgid "refers to"
 msgstr "bezieht sich auf"
 
 #: cms/models/feedback.py:35 cmsv2/models/feedback.py:34
-#: cmsv2/models/review.py:94
+#: cmsv2/models/review.py:96
 msgid "comment"
 msgstr "Kommentar"
 
@@ -665,6 +666,24 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
+#: cmsv2/admins/image_review_admin.py:121 cmsv2/models/job.py:20
+#: cmsv2/models/unit.py:321
+msgid "job"
+msgstr "Beruf"
+
+#: cmsv2/admins/image_review_admin.py:128 cmsv2/models/review.py:28
+#: cmsv2/models/unit.py:313
+msgid "unit"
+msgstr "Einheit"
+
+#: cmsv2/admins/image_review_admin.py:142
+msgid "No image available."
+msgstr "Kein Bild zur Verfügung."
+
+#: cmsv2/admins/image_review_admin.py:144
+msgid "image preview"
+msgstr "Bild Vorschau"
+
 #: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:70
 #: cmsv2/admins/word_admin.py:115
 msgid "migration status"
@@ -685,7 +704,7 @@ msgid "units"
 msgstr "Einheiten"
 
 #: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:257
-#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:329
+#: cmsv2/models/job.py:34 cmsv2/models/review.py:104 cmsv2/models/unit.py:329
 msgid "created at"
 msgstr "Erstellt"
 
@@ -833,10 +852,6 @@ msgstr "Zeile %(n)s: %(msg)s"
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
-#: cmsv2/models/job.py:20 cmsv2/models/unit.py:321
-msgid "job"
-msgstr "Beruf"
-
 #: cmsv2/models/job.py:35 cmsv2/models/unit.py:330 cmsv2/models/word.py:114
 msgid "modified at"
 msgstr "zuletzt geändert"
@@ -853,81 +868,95 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py:26 cmsv2/models/unit.py:313
-msgid "unit"
-msgstr "Einheit"
-
-#: cmsv2/models/review.py:32 cmsv2/models/review.py:86
+#: cmsv2/models/review.py:34 cmsv2/models/review.py:88
 msgid "reviewer"
 msgstr "Kontrolleur:in"
 
-#: cmsv2/models/review.py:39
+#: cmsv2/models/review.py:41
 msgid "assigned by"
 msgstr "Zugewiesen von"
 
-#: cmsv2/models/review.py:41
+#: cmsv2/models/review.py:43
 msgid "assigned at"
 msgstr "Zuwiesen am"
 
-#: cmsv2/models/review.py:43
+#: cmsv2/models/review.py:45
 msgid "completed at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:56
+#: cmsv2/models/review.py:58
 msgid "Review Assignment"
 msgstr "Kontroll Zuweisung"
 
-#: cmsv2/models/review.py:57
+#: cmsv2/models/review.py:59
 msgid "Review Assignments"
 msgstr "Kontroll Zuweisungen"
 
-#: cmsv2/models/review.py:73
+#: cmsv2/models/review.py:75
 msgid "unit-word relation"
 msgstr "Einheit-Wort Beziehung"
 
-#: cmsv2/models/review.py:77
+#: cmsv2/models/review.py:79
 msgid "unit-specific image"
 msgstr "Einheit spezifisches Bild"
 
-#: cmsv2/models/review.py:79
+#: cmsv2/models/review.py:81
 msgid "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
 msgstr ""
 "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, Falsch "
 "wenn ein Bild aus dem Wort kontrolliert wird"
 
-#: cmsv2/models/review.py:92
+#: cmsv2/models/review.py:94
 msgid "status"
 msgstr "Status"
 
-#: cmsv2/models/review.py:99
+#: cmsv2/models/review.py:101
 msgid "suggested image"
 msgstr "Vorgeschlagenes Bild"
 
-#: cmsv2/models/review.py:100
+#: cmsv2/models/review.py:102
 msgid "Alternative image suggested by reviewer"
 msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
 
-#: cmsv2/models/review.py:103
+#: cmsv2/models/review.py:105
 msgid "updated at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:119
+#: cmsv2/models/review.py:121
 msgid "Image Review"
 msgstr "Bild Kontrolle"
 
-#: cmsv2/models/review.py:120
+#: cmsv2/models/review.py:122
 msgid "Image Reviews"
 msgstr "Bild Kontrollen"
 
 #: cmsv2/models/static.py:57
-msgid "Pending Review"
-msgstr "Freigabe ausstehend"
+msgid "New Vocabulary"
+msgstr "Neue Vokabel"
 
 #: cmsv2/models/static.py:58
+msgid "1st Submission"
+msgstr "1. Einreichung"
+
+#: cmsv2/models/static.py:59
+msgid "2nd Submission"
+msgstr "2. Einreichung"
+
+#: cmsv2/models/static.py:60
+msgid "3rd Submission"
+msgstr "3. Einreichung"
+
+#: cmsv2/models/static.py:61
+#: cmsv2/templates/admin/cmsv2/imagereview/change_list.html:17
 msgid "Approved"
 msgstr "Genehmigt"
 
-#: cmsv2/models/static.py:68
+#: cmsv2/models/static.py:62
+#: cmsv2/templates/admin/cmsv2/imagereview/change_list.html:24
+msgid "Rejected"
+msgstr "Abgelehnt"
+
+#: cmsv2/models/static.py:72
 msgid "Reviewer"
 msgstr "Expert:in"
 
@@ -1019,6 +1048,10 @@ msgstr "Zuweisen"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: cmsv2/templates/admin/cmsv2/imagereview/change_list.html:10
+msgid "Pending Review"
+msgstr "Freigabe ausstehend"
+
 #: cmsv2/templates/admin/cmsv2/import_csv_button.html:7
 #: cmsv2/templates/admin/csv_form.html:4 cmsv2/templates/admin/csv_form.html:13
 #: cmsv2/templates/admin/csv_form.html:17
@@ -1104,6 +1137,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "review status"
+#~ msgstr "Status"
 
 #, python-format
 #~ msgid "Unexpected error - %(e)s"

@@ -1,3 +1,13 @@
+:root {
+    --primary: #425bee;
+    --secondary: #000e38;
+    --muted-dark: #2F2B47;
+    --active: #3A3650;
+    --grey-500: #5b616a;
+    --grey-200: #E5E7EB;
+    --grey-100: #F3F4F6;
+}
+
 /*primary buttons*/
 .btn-primary {
     background-color: #000e38;
@@ -109,7 +119,7 @@
 }
 
 .main-header {
-    background-color: #425bee;
+    background-color: var(--muted-dark);
 }
 
 /*circles*/
@@ -283,5 +293,24 @@
 .app-cmsv2 .btn.btn-primary {
     font-weight: bold;
     padding: 8px 32px;
-    background-color: #3F6BEE;
+    background-color: var(--primary);
+}
+
+.app-cmsv2 .nav-link.active {
+    background-color: transparent;
+    border: 0;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+.app-cmsv2 .badge {
+    background-color: var(--grey-100);
+    border: 1px solid var(--grey-200);
+    border-radius: 50%;
+    color: #000;
+}
+
+.sidebar-dark-primary .nav-sidebar.nav-legacy > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar.nav-legacy > .nav-item > .nav-link.active {
+    border: 0;
+    background-color: var(--active);
 }
