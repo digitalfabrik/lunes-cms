@@ -20,7 +20,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v6
+          key: pip-{{ checksum "pyproject.toml" }}-v7
       - run:
           name: Creating virtual environment
           command: |
@@ -29,10 +29,10 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install -e .[dev,doc,test]
+              pip install -e .[dev,pinned,dev-pinned]
             fi
       - save_cache:
-          key: pip-{{ checksum "setup.cfg" }}-v6
+          key: pip-{{ checksum "pyproject.toml" }}-v7
           paths:
             - .venv
             - lunes_cms.egg-info
@@ -135,6 +135,37 @@ jobs:
           at: .
       - qlty/coverage_publish:
           files: coverage.xml
+  test-python313:
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          LUNES_CMS_SECRET_KEY: circleci-dummy-key
+          LUNES_CMS_DB_BACKEND: sqlite
+    steps:
+      - checkout
+      - restore_cache:
+          key: pip-3.13-{{ checksum "pyproject.toml" }}-v1
+      - run:
+          name: Create virtual environment
+          command: |
+            if [[ -d ".venv" ]]; then
+              echo "Virtual environment restored from cache, skipping pip install"
+            else
+              python3 -m venv .venv
+              source .venv/bin/activate
+              pip install -e .[dev,pinned,dev-pinned]
+            fi
+      - save_cache:
+          key: pip-3.13-{{ checksum "pyproject.toml" }}-v1
+          paths:
+            - .venv
+            - lunes_cms.egg-info
+            - /home/circleci/.cache/pip
+      - run:
+          name: Run tests
+          command: |
+            source .venv/bin/activate
+            pytest --disable-warnings --ds=lunes_cms.core.settings -q
   black:
     docker:
       - image: cimg/python:3.11
@@ -562,6 +593,10 @@ workflows:
       - test:
           requires:
             - compile-translations
+      - test-python313:
+          filters:
+            branches:
+              ignore: main
       - upload-test-coverage:
           context: codeclimate-lunes-cms
           requires:
