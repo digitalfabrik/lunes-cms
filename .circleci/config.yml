@@ -165,7 +165,7 @@ jobs:
           name: Run tests
           command: |
             source .venv/bin/activate
-            pytest --disable-warnings --ds=lunes_cms.core.settings -q
+            ./tools/test.sh --ci
   black:
     docker:
       - image: cimg/python:3.11
