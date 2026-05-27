@@ -10,7 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models import Word
-from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
+from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
+from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
 
 
@@ -51,27 +52,13 @@ def word_generate_example_sentence_audio_via_openai(request):
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
-        client = get_openai_client()
-
-        # Determine instruction based on sentence ending
-        if example_sentence_text.strip().endswith("?"):
-            instruction = "Read this sentence as a question with rising intonation."
-        else:
-            instruction = "Read this sentence as a declarative statement with neutral, falling intonation."
-
-        response = client.audio.speech.create(
-            model="gpt-4o-mini-tts",
-            voice="nova",
-            input=example_sentence_text,
-            instructions=instruction,
-        )
+        audio_bytes = openai_sentence_audio_bytes(example_sentence_text)
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)
 
         with open(temp_filepath, "wb") as f:
-            for chunk in response.iter_bytes(chunk_size=4096):
-                f.write(chunk)
+            f.write(audio_bytes)
 
         temp_audio_url = os.path.join(settings.MEDIA_URL, "temp_audio", temp_filename)
 

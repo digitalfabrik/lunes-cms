@@ -51,6 +51,7 @@ class RowResult:
     created: int = 0
     updated: int = 0
     error: Optional[str] = None
+    word_id: Optional[int] = None
 
 
 def map_article_to_int(article: str) -> int:
@@ -186,13 +187,16 @@ def process_row(
 
     unit.words.add(word)
 
-    return RowResult(created=created, updated=updated)
+    return RowResult(created=created, updated=updated, word_id=word.pk)
 
 
-def import_words_from_csv(dataset: Dataset, job: Job) -> Tuple[int, int, list[str]]:
+def import_words_from_csv(
+    dataset: Dataset, job: Job
+) -> Tuple[int, int, list[str], list[int]]:
     """
     Imports the entire csv dataset to a job.
-    Returns a tuple of created_count, updated_count, error_messages
+    Returns a tuple of created_count, updated_count, error_messages,
+    imported_word_ids
 
     Important: During the import there is a local cache ``created_units`` because of the following scenario:
     In the CSV file there are ten words for the unit "tools"
@@ -203,6 +207,7 @@ def import_words_from_csv(dataset: Dataset, job: Job) -> Tuple[int, int, list[st
     total_created = 0
     total_updated = 0
     error_messages: list[str] = []
+    imported_word_ids: list[int] = []
 
     created_units: Dict[str, Unit] = {}
 
@@ -224,5 +229,7 @@ def import_words_from_csv(dataset: Dataset, job: Job) -> Tuple[int, int, list[st
 
         total_created += result.created
         total_updated += result.updated
+        if result.word_id is not None:
+            imported_word_ids.append(result.word_id)
 
-    return total_created, total_updated, error_messages
+    return total_created, total_updated, error_messages, imported_word_ids

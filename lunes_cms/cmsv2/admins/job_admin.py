@@ -166,12 +166,11 @@ class JobAdmin(BaseAdmin):
     migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
 
     @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
-    def export_to_csv(self, request, queryset):
+    def export_to_csv(self, _, queryset):
         """
         Export the words of the selected jobs.
 
         :param request: current user request
-        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
         """
@@ -207,7 +206,8 @@ class JobAdmin(BaseAdmin):
             job.pk = None
             job.v1_id = None
             job.released = False
-            job.name = f"{job.name} ({_('New')})"
+            new_label = "New"
+            job.name = _("%(name)s %(label)") % {"name": job.name, "label": new_label}
             job.created_by = request.user.groups.first()
             job.save()
             job.units.set(units)

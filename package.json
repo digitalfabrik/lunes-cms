@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint lunes_cms/src --ext .ts",
+    "lint:fix": "eslint lunes_cms/src --ext .ts --fix",
+    "format": "prettier --write lunes_cms/src/**/*.ts",
+    "format:check": "prettier --check lunes_cms/src/**/*.ts"
+  },
+  "devDependencies": {
+    "@types/jquery": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -49,6 +49,11 @@ if [[ ! -x "$(command -v ffmpeg)" ]]; then
     echo "FFmpeg is not installed. Please install ffmpeg manually and run this script again."  | print_error
     exit 1
 fi
+# Check if npm is installed
+if [[ ! -x "$(command -v npm)" ]]; then
+    echo "npm is not installed. Please install Node.js and npm manually and run this script again."  | print_error
+    exit 1
+fi
 echo "✔ All system requirements are satisfied" | print_success
 
 # Check if the --clean option is given
@@ -65,6 +70,10 @@ activate_venv
 echo "Installing Lunes CMS including its python dependencies..." | print_info
 # shellcheck disable=SC2102
 pip install -e .[pinned,dev-pinned]
+
+# Install node dependencies
+echo "Installing Node.js dependencies..." | print_info
+npm install
 
 # Install pre-commit-hooks if --pre-commit option is given
 if [[ "$*" == *"--pre-commit"* ]]; then

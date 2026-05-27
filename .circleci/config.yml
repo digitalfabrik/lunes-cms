@@ -3,6 +3,16 @@ version: 2.1
 orbs:
   shellcheck: circleci/shellcheck@2.2.4
   qlty: qltysh/qlty-orb@0.0.10
+executors:
+  python:
+    docker:
+      - image: cimg/python:3.11
+commands:
+  activate-venv:
+    steps:
+      - run:
+          name: Activate virtual environment
+          command: echo "source .venv/bin/activate" >> $BASH_ENV
 jobs:
   install:
     docker:
@@ -88,7 +98,7 @@ jobs:
       - image: cimg/python:3.11
         environment:
           LUNES_CMS_SECRET_KEY: circleci-dummy-key
-      - image: cimg/postgres:14.1
+      - image: cimg/postgres:15.1
         environment:
           POSTGRES_USER: lunes
           POSTGRES_DB: lunes
@@ -365,6 +375,136 @@ jobs:
       - run:
           name: Create release as Deliverino app
           command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
+  e2e:
+    parameters:
+      persist_docs:
+        type: boolean
+        default: false
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          LUNES_CMS_SECRET_KEY: circleci-dummy-key
+          LUNES_CMS_DEBUG: "True"
+      - image: cimg/postgres:15.1
+        environment:
+          POSTGRES_USER: lunes
+          POSTGRES_DB: lunes
+          POSTGRES_PASSWORD: password
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
+      - activate-venv
+      - run:
+          name: Install e2e dependencies
+          command: pip install -e ".[e2e]"
+      - run:
+          name: Install system dependencies
+          command: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run:
+          name: Install Playwright system dependencies
+          command: sudo .venv/bin/python -m playwright install-deps chromium
+      - run:
+          name: Install Playwright browser
+          command: python -m playwright install chromium
+      - save_cache:
+          key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
+          paths:
+            - .venv
+            - /home/circleci/.cache/ms-playwright
+      - run:
+          name: Migrate database
+          command: lunes-cms-cli migrate
+      - run:
+          name: Load basic test data
+          command: lunes-cms-cli loaddata lunes_cms/cms/fixtures/test_data.json
+      - run:
+          name: Start Django server
+          command: lunes-cms-cli runserver --noreload 0.0.0.0:8080
+          background: true
+      - run:
+          name: Wait for Django server
+          command: dockerize -wait http://localhost:8080 -timeout 120s
+      - run:
+          name: Run e2e tests
+          command: pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup --generate=all --junitxml=test-results/e2e-junit.xml
+      - store_test_results:
+          path: test-results
+      - when:
+          condition: << parameters.persist_docs >>
+          steps:
+            - persist_to_workspace:
+                root: .
+                paths:
+                  - user_docs
+  deploy-user-manual:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - activate-venv
+      - run:
+          name: Install e2e dependencies
+          command: pip install -e ".[e2e]"
+      - run:
+          name: Request installation access token to authorize as Deliverino app
+          command: |
+            TOKEN=$(./.circleci/scripts/get_access_token.py)
+            echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+      - run:
+          name: Configure git to push as Deliverino app
+          command: |
+            git config user.name "deliverino[bot]"
+            git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
+            git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
+      - run:
+          name: Deploy user manual to GitHub Pages
+          command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
+  build-js:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+      - run:
+          name: Install npm dependencies
+          command: npm install
+      - save_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+          paths:
+            - node_modules
+      - run:
+          name: Build TypeScript
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - lunes_cms/static/js
+  lint-ts:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+      - run:
+          name: Install npm dependencies
+          command: npm install
+      - save_cache:
+          key: npm-{{ checksum "package.json" }}-v1
+          paths:
+            - node_modules
+      - run:
+          name: Lint TypeScript
+          command: npm run lint
+      - run:
+          name: Check TypeScript formatting
+          command: npm run format:check
   notify-mattermost:
     docker:
       - image: cimg/base:stable
@@ -402,6 +542,14 @@ workflows:
             branches:
               ignore: main
       - install:
+          filters:
+            branches:
+              ignore: main
+      - lint-ts:
+          filters:
+            branches:
+              ignore: main
+      - build-js:
           filters:
             branches:
               ignore: main
@@ -455,6 +603,18 @@ workflows:
                 - /.*-publish-dev-package/
           requires:
             - build-dev-package
+  commit_develop:
+    jobs:
+      - install:
+          filters:
+            branches:
+              only: develop
+      - compile-translations:
+          requires:
+            - install
+      - e2e:
+          requires:
+            - compile-translations
   main:
     jobs:
       - install:
@@ -482,9 +642,17 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - build-js:
+          name: build-js-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
       - build-package:
           requires:
             - compile-translations-deploy
+            - build-js-deploy
           filters:
             tags:
               only: /.*/
@@ -509,3 +677,22 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - e2e:
+          name: e2e-deploy
+          persist_docs: true
+          requires:
+            - compile-translations-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - deploy-user-manual:
+          context: deliverino
+          requires:
+            - e2e-deploy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/

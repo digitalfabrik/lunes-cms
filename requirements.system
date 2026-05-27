@@ -4,3 +4,5 @@ libpq-dev
 ffmpeg
 gettext
 pcregrep
+nodejs
+npm

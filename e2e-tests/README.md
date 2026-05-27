@@ -20,14 +20,15 @@ E2E tests using pytest-playwright that automatically generate a user manual (Mar
 ```
 
 ```bash
-# Run all E2E tests headless (generates user_docs/)
-pytest e2e-tests/
-```
-```bash
+# Run all tests in parallel, regenerate screenshots only for changed tests (default)
+pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup
+
+# Run all tests in parallel, regenerate screenshots
+pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup --generate=all
+
 # With visible browser (for debugging)
-pytest e2e-tests/ --headed
-```
-```bash
+pytest e2e-tests/ -m e2e --headed
+
 # Run a single test
 pytest e2e-tests/test_login.py
 ```
@@ -40,9 +41,12 @@ mkdocs build
 
 # Live preview at http://127.0.0.1:8000
 mkdocs serve
+```
 
+## Deploy the user manual
+```
 # Run tests and deploy to GitHub Pages: https://digitalfabrik.github.io/lunes-cms/
-pytest e2e-tests/ && mkdocs gh-deploy --remote-branch gh-pages-user-docs
+pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup && mkdocs gh-deploy --remote-branch gh-pages-user-docs
 ```
 
 ## Writing a new test
@@ -52,12 +56,13 @@ import pytest
 from playwright.sync_api import Page
 
 @pytest.mark.e2e
-def test_my_feature(page: Page, document, base_url: str) -> None:
+@pytest.mark.xdist_group("my_feature")  # tests in the same group run on the same worker
+def test_my_feature(page: Page, document, base_url: str, login) -> None:
     with document.step(
         "Open page",
-        description=f"Navigate to the following URL: `{base_url}/de/admin/...`",
+        description=f"Navigate to the following URL: `{base_url}/en/admin/...`",
     ):
-        page.goto(f"{base_url}/de/admin/...")
+        page.goto(f"{base_url}/en/admin/...")
 
     with document.step(
         "Perform action",

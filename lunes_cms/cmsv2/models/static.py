@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
-from ..utils import create_resource_path
+from ..utils import create_resource_path, make_safe_filename
 
 
 class Static:
@@ -141,13 +141,11 @@ def convert_image_to_webp(image_field):
     return True
 
 
-def convert_umlaute_images(instance, filename):
+def convert_umlaute_images(_, filename):
     """
     Convert file name of images to handle all kind of characters (including "Umlaute" etc.).
 
 
-    :param instance: instance where the current file is being attached
-    :type instance: django.db.models
     :param filename: name of the file
     :type filename: str
 
@@ -157,28 +155,29 @@ def convert_umlaute_images(instance, filename):
     return create_resource_path("images", filename)
 
 
-def convert_umlaute_audio(instance, filename):
+def convert_umlaute_audio(_, filename):
     """
     Convert file name of audios to handle all kind of
     characters (including "Umlaute" etc.).
 
-    :param instance: instance where the current file is being attached
-    :type instance: django.db.models
     :param filename: name of the file
     :type filename: str
 
     :return: file path of converted audio
     :rtype: str
     """
-    return create_resource_path("audio", filename)
+    stem = os.path.splitext(os.path.basename(filename))[0]
+    # convert_audio() re-saves the file as "<name>-conv.mp3"; keep the base name.
+    if stem.endswith("-conv"):
+        stem = stem[: -len("-conv")]
+    safe_stem = make_safe_filename(stem) or "audio"
+    return os.path.join("audio", f"{safe_stem}.mp3")
 
 
-def upload_sponsor_logos(instance, filename):
+def upload_sponsor_logos(_, filename):
     """
     Upload path for sponsor logos
 
-    :param instance: instance where the current file is being attached
-    :type instance: django.db.models
 
     :param filename: name of the file
     :type filename: str
@@ -190,13 +189,11 @@ def upload_sponsor_logos(instance, filename):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(instance, created, **_kwargs):
     """
     Automatically adds a group when creating a new user
     if group name given in Static module
 
-    :param sender: user that sends request
-    :type sender: django.contrib.auth.models
     :param instance: user that eventually will be added to a new group
     :type instance: django.contrib.auth.models
     :param created: checks if User is creator

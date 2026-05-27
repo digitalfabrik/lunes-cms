@@ -60,7 +60,7 @@ class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             installation_id=self.kwargs["installation_id"]
         )
 
-    def destroy(self, request: Request, *args, **kwargs) -> Response:
+    def destroy(self, _, *_args, **_kwargs) -> Response:
         """
         Deletes all events with a matching installation_id
         """
