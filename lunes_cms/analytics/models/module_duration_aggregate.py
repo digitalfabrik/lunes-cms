@@ -41,7 +41,10 @@ class ModuleDurationAggregate(models.Model):
         ]
 
     def __str__(self) -> str:
+        key = (
+            f"unit={self.unit_id}" if self.unit_id is not None else f"job={self.job_id}"
+        )
         return (
             f"Module duration aggregate ({self.date}, {self.exercise_type}, "
-            f"unit={self.unit_id}, job={self.job_id}): {self.total_sessions} | {self.total_duration_seconds}"
+            f"{key}): {self.total_sessions} | {self.total_duration_seconds}"
         )

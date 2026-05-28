@@ -17,6 +17,15 @@ class AnalyticsEvent(models.Model):
         SENTENCE = "sentence", "Sentence Training"
         SPEECH = "speech", "Speech Training"
 
+    class ExerciseKeyType(models.TextChoices):
+        """
+        Discriminator for an exercise_key payload: standard (unit-based) vs
+        training (job-based).
+        """
+
+        STANDARD = "exercise"
+        TRAINING = "training"
+
     class EventType(models.TextChoices):
         """
         Supported analytics event types

@@ -28,7 +28,7 @@ class PayloadSerializer(serializers.Serializer):
 class StandardExerciseKeySerializer(PayloadSerializer):
     """Validates the exercise key for a standard (unit-based) exercise"""
 
-    type = serializers.ChoiceField(choices=["exercise"])
+    type = serializers.ChoiceField(choices=[AnalyticsEvent.ExerciseKeyType.STANDARD])
     exercise_type = serializers.ChoiceField(choices=STANDARD_EXERCISE_TYPES)
     unit_id = serializers.IntegerField()
 
@@ -36,14 +36,14 @@ class StandardExerciseKeySerializer(PayloadSerializer):
 class TrainingExerciseKeySerializer(PayloadSerializer):
     """Validates the exercise key for a training (job-based) exercise"""
 
-    type = serializers.ChoiceField(choices=["training"])
+    type = serializers.ChoiceField(choices=[AnalyticsEvent.ExerciseKeyType.TRAINING])
     exercise_type = serializers.ChoiceField(choices=TRAINING_EXERCISE_TYPES)
     job_id = serializers.IntegerField()
 
 
 _EXERCISE_KEY_SUB_SERIALIZERS: dict[str, type[PayloadSerializer]] = {
-    "exercise": StandardExerciseKeySerializer,
-    "training": TrainingExerciseKeySerializer,
+    AnalyticsEvent.ExerciseKeyType.STANDARD: StandardExerciseKeySerializer,
+    AnalyticsEvent.ExerciseKeyType.TRAINING: TrainingExerciseKeySerializer,
 }
 
 
@@ -104,7 +104,7 @@ class ExerciseDropoutPayloadSerializer(PayloadSerializer):
 
     def validate(self, attrs: dict) -> dict:
         if (
-            attrs["exercise_key"]["type"] == "training"
+            attrs["exercise_key"]["type"] == AnalyticsEvent.ExerciseKeyType.TRAINING
             and attrs.get("vocabulary_item_id") is None
         ):
             raise serializers.ValidationError(

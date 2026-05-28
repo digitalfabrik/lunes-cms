@@ -201,8 +201,12 @@ class ModuleDurationAggregator(EventAggregator):
 
     @staticmethod
     def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
-        standard_events = events.filter(payload__exercise_key__type="exercise")
-        training_events = events.filter(payload__exercise_key__type="training")
+        standard_events = events.filter(
+            payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
+        )
+        training_events = events.filter(
+            payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
+        )
 
         standard_aggregated = (
             standard_events.annotate(
@@ -281,8 +285,12 @@ class DropoutAggregator(EventAggregator):
 
     @staticmethod
     def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
-        standard_events = events.filter(payload__exercise_key__type="exercise")
-        training_events = events.filter(payload__exercise_key__type="training")
+        standard_events = events.filter(
+            payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
+        )
+        training_events = events.filter(
+            payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
+        )
 
         standard_aggregated = (
             standard_events.annotate(

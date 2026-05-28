@@ -39,7 +39,10 @@ class ExerciseRepetitionAggregate(models.Model):
         ]
 
     def __str__(self) -> str:
+        key = (
+            f"Unit {self.unit_id}" if self.unit_id is not None else f"Job {self.job_id}"
+        )
         return (
-            f"Unit {self.unit_id} | Job {self.job_id} | Exercise {self.exercise_type} | "
+            f"{key} | Exercise {self.exercise_type} | "
             f"Session ID {self.session_id} | Repetitions {self.repetition_count}"
         )

@@ -52,8 +52,11 @@ class DropoutAggregate(models.Model):
         ]
 
     def __str__(self) -> str:
+        key = (
+            f"unit={self.unit_id}" if self.unit_id is not None else f"job={self.job_id}"
+        )
         return (
             f"Dropout aggregate ({self.date}, type={self.exercise_type}, "
-            f"unit={self.unit_id}, job={self.job_id}, vocab={self.vocabulary_item_id}, "
+            f"{key}, vocab={self.vocabulary_item_id}, "
             f"pos={self.dropout_position}/{self.total_items}): {self.dropout_count}"
         )
