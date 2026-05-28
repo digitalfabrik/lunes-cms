@@ -29,6 +29,13 @@ class ExerciseRepetitionAggregate(models.Model):
                 name="unique_exercise_repetition_per_session",
                 nulls_distinct=False,
             ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="exercise_repetition_exclusive_unit_or_job_id",
+            ),
         ]
 
     def __str__(self) -> str:

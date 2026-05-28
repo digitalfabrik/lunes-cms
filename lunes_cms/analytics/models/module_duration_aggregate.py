@@ -30,7 +30,14 @@ class ModuleDurationAggregate(models.Model):
                 fields=["date", "exercise_type", "unit_id", "job_id"],
                 name="unique_module_duration_key",
                 nulls_distinct=False,
-            )
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="module_duration_exclusive_unit_or_job_id",
+            ),
         ]
 
     def __str__(self) -> str:

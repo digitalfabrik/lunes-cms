@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
     - adds job_id to ModuleDurationAggregate, DropoutAggregate, and ExerciseRepetitionAggregate
     - makes unit_id nullable on DropoutAggregate and ExerciseRepetitionAggregate
     - adds vocabulary_item_id to DropoutAggregate
+    - adds a check constraint to all three aggregates that either unit_id (standard exercises) or job_id (training exercises) is set
     """
 
     dependencies = [
@@ -116,6 +117,36 @@ class Migration(migrations.Migration):
                 fields=("date", "exercise_type", "unit_id", "job_id"),
                 name="unique_module_duration_key",
                 nulls_distinct=False,
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name="dropoutaggregate",
+            constraint=models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="dropout_exclusive_unit_or_job_id",
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name="exerciserepetitionaggregate",
+            constraint=models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="exercise_repetition_exclusive_unit_or_job_id",
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name="moduledurationaggregate",
+            constraint=models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="module_duration_exclusive_unit_or_job_id",
             ),
         ),
     ]
