@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
-from .static import PENDING_REVIEW_STATUSES, REVIEW_STATUS_CHOICES
+from .static import REVIEW_STATUS_CHOICES
 
 
 def upload_review_suggestions(_, filename):
@@ -134,7 +134,6 @@ class ImageReview(models.Model):
     def unit(self):
         """Returns the unit context of the review."""
         return self.unit_word_relation.unit
-
 
     @property
     def reviewed_image(self):

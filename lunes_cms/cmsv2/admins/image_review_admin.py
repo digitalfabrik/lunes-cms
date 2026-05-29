@@ -66,14 +66,11 @@ class ImageReviewAdmin(admin.ModelAdmin):
         Default (no parameter or ?tab=PENDING) shows all pending items.
         """
         qs = self._base_queryset(request)
-        # _status_tab is set by changelist_view after stripping 'tab' from GET
-        # so Django Admin doesn't try to apply it as an ORM filter.
-        status_param = getattr(request, "_status_tab", request.GET.get("tab"))
+        status_param = getattr(request, "status_tab", request.GET.get("tab"))
         if status_param == "APPROVED":
             return qs.filter(status="APPROVED")
         if status_param == "REJECTED":
             return qs.filter(status="REJECTED")
-        # Default: show all pending statuses
         return qs.filter(status__in=PENDING_REVIEW_STATUSES)
 
     def changelist_view(self, request, extra_context=None):
@@ -90,7 +87,7 @@ class ImageReviewAdmin(admin.ModelAdmin):
             "REJECTED": qs.filter(status="REJECTED").count(),
         }
         tab = request.GET.get("tab")
-        request._status_tab = tab
+        request.status_tab = tab
         extra_context["active_tab"] = tab or "PENDING"
         if tab is not None:
             mutable = request.GET.copy()
@@ -101,17 +98,17 @@ class ImageReviewAdmin(admin.ModelAdmin):
     def _is_expert(self, request):
         return request.user.groups.filter(name="Expert:innen").exists()
 
-    def has_view_permission(self, request, obj=None):
+    def has_view_permission(self, request, _obj=None):
         return self._is_expert(request)
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(self, request, _obj=None):
         return self._is_expert(request)
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, _request):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return request.user.is_superuser
+    def has_delete_permission(self, _request, _obj=None):
+        return False
 
     def word_display(self, obj):
         """Display the word being reviewed."""
@@ -123,14 +120,22 @@ class ImageReviewAdmin(admin.ModelAdmin):
         if not jobs.exists():
             return "-"
         return ", ".join(str(j) for j in jobs)
-    
+
+    def unit_display(self, obj):
+        """Display the unit context of the review."""
+        return obj.unit
+
     def status_display(self, obj):
+        """Display the review status with color-coded badges."""
         if obj.status == "APPROVED":
             border, background = "#65D880", "#65D8801A"
         elif obj.status == "REJECTED":
             border, background = "#DC3545", "#DC35451A"
         else:
-            border, background = "var(--primary)", "color-mix(in srgb, var(--primary) 10%, transparent)"
+            border, background = (
+                "var(--primary)",
+                "color-mix(in srgb, var(--primary) 10%, transparent)",
+            )
         style = (
             "display: inline-block;"
             "padding: .25rem .75rem;"
@@ -139,16 +144,14 @@ class ImageReviewAdmin(admin.ModelAdmin):
             f"background-color: {background};"
             "white-space: nowrap;"
         )
-        return format_html('<span style="{}">{}</span>', style, obj.get_status_display())
+        return format_html(
+            '<span style="{}">{}</span>', style, obj.get_status_display()
+        )
 
     word_display.short_description = _("word")  # type: ignore[attr-defined]
     job_display.short_description = _("job")  # type: ignore[attr-defined]
     status_display.short_description = _("status")  # type: ignore[attr-defined]
     word_display.admin_order_field = "unit_word_relation__word__word"  # type: ignore[attr-defined]
-
-    def unit_display(self, obj):
-        """Display the unit context of the review."""
-        return obj.unit
 
     unit_display.short_description = _("unit")  # type: ignore[attr-defined]
     unit_display.admin_order_field = "unit_word_relation__unit__title"  # type: ignore[attr-defined]
