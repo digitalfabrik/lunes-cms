@@ -136,16 +136,9 @@ class ImageReviewAdmin(admin.ModelAdmin):
                 "var(--primary)",
                 "color-mix(in srgb, var(--primary) 10%, transparent)",
             )
-        style = (
-            "display: inline-block;"
-            "padding: .25rem .75rem;"
-            "border-radius: 999px;"
-            f"border: 1px solid {border};"
-            f"background-color: {background};"
-            "white-space: nowrap;"
-        )
+        style = f"border: 1px solid {border};" f"background-color: {background};"
         return format_html(
-            '<span style="{}">{}</span>', style, obj.get_status_display()
+            '<span class="badge" style="{}">{}</span>', style, obj.get_status_display()
         )
 
     word_display.short_description = _("word")  # type: ignore[attr-defined]

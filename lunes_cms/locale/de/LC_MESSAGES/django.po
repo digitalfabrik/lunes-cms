@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 09:31+0000\n"
+"POT-Creation-Date: 2026-05-29 09:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -386,7 +386,7 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:34 cmsv2/admins/image_review_admin.py:151
+#: cms/models/document.py:34 cmsv2/admins/image_review_admin.py:144
 #: cmsv2/models/unit.py:323 cmsv2/models/word.py:37
 msgid "word"
 msgstr "Wort"
@@ -666,25 +666,25 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/image_review_admin.py:152 cmsv2/models/job.py:20
+#: cmsv2/admins/image_review_admin.py:145 cmsv2/models/job.py:20
 #: cmsv2/models/unit.py:321
 msgid "job"
 msgstr "Beruf"
 
-#: cmsv2/admins/image_review_admin.py:153 cmsv2/models/review.py:94
+#: cmsv2/admins/image_review_admin.py:146 cmsv2/models/review.py:94
 msgid "status"
 msgstr "Status"
 
-#: cmsv2/admins/image_review_admin.py:156 cmsv2/models/review.py:28
+#: cmsv2/admins/image_review_admin.py:149 cmsv2/models/review.py:28
 #: cmsv2/models/unit.py:313
 msgid "unit"
 msgstr "Einheit"
 
-#: cmsv2/admins/image_review_admin.py:170
+#: cmsv2/admins/image_review_admin.py:163
 msgid "No image available."
 msgstr "Kein Bild zur Verfügung."
 
-#: cmsv2/admins/image_review_admin.py:172
+#: cmsv2/admins/image_review_admin.py:165
 msgid "image preview"
 msgstr "Bild Vorschau"
 

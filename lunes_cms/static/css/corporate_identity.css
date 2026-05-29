@@ -306,7 +306,10 @@
 .app-cmsv2 .badge {
     background-color: var(--grey-100);
     border: 1px solid var(--grey-200);
-    border-radius: 50%;
+    display: inline-block;
+    border-radius: 12px;
+    white-space: nowrap;
+    padding: 2px 8px;
     color: #000;
 }
 
