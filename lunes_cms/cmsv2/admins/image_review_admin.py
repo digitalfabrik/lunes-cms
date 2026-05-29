@@ -22,7 +22,7 @@ class ImageReviewAdmin(admin.ModelAdmin):
         "word_display",
         "job_display",
         "unit_display",
-        "status",
+        "status_display",
     ]
     list_display_links = ["word_display"]
     search_fields = [
@@ -123,9 +123,27 @@ class ImageReviewAdmin(admin.ModelAdmin):
         if not jobs.exists():
             return "-"
         return ", ".join(str(j) for j in jobs)
+    
+    def status_display(self, obj):
+        if obj.status == "APPROVED":
+            border, background = "#65D880", "#65D8801A"
+        elif obj.status == "REJECTED":
+            border, background = "#DC3545", "#DC35451A"
+        else:
+            border, background = "var(--primary)", "color-mix(in srgb, var(--primary) 10%, transparent)"
+        style = (
+            "display: inline-block;"
+            "padding: .25rem .75rem;"
+            "border-radius: 999px;"
+            f"border: 1px solid {border};"
+            f"background-color: {background};"
+            "white-space: nowrap;"
+        )
+        return format_html('<span style="{}">{}</span>', style, obj.get_status_display())
 
     word_display.short_description = _("word")  # type: ignore[attr-defined]
     job_display.short_description = _("job")  # type: ignore[attr-defined]
+    status_display.short_description = _("status")  # type: ignore[attr-defined]
     word_display.admin_order_field = "unit_word_relation__word__word"  # type: ignore[attr-defined]
 
     def unit_display(self, obj):
