@@ -22,7 +22,6 @@ class ImageReviewAdmin(admin.ModelAdmin):
         "word_display",
         "job_display",
         "unit_display",
-        "is_unit_specific_image",
         "status",
     ]
     list_display_links = ["word_display"]
@@ -31,10 +30,9 @@ class ImageReviewAdmin(admin.ModelAdmin):
         "unit_word_relation__unit__title",
     ]
     readonly_fields = [
-        "reviewer",
-        "unit_word_relation",
-        "is_unit_specific_image",
         "image_preview",
+        "unit_word_relation",
+        "reviewer",
         "created_at",
         "updated_at",
     ]
@@ -65,10 +63,12 @@ class ImageReviewAdmin(admin.ModelAdmin):
         """
         Restrict the queryset to the current user's reviews unless they are a superuser,
         and apply the active status tab filter from the URL parameter.
-        Default (no parameter or ?status=PENDING) shows all pending items.
+        Default (no parameter or ?tab=PENDING) shows all pending items.
         """
         qs = self._base_queryset(request)
-        status_param = request.GET.get("status")
+        # _status_tab is set by changelist_view after stripping 'tab' from GET
+        # so Django Admin doesn't try to apply it as an ORM filter.
+        status_param = getattr(request, "_status_tab", request.GET.get("tab"))
         if status_param == "APPROVED":
             return qs.filter(status="APPROVED")
         if status_param == "REJECTED":
@@ -89,6 +89,13 @@ class ImageReviewAdmin(admin.ModelAdmin):
             "APPROVED": qs.filter(status="APPROVED").count(),
             "REJECTED": qs.filter(status="REJECTED").count(),
         }
+        tab = request.GET.get("tab")
+        request._status_tab = tab
+        extra_context["active_tab"] = tab or "PENDING"
+        if tab is not None:
+            mutable = request.GET.copy()
+            del mutable["tab"]
+            request.GET = mutable
         return super().changelist_view(request, extra_context=extra_context)
 
     def _is_expert(self, request):
