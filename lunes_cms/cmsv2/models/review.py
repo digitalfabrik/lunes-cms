@@ -135,15 +135,6 @@ class ImageReview(models.Model):
         """Returns the unit context of the review."""
         return self.unit_word_relation.unit
 
-    @property
-    def status_summary(self):
-        """
-        Returns 'PENDING' for all statuses that are awaiting approval,
-        otherwise returns the actual status value.
-        """
-        if self.status in PENDING_REVIEW_STATUSES:
-            return "PENDING"
-        return self.status
 
     @property
     def reviewed_image(self):
