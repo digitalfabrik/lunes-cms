@@ -313,6 +313,10 @@
     color: #000;
 }
 
+.app-cmsv2 #search_group {
+    gap: .5rem;
+}
+
 .sidebar-dark-primary .nav-sidebar.nav-legacy > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar.nav-legacy > .nav-item > .nav-link.active {
     border: 0;
     background-color: var(--active);

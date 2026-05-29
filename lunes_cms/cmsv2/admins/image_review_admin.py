@@ -4,9 +4,8 @@ from django.contrib import admin
 from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.cmsv2.models.static import PENDING_REVIEW_STATUSES
+from lunes_cms.cmsv2.models.static import PENDING_REVIEW_STATUSES, REVIEWER_GROUP
 from lunes_cms.cmsv2.utils import get_image_tag
-from lunes_cms.core import settings
 
 
 class ImageReviewAdmin(admin.ModelAdmin):
@@ -96,7 +95,7 @@ class ImageReviewAdmin(admin.ModelAdmin):
         return super().changelist_view(request, extra_context=extra_context)
 
     def _is_expert(self, request):
-        return request.user.groups.filter(name="Expert:innen").exists()
+        return request.user.groups.filter(name=REVIEWER_GROUP).exists()
 
     def has_view_permission(self, request, _obj=None):
         return self._is_expert(request)
@@ -157,7 +156,7 @@ class ImageReviewAdmin(admin.ModelAdmin):
         if image:
             return format_html(
                 '<a href="{}" target="_blank">{}</a>',
-                f"{settings.MEDIA_URL}{image}",
+                image.url,
                 mark_safe(get_image_tag(image, width=80)),
             )
         return _("No image available.")

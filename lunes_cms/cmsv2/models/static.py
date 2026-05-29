@@ -118,6 +118,8 @@ PENDING_REVIEW_STATUSES = frozenset(
     {"NEW_WORD", "SUBMISSION_1", "SUBMISSION_2", "SUBMISSION_3"}
 )
 
+REVIEWER_GROUP = "Expert:innen"
+
 
 def convert_image_to_webp(image_field):
     """
