@@ -6,21 +6,13 @@ Mirrors ``audio_generation``: the DB is the queue, a Word with an empty
 image API, saves the file. Idempotent — already-populated rows are filtered
 out, so re-runs are free.
 
-The drain is scoped to the word IDs just created by a CSV import (passed via
-``word_ids``); it never touches words created elsewhere.
-
 The OpenAI call is made *outside* any DB transaction. An in-process lock makes
 the drain single-flight; it is separate from the audio drain's lock so image
 and audio generation can run concurrently.
-
-Triggered from ``import_csv_view`` after a successful CSV import. If a worker
-dies mid-batch the remaining rows stay pending and are picked up on the next
-import.
 """
 
 import base64
 import logging
-import os
 import threading
 import time
 
@@ -31,7 +23,7 @@ from django.db.models import Q
 from openai import RateLimitError
 
 from ..models import Word
-from ..utils import get_openai_client, make_safe_filename, OpenAIConfigurationError
+from ..utils import get_openai_client, OpenAIConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -58,10 +50,10 @@ def build_image_prompt(
         - Keine zusätzlichen Objekte, kein Text, neutraler Hintergrund (z.B. weiß oder freigestellt).
     """
     if unit_title:
-        prompt += f"Der Begriff gehört zum Lernmodul: {unit_title}"
-    prompt += f'Erstelle ein passendes realistisches Foto zur Vokabel: "{word_text}"'
+        prompt += f"Der Begriff gehört zum Lernmodul: {unit_title}.\n"
+    prompt += f'Erstelle ein passendes realistisches Foto zur Vokabel: "{word_text}".\n'
     if additional_info:
-        prompt += f"Zusätzliche Hinweise zur Bildgestaltung: {additional_info}"
+        prompt += f"Zusätzliche Hinweise zur Bildgestaltung: {additional_info}\n"
     prompt += "Ziel ist es, dass die Vokabel durch das Bild eindeutig verstanden werden kann – auch ohne Text oder Erklärung."
     return prompt
 
@@ -81,51 +73,17 @@ def openai_word_image_bytes(word: Word) -> bytes:
     return base64.b64decode(response.data[0].b64_json)
 
 
-def _rename_image_to_word(word: Word) -> None:
-    """
-    Rename the stored image file to a deterministic, word-derived name.
-
-    ``upload_to`` (``convert_umlaute_images``) names every uploaded image with
-    a random UUID. Generated images get a "<word>.webp" name instead — mirrors
-    how ``Word.convert_audio()`` names audio files. A pk suffix breaks ties if
-    another word already owns that name.
-    """
-    old_name = word.image.name
-    storage = word.image.storage
-    directory = os.path.dirname(old_name)
-    extension = os.path.splitext(old_name)[1]
-    safe_stem = make_safe_filename(word.word) or "image"
-
-    new_name = os.path.join(directory, f"{safe_stem}{extension}")
-    if new_name == old_name:
-        return
-    if storage.exists(new_name):
-        new_name = os.path.join(directory, f"{safe_stem}_{word.pk}{extension}")
-        if storage.exists(new_name):
-            storage.delete(new_name)
-
-    with storage.open(old_name) as source:
-        storage.save(new_name, source)
-    storage.delete(old_name)
-    word.image.name = new_name
-    word.save(update_fields=["image"])
-
-
 def _generate_for_word_image(word: Word) -> None:
     """
     Generate a missing image for a single Word and save it to the ImageField.
 
     ``Word.save()`` converts the uploaded image to WebP and the field defaults
-    ``image_check_status`` to ``NOT_CHECKED``; afterwards the file is renamed
-    to a word-derived name.
+    ``image_check_status`` to ``NOT_CHECKED``. The file name is the UUID the
+    field's ``upload_to`` assigns — same as every other image in the system.
     """
     if not word.image:
         data = openai_word_image_bytes(word)
-        word.image.save(
-            f"{make_safe_filename(word.word)}.png",
-            ContentFile(data),
-        )
-        _rename_image_to_word(word)
+        word.image.save("image.png", ContentFile(data))
         logger.info("Generated image for word_id=%s (%s)", word.pk, word.word)
 
 

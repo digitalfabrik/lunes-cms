@@ -26,27 +26,19 @@ def generate_image_via_openai(request):
         return JsonResponse({"error": "No word_text provided."}, status=400)
     additional_info = request.POST.get("additional_info")
     unit_title = request.POST.get("unit_title")
-    model = request.POST.get("model")
-    if not model:
-        return JsonResponse({"error": "No model provided."}, status=400)
 
     prompt = build_image_prompt(word_text, unit_title, additional_info)
 
     try:
         client = get_openai_client()
 
-        if model == "gpt-image-1":
-            response = client.images.generate(
-                model=model, prompt=prompt, size="1024x1024", n=1
-            )
-        else:
-            response = client.images.generate(
-                model=model,
-                prompt=prompt,
-                response_format="b64_json",
-                size="1024x1024",
-                n=1,
-            )
+        response = client.images.generate(
+            model=settings.OPENAI_IMAGE_MODEL,
+            prompt=prompt,
+            size="1024x1024",
+            quality=settings.OPENAI_IMAGE_QUALITY,
+            n=1,
+        )
 
         b64_image = response.data[0].b64_json
         image_data = base64.b64decode(b64_image)

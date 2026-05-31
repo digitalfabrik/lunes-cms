@@ -2,7 +2,6 @@
 Tests for the background image generation worker.
 """
 
-import os
 import threading
 from unittest import mock
 
@@ -37,8 +36,7 @@ def fast_worker(transactional_db, settings, tmp_path):
     The worker scans the *whole* Word table. The session-scoped ``test_data``
     fixture plus ``transaction=True`` (no rollback between tests) can leave rows
     around, so wipe them first to keep these tests isolated. A per-test
-    ``MEDIA_ROOT`` keeps generated files from colliding across runs (the
-    word-derived names are deterministic, so a shared dir would not be).
+    ``MEDIA_ROOT`` keeps generated files isolated across runs.
     """
     settings.MEDIA_ROOT = str(tmp_path)
     Word.objects.all().delete()
@@ -90,7 +88,7 @@ def test_drain_generates_image_for_word_missing_image(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_names_image_after_word(fast_worker):
+def test_drain_stores_image_under_standard_path(fast_worker):
     word = _make_word(word="Säge & Co")
 
     with mock.patch.object(
@@ -99,27 +97,11 @@ def test_drain_names_image_after_word(fast_worker):
         _run_drain()
 
     word.refresh_from_db()
-    # make_safe_filename keeps umlauts, collapses other punctuation to "_".
-    assert os.path.basename(word.image.name) == "Säge_Co.png"
-
-
-@pytest.mark.django_db(transaction=True)
-def test_drain_suffixes_image_name_on_collision(fast_worker):
-    first = _make_word(word="Hammer")
-    second = _make_word(word="Hammer")
-
-    with mock.patch.object(
-        image_generation, "openai_word_image_bytes", return_value=b"fake-png"
-    ):
-        _run_drain()
-
-    first.refresh_from_db()
-    second.refresh_from_db()
-    names = {
-        os.path.basename(first.image.name),
-        os.path.basename(second.image.name),
-    }
-    assert names == {"Hammer.png", f"Hammer_{second.pk}.png"}
+    # Naming is delegated to the field's ``upload_to`` (a UUID under images/),
+    # consistent with every other image in the system — never word-derived.
+    assert word.image.name.startswith("images/")
+    assert word.image.name.endswith(".png")
+    assert "Säge" not in word.image.name
 
 
 @pytest.mark.django_db(transaction=True)
