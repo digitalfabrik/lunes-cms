@@ -279,6 +279,82 @@ def add_user(page: Page, base_url: str) -> Callable[[str, str], None]:
     return _add
 
 
+PERMISSION_GROUPS = [
+    (
+        "Beruf",
+        [
+            "Beruf | Can add Job",
+            "Beruf | Can change Job",
+            "Beruf | Can delete Job",
+            "Beruf | Can view Job",
+        ],
+    ),
+    (
+        "Einheit-Wort",
+        [
+            "Einheit-Wort Beziehung | Can add Unit-Word Relation",
+            "Einheit-Wort Beziehung | Can change Unit-Word Relation",
+            "Einheit-Wort Beziehung | Can delete Unit-Word Relation",
+            "Einheit-Wort Beziehung | Can view Unit-Word Relation",
+        ],
+    ),
+    (
+        "Einheit",
+        [
+            "Einheit | Can add Unit",
+            "Einheit | Can change Unit",
+            "Einheit | Can delete Unit",
+            "Einheit | Can view Unit",
+        ],
+    ),
+    (
+        "Vokabel",
+        [
+            "Vokabel | Can add Word",
+            "Vokabel | Can change Word",
+            "Vokabel | Can delete Word",
+            "Vokabel | Can view Word",
+        ],
+    ),
+]
+
+
+@pytest.fixture
+def add_group(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that creates a group with standard permissions from the Django admin."""
+
+    def _add(group_name: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/group/add/")
+        page.fill("[name=name]", group_name)
+        filter_input = page.locator("#id_permissions_input")
+        choose_all = page.locator("#id_permissions_add_all")
+        for search_term, _ in PERMISSION_GROUPS:
+            filter_input.press_sequentially(search_term)
+            page.wait_for_timeout(200)
+            choose_all.click()
+            filter_input.select_text()
+            filter_input.press("Backspace")
+            page.wait_for_timeout(200)
+        page.get_by_role("button", name="Sichern", exact=True).click()
+
+    return _add
+
+
+@pytest.fixture
+def delete_group(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that deletes a group by name from the Django admin."""
+
+    def _delete(group_name: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/group/")
+        page.fill("#searchbar", group_name)
+        page.get_by_role("button", name="Suchen").click()
+        page.get_by_role("link", name=group_name).first.click()
+        page.get_by_role("link", name="Löschen").click()
+        page.locator("input[type=submit]").click()
+
+    return _delete
+
+
 @pytest.fixture
 def delete_user(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a user by username from the Django admin."""
