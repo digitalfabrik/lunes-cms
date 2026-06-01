@@ -17,8 +17,10 @@ from __future__ import annotations
 
 import contextlib
 import json
+import os
 import re
 import subprocess
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Generator
@@ -28,6 +30,9 @@ from playwright.sync_api import Browser, Page, StorageState, expect
 
 BASE_URL = "http://localhost:8080"
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
+EMAIL_OUTBOX_DIR = Path(
+    os.environ.get("LUNES_CMS_EMAIL_FILE_PATH", "/tmp/django-email-outbox")
+)
 SCREENSHOTS_DIR = DOCS_DIR / "screenshots"
 ASSETS_DIR = Path(__file__).parent / "assets"
 REPO_ROOT = Path(__file__).parent.parent
@@ -353,6 +358,27 @@ def delete_group(page: Page, base_url: str) -> Callable[[str], None]:
         page.locator("input[type=submit]").click()
 
     return _delete
+
+
+@pytest.fixture
+def email_outbox() -> Generator[Callable[[], str], None, None]:
+    """Clears the email outbox before the test and provides a function to read the latest email body."""
+    EMAIL_OUTBOX_DIR.mkdir(parents=True, exist_ok=True)
+    for f in EMAIL_OUTBOX_DIR.glob("*.log"):
+        f.unlink()
+
+    def get_latest(timeout: int = 10) -> str:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            files = sorted(
+                EMAIL_OUTBOX_DIR.glob("*.log"), key=lambda f: f.stat().st_mtime
+            )
+            if files:
+                return files[-1].read_text()
+            time.sleep(0.2)
+        raise TimeoutError(f"No email appeared in {EMAIL_OUTBOX_DIR} within {timeout}s")
+
+    yield get_latest
 
 
 @pytest.fixture

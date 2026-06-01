@@ -5,6 +5,7 @@ Willkommen im Benutzerhandbuch für das **Lunes CMS** – das Content Management
 ## Inhaltsverzeichnis
 
 1. [Anmelden](login.md) — Zugang zum Lunes CMS
+1. [Passwort zurücksetzen](password_reset.md) — Vergessenes Passwort per E-Mail zurücksetzen
 1. Benutzer:innen
     1. [Benutzer:in anlegen](add_user.md) — Neues Benutzerkonto anlegen
     2. [Benutzer:in bearbeiten (Informationen)](edit_user_information.md) — Persönliche Informationen eines Benutzerkontos bearbeiten

@@ -314,7 +314,11 @@ TEMP_IMAGE_DIR = os.path.join(MEDIA_ROOT, "temp_image")
 
 if DEBUG:
     #: The backend to use for sending emails (see :setting:`django:EMAIL_BACKEND` and :doc:`django:topics/email`)
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    #: Directory where outgoing emails are stored as files in debug mode (see :setting:`django:EMAIL_FILE_PATH`)
+    EMAIL_FILE_PATH = os.environ.get(
+        "LUNES_CMS_EMAIL_FILE_PATH", "/tmp/django-email-outbox"
+    )
 else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
