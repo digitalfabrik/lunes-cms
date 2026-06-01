@@ -90,7 +90,9 @@ def test_generate_word_audio_and_image(
     page.get_by_role("button", name="Suchen").click()
     page.locator("th.field-word a", has_text=re.compile(f"^{WORD}$")).first.click()
     page.wait_for_url(re.compile(r"/word/\d+/change/"))
-    word_id = re.search(r"/word/(\d+)/change/", page.url).group(1)
+    match = re.search(r"/word/(\d+)/change/", page.url)
+    assert match, f"Could not find word ID in URL: {page.url}"
+    word_id = match.group(1)
 
     with document.step(
         "Öffnen Sie ein Wort",
