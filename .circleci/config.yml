@@ -137,14 +137,14 @@ jobs:
           files: coverage.xml
   test-python313:
     docker:
-      - image: cimg/python:3.13
+      - image: cimg/python:3.13.13
         environment:
           LUNES_CMS_SECRET_KEY: circleci-dummy-key
           LUNES_CMS_DB_BACKEND: sqlite
     steps:
       - checkout
       - restore_cache:
-          key: pip-3.13-{{ checksum "pyproject.toml" }}-v1
+          key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
       - run:
           name: Create virtual environment
           command: |
@@ -156,7 +156,7 @@ jobs:
               pip install -e .[dev,pinned,dev-pinned]
             fi
       - save_cache:
-          key: pip-3.13-{{ checksum "pyproject.toml" }}-v1
+          key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
           paths:
             - .venv
             - lunes_cms.egg-info
