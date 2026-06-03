@@ -11,14 +11,17 @@ logger = logging.getLogger(__name__)
 
 
 COLUMN_MAPPING: dict[str, str] = {
-    "Einheit": "unit",
-    "Sinneinheit": "unit",
-    "Sinneseinheit": "unit",
-    "Fachbegriff": "word",
-    "Begriff": "word",
-    "Vokabel": "word",
-    "Artikel": "article",
-    "Beispielsatz": "example",
+    key.lower(): value
+    for key, value in {
+        "Einheit": "unit",
+        "Sinneinheit": "unit",
+        "Sinneseinheit": "unit",
+        "Fachbegriff": "word",
+        "Begriff": "word",
+        "Vokabel": "word",
+        "Artikel": "article",
+        "Beispielsatz": "example",
+    }.items()
 }
 
 
@@ -95,11 +98,11 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     """
     try:
         mapped = {
-            COLUMN_MAPPING[key.strip()]: (
+            COLUMN_MAPPING[key.strip().lower()]: (
                 value.strip() if isinstance(value, str) else value
             )
             for key, value in raw_row.items()
-            if key and COLUMN_MAPPING.get(key.strip())
+            if key and COLUMN_MAPPING.get(key.strip().lower())
         }
 
         if not mapped:

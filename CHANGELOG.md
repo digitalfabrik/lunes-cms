@@ -4,6 +4,7 @@ UNRELEASED
 * [ [#771](https://github.com/digitalfabrik/lunes-cms/issues/771) ] 771: Change order of languages in dropdown
 * [ [#375](https://github.com/digitalfabrik/lunes-cms/issues/375) ] 375: Add created by filter to CMS
 * [ [#739](https://github.com/digitalfabrik/lunes-cms/issues/739) ] 739: Add option to duplicate jobs
+* [ [#687](https://github.com/digitalfabrik/lunes-cms/issues/687) ] 687: Add automatical audio generation after CSV import
 
 2026.4.7
 --------
