@@ -44,9 +44,9 @@ mkdocs serve
 ```
 
 ## Deploy the user manual
-```
+```bash
 # Run tests and deploy to GitHub Pages: https://digitalfabrik.github.io/lunes-cms/
-pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup && mkdocs gh-deploy --remote-branch gh-pages-user-docs
+pytest e2e-tests/ -m e2e && mkdocs gh-deploy --remote-branch gh-pages-user-docs
 ```
 
 ## Writing a new test
