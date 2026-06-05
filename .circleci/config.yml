@@ -162,6 +162,16 @@ jobs:
             - lunes_cms.egg-info
             - /home/circleci/.cache/pip
       - run:
+          name: Migrate database
+          command: |
+            source .venv/bin/activate
+            lunes-cms-cli migrate
+      - run:
+          name: Load basic test data
+          command: |
+            source .venv/bin/activate
+            lunes-cms-cli loaddata lunes_cms/cms/fixtures/test_data.json
+      - run:
           name: Run tests
           command: |
             source .venv/bin/activate
