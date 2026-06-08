@@ -54,8 +54,12 @@ class Static:
 
     # Review status choices
     review_status_choices = [
-        ("PENDING", _("Pending Review")),
+        ("NEW_WORD", _("New Vocabulary")),
+        ("SUBMISSION_1", _("1st Submission")),
+        ("SUBMISSION_2", _("2nd Submission")),
+        ("SUBMISSION_3", _("3rd Submission")),
         ("APPROVED", _("Approved")),
+        ("REJECTED", _("Rejected")),
     ]
 
     # number of pixels used for box blur
@@ -108,6 +112,13 @@ class Static:
 
 
 REVIEW_STATUS_CHOICES = Static.review_status_choices
+
+#: Statuses that collectively mean "awaiting approval"
+PENDING_REVIEW_STATUSES = frozenset(
+    {"NEW_WORD", "SUBMISSION_1", "SUBMISSION_2", "SUBMISSION_3"}
+)
+
+REVIEWER_GROUP = "Expert:innen"
 
 
 def convert_image_to_webp(image_field):
