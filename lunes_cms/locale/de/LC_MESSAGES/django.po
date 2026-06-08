@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 14:12+0000\n"
+"POT-Creation-Date: 2026-06-08 09:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -596,7 +596,6 @@ msgstr ""
 "ebenfalls löschen, die allerdings geschützt sind."
 
 #: cms/templates/admin/delete_confirmation.html:53
-#: cms/templates/admin/delete_selected_confirmation.html:51
 #, python-format
 msgid ""
 "Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
@@ -607,12 +606,12 @@ msgstr ""
 "der Zusammenfassung sehen kannst:"
 
 #: cms/templates/admin/delete_confirmation.html:62
-#: cms/templates/admin/delete_selected_confirmation.html:64
+#: cms/templates/admin/delete_selected_confirmation.html:72
 msgid "Yes, I’m sure"
 msgstr "Ja, ich bin mir sicher"
 
 #: cms/templates/admin/delete_confirmation.html:65
-#: cms/templates/admin/delete_selected_confirmation.html:67
+#: cms/templates/admin/delete_selected_confirmation.html:75
 msgid "No, take me back"
 msgstr "Nein, bitte abbrechen"
 
@@ -640,6 +639,23 @@ msgid ""
 msgstr ""
 "Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, die allerdings geschützt sind:"
+
+#: cms/templates/admin/delete_selected_confirmation.html:51
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? It eventually "
+"will delete related objects as well, as shown in the summary:"
+msgstr ""
+"Bist du sicher, dass du die ausgewählten %(objects_name)s löschen möchtest? "
+"Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in der "
+"Zusammenfassung sehen kannst:"
+
+#: cms/templates/admin/delete_selected_confirmation.html:57
+#, python-format
+msgid "and %(remaining)s more object will be deleted"
+msgid_plural "and %(remaining)s more objects will be deleted"
+msgstr[0] "und %(remaining)s weiteres Objekt wird gelöscht"
+msgstr[1] "und %(remaining)s weitere Objekte werden gelöscht"
 
 #: cms/templates/admin/object_delete_summary.html:2
 msgid "Summary"
