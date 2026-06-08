@@ -280,6 +280,29 @@
     background-color: white;
 }
 
+@media (prefers-color-scheme: dark) {
+    .app-cmsv2 .table-striped thead tr {
+        background-color: #000e38;
+    }
+    .app-cmsv2 .table-striped thead th,
+    .app-cmsv2 .table-striped thead th a {
+        color: inherit !important;
+    }
+    .app-cmsv2 .table-striped tbody tr,
+    .app-cmsv2 .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #47476e;
+    }
+    .app-cmsv2 .table-striped tbody tr:nth-of-type(even) {
+        background-color: #2d2d4a;
+    }
+    .app-cmsv2 .table-striped td {
+        color: inherit;
+    }
+    .app-cmsv2 .table-striped tbody th a {
+        color: inherit !important;
+    }
+}
+
 .app-cmsv2 .btn.btn-primary {
     font-weight: bold;
     padding: 8px 32px;
