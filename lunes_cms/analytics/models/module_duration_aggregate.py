@@ -13,7 +13,8 @@ class ModuleDurationAggregate(models.Model):
         max_length=50,
         choices=AnalyticsEvent.ExerciseType.choices,
     )
-    unit_id = models.IntegerField()
+    unit_id = models.IntegerField(null=True)
+    job_id = models.IntegerField(null=True)
 
     # aggregated fields
     total_sessions = models.IntegerField(default=0)
@@ -26,10 +27,24 @@ class ModuleDurationAggregate(models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=["date", "exercise_type", "unit_id"],
+                fields=["date", "exercise_type", "unit_id", "job_id"],
                 name="unique_module_duration_key",
-            )
+                nulls_distinct=False,
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="module_duration_exclusive_unit_or_job_id",
+            ),
         ]
 
     def __str__(self) -> str:
-        return f"Module duration aggregate ({self.date}, {self.exercise_type}, {self.unit_id}): {self.total_sessions} | {self.total_duration_seconds}"
+        key = (
+            f"unit={self.unit_id}" if self.unit_id is not None else f"job={self.job_id}"
+        )
+        return (
+            f"Module duration aggregate ({self.date}, {self.exercise_type}, "
+            f"{key}): {self.total_sessions} | {self.total_duration_seconds}"
+        )

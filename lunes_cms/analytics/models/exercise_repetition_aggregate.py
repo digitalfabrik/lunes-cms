@@ -9,7 +9,8 @@ class ExerciseRepetitionAggregate(models.Model):
     Tracks how many times the same exercise/unit combo is started within a session.
     """
 
-    unit_id = models.IntegerField()
+    unit_id = models.IntegerField(null=True)
+    job_id = models.IntegerField(null=True)
     exercise_type = models.CharField(
         max_length=50,
         choices=AnalyticsEvent.ExerciseType.choices,
@@ -24,10 +25,24 @@ class ExerciseRepetitionAggregate(models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=["unit_id", "exercise_type", "session_id"],
+                fields=["unit_id", "job_id", "exercise_type", "session_id"],
                 name="unique_exercise_repetition_per_session",
+                nulls_distinct=False,
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(unit_id__isnull=True, job_id__isnull=False)
+                    | models.Q(unit_id__isnull=False, job_id__isnull=True)
+                ),
+                name="exercise_repetition_exclusive_unit_or_job_id",
             ),
         ]
 
     def __str__(self) -> str:
-        return f"Unit {self.unit_id} | Exercise {self.exercise_type} | Session ID {self.session_id} | Repetitions {self.repetition_count}"
+        key = (
+            f"Unit {self.unit_id}" if self.unit_id is not None else f"Job {self.job_id}"
+        )
+        return (
+            f"{key} | Exercise {self.exercise_type} | "
+            f"Session ID {self.session_id} | Repetitions {self.repetition_count}"
+        )
