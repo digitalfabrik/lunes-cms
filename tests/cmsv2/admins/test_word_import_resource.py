@@ -1,0 +1,244 @@
+"""
+Tests for the CSV word import resource (column mapping, row parsing, full import).
+Covers the re-import workflow described in issue #775.
+"""
+
+import pytest
+from tablib import Dataset
+
+from lunes_cms.cmsv2.admins.word_import_resource import (
+    ParsedRow,
+    RowResult,
+    _build_column_mapping,
+    import_words_from_csv,
+    map_plural_article_to_int,
+    parse_row,
+)
+from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models.job import Job
+
+# ---------------------------------------------------------------------------
+# Column mapping
+# ---------------------------------------------------------------------------
+
+
+def test_german_export_columns_are_mapped():
+    """German column names produced by the exporter are recognised."""
+    mapping = _build_column_mapping()
+    assert mapping["Einheit"] == "unit"
+    assert mapping["Vokabel"] == "word"
+    assert mapping["Singular Artikel"] == "article"
+    assert mapping["Plural Artikel"] == "plural_article"
+    assert mapping["Beispielsatz"] == "example"
+
+
+def test_english_export_columns_are_mapped():
+    """English column names produced by the exporter are recognised."""
+    mapping = _build_column_mapping()
+    assert mapping["Units"] == "unit"
+    assert mapping["Word"] == "word"
+    assert mapping["Singular Article"] == "article"
+    assert mapping["Plural Article"] == "plural_article"
+    assert mapping["Example sentence"] == "example"
+
+
+def test_legacy_column_names_are_mapped():
+    """Legacy column names from older import templates are still recognised."""
+    mapping = _build_column_mapping()
+    assert mapping["Sinneinheit"] == "unit"
+    assert mapping["Sinneseinheit"] == "unit"
+    assert mapping["Fachbegriff"] == "word"
+    assert mapping["Begriff"] == "word"
+    assert mapping["Artikel"] == "article"
+
+
+# ---------------------------------------------------------------------------
+# map_plural_article_to_int
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("die (Plural)", 1),
+        ("DIE (PLURAL)", 1),
+        ("keiner", 0),
+        ("", None),
+        ("-", None),
+        ("unknown", None),
+    ],
+)
+def test_map_plural_article_to_int(value, expected):
+    assert map_plural_article_to_int(value) == expected
+
+
+# ---------------------------------------------------------------------------
+# parse_row
+# ---------------------------------------------------------------------------
+
+
+def _make_row(**overrides) -> dict:
+    row = {"Einheit": "Werkzeug", "Vokabel": "Hammer", "Artikel": "der"}
+    row.update(overrides)
+    return row
+
+
+def test_parse_row_returns_parsed_row():
+    result = parse_row(_make_row(), 1)
+    assert isinstance(result, ParsedRow)
+    assert result.unit == "Werkzeug"
+    assert result.word == "Hammer"
+    assert result.article == "der"
+
+
+def test_parse_row_parses_plural_article():
+    result = parse_row(_make_row(**{"Plural Artikel": "die (Plural)"}), 1)
+    assert isinstance(result, ParsedRow)
+    assert result.plural_article == "die (Plural)"
+
+
+def test_parse_row_parses_example_sentence():
+    result = parse_row(_make_row(Beispielsatz="Der Hammer ist schwer."), 1)
+    assert isinstance(result, ParsedRow)
+    assert result.example == "Der Hammer ist schwer."
+
+
+def test_parse_row_english_column_names():
+    row = {
+        "Units": "Werkzeug",
+        "Word": "Hammer",
+        "Singular Article": "der",
+        "Plural Article": "die (Plural)",
+        "Example sentence": "Der Hammer ist schwer.",
+    }
+    result = parse_row(row, 1)
+    assert isinstance(result, ParsedRow)
+    assert result.unit == "Werkzeug"
+    assert result.word == "Hammer"
+    assert result.article == "der"
+    assert result.plural_article == "die (Plural)"
+    assert result.example == "Der Hammer ist schwer."
+
+
+def test_parse_row_missing_unit_returns_error():
+    result = parse_row(_make_row(Einheit=""), 1)
+    assert isinstance(result, RowResult)
+    assert result.error is not None
+
+
+def test_parse_row_missing_word_returns_error():
+    result = parse_row(_make_row(Vokabel=""), 1)
+    assert isinstance(result, RowResult)
+    assert result.error is not None
+
+
+def test_parse_row_no_recognised_columns_returns_error():
+    result = parse_row({"Unknown": "value"}, 1)
+    assert isinstance(result, RowResult)
+    assert result.error is not None
+
+
+def test_parse_row_strips_whitespace_from_column_names():
+    row = {" Einheit ": "Werkzeug", " Vokabel ": "Hammer", " Artikel ": "der"}
+    result = parse_row(row, 1)
+    assert isinstance(result, ParsedRow)
+
+
+# ---------------------------------------------------------------------------
+# import_words_from_csv — integration
+# ---------------------------------------------------------------------------
+
+
+def _make_dataset(headers: list[str], rows: list[list]) -> Dataset:
+    ds = Dataset(headers=headers)
+    for row in rows:
+        ds.append(row)
+    return ds
+
+
+@pytest.fixture
+def job(db) -> Job:
+    return Job.objects.create(name="Test Job")
+
+
+def _job_words(job: Job):
+    """Return queryset of words imported into the given job."""
+    return Word.objects.filter(units__jobs=job)
+
+
+@pytest.mark.django_db
+def test_import_with_german_headers(job):
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["Werkzeug", "Hammer", "der"], ["Werkzeug", "Säge", "die"]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job)
+    assert errors == []
+    assert _job_words(job).count() == 2
+
+
+@pytest.mark.django_db
+def test_reimport_with_english_headers(job):
+    """Re-import of a CSV exported with English admin locale works (issue #775)."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Plural Article", "Example sentence"],
+        [["Werkzeug", "Hammer", "der", "die (Plural)", "Der Hammer ist schwer."]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job)
+    assert errors == []
+    word = _job_words(job).get(word="Hammer")
+    assert word.plural_article == 1
+    assert word.example_sentence == "Der Hammer ist schwer."
+
+
+@pytest.mark.django_db
+def test_reimport_with_german_headers(job):
+    """Re-import of a CSV exported with German admin locale works (issue #775)."""
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Singular Artikel", "Plural Artikel", "Beispielsatz"],
+        [["Werkzeug", "Hammer", "der", "die (Plural)", "Der Hammer ist schwer."]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job)
+    assert errors == []
+    assert _job_words(job).get(word="Hammer").plural_article == 1
+
+
+@pytest.mark.django_db
+def test_plural_article_dash_stored_as_none(job):
+    """'-' in the plural article column (exporter default) is stored as None."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Plural Article"],
+        [["Werkzeug", "Hammer", "der", "-"]],
+    )
+    import_words_from_csv(ds, job)
+    assert _job_words(job).get(word="Hammer").plural_article is None
+
+
+@pytest.mark.django_db
+def test_extra_export_columns_are_ignored(job):
+    """Extra columns from the export (Word type, Has audio?, Creation date) don't cause errors."""
+    ds = _make_dataset(
+        [
+            "Units",
+            "Word",
+            "Singular Article",
+            "Word type",
+            "Has audio?",
+            "Creation date",
+        ],
+        [["Werkzeug", "Hammer", "der", "noun", "No", "01.01.2026 10:00"]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job)
+    assert errors == []
+    assert _job_words(job).count() == 1
+
+
+@pytest.mark.django_db
+def test_empty_rows_produce_errors(job):
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["", "Hammer", "der"], ["Werkzeug", "", "der"]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job)
+    assert len(errors) == 2
+    assert _job_words(job).count() == 0
