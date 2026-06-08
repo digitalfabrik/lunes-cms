@@ -10,19 +10,36 @@ from ..models import Job, Static, Unit, Word
 logger = logging.getLogger(__name__)
 
 
-COLUMN_MAPPING: dict[str, str] = {
-    key.lower(): value
-    for key, value in {
+def _build_column_mapping() -> dict[str, str]:
+    """
+    Maps CSV column headers (from the exporter or legacy templates) to internal
+    field names. Both German and English export headers are listed explicitly
+    since the exported CSV uses the language of the admin interface at export
+    time.
+    """
+    return {
+        # unit
+        "Units": "unit",
         "Einheit": "unit",
-        "Sinneinheit": "unit",
-        "Sinneseinheit": "unit",
+        # word
+        "Word": "word",
+        "Vokabel": "word",
+        # singular article
+        "Singular Article": "article",
+        "Singular Artikel": "article",
+        # plural article
+        "Plural Article": "plural_article",
+        "Plural Artikel": "plural_article",
+        # example sentence
+        "Example sentence": "example",
+        "Beispielsatz": "example",
+        # For legacy imports
+        "Artikel": "article",
         "Fachbegriff": "word",
         "Begriff": "word",
-        "Vokabel": "word",
-        "Artikel": "article",
-        "Beispielsatz": "example",
-    }.items()
-}
+        "Sinneinheit": "unit",
+        "Sinneseinheit": "unit",
+    }
 
 
 @dataclass(frozen=True)
@@ -76,7 +93,9 @@ def create_unit(unit_title: str, job: Job) -> Unit:
     return unit
 
 
-def create_word(word_text: str, singular_article: int) -> Word:
+def create_word(
+    word_text: str, singular_article: int
+) -> Word:
     """
     Creates a new word object.
     """
@@ -97,12 +116,13 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     Parses a single row and returns either a ParsedRow or a RowResult (error).
     """
     try:
+        column_mapping = _build_column_mapping()
         mapped = {
-            COLUMN_MAPPING[key.strip().lower()]: (
+            column_mapping[key.strip().lower()]: (
                 value.strip() if isinstance(value, str) else value
             )
             for key, value in raw_row.items()
-            if key and COLUMN_MAPPING.get(key.strip().lower())
+            if key and column_mapping.get(key.strip().lower())
         }
 
         if not mapped:
@@ -112,7 +132,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             )
 
         unknown_keys = {
-            k.strip() for k in raw_row.keys() if k and not COLUMN_MAPPING.get(k.strip())
+            k.strip() for k in raw_row.keys() if k and not column_mapping.get(k.strip())
         }
         if unknown_keys:
             logger.info(
@@ -138,7 +158,12 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         article = mapped.get("article", "").lower()
         example = mapped.get("example", "")
 
-        return ParsedRow(unit=unit, word=word, article=article, example=example)
+        return ParsedRow(
+            unit=unit,
+            word=word,
+            article=article,
+            example=example,
+        )
 
     except (AttributeError, TypeError) as exc:
         logger.warning("Row %s – malformed column data: %s", row_number, exc)
