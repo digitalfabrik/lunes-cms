@@ -151,8 +151,8 @@ def sessions_report(request: HttpRequest) -> HttpResponse:
             "values": [r["total_sessions"] for r in rows],
         },
         "line": {
-            "label": str(_("Average duration (s)")),
-            "values": [r["avg_duration_seconds"] for r in rows],
+            "label": str(_("Average duration (min)")),
+            "values": [round(r["avg_duration_seconds"] / 60, 1) for r in rows],
         },
     }
 
