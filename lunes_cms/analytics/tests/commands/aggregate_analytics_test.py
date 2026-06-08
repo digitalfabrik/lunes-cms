@@ -428,7 +428,9 @@ class ModuleDurationAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
         agg = ModuleDurationAggregate.objects.get(
             exercise_type="image", job_id=5, date="2026-01-15"
         )
@@ -731,7 +733,9 @@ class DropoutAggregateTests(TestCase):
 
         call_command("aggregate_analytics")
 
-        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
         agg = DropoutAggregate.objects.get(
             exercise_type="image", job_id=5, dropout_position=2, total_items=8
         )
