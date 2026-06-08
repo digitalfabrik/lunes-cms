@@ -43,7 +43,7 @@ function renderReportsChart(canvas: HTMLCanvasElement, data: ChartData): void {
     const lineValues = (data.line && data.line.values) || []
     const n = labels.length
 
-    const padding = { top: 28, right: 56, bottom: 40, left: 56 }
+    const padding = { top: 28, right: 72, bottom: 40, left: 72 }
     const chartWidth = cssWidth - padding.left - padding.right
     const chartHeight = cssHeight - padding.top - padding.bottom
 
@@ -84,12 +84,13 @@ function renderReportsChart(canvas: HTMLCanvasElement, data: ChartData): void {
         )
     }
 
-    // Axis lines.
+    // Axis lines (left, bottom, right).
     ctx.strokeStyle = AXIS_COLOR
     ctx.beginPath()
     ctx.moveTo(padding.left, padding.top)
     ctx.lineTo(padding.left, padding.top + chartHeight)
     ctx.lineTo(padding.left + chartWidth, padding.top + chartHeight)
+    ctx.lineTo(padding.left + chartWidth, padding.top)
     ctx.stroke()
 
     // Bars.
@@ -129,6 +130,22 @@ function renderReportsChart(canvas: HTMLCanvasElement, data: ChartData): void {
         ctx.fill()
     }
 
+    // Y-axis titles (rotated).
+    ctx.font = "11px sans-serif"
+    ctx.fillStyle = TEXT_COLOR
+    ctx.save()
+    ctx.translate(12, padding.top + chartHeight / 2)
+    ctx.rotate(-Math.PI / 2)
+    ctx.textAlign = "center"
+    ctx.fillText(data.bar.label, 0, 0)
+    ctx.restore()
+    ctx.save()
+    ctx.translate(cssWidth - 12, padding.top + chartHeight / 2)
+    ctx.rotate(Math.PI / 2)
+    ctx.textAlign = "center"
+    ctx.fillText(data.line.label, 0, 0)
+    ctx.restore()
+
     // X-axis labels (sample to avoid overlap on long ranges).
     ctx.fillStyle = TEXT_COLOR
     ctx.textAlign = "center"
@@ -138,20 +155,27 @@ function renderReportsChart(canvas: HTMLCanvasElement, data: ChartData): void {
         ctx.fillText(labels[xi], lx2, padding.top + chartHeight + 18)
     }
 
-    // Legend (top-left, simple horizontal layout).
+    // Legend (centered, horizontal layout).
     ctx.font = "12px sans-serif"
     ctx.textAlign = "left"
     const legendY = 6
-    let cursor = padding.left
+    const boxSize = 12
+    const boxGap = 6
+    const itemGap = 16
+    const barLabelWidth = ctx.measureText(data.bar.label).width
+    const lineLabelWidth = ctx.measureText(data.line.label).width
+    const totalLegendWidth =
+        boxSize + boxGap + barLabelWidth + itemGap + boxSize + boxGap + lineLabelWidth
+    let cursor = (cssWidth - totalLegendWidth) / 2
     ctx.fillStyle = BAR_COLOR
-    ctx.fillRect(cursor, legendY, 12, 12)
-    cursor += 18
+    ctx.fillRect(cursor, legendY, boxSize, boxSize)
+    cursor += boxSize + boxGap
     ctx.fillStyle = TEXT_COLOR
     ctx.fillText(data.bar.label, cursor, legendY + 10)
-    cursor += ctx.measureText(data.bar.label).width + 16
+    cursor += barLabelWidth + itemGap
     ctx.fillStyle = LINE_COLOR
-    ctx.fillRect(cursor, legendY, 12, 12)
-    cursor += 18
+    ctx.fillRect(cursor, legendY, boxSize, boxSize)
+    cursor += boxSize + boxGap
     ctx.fillStyle = TEXT_COLOR
     ctx.fillText(data.line.label, cursor, legendY + 10)
 }
