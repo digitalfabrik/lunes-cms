@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("analytics", "0006_alter_analyticsevent_event_type_and_more"),
+        ("analytics", "0007_add_training_exercise_tracking"),
     ]
 
     operations = [

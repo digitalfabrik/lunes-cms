@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
     """Add the ``SessionDurationReport`` proxy model that surfaces the Total Session Duration report in the admin sidebar."""
 
     dependencies = [
-        ("analytics", "0007_keep_raw_events_drop_buckets"),
+        ("analytics", "0008_keep_raw_events_drop_buckets"),
     ]
 
     operations = [
