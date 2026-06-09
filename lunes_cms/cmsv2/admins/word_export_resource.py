@@ -39,6 +39,8 @@ class WordExportResource(resources.ModelResource):
                 return article_choice[1]
         return "-"
 
+    plural = fields.Field(column_name=_("Plural"), attribute="plural")
+
     plural_article = fields.Field(
         column_name=_("Plural Article"),
         attribute="plural_article_choices",
@@ -50,7 +52,7 @@ class WordExportResource(resources.ModelResource):
         """
         for article_choice in Static.plural_article_choices:
             if article_choice[0] == word.plural_article:
-                return article_choice[1]
+                return article_choice[1].replace(" (Plural)", "")
         return "-"
 
     has_audio = fields.Field(column_name=_("Has audio?"), attribute="word")
@@ -100,6 +102,7 @@ class WordExportResource(resources.ModelResource):
             "word",
             "word_type",
             "singular_article",
+            "plural",
             "plural_article",
             "has_audio",
             "example_sentence",

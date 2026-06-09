@@ -27,6 +27,8 @@ def _build_column_mapping() -> dict[str, str]:
         # singular article
         "Singular Article": "article",
         "Singularartikel": "article",
+        # plural word
+        "Plural": "plural",
         # plural article
         "Plural Article": "plural_article",
         "Pluralartikel": "plural_article",
@@ -51,6 +53,7 @@ class ParsedRow:
     unit: str
     word: str
     article: str
+    plural: str = ""
     plural_article: str = ""
     example: str = ""
 
@@ -92,6 +95,9 @@ def map_plural_article_to_int(plural_article: str) -> int | None:
     """
     ARTICLE_MAP: dict[str, int] = {
         label.lower(): value for value, label in Static.plural_article_choices
+    } | {
+        label.lower().replace(" (plural)", ""): value
+        for value, label in Static.plural_article_choices
     }
     normalized = plural_article.lower().strip()
     return ARTICLE_MAP.get(normalized)
@@ -107,7 +113,7 @@ def create_unit(unit_title: str, job: Job) -> Unit:
 
 
 def create_word(
-    word_text: str, singular_article: int, plural_article: int | None
+    word_text: str, singular_article: int, plural_article: int | None, plural: str = ""
 ) -> Word:
     """
     Creates a new word object.
@@ -116,6 +122,7 @@ def create_word(
         word=word_text,
         singular_article=singular_article,
         plural_article=plural_article,
+        plural=plural,
     )
 
 
@@ -173,6 +180,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             )
 
         article = mapped.get("article", "").lower()
+        plural = mapped.get("plural", "")
         plural_article = mapped.get("plural_article", "")
         example = mapped.get("example", "")
 
@@ -180,6 +188,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             unit=unit,
             word=word,
             article=article,
+            plural=plural,
             plural_article=plural_article,
             example=example,
         )
@@ -228,7 +237,7 @@ def process_row(
 
     article_int = map_article_to_int(parsed.article)
     plural_article_int = map_plural_article_to_int(parsed.plural_article)
-    word = create_word(parsed.word, article_int, plural_article_int)
+    word = create_word(parsed.word, article_int, plural_article_int, parsed.plural)
     created += 1
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
