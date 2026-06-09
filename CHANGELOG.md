@@ -5,6 +5,7 @@ UNRELEASED
 * [ [#375](https://github.com/digitalfabrik/lunes-cms/issues/375) ] 375: Add created by filter to CMS
 * [ [#739](https://github.com/digitalfabrik/lunes-cms/issues/739) ] 739: Add option to duplicate jobs
 * [ [#687](https://github.com/digitalfabrik/lunes-cms/issues/687) ] 687: Add automatical audio generation after CSV import
+* [ [#775](https://github.com/digitalfabrik/lunes-cms/issues/775) ] 775: Fix job csv re-import
 
 2026.4.7
 --------
