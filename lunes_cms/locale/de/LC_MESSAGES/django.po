@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-11 10:41+0000\n"
+"POT-Creation-Date: 2026-06-12 10:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:243
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:267
 #: cmsv2/admins/word_admin.py:435
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -665,17 +665,17 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:70
+#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:72
 #: cmsv2/admins/word_admin.py:115
 msgid "migration status"
 msgstr "Ablaufdatum"
 
-#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:81
+#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:83
 #: cmsv2/admins/word_admin.py:126
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:82
+#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:84
 #: cmsv2/admins/word_admin.py:127
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
@@ -684,12 +684,12 @@ msgstr "Nicht migriert aus altem Datenmodell"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:257
+#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:281
 #: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:329
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:279
+#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:303
 #: cmsv2/admins/word_admin.py:712
 msgid "migrated"
 msgstr "Migriert"
@@ -714,28 +714,41 @@ msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
 msgid "Import"
 msgstr "Import"
 
-#: cmsv2/admins/unit_admin.py:50
+#: cmsv2/admins/unit_admin.py:52
 msgid "assigned user"
 msgstr "Zugewiesene Person"
 
-#: cmsv2/admins/unit_admin.py:51
+#: cmsv2/admins/unit_admin.py:53
 msgid "assigned users"
 msgstr "Zugewiesene Personen"
 
-#: cmsv2/admins/unit_admin.py:165 cmsv2/admins/unit_admin.py:185
+#: cmsv2/admins/unit_admin.py:167
+msgid "Release all selected units"
+msgstr "Alle ausgewählte Einheiten veröffentlichen"
+
+#: cmsv2/admins/unit_admin.py:181
+#, python-format
+msgid ""
+"Released %(unit_count)d unit(s). %(units_skipped)d unit(s) were skipped, "
+"because they were already released"
+msgstr ""
+"%(unit_count)d Einheit(en) wurden veröffentlicht. %(units_skipped)d "
+"Einheiten wurden übersprungen, da sie bereits veröffentlicht waren"
+
+#: cmsv2/admins/unit_admin.py:189 cmsv2/admins/unit_admin.py:209
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:4
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:14
 msgid "Assign selected units to user"
 msgstr "Ausgewählte Einheiten zuweisen"
 
-#: cmsv2/admins/unit_admin.py:203
+#: cmsv2/admins/unit_admin.py:227
 #, python-format
 msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
 "%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
-#: cmsv2/admins/unit_admin.py:224
+#: cmsv2/admins/unit_admin.py:248
 msgid "jobs"
 msgstr "Berufe"
 
@@ -1113,6 +1126,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py:13
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Admins"
+#~ msgstr "Administrator:innen"
 
 #, python-format
 #~ msgid "Unexpected error - %(e)s"
