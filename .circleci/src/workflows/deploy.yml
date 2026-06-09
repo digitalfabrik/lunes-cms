@@ -1,3 +1,4 @@
+when: << pipeline.parameters.run_deploy >>
 jobs:
   - install:
       name: install-deploy

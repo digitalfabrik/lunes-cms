@@ -1,8 +1,11 @@
+when:
+  or:
+    - equal: [<< pipeline.parameters.run_commit_develop >>, "run"]
+    - and:
+        - equal: [<< pipeline.parameters.run_commit_develop >>, "run_if_on_develop"]
+        - equal: [develop, << pipeline.git.branch >>]
 jobs:
-  - install:
-      filters:
-        branches:
-          only: develop
+  - install
   - compile-translations:
       requires:
         - install
