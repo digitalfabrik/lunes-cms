@@ -794,8 +794,6 @@ msgid "image check status"
 msgstr "Bild Prüfstatus"
 
 #: cmsv2/admins/word_export_resource.py:42
-#, fuzzy
-#| msgid "plural"
 msgid "Plural"
 msgstr "Plural"
 
