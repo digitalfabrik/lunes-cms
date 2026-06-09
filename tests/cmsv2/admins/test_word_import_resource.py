@@ -27,8 +27,9 @@ def test_german_export_columns_are_mapped():
     mapping = _build_column_mapping()
     assert mapping["Einheit"] == "unit"
     assert mapping["Vokabel"] == "word"
-    assert mapping["Singular Artikel"] == "article"
-    assert mapping["Plural Artikel"] == "plural_article"
+    assert mapping["Singularartikel"] == "article"
+    assert mapping["Plural"] == "plural"
+    assert mapping["Pluralartikel"] == "plural_article"
     assert mapping["Beispielsatz"] == "example"
 
 
@@ -38,6 +39,7 @@ def test_english_export_columns_are_mapped():
     assert mapping["Units"] == "unit"
     assert mapping["Word"] == "word"
     assert mapping["Singular Article"] == "article"
+    assert mapping["Plural"] == "plural"
     assert mapping["Plural Article"] == "plural_article"
     assert mapping["Example sentence"] == "example"
 
@@ -62,6 +64,8 @@ def test_legacy_column_names_are_mapped():
     [
         ("die (Plural)", 1),
         ("DIE (PLURAL)", 1),
+        ("die", 1),
+        ("DIE", 1),
         ("keiner", 0),
         ("", None),
         ("-", None),
@@ -92,7 +96,7 @@ def test_parse_row_returns_parsed_row():
 
 
 def test_parse_row_parses_plural_article():
-    result = parse_row(_make_row(**{"Plural Artikel": "die (Plural)"}), 1)
+    result = parse_row(_make_row(**{"Pluralartikel": "die (Plural)"}), 1)
     assert isinstance(result, ParsedRow)
     assert result.plural_article == "die (Plural)"
 
@@ -195,11 +199,36 @@ def test_reimport_with_english_headers(job):
 def test_reimport_with_german_headers(job):
     """Re-import of a CSV exported with German admin locale works (issue #775)."""
     ds = _make_dataset(
-        ["Einheit", "Vokabel", "Singular Artikel", "Plural Artikel", "Beispielsatz"],
+        ["Einheit", "Vokabel", "Singularartikel", "Pluralartikel", "Beispielsatz"],
         [["Werkzeug", "Hammer", "der", "die (Plural)", "Der Hammer ist schwer."]],
     )
     _, _, errors, _ = import_words_from_csv(ds, job)
     assert errors == []
+    assert _job_words(job).get(word="Hammer").plural_article == 1
+
+
+@pytest.mark.django_db
+def test_import_plural_word(job):
+    """The Plural column is imported and stored on the word."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Plural", "Plural Article"],
+        [["Werkzeug", "Hammer", "der", "Hämmer", "die"]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job)
+    assert errors == []
+    word = _job_words(job).get(word="Hammer")
+    assert word.plural == "Hämmer"
+    assert word.plural_article == 1
+
+
+@pytest.mark.django_db
+def test_plural_article_short_form_stored(job):
+    """'die' (short form exported by the exporter) is stored as plural article 1."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Plural Article"],
+        [["Werkzeug", "Hammer", "der", "die"]],
+    )
+    import_words_from_csv(ds, job)
     assert _job_words(job).get(word="Hammer").plural_article == 1
 
 
