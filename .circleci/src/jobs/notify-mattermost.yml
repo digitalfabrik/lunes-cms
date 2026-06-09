@@ -1,0 +1,22 @@
+docker:
+  - image: cimg/base:stable
+steps:
+  - checkout
+  - run:
+      name: Notify mattermost about release
+      command: |
+        CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
+        MM_MESSAGE="##### Lunes CMS version [${CIRCLE_TAG}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${CIRCLE_TAG}) has been released successfully :tada:\n\n###### **Release Notes:**\n\n${CHANGELOG}"
+        STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST -H 'Content-type: application/json' \
+          --data \
+          "{
+            \"channel\": \"releases\",
+            \"username\": \"circleci\",
+            \"icon_emoji\": \":lunes:\",
+            \"text\": \"${MM_MESSAGE}\"
+          }" "${MM_WEBHOOK}")
+        if [ "$STATUS" -ne "200" ]; then
+          echo "Notification not sent due to an error (HTTP status: ${STATUS})."
+          exit 1
+        fi
+        echo "Notification sent!"

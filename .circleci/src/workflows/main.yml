@@ -1,0 +1,10 @@
+jobs:
+  - install:
+      name: install-main
+      filters:
+        branches:
+          only: main
+  - bump-version:
+      context: deliverino
+      requires:
+        - install-main

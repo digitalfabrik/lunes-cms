@@ -1,0 +1,11 @@
+jobs:
+  - install:
+      filters:
+        branches:
+          only: develop
+  - compile-translations:
+      requires:
+        - install
+  - e2e:
+      requires:
+        - compile-translations

@@ -1,0 +1,69 @@
+jobs:
+  - install:
+      name: install-deploy
+      filters:
+        tags:
+          only: /.*/
+        branches:
+          ignore: /.*/
+  - compile-translations:
+      name: compile-translations-deploy
+      requires:
+        - install-deploy
+      filters:
+        tags:
+          only: /.*/
+  - build-js:
+      name: build-js-deploy
+      filters:
+        tags:
+          only: /.*/
+        branches:
+          ignore: /.*/
+  - build-package:
+      requires:
+        - compile-translations-deploy
+        - build-js-deploy
+      filters:
+        tags:
+          only: /.*/
+  - publish-package:
+      context: pypi
+      requires:
+        - build-package
+      filters:
+        tags:
+          only: /.*/
+  - create-release:
+      context: deliverino
+      requires:
+        - publish-package
+      filters:
+        tags:
+          only: /.*/
+  - notify-mattermost:
+      context: mattermost
+      requires:
+        - create-release
+      filters:
+        tags:
+          only: /.*/
+  - e2e:
+      name: e2e-deploy
+      persist_docs: true
+      requires:
+        - compile-translations-deploy
+      filters:
+        tags:
+          only: /.*/
+        branches:
+          ignore: /.*/
+  - deploy-user-manual:
+      context: deliverino
+      requires:
+        - e2e-deploy
+      filters:
+        tags:
+          only: /.*/
+        branches:
+          ignore: /.*/
