@@ -140,7 +140,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     Parses a single row and returns either a ParsedRow or a RowResult (error).
     """
     try:
-        column_mapping = _build_column_mapping()
+        column_mapping = {k.lower(): v for k, v in _build_column_mapping().items()}
         mapped = {
             column_mapping[key.strip().lower()]: (
                 value.strip() if isinstance(value, str) else value
