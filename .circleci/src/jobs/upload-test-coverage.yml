@@ -1,0 +1,7 @@
+docker:
+  - image: cimg/base:stable
+steps:
+  - attach_workspace:
+      at: .
+  - qlty/coverage_publish:
+      files: coverage.xml

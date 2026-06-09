@@ -1,0 +1,4 @@
+steps:
+  - run:
+      name: Activate virtual environment
+      command: echo "source .venv/bin/activate" >> $BASH_ENV

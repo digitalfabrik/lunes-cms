@@ -1,0 +1,73 @@
+jobs:
+  - shellcheck/check:
+      dir: ./tools
+      external_sources: true
+      filters:
+        branches:
+          ignore: main
+  - install:
+      filters:
+        branches:
+          ignore: main
+  - lint-ts:
+      filters:
+        branches:
+          ignore: main
+  - build-js:
+      filters:
+        branches:
+          ignore: main
+  - compile-translations:
+      requires:
+        - install
+  - pylint:
+      requires:
+        - install
+  - test:
+      requires:
+        - compile-translations
+  - test-python313:
+      filters:
+        branches:
+          ignore: main
+  - upload-test-coverage:
+      context: codeclimate-lunes-cms
+      requires:
+        - test
+  - black:
+      requires:
+        - install
+  - isort:
+      requires:
+        - install
+  - mypy:
+      requires:
+        - install
+  - check-translations:
+      requires:
+        - install
+  - build-documentation:
+      requires:
+        - install
+  - bump-dev-version:
+      filters:
+        branches:
+          only:
+            - develop
+            - /.*-publish-dev-package/
+      requires:
+        - install
+  - build-package:
+      name: build-dev-package
+      requires:
+        - bump-dev-version
+  - publish-package:
+      name: publish-dev-package
+      context: pypi-test
+      filters:
+        branches:
+          only:
+            - develop
+            - /.*-publish-dev-package/
+      requires:
+        - build-dev-package

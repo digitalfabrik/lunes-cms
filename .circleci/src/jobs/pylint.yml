@@ -1,0 +1,15 @@
+docker:
+  - image: cimg/python:3.11
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - run:
+      name: Install pylint requirements
+      command: sudo apt-get update && sudo apt-get install ffmpeg
+  - run:
+      name: Run pylint
+      command: |
+        source .venv/bin/activate
+        pip install pylint
+        ./tools/pylint.sh
