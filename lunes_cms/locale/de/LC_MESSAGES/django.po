@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 14:12+0000\n"
+"POT-Creation-Date: 2026-06-03 18:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -798,32 +798,32 @@ msgstr "Bild Prüfstatus"
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/admins/word_import_resource.py:107
+#: cmsv2/admins/word_import_resource.py:110
 #, python-format
 msgid "Row %(n)s: No recognised columns – row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:124
+#: cmsv2/admins/word_import_resource.py:127
 #, python-format
 msgid "Row %(n)s: Unit column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:131
+#: cmsv2/admins/word_import_resource.py:134
 #, python-format
 msgid "Row %(n)s: Vocabulary column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Vokabel ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:143
+#: cmsv2/admins/word_import_resource.py:146
 #, python-format
 msgid "Row %(n)s: Malformed column data – %(e)s"
 msgstr "Zeile %(n)s: Fehlerhafte Spaltendaten – %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:152
+#: cmsv2/admins/word_import_resource.py:155
 #, python-format
 msgid "Row %(n)s: Unexpected parsing error – %(e)s"
 msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:226
+#: cmsv2/admins/word_import_resource.py:229
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
