@@ -48001,7 +48001,7 @@
       "is_staff": true,
       "is_active": true,
       "date_joined": "2026-06-28T23:02:40Z",
-      "groups": [["Vokabelverwaltung"]],
+      "groups": [["Lunes Vokabelverwaltung (v2)"]],
       "user_permissions": []
     }
   },
@@ -48034,14 +48034,14 @@
       "is_staff": true,
       "is_active": true,
       "date_joined": "2026-06-28T23:02:40Z",
-      "groups": [["Partnermanagement"]],
+      "groups": [["Lunes Partnermanagement (v2)"]],
       "user_permissions": []
     }
   }, 
   {
     "model": "auth.group",
     "fields": {
-      "name": "Vokabelverwaltung",
+      "name": "Lunes Vokabelverwaltung (v2)",
       "icon": "",
       "permissions": [
         ["add_job", "cmsv2", "job"],
@@ -48086,7 +48086,7 @@
   }, {
     "model": "auth.group",
     "fields": {
-      "name": "Partnermanagement",
+      "name": "Lunes Partnermanagement (v2)",
       "icon": "",
       "permissions": [
         ["add_job", "cmsv2", "job"],

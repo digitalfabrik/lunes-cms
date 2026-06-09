@@ -1,5 +1,5 @@
 import os
-
+from django.db import models
 from django.contrib.auth.models import Group, User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -7,6 +7,16 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from ..utils import create_resource_path, make_safe_filename
+
+
+class UserRole(models.TextChoices):
+    """
+    List of all user roles.
+    """
+
+    ADMIN = ("ADMIN", _("Admins"))
+    PARTNERMANAGEMENT = ("PARTNERMANAGEMENT", "Lunes Partnermanagement (v2)")
+    VOCABULARYMANAGER = ("VOCABULARYMANAGER", "Lunes Vokabelverwaltung (v2)")
 
 
 class Static:
@@ -69,6 +79,8 @@ class Static:
 
     # default group name
     default_group_name = None
+
+    # permissions
     STAFF_PERMISSIONS = [
         "add_job",
         "change_job",
@@ -223,6 +235,6 @@ def user_has_role(user: User, *roles: UserRole) -> bool:
 
     Superusers are always treated as having the Admin role.
     """
-    if UserRole.ADMIN in roles and user.is_superuser:
+    if UserRole.ADMIN in roles and user.is_superuser:  # type: ignore[operator]
         return True
     return user.groups.filter(name__in=[role.label for role in roles]).exists()

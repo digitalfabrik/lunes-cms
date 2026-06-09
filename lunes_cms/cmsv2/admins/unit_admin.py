@@ -170,12 +170,10 @@ class UnitAdmin(BaseAdmin):
         """
         Bulk action to release selected units in one go
         """
-        allowed_roles = [UserRole.VOCABULARYMANAGER, UserRole.PARTNERMANAGEMENT]
-        user_in_allowed_group = request.user.groups.filter(
-            name__in=[role.label for role in allowed_roles]
-        ).exists()
-
-        if not (request.user.is_superuser or user_in_allowed_group):
+        if not user_has_role(
+            request.user,
+            (UserRole.ADMIN, UserRole.VOCABULARYMANAGER, UserRole.PARTNERMANAGEMENT),  # type: ignore[arg-type]
+        ):
             raise PermissionDenied
 
         units_skipped = queryset.filter(released=True).count()
@@ -188,6 +186,7 @@ class UnitAdmin(BaseAdmin):
             )
             % {
                 "unit_count": released_unit_count,
+                "units_skipped": units_skipped,
             },
         )
 
