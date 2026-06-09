@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 18:21+0000\n"
+"POT-Creation-Date: 2026-06-09 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,29 +148,29 @@ msgstr "Wortart"
 msgid "Singular Article"
 msgstr "Singular Artikel"
 
-#: cms/admins/document_resource.py:43 cmsv2/admins/word_export_resource.py:43
+#: cms/admins/document_resource.py:43 cmsv2/admins/word_export_resource.py:45
 msgid "Plural Article"
 msgstr "Plural Artikel"
 
-#: cms/admins/document_resource.py:56 cmsv2/admins/word_export_resource.py:56
+#: cms/admins/document_resource.py:56 cmsv2/admins/word_export_resource.py:58
 msgid "Has audio?"
 msgstr "Audio"
 
 #: cms/admins/document_resource.py:63 cmsv2/admins/word_admin.py:25
-#: cmsv2/admins/word_admin.py:75 cmsv2/admins/word_export_resource.py:63
+#: cmsv2/admins/word_admin.py:75 cmsv2/admins/word_export_resource.py:65
 msgid "Yes"
 msgstr "Ja"
 
 #: cms/admins/document_resource.py:64 cmsv2/admins/word_admin.py:26
-#: cmsv2/admins/word_admin.py:76 cmsv2/admins/word_export_resource.py:64
+#: cmsv2/admins/word_admin.py:76 cmsv2/admins/word_export_resource.py:66
 msgid "No"
 msgstr "Nein"
 
-#: cms/admins/document_resource.py:67 cmsv2/admins/word_export_resource.py:67
+#: cms/admins/document_resource.py:67 cmsv2/admins/word_export_resource.py:69
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
-#: cms/admins/document_resource.py:71 cmsv2/admins/word_export_resource.py:71
+#: cms/admins/document_resource.py:71 cmsv2/admins/word_export_resource.py:73
 msgid "Creation date"
 msgstr "Erstellt am"
 
@@ -793,37 +793,43 @@ msgstr "Audio Prüfstatus"
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
-#: cmsv2/admins/word_export_resource.py:80 cmsv2/models/unit.py:407
+#: cmsv2/admins/word_export_resource.py:42
+#, fuzzy
+#| msgid "plural"
+msgid "Plural"
+msgstr "Plural"
+
+#: cmsv2/admins/word_export_resource.py:82 cmsv2/models/unit.py:407
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:9
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/admins/word_import_resource.py:110
+#: cmsv2/admins/word_import_resource.py:154
 #, python-format
 msgid "Row %(n)s: No recognised columns – row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:127
+#: cmsv2/admins/word_import_resource.py:171
 #, python-format
 msgid "Row %(n)s: Unit column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:134
+#: cmsv2/admins/word_import_resource.py:178
 #, python-format
 msgid "Row %(n)s: Vocabulary column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Vokabel ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:146
+#: cmsv2/admins/word_import_resource.py:199
 #, python-format
 msgid "Row %(n)s: Malformed column data – %(e)s"
 msgstr "Zeile %(n)s: Fehlerhafte Spaltendaten – %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:155
+#: cmsv2/admins/word_import_resource.py:208
 #, python-format
 msgid "Row %(n)s: Unexpected parsing error – %(e)s"
 msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:229
+#: cmsv2/admins/word_import_resource.py:283
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
