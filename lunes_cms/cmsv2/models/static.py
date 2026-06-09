@@ -215,3 +215,14 @@ def is_reviewer(user: User) -> bool:
     Check if the user is a reviewer.
     """
     return user.groups.filter(name=Static.admin_group).exists()
+
+
+def user_has_role(user: User, *roles: UserRole) -> bool:
+    """
+    Check if the user has any of the given roles.
+
+    Superusers are always treated as having the Admin role.
+    """
+    if UserRole.ADMIN in roles and user.is_superuser:
+        return True
+    return user.groups.filter(name__in=[role.label for role in roles]).exists()
