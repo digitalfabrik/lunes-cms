@@ -26,10 +26,10 @@ def _build_column_mapping() -> dict[str, str]:
         "Vokabel": "word",
         # singular article
         "Singular Article": "article",
-        "Singular Artikel": "article",
+        "Singularartikel": "article",
         # plural article
         "Plural Article": "plural_article",
-        "Plural Artikel": "plural_article",
+        "Pluralartikel": "plural_article",
         # example sentence
         "Example sentence": "example",
         "Beispielsatz": "example",
