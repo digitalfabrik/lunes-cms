@@ -550,8 +550,12 @@ orbs:
     shellcheck: circleci/shellcheck@2.2.4
 parameters:
     run_commit_develop:
-        default: false
-        type: boolean
+        default: run_if_on_develop
+        enum:
+            - run_if_on_develop
+            - run
+            - skip
+        type: enum
     run_deploy:
         default: false
         type: boolean
@@ -565,16 +569,25 @@ version: 2.1
 workflows:
     commit_develop:
         jobs:
-            - install:
-                filters:
-                    branches:
-                        only: develop
+            - install
             - compile-translations:
                 requires:
                     - install
             - e2e:
                 requires:
                     - compile-translations
+        when:
+            or:
+                - equal:
+                    - << pipeline.parameters.run_commit_develop >>
+                    - run
+                - and:
+                    - equal:
+                        - << pipeline.parameters.run_commit_develop >>
+                        - run_if_on_develop
+                    - equal:
+                        - develop
+                        - << pipeline.git.branch >>
     deploy:
         jobs:
             - install:
@@ -645,6 +658,7 @@ workflows:
                         only: /.*/
                 requires:
                     - e2e-deploy
+        when: << pipeline.parameters.run_deploy >>
     develop:
         jobs:
             - shellcheck/check:
@@ -719,6 +733,13 @@ workflows:
                 name: publish-dev-package
                 requires:
                     - build-dev-package
+        when:
+            and:
+                - << pipeline.parameters.run_develop >>
+                - not:
+                    equal:
+                        - main
+                        - << pipeline.git.branch >>
     main:
         jobs:
             - install:
@@ -730,4 +751,10 @@ workflows:
                 context: deliverino
                 requires:
                     - install-main
+        when:
+            and:
+                - << pipeline.parameters.run_main >>
+                - equal:
+                    - main
+                    - << pipeline.git.branch >>
 

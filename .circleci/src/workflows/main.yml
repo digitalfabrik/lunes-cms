@@ -1,3 +1,7 @@
+when:
+  and:
+    - << pipeline.parameters.run_main >>
+    - equal: [main, << pipeline.git.branch >>]
 jobs:
   - install:
       name: install-main
