@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from django.core.management import call_command
 from django.test import TestCase
@@ -759,3 +759,54 @@ class DropoutAggregateTests(TestCase):
         self.assertIsNone(
             DropoutAggregate.objects.get(exercise_type="word_choice").vocabulary_item_id
         )
+
+
+class UnprocessedEventCleanupTests(TestCase):
+    """
+    Tests for deletion of events not covered by batch aggregators (task 3 of #666).
+    exercise_repetition events are aggregated inline on receipt and must be cleaned
+    up by the management command after RETENTION_DAYS days.
+    """
+
+    OLD_TIMESTAMP = datetime.now(tz=timezone.utc) - timedelta(days=91)
+    RECENT_TIMESTAMP = datetime.now(tz=timezone.utc) - timedelta(days=1)
+
+    def _create_event(self, event_type: str, timestamp: datetime) -> AnalyticsEvent:
+        return AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type=event_type,
+            timestamp=timestamp,
+            payload={},
+        )
+
+    def test_deletes_old_exercise_repetition_events(self) -> None:
+        """exercise_repetition events older than 90 days are deleted"""
+        self._create_event("exercise_repetition", self.OLD_TIMESTAMP)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+
+    def test_keeps_recent_exercise_repetition_events(self) -> None:
+        """exercise_repetition events within 90 days are kept"""
+        self._create_event("exercise_repetition", self.RECENT_TIMESTAMP)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 1)
+
+    def test_deletes_old_unknown_event_types(self) -> None:
+        """Events of unknown type older than 90 days are deleted"""
+        self._create_event("unknown_future_type", self.OLD_TIMESTAMP)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 0)
+
+    def test_keeps_recent_unknown_event_types(self) -> None:
+        """Events of unknown type within 90 days are kept"""
+        self._create_event("unknown_future_type", self.RECENT_TIMESTAMP)
+
+        call_command("aggregate_analytics")
+
+        self.assertEqual(AnalyticsEvent.objects.count(), 1)
