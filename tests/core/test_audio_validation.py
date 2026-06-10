@@ -3,6 +3,7 @@ Tests for the audio validation logic in Document.clean() and Word.clean().
 """
 
 import json
+import shutil
 import subprocess
 from unittest import mock
 
@@ -13,6 +14,13 @@ from django.core.files.base import ContentFile
 from lunes_cms.cms.models.document import Document
 from lunes_cms.cmsv2.models.word import Word
 from lunes_cms.core.audio import normalize_loudness
+
+#: These tests invoke real ffmpeg/ffprobe, which aren't installed everywhere
+#: (e.g. CI). Skip rather than fail when the binaries are missing.
+requires_ffmpeg = pytest.mark.skipif(
+    shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None,
+    reason="ffmpeg/ffprobe not installed",
+)
 
 
 class TestDocumentClean:
@@ -136,6 +144,7 @@ def _measure_lufs(audio_bytes, tmp_path):
             "null",
             "-",
         ],
+        check=False,
         capture_output=True,
         text=True,
     )
@@ -143,6 +152,7 @@ def _measure_lufs(audio_bytes, tmp_path):
     return float(json.loads(stats)["input_i"])
 
 
+@requires_ffmpeg
 class TestNormalizeLoudness:
     def test_brings_quiet_clip_to_target_loudness(self, tmp_path):
         raw = _make_mp3(tmp_path, volume="0.2")

@@ -1087,7 +1087,7 @@ msgstr "Ungültige Audiodatei"
 
 #: core/audio.py:89
 msgid "Could not measure audio loudness"
-msgstr ""
+msgstr "Die Lautstärke der Audiodatei konnte nicht gemessen werden."
 
 #: core/settings.py:239
 msgid "German"

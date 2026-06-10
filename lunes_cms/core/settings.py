@@ -31,7 +31,7 @@ TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
-#: OpenAI model used for all text-to-speech 
+#: OpenAI model used for all text-to-speech
 #: Must support the instructions parameter so word audio can be
 #: pinned to German pronunciation
 OPENAI_TTS_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
