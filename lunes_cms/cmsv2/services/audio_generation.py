@@ -45,8 +45,10 @@ _drain_lock = threading.Lock()
 #: a prohibition ("don't use an English accent"): negative instructions are
 #: less reliable and can prime the very accent we want to avoid.
 GERMAN_PRONUNCIATION_INSTRUCTION = (
-    "Read this as German. Use natural, correct German pronunciation, "
-    "including for proper nouns, plant names, and loanwords."
+    "Read this as German, the way an educated native speaker would. "
+    "Pronounce proper nouns, plant names, and loanwords as they are "
+    "conventionally pronounced in German, preserving the original-language "
+    "sounds of borrowed words."
 )
 
 
