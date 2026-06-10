@@ -10,7 +10,7 @@ from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.static import Static
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
-from lunes_cms.cmsv2.utils import get_image_tag, is_not_blank
+from lunes_cms.cmsv2.utils import cache_busted_url, get_image_tag, is_not_blank
 from lunes_cms.core import settings
 
 
@@ -325,7 +325,7 @@ class WordAdmin(BaseAdmin):
         if obj.audio:
             return format_html(
                 "<audio controls id='audio_preview_player' src='{}'></audio>",
-                obj.audio.url,
+                cache_busted_url(obj.audio),
             )
         return "No audio file uploaded."
 
@@ -363,7 +363,7 @@ class WordAdmin(BaseAdmin):
         if obj.example_sentence_audio:
             return format_html(
                 "<audio controls id='example_sentence_audio_preview_player' src='{}'></audio>",
-                obj.example_sentence_audio.url,
+                cache_busted_url(obj.example_sentence_audio),
             )
         return "No audio file uploaded."
 
@@ -451,7 +451,7 @@ class WordAdmin(BaseAdmin):
         if obj.audio:
             audio_html = f"""
             <div class="audio-player-container">
-                <audio class="minimal-audio-player"><source src="{obj.audio.url}" type="audio/mpeg"></audio>
+                <audio class="minimal-audio-player"><source src="{cache_busted_url(obj.audio)}" type="audio/mpeg"></audio>
                 <div class="play-btn">
                     <div>
                         <i class="fas fa-play"></i>

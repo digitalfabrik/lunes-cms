@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from ..models import Word
+from ..utils import cache_busted_url
 
 
 @staff_member_required
@@ -42,7 +43,7 @@ def update_word_audio(request, word_id):
             {
                 "status": "success",
                 "message": "Audio added successfully",
-                "audio_url": word.audio.url if word.audio else None,
+                "audio_url": cache_busted_url(word.audio) if word.audio else None,
             }
         )
 
