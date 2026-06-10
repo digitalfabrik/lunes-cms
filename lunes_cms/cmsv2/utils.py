@@ -77,6 +77,29 @@ def word_to_string(word):
     )
 
 
+def cache_busted_url(file):
+    """
+    Return a media file's URL with a ?v= query that changes when the file does.
+
+    Regenerated audio is always re-saved under the same deterministic filename
+    (e.g. <word>.mp3), so its URL never changes when the content does — and
+    browsers keep playing the cached copy. Appending the file's modification
+    time makes the URL change on each regeneration, forcing a refetch. Falls
+    back to the plain URL if the storage can't report a modification time.
+
+    Args:
+        file: A Django FieldFile (e.g. word.audio).
+
+    Returns:
+        str: The file URL, cache-busted when possible.
+    """
+    try:
+        version = int(file.storage.get_modified_time(file.name).timestamp())
+    except (NotImplementedError, OSError, ValueError):
+        return file.url
+    return f"{file.url}?v={version}"
+
+
 def get_image_tag(image, width=330):
     """
     Generate an HTML image tag for the given image.
