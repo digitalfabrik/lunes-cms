@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 14:08+0000\n"
+"POT-Creation-Date: 2026-06-10 13:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1085,23 +1085,27 @@ msgstr ""
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
 
-#: core/audio.py:23
+#: core/audio.py:28
 msgid "Invalid audio file"
 msgstr "Ungültige Audiodatei"
 
-#: core/settings.py:237
+#: core/audio.py:89
+msgid "Could not measure audio loudness"
+msgstr "Die Lautstärke der Audiodatei konnte nicht gemessen werden."
+
+#: core/settings.py:239
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:238
+#: core/settings.py:240
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:495 core/settings.py:496 core/settings.py:498
+#: core/settings.py:497 core/settings.py:498 core/settings.py:500
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:497
+#: core/settings.py:499
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 

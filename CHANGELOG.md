@@ -8,6 +8,7 @@ UNRELEASED
 * [ [#775](https://github.com/digitalfabrik/lunes-cms/issues/775) ] 775: Fix job csv re-import
 * [ [#777](https://github.com/digitalfabrik/lunes-cms/issues/777) ] 777: Add plural and plural article to CSV import
 * [ [#787](https://github.com/digitalfabrik/lunes-cms/issues/787) ] 787: Fix contrast in dark mode
+* [ [#804](https://github.com/digitalfabrik/lunes-cms/issues/804) ] 804: Ensure German pronunciation
 
 2026.4.7
 --------

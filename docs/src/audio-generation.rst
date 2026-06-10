@@ -39,12 +39,14 @@ Configure via environment variables:
    * - ``LUNES_CMS_OPENAI_API_KEY``
      - –
      - OpenAI API key (required to enable audio generation)
-   * - ``LUNES_CMS_OPENAI_TTS_WORD_MODEL``
-     - ``tts-1-hd``
-     - Model used for single word/term audio
-   * - ``LUNES_CMS_OPENAI_TTS_SENTENCE_MODEL``
+   * - ``LUNES_CMS_OPENAI_TTS_MODEL``
      - ``gpt-4o-mini-tts``
-     - Model used for example-sentence audio
+     - Model used for all text-to-speech (words and example sentences). Must
+       support the ``instructions`` parameter.
    * - ``LUNES_CMS_OPENAI_TTS_VOICE``
      - ``nova``
      - Voice used for text-to-speech
+   * - ``LUNES_CMS_OPENAI_TTS_LOUDNESS_LUFS``
+     - ``-16.0``
+     - Loudness (in LUFS) generated audio is normalized to,
+       so all clips play back at a consistent volume
