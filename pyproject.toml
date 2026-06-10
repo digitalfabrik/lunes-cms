@@ -83,7 +83,7 @@ e2e = [
 pinned = [
 	"django==5.2.14",
 	"django-import-export==4.4.1",
-	"django-jazzmin==3.0.1",
+	"django-jazzmin==3.0.4",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.17.1",
