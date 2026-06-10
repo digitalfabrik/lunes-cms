@@ -3,6 +3,7 @@ import uuid
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -72,6 +73,8 @@ def word_generate_example_sentence_audio_via_openai(request):
 
     except OpenAIConfigurationError as e:
         return JsonResponse({"error": str(e)}, status=503)
+    except ValidationError as e:
+        return JsonResponse({"error": "; ".join(e.messages)}, status=500)
     except (ValueError, ConnectionError, TimeoutError) as e:
         return JsonResponse({"error": str(e)}, status=500)
 
