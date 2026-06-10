@@ -32,6 +32,8 @@ from lunes_cms.analytics.models import (
 
 logger = logging.getLogger(__name__)
 
+RETENTION_DAYS = 90
+
 
 class EventAggregator(ABC):
     """
@@ -385,6 +387,41 @@ class Command(BaseCommand):
         dry_run: bool = options["dry_run"]
         for aggregator_class in EVENT_AGGREGATORS:
             self._aggregate_event_type(aggregator_class, dry_run)
+        self._delete_old_unprocessed_events(dry_run)
+
+    @transaction.atomic
+    def _delete_old_unprocessed_events(self, dry_run: bool) -> None:
+        """
+        Delete events not covered by any batch aggregator that are older than RETENTION_DAYS.
+
+        This includes exercise_repetition events (aggregated inline on receipt)
+        and any unknown event types.
+
+        We exclude batch aggregator event types from this deletion for security reasons to avoid data loss.
+        For example someone removes atomic transaction annotation and aggregation fails.
+        """
+        batch_aggregated_types = [
+            event_type
+            for aggregator in EVENT_AGGREGATORS
+            for event_type in aggregator.event_types
+        ]
+        cutoff = datetime.datetime.now(tz=UTC) - datetime.timedelta(days=RETENTION_DAYS)
+        old_events = AnalyticsEvent.objects.filter(timestamp__lt=cutoff).exclude(
+            event_type__in=batch_aggregated_types
+        )
+        count, _ = old_events.delete()
+
+        if dry_run:
+            transaction.set_rollback(True)
+            self.stdout.write(
+                f"[DRY RUN] Would delete {count} unprocessed events older than {RETENTION_DAYS} days."
+            )
+        else:
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Deleted {count} unprocessed events older than {RETENTION_DAYS} days."
+                )
+            )
 
     @transaction.atomic
     def _aggregate_event_type(
