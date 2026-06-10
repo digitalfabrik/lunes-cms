@@ -31,16 +31,18 @@ TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
-#: OpenAI model used for single-word/term text-to-speech
-OPENAI_TTS_WORD_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_WORD_MODEL", "tts-1-hd")
-
-#: OpenAI model used for example-sentence text-to-speech
-OPENAI_TTS_SENTENCE_MODEL = os.environ.get(
-    "LUNES_CMS_OPENAI_TTS_SENTENCE_MODEL", "gpt-4o-mini-tts"
-)
+#: OpenAI model used for all text-to-speech
+#: Must support the instructions parameter so word audio can be
+#: pinned to German pronunciation
+OPENAI_TTS_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
 
 #: OpenAI voice used for text-to-speech
 OPENAI_TTS_VOICE = os.environ.get("LUNES_CMS_OPENAI_TTS_VOICE", "nova")
+
+#: Loudness in LUFS (https://en.wikipedia.org/wiki/LUFS) for normalizing generated audio
+OPENAI_TTS_LOUDNESS_LUFS = float(
+    os.environ.get("LUNES_CMS_OPENAI_TTS_LOUDNESS_LUFS", "-16.0")
+)
 
 ###################
 # MATOMO TRACKING #

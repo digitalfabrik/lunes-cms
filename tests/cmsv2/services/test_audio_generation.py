@@ -6,6 +6,7 @@ import threading
 from unittest import mock
 
 import pytest
+from django.conf import settings
 from django.core.files.base import ContentFile
 
 from lunes_cms.cmsv2.models import Word
@@ -267,6 +268,91 @@ def test_word_audio_text_includes_article_and_word(
 
     assert tts_call.call_count == 1
     assert tts_call.call_args[0][0] == expected_text
+
+
+def _fake_openai_client(audio_bytes=b"raw-mp3"):
+    fake_response = mock.Mock()
+    fake_response.iter_bytes.return_value = [audio_bytes]
+    fake_client = mock.Mock()
+    fake_client.audio.speech.create.return_value = fake_response
+    return fake_client
+
+
+def test_word_audio_pins_pronunciation_to_german():
+    """
+    A single word has no sentence context, so the model otherwise reads German
+    terms with the wrong accent. The TTS call must pass the German-pronunciation
+    instruction.
+    """
+    fake_client = _fake_openai_client()
+
+    with (
+        mock.patch.object(
+            audio_generation, "get_openai_client", return_value=fake_client
+        ),
+        mock.patch.object(
+            audio_generation, "normalize_loudness", side_effect=lambda data, _lufs: data
+        ),
+    ):
+        audio_generation.openai_word_audio_bytes("die Robinie")
+
+    create_kwargs = fake_client.audio.speech.create.call_args.kwargs
+    assert create_kwargs["input"] == "die Robinie"
+    assert (
+        create_kwargs["instructions"]
+        == audio_generation.GERMAN_PRONUNCIATION_INSTRUCTION
+    )
+
+
+def test_sentence_audio_reuses_german_instruction_with_intonation():
+    """
+    Sentence audio shares the single German-pronunciation instruction and only
+    adds an intonation hint, rather than duplicating the pronunciation wording.
+    """
+    fake_client = _fake_openai_client()
+
+    with (
+        mock.patch.object(
+            audio_generation, "get_openai_client", return_value=fake_client
+        ),
+        mock.patch.object(
+            audio_generation, "normalize_loudness", side_effect=lambda data, _lufs: data
+        ),
+    ):
+        audio_generation.openai_sentence_audio_bytes("Ist das eine Robinie?")
+
+    instructions = fake_client.audio.speech.create.call_args.kwargs["instructions"]
+    assert instructions.startswith(audio_generation.GERMAN_PRONUNCIATION_INSTRUCTION)
+    assert "rising intonation" in instructions
+
+
+@pytest.mark.parametrize(
+    "generate, args",
+    [
+        (audio_generation.openai_word_audio_bytes, ("der Apfel",)),
+        (audio_generation.openai_sentence_audio_bytes, ("Das ist ein Apfel.",)),
+    ],
+)
+def test_generated_audio_is_loudness_normalized(generate, args):
+    """
+    Word and sentence audio come back from the model at different levels, so
+    both must run through loudness normalization to play back at one volume.
+    """
+    fake_client = _fake_openai_client(b"raw-mp3")
+
+    with (
+        mock.patch.object(
+            audio_generation, "get_openai_client", return_value=fake_client
+        ),
+        mock.patch.object(
+            audio_generation, "normalize_loudness", return_value=b"normalized-mp3"
+        ) as normalize,
+    ):
+        result = generate(*args)
+
+    assert result == b"normalized-mp3"
+    assert normalize.call_args.args[0] == b"raw-mp3"
+    assert normalize.call_args.args[1] == settings.OPENAI_TTS_LOUDNESS_LUFS
 
 
 @pytest.mark.parametrize(
