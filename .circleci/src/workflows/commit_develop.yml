@@ -12,3 +12,16 @@ jobs:
   - e2e:
       requires:
         - compile-translations
+  - bump-dev-version:
+      requires:
+        - install
+  - build-package:
+      name: build-dev-package
+      requires:
+        - bump-dev-version
+        - e2e
+  - publish-package:
+      name: publish-dev-package
+      context: pypi-test
+      requires:
+        - build-dev-package
