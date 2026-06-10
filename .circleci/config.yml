@@ -549,6 +549,9 @@ orbs:
     qlty: qltysh/qlty-orb@0.0.10
     shellcheck: circleci/shellcheck@2.2.4
 parameters:
+    run_commit:
+        default: true
+        type: boolean
     run_commit_develop:
         default: run_if_on_develop
         enum:
@@ -559,14 +562,55 @@ parameters:
     run_deploy:
         default: false
         type: boolean
-    run_develop:
-        default: true
-        type: boolean
     run_main:
         default: false
         type: boolean
 version: 2.1
 workflows:
+    commit:
+        jobs:
+            - shellcheck/check:
+                dir: ./tools
+                external_sources: true
+            - install
+            - lint-ts
+            - build-js
+            - compile-translations:
+                requires:
+                    - install
+            - pylint:
+                requires:
+                    - install
+            - test:
+                requires:
+                    - compile-translations
+            - test-python313
+            - upload-test-coverage:
+                context: codeclimate-lunes-cms
+                requires:
+                    - test
+            - black:
+                requires:
+                    - install
+            - isort:
+                requires:
+                    - install
+            - mypy:
+                requires:
+                    - install
+            - check-translations:
+                requires:
+                    - install
+            - build-documentation:
+                requires:
+                    - install
+        when:
+            and:
+                - << pipeline.parameters.run_commit >>
+                - not:
+                    equal:
+                        - main
+                        - << pipeline.git.branch >>
     commit_develop:
         jobs:
             - install
@@ -576,6 +620,19 @@ workflows:
             - e2e:
                 requires:
                     - compile-translations
+            - bump-dev-version:
+                requires:
+                    - install
+            - build-package:
+                name: build-dev-package
+                requires:
+                    - bump-dev-version
+                    - e2e
+            - publish-package:
+                context: pypi-test
+                name: publish-dev-package
+                requires:
+                    - build-dev-package
         when:
             or:
                 - equal:
@@ -659,87 +716,6 @@ workflows:
                 requires:
                     - e2e-deploy
         when: << pipeline.parameters.run_deploy >>
-    develop:
-        jobs:
-            - shellcheck/check:
-                dir: ./tools
-                external_sources: true
-                filters:
-                    branches:
-                        ignore: main
-            - install:
-                filters:
-                    branches:
-                        ignore: main
-            - lint-ts:
-                filters:
-                    branches:
-                        ignore: main
-            - build-js:
-                filters:
-                    branches:
-                        ignore: main
-            - compile-translations:
-                requires:
-                    - install
-            - pylint:
-                requires:
-                    - install
-            - test:
-                requires:
-                    - compile-translations
-            - test-python313:
-                filters:
-                    branches:
-                        ignore: main
-            - upload-test-coverage:
-                context: codeclimate-lunes-cms
-                requires:
-                    - test
-            - black:
-                requires:
-                    - install
-            - isort:
-                requires:
-                    - install
-            - mypy:
-                requires:
-                    - install
-            - check-translations:
-                requires:
-                    - install
-            - build-documentation:
-                requires:
-                    - install
-            - bump-dev-version:
-                filters:
-                    branches:
-                        only:
-                            - develop
-                            - /.*-publish-dev-package/
-                requires:
-                    - install
-            - build-package:
-                name: build-dev-package
-                requires:
-                    - bump-dev-version
-            - publish-package:
-                context: pypi-test
-                filters:
-                    branches:
-                        only:
-                            - develop
-                            - /.*-publish-dev-package/
-                name: publish-dev-package
-                requires:
-                    - build-dev-package
-        when:
-            and:
-                - << pipeline.parameters.run_develop >>
-                - not:
-                    equal:
-                        - main
-                        - << pipeline.git.branch >>
     main:
         jobs:
             - install:
