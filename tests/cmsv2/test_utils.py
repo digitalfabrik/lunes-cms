@@ -27,7 +27,7 @@ def test_cache_busted_url_appends_modified_time():
 
 
 def test_cache_busted_url_changes_when_file_is_modified():
-    """A regenerated file (new mtime, same URL) yields a different busted URL."""
+    """A regenerated file (new modification time, same URL) yields a different busted URL."""
     file = _fake_file("/media/audio/Apfel.mp3")
 
     file.storage.get_modified_time.return_value = datetime.datetime(2026, 6, 10, 12, 0)
@@ -38,7 +38,7 @@ def test_cache_busted_url_changes_when_file_is_modified():
     assert before != after
 
 
-def test_cache_busted_url_falls_back_when_mtime_unavailable():
+def test_cache_busted_url_falls_back_when_modification_time_unavailable():
     """Storages that can't report a modification time get the plain URL."""
     file = _fake_file("/media/audio/Apfel.mp3")
     file.storage.get_modified_time.side_effect = NotImplementedError
