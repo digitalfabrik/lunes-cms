@@ -13,8 +13,7 @@ executors:
             - image: cimg/python:3.11
 jobs:
     black:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -24,8 +23,7 @@ jobs:
                 command: black --check .
                 name: Check formatting of python files
     build-documentation:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -59,8 +57,7 @@ jobs:
                     - lunes_cms/static/js
                 root: .
     build-package:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -80,8 +77,7 @@ jobs:
                     - dist
                 root: .
     bump-dev-version:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -122,8 +118,7 @@ jobs:
                     - lunes_cms/_manifest
                 root: .
     bump-version:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - run:
@@ -184,8 +179,7 @@ jobs:
                 command: git checkout develop && git merge main --commit --no-edit && git push
                 name: Merge version bump into develop
     check-translations:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -197,8 +191,7 @@ jobs:
                 command: ./tools/check_translations.sh
                 name: Check translation file for missing or empty entries
     compile-translations:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -220,8 +213,7 @@ jobs:
                     - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
                 root: .
     create-release:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -243,8 +235,7 @@ jobs:
                 command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
                 name: Create release as Deliverino app
     deploy-user-manual:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -332,8 +323,7 @@ jobs:
                             - user_docs
                         root: .
     install:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - restore_cache:
@@ -360,8 +350,7 @@ jobs:
                     - lunes_cms.egg-info
                 root: .
     isort:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         resource_class: small
         steps:
             - checkout
@@ -392,8 +381,7 @@ jobs:
                 command: npm run format:check
                 name: Check TypeScript formatting
     mypy:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -427,8 +415,7 @@ jobs:
                     echo "Notification sent!"
                 name: Notify mattermost about release
     publish-package:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -447,8 +434,7 @@ jobs:
                     twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
                 name: Publish lunes-cms package to (Test-)PyPI
     pylint:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -614,6 +600,7 @@ workflows:
     commit_develop:
         jobs:
             - install
+            - build-js
             - compile-translations:
                 requires:
                     - install
@@ -627,6 +614,7 @@ workflows:
                 name: build-dev-package
                 requires:
                     - bump-dev-version
+                    - build-js
                     - e2e
             - publish-package:
                 context: pypi-test
