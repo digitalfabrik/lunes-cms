@@ -6,6 +6,7 @@ when:
         - equal: [develop, << pipeline.git.branch >>]
 jobs:
   - install
+  - build-js
   - compile-translations:
       requires:
         - install
@@ -19,6 +20,7 @@ jobs:
       name: build-dev-package
       requires:
         - bump-dev-version
+        - build-js
         - e2e
   - publish-package:
       name: publish-dev-package
