@@ -55,6 +55,11 @@ urlpatterns = [
         name="word_store_generated_example_sentence_audio_permanently",
     ),
     path(
+        "words/<int:word_id>/generate-example-sentence-via-openai",
+        views.word_generate_example_sentence_via_openai,
+        name="word_generate_example_sentence_via_openai",
+    ),
+    path(
         "words/<int:word_id>/store-generated-image-permanently",
         views.word_store_generated_image_permanently,
         name="word_store_generated_image_permanently",
@@ -113,6 +118,11 @@ urlpatterns = [
         "unitwordrelations/generate-example-sentence-audio-via-openai",
         views.unitword_generate_example_sentence_audio_via_openai,
         name="unitword_generate_example_sentence_audio_via_openai",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/generate-example-sentence-via-openai",
+        views.unitword_generate_example_sentence_via_openai,
+        name="unitword_generate_example_sentence_via_openai",
     ),
     path(
         "unitwordrelations/<int:unitword_id>/store-generated-example-sentence-audio-permanently",

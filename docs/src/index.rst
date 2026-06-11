@@ -37,12 +37,14 @@ Basic Concepts
     continous-integration
     audio-generation
     image-generation
+    example-sentence-generation
 
 * :doc:`internationalization`: Internationalization (i18n)
 * :doc:`documentation`: Documentation (Sphinx)
 * :doc:`continous-integration`: Continous Integration (Circle CI)
 * :doc:`audio-generation`: OpenAI audio generation for vocabulary
 * :doc:`image-generation`: OpenAI image generation for vocabulary
+* :doc:`example-sentence-generation`: OpenAI example sentence generation for vocabulary
 
 Deployment
 ==========

@@ -28,10 +28,15 @@ class WordInline(admin.TabularInline):
         "word",
         "image_with_controls",
         "example_sentence",
+        "example_sentence_generate",
         "example_sentence_check_status",
         "example_sentence_audio_player",
     ]
-    readonly_fields = ["image_with_controls", "example_sentence_audio_player"]
+    readonly_fields = [
+        "image_with_controls",
+        "example_sentence_generate",
+        "example_sentence_audio_player",
+    ]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
@@ -145,7 +150,11 @@ class UnitAdmin(BaseAdmin):
         particularly for asset management functionality.
         """
 
-        js = ["js/unit_icon_asset_config.js", "js/asset_manager.js"]
+        js = [
+            "js/unit_icon_asset_config.js",
+            "js/asset_manager.js",
+            "js/generate_example_sentence.js",
+        ]
         css = {"all": ["css/asset_manager.css"]}
 
     def get_queryset(self, request):

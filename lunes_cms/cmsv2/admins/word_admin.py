@@ -159,10 +159,15 @@ class UnitInline(admin.TabularInline):
         "unit",
         "image_with_controls",
         "example_sentence",
+        "example_sentence_generate",
         "example_sentence_check_status",
         "example_sentence_audio_player",
     ]
-    readonly_fields = ["image_with_controls", "example_sentence_audio_player"]
+    readonly_fields = [
+        "image_with_controls",
+        "example_sentence_generate",
+        "example_sentence_audio_player",
+    ]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
@@ -220,6 +225,7 @@ class WordAdmin(BaseAdmin):
             {
                 "fields": (
                     "example_sentence",
+                    "example_sentence_generate",
                     "example_sentence_check_status",
                     "example_sentence_audio",
                     "example_sentence_audio_player",
@@ -243,6 +249,7 @@ class WordAdmin(BaseAdmin):
         "audio_player",
         "example_sentence_audio_generate",
         "example_sentence_audio_player",
+        "example_sentence_generate",
         "created_by",
         "image_generate",
         "image_tag",
@@ -290,6 +297,7 @@ class WordAdmin(BaseAdmin):
             "js/audio_player.js",
             "js/audio_check_status_update.js",
             "js/image_check_status_update.js",
+            "js/generate_example_sentence.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 
@@ -330,6 +338,33 @@ class WordAdmin(BaseAdmin):
         return "No audio file uploaded."
 
     audio_player.short_description = "Audio Preview"  # type: ignore[attr-defined]
+
+    def example_sentence_generate(self, obj):
+        """
+        Generate HTML for the example sentence generation button.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the example sentence generation button
+        """
+        if obj.pk:
+            url = reverse(
+                "cmsv2:word_generate_example_sentence_via_openai", args=[obj.pk]
+            )
+            return format_html(
+                '<button type="button" class="btn btn-primary btn-sm generate-example-sentence-btn" '
+                'data-url="{}" data-target="id_example_sentence">{}</button>'
+                '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
+                'style="display: none; margin-left: 8px;"></span>'
+                '<span class="generate-example-sentence-message" style="margin-left: 8px;"></span>',
+                url,
+                _("Generate example sentence"),
+            )
+        return _("Save to enable example sentence generation.")
+
+    example_sentence_generate.short_description = _("Example Sentence Generation")  # type: ignore[attr-defined]
 
     def example_sentence_audio_generate(self, obj):
         """
