@@ -77,7 +77,7 @@ function print_with_borders {
 # This function applies different sed replacements to make sure the matched lines from grep are aligned and colored
 function format_grep_output {
     while read -r line; do
-        echo "$line" | sed --regexp-extended \
+        echo "$line" | sed -E \
             -e "s/^([0-9])([:-])(.*)/\1\2      \3/"         `# Pad line numbers with 1 digit` \
             -e "s/^([0-9]{2})([:-])(.*)/\1\2     \3/"       `# Pad line numbers with 2 digits` \
             -e "s/^([0-9]{3})([:-])(.*)/\1\2    \3/"        `# Pad line numbers with 3 digits` \
