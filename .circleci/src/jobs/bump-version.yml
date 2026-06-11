@@ -1,5 +1,4 @@
-docker:
-  - image: cimg/python:3.11
+executor: python
 steps:
   - checkout
   - run:
