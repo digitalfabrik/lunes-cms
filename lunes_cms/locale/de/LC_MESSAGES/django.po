@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-11 11:28+0000\n"
+"POT-Creation-Date: 2026-06-11 11:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -936,19 +936,19 @@ msgstr "Bild Kontrolle"
 msgid "Image Reviews"
 msgstr "Bild Kontrollen"
 
-#: cmsv2/models/static.py:19
+#: cmsv2/models/static.py:17
 msgid "Admins"
 msgstr "Administrator:innen"
 
-#: cmsv2/models/static.py:69
+#: cmsv2/models/static.py:67
 msgid "Pending Review"
 msgstr "Freigabe ausstehend"
 
-#: cmsv2/models/static.py:70
+#: cmsv2/models/static.py:68
 msgid "Approved"
 msgstr "Genehmigt"
 
-#: cmsv2/models/static.py:80
+#: cmsv2/models/static.py:78
 msgid "Reviewer"
 msgstr "Expert:in"
 

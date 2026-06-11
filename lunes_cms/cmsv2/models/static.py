@@ -235,6 +235,6 @@ def user_has_role(user: User, *roles: UserRole) -> bool:
 
     Superusers are always treated as having the Admin role.
     """
-    if UserRole.ADMIN in roles and user.is_superuser:  # type: ignore[operator]
+    if UserRole.ADMIN in roles and user.is_superuser:
         return True
     return user.groups.filter(name__in=[role.label for role in roles]).exists()
