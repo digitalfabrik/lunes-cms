@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from datetime import UTC, datetime
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.core.management import CommandParser
