@@ -39,22 +39,19 @@ def build_image_prompt(
     Build the German image-generation prompt shared by the on-demand admin
     view and the background import drain.
     """
-    prompt = """Du bist Content-Manager für eine Vokabel-Lern-App namens "Lunes". Die App richtet sich an Zugewanderte, die in Deutschland eine Ausbildung machen oder bereits beruflich tätig sind. Sie lernen Deutsch als Fremdsprache und benötigen spezifischen Fachwortschatz, der in regulären Sprachkursen nicht vermittelt wird.
-
-        Die App zeigt Fachbegriffe aus dem Berufsfeld in Form von Bildern. Alle Vokabeln werden einsprachig (nur auf Deutsch) vermittelt – durch realistische Fotos, die das Wort eindeutig visuell darstellen.
-
-        Für die Bildsprache gelten folgende Vorgaben:
-        - Es sollen realistische Fotos sein (keine Illustrationen, keine Renderings).
-        - Das Bildmotiv muss eindeutig dem jeweiligen Fachbegriff zuzuordnen sein.
-        - Es soll nur der relevante Gegenstand oder die relevante Handlung zu sehen sein.
-        - Keine zusätzlichen Objekte, kein Text, neutraler Hintergrund (z.B. weiß oder freigestellt).
-    """
+    prompt = f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
     if unit_title:
-        prompt += f"Der Begriff gehört zum Lernmodul: {unit_title}.\n"
-    prompt += f'Erstelle ein passendes realistisches Foto zur Vokabel: "{word_text}".\n'
+        prompt += f" Thematischer Kontext: {unit_title}."
+    prompt += (
+        " Nur das zentrale Motiv ist zu sehen, vor einem neutralen weißen Hintergrund,"
+        " ohne zusätzliche Objekte. Fotorealistisch, keine Illustration, kein Rendering."
+    )
     if additional_info:
-        prompt += f"Zusätzliche Hinweise zur Bildgestaltung: {additional_info}\n"
-    prompt += "Ziel ist es, dass die Vokabel durch das Bild eindeutig verstanden werden kann – auch ohne Text oder Erklärung."
+        prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
+    prompt += (
+        " Das Bild enthält keinerlei Text, Buchstaben, Zahlen,"
+        " Beschriftungen, Untertitel oder Logos."
+    )
     return prompt
 
 
