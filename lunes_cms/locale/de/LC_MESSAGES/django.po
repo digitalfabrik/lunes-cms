@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-11 11:49+0000\n"
+"POT-Creation-Date: 2026-06-12 07:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:271
+#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:273
 #: cmsv2/admins/word_admin.py:435
 msgid "creator group"
 msgstr "Besitzergruppe"
@@ -684,12 +684,12 @@ msgstr "Nicht migriert aus altem Datenmodell"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:285
+#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:287
 #: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:329
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:307
+#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:309
 #: cmsv2/admins/word_admin.py:712
 msgid "migrated"
 msgstr "Migriert"
@@ -726,7 +726,7 @@ msgstr "Zugewiesene Personen"
 msgid "Release all selected units"
 msgstr "Alle ausgewählte Einheiten veröffentlichen"
 
-#: cmsv2/admins/unit_admin.py:185
+#: cmsv2/admins/unit_admin.py:187
 #, python-format
 msgid ""
 "Released %(unit_count)d unit(s). %(units_skipped)d unit(s) were skipped, "
@@ -735,20 +735,20 @@ msgstr ""
 "%(unit_count)d Einheit(en) wurden veröffentlicht. %(units_skipped)d "
 "Einheiten wurden übersprungen, da sie bereits veröffentlicht waren"
 
-#: cmsv2/admins/unit_admin.py:193 cmsv2/admins/unit_admin.py:213
+#: cmsv2/admins/unit_admin.py:195 cmsv2/admins/unit_admin.py:215
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:4
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:14
 msgid "Assign selected units to user"
 msgstr "Ausgewählte Einheiten zuweisen"
 
-#: cmsv2/admins/unit_admin.py:231
+#: cmsv2/admins/unit_admin.py:233
 #, python-format
 msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
 "%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
-#: cmsv2/admins/unit_admin.py:252
+#: cmsv2/admins/unit_admin.py:254
 msgid "jobs"
 msgstr "Berufe"
 
