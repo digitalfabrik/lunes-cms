@@ -39,7 +39,9 @@ def build_image_prompt(
     Build the German image-generation prompt shared by the on-demand admin
     view and the background import drain.
     """
-    prompt = f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
+    prompt = (
+        f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
+    )
     if unit_title:
         prompt += f" Thematischer Kontext: {unit_title}."
     prompt += (
