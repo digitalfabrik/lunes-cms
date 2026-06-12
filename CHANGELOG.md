@@ -9,6 +9,8 @@ UNRELEASED
 * [ [#777](https://github.com/digitalfabrik/lunes-cms/issues/777) ] 777: Add plural and plural article to CSV import
 * [ [#787](https://github.com/digitalfabrik/lunes-cms/issues/787) ] 787: Fix contrast in dark mode
 * [ [#804](https://github.com/digitalfabrik/lunes-cms/issues/804) ] 804: Ensure German pronunciation
+* [ [#798](https://github.com/digitalfabrik/lunes-cms/issues/798) ] 798: Add bulk action to release units
+* [ [#667](https://github.com/digitalfabrik/lunes-cms/issues/667) ] 667: Show total session duration
 
 2026.4.7
 --------
