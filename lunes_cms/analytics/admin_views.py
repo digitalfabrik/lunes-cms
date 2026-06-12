@@ -22,6 +22,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from .models import SessionAggregate
+from lunes_cms.core.permissions import can_view_analytics
 
 #: Maps the ``granularity`` query parameter to the noun displayed for the column
 #: header and the optional ``Trunc*`` function used to roll daily aggregate rows
@@ -130,7 +131,7 @@ def _session_summary(start: date, end: date) -> dict[str, Any]:
 
 
 @staff_member_required
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(can_view_analytics)
 def sessions_report(request: HttpRequest) -> HttpResponse:
     """
     Total Session Duration report.

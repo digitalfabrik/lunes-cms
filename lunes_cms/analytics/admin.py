@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
+from lunes_cms.core.permissions import can_view_analytics
 from .models import SessionDurationReport
 
 
@@ -19,10 +20,10 @@ class SessionDurationReportAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(reverse("analytics_admin:sessions_report"))
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        return request.user.is_superuser
+        return can_view_analytics(request.user)
 
     def has_view_permission(self, request: HttpRequest, obj=None) -> bool:
-        return request.user.is_superuser
+        return can_view_analytics(request.user)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False

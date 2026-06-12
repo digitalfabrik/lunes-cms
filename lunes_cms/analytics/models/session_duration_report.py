@@ -17,3 +17,6 @@ class SessionDurationReport(SessionAggregate):
         proxy = True
         verbose_name = _("Total Session Duration")
         verbose_name_plural = _("Total Session Duration")
+        permissions = [
+            ("can_view_analytics", _("Can view analytics")),
+        ]
