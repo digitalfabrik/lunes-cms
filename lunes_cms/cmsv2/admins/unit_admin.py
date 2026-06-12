@@ -172,7 +172,9 @@ class UnitAdmin(BaseAdmin):
         """
         if not user_has_role(
             request.user,
-            UserRole.ADMIN, UserRole.VOCABULARYMANAGER, UserRole.PARTNERMANAGEMENT # type: ignore[arg-type]
+            UserRole.ADMIN,  # type: ignore[arg-type]
+            UserRole.VOCABULARYMANAGER,  # type: ignore[arg-type]
+            UserRole.PARTNERMANAGEMENT,  # type: ignore[arg-type]
         ):
             raise PermissionDenied
 
