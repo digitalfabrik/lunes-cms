@@ -43,7 +43,7 @@ if [ $UP_TO_DATE -ne 0 ] || [ $EMPTY_ENTRIES -eq 0 ] || [ $FUZZY_ENTRIES -eq 0 ]
     if [ $EMPTY_ENTRIES -eq 0 ]; then
         echo -e "❌ You have empty entries in your translation file. Please translate them manually:\n" | print_error
         echo -e "${PACKAGE_DIR_REL}/${TRANSLATION_FILE}"
-        pcregrep -M -B2 -n --color=never 'msgstr ""\n\n' $TRANSLATION_FILE | sed '4~5d' | format_grep_output | print_with_borders
+        pcregrep -M -B2 -n --color=never 'msgstr ""\n\n' $TRANSLATION_FILE | awk 'NR % 5 != 4' | format_grep_output | print_with_borders
     fi
     # Check for fuzzy headers (automatic translation proposals)
     if [ $FUZZY_ENTRIES -eq 0 ]; then
