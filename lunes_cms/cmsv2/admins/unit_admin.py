@@ -3,13 +3,15 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.db.models import QuerySet
+from django.http import HttpRequest
 from django.template.response import TemplateResponse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models.review import ReviewAssignment
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 
 
 class WordInline(admin.TabularInline):
@@ -133,7 +135,7 @@ class UnitAdmin(BaseAdmin):
     list_display_links = ["title"]
     list_filter = ["released", MigratedFilter, "jobs"]
     list_per_page = 25
-    actions = ["assign_to_user"]
+    actions = ["bulk_release", "assign_to_user"]
 
     class Media:
         """
@@ -161,6 +163,28 @@ class UnitAdmin(BaseAdmin):
             formset.save_m2m()
         else:
             super().save_formset(request, form, formset, change)
+
+    @admin.action(description=_("Release all selected units"))
+    def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:
+        """
+        Bulk action to release selected units in one go
+        """
+        if not request.user.has_perm("change_unit"):
+            raise PermissionDenied
+
+        units_skipped = queryset.filter(released=True).count()
+        released_unit_count = queryset.filter(released=False).update(released=True)
+
+        self.message_user(
+            request,
+            _(
+                "Released %(unit_count)d unit(s). %(units_skipped)d unit(s) were skipped, because they were already released"
+            )
+            % {
+                "unit_count": released_unit_count,
+                "units_skipped": units_skipped,
+            },
+        )
 
     @admin.action(description=_("Assign selected units to user"))
     def assign_to_user(self, request, queryset):
