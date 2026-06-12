@@ -23,9 +23,10 @@ interface ChartData {
 
 const BAR_COLOR = "#1d4e8a"
 const LINE_COLOR = "#d97706"
-const AXIS_COLOR = "#999"
-const GRID_COLOR = "#eee"
-const TEXT_COLOR = "#444"
+const isDark = document.documentElement.dataset.bsTheme === "dark"
+const AXIS_COLOR = isDark ? "#666" : "#999"
+const GRID_COLOR = isDark ? "#333" : "#eee"
+const TEXT_COLOR = isDark ? "#fff" : "#444"
 
 function renderReportsChart(canvas: HTMLCanvasElement, data: ChartData): void {
     const ctx = canvas.getContext("2d")!
