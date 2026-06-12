@@ -6,7 +6,8 @@ CODENAMES = [
 ]
 
 
-def assign_permissions(apps, schema_editor):
+def assign_permissions(apps, _schema_editor):
+    """Assign analytics permissions to the Partnermanagement group."""
     Group = apps.get_model("auth", "Group")
     Permission = apps.get_model("auth", "Permission")
 
@@ -22,8 +23,8 @@ def assign_permissions(apps, schema_editor):
     group.permissions.add(*permissions)
 
 
-# needed for rollback
-def remove_permissions(apps, schema_editor):
+def remove_permissions(apps, _schema_editor):
+    """Remove analytics permissions from the Partnermanagement group (rollback)."""
     Group = apps.get_model("auth", "Group")
     Permission = apps.get_model("auth", "Permission")
 

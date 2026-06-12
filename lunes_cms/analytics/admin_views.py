@@ -21,8 +21,9 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from .models import SessionAggregate
 from lunes_cms.core.permissions import can_view_analytics
+
+from .models import SessionAggregate
 
 #: Maps the ``granularity`` query parameter to the noun displayed for the column
 #: header and the optional ``Trunc*`` function used to roll daily aggregate rows

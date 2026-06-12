@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-import datetime
-from datetime import UTC
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from django.core.management import CommandParser
@@ -403,7 +402,7 @@ class Command(BaseCommand):
             for aggregator in EVENT_AGGREGATORS
             for event_type in aggregator.event_types
         ]
-        cutoff = datetime.datetime.now(tz=UTC) - datetime.timedelta(days=RETENTION_DAYS)
+        cutoff = datetime.now(tz=UTC) - timedelta(days=RETENTION_DAYS)
         old_events = AnalyticsEvent.objects.filter(timestamp__lt=cutoff).exclude(
             event_type__in=batch_aggregated_types
         )
