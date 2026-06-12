@@ -18,7 +18,7 @@ After you finished your changes to the code base, run the following command::
 
     source .venv/bin/activate
     cd lunes_cms
-    lunes-cms-cli makemessages -l de
+    lunes-cms-cli makemessages -l de --add-location file
 
 Then, open the file :github-source:`lunes_cms/locale/de/LC_MESSAGES/django.po` and fill in the german translations::
 
