@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-12 10:38+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,194 +17,190 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: api/apps.py:13
+#: api/apps.py
 msgid "API"
 msgstr "API"
 
-#: api/utils.py:191
+#: api/utils.py
 msgid "This word is assigned to no training set."
 msgstr "Das word ist zu keinem Modul zugeordnet."
 
-#: api/utils.py:198
+#: api/utils.py
 msgid "This word is already registered in the system."
 msgstr "Das Wort ist schon im System hinterlegt."
 
-#: api/utils.py:201 api/utils.py:203
+#: api/utils.py
 msgid "Definition: "
 msgstr "Definition: "
 
-#: api/utils.py:203
+#: api/utils.py
 msgid "No definition is provided for this word."
 msgstr "Für dieses Wort ist keine Definition hinterlegt."
 
-#: api/utils.py:205
+#: api/utils.py
 msgid "Training sets: "
 msgstr "Module: "
 
-#: api/utils.py:209
+#: api/utils.py
 msgid "This word is not yet registered in the system"
 msgstr "Das Wort ist noch nicht im System hinterlegt."
 
-#: api/v1/serializers/feedback_serializer.py:22
+#: api/v1/serializers/feedback_serializer.py
 msgid ""
 "The content type must be either 'discipline', 'training set' or 'document'."
 msgstr ""
 "Der Inhaltstyp muss entweder 'discipline', 'trainingset' oder 'document' "
 "sein."
 
-#: api/v1/serializers/feedback_serializer.py:36
-#: api/v2/serializers/feedback_serializer.py:35
+#: api/v1/serializers/feedback_serializer.py
+#: api/v2/serializers/feedback_serializer.py
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
-#: api/v2/serializers/feedback_serializer.py:22
+#: api/v2/serializers/feedback_serializer.py
 msgid "The content type must be either 'job', 'unit' or 'word'."
 msgstr "Der Inhaltstyp muss entweder 'job', 'unit' oder 'word' sein."
 
-#: cms/admin.py:36 cms/admins/document_admin.py:162
-#: cms/admins/training_set_admin.py:361 cms/forms.py:46 cms/forms.py:48
-#: cms/list_filter.py:14 cms/models/discipline.py:101
+#: cms/admin.py cms/admins/document_admin.py cms/admins/training_set_admin.py
+#: cms/forms.py cms/list_filter.py cms/models/discipline.py
 msgid "disciplines"
 msgstr "Modulgruppen"
 
-#: cms/admin.py:37 cms/list_filter.py:103 cms/models/training_set.py:92
+#: cms/admin.py cms/list_filter.py cms/models/training_set.py
 msgid "training sets"
 msgstr "Module"
 
-#: cms/admin.py:38 cms/forms.py:52 cms/forms.py:53 cms/models/document.py:154
-#: cms/models/document.py:155
+#: cms/admin.py cms/forms.py cms/models/document.py
 msgid "vocabulary"
 msgstr "Vokabeln"
 
-#: cms/admin.py:39
+#: cms/admin.py
 msgid "api keys"
 msgstr "API Keys"
 
-#: cms/admin.py:40 cms/models/feedback.py:90 cmsv2/models/feedback.py:89
+#: cms/admin.py cms/models/feedback.py cmsv2/models/feedback.py
 msgid "feedback"
 msgstr "Feedback"
 
-#: cms/admins/discipline_admin.py:258
+#: cms/admins/discipline_admin.py
 msgid "Release selected disciplines"
 msgstr "Ausgewählte Modulgruppen veröffentlichen"
 
-#: cms/admins/discipline_admin.py:271
+#: cms/admins/discipline_admin.py
 msgid "Unrelease selected disciplines"
 msgstr "Ausgewählte Modulgruppen zurückhalten"
 
-#: cms/admins/discipline_admin.py:284
+#: cms/admins/discipline_admin.py
 msgid "Export all vocabulary for this discipline to CSV"
 msgstr "Alle Vokabeln dieser Modulgruppe aus CSV importieren"
 
-#: cms/admins/discipline_admin.py:324
+#: cms/admins/discipline_admin.py
 msgid "released modules"
 msgstr "veröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:345
+#: cms/admins/discipline_admin.py
 msgid "unreleased modules"
 msgstr "unveröffentlichte Module"
 
-#: cms/admins/discipline_admin.py:366
+#: cms/admins/discipline_admin.py
 msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
-#: cms/admins/discipline_admin.py:387 cms/admins/document_admin.py:179
-#: cms/admins/training_set_admin.py:378 cmsv2/admins/unit_admin.py:267
-#: cmsv2/admins/word_admin.py:435
+#: cms/admins/discipline_admin.py cms/admins/document_admin.py
+#: cms/admins/training_set_admin.py cmsv2/admins/unit_admin.py
+#: cmsv2/admins/word_admin.py
 msgid "creator group"
 msgstr "Besitzergruppe"
 
-#: cms/admins/document_admin.py:142 cms/models/training_set.py:25
-#: cms/models/training_set.py:91
+#: cms/admins/document_admin.py cms/models/training_set.py
 msgid "training set"
 msgstr "Modul"
 
-#: cms/admins/document_admin.py:196 cms/models/document.py:67
-#: cmsv2/admins/word_admin.py:502 cmsv2/models/word.py:70
+#: cms/admins/document_admin.py cms/models/document.py
+#: cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "audio"
 msgstr "Audio"
 
-#: cms/admins/document_admin.py:216 cms/models/document_image.py:124
-#: cmsv2/models/unit.py:41 cmsv2/models/word.py:143
+#: cms/admins/document_admin.py cms/models/document_image.py
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "image"
 msgstr "Bild"
 
-#: cms/admins/document_admin.py:231 cms/models/alternative_word.py:24
-#: cms/models/document.py:44 cmsv2/admins/word_admin.py:676
-#: cmsv2/models/word.py:47
+#: cms/admins/document_admin.py cms/models/alternative_word.py
+#: cms/models/document.py cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "singular article"
 msgstr "Singular-Artikel"
 
-#: cms/admins/document_resource.py:24 cmsv2/admins/word_export_resource.py:24
-#: cmsv2/models/word.py:331
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/models/word.py
 msgid "Word"
 msgstr "Vokabel"
 
-#: cms/admins/document_resource.py:26 cmsv2/admins/word_export_resource.py:26
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
 msgid "Word type"
 msgstr "Wortart"
 
-#: cms/admins/document_resource.py:29 cmsv2/admins/word_export_resource.py:29
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
 msgid "Singular Article"
 msgstr "Singular Artikel"
 
-#: cms/admins/document_resource.py:43 cmsv2/admins/word_export_resource.py:45
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
 msgid "Plural Article"
 msgstr "Plural Artikel"
 
-#: cms/admins/document_resource.py:56 cmsv2/admins/word_export_resource.py:58
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
 msgid "Has audio?"
 msgstr "Audio"
 
-#: cms/admins/document_resource.py:63 cmsv2/admins/word_admin.py:25
-#: cmsv2/admins/word_admin.py:75 cmsv2/admins/word_export_resource.py:65
+#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_export_resource.py
 msgid "Yes"
 msgstr "Ja"
 
-#: cms/admins/document_resource.py:64 cmsv2/admins/word_admin.py:26
-#: cmsv2/admins/word_admin.py:76 cmsv2/admins/word_export_resource.py:66
+#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_export_resource.py
 msgid "No"
 msgstr "Nein"
 
-#: cms/admins/document_resource.py:67 cmsv2/admins/word_export_resource.py:69
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
-#: cms/admins/document_resource.py:71 cmsv2/admins/word_export_resource.py:73
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
 msgid "Creation date"
 msgstr "Erstellt am"
 
-#: cms/admins/document_resource.py:81
+#: cms/admins/document_resource.py
 msgid "Training Sets"
 msgstr "Module"
 
-#: cms/admins/feedback_admin.py:33 cmsv2/admins/feedback_admin.py:33
+#: cms/admins/feedback_admin.py cmsv2/admins/feedback_admin.py
 msgid "Mark as read"
 msgstr "Als gelesen markieren"
 
-#: cms/admins/feedback_admin.py:48 cmsv2/admins/feedback_admin.py:48
+#: cms/admins/feedback_admin.py cmsv2/admins/feedback_admin.py
 msgid "The selected feedback entries were successfully marked as read."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als gelesen markiert."
 
-#: cms/admins/feedback_admin.py:52 cmsv2/admins/feedback_admin.py:52
+#: cms/admins/feedback_admin.py cmsv2/admins/feedback_admin.py
 msgid "Mark as unread"
 msgstr "Als ungelesen markieren"
 
-#: cms/admins/feedback_admin.py:67 cmsv2/admins/feedback_admin.py:67
+#: cms/admins/feedback_admin.py cmsv2/admins/feedback_admin.py
 msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/sponsor_admin.py:38 cms/models/sponsor.py:26
+#: cms/admins/sponsor_admin.py cms/models/sponsor.py
 msgid "logo"
 msgstr "Logo"
 
-#: cms/admins/training_set_admin.py:185
+#: cms/admins/training_set_admin.py
 msgid "Release selected training sets"
 msgstr "Ausgewählte Module veröffentlichen"
 
-#: cms/admins/training_set_admin.py:220
+#: cms/admins/training_set_admin.py
 msgid ""
 "The training set {} could not be released because it contains less than {} "
 "vocabulary words with confirmed images."
@@ -218,51 +214,51 @@ msgstr[1] ""
 "Die Module {} konnten nicht veröffentlicht werden, da sie weniger als {} "
 "Vokabeln mit bestätigten Bildern enthalten."
 
-#: cms/admins/training_set_admin.py:235
+#: cms/admins/training_set_admin.py
 msgid "The training set {} is already released."
 msgid_plural "The training sets {} are already released."
 msgstr[0] "Das Modul {} ist bereits veröffentlicht."
 msgstr[1] "Die Module {} sind bereits veröffentlicht."
 
-#: cms/admins/training_set_admin.py:249
+#: cms/admins/training_set_admin.py
 msgid "The training set {} was successfully released."
 msgid_plural "The training sets {} were successfully released."
 msgstr[0] "Das Modul {} wurde erfolgreich veröffentlicht."
 msgstr[1] "Die Module {} wurden erfolgreich veröffentlicht."
 
-#: cms/admins/training_set_admin.py:255
+#: cms/admins/training_set_admin.py
 msgid "Unrelease selected training sets"
 msgstr "Ausgewählte Module zurückhalten"
 
-#: cms/admins/training_set_admin.py:279
+#: cms/admins/training_set_admin.py
 msgid "The training set {} is already unreleased."
 msgid_plural "The training sets {} are already unreleased."
 msgstr[0] "Das Modul {} ist bereits zurückgehalten."
 msgstr[1] "Die Module {} sind bereits zurückgehalten."
 
-#: cms/admins/training_set_admin.py:290
+#: cms/admins/training_set_admin.py
 msgid "The training set {} was successfully unreleased."
 msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
 msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 
-#: cms/admins/training_set_admin.py:297
+#: cms/admins/training_set_admin.py
 msgid "words"
 msgstr "Vokabeln"
 
-#: cms/admins/training_set_admin.py:315
+#: cms/admins/training_set_admin.py
 msgid "published words"
 msgstr "veröffentlichte Vokabeln"
 
-#: cms/admins/training_set_admin.py:333
+#: cms/admins/training_set_admin.py
 msgid "unpublished words"
 msgstr "unveröffentlichte Vokabeln"
 
-#: cms/apps.py:12
+#: cms/apps.py
 msgid "Vocabulary Management"
 msgstr "Vokabelverwaltung"
 
-#: cms/forms.py:55
+#: cms/forms.py
 msgid ""
 "Please select some vocabularies for your training set. To see a preview of "
 "the corresponding image and audio files, press the alt key while selecting."
@@ -271,7 +267,7 @@ msgstr ""
 "Bilder und Audio-Dateien zu sehen, drücke die Alt-Taste, während du ein "
 "Element auswählst."
 
-#: cms/forms.py:79
+#: cms/forms.py
 msgid ""
 "You can only release a training set that contains at least {} vocabulary "
 "words with confirmed images."
@@ -279,177 +275,168 @@ msgstr ""
 "Sie können nur Module veröffentlichen, die mindestens {} Vokabeln mit "
 "bestätigten Bildern enthalten."
 
-#: cms/list_filter.py:163
+#: cms/list_filter.py
 msgid "Images"
 msgstr "Bilder"
 
-#: cms/list_filter.py:184
+#: cms/list_filter.py
 msgid "At least one approved image"
 msgstr "Mind. ein bestätigtes Bild"
 
-#: cms/list_filter.py:185
+#: cms/list_filter.py
 msgid "At least one pending image"
 msgstr "Mind. ein unbestätigtes Bild"
 
-#: cms/list_filter.py:186
+#: cms/list_filter.py
 msgid "No approved images"
 msgstr "Keine bestätigten Bilder"
 
-#: cms/list_filter.py:187
+#: cms/list_filter.py
 msgid "No images"
 msgstr "Keine Bilder"
 
-#: cms/list_filter.py:229
+#: cms/list_filter.py
 msgid "Assignments"
 msgstr "Zuweisungen"
 
-#: cms/list_filter.py:250
+#: cms/list_filter.py
 msgid "Not assigned to any module"
 msgstr "Keinem Modul zugewiesen"
 
-#: cms/list_filter.py:251
+#: cms/list_filter.py
 msgid "Assigned to at least one module"
 msgstr "Mind. einem Modul zugewiesen"
 
-#: cms/list_filter.py:252
+#: cms/list_filter.py
 msgid "Assigned to released modules"
 msgstr "Veröffentlichten Modulen zugewiesen"
 
-#: cms/list_filter.py:255
+#: cms/list_filter.py
 msgid "Assigned to released modules in released disciplines"
 msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 
-#: cms/list_filter.py:257
+#: cms/list_filter.py
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py:13 cms/models/alternative_word.py:56
+#: cms/models/alternative_word.py
 msgid "alternative word"
 msgstr "Alternatives Wort"
 
-#: cms/models/alternative_word.py:16
+#: cms/models/alternative_word.py
 msgid "grammatical gender"
 msgstr "Genus"
 
-#: cms/models/alternative_word.py:28 cms/models/document.py:48
-#: cmsv2/models/word.py:51
+#: cms/models/alternative_word.py cms/models/document.py cmsv2/models/word.py
 msgid "plural"
 msgstr "Plural"
 
-#: cms/models/alternative_word.py:34 cms/models/document.py:54
-#: cmsv2/models/word.py:57
+#: cms/models/alternative_word.py cms/models/document.py cmsv2/models/word.py
 msgid "plural article"
 msgstr "Plural-Artikel"
 
-#: cms/models/alternative_word.py:57
+#: cms/models/alternative_word.py
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
-#: cms/models/discipline.py:20 cms/models/training_set.py:24
-#: cmsv2/models/job.py:19 cmsv2/models/unit.py:311
+#: cms/models/discipline.py cms/models/training_set.py cmsv2/models/job.py
+#: cmsv2/models/unit.py
 msgid "released"
 msgstr "veröffentlicht"
 
-#: cms/models/discipline.py:21 cms/models/discipline.py:100
-#: cms/models/training_set.py:36
+#: cms/models/discipline.py cms/models/training_set.py
 msgid "discipline"
 msgstr "Modulgruppe"
 
-#: cms/models/discipline.py:23 cms/models/training_set.py:27
-#: cmsv2/models/unit.py:315
+#: cms/models/discipline.py cms/models/training_set.py cmsv2/models/unit.py
 msgid "description"
 msgstr "Beschreibung"
 
-#: cms/models/discipline.py:26 cms/models/group.py:10
-#: cms/models/training_set.py:30 cmsv2/models/job.py:22
-#: cmsv2/models/unit.py:318
+#: cms/models/discipline.py cms/models/group.py cms/models/training_set.py
+#: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "icon"
 msgstr "Icon"
 
-#: cms/models/discipline.py:33 cms/models/document.py:95
-#: cms/models/training_set.py:39 cmsv2/models/job.py:30
-#: cmsv2/models/unit.py:326 cmsv2/models/word.py:137
+#: cms/models/discipline.py cms/models/document.py cms/models/training_set.py
+#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "created by"
 msgstr "Erstellt von"
 
-#: cms/models/discipline.py:36 cms/models/document.py:99
-#: cms/models/training_set.py:41 cmsv2/models/job.py:33
-#: cmsv2/models/unit.py:328 cmsv2/models/word.py:141
+#: cms/models/discipline.py cms/models/document.py cms/models/training_set.py
+#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "admin"
 msgstr "Admin"
 
-#: cms/models/discipline.py:43 cms/models/training_set.py:48
+#: cms/models/discipline.py cms/models/training_set.py
 msgid "parent"
 msgstr "Übergeordnete Modulgruppe"
 
-#: cms/models/document.py:32 cmsv2/models/word.py:35
+#: cms/models/document.py cmsv2/models/word.py
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py:34 cmsv2/models/unit.py:323 cmsv2/models/word.py:37
+#: cms/models/document.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py:37 cmsv2/models/word.py:40
+#: cms/models/document.py cmsv2/models/word.py
 msgid "Grammatical gender"
 msgstr "Genus"
 
-#: cms/models/document.py:69 cmsv2/models/unit.py:50 cmsv2/models/word.py:85
+#: cms/models/document.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence"
 msgstr "Beispielsatz"
 
-#: cms/models/document.py:71 cms/models/group_api_key.py:65
-#: cmsv2/admins/word_admin.py:690 cmsv2/models/word.py:112
+#: cms/models/document.py cms/models/group_api_key.py
+#: cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py:77 cmsv2/models/word.py:119
+#: cms/models/document.py cmsv2/models/word.py
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py:83 cmsv2/models/word.py:125
+#: cms/models/document.py cmsv2/models/word.py
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py:89 cmsv2/models/word.py:131
+#: cms/models/document.py cmsv2/models/word.py
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
-#: cms/models/document_image.py:125
+#: cms/models/document_image.py
 msgid "images"
 msgstr "Bilder"
 
-#: cms/models/feedback.py:24 cmsv2/models/feedback.py:22
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "content type"
 msgstr "Inhaltstyp"
 
-#: cms/models/feedback.py:25 cmsv2/models/feedback.py:23
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "The content type this feedback entry refers to."
 msgstr "Der Inhaltstyp, auf den sich dieser Feedback-Eintrag bezieht."
 
-#: cms/models/feedback.py:28 cmsv2/models/feedback.py:27
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "object id"
 msgstr "Objekt-ID"
 
-#: cms/models/feedback.py:29 cmsv2/models/feedback.py:28
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "The id of the object this feedback entry refers to."
 msgstr "Die ID des Objekts, auf das sich dieser Feedback-Eintrag bezieht."
 
-#: cms/models/feedback.py:32 cms/models/feedback.py:73
-#: cmsv2/models/feedback.py:31 cmsv2/models/feedback.py:72
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "refers to"
 msgstr "bezieht sich auf"
 
-#: cms/models/feedback.py:35 cmsv2/models/feedback.py:34
-#: cmsv2/models/review.py:94
+#: cms/models/feedback.py cmsv2/models/feedback.py cmsv2/models/review.py
 msgid "comment"
 msgstr "Kommentar"
 
-#: cms/models/feedback.py:44 cmsv2/models/feedback.py:43
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "marked as read by"
 msgstr "als gelesen markiert von"
 
-#: cms/models/feedback.py:46 cmsv2/models/feedback.py:45
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid ""
 "The user who marked this feedback as read. If the feedback is unread, this "
 "field is empty."
@@ -457,103 +444,103 @@ msgstr ""
 "Die nutzende Person, die dieses Feedback als gelesen markiert hat. Wenn das "
 "Feedback ungelesen ist, ist dieses Feld leer."
 
-#: cms/models/feedback.py:53 cmsv2/models/feedback.py:52
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "submitted on"
 msgstr "übermittelt am"
 
-#: cms/models/feedback.py:54 cmsv2/models/feedback.py:53
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "The time and date when the feedback was submitted."
 msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
 
-#: cms/models/feedback.py:92 cmsv2/models/feedback.py:91
+#: cms/models/feedback.py cmsv2/models/feedback.py
 msgid "feedback entries"
 msgstr "Feedback-Einträge"
 
-#: cms/models/group_api_key.py:36
+#: cms/models/group_api_key.py
 msgid "group"
 msgstr "Gruppe"
 
-#: cms/models/group_api_key.py:42
+#: cms/models/group_api_key.py
 msgid "token"
 msgstr "Token"
 
-#: cms/models/group_api_key.py:43
+#: cms/models/group_api_key.py
 msgid "10-50 characters, only digits and upper case letters allowed."
 msgstr "10-50 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
 
-#: cms/models/group_api_key.py:47
+#: cms/models/group_api_key.py
 msgid "Only digits and upper case letters allowed"
 msgstr "Nur Ziffern und Großbuchstaben erlaubt"
 
-#: cms/models/group_api_key.py:55
+#: cms/models/group_api_key.py
 msgid "revoked"
 msgstr "widerrufen"
 
-#: cms/models/group_api_key.py:56
+#: cms/models/group_api_key.py
 msgid "If the API key is revoked, clients cannot use it anymore."
 msgstr ""
 "Wenn der API-Schlüssel widerrufen wird, können Clients ihn nicht mehr "
 "verwenden."
 
-#: cms/models/group_api_key.py:61
+#: cms/models/group_api_key.py
 msgid "expiration date"
 msgstr "Ablaufdatum"
 
-#: cms/models/group_api_key.py:62
+#: cms/models/group_api_key.py
 msgid "Once API key expires, clients cannot use it anymore."
 msgstr ""
 "Sobald der API-Schlüssel abläuft, können die Clients ihn nicht mehr "
 "verwenden."
 
-#: cms/models/group_api_key.py:78
+#: cms/models/group_api_key.py
 msgid "valid"
 msgstr "gültig"
 
-#: cms/models/group_api_key.py:111
+#: cms/models/group_api_key.py
 msgid "Download"
 msgstr "Herunterladen"
 
-#: cms/models/group_api_key.py:113 cms/models/group_api_key.py:132
+#: cms/models/group_api_key.py
 msgid "QR code"
 msgstr "QR-Code"
 
-#: cms/models/group_api_key.py:126
+#: cms/models/group_api_key.py
 msgid "Download QR code"
 msgstr "QR-Code herunterladen"
 
-#: cms/models/group_api_key.py:158
+#: cms/models/group_api_key.py
 msgid "{}: Token for the group \"{}\""
 msgstr "{}: Token für die Gruppe \"{}\""
 
-#: cms/models/group_api_key.py:165
+#: cms/models/group_api_key.py
 msgid "API Key"
 msgstr "API-Key"
 
-#: cms/models/group_api_key.py:166
+#: cms/models/group_api_key.py
 msgid "API Keys"
 msgstr "API-Keys"
 
-#: cms/models/sponsor.py:14
+#: cms/models/sponsor.py
 msgid "name"
 msgstr "Name"
 
-#: cms/models/sponsor.py:20
+#: cms/models/sponsor.py
 msgid "URL"
 msgstr "URL"
 
-#: cms/models/sponsor.py:43
+#: cms/models/sponsor.py
 msgid "sponsor"
 msgstr "Sponsor:in"
 
-#: cms/models/sponsor.py:44
+#: cms/models/sponsor.py
 msgid "sponsors"
 msgstr "Sponsor:innen"
 
-#: cms/models/training_set.py:33
+#: cms/models/training_set.py
 msgid "document"
 msgstr "Dokument"
 
-#: cms/models/training_set.py:79
+#: cms/models/training_set.py
 msgid ""
 "It is not possible to create child elements for training sets (unlike "
 "disciplines)."
@@ -561,22 +548,20 @@ msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
 
-#: cms/templates/admin/delete_confirmation.html:16
-#: cms/templates/admin/delete_selected_confirmation.html:15
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:8
-#: cmsv2/templates/admin/csv_form.html:8
-#: cmsv2/templates/admin/generate_audio_base.html:9
-#: cmsv2/templates/admin/generate_image_base.html:9
+#: cms/templates/admin/delete_confirmation.html
+#: cms/templates/admin/delete_selected_confirmation.html
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/csv_form.html
+#: cmsv2/templates/admin/generate_audio_base.html
+#: cmsv2/templates/admin/generate_image_base.html
 msgid "Home"
 msgstr "Home"
 
-#: cms/templates/admin/delete_confirmation.html:20
-#: cms/templates/admin/delete_confirmation.html:24
-#: cms/templates/admin/delete_confirmation.html:32
+#: cms/templates/admin/delete_confirmation.html
 msgid "Delete"
 msgstr "Löschen"
 
-#: cms/templates/admin/delete_confirmation.html:39
+#: cms/templates/admin/delete_confirmation.html
 #, python-format
 msgid ""
 "Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
@@ -586,7 +571,7 @@ msgstr ""
 "Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
 "ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen."
 
-#: cms/templates/admin/delete_confirmation.html:46
+#: cms/templates/admin/delete_confirmation.html
 #, python-format
 msgid ""
 "Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
@@ -595,8 +580,8 @@ msgstr ""
 "Löschen von %(object_name)s '%(escaped_object)s' würde verwandte Objekte "
 "ebenfalls löschen, die allerdings geschützt sind."
 
-#: cms/templates/admin/delete_confirmation.html:53
-#: cms/templates/admin/delete_selected_confirmation.html:51
+#: cms/templates/admin/delete_confirmation.html
+#: cms/templates/admin/delete_selected_confirmation.html
 #, python-format
 msgid ""
 "Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
@@ -606,23 +591,21 @@ msgstr ""
 "möchtest? Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in "
 "der Zusammenfassung sehen kannst:"
 
-#: cms/templates/admin/delete_confirmation.html:62
-#: cms/templates/admin/delete_selected_confirmation.html:64
+#: cms/templates/admin/delete_confirmation.html
+#: cms/templates/admin/delete_selected_confirmation.html
 msgid "Yes, I’m sure"
 msgstr "Ja, ich bin mir sicher"
 
-#: cms/templates/admin/delete_confirmation.html:65
-#: cms/templates/admin/delete_selected_confirmation.html:67
+#: cms/templates/admin/delete_confirmation.html
+#: cms/templates/admin/delete_selected_confirmation.html
 msgid "No, take me back"
 msgstr "Nein, bitte abbrechen"
 
-#: cms/templates/admin/delete_selected_confirmation.html:18
-#: cms/templates/admin/delete_selected_confirmation.html:22
-#: cms/templates/admin/delete_selected_confirmation.html:30
+#: cms/templates/admin/delete_selected_confirmation.html
 msgid "Delete multiple objects"
 msgstr "Mehrere Objekte löschen"
 
-#: cms/templates/admin/delete_selected_confirmation.html:37
+#: cms/templates/admin/delete_selected_confirmation.html
 #, python-format
 msgid ""
 "Deleting the selected %(objects_name)s would result in deleting related "
@@ -632,7 +615,7 @@ msgstr ""
 "Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, wofür Ihnen aber Berechtigungen fehlen:"
 
-#: cms/templates/admin/delete_selected_confirmation.html:44
+#: cms/templates/admin/delete_selected_confirmation.html
 #, python-format
 msgid ""
 "Deleting the selected %(objects_name)s would require deleting the following "
@@ -641,92 +624,92 @@ msgstr ""
 "Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, die allerdings geschützt sind:"
 
-#: cms/templates/admin/object_delete_summary.html:2
+#: cms/templates/admin/object_delete_summary.html
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: cms/urls.py:40
+#: cms/urls.py
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: cms/utils.py:164 cmsv2/utils.py:140
+#: cms/utils.py cmsv2/utils.py
 msgid "and"
 msgstr "und"
 
-#: cms/validators.py:21 cmsv2/validators.py:21
+#: cms/validators.py cmsv2/validators.py
 msgid "File type not supported! Use: .mp3 .aac .wav .m4a .wma .ogg"
 msgstr "Unerlaubtes Dateiformat! Erlaubt: .mp3 .aac .wav .m4a .wma .ogg"
 
-#: cms/validators.py:36 cmsv2/validators.py:36
+#: cms/validators.py cmsv2/validators.py
 msgid "File too large! Max. 5 MB"
 msgstr "Datei zu groß! Max. 5 MB"
 
-#: cms/validators.py:51 cmsv2/validators.py:51
+#: cms/validators.py cmsv2/validators.py
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/job_admin.py:38 cmsv2/admins/unit_admin.py:72
-#: cmsv2/admins/word_admin.py:115
+#: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
+#: cmsv2/admins/word_admin.py
 msgid "migration status"
 msgstr "Ablaufdatum"
 
-#: cmsv2/admins/job_admin.py:49 cmsv2/admins/unit_admin.py:83
-#: cmsv2/admins/word_admin.py:126
+#: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
+#: cmsv2/admins/word_admin.py
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:50 cmsv2/admins/unit_admin.py:84
-#: cmsv2/admins/word_admin.py:127
+#: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
+#: cmsv2/admins/word_admin.py
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
 
-#: cmsv2/admins/job_admin.py:130
+#: cmsv2/admins/job_admin.py
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py:144 cmsv2/admins/unit_admin.py:281
-#: cmsv2/models/job.py:34 cmsv2/models/review.py:102 cmsv2/models/unit.py:329
+#: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py cmsv2/models/job.py
+#: cmsv2/models/review.py cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
-#: cmsv2/admins/job_admin.py:166 cmsv2/admins/unit_admin.py:303
-#: cmsv2/admins/word_admin.py:712
+#: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
+#: cmsv2/admins/word_admin.py
 msgid "migrated"
 msgstr "Migriert"
 
-#: cmsv2/admins/job_admin.py:168
+#: cmsv2/admins/job_admin.py
 msgid "Export all vocabulary for these jobs to CSV"
 msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 
-#: cmsv2/admins/job_admin.py:201
+#: cmsv2/admins/job_admin.py
 msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
-#: cmsv2/admins/job_admin.py:210
+#: cmsv2/admins/job_admin.py
 msgid "%(name)s %(label)"
 msgstr "%(name)s (Neu)"
 
-#: cmsv2/admins/job_admin.py:214
+#: cmsv2/admins/job_admin.py
 msgid "Selected jobs have been duplicated successfully."
 msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
 
-#: cmsv2/admins/job_admin.py:235
+#: cmsv2/admins/job_admin.py
 msgid "Import"
 msgstr "Import"
 
-#: cmsv2/admins/unit_admin.py:52
+#: cmsv2/admins/unit_admin.py
 msgid "assigned user"
 msgstr "Zugewiesene Person"
 
-#: cmsv2/admins/unit_admin.py:53
+#: cmsv2/admins/unit_admin.py
 msgid "assigned users"
 msgstr "Zugewiesene Personen"
 
-#: cmsv2/admins/unit_admin.py:167
+#: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"
 msgstr "Alle ausgewählte Einheiten veröffentlichen"
 
-#: cmsv2/admins/unit_admin.py:181
+#: cmsv2/admins/unit_admin.py
 #, python-format
 msgid ""
 "Released %(unit_count)d unit(s). %(units_skipped)d unit(s) were skipped, "
@@ -735,331 +718,323 @@ msgstr ""
 "%(unit_count)d Einheit(en) wurden veröffentlicht. %(units_skipped)d "
 "Einheiten wurden übersprungen, da sie bereits veröffentlicht waren"
 
-#: cmsv2/admins/unit_admin.py:189 cmsv2/admins/unit_admin.py:209
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:4
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:14
+#: cmsv2/admins/unit_admin.py
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign selected units to user"
 msgstr "Ausgewählte Einheiten zuweisen"
 
-#: cmsv2/admins/unit_admin.py:227
+#: cmsv2/admins/unit_admin.py
 #, python-format
 msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
 "%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
-#: cmsv2/admins/unit_admin.py:248
+#: cmsv2/admins/unit_admin.py
 msgid "jobs"
 msgstr "Berufe"
 
-#: cmsv2/admins/user_admin.py:21
+#: cmsv2/admins/user_admin.py
 msgid "assigned unit"
 msgstr "Zugewiesene Einheit"
 
-#: cmsv2/admins/user_admin.py:22
+#: cmsv2/admins/user_admin.py
 msgid "assigned units"
 msgstr "Zugewiesene Einheiten"
 
-#: cmsv2/admins/word_admin.py:20
+#: cmsv2/admins/word_admin.py
 msgid "Has Image"
 msgstr "Hat Bild"
 
-#: cmsv2/admins/word_admin.py:40
+#: cmsv2/admins/word_admin.py
 msgid "Unit or Job"
 msgstr "Einheit oder Job"
 
-#: cmsv2/admins/word_admin.py:70
+#: cmsv2/admins/word_admin.py
 msgid "Has Complete Example Sentence"
 msgstr "Hat vollständigen Beispielsatz"
 
-#: cmsv2/admins/word_admin.py:183
+#: cmsv2/admins/word_admin.py
 msgid "Word Information"
 msgstr "Wort Informationen"
 
-#: cmsv2/admins/word_admin.py:197
+#: cmsv2/admins/word_admin.py
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py:208 cmsv2/admins/word_admin.py:662
-#: cmsv2/models/unit.py:160 cmsv2/models/unit.py:266
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
 msgid "Image"
 msgstr "Bilder"
 
-#: cmsv2/admins/word_admin.py:219
+#: cmsv2/admins/word_admin.py
 msgid "Example Sentence"
 msgstr "Beispielsatz"
 
-#: cmsv2/admins/word_admin.py:231
+#: cmsv2/admins/word_admin.py
 msgid "Miscellaneous"
 msgstr "Verschiedene"
 
-#: cmsv2/admins/word_admin.py:397
+#: cmsv2/admins/word_admin.py
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
-#: cmsv2/admins/word_admin.py:726 cmsv2/models/word.py:76
+#: cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
 
-#: cmsv2/admins/word_admin.py:741 cmsv2/models/unit.py:47
-#: cmsv2/models/word.py:149
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "image check status"
 msgstr "Bild Prüfstatus"
 
-#: cmsv2/admins/word_export_resource.py:42
+#: cmsv2/admins/word_export_resource.py
 msgid "Plural"
 msgstr "Plural"
 
-#: cmsv2/admins/word_export_resource.py:82 cmsv2/models/unit.py:407
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:9
+#: cmsv2/admins/word_export_resource.py cmsv2/models/unit.py
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Units"
 msgstr "Einheit"
 
-#: cmsv2/admins/word_import_resource.py:154
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: No recognised columns – row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:171
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: Unit column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:178
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: Vocabulary column is empty, row will be skipped."
 msgstr "Zeile %(n)s: Die Spalte Vokabel ist leer, wird übersprungen."
 
-#: cmsv2/admins/word_import_resource.py:199
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: Malformed column data – %(e)s"
 msgstr "Zeile %(n)s: Fehlerhafte Spaltendaten – %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:208
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: Unexpected parsing error – %(e)s"
 msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 
-#: cmsv2/admins/word_import_resource.py:283
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
 
-#: cmsv2/apps.py:14 cmsv2/templates/admin/generate_audio_base.html:10
-#: cmsv2/templates/admin/generate_image_base.html:10
+#: cmsv2/apps.py cmsv2/templates/admin/generate_audio_base.html
+#: cmsv2/templates/admin/generate_image_base.html
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
-#: cmsv2/models/job.py:20 cmsv2/models/unit.py:321
+#: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:35 cmsv2/models/unit.py:330 cmsv2/models/word.py:114
+#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"
 msgstr "zuletzt geändert"
 
-#: cmsv2/models/job.py:79 cmsv2/models/unit.py:374
+#: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py:92 cmsv2/views/import_csv_view.py:26
+#: cmsv2/models/job.py cmsv2/views/import_csv_view.py
 msgid "Job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py:93 cmsv2/templates/admin/csv_form.html:9
+#: cmsv2/models/job.py cmsv2/templates/admin/csv_form.html
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py:26 cmsv2/models/unit.py:313
+#: cmsv2/models/review.py cmsv2/models/unit.py
 msgid "unit"
 msgstr "Einheit"
 
-#: cmsv2/models/review.py:32 cmsv2/models/review.py:86
+#: cmsv2/models/review.py
 msgid "reviewer"
 msgstr "Kontrolleur:in"
 
-#: cmsv2/models/review.py:39
+#: cmsv2/models/review.py
 msgid "assigned by"
 msgstr "Zugewiesen von"
 
-#: cmsv2/models/review.py:41
+#: cmsv2/models/review.py
 msgid "assigned at"
 msgstr "Zuwiesen am"
 
-#: cmsv2/models/review.py:43
+#: cmsv2/models/review.py
 msgid "completed at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:56
+#: cmsv2/models/review.py
 msgid "Review Assignment"
 msgstr "Kontroll Zuweisung"
 
-#: cmsv2/models/review.py:57
+#: cmsv2/models/review.py
 msgid "Review Assignments"
 msgstr "Kontroll Zuweisungen"
 
-#: cmsv2/models/review.py:73
+#: cmsv2/models/review.py
 msgid "unit-word relation"
 msgstr "Einheit-Wort Beziehung"
 
-#: cmsv2/models/review.py:77
+#: cmsv2/models/review.py
 msgid "unit-specific image"
 msgstr "Einheit spezifisches Bild"
 
-#: cmsv2/models/review.py:79
+#: cmsv2/models/review.py
 msgid "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
 msgstr ""
 "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, Falsch "
 "wenn ein Bild aus dem Wort kontrolliert wird"
 
-#: cmsv2/models/review.py:92
+#: cmsv2/models/review.py
 msgid "status"
 msgstr "Status"
 
-#: cmsv2/models/review.py:99
+#: cmsv2/models/review.py
 msgid "suggested image"
 msgstr "Vorgeschlagenes Bild"
 
-#: cmsv2/models/review.py:100
+#: cmsv2/models/review.py
 msgid "Alternative image suggested by reviewer"
 msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
 
-#: cmsv2/models/review.py:103
+#: cmsv2/models/review.py
 msgid "updated at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py:119
+#: cmsv2/models/review.py
 msgid "Image Review"
 msgstr "Bild Kontrolle"
 
-#: cmsv2/models/review.py:120
+#: cmsv2/models/review.py
 msgid "Image Reviews"
 msgstr "Bild Kontrollen"
 
-#: cmsv2/models/static.py:57
+#: cmsv2/models/static.py
 msgid "Pending Review"
 msgstr "Freigabe ausstehend"
 
-#: cmsv2/models/static.py:58
+#: cmsv2/models/static.py
 msgid "Approved"
 msgstr "Genehmigt"
 
-#: cmsv2/models/static.py:68
+#: cmsv2/models/static.py
 msgid "Reviewer"
 msgstr "Expert:in"
 
-#: cmsv2/models/unit.py:60 cmsv2/models/unit.py:218 cmsv2/models/unit.py:290
-#: cmsv2/models/word.py:95
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio"
 msgstr "Beispielsatz Audio"
 
-#: cmsv2/models/unit.py:66 cmsv2/models/word.py:101
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence check status"
 msgstr "Beispielsatz Check Status"
 
-#: cmsv2/models/unit.py:71 cmsv2/models/word.py:106
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio regenerated"
 msgstr "Beispielsatz Audio neu generiert"
 
-#: cmsv2/models/unit.py:73 cmsv2/models/word.py:108
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid ""
 "Indicates whether the audio has been regenerated with the new TTS model."
 msgstr "Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
 
-#: cmsv2/models/unit.py:170 cmsv2/templates/admin/generate_image_base.html:16
-#: cmsv2/templates/admin/unitword_generate_image.html:12
-#: cmsv2/templates/admin/word_generate_image.html:9
+#: cmsv2/models/unit.py cmsv2/templates/admin/generate_image_base.html
+#: cmsv2/templates/admin/unitword_generate_image.html
+#: cmsv2/templates/admin/word_generate_image.html
 msgid "Generate Image"
 msgstr "Bild generieren"
 
-#: cmsv2/models/unit.py:194
-#: cmsv2/templates/admin/unitword_generate_example_sentence_audio.html:6
-#: cmsv2/templates/admin/unitword_generate_example_sentence_audio.html:9
-#: cmsv2/templates/admin/word_generate_example_sentence_audio.html:6
-#: cmsv2/templates/admin/word_generate_example_sentence_audio.html:11
+#: cmsv2/models/unit.py
+#: cmsv2/templates/admin/unitword_generate_example_sentence_audio.html
+#: cmsv2/templates/admin/word_generate_example_sentence_audio.html
 msgid "Generate Example Sentence Audio"
 msgstr "Generiere Beispielsatz Audio"
 
-#: cmsv2/models/unit.py:300
+#: cmsv2/models/unit.py
 msgid "Unit-Word Relation"
 msgstr "Einheit-Wort Beziehung"
 
-#: cmsv2/models/unit.py:301
+#: cmsv2/models/unit.py
 msgid "Unit-Word Relations"
 msgstr "Einheit-Wort Beziehungen"
 
-#: cmsv2/models/unit.py:406
+#: cmsv2/models/unit.py
 msgid "Unit"
 msgstr "Einheit"
 
-#: cmsv2/models/word.py:83
+#: cmsv2/models/word.py
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py:332 cmsv2/templates/admin/word_generate_audio.html:7
-#: cmsv2/templates/admin/word_generate_example_sentence_audio.html:9
-#: cmsv2/templates/admin/word_generate_image.html:7
+#: cmsv2/models/word.py cmsv2/templates/admin/word_generate_audio.html
+#: cmsv2/templates/admin/word_generate_example_sentence_audio.html
+#: cmsv2/templates/admin/word_generate_image.html
 msgid "Words"
 msgstr "Vokabel"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:10
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign to user"
 msgstr "An nutzende Person zuweisen"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:31
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 #, python-format
 msgid "You are about to assign %(counter)s unit to a single user."
 msgid_plural "You are about to assign %(counter)s units to a single user."
 msgstr[0] "Du bist dabei, %(counter)s Einheit einer Person zuzuweisen."
 msgstr[1] "Du bist dabei, %(counter)s Einheiten einer Person zuzuweisen."
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:39
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "User"
 msgstr "Nutzende Person"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:47
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Units already assigned to this user will be skipped."
 msgstr ""
 "Einheiten, die dieser Person bereits zugewiesen sind, werden übersprungen."
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:52
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Selected units"
 msgstr "Ausgewählte Einheiten"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:66
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign"
 msgstr "Zuweisen"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html:71
-#: cmsv2/templates/admin/csv_form.html:55
-#: cmsv2/templates/admin/csv_form.html:59
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/csv_form.html
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: cmsv2/templates/admin/cmsv2/import_csv_button.html:7
-#: cmsv2/templates/admin/csv_form.html:4 cmsv2/templates/admin/csv_form.html:13
-#: cmsv2/templates/admin/csv_form.html:17
+#: cmsv2/templates/admin/cmsv2/import_csv_button.html
+#: cmsv2/templates/admin/csv_form.html
 msgid "Import CSV"
 msgstr "CSV importieren"
 
-#: cmsv2/templates/admin/cmsv2/save_and_import_button.html:10
+#: cmsv2/templates/admin/cmsv2/save_and_import_button.html
 msgid "Save and import words"
 msgstr "Sichern und Wörter importieren"
 
-#: cmsv2/templates/admin/csv_form.html:49
+#: cmsv2/templates/admin/csv_form.html
 msgid "Start import"
 msgstr "Import starten"
 
-#: cmsv2/templates/admin/generate_audio_base.html:16
-#: cmsv2/templates/admin/word_generate_audio.html:9
+#: cmsv2/templates/admin/generate_audio_base.html
+#: cmsv2/templates/admin/word_generate_audio.html
 msgid "Generate Audio"
 msgstr "Audio generieren"
 
-#: cmsv2/views/import_csv_view.py:30
+#: cmsv2/views/import_csv_view.py
 msgid "Select CSV file"
 msgstr "CSV Datei auswählen"
 
-#: cmsv2/views/import_csv_view.py:32
+#: cmsv2/views/import_csv_view.py
 msgid ""
 "The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
 "and \"Beispielsatz\"."
@@ -1067,16 +1042,16 @@ msgstr ""
 "Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
 "\"Beispielsatz\" enthalten."
 
-#: cmsv2/views/import_csv_view.py:52
+#: cmsv2/views/import_csv_view.py
 msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
-#: cmsv2/views/import_csv_view.py:95
+#: cmsv2/views/import_csv_view.py
 #, python-format
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
-#: cmsv2/views/import_csv_view.py:102
+#: cmsv2/views/import_csv_view.py
 #, python-format
 msgid ""
 "Import successful! %(created)s new entries, %(updated)s updated. Audio and "
@@ -1086,7 +1061,7 @@ msgstr ""
 "aktualisiert. Audio und Bilder werden im Hintergrund generiert. Dies kann "
 "einige Minuten dauern..."
 
-#: cmsv2/views/import_csv_view.py:126
+#: cmsv2/views/import_csv_view.py
 msgid ""
 "Import failed. The size of the column or row doesn't fit the table "
 "dimensions. Please adjust your table and try again."
@@ -1094,36 +1069,36 @@ msgstr ""
 "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen "
 "nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
 
-#: cmsv2/views/import_csv_view.py:135
+#: cmsv2/views/import_csv_view.py
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
 
-#: core/audio.py:28
+#: core/audio.py
 msgid "Invalid audio file"
 msgstr "Ungültige Audiodatei"
 
-#: core/audio.py:89
+#: core/audio.py
 msgid "Could not measure audio loudness"
 msgstr "Die Lautstärke der Audiodatei konnte nicht gemessen werden."
 
-#: core/settings.py:244
+#: core/settings.py
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:245
+#: core/settings.py
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:502 core/settings.py:503 core/settings.py:505
+#: core/settings.py
 msgid "Lunes Administration"
 msgstr "Lunes-Verwaltung"
 
-#: core/settings.py:504
+#: core/settings.py
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
-#: help/apps.py:13
+#: help/apps.py
 msgid "help"
 msgstr "Hilfe"
 
