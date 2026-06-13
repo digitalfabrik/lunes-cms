@@ -212,7 +212,9 @@ def test_drain_is_single_flight(fast_worker):
 
 def test_build_image_prompt_includes_word_and_optional_hints():
     bare = image_generation.build_image_prompt("Hammer")
-    assert '"Hammer"' in bare
+    # Quotes around the the word make it more likely to have the word printed in the image
+    assert "Hammer" in bare
+    assert '"Hammer"' not in bare
     assert "Lernmodul" not in bare
 
     enriched = image_generation.build_image_prompt(
