@@ -18,11 +18,13 @@ def unitword_generate_image(request, unitword_id):
     """
 
     unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    jobs = list(unitword_instance.unit.jobs.all())
 
     context = admin.site.each_context(request)
     context.update(
         {
             "unitword_instance": unitword_instance,
+            "job_title": jobs[0].name if len(jobs) == 1 else None,
             "temp_image_url": None,
         }
     )
