@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import datetime
 import logging
 from abc import ABC, abstractmethod
-from datetime import UTC
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from django.core.management import CommandParser
@@ -21,6 +20,7 @@ from django.db.models import (
 )
 from django.db.models.fields.json import KT
 from django.db.models.functions import Cast, TruncDate
+from django.utils import timezone
 
 from lunes_cms.analytics.models import (
     AnalyticsEvent,
@@ -38,17 +38,22 @@ RETENTION_DAYS = 90
 class EventAggregator(ABC):
     """
     Base class for event type aggregators.
-    Subclasses implement aggregate() to transform raw events into aggregate models.
+    Subclasses implement aggregate() to transform raw events into aggregate models
+    and to mark the consumed events with ``aggregated_at`` so they are not picked
+    up on subsequent runs.
     """
 
     event_types: list[str]
 
     @staticmethod
     @abstractmethod
-    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
         """
-        Aggregate the given events into the corresponding aggregate model.
-        The queryset is already filtered by event type, bounded by ID,
+        Aggregate the given events into the corresponding aggregate model and
+        mark the events that were consumed by setting ``aggregated_at``.
+
+        The queryset is already filtered to events of this aggregator's types,
+        bounded by the snapshot ID, restricted to ``aggregated_at__isnull=True``
         and annotated with ``event_date`` (UTC date of the event).
         """
 
@@ -62,7 +67,7 @@ class JobSelectionAggregator(EventAggregator):
     event_types = [AnalyticsEvent.EventType.JOB_SELECTED]
 
     @staticmethod
-    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
         daily_stats = (
             events.annotate(job_id=KT("payload__job_id"))
             .values("job_id", "event_date")
@@ -85,15 +90,19 @@ class JobSelectionAggregator(EventAggregator):
             )
             logger.info("Created or updated aggregate %r", aggregate)
 
+        events.update(aggregated_at=aggregated_at)
+
 
 class SessionAggregator(EventAggregator):
     """
-    Aggregates session_start and session_end events into daily SessionAggregate records.
-    Pairs events by session_id to compute duration, then buckets the durations.
-    This command ignores invalid sessions (for example session that have not been completed yet and
-    thus only have a session_start, but no session_end event). These invalid or not yet completed sessions
-    will be deleted after aggregation.
-    Sessions ending on a different day than they started will be attributed to their start day.
+    Aggregates session_start and session_end events into daily SessionAggregate
+    records. Pairs events by session_id to compute duration.
+
+    Sessions whose start and end fall on different UTC days are attributed to
+    their start day. Sessions that cannot be paired in this run (for example a
+    session_start whose session_end has not arrived yet, or a session_id that
+    appears more than twice) are left unmarked so a later run can pick them up
+    once the matching event arrives.
     """
 
     event_types = [
@@ -101,28 +110,17 @@ class SessionAggregator(EventAggregator):
         AnalyticsEvent.EventType.SESSION_END,
     ]
 
-    DURATION_BUCKETS: tuple[tuple[str, float], ...] = (
-        ("0-1", 1.0),
-        ("1-5", 5.0),
-        ("5-15", 15.0),
-        ("15-30", 30.0),
-        ("30-", float("inf")),
-    )
-    """
-    The durations used for the histogram aggregation.
-    Values indicate the maximal duration for a given bucket in minutes.
-    """
-
     @classmethod
-    def aggregate(cls, events: QuerySet[AnalyticsEvent]) -> None:
+    def aggregate(
+        cls, events: QuerySet[AnalyticsEvent], aggregated_at: datetime
+    ) -> None:
+        consumed_session_ids: list[str] = []
         for session in cls.sessions(events):
             date = session["event_date"]
-            duration: datetime.timedelta = (
-                session["end_timestamp"] - session["timestamp"]
+            duration_seconds = int(
+                (session["end_timestamp"] - session["timestamp"]).total_seconds()
             )
-            duration_seconds = duration.total_seconds()
-            bucket = cls.get_duration_bucket(duration_seconds / 60)
-            aggregate, created = SessionAggregate.objects.update_or_create(
+            aggregate, _created = SessionAggregate.objects.update_or_create(
                 date=date,
                 defaults={
                     "total_sessions": F("total_sessions") + 1,
@@ -132,25 +130,17 @@ class SessionAggregator(EventAggregator):
                 create_defaults={
                     "total_sessions": 1,
                     "total_duration_seconds": duration_seconds,
-                    "duration_buckets": {bucket: 1},
                 },
             )
-            if not created:
-                aggregate.duration_buckets[bucket] = (
-                    aggregate.duration_buckets.get(bucket, 0) + 1
-                )
-                aggregate.save(update_fields=["duration_buckets"])
+            consumed_session_ids.append(session["payload__session_id"])
             logger.info(
                 "Created or updated aggregate %r with session %r", aggregate, session
             )
 
-    @classmethod
-    def get_duration_bucket(cls, duration_minutes: float) -> str:
-        """Returns the duration bucket for the given duration_seconds."""
-        for label, max_duration_minutes in cls.DURATION_BUCKETS:
-            if duration_minutes <= max_duration_minutes:
-                return label
-        raise ValueError(f"Invalid value {duration_minutes=}")
+        if consumed_session_ids:
+            events.filter(payload__session_id__in=consumed_session_ids).update(
+                aggregated_at=aggregated_at
+            )
 
     @staticmethod
     def sessions(
@@ -202,7 +192,7 @@ class ModuleDurationAggregator(EventAggregator):
     event_types = [AnalyticsEvent.EventType.MODULE_DURATION]
 
     @staticmethod
-    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
         )
@@ -274,6 +264,8 @@ class ModuleDurationAggregator(EventAggregator):
             )
             logger.info("Created or updated aggregate %r", aggregate)
 
+        events.update(aggregated_at=aggregated_at)
+
 
 class DropoutAggregator(EventAggregator):
     """
@@ -286,7 +278,7 @@ class DropoutAggregator(EventAggregator):
     event_types = [AnalyticsEvent.EventType.EXERCISE_DROPOUT]
 
     @staticmethod
-    def aggregate(events: QuerySet[AnalyticsEvent]) -> None:
+    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
         )
@@ -360,6 +352,8 @@ class DropoutAggregator(EventAggregator):
             )
             logger.info("Created or updated aggregate %r", aggregate)
 
+        events.update(aggregated_at=aggregated_at)
+
 
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
     JobSelectionAggregator,
@@ -371,10 +365,13 @@ EVENT_AGGREGATORS: list[type[EventAggregator]] = [
 
 class Command(BaseCommand):
     """
-    Aggregate analytics events into daily summaries and delete the raw events.
+    Aggregate analytics events into daily summaries.
+
+    Raw events are kept after aggregation; each consumed event is stamped with
+    ``aggregated_at`` so subsequent runs only process newly arrived events.
     """
 
-    help = "Aggregate analytics events into daily summaries and delete the raw events."
+    help = "Aggregate analytics events into daily summaries (raw events are retained)."
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
@@ -405,7 +402,7 @@ class Command(BaseCommand):
             for aggregator in EVENT_AGGREGATORS
             for event_type in aggregator.event_types
         ]
-        cutoff = datetime.datetime.now(tz=UTC) - datetime.timedelta(days=RETENTION_DAYS)
+        cutoff = datetime.now(tz=UTC) - timedelta(days=RETENTION_DAYS)
         old_events = AnalyticsEvent.objects.filter(timestamp__lt=cutoff).exclude(
             event_type__in=batch_aggregated_types
         )
@@ -431,34 +428,38 @@ class Command(BaseCommand):
     ) -> None:
         event_types = aggregator_class.event_types
 
-        # Capture max ID to avoid deleting events that arrive during aggregation
+        # Capture max ID to avoid touching events that arrive during aggregation.
         max_id = AnalyticsEvent.objects.filter(
             event_type__in=event_types,
-        ).aggregate(
-            max_id=models.Max("id")
-        )["max_id"]
+            aggregated_at__isnull=True,
+        ).aggregate(max_id=models.Max("id"))["max_id"]
 
         if max_id is None:
-            self.stdout.write(f"No {event_types} events to aggregate.")
+            self.stdout.write(f"No new {event_types} events to aggregate.")
             return
 
         events = AnalyticsEvent.objects.filter(
             event_type__in=event_types,
+            aggregated_at__isnull=True,
             id__lte=max_id,
         ).annotate(event_date=TruncDate("timestamp", tzinfo=UTC))
 
-        aggregator_class.aggregate(events)
+        aggregated_at = timezone.now()
+        aggregator_class.aggregate(events, aggregated_at)
 
-        count, _ = events.delete()
+        marked_count = AnalyticsEvent.objects.filter(
+            event_type__in=event_types,
+            aggregated_at=aggregated_at,
+        ).count()
 
         if dry_run:
             transaction.set_rollback(True)
             self.stdout.write(
-                f"[DRY RUN] Would aggregate and delete {count} {event_types} events."
+                f"[DRY RUN] Would aggregate and mark {marked_count} {event_types} events."
             )
         else:
             self.stdout.write(
                 self.style.SUCCESS(
-                    f"Aggregated and deleted {count} {event_types} events."
+                    f"Aggregated and marked {marked_count} {event_types} events."
                 )
             )

@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any, Callable, Generator
 
 import pytest
-from playwright.sync_api import Browser, Page, expect
+from playwright.sync_api import Browser, Page, StorageState, expect
 
 BASE_URL = "http://localhost:8080"
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
@@ -65,7 +65,7 @@ def pytest_configure(config: pytest.Config) -> None:
     )
 
 
-_auth_state: dict | None = None
+_auth_state: StorageState | None = None
 
 
 def pytest_configure_node(node: Any) -> None:

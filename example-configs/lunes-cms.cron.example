@@ -1,0 +1,12 @@
+# Example crontab for lunes-cms periodic jobs.
+# Place at /etc/cron.d/lunes-cms (file owned by root, mode 0644).
+#
+# Run nightly at 02:15 UTC. The aggregator is idempotent (each consumed event
+# is stamped with ``aggregated_at``), so the cadence can be tightened or
+# loosened without risk of double-counting; daily is the natural granularity
+# because ``SessionAggregate`` is keyed by UTC day.
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+15 2 * * *  lunes  /usr/local/bin/lunes-cms-cli aggregate_analytics >> /var/log/lunes-cms/aggregate.log 2>&1

@@ -8,4 +8,5 @@ interface Window {
     initAudioGenerator: (config: AudioGeneratorConfig) => void
     initImageGenerator: (config: ImageGeneratorConfig) => void
     document_overlay: (event: MouseEvent & { target: HTMLSelectElement }) => void
+    renderReportsChart: (canvas: HTMLCanvasElement, data: ChartData) => void
 }

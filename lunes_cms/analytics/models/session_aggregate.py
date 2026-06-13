@@ -11,7 +11,6 @@ class SessionAggregate(models.Model):
     # aggregated fields
     total_sessions = models.IntegerField(default=0)
     total_duration_seconds = models.IntegerField(default=0)
-    duration_buckets = models.JSONField(default=dict)
 
     class Meta:
         """
@@ -19,4 +18,4 @@ class SessionAggregate(models.Model):
         """
 
     def __str__(self) -> str:
-        return f"Session aggregate ({self.date}): {self.total_sessions} | {self.total_duration_seconds} | {self.duration_buckets}"
+        return f"Session aggregate ({self.date}): {self.total_sessions} | {self.total_duration_seconds}"
