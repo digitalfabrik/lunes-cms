@@ -121,7 +121,7 @@ def test_drain_isolates_failures_per_row(fast_worker):
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(word: Word) -> bytes:
+    def maybe_fail(word: Word, job_title: str | None = None) -> bytes:
         if word.word == "Schraubenzieher":
             raise ValueError("simulated openai 5xx")
         return b"ok-png"
@@ -218,7 +218,33 @@ def test_build_image_prompt_includes_word_and_optional_hints():
     assert "Lernmodul" not in bare
 
     enriched = image_generation.build_image_prompt(
-        "Hammer", unit_title="Werkzeuge", additional_info="Profilansicht"
+        "Hammer",
+        unit_title="Werkzeuge",
+        additional_info="Profilansicht",
+        job_title="Tischler/in",
     )
     assert "Werkzeuge" in enriched
     assert "Profilansicht" in enriched
+    assert "Tischler/in" in enriched
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_passes_job_title_to_image_generation(fast_worker):
+    imported = _make_word(word="Hammer")
+
+    with mock.patch.object(
+        image_generation, "openai_word_image_bytes", return_value=b"png"
+    ) as image_call:
+        thread = threading.Thread(
+            target=image_generation.drain_pending_images,
+            kwargs={
+                "word_ids": [imported.pk],
+                "throttle_seconds": 0,
+                "job_title": "Tischler/in",
+            },
+        )
+        thread.start()
+        thread.join(timeout=10)
+        assert not thread.is_alive()
+
+    image_call.assert_called_once_with(mock.ANY, job_title="Tischler/in")
