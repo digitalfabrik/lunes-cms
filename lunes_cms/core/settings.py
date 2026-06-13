@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import configparser
 import os
 
 from django.core.exceptions import ImproperlyConfigured
@@ -24,6 +25,14 @@ from .utils import strtobool
 
 #: Build paths inside the project like this: ``os.path.join(BASE_DIR, ...)``
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Load config from /etc/lunes-cms.ini (production) or a local override file.
+# The local override is never committed and takes precedence over the system file.
+_config = configparser.ConfigParser(interpolation=None)
+_config.read(["/etc/lunes-cms.ini", os.path.join(BASE_DIR, "..", "lunes-cms.ini")])
+for _section in _config.sections():
+    for _key, _value in _config.items(_section):
+        os.environ.setdefault(f"LUNES_CMS_{_key.upper()}", _value)
 
 #: How many documents a training sets needs at least to get released
 TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
@@ -68,6 +77,24 @@ MATOMO_SITE_ID = os.environ.get("LUNES_CMS_MATOMO_SITE_ID", "")
 #: Authentication token for Matomo API
 MATOMO_TOKEN = os.environ.get("LUNES_CMS_MATOMO_TOKEN", "")
 
+###########
+# INFLUXDB #
+###########
+
+#: InfluxDB write endpoint
+INFLUX_URL = os.environ.get(
+    "LUNES_CMS_INFLUX_URL", "https://monitoring.tuerantuer.org/write"
+)
+
+#: Path to the client TLS certificate for InfluxDB mTLS auth
+INFLUX_CERT = os.environ.get("LUNES_CMS_INFLUX_CERT", "/etc/pki/client.crt")
+
+#: Path to the client TLS key for InfluxDB mTLS auth
+INFLUX_KEY = os.environ.get("LUNES_CMS_INFLUX_KEY", "/etc/pki/client.key")
+
+#: Path to the CA certificate for verifying the InfluxDB server certificate
+INFLUX_CA = os.environ.get("LUNES_CMS_INFLUX_CA", "/etc/pki/ca.crt")
+
 ########################
 # DJANGO CORE SETTINGS #
 ########################
@@ -77,6 +104,11 @@ MATOMO_TOKEN = os.environ.get("LUNES_CMS_MATOMO_TOKEN", "")
 #: .. warning::
 #:     Never deploy a site into production with :setting:`DEBUG` turned on!
 DEBUG = bool(strtobool(os.environ.get("LUNES_CMS_DEBUG", "False")))
+
+#: InfluxDB database name — defaults to lunes_test in debug mode, lunes_production otherwise
+INFLUX_DB = os.environ.get(
+    "LUNES_CMS_INFLUX_DB", "lunes_test" if DEBUG else "lunes_production"
+)
 
 #: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
