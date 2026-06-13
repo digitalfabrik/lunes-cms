@@ -149,11 +149,11 @@ def sessions_report(request: HttpRequest) -> HttpResponse:
     chart_data = {
         "labels": [r["bucket"].isoformat() for r in rows],
         "bar": {
-            "label": str(_("Sessions")),
+            "label": _("Sessions"),
             "values": [r["total_sessions"] for r in rows],
         },
         "line": {
-            "label": str(_("Average duration (min)")),
+            "label": _("Average duration (min)"),
             "values": [round(r["avg_duration_seconds"] / 60, 1) for r in rows],
         },
     }
