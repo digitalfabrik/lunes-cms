@@ -22,13 +22,9 @@ from django.db.models.fields.json import KT
 from django.db.models.functions import Cast, TruncDate
 from django.utils import timezone
 
-from lunes_cms.analytics.models import (
-    AnalyticsEvent,
-    DropoutAggregate,
-    JobSelectionAggregate,
-    ModuleDurationAggregate,
-    SessionAggregate,
-)
+from lunes_cms.analytics.influx import date_to_ns, push_lines, resolve_job
+from lunes_cms.analytics.models import AnalyticsEvent
+from lunes_cms.cmsv2.models import Job
 
 logger = logging.getLogger(__name__)
 
@@ -38,36 +34,47 @@ RETENTION_DAYS = 90
 class EventAggregator(ABC):
     """
     Base class for event type aggregators.
-    Subclasses implement aggregate() to transform raw events into aggregate models
-    and to mark the consumed events with ``aggregated_at`` so they are not picked
-    up on subsequent runs.
+    Subclasses implement aggregate() to transform raw events into InfluxDB line
+    protocol strings and to mark the consumed events with ``aggregated_at`` so
+    they are not picked up on subsequent runs.
     """
 
     event_types: list[str]
 
     @staticmethod
     @abstractmethod
-    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
+    def aggregate(
+        events: QuerySet[AnalyticsEvent],
+        aggregated_at: datetime,
+        job_names: dict[int, str],
+    ) -> list[str]:
         """
-        Aggregate the given events into the corresponding aggregate model and
-        mark the events that were consumed by setting ``aggregated_at``.
+        Aggregate the given events into InfluxDB line protocol strings and mark
+        the events that were consumed by setting ``aggregated_at``.
 
         The queryset is already filtered to events of this aggregator's types,
         bounded by the snapshot ID, restricted to ``aggregated_at__isnull=True``
         and annotated with ``event_date`` (UTC date of the event).
+
+        Returns a list of InfluxDB line protocol strings to be pushed after the
+        transaction commits.
         """
 
 
 class JobSelectionAggregator(EventAggregator):
     """
-    Aggregates job_selected events into daily JobSelectionAggregate records.
+    Aggregates job_selected events into daily lunes_job_selection measurements.
     selection_count = number of "add" events minus number of "remove" events.
     """
 
     event_types = [AnalyticsEvent.EventType.JOB_SELECTED]
 
     @staticmethod
-    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
+    def aggregate(
+        events: QuerySet[AnalyticsEvent],
+        aggregated_at: datetime,
+        job_names: dict[int, str],
+    ) -> list[str]:
         daily_stats = (
             events.annotate(job_id=KT("payload__job_id"))
             .values("job_id", "event_date")
@@ -79,24 +86,31 @@ class JobSelectionAggregator(EventAggregator):
             )
         )
 
+        lines = []
         for stat in daily_stats:
-            aggregate, _created = JobSelectionAggregate.objects.update_or_create(
-                job_id=stat["job_id"],
-                date=stat["event_date"],
-                defaults={
-                    "selection_count": F("selection_count") + stat["selection_count"]
-                },
-                create_defaults={"selection_count": stat["selection_count"]},
+            job = resolve_job(stat["job_id"], job_names)
+            if job is None:
+                logger.warning("job_selected event has no job_id, skipping")
+                continue
+            ts = date_to_ns(stat["event_date"])
+            lines.append(
+                f"lunes_job_selection,job={job} selection_count={stat['selection_count']}i {ts}"
             )
-            logger.info("Created or updated aggregate %r", aggregate)
+            logger.info(
+                "Queued job_selection line: job=%s date=%s count=%d",
+                job,
+                stat["event_date"],
+                stat["selection_count"],
+            )
 
         events.update(aggregated_at=aggregated_at)
+        return lines
 
 
 class SessionAggregator(EventAggregator):
     """
-    Aggregates session_start and session_end events into daily SessionAggregate
-    records. Pairs events by session_id to compute duration.
+    Aggregates session_start and session_end events into daily lunes_sessions
+    measurements. Pairs events by session_id to compute duration.
 
     Sessions whose start and end fall on different UTC days are attributed to
     their start day. Sessions that cannot be paired in this run (for example a
@@ -112,35 +126,39 @@ class SessionAggregator(EventAggregator):
 
     @classmethod
     def aggregate(
-        cls, events: QuerySet[AnalyticsEvent], aggregated_at: datetime
-    ) -> None:
+        cls,
+        events: QuerySet[AnalyticsEvent],
+        aggregated_at: datetime,
+        job_names: dict[int, str],
+    ) -> list[str]:
+        # Accumulate per-date totals in Python before building lines
+        daily: dict[Any, tuple[int, int]] = (
+            {}
+        )  # event_date -> (session_count, total_duration_seconds)
         consumed_session_ids: list[str] = []
+
         for session in cls.sessions(events):
-            date = session["event_date"]
+            d = session["event_date"]
             duration_seconds = int(
                 (session["end_timestamp"] - session["timestamp"]).total_seconds()
             )
-            aggregate, _created = SessionAggregate.objects.update_or_create(
-                date=date,
-                defaults={
-                    "total_sessions": F("total_sessions") + 1,
-                    "total_duration_seconds": F("total_duration_seconds")
-                    + duration_seconds,
-                },
-                create_defaults={
-                    "total_sessions": 1,
-                    "total_duration_seconds": duration_seconds,
-                },
-            )
+            count, total = daily.get(d, (0, 0))
+            daily[d] = (count + 1, total + duration_seconds)
             consumed_session_ids.append(session["payload__session_id"])
-            logger.info(
-                "Created or updated aggregate %r with session %r", aggregate, session
+            logger.info("Queued session for date=%s duration=%ds", d, duration_seconds)
+
+        lines = []
+        for d, (count, total_duration) in daily.items():
+            ts = date_to_ns(d)
+            lines.append(
+                f"lunes_sessions total_sessions={count}i,total_duration_seconds={total_duration}i {ts}"
             )
 
         if consumed_session_ids:
             events.filter(payload__session_id__in=consumed_session_ids).update(
                 aggregated_at=aggregated_at
             )
+        return lines
 
     @staticmethod
     def sessions(
@@ -186,19 +204,26 @@ class SessionAggregator(EventAggregator):
 
 class ModuleDurationAggregator(EventAggregator):
     """
-    Aggregates module duration events for both standard and training exercises.
+    Aggregates module duration events into daily lunes_module_duration measurements
+    for both standard (unit-based) and training (job-based) exercises.
     """
 
     event_types = [AnalyticsEvent.EventType.MODULE_DURATION]
 
     @staticmethod
-    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
+    def aggregate(
+        events: QuerySet[AnalyticsEvent],
+        aggregated_at: datetime,
+        job_names: dict[int, str],
+    ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
         )
         training_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
+
+        lines = []
 
         standard_aggregated = (
             standard_events.annotate(
@@ -215,22 +240,17 @@ class ModuleDurationAggregator(EventAggregator):
             )
         )
         for event in standard_aggregated:
-            aggregate, _created = ModuleDurationAggregate.objects.update_or_create(
-                date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=event["unit_id"],
-                job_id=None,
-                defaults={
-                    "total_duration_seconds": F("total_duration_seconds")
-                    + event["total_duration_seconds"],
-                    "total_sessions": F("total_sessions") + event["total_sessions"],
-                },
-                create_defaults={
-                    "total_duration_seconds": event["total_duration_seconds"],
-                    "total_sessions": event["total_sessions"],
-                },
+            ts = date_to_ns(event["event_date"])
+            lines.append(
+                f"lunes_module_duration,unit_id={event['unit_id']},exercise_type={event['exercise_type']}"
+                f" total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
-            logger.info("Created or updated aggregate %r", aggregate)
+            logger.info(
+                "Queued module_duration (standard) line: unit_id=%s exercise_type=%s date=%s",
+                event["unit_id"],
+                event["exercise_type"],
+                event["event_date"],
+            )
 
         training_aggregated = (
             training_events.annotate(
@@ -247,44 +267,48 @@ class ModuleDurationAggregator(EventAggregator):
             )
         )
         for event in training_aggregated:
-            aggregate, _created = ModuleDurationAggregate.objects.update_or_create(
-                date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=None,
-                job_id=event["job_id"],
-                defaults={
-                    "total_duration_seconds": F("total_duration_seconds")
-                    + event["total_duration_seconds"],
-                    "total_sessions": F("total_sessions") + event["total_sessions"],
-                },
-                create_defaults={
-                    "total_duration_seconds": event["total_duration_seconds"],
-                    "total_sessions": event["total_sessions"],
-                },
+            job = resolve_job(event["job_id"], job_names)
+            if job is None:
+                logger.warning("module_duration training event has no job_id, skipping")
+                continue
+            ts = date_to_ns(event["event_date"])
+            lines.append(
+                f"lunes_module_duration,job={job},exercise_type={event['exercise_type']}"
+                f" total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
-            logger.info("Created or updated aggregate %r", aggregate)
+            logger.info(
+                "Queued module_duration (training) line: job=%s exercise_type=%s date=%s",
+                job,
+                event["exercise_type"],
+                event["event_date"],
+            )
 
         events.update(aggregated_at=aggregated_at)
+        return lines
 
 
 class DropoutAggregator(EventAggregator):
     """
-    Aggregates exercise dropout events into daily DropoutAggregate records
+    Aggregates exercise dropout events into daily lunes_dropout measurements
     for both standard and training exercises.
-    Groups standard events by (date, exercise_type, unit_id, dropout_position, total_items).
-    Groups training events by (date, exercise_type, job_id, vocabulary_item_id, dropout_position, total_items).
     """
 
     event_types = [AnalyticsEvent.EventType.EXERCISE_DROPOUT]
 
     @staticmethod
-    def aggregate(events: QuerySet[AnalyticsEvent], aggregated_at: datetime) -> None:
+    def aggregate(
+        events: QuerySet[AnalyticsEvent],
+        aggregated_at: datetime,
+        job_names: dict[int, str],
+    ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
         )
         training_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
+
+        lines = []
 
         standard_aggregated = (
             standard_events.annotate(
@@ -302,22 +326,24 @@ class DropoutAggregator(EventAggregator):
             .annotate(dropout_count=Count("pk"))
         )
         for event in standard_aggregated:
-            aggregate, _created = DropoutAggregate.objects.update_or_create(
-                date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=event["unit_id"],
-                job_id=None,
-                vocabulary_item_id=event["payload__vocabulary_item_id"],
-                dropout_position=event["payload__position"],
-                total_items=event["payload__total"],
-                defaults={
-                    "dropout_count": F("dropout_count") + event["dropout_count"],
-                },
-                create_defaults={
-                    "dropout_count": event["dropout_count"],
-                },
+            ts = date_to_ns(event["event_date"])
+            vocab_id = event["payload__vocabulary_item_id"]
+            vocab_tag = f",vocab_id={vocab_id}" if vocab_id is not None else ""
+            lines.append(
+                f"lunes_dropout"
+                f",unit_id={event['unit_id']}"
+                f",exercise_type={event['exercise_type']}"
+                f"{vocab_tag}"
+                f",position={event['payload__position']}"
+                f",total={event['payload__total']}"
+                f" dropout_count={event['dropout_count']}i {ts}"
             )
-            logger.info("Created or updated aggregate %r", aggregate)
+            logger.info(
+                "Queued dropout (standard) line: unit_id=%s exercise_type=%s date=%s",
+                event["unit_id"],
+                event["exercise_type"],
+                event["event_date"],
+            )
 
         training_aggregated = (
             training_events.annotate(
@@ -335,24 +361,31 @@ class DropoutAggregator(EventAggregator):
             .annotate(dropout_count=Count("pk"))
         )
         for event in training_aggregated:
-            aggregate, _created = DropoutAggregate.objects.update_or_create(
-                date=event["event_date"],
-                exercise_type=event["exercise_type"],
-                unit_id=None,
-                job_id=event["job_id"],
-                vocabulary_item_id=event["payload__vocabulary_item_id"],
-                dropout_position=event["payload__position"],
-                total_items=event["payload__total"],
-                defaults={
-                    "dropout_count": F("dropout_count") + event["dropout_count"],
-                },
-                create_defaults={
-                    "dropout_count": event["dropout_count"],
-                },
+            job = resolve_job(event["job_id"], job_names)
+            if job is None:
+                logger.warning("dropout training event has no job_id, skipping")
+                continue
+            ts = date_to_ns(event["event_date"])
+            vocab_id = event["payload__vocabulary_item_id"]
+            vocab_tag = f",vocab_id={vocab_id}" if vocab_id is not None else ""
+            lines.append(
+                f"lunes_dropout"
+                f",job={job}"
+                f",exercise_type={event['exercise_type']}"
+                f"{vocab_tag}"
+                f",position={event['payload__position']}"
+                f",total={event['payload__total']}"
+                f" dropout_count={event['dropout_count']}i {ts}"
             )
-            logger.info("Created or updated aggregate %r", aggregate)
+            logger.info(
+                "Queued dropout (training) line: job=%s exercise_type=%s date=%s",
+                job,
+                event["exercise_type"],
+                event["event_date"],
+            )
 
         events.update(aggregated_at=aggregated_at)
+        return lines
 
 
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
@@ -365,25 +398,26 @@ EVENT_AGGREGATORS: list[type[EventAggregator]] = [
 
 class Command(BaseCommand):
     """
-    Aggregate analytics events into daily summaries.
+    Aggregate analytics events and push daily summaries to InfluxDB.
 
     Raw events are kept after aggregation; each consumed event is stamped with
     ``aggregated_at`` so subsequent runs only process newly arrived events.
     """
 
-    help = "Aggregate analytics events into daily summaries (raw events are retained)."
+    help = "Aggregate analytics events and push daily summaries to InfluxDB (raw events are retained)."
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
             "--dry-run",
             action="store_true",
-            help="Run the full aggregation pipeline but roll back all changes.",
+            help="Run the full aggregation pipeline but roll back all DB changes and skip InfluxDB push.",
         )
 
     def handle(self, *args, **options) -> None:
         dry_run: bool = options["dry_run"]
+        job_names: dict[int, str] = dict(Job.objects.values_list("id", "name"))
         for aggregator_class in EVENT_AGGREGATORS:
-            self._aggregate_event_type(aggregator_class, dry_run)
+            self._aggregate_event_type(aggregator_class, dry_run, job_names)
         self._delete_old_unprocessed_events(dry_run)
 
     @transaction.atomic
@@ -425,6 +459,7 @@ class Command(BaseCommand):
         self,
         aggregator_class: type[EventAggregator],
         dry_run: bool,
+        job_names: dict[int, str],
     ) -> None:
         event_types = aggregator_class.event_types
 
@@ -445,7 +480,7 @@ class Command(BaseCommand):
         ).annotate(event_date=TruncDate("timestamp", tzinfo=UTC))
 
         aggregated_at = timezone.now()
-        aggregator_class.aggregate(events, aggregated_at)
+        lines = aggregator_class.aggregate(events, aggregated_at, job_names)
 
         marked_count = AnalyticsEvent.objects.filter(
             event_type__in=event_types,
@@ -455,11 +490,15 @@ class Command(BaseCommand):
         if dry_run:
             transaction.set_rollback(True)
             self.stdout.write(
-                f"[DRY RUN] Would aggregate and mark {marked_count} {event_types} events."
+                f"[DRY RUN] Would aggregate and mark {marked_count} {event_types} events "
+                f"({len(lines)} InfluxDB lines skipped)."
             )
         else:
+            # Push after the transaction commits so we only push data that was successfully marked.
+            transaction.on_commit(lambda: push_lines(lines))
             self.stdout.write(
                 self.style.SUCCESS(
-                    f"Aggregated and marked {marked_count} {event_types} events."
+                    f"Aggregated and marked {marked_count} {event_types} events "
+                    f"({len(lines)} InfluxDB lines queued)."
                 )
             )
