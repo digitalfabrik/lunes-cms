@@ -1,16 +1,13 @@
 from datetime import datetime, timedelta, timezone
+from unittest.mock import patch
 
 from django.core.management import call_command
 from django.test import TestCase
 
-from lunes_cms.analytics.models import (
-    AnalyticsEvent,
-    DropoutAggregate,
-    JobSelectionAggregate,
-    ModuleDurationAggregate,
-    SessionAggregate,
-)
+from lunes_cms.analytics.models import AnalyticsEvent
 from lunes_cms.cmsv2.models.job import Job
+
+PATCH_PUSH = "lunes_cms.analytics.management.commands.aggregate_analytics.push_lines"
 
 
 class JobSelectionAggregateTests(TestCase):
@@ -36,79 +33,101 @@ class JobSelectionAggregateTests(TestCase):
         self._create_event(self.job1.id, "add", "2026-01-15T11:00:00")
         self._create_event(self.job1.id, "remove", "2026-01-15T12:00:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
         self.assertEqual(AnalyticsEvent.objects.count(), 3)
-        agg = JobSelectionAggregate.objects.get(job_id=self.job1.id)
-        self.assertEqual(agg.selection_count, 1)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("lunes_job_selection", line)
+        self.assertIn(r"job=Job\ 1", line)
+        self.assertIn("selection_count=1i", line)
 
     def test_aggregates_multiple_days(self) -> None:
-        """Test that events on different days create separate aggregates"""
+        """Test that events on different days create separate lines"""
         self._create_event(self.job1.id, "add", "2026-01-15T10:00:00")
         self._create_event(self.job1.id, "add", "2026-01-16T10:00:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(JobSelectionAggregate.objects.count(), 2)
+        mock_push.assert_called_once()
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
 
     def test_aggregates_multiple_jobs(self) -> None:
-        """Test that events for different jobs create separate aggregates"""
+        """Test that events for different jobs create separate lines"""
         self._create_event(self.job1.id, "add", "2026-01-15T10:00:00")
         self._create_event(self.job2.id, "add", "2026-01-15T10:00:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(JobSelectionAggregate.objects.count(), 2)
-        self.assertEqual(
-            JobSelectionAggregate.objects.get(job_id=self.job1.id).selection_count, 1
-        )
-        self.assertEqual(
-            JobSelectionAggregate.objects.get(job_id=self.job2.id).selection_count, 1
-        )
+        mock_push.assert_called_once()
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(any(r"job=Job\ 1" in l for l in lines))
+        self.assertTrue(any(r"job=Job\ 2" in l for l in lines))
+        self.assertTrue(all("selection_count=1i" in l for l in lines))
 
-    def test_increments_existing_aggregate(self) -> None:
-        """Test that running twice increments existing aggregates"""
+    def test_second_run_pushes_only_new_events(self) -> None:
+        """Test that running twice pushes each batch of new events separately"""
         self._create_event(self.job1.id, "add", "2026-01-15T10:00:00")
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_called_once()
 
         self._create_event(self.job1.id, "add", "2026-01-15T14:00:00")
-        call_command("aggregate_analytics")
-
-        agg = JobSelectionAggregate.objects.get(job_id=self.job1.id)
-        self.assertEqual(agg.selection_count, 2)
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("selection_count=1i", line)
 
     def test_no_events(self) -> None:
-        """Test that running with no events does nothing"""
-        call_command("aggregate_analytics")
-        self.assertEqual(JobSelectionAggregate.objects.count(), 0)
+        """Test that running with no events does not push anything"""
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_not_called()
 
     def test_nonexistent_job_id(self) -> None:
-        """Test that events with nonexistent job_ids are aggregated normally"""
+        """Test that events with nonexistent job_ids are pushed with an unknown_<id> tag"""
         self._create_event(self.job1.id, "add", "2026-01-15T10:00:00")
         self._create_event(99999, "add", "2026-01-15T10:00:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
-        self.assertEqual(JobSelectionAggregate.objects.count(), 2)
-        self.assertEqual(
-            JobSelectionAggregate.objects.get(job_id=99999).selection_count, 1
-        )
+        mock_push.assert_called_once()
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(any("job=unknown_99999" in l for l in lines))
 
     def test_only_removes_count(self) -> None:
         """Test aggregation with only remove actions gives negative count"""
         self._create_event(self.job1.id, "remove", "2026-01-15T10:00:00")
         self._create_event(self.job1.id, "remove", "2026-01-15T11:00:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = JobSelectionAggregate.objects.get(job_id=self.job1.id)
-        self.assertEqual(agg.selection_count, -2)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("selection_count=-2i", line)
 
 
 class SessionAggregateTests(TestCase):
@@ -134,134 +153,165 @@ class SessionAggregateTests(TestCase):
             self._create_session_event(session_id, "session_end", end),
         )
 
-    def test_valid_session_creates_aggregate(self) -> None:
-        """A single valid session pair creates a SessionAggregate"""
+    def test_valid_session_creates_line(self) -> None:
+        """A single valid session pair pushes one InfluxDB line"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
         self.assertEqual(AnalyticsEvent.objects.count(), 2)
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 1)
-        self.assertEqual(agg.total_duration_seconds, 30)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("lunes_sessions", line)
+        self.assertIn("total_sessions=1i", line)
+        self.assertIn("total_duration_seconds=30i", line)
 
     def test_multiple_sessions_same_day(self) -> None:
-        """Multiple valid sessions on the same day are aggregated together"""
+        """Multiple valid sessions on the same day are aggregated into one line"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
         self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:10:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.total_duration_seconds, 630)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("total_sessions=2i", line)
+        self.assertIn("total_duration_seconds=630i", line)
 
     def test_sessions_on_different_days(self) -> None:
-        """Sessions on different days create separate aggregates"""
+        """Sessions on different days create separate lines"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:02:00")
         self._create_session("s2", "2026-01-16T10:00:00", "2026-01-16T10:02:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(SessionAggregate.objects.count(), 2)
+        mock_push.assert_called_once()
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
 
-    def test_increments_existing_aggregate(self) -> None:
-        """Running the command twice increments existing aggregates"""
+    def test_second_run_pushes_only_new_sessions(self) -> None:
+        """Running the command twice pushes new sessions in each run separately"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_called_once()
 
         self._create_session("s2", "2026-01-15T11:00:00", "2026-01-15T11:00:30")
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.total_duration_seconds, 60)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("total_sessions=1i", line)
+        self.assertIn("total_duration_seconds=30i", line)
 
-    def test_does_not_double_count_on_rerun(self) -> None:
-        """Re-running on already-aggregated data does not double count"""
+    def test_does_not_push_on_rerun_with_no_new_events(self) -> None:
+        """Re-running with no new events does not push"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
-        call_command("aggregate_analytics")
-        call_command("aggregate_analytics")
+        with self.captureOnCommitCallbacks(execute=True):
+            call_command("aggregate_analytics")
 
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 1)
-        self.assertEqual(agg.total_duration_seconds, 30)
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        mock_push.assert_not_called()
 
     def test_pairs_session_across_runs(self) -> None:
         """A session_start in run N and session_end in run N+1 still get paired"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        # Start arrived but no matching end yet -> no aggregate, event left unmarked
-        self.assertEqual(SessionAggregate.objects.count(), 0)
+        # Start arrived but no matching end yet -> no push, event left unmarked
+        mock_push.assert_not_called()
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
         )
 
         self._create_session_event("s1", "session_end", "2026-01-15T10:00:30")
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 1)
-        self.assertEqual(agg.total_duration_seconds, 30)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("total_sessions=1i", line)
+        self.assertIn("total_duration_seconds=30i", line)
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
 
     def test_ignores_start_without_end(self) -> None:
-        """A session_start without a matching session_end produces no aggregate"""
+        """A session_start without a matching session_end produces no push"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(SessionAggregate.objects.count(), 0)
-        # Unpaired start is left unmarked so a later run can still pair it
+        mock_push.assert_not_called()
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
         )
 
     def test_ignores_end_without_start(self) -> None:
-        """A session_end without a matching session_start produces no aggregate"""
+        """A session_end without a matching session_start produces no push"""
         self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(SessionAggregate.objects.count(), 0)
+        mock_push.assert_not_called()
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
         )
 
     def test_ignores_duplicate_start_events(self) -> None:
-        """A session_id with two start events and one end event produces no aggregate"""
+        """A session_id with two start events and one end event produces no push"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
         self._create_session_event("s1", "session_start", "2026-01-15T10:01:00")
         self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(SessionAggregate.objects.count(), 0)
+        mock_push.assert_not_called()
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 3
         )
 
     def test_ignores_duplicate_end_events(self) -> None:
-        """A session_id with one start event and two end events produces no aggregate"""
+        """A session_id with one start event and two end events produces no push"""
         self._create_session_event("s1", "session_start", "2026-01-15T10:00:00")
         self._create_session_event("s1", "session_end", "2026-01-15T10:05:00")
         self._create_session_event("s1", "session_end", "2026-01-15T10:06:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(SessionAggregate.objects.count(), 0)
+        mock_push.assert_not_called()
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 3
         )
 
     def test_invalid_sessions_dont_affect_valid_ones(self) -> None:
-        """Invalid sessions are discarded but valid ones are still aggregated"""
+        """Invalid sessions are discarded but valid ones are still pushed"""
         # Valid session
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:02:00")
         # Invalid: start without end
@@ -271,11 +321,14 @@ class SessionAggregateTests(TestCase):
         self._create_session_event("s3", "session_start", "2026-01-15T12:01:00")
         self._create_session_event("s3", "session_end", "2026-01-15T12:05:00")
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 1)
-        self.assertEqual(agg.total_duration_seconds, 120)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("total_sessions=1i", line)
+        self.assertIn("total_duration_seconds=120i", line)
         # The two valid pair events are marked, the four invalid ones remain unmarked
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 4
@@ -294,11 +347,16 @@ class SessionAggregateTests(TestCase):
             "s6", "2026-01-15T15:00:00", "2026-01-15T15:31:00"
         )  # 1860s
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = SessionAggregate.objects.get(date="2026-01-15")
-        self.assertEqual(agg.total_sessions, 6)
-        self.assertEqual(agg.total_duration_seconds, 60 + 61 + 300 + 301 + 1800 + 1860)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("total_sessions=6i", line)
+        self.assertIn(
+            f"total_duration_seconds={60 + 61 + 300 + 301 + 1800 + 1860}i", line
+        )
 
 
 class ModuleDurationAggregateTests(TestCase):
@@ -345,138 +403,157 @@ class ModuleDurationAggregateTests(TestCase):
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
         self._create_standard_event("word_choice", 10, "2026-01-15T11:00:00", 90)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
-        agg = ModuleDurationAggregate.objects.get(
-            exercise_type="word_choice", unit_id=10, date="2026-01-15"
-        )
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.total_duration_seconds, 150)
-        self.assertIsNone(agg.job_id)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("lunes_module_duration", line)
+        self.assertIn("unit_id=10", line)
+        self.assertIn("exercise_type=word_choice", line)
+        self.assertIn("total_sessions=2i", line)
+        self.assertIn("total_duration_seconds=150i", line)
 
     def test_aggregates_multiple_days(self) -> None:
-        """Test that events on different days create separate aggregates"""
+        """Test that events on different days create separate lines"""
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
         self._create_standard_event("word_choice", 10, "2026-01-16T10:00:00", 60)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
 
     def test_aggregates_different_exercise_types(self) -> None:
-        """Test that different exercise types create separate aggregates"""
+        """Test that different exercise types create separate lines"""
         self._create_standard_event("word_list", 10, "2026-01-15T10:00:00", 60)
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(
-                exercise_type="word_list", unit_id=10
-            ).total_sessions,
-            1,
-        )
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(
-                exercise_type="word_choice", unit_id=10
-            ).total_sessions,
-            1,
-        )
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(any("exercise_type=word_list" in l for l in lines))
+        self.assertTrue(any("exercise_type=word_choice" in l for l in lines))
 
     def test_aggregates_different_units(self) -> None:
-        """Test that different unit IDs create separate aggregates"""
+        """Test that different unit IDs create separate lines"""
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
         self._create_standard_event("word_choice", 20, "2026-01-15T10:00:00", 90)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(unit_id=10).total_duration_seconds, 60
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(
+            any("unit_id=10" in l and "total_duration_seconds=60i" in l for l in lines)
         )
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(unit_id=20).total_duration_seconds, 90
+        self.assertTrue(
+            any("unit_id=20" in l and "total_duration_seconds=90i" in l for l in lines)
         )
 
-    def test_increments_existing_aggregate(self) -> None:
-        """Test that running twice updates existing aggregates"""
+    def test_second_run_pushes_only_new_events(self) -> None:
+        """Test that running twice pushes new events in each run separately"""
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        call_command("aggregate_analytics")
+        with self.captureOnCommitCallbacks(execute=True):
+            call_command("aggregate_analytics")
 
         self._create_standard_event("word_choice", 10, "2026-01-15T14:00:00", 40)
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = ModuleDurationAggregate.objects.get(
-            exercise_type="word_choice", unit_id=10, date="2026-01-15"
-        )
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.total_duration_seconds, 100)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("total_sessions=1i", line)
+        self.assertIn("total_duration_seconds=40i", line)
 
     def test_no_events(self) -> None:
-        """Test that running with no events does nothing"""
-        call_command("aggregate_analytics")
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 0)
+        """Test that running with no events does not push anything"""
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_not_called()
 
     def test_aggregates_training_exercise(self) -> None:
         """Test aggregation of training module duration events"""
         self._create_training_event("image", 5, "2026-01-15T10:00:00", 120)
         self._create_training_event("image", 5, "2026-01-15T11:00:00", 80)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
-        agg = ModuleDurationAggregate.objects.get(
-            exercise_type="image", job_id=5, date="2026-01-15"
-        )
-        self.assertEqual(agg.total_sessions, 2)
-        self.assertEqual(agg.total_duration_seconds, 200)
-        self.assertIsNone(agg.unit_id)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("job=unknown_5", line)
+        self.assertIn("exercise_type=image", line)
+        self.assertIn("total_sessions=2i", line)
+        self.assertIn("total_duration_seconds=200i", line)
 
     def test_aggregates_different_training_types(self) -> None:
-        """Test that different training exercise types create separate aggregates"""
+        """Test that different training exercise types create separate lines"""
         self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
         self._create_training_event("sentence", 5, "2026-01-15T10:00:00", 60)
         self._create_training_event("speech", 5, "2026-01-15T10:00:00", 60)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 3)
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 3)
 
     def test_aggregates_different_jobs(self) -> None:
-        """Test that different job IDs create separate training aggregates"""
+        """Test that different job IDs create separate training lines"""
         self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
         self._create_training_event("image", 6, "2026-01-15T10:00:00", 90)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(job_id=5).total_duration_seconds, 60
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(
+            any(
+                "job=unknown_5" in l and "total_duration_seconds=60i" in l
+                for l in lines
+            )
         )
-        self.assertEqual(
-            ModuleDurationAggregate.objects.get(job_id=6).total_duration_seconds, 90
+        self.assertTrue(
+            any(
+                "job=unknown_6" in l and "total_duration_seconds=90i" in l
+                for l in lines
+            )
         )
 
-    def test_standard_and_training_create_separate_aggregates(self) -> None:
-        """Test that standard and training exercises never share an aggregate"""
+    def test_standard_and_training_create_separate_lines(self) -> None:
+        """Test that standard and training exercises produce separate lines"""
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
         self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(ModuleDurationAggregate.objects.count(), 2)
-        standard_agg = ModuleDurationAggregate.objects.get(exercise_type="word_choice")
-        self.assertEqual(standard_agg.unit_id, 10)
-        self.assertIsNone(standard_agg.job_id)
-        training_agg = ModuleDurationAggregate.objects.get(exercise_type="image")
-        self.assertIsNone(training_agg.unit_id)
-        self.assertEqual(training_agg.job_id, 5)
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(any("unit_id=10" in l for l in lines))
+        self.assertTrue(any("job=unknown_5" in l for l in lines))
 
 
 class DropoutAggregateTests(TestCase):
@@ -551,19 +628,24 @@ class DropoutAggregateTests(TestCase):
             timestamp="2026-01-15T11:00:00",
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
-        agg = DropoutAggregate.objects.get(
-            exercise_type="word_choice", unit_id=10, dropout_position=3, total_items=10
-        )
-        self.assertEqual(agg.dropout_count, 2)
-        self.assertIsNone(agg.job_id)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("lunes_dropout", line)
+        self.assertIn("unit_id=10", line)
+        self.assertIn("exercise_type=word_choice", line)
+        self.assertIn("position=3", line)
+        self.assertIn("total=10", line)
+        self.assertIn("dropout_count=2i", line)
 
     def test_aggregates_multiple_days(self) -> None:
-        """Test that events on different days create separate aggregates"""
+        """Test that events on different days create separate lines"""
         self._create_standard_event(
             exercise_type="word_choice",
             unit_id=10,
@@ -579,12 +661,15 @@ class DropoutAggregateTests(TestCase):
             timestamp="2026-01-16T10:00:00",
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
 
     def test_aggregates_different_positions(self) -> None:
-        """Test that different dropout positions create separate aggregates"""
+        """Test that different dropout positions create separate lines"""
         self._create_standard_event(
             exercise_type="word_choice",
             unit_id=10,
@@ -600,18 +685,21 @@ class DropoutAggregateTests(TestCase):
             timestamp="2026-01-15T10:00:00",
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertEqual(
-            DropoutAggregate.objects.get(dropout_position=2).dropout_count, 1
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(
+            any("position=2" in l and "dropout_count=1i" in l for l in lines)
         )
-        self.assertEqual(
-            DropoutAggregate.objects.get(dropout_position=5).dropout_count, 1
+        self.assertTrue(
+            any("position=5" in l and "dropout_count=1i" in l for l in lines)
         )
 
     def test_aggregates_different_exercise_types(self) -> None:
-        """Test that different exercise types create separate aggregates"""
+        """Test that different exercise types create separate lines"""
         self._create_standard_event(
             exercise_type="word_list",
             unit_id=10,
@@ -627,12 +715,15 @@ class DropoutAggregateTests(TestCase):
             timestamp="2026-01-15T10:00:00",
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
 
     def test_aggregates_training_events_grouped(self) -> None:
-        """Test that training events with the same job_id are grouped into one aggregate"""
+        """Test that training events with the same job_id are grouped into one line"""
         self._create_training_event(
             exercise_type="image",
             job_id=5,
@@ -650,16 +741,17 @@ class DropoutAggregateTests(TestCase):
             vocabulary_item_id=99,
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 1)
-        agg = DropoutAggregate.objects.get()
-        self.assertIsNone(agg.unit_id)
-        self.assertEqual(agg.job_id, 5)
-        self.assertEqual(agg.dropout_count, 2)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("job=unknown_5", line)
+        self.assertIn("dropout_count=2i", line)
 
     def test_training_and_standard_events_separate(self) -> None:
-        """Test that training events (job_id) and standard events (unit_id) create separate aggregates"""
+        """Test that training events (job) and standard events (unit_id) create separate lines"""
         self._create_training_event(
             exercise_type="image",
             job_id=5,
@@ -675,12 +767,15 @@ class DropoutAggregateTests(TestCase):
             timestamp="2026-01-15T10:00:00",
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
 
-    def test_increments_existing_aggregate(self) -> None:
-        """Test that running twice increments existing aggregates"""
+    def test_second_run_pushes_only_new_events(self) -> None:
+        """Test that running twice pushes new events in each run separately"""
         self._create_standard_event(
             exercise_type="word_choice",
             unit_id=10,
@@ -688,7 +783,8 @@ class DropoutAggregateTests(TestCase):
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        call_command("aggregate_analytics")
+        with self.captureOnCommitCallbacks(execute=True):
+            call_command("aggregate_analytics")
 
         self._create_standard_event(
             exercise_type="word_choice",
@@ -697,20 +793,20 @@ class DropoutAggregateTests(TestCase):
             total=10,
             timestamp="2026-01-15T14:00:00",
         )
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        agg = DropoutAggregate.objects.get(
-            exercise_type="word_choice",
-            unit_id=10,
-            dropout_position=3,
-            total_items=10,
-        )
-        self.assertEqual(agg.dropout_count, 2)
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("dropout_count=1i", line)
 
     def test_no_events(self) -> None:
-        """Test that running with no events does nothing"""
-        call_command("aggregate_analytics")
-        self.assertEqual(DropoutAggregate.objects.count(), 0)
+        """Test that running with no events does not push anything"""
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_not_called()
 
     def test_aggregates_training_dropout(self) -> None:
         """Test aggregation of dropout events for training exercises"""
@@ -731,20 +827,23 @@ class DropoutAggregateTests(TestCase):
             vocabulary_item_id=99,
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self.assertEqual(
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
-        agg = DropoutAggregate.objects.get(
-            exercise_type="image", job_id=5, dropout_position=2, total_items=8
-        )
-        self.assertEqual(agg.dropout_count, 2)
-        self.assertIsNone(agg.unit_id)
-        self.assertEqual(agg.vocabulary_item_id, 99)
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("job=unknown_5", line)
+        self.assertIn("exercise_type=image", line)
+        self.assertIn("position=2", line)
+        self.assertIn("total=8", line)
+        self.assertIn("vocab_id=99", line)
+        self.assertIn("dropout_count=2i", line)
 
-    def test_different_vocabulary_items_create_separate_aggregates(self) -> None:
-        """Test that dropouts on different vocabulary items create separate aggregates"""
+    def test_different_vocabulary_items_create_separate_lines(self) -> None:
+        """Test that dropouts on different vocabulary items create separate lines"""
         self._create_training_event(
             exercise_type="image",
             job_id=5,
@@ -762,18 +861,21 @@ class DropoutAggregateTests(TestCase):
             vocabulary_item_id=20,
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertEqual(
-            DropoutAggregate.objects.get(vocabulary_item_id=10).dropout_count, 1
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(
+            any("vocab_id=10" in l and "dropout_count=1i" in l for l in lines)
         )
-        self.assertEqual(
-            DropoutAggregate.objects.get(vocabulary_item_id=20).dropout_count, 1
+        self.assertTrue(
+            any("vocab_id=20" in l and "dropout_count=1i" in l for l in lines)
         )
 
     def test_standard_and_training_dropout_separate(self) -> None:
-        """Test that standard and training dropouts never share an aggregate"""
+        """Test that standard and training dropouts produce separate lines"""
         self._create_standard_event(
             exercise_type="word_choice",
             unit_id=10,
@@ -790,17 +892,19 @@ class DropoutAggregateTests(TestCase):
             vocabulary_item_id=99,
         )
 
-        call_command("aggregate_analytics")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
-        self.assertEqual(DropoutAggregate.objects.count(), 2)
-        self.assertIsNone(
-            DropoutAggregate.objects.get(exercise_type="word_choice").vocabulary_item_id
-        )
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(any("unit_id=10" in l for l in lines))
+        self.assertTrue(any("job=unknown_5" in l for l in lines))
 
 
 class UnprocessedEventCleanupTests(TestCase):
     """
-    Tests for deletion of events not covered by batch aggregators (task 3 of #666).
+    Tests for deletion of events not covered by batch aggregators.
     exercise_repetition events are aggregated inline on receipt and must be cleaned
     up by the management command after RETENTION_DAYS days.
     """
