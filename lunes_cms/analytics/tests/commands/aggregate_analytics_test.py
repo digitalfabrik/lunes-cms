@@ -1,3 +1,4 @@
+import unittest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
@@ -902,6 +903,10 @@ class DropoutAggregateTests(TestCase):
         self.assertTrue(any("job=unknown_5" in l for l in lines))
 
 
+# 829 Enable cleanup
+@unittest.skip(
+    "Cleanup is temporarily disabled — see issue for re-enabling _delete_old_unprocessed_events"
+)
 class UnprocessedEventCleanupTests(TestCase):
     """
     Tests for deletion of events not covered by batch aggregators.

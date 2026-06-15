@@ -418,7 +418,7 @@ class Command(BaseCommand):
         for aggregator_class in EVENT_AGGREGATORS:
             self._aggregate_event_type(aggregator_class, dry_run, job_names)
 
-    # Will be uncommented when we are sure that aggregation works as expected
+    # Will be uncommented with #829
     # self._delete_old_unprocessed_events(dry_run)
 
     @transaction.atomic
@@ -496,7 +496,8 @@ class Command(BaseCommand):
             )
         else:
             # Push after the transaction commits so we only push data that was successfully marked.
-            transaction.on_commit(lambda: push_lines(lines))
+            if lines:
+                transaction.on_commit(lambda: push_lines(lines))
             self.stdout.write(
                 self.style.SUCCESS(
                     f"Aggregated and marked {marked_count} {event_types} events "
