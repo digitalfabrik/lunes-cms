@@ -418,7 +418,8 @@ class Command(BaseCommand):
         job_names: dict[int, str] = dict(Job.objects.values_list("id", "name"))
         for aggregator_class in EVENT_AGGREGATORS:
             self._aggregate_event_type(aggregator_class, dry_run, job_names)
-        self._delete_old_unprocessed_events(dry_run)
+       # Will be uncommented when we are sure that aggregation works as expected
+       # self._delete_old_unprocessed_events(dry_run)
 
     @transaction.atomic
     def _delete_old_unprocessed_events(self, dry_run: bool) -> None:
