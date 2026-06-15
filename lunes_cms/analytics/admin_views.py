@@ -13,15 +13,12 @@ from typing import Any, Callable
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Sum
 from django.db.models.expressions import Combinable
 from django.db.models.functions import TruncMonth, TruncWeek
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
-
-from lunes_cms.core.permissions import can_view_analytics
 
 from .models import SessionAggregate
 
@@ -132,7 +129,6 @@ def _session_summary(start: date, end: date) -> dict[str, Any]:
 
 
 @staff_member_required
-@user_passes_test(can_view_analytics)
 def sessions_report(request: HttpRequest) -> HttpResponse:
     """
     Total Session Duration report.

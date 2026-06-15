@@ -38,17 +38,13 @@ msgstr "Sitzungen"
 msgid "Average duration (min)"
 msgstr "Durchschnittliche Dauer (min)"
 
-#: analytics/admin_views.py analytics/models/session_duration_report.py
+#: analytics/admin_views.py
 msgid "Total Session Duration"
 msgstr "Gesamtsitzungsdauer"
 
 #: analytics/apps.py
 msgid "Analytics"
 msgstr "Analytik"
-
-#: analytics/models/session_duration_report.py
-msgid "Can view analytics"
-msgstr "Kann Analytik einsehen"
 
 #: analytics/templates/admin/analytics/reports/sessions.html
 msgid "Django site admin"
@@ -1187,6 +1183,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Can view analytics"
+#~ msgstr "Kann Analytik einsehen"
 
 #~ msgid "%(name)s %(label)"
 #~ msgstr "%(name)s (Neu)"
