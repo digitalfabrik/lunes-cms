@@ -52,5 +52,5 @@ def push_lines(lines: list[str]) -> None:
         logger.debug(
             "Pushed %d lines to InfluxDB (db=%s)", len(lines), settings.INFLUX_DB
         )
-    except Exception as exc:
+    except Exception as exc:  # pylint: disable=broad-exception-caught
         logger.error("InfluxDB push failed (%d lines): %s", len(lines), exc)
