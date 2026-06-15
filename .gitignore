@@ -1,4 +1,5 @@
 .venv
+lunes-cms.ini
 *.pyc
 *.mo
 media
