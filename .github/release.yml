@@ -1,0 +1,20 @@
+changelog:
+  exclude:
+    labels:
+      - exclude-changelog
+      - wontfix
+      - idea
+  categories:
+    - title: Features, Fixes & Enhancements 🎉
+      labels:
+        - '*'
+      exclude:
+        labels:
+          - dependencies
+          - maintenance
+    - title: Dependencies 📦
+      labels:
+        - dependencies
+    - title: Maintenance 🛠
+      labels:
+        - maintenance
