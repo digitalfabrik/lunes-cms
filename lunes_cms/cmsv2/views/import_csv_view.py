@@ -115,6 +115,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
             threading.Thread(
                 target=drain_pending_images,
                 args=(imported_word_ids,),
+                kwargs={"job_title": selected_job.name},
                 daemon=True,
             ).start()
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))

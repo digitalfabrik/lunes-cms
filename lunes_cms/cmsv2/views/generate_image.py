@@ -26,8 +26,11 @@ def generate_image_via_openai(request):
         return JsonResponse({"error": "No word_text provided."}, status=400)
     additional_info = request.POST.get("additional_info")
     unit_title = request.POST.get("unit_title")
+    job_title = request.POST.get("job_title")
 
-    prompt = build_image_prompt(word_text, unit_title, additional_info)
+    prompt = build_image_prompt(
+        word_text, unit_title, additional_info, job_title=job_title
+    )
 
     try:
         client = get_openai_client()

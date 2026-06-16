@@ -34,6 +34,7 @@ def build_image_prompt(
     word_text: str,
     unit_title: str | None = None,
     additional_info: str | None = None,
+    job_title: str | None = None,
 ) -> str:
     """
     Build the German image-generation prompt shared by the on-demand admin
@@ -42,6 +43,8 @@ def build_image_prompt(
     prompt = (
         f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
     )
+    if job_title:
+        prompt += f" Beruflicher Kontext: {job_title}."
     if unit_title:
         prompt += f" Thematischer Kontext: {unit_title}."
     prompt += (
@@ -57,14 +60,14 @@ def build_image_prompt(
     return prompt
 
 
-def openai_word_image_bytes(word: Word) -> bytes:
+def openai_word_image_bytes(word: Word, job_title: str | None = None) -> bytes:
     """
     Generate PNG bytes for a single word via the OpenAI image API.
     """
     client = get_openai_client()
     response = client.images.generate(
         model=settings.OPENAI_IMAGE_MODEL,
-        prompt=build_image_prompt(word.word),
+        prompt=build_image_prompt(word.word, job_title=job_title),
         size="1024x1024",
         quality=settings.OPENAI_IMAGE_QUALITY,
         n=1,
@@ -72,7 +75,7 @@ def openai_word_image_bytes(word: Word) -> bytes:
     return base64.b64decode(response.data[0].b64_json)
 
 
-def _generate_for_word_image(word: Word) -> None:
+def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
     """
     Generate a missing image for a single Word and save it to the ImageField.
 
@@ -81,7 +84,7 @@ def _generate_for_word_image(word: Word) -> None:
     field's ``upload_to`` assigns — same as every other image in the system.
     """
     if not word.image:
-        data = openai_word_image_bytes(word)
+        data = openai_word_image_bytes(word, job_title=job_title)
         word.image.save("image.png", ContentFile(data))
         logger.info("Generated image for word_id=%s (%s)", word.pk, word.word)
 
@@ -94,13 +97,19 @@ def _pending_filter(word_ids: list[int] | None = None) -> Q:
 
 
 def drain_pending_images(
-    word_ids: list[int] | None = None, throttle_seconds: float = 1.0
+    word_ids: list[int] | None = None,
+    throttle_seconds: float = 1.0,
+    job_title: str | None = None,
 ) -> None:
     """
     Process Words that need an image, one at a time, until none remain.
 
     ``word_ids`` restricts the drain to those Word rows (the ones a CSV
     import just created). Without it the whole table is scanned.
+
+    ``job_title`` adds the importing job to every prompt in the batch. A CSV
+    import always targets a single job, unlike already saved words which can
+    belong to several jobs.
 
     Single-flight within the process: if another thread already holds the
     drain lock this call returns immediately.
@@ -129,7 +138,7 @@ def drain_pending_images(
             if word is None:
                 return
             try:
-                _generate_for_word_image(word)
+                _generate_for_word_image(word, job_title=job_title)
             except OpenAIConfigurationError:
                 logger.warning("OpenAI not configured — image worker exiting")
                 return
