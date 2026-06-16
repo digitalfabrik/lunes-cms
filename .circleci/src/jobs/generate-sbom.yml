@@ -1,0 +1,24 @@
+executor: python
+# TODO: Replace this job with app-toolbelt once SBOM support is available
+# See https://github.com/digitalfabrik/app-toolbelt/issues/68
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Generate SBOM
+      command: |
+        curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+        export SYFT_SOURCE_VERSION=$(jq -r .versionName version.json)
+        export SYFT_SOURCE_NAME="lunes-cms"
+        export SYFT_FORMAT_SPDX_JSON_PRETTY=true
+        syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
+  - configure-deliverino
+  - run:
+      name: Commit and push SBOM
+      command: |
+        git pull origin "${CIRCLE_BRANCH}"
+        git add lunes_cms/_manifest
+        git commit -m "Add SBOM for $(jq -r .versionName version.json)"
+        git push origin "${CIRCLE_BRANCH}"

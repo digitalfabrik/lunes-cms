@@ -1,4 +1,5 @@
-executor: python
+docker:
+  - image: cimg/node:lts
 steps:
   - checkout
   - run:
@@ -7,54 +8,19 @@ steps:
         if git log -1 --pretty=%s | grep -q "^Bump version to"; then
           circleci-agent step halt
         fi
-  - attach_workspace:
-      at: .
-  - activate-venv
   - run:
-      name: Request installation access token to authorize as Deliverino app
+      name: Install app-toolbelt
+      command: npm ci
+  - run:
+      name: Calculate next version
       command: |
-        TOKEN=$(./.circleci/scripts/get_access_token.py)
-        echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+        NEW_VERSION=$(npx --no app-toolbelt v0 version calc | jq -r .versionName)
+        echo "export NEW_VERSION=$NEW_VERSION" >> $BASH_ENV
   - run:
-      name: Config git repository to commit & push as Deliverino app
+      name: Bump git version
       command: |
-        git config user.name "deliverino[bot]"
-        git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
-        git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
-  - run:
-      name: Bump version
-      command: bumpver update --tag=final
-  - run:
-      name: Get tag of newly created version
-      command: |
-        eval $(bumpver show --env -n)
-        echo "export CURRENT_VERSION=$CURRENT_VERSION" >> $BASH_ENV
-  - run:
-      name: Update changelog
-      command: |
-        UNRELEASED="UNRELEASED\n----------"
-        UNDERLINE=$(echo "$CURRENT_VERSION" | tr "[:print:]" "-")
-        sed --null-data --in-place \
-          "s/${UNRELEASED}/${UNRELEASED}\n\n\n${CURRENT_VERSION}\n${UNDERLINE}/g" \
-          CHANGELOG.md
-        git add CHANGELOG.md
-        git commit --amend --no-edit
-  - run:
-      name: Generate SBOM
-      command: |
-        curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
-        export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-        export SYFT_SOURCE_NAME="lunes-cms"
-        export SYFT_FORMAT_SPDX_JSON_PRETTY=true
-        syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
-        git add lunes_cms/_manifest
-        git commit --amend --no-edit
-  - run:
-      name: Tag and push commit
-      command: |
-        CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4 | sed --regexp-extended 's|\[#([0-9]+)\]\(https://github\.com/digitalfabrik/lunes-cms/issues/([0-9]+)\)|#\1|')
-        git tag --annotate "${CURRENT_VERSION}" --message "${CHANGELOG}"
-        git push origin --follow-tags "${CURRENT_VERSION}" HEAD
-  - run:
-      name: Merge version bump into develop
-      command: git checkout develop && git merge main --commit --no-edit && git push
+        npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" 0 \
+          --private-key "${DELIVERINO_PRIVATE_KEY}" \
+          --owner "${CIRCLE_PROJECT_USERNAME}" \
+          --repo "${CIRCLE_PROJECT_REPONAME}" \
+          --branch "${CIRCLE_BRANCH}"

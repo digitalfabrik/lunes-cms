@@ -1,0 +1,17 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - run:
+      name: Download artifact from GitHub pre-release
+      command: |
+        mkdir -p dist
+        NEW_VERSION=$(jq -r .versionName version.json)
+        curl -L -o "dist/lunes_cms-${NEW_VERSION}.tar.gz" \
+          "https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${NEW_VERSION}/lunes_cms-${NEW_VERSION}.tar.gz"
+  - run:
+      name: Publish artifact to PyPI
+      command: |
+        pip install twine
+        twine upload --non-interactive --verbose dist/lunes_cms-*.tar.gz
