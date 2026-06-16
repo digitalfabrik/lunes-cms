@@ -50,10 +50,12 @@ Deployment
     :hidden:
 
     packaging
+    release-workflow
     prod-server
     changelog
 
 * :doc:`packaging`: Create an easy installable python
+* :doc:`release-workflow`: Release process (beta delivery & promotion)
 * :doc:`prod-server`: Setup the production server
 * :doc:`changelog`: The release history including all relevant changes
 
