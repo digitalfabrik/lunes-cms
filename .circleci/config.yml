@@ -7,14 +7,26 @@ commands:
             - run:
                 command: echo "source .venv/bin/activate" >> $BASH_ENV
                 name: Activate virtual environment
+    configure-deliverino:
+        steps:
+            - run:
+                command: |
+                    TOKEN=$(./.circleci/scripts/get_access_token.py)
+                    echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+                name: Request installation access token to authorize as Deliverino app
+            - run:
+                command: |
+                    git config user.name "deliverino[bot]"
+                    git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
+                    git remote set-url origin "https://x-access-token:${DELIVERINO_ACCESS_TOKEN}@github.com/digitalfabrik/lunes-cms.git"
+                name: Configure git to commit & push as Deliverino app
 executors:
     python:
         docker:
             - image: cimg/python:3.11
 jobs:
     black:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -24,8 +36,7 @@ jobs:
                 command: black --check .
                 name: Check formatting of python files
     build-documentation:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -59,18 +70,17 @@ jobs:
                     - lunes_cms/static/js
                 root: .
     build-package:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
                 at: .
+            - activate-venv
             - run:
                 command: mv lunes_cms/README.md .
                 name: Use alternative README.md file
             - run:
                 command: |
-                    source .venv/bin/activate
                     pip install .
                     python -m build --sdist .
                     python -m build --wheel .
@@ -80,8 +90,7 @@ jobs:
                     - dist
                 root: .
     bump-dev-version:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -123,7 +132,7 @@ jobs:
                 root: .
     bump-version:
         docker:
-            - image: cimg/python:3.11
+            - image: cimg/node:lts
         steps:
             - checkout
             - run:
@@ -132,60 +141,24 @@ jobs:
                       circleci-agent step halt
                     fi
                 name: Skip if already a version bump
-            - attach_workspace:
-                at: .
-            - activate-venv
+            - run:
+                command: npm ci
+                name: Install app-toolbelt
             - run:
                 command: |
-                    TOKEN=$(./.circleci/scripts/get_access_token.py)
-                    echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
-                name: Request installation access token to authorize as Deliverino app
+                    NEW_VERSION=$(npx --no app-toolbelt v0 version calc | jq -r .versionName)
+                    echo "export NEW_VERSION=$NEW_VERSION" >> $BASH_ENV
+                name: Calculate next version
             - run:
                 command: |
-                    git config user.name "deliverino[bot]"
-                    git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
-                    git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
-                name: Config git repository to commit & push as Deliverino app
-            - run:
-                command: bumpver update --tag=final
-                name: Bump version
-            - run:
-                command: |
-                    eval $(bumpver show --env -n)
-                    echo "export CURRENT_VERSION=$CURRENT_VERSION" >> $BASH_ENV
-                name: Get tag of newly created version
-            - run:
-                command: |
-                    UNRELEASED="UNRELEASED\n----------"
-                    UNDERLINE=$(echo "$CURRENT_VERSION" | tr "[:print:]" "-")
-                    sed --null-data --in-place \
-                      "s/${UNRELEASED}/${UNRELEASED}\n\n\n${CURRENT_VERSION}\n${UNDERLINE}/g" \
-                      CHANGELOG.md
-                    git add CHANGELOG.md
-                    git commit --amend --no-edit
-                name: Update changelog
-            - run:
-                command: |
-                    curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
-                    export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-                    export SYFT_SOURCE_NAME="lunes-cms"
-                    export SYFT_FORMAT_SPDX_JSON_PRETTY=true
-                    syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
-                    git add lunes_cms/_manifest
-                    git commit --amend --no-edit
-                name: Generate SBOM
-            - run:
-                command: |
-                    CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4 | sed --regexp-extended 's|\[#([0-9]+)\]\(https://github\.com/digitalfabrik/lunes-cms/issues/([0-9]+)\)|#\1|')
-                    git tag --annotate "${CURRENT_VERSION}" --message "${CHANGELOG}"
-                    git push origin --follow-tags "${CURRENT_VERSION}" HEAD
-                name: Tag and push commit
-            - run:
-                command: git checkout develop && git merge main --commit --no-edit && git push
-                name: Merge version bump into develop
+                    npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" 0 \
+                      --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                      --owner "${CIRCLE_PROJECT_USERNAME}" \
+                      --repo "${CIRCLE_PROJECT_REPONAME}" \
+                      --branch "${CIRCLE_BRANCH}"
+                name: Bump git version
     check-translations:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -197,18 +170,17 @@ jobs:
                 command: ./tools/check_translations.sh
                 name: Check translation file for missing or empty entries
     compile-translations:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
                 at: .
+            - activate-venv
             - run:
                 command: sudo apt-get update && sudo apt-get install gettext
                 name: Install gettext
             - run:
                 command: |
-                    source .venv/bin/activate
                     cd lunes_cms
                     lunes-cms-cli compilemessages
                 environment:
@@ -221,30 +193,45 @@ jobs:
                 root: .
     create-release:
         docker:
-            - image: cimg/python:3.11
+            - image: cimg/node:lts
         steps:
             - checkout
             - attach_workspace:
                 at: .
-            - activate-venv
+            - run:
+                command: npm ci
+                name: Install app-toolbelt
             - run:
                 command: |
-                    TOKEN=$(./.circleci/scripts/get_access_token.py)
-                    echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
-                name: Request installation access token to authorize as Deliverino app
+                    NEW_VERSION=$(jq -r .versionName version.json)
+                    RELEASE=$(npx --no app-toolbelt v0 release create lunes-cms "${NEW_VERSION}" 0 \
+                      --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                      --owner "${CIRCLE_PROJECT_USERNAME}" \
+                      --repo "${CIRCLE_PROJECT_REPONAME}" \
+                      --branch main)
+                    echo "export RELEASE_ID=$(echo ${RELEASE} | jq .id)" >> ${BASH_ENV}
+                    echo "export RELEASE_NOTES=$(echo ${RELEASE} | jq .releaseNotes)" >> ${BASH_ENV}
+                name: Create GitHub pre-release
             - run:
                 command: |
-                    PREV_TAG=$(git describe --abbrev=0 --tags "${CIRCLE_TAG}^") || true
-                    CHANGELOG+=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
-                    echo "export PREV_TAG=\"${PREV_TAG}\"" >> $BASH_ENV
-                    echo "export CHANGELOG=\"${CHANGELOG}\"" >> $BASH_ENV
-                name: Assemble release body
+                    npx --no app-toolbelt v0 release upload \
+                      --releaseId "${RELEASE_ID}" \
+                      --files "$(ls dist/lunes_cms-*.tar.gz)" \
+                      --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                      --owner "${CIRCLE_PROJECT_USERNAME}" \
+                      --repo "${CIRCLE_PROJECT_REPONAME}"
+                name: Upload package to GitHub release
             - run:
-                command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
-                name: Create release as Deliverino app
+                command: |
+                    NEW_VERSION=$(jq -r .versionName version.json)
+                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:\n${RELEASE_NOTES}\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
+                    npx --no app-toolbelt v0 notify mattermost \
+                      --message "${MESSAGE}" \
+                      --channel releases \
+                      --allow-all-branches
+                name: Notify mattermost about pre-release
     deploy-user-manual:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
@@ -253,17 +240,7 @@ jobs:
             - run:
                 command: pip install -e ".[e2e]"
                 name: Install e2e dependencies
-            - run:
-                command: |
-                    TOKEN=$(./.circleci/scripts/get_access_token.py)
-                    echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
-                name: Request installation access token to authorize as Deliverino app
-            - run:
-                command: |
-                    git config user.name "deliverino[bot]"
-                    git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
-                    git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
-                name: Configure git to push as Deliverino app
+            - configure-deliverino
             - run:
                 command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
                 name: Deploy user manual to GitHub Pages
@@ -331,9 +308,31 @@ jobs:
                         paths:
                             - user_docs
                         root: .
+    generate-sbom:
+        executor: python
+        steps:
+            - checkout
+            - attach_workspace:
+                at: .
+            - activate-venv
+            - run:
+                command: |
+                    curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+                    export SYFT_SOURCE_VERSION=$(jq -r .versionName version.json)
+                    export SYFT_SOURCE_NAME="lunes-cms"
+                    export SYFT_FORMAT_SPDX_JSON_PRETTY=true
+                    syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
+                name: Generate SBOM
+            - configure-deliverino
+            - run:
+                command: |
+                    git pull origin "${CIRCLE_BRANCH}"
+                    git add lunes_cms/_manifest
+                    git commit -m "Add SBOM for $(jq -r .versionName version.json)"
+                    git push origin "${CIRCLE_BRANCH}"
+                name: Commit and push SBOM
     install:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - restore_cache:
@@ -360,8 +359,7 @@ jobs:
                     - lunes_cms.egg-info
                 root: .
     isort:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         resource_class: small
         steps:
             - checkout
@@ -392,73 +390,90 @@ jobs:
                 command: npm run format:check
                 name: Check TypeScript formatting
     mypy:
-        docker:
-            - image: cimg/python:3.11
+        executor: python
         steps:
             - checkout
             - attach_workspace:
                 at: .
+            - activate-venv
             - run:
-                command: |
-                    source .venv/bin/activate
-                    ./tools/mypy.sh
+                command: ./tools/mypy.sh
                 name: Run mypy
-    notify-mattermost:
+    promote-release:
         docker:
-            - image: cimg/base:stable
-        steps:
-            - checkout
-            - run:
-                command: |
-                    CHANGELOG=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
-                    MM_MESSAGE="##### Lunes CMS version [${CIRCLE_TAG}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${CIRCLE_TAG}) has been released successfully :tada:\n\n###### **Release Notes:**\n\n${CHANGELOG}"
-                    STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST -H 'Content-type: application/json' \
-                      --data \
-                      "{
-                        \"channel\": \"releases\",
-                        \"username\": \"circleci\",
-                        \"icon_emoji\": \":lunes:\",
-                        \"text\": \"${MM_MESSAGE}\"
-                      }" "${MM_WEBHOOK}")
-                    if [ "$STATUS" -ne "200" ]; then
-                      echo "Notification not sent due to an error (HTTP status: ${STATUS})."
-                      exit 1
-                    fi
-                    echo "Notification sent!"
-                name: Notify mattermost about release
-    publish-package:
-        docker:
-            - image: cimg/python:3.11
+            - image: cimg/node:lts
         steps:
             - checkout
             - attach_workspace:
                 at: .
             - run:
+                command: npm ci
+                name: Install app-toolbelt
+            - run:
                 command: |
-                    source .venv/bin/activate
+                    npx --no app-toolbelt v0 release promote \
+                      --platform lunes-cms \
+                      --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                      --owner "${CIRCLE_PROJECT_USERNAME}" \
+                      --repo "${CIRCLE_PROJECT_REPONAME}"
+                name: Promote pre-release to latest
+            - run:
+                command: |
+                    NEW_VERSION=$(jq -r .versionName version.json)
+                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) has been released successfully :tada:\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
+                    npx --no app-toolbelt v0 notify mattermost \
+                      --message "${MESSAGE}" \
+                      --channel releases \
+                      --allow-all-branches
+                name: Notify mattermost about production release
+    publish-package:
+        executor: python
+        steps:
+            - checkout
+            - attach_workspace:
+                at: .
+            - activate-venv
+            - run:
+                command: |
                     pip install twine
                     twine check ./dist/lunes*.tar.gz
                 name: Check via twine
             - run:
                 command: |
-                    source .venv/bin/activate
                     pip install twine
                     ls -lh ./dist/*
                     twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
                 name: Publish lunes-cms package to (Test-)PyPI
-    pylint:
-        docker:
-            - image: cimg/python:3.11
+    publish-release-artifact:
+        executor: python
         steps:
             - checkout
             - attach_workspace:
                 at: .
             - run:
+                command: |
+                    mkdir -p dist
+                    NEW_VERSION=$(jq -r .versionName version.json)
+                    curl -L -o "dist/lunes_cms-${NEW_VERSION}.tar.gz" \
+                      "https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${NEW_VERSION}/lunes_cms-${NEW_VERSION}.tar.gz"
+                name: Download artifact from GitHub pre-release
+            - run:
+                command: |
+                    pip install twine
+                    twine upload --non-interactive --verbose dist/lunes_cms-*.tar.gz
+                name: Publish artifact to PyPI
+    pylint:
+        executor: python
+        steps:
+            - checkout
+            - attach_workspace:
+                at: .
+            - activate-venv
+            - run:
                 command: sudo apt-get update && sudo apt-get install ffmpeg
                 name: Install pylint requirements
             - run:
                 command: |
-                    source .venv/bin/activate
                     pip install pylint
                     ./tools/pylint.sh
                 name: Run pylint
@@ -549,122 +564,32 @@ orbs:
     qlty: qltysh/qlty-orb@0.0.10
     shellcheck: circleci/shellcheck@2.2.4
 parameters:
-    run_commit_develop:
-        default: false
-        type: boolean
-    run_deploy:
-        default: false
-        type: boolean
-    run_develop:
+    run_commit:
         default: true
         type: boolean
-    run_main:
+    run_commit_main:
+        default: run_if_on_main
+        enum:
+            - run_if_on_main
+            - run
+            - skip
+        type: enum
+    run_delivery_beta:
+        default: false
+        type: boolean
+    run_promotion:
         default: false
         type: boolean
 version: 2.1
 workflows:
-    commit_develop:
-        jobs:
-            - install:
-                filters:
-                    branches:
-                        only: develop
-            - compile-translations:
-                requires:
-                    - install
-            - e2e:
-                requires:
-                    - compile-translations
-    deploy:
-        jobs:
-            - install:
-                filters:
-                    branches:
-                        ignore: /.*/
-                    tags:
-                        only: /.*/
-                name: install-deploy
-            - compile-translations:
-                filters:
-                    tags:
-                        only: /.*/
-                name: compile-translations-deploy
-                requires:
-                    - install-deploy
-            - build-js:
-                filters:
-                    branches:
-                        ignore: /.*/
-                    tags:
-                        only: /.*/
-                name: build-js-deploy
-            - build-package:
-                filters:
-                    tags:
-                        only: /.*/
-                requires:
-                    - compile-translations-deploy
-                    - build-js-deploy
-            - publish-package:
-                context: pypi
-                filters:
-                    tags:
-                        only: /.*/
-                requires:
-                    - build-package
-            - create-release:
-                context: deliverino
-                filters:
-                    tags:
-                        only: /.*/
-                requires:
-                    - publish-package
-            - notify-mattermost:
-                context: mattermost
-                filters:
-                    tags:
-                        only: /.*/
-                requires:
-                    - create-release
-            - e2e:
-                filters:
-                    branches:
-                        ignore: /.*/
-                    tags:
-                        only: /.*/
-                name: e2e-deploy
-                persist_docs: true
-                requires:
-                    - compile-translations-deploy
-            - deploy-user-manual:
-                context: deliverino
-                filters:
-                    branches:
-                        ignore: /.*/
-                    tags:
-                        only: /.*/
-                requires:
-                    - e2e-deploy
-    develop:
+    commit:
         jobs:
             - shellcheck/check:
                 dir: ./tools
                 external_sources: true
-                filters:
-                    branches:
-                        ignore: main
-            - install:
-                filters:
-                    branches:
-                        ignore: main
-            - lint-ts:
-                filters:
-                    branches:
-                        ignore: main
-            - build-js:
-                filters:
-                    branches:
-                        ignore: main
+            - install
+            - lint-ts
+            - build-js
             - compile-translations:
                 requires:
                     - install
@@ -674,10 +599,7 @@ workflows:
             - test:
                 requires:
                     - compile-translations
-            - test-python313:
-                filters:
-                    branches:
-                        ignore: main
+            - test-python313
             - upload-test-coverage:
                 context: codeclimate-lunes-cms
                 requires:
@@ -697,37 +619,80 @@ workflows:
             - build-documentation:
                 requires:
                     - install
-            - bump-dev-version:
-                filters:
-                    branches:
-                        only:
-                            - develop
-                            - /.*-publish-dev-package/
+        when:
+            and:
+                - << pipeline.parameters.run_commit >>
+                - not:
+                    equal:
+                        - main
+                        - << pipeline.git.branch >>
+    commit_main:
+        jobs:
+            - install
+            - build-js
+            - compile-translations:
                 requires:
                     - install
-            - build-package:
-                name: build-dev-package
+            - e2e:
                 requires:
-                    - bump-dev-version
-            - publish-package:
-                context: pypi-test
-                filters:
-                    branches:
-                        only:
-                            - develop
-                            - /.*-publish-dev-package/
-                name: publish-dev-package
-                requires:
-                    - build-dev-package
-    main:
+                    - compile-translations
+        when:
+            or:
+                - equal:
+                    - << pipeline.parameters.run_commit_main >>
+                    - run
+                - and:
+                    - equal:
+                        - << pipeline.parameters.run_commit_main >>
+                        - run_if_on_main
+                    - equal:
+                        - main
+                        - << pipeline.git.branch >>
+    delivery_beta:
         jobs:
-            - install:
-                filters:
-                    branches:
-                        only: main
-                name: install-main
             - bump-version:
                 context: deliverino
+            - install:
                 requires:
-                    - install-main
+                    - bump-version
+            - build-js
+            - compile-translations:
+                requires:
+                    - install
+            - generate-sbom:
+                context: deliverino
+                requires:
+                    - install
+            - e2e:
+                persist_docs: true
+                requires:
+                    - compile-translations
+            - build-package:
+                requires:
+                    - install
+                    - build-js
+                    - e2e
+            - publish-package:
+                context: pypi-test
+                name: publish-beta-package
+                requires:
+                    - build-package
+            - deploy-user-manual:
+                context: deliverino
+                requires:
+                    - e2e
+            - create-release:
+                context: deliverino
+                requires:
+                    - publish-beta-package
+        when: << pipeline.parameters.run_delivery_beta >>
+    promotion:
+        jobs:
+            - publish-release-artifact:
+                context: pypi
+            - promote-release:
+                context: deliverino
+                requires:
+                    - publish-release-artifact
+        when: << pipeline.parameters.run_promotion >>
 
