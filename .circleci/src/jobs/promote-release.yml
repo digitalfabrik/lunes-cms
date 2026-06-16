@@ -1,0 +1,26 @@
+docker:
+  - image: cimg/node:lts
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - run:
+      name: Install app-toolbelt
+      command: npm ci
+  - run:
+      name: Promote pre-release to latest
+      command: |
+        npx --no app-toolbelt v0 release promote \
+          --platform lunes-cms \
+          --private-key "${DELIVERINO_PRIVATE_KEY}" \
+          --owner "${CIRCLE_PROJECT_USERNAME}" \
+          --repo "${CIRCLE_PROJECT_REPONAME}"
+  - run:
+      name: Notify mattermost about production release
+      command: |
+        NEW_VERSION=$(jq -r .versionName version.json)
+        MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) has been released successfully :tada:\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
+        npx --no app-toolbelt v0 notify mattermost \
+          --message "${MESSAGE}" \
+          --channel releases \
+          --allow-all-branches

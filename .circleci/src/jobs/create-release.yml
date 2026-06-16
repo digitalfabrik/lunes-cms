@@ -1,21 +1,38 @@
-executor: python
+docker:
+  - image: cimg/node:lts
 steps:
   - checkout
   - attach_workspace:
       at: .
-  - activate-venv
   - run:
-      name: Request installation access token to authorize as Deliverino app
+      name: Install app-toolbelt
+      command: npm ci
+  - run:
+      name: Create GitHub pre-release
       command: |
-        TOKEN=$(./.circleci/scripts/get_access_token.py)
-        echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+        NEW_VERSION=$(jq -r .versionName version.json)
+        RELEASE=$(npx --no app-toolbelt v0 release create lunes-cms "${NEW_VERSION}" 0 \
+          --private-key "${DELIVERINO_PRIVATE_KEY}" \
+          --owner "${CIRCLE_PROJECT_USERNAME}" \
+          --repo "${CIRCLE_PROJECT_REPONAME}" \
+          --branch main)
+        echo "export RELEASE_ID=$(echo ${RELEASE} | jq .id)" >> ${BASH_ENV}
+        echo "export RELEASE_NOTES=$(echo ${RELEASE} | jq .releaseNotes)" >> ${BASH_ENV}
   - run:
-      name: Assemble release body
+      name: Upload package to GitHub release
       command: |
-        PREV_TAG=$(git describe --abbrev=0 --tags "${CIRCLE_TAG}^") || true
-        CHANGELOG+=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
-        echo "export PREV_TAG=\"${PREV_TAG}\"" >> $BASH_ENV
-        echo "export CHANGELOG=\"${CHANGELOG}\"" >> $BASH_ENV
+        npx --no app-toolbelt v0 release upload \
+          --releaseId "${RELEASE_ID}" \
+          --files "$(ls dist/lunes_cms-*.tar.gz)" \
+          --private-key "${DELIVERINO_PRIVATE_KEY}" \
+          --owner "${CIRCLE_PROJECT_USERNAME}" \
+          --repo "${CIRCLE_PROJECT_REPONAME}"
   - run:
-      name: Create release as Deliverino app
-      command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz
+      name: Notify mattermost about pre-release
+      command: |
+        NEW_VERSION=$(jq -r .versionName version.json)
+        MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:\n${RELEASE_NOTES}\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
+        npx --no app-toolbelt v0 notify mattermost \
+          --message "${MESSAGE}" \
+          --channel releases \
+          --allow-all-branches
