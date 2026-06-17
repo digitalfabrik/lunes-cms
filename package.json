@@ -11,7 +11,7 @@
     "format:check": "prettier --check lunes_cms/src/**/*.ts"
   },
   "devDependencies": {
-    "app-toolbelt": "github:digitalfabrik/app-toolbelt#semver:1.0.0",
+    "app-toolbelt": "github:digitalfabrik/app-toolbelt#20101363254a113600e9542acc5e90d737793517",
     "@types/jquery": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",

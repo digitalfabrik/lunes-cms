@@ -9,10 +9,6 @@ jobs:
   - compile-translations:
       requires:
         - install
-  - generate-sbom:
-      context: deliverino
-      requires:
-        - install
   - e2e:
       persist_docs: true
       requires:
