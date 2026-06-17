@@ -204,7 +204,7 @@ jobs:
             - run:
                 command: |
                     NEW_VERSION=$(jq -r .versionName version.json)
-                    RELEASE=$(npx --no app-toolbelt v0 release create lunes-cms "${NEW_VERSION}" 0 \
+                    RELEASE=$(npx --no app-toolbelt v0 release create all "${NEW_VERSION}" \
                       --private-key "${DELIVERINO_PRIVATE_KEY}" \
                       --owner "${CIRCLE_PROJECT_USERNAME}" \
                       --repo "${CIRCLE_PROJECT_REPONAME}" \
@@ -221,6 +221,17 @@ jobs:
                       --owner "${CIRCLE_PROJECT_USERNAME}" \
                       --repo "${CIRCLE_PROJECT_REPONAME}"
                 name: Upload package to GitHub release
+            - run:
+                command: |
+                    npx --no app-toolbelt v0 generate sbom \
+                      --version-name "${NEW_VERSION}" \
+                      --releaseId "${RELEASE_ID}" \
+                      --path lunes_cms/_manifest/spdx_2.2/manifest.spdx.json \
+                      --branch "${CIRCLE_BRANCH}" \
+                      --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                      --owner "${CIRCLE_PROJECT_USERNAME}" \
+                      --repo "${CIRCLE_PROJECT_REPONAME}"
+                name: Generate SBOM
             - run:
                 command: |
                     NEW_VERSION=$(jq -r .versionName version.json)
@@ -308,29 +319,6 @@ jobs:
                         paths:
                             - user_docs
                         root: .
-    generate-sbom:
-        executor: python
-        steps:
-            - checkout
-            - attach_workspace:
-                at: .
-            - activate-venv
-            - run:
-                command: |
-                    curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
-                    export SYFT_SOURCE_VERSION=$(jq -r .versionName version.json)
-                    export SYFT_SOURCE_NAME="lunes-cms"
-                    export SYFT_FORMAT_SPDX_JSON_PRETTY=true
-                    syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
-                name: Generate SBOM
-            - configure-deliverino
-            - run:
-                command: |
-                    git pull origin "${CIRCLE_BRANCH}"
-                    git add lunes_cms/_manifest
-                    git commit -m "Add SBOM for $(jq -r .versionName version.json)"
-                    git push origin "${CIRCLE_BRANCH}"
-                name: Commit and push SBOM
     install:
         executor: python
         steps:
@@ -657,10 +645,6 @@ workflows:
                     - bump-version
             - build-js
             - compile-translations:
-                requires:
-                    - install
-            - generate-sbom:
-                context: deliverino
                 requires:
                     - install
             - e2e:
