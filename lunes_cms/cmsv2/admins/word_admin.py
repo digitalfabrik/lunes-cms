@@ -700,11 +700,11 @@ class WordAdmin(BaseAdmin):
             str: HTML formatted badge showing migration status
         """
         if obj.v1_id is not None:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
                 'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )

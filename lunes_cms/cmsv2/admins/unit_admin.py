@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.template.response import TemplateResponse
-from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
@@ -291,11 +291,11 @@ class UnitAdmin(BaseAdmin):
             str: HTML formatted badge showing migration status
         """
         if obj.v1_id is not None:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
                 'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
