@@ -37,6 +37,7 @@ classifiers = [
     "Natural Language :: German",
 ]
 dependencies = [
+  "audioop-lts; python_version>='3.13'",
 	"django",
 	"django-import-export",
 	"django-jazzmin",
