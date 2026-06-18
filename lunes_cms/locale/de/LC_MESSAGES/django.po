@@ -17,100 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: analytics/admin_views.py
-msgid "Day"
-msgstr "Tag"
-
-#: analytics/admin_views.py
-msgid "Week"
-msgstr "Woche"
-
-#: analytics/admin_views.py
-msgid "Month"
-msgstr "Monat"
-
-#: analytics/admin_views.py
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Sessions"
-msgstr "Sitzungen"
-
-#: analytics/admin_views.py
-msgid "Average duration (min)"
-msgstr "Durchschnittliche Dauer (min)"
-
-#: analytics/admin_views.py analytics/models/session_duration_report.py
-msgid "Total Session Duration"
-msgstr "Gesamtsitzungsdauer"
-
 #: analytics/apps.py
 msgid "Analytics"
 msgstr "Analytik"
-
-#: analytics/models/session_duration_report.py
-msgid "Can view analytics"
-msgstr "Kann Analytik einsehen"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Django site admin"
-msgstr "Django-Administrationsseite"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-#: cms/templates/admin/delete_confirmation.html
-#: cms/templates/admin/delete_selected_confirmation.html
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-#: cmsv2/templates/admin/csv_form.html
-#: cmsv2/templates/admin/generate_audio_base.html
-#: cmsv2/templates/admin/generate_image_base.html
-msgid "Home"
-msgstr "Home"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "From"
-msgstr "Von"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "To"
-msgstr "Bis"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Granularity"
-msgstr "Granularität"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Daily"
-msgstr "Täglich"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Weekly"
-msgstr "Wöchentlich"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Monthly"
-msgstr "Monatlich"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Apply"
-msgstr "Anwenden"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Total sessions"
-msgstr "Sitzungen gesamt"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Total time"
-msgstr "Gesamtzeit"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Average session duration"
-msgstr "Durchschnittliche Sitzungsdauer"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "Average duration"
-msgstr "Durchschnittliche Dauer"
-
-#: analytics/templates/admin/analytics/reports/sessions.html
-msgid "No data in selected range"
-msgstr "Keine Daten im gewählten Zeitraum"
 
 #: api/apps.py
 msgid "API"
@@ -642,6 +551,15 @@ msgid ""
 msgstr ""
 "Es ist nicht möglich, untergeordnete Elemente für Module zu erstellen (im "
 "Gegensatz zu Modulgruppen)"
+
+#: cms/templates/admin/delete_confirmation.html
+#: cms/templates/admin/delete_selected_confirmation.html
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/csv_form.html
+#: cmsv2/templates/admin/generate_audio_base.html
+#: cmsv2/templates/admin/generate_image_base.html
+msgid "Home"
+msgstr "Home"
 
 #: cms/templates/admin/delete_confirmation.html
 msgid "Delete"
@@ -1187,6 +1105,66 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Day"
+#~ msgstr "Tag"
+
+#~ msgid "Week"
+#~ msgstr "Woche"
+
+#~ msgid "Month"
+#~ msgstr "Monat"
+
+#~ msgid "Sessions"
+#~ msgstr "Sitzungen"
+
+#~ msgid "Average duration (min)"
+#~ msgstr "Durchschnittliche Dauer (min)"
+
+#~ msgid "Total Session Duration"
+#~ msgstr "Gesamtsitzungsdauer"
+
+#~ msgid "Django site admin"
+#~ msgstr "Django-Administrationsseite"
+
+#~ msgid "From"
+#~ msgstr "Von"
+
+#~ msgid "To"
+#~ msgstr "Bis"
+
+#~ msgid "Granularity"
+#~ msgstr "Granularität"
+
+#~ msgid "Daily"
+#~ msgstr "Täglich"
+
+#~ msgid "Weekly"
+#~ msgstr "Wöchentlich"
+
+#~ msgid "Monthly"
+#~ msgstr "Monatlich"
+
+#~ msgid "Apply"
+#~ msgstr "Anwenden"
+
+#~ msgid "Total sessions"
+#~ msgstr "Sitzungen gesamt"
+
+#~ msgid "Total time"
+#~ msgstr "Gesamtzeit"
+
+#~ msgid "Average session duration"
+#~ msgstr "Durchschnittliche Sitzungsdauer"
+
+#~ msgid "Average duration"
+#~ msgstr "Durchschnittliche Dauer"
+
+#~ msgid "No data in selected range"
+#~ msgstr "Keine Daten im gewählten Zeitraum"
+
+#~ msgid "Can view analytics"
+#~ msgstr "Kann Analytik einsehen"
 
 #~ msgid "%(name)s %(label)"
 #~ msgstr "%(name)s (Neu)"
