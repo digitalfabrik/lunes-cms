@@ -11,6 +11,7 @@ UNRELEASED
 * [ [#804](https://github.com/digitalfabrik/lunes-cms/issues/804) ] 804: Ensure German pronunciation
 * [ [#798](https://github.com/digitalfabrik/lunes-cms/issues/798) ] 798: Add bulk action to release units
 * [ [#667](https://github.com/digitalfabrik/lunes-cms/issues/667) ] 667: Show total session duration
+* [ [#625](https://github.com/digitalfabrik/lunes-cms/issues/625) ] 625: Generate example sentences via OpenAI
 
 2026.4.7
 --------

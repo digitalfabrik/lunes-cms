@@ -49,6 +49,9 @@ OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2
 #: OpenAI image quality tier (low/medium/high)
 OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
 
+#: OpenAI model used for text generation (e.g. example sentences)
+OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
+
 ###################
 # MATOMO TRACKING #
 ###################

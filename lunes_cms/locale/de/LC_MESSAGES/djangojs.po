@@ -29,3 +29,19 @@ msgstr "Kein Bild verfügbar"
 #: lunes_cms/static/js/manytomany_overlay.js:75
 msgid "No audio available"
 msgstr "Kein Audio verfügbar"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Could not find the example sentence field."
+msgstr "Das Beispielsatz-Feld konnte nicht gefunden werden."
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Generating example sentence..."
+msgstr "Beispielsatz wird generiert …"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Example sentence generated!"
+msgstr "Beispielsatz generiert!"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Error"
+msgstr "Fehler"

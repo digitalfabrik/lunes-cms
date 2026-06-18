@@ -779,6 +779,18 @@ msgid "Miscellaneous"
 msgstr "Verschiedene"
 
 #: cmsv2/admins/word_admin.py
+msgid "Generate example sentence"
+msgstr "Beispielsatz generieren"
+
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+msgid "Save to enable example sentence generation."
+msgstr "Speichern, um die Beispielsatz-Generierung zu aktivieren."
+
+#: cmsv2/admins/word_admin.py
+msgid "Example Sentence Generation"
+msgstr "Beispielsatz-Generierung"
+
+#: cmsv2/admins/word_admin.py
 msgid "Image Preview"
 msgstr "Bild Vorschau"
 
@@ -960,6 +972,10 @@ msgstr "Bild generieren"
 #: cmsv2/templates/admin/word_generate_example_sentence_audio.html
 msgid "Generate Example Sentence Audio"
 msgstr "Generiere Beispielsatz Audio"
+
+#: cmsv2/models/unit.py
+msgid "Generate Example Sentence"
+msgstr "Beispielsatz generieren"
 
 #: cmsv2/models/unit.py
 msgid "Unit-Word Relation"
