@@ -1,0 +1,130 @@
+[
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99001,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "job_selected",
+      "timestamp": "2026-06-09T08:00:00Z",
+      "payload": {"job_id": 1, "action": "add"},
+      "created_at": "2026-06-09T08:00:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99002,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "job_selected",
+      "timestamp": "2026-06-09T09:00:00Z",
+      "payload": {"job_id": 1, "action": "add"},
+      "created_at": "2026-06-09T09:00:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99003,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "job_selected",
+      "timestamp": "2026-06-09T10:00:00Z",
+      "payload": {"job_id": 1, "action": "remove"},
+      "created_at": "2026-06-09T10:00:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99004,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "session_start",
+      "timestamp": "2026-06-09T08:00:00Z",
+      "payload": {"session_id": "aabbccddeeff00112233445566778899"},
+      "created_at": "2026-06-09T08:00:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99005,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "session_end",
+      "timestamp": "2026-06-09T08:07:42Z",
+      "payload": {"session_id": "aabbccddeeff00112233445566778899"},
+      "created_at": "2026-06-09T08:07:42Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99006,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "module_duration",
+      "timestamp": "2026-06-09T08:05:00Z",
+      "payload": {
+        "exercise_key": {"type": "exercise", "exercise_type": "word_choice", "unit_id": 1},
+        "duration_seconds": 462
+      },
+      "created_at": "2026-06-09T08:05:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99007,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "module_duration",
+      "timestamp": "2026-06-09T08:06:00Z",
+      "payload": {
+        "exercise_key": {"type": "training", "exercise_type": "image", "job_id": 1},
+        "duration_seconds": 180
+      },
+      "created_at": "2026-06-09T08:06:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99008,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "exercise_dropout",
+      "timestamp": "2026-06-09T08:04:00Z",
+      "payload": {
+        "exercise_key": {"type": "exercise", "exercise_type": "word_choice", "unit_id": 1},
+        "position": 3,
+        "total": 10
+      },
+      "created_at": "2026-06-09T08:04:00Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99009,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "exercise_dropout",
+      "timestamp": "2026-06-09T08:04:30Z",
+      "payload": {
+        "exercise_key": {"type": "training", "exercise_type": "image", "job_id": 1},
+        "position": 2,
+        "total": 8,
+        "vocabulary_item_id": 42
+      },
+      "created_at": "2026-06-09T08:04:30Z"
+    }
+  },
+  {
+    "model": "analytics.analyticsevent",
+    "pk": 99010,
+    "fields": {
+      "installation_id": "test-aggregate-delete-me",
+      "event_type": "exercise_repetition",
+      "timestamp": "2026-01-01T00:00:00Z",
+      "payload": {
+        "exercise_key": {"type": "exercise", "exercise_type": "word_choice", "unit_id": 1},
+        "session_id": "aabbccddeeff00112233445566778899"
+      },
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  }
+]

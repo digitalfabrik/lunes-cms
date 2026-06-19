@@ -3,9 +3,10 @@ import os
 from django.contrib.auth.models import Group, User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
-from ..utils import create_resource_path
+from ..utils import create_resource_path, make_safe_filename
 
 
 class Static:
@@ -51,6 +52,12 @@ class Static:
         ("CONFIRMED", "Confirmed"),
     ]
 
+    # Review status choices
+    review_status_choices = [
+        ("PENDING", _("Pending Review")),
+        ("APPROVED", _("Approved")),
+    ]
+
     # number of pixels used for box blur
     blurr_radius = 30
     # maximum (width, height) of images
@@ -58,9 +65,49 @@ class Static:
 
     # super admin group name
     admin_group = "Lunes"
+    reviewer_group = _("Reviewer")
 
     # default group name
     default_group_name = None
+    STAFF_PERMISSIONS = [
+        "add_job",
+        "change_job",
+        "delete_job",
+        "view_job",
+        "add_word",
+        "change_word",
+        "delete_word",
+        "view_word",
+        "add_unit",
+        "change_unit",
+        "delete_unit",
+        "view_unit",
+        "add_image",
+        "change_image",
+        "delete_image",
+        "view_image",
+        "add_feedback",
+        "change_feedback",
+        "delete_feedback",
+        "view_feedback",
+        "add_unitwordrelation",
+        "change_unitwordrelation",
+        "delete_unitwordrelation",
+        "view_unitwordrelation",
+    ]
+    REVIEW_PERMISSIONS = [
+        "add_imagereview",
+        "change_imagereview",
+        "delete_imagereview",
+        "view_imagereview",
+        "add_reviewassignment",
+        "change_reviewassignment",
+        "delete_reviewassignment",
+        "view_reviewassignment",
+    ]
+
+
+REVIEW_STATUS_CHOICES = Static.review_status_choices
 
 
 def convert_image_to_webp(image_field):
@@ -94,13 +141,11 @@ def convert_image_to_webp(image_field):
     return True
 
 
-def convert_umlaute_images(instance, filename):
+def convert_umlaute_images(_, filename):
     """
     Convert file name of images to handle all kind of characters (including "Umlaute" etc.).
 
 
-    :param instance: instance where the current file is being attached
-    :type instance: django.db.models
     :param filename: name of the file
     :type filename: str
 
@@ -110,28 +155,29 @@ def convert_umlaute_images(instance, filename):
     return create_resource_path("images", filename)
 
 
-def convert_umlaute_audio(instance, filename):
+def convert_umlaute_audio(_, filename):
     """
     Convert file name of audios to handle all kind of
     characters (including "Umlaute" etc.).
 
-    :param instance: instance where the current file is being attached
-    :type instance: django.db.models
     :param filename: name of the file
     :type filename: str
 
     :return: file path of converted audio
     :rtype: str
     """
-    return create_resource_path("audio", filename)
+    stem = os.path.splitext(os.path.basename(filename))[0]
+    # convert_audio() re-saves the file as "<name>-conv.mp3"; keep the base name.
+    if stem.endswith("-conv"):
+        stem = stem[: -len("-conv")]
+    safe_stem = make_safe_filename(stem) or "audio"
+    return os.path.join("audio", f"{safe_stem}.mp3")
 
 
-def upload_sponsor_logos(instance, filename):
+def upload_sponsor_logos(_, filename):
     """
     Upload path for sponsor logos
 
-    :param instance: instance where the current file is being attached
-    :type instance: django.db.models
 
     :param filename: name of the file
     :type filename: str
@@ -143,13 +189,11 @@ def upload_sponsor_logos(instance, filename):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(instance, created, **_kwargs):
     """
     Automatically adds a group when creating a new user
     if group name given in Static module
 
-    :param sender: user that sends request
-    :type sender: django.contrib.auth.models
     :param instance: user that eventually will be added to a new group
     :type instance: django.contrib.auth.models
     :param created: checks if User is creator
@@ -164,3 +208,10 @@ def create_user_profile(sender, instance, created, **kwargs):
             return False
         instance.groups.add(Group.objects.get(name=Static.default_group_name))
     return True
+
+
+def is_reviewer(user: User) -> bool:
+    """
+    Check if the user is a reviewer.
+    """
+    return user.groups.filter(name=Static.admin_group).exists()

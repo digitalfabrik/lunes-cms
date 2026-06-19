@@ -31,5 +31,6 @@
 function(formData) {
     formData.append("word_text", "{{ unitword_instance.word.word }}")
     formData.append("unit_title", "{{ unitword_instance.unit.title }}")
+    {% if job_title %}formData.append("job_title", "{{ job_title }}"){% endif %}
 }
 {% endblock %}

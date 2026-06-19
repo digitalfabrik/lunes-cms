@@ -1,3 +1,7 @@
+from .generate_example_sentence import (
+    unitword_generate_example_sentence_via_openai,
+    word_generate_example_sentence_via_openai,
+)
 from .generate_image import generate_image_via_openai
 from .import_csv_view import import_from_csv
 from .unitword_generate_example_sentence_audio import (
@@ -39,6 +43,7 @@ __all__ = [
     "unitword_store_generated_image_permanently",
     "unitword_generate_example_sentence_audio",
     "unitword_generate_example_sentence_audio_via_openai",
+    "unitword_generate_example_sentence_via_openai",
     "unitword_store_generated_example_sentence_audio_permanently",
     "update_job_icon",
     "update_unit_icon",
@@ -52,6 +57,7 @@ __all__ = [
     "word_generate_audio_via_openai",
     "word_generate_example_sentence_audio",
     "word_generate_example_sentence_audio_via_openai",
+    "word_generate_example_sentence_via_openai",
     "word_generate_image",
     "word_store_generated_audio_permanently",
     "word_store_generated_example_sentence_audio_permanently",

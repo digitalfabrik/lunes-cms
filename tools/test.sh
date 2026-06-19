@@ -17,8 +17,15 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         # Verbosity for pytest
         -v|-vv|-vvv|-vvvv) VERBOSITY="$1";shift;;
+        # CI mode: skip database setup (pytest-django manages its own test DB)
+        --ci) CI_MODE=1;shift;;
     esac
 done
+
+# Require that the database exists and is in the correct state (skipped in CI mode)
+if [[ -z "${CI_MODE}" ]]; then
+    require_database
+fi
 
 # The default pytests args we use
 PYTEST_ARGS=("--disable-warnings" "--color=yes" "--cov=lunes_cms" "--cov-report=html" "--ds=lunes_cms.core.settings")
@@ -32,5 +39,7 @@ fi
 pytest "${PYTEST_ARGS[@]}"
 echo "✔ Tests successfully completed " | print_success
 
-echo -e "Open the following file in your browser to view the test coverage:\n" | print_info
-echo -e "\tfile://${BASE_DIR}/htmlcov/index.html\n" | print_bold
+if [[ -z "${CI_MODE}" ]]; then
+    echo -e "Open the following file in your browser to view the test coverage:\n" | print_info
+    echo -e "\tfile://${BASE_DIR}/htmlcov/index.html\n" | print_bold
+fi

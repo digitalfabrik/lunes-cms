@@ -1,10 +1,10 @@
-from django.db.models import QuerySet
+from django.db.models import F, QuerySet
 from rest_framework import mixins, status, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
 
-from ..models import AnalyticsEvent
+from ..models import AnalyticsEvent, ExerciseRepetitionAggregate
 from .serializers import AnalyticsEventSerializer
 
 
@@ -33,6 +33,20 @@ class AnalyticsEventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     throttle_classes = [InstallationRateThrottle]
     serializer_class = AnalyticsEventSerializer
 
+    def perform_create(self, serializer: AnalyticsEventSerializer) -> None:
+        event = serializer.save()
+        if event.event_type == AnalyticsEvent.EventType.EXERCISE_REPETITION:
+            payload = event.payload
+            exercise_key = payload["exercise_key"]
+            ExerciseRepetitionAggregate.objects.update_or_create(
+                unit_id=exercise_key.get("unit_id"),
+                job_id=exercise_key.get("job_id"),
+                exercise_type=exercise_key["exercise_type"],
+                session_id=payload["session_id"],
+                defaults={"repetition_count": F("repetition_count") + 1},
+                create_defaults={"repetition_count": 1},
+            )
+
 
 class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """View class for viewing and deleting personal data"""
@@ -46,7 +60,7 @@ class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             installation_id=self.kwargs["installation_id"]
         )
 
-    def destroy(self, request: Request, *args, **kwargs) -> Response:
+    def destroy(self, _, *_args, **_kwargs) -> Response:
         """
         Deletes all events with a matching installation_id
         """

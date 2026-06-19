@@ -1,11 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
-from django.utils.html import format_html
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+from django.db.models import QuerySet
+from django.http import HttpRequest
+from django.template.response import TemplateResponse
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.models.review import ReviewAssignment
+from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 
 
 class WordInline(admin.TabularInline):
@@ -22,14 +28,43 @@ class WordInline(admin.TabularInline):
         "word",
         "image_with_controls",
         "example_sentence",
+        "example_sentence_generate",
         "example_sentence_check_status",
         "example_sentence_audio_player",
     ]
-    readonly_fields = ["image_with_controls", "example_sentence_audio_player"]
+    readonly_fields = [
+        "image_with_controls",
+        "example_sentence_generate",
+        "example_sentence_audio_player",
+    ]
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         return formset
+
+
+class ReviewAssignmentInline(admin.TabularInline):
+    """
+    Inline admin for ReviewAssignment.
+    """
+
+    model = ReviewAssignment
+    fk_name = "unit"
+    extra = 0
+    fields = ["reviewer", "assigned_by", "assigned_at"]
+    readonly_fields = ["assigned_by", "assigned_at"]
+    autocomplete_fields = ["reviewer"]
+    verbose_name = _("assigned user")
+    verbose_name_plural = _("assigned users")
+
+    def has_add_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
 
 
 class MigratedFilter(admin.SimpleListFilter):
@@ -91,7 +126,7 @@ class UnitAdmin(BaseAdmin):
         "released",
     ]
     readonly_fields = ["created_by", "image_tag", "migrated_status"]
-    inlines = [WordInline]
+    inlines = [WordInline, ReviewAssignmentInline]
     search_fields = ["title"]
     list_display = [
         "title",
@@ -105,6 +140,7 @@ class UnitAdmin(BaseAdmin):
     list_display_links = ["title"]
     list_filter = ["released", MigratedFilter, "jobs"]
     list_per_page = 25
+    actions = ["bulk_release", "assign_to_user"]
 
     class Media:
         """
@@ -114,8 +150,97 @@ class UnitAdmin(BaseAdmin):
         particularly for asset management functionality.
         """
 
-        js = ["js/unit_icon_asset_config.js", "js/asset_manager.js"]
+        js = [
+            "js/unit_icon_asset_config.js",
+            "js/asset_manager.js",
+            "js/generate_example_sentence.js",
+        ]
         css = {"all": ["css/asset_manager.css"]}
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("jobs")
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model is ReviewAssignment:
+            instances = formset.save(commit=False)
+            for obj in formset.deleted_objects:
+                obj.delete()
+            for instance in instances:
+                if instance.assigned_by_id is None:
+                    instance.assigned_by = request.user
+                instance.save()
+            formset.save_m2m()
+        else:
+            super().save_formset(request, form, formset, change)
+
+    @admin.action(description=_("Release all selected units"))
+    def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:
+        """
+        Bulk action to release selected units in one go
+        """
+        if not request.user.has_perm("change_unit"):
+            raise PermissionDenied
+
+        units_skipped = queryset.filter(released=True).count()
+        released_unit_count = queryset.filter(released=False).update(released=True)
+
+        self.message_user(
+            request,
+            _(
+                "Released %(unit_count)d unit(s). %(units_skipped)d unit(s) were skipped, because they were already released"
+            )
+            % {
+                "unit_count": released_unit_count,
+                "units_skipped": units_skipped,
+            },
+        )
+
+    @admin.action(description=_("Assign selected units to user"))
+    def assign_to_user(self, request, queryset):
+        """
+        Bulk-create ReviewAssignments linking each selected unit to a chosen
+        user. Superusers only. Units already assigned to the target user are
+        silently skipped via the (unit, reviewer) unique constraint.
+        """
+        if not request.user.is_superuser:
+            raise PermissionDenied
+
+        if "apply" not in request.POST:
+            return TemplateResponse(
+                request,
+                "admin/cmsv2/assign_units_to_user.html",
+                {
+                    **self.admin_site.each_context(request),
+                    "units": queryset,
+                    "users": User.objects.order_by("username"),
+                    "action": "assign_to_user",
+                    "selected_action": queryset.values_list("pk", flat=True),
+                    "title": _("Assign selected units to user"),
+                },
+            )
+
+        user = User.objects.get(pk=request.POST["user"])
+        existing_unit_ids = set(
+            ReviewAssignment.objects.filter(
+                reviewer=user, unit__in=queryset
+            ).values_list("unit_id", flat=True)
+        )
+        to_create = [
+            ReviewAssignment(unit=unit, reviewer=user, assigned_by=request.user)
+            for unit in queryset
+            if unit.pk not in existing_unit_ids
+        ]
+        ReviewAssignment.objects.bulk_create(to_create, ignore_conflicts=True)
+        self.message_user(
+            request,
+            _("Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned).")
+            % {
+                "new": len(to_create),
+                "skipped": len(existing_unit_ids),
+                "user": user,
+            },
+        )
+        return None
 
     def related_jobs(self, obj):
         """
@@ -175,11 +300,11 @@ class UnitAdmin(BaseAdmin):
             str: HTML formatted badge showing migration status
         """
         if obj.v1_id is not None:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
                 'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )

@@ -193,6 +193,23 @@ class UnitWordRelation(models.Model):
 
     generate_example_sentence_audio_link.short_description = _("Generate Example Sentence Audio")  # type: ignore[attr-defined]
 
+    def example_sentence_generate(self):
+        """Display a button to generate an example sentence via OpenAI."""
+        if self.pk:
+            url = reverse(
+                "cmsv2:unitword_generate_example_sentence_via_openai", args=[self.pk]
+            )
+            return mark_safe(
+                f'<button type="button" class="button generate-example-sentence-btn" data-url="{url}">'
+                f"{_('Generate example sentence')}</button>"
+                '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
+                'style="display: none; margin-left: 8px;"></span>'
+                '<div class="generate-example-sentence-message" style="margin-top: 4px;"></div>'
+            )
+        return _("Save to enable example sentence generation.")
+
+    example_sentence_generate.short_description = _("Generate Example Sentence")  # type: ignore[attr-defined]
+
     def example_sentence_audio_with_player(self):
         """Display audio player and generate button in a single column."""
         audio_html = ""
@@ -307,7 +324,9 @@ class Unit(models.Model):
     Represents a unit in the system, which can be linked to jobs and words.
     """
 
-    released = models.BooleanField(default=False, verbose_name=_("released"))
+    released = models.BooleanField(
+        default=False, db_index=True, verbose_name=_("released")
+    )
     title = models.CharField(max_length=255, verbose_name=_("unit"))
     description = models.CharField(
         max_length=255, blank=True, verbose_name=_("description")

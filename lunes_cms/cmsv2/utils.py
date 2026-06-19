@@ -77,37 +77,27 @@ def word_to_string(word):
     )
 
 
-def get_child_count(disc):
+def cache_busted_url(file):
     """
-    Count the number of released children with training sets.
+    Return a media file's URL with a ?v= query that changes when the file does.
+
+    Regenerated audio is always re-saved under the same deterministic filename
+    (e.g. <word>.mp3), so its URL never changes when the content does — and
+    browsers keep playing the cached copy. Appending the file's modification
+    time makes the URL change on each regeneration, forcing a refetch. Falls
+    back to the plain URL if the storage can't report a modification time.
 
     Args:
-        disc: The parent object whose children will be counted
+        file: A Django FieldFile (e.g. word.audio).
 
     Returns:
-        int: The count of released children with at least one training set
+        str: The file URL, cache-busted when possible.
     """
-    children_counter = 0
-    for child in disc.get_children():
-        if child.released and get_training_set_count(child) > 0:
-            children_counter += 1
-    return children_counter
-
-
-def get_training_set_count(disc):
-    """
-    Count the total number of training sets for an object and its descendants.
-
-    Args:
-        disc: The object whose training sets will be counted
-
-    Returns:
-        int: The total count of training sets
-    """
-    training_set_counter = 0
-    for child in disc.get_descendants(include_self=True):
-        training_set_counter += child.training_sets.count()
-    return training_set_counter
+    try:
+        version = int(file.storage.get_modified_time(file.name).timestamp())
+    except (NotImplementedError, OSError, ValueError):
+        return file.url
+    return f"{file.url}?v={version}"
 
 
 def get_image_tag(image, width=330):

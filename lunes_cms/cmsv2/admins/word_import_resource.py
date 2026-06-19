@@ -10,16 +10,38 @@ from ..models import Job, Static, Unit, Word
 logger = logging.getLogger(__name__)
 
 
-COLUMN_MAPPING: dict[str, str] = {
-    "Einheit": "unit",
-    "Sinneinheit": "unit",
-    "Sinneseinheit": "unit",
-    "Fachbegriff": "word",
-    "Begriff": "word",
-    "Vokabel": "word",
-    "Artikel": "article",
-    "Beispielsatz": "example",
-}
+def _build_column_mapping() -> dict[str, str]:
+    """
+    Maps CSV column headers (from the exporter or legacy templates) to internal
+    field names. Both German and English export headers are listed explicitly
+    since the exported CSV uses the language of the admin interface at export
+    time.
+    """
+    return {
+        # unit
+        "Units": "unit",
+        "Einheit": "unit",
+        # word
+        "Word": "word",
+        "Vokabel": "word",
+        # singular article
+        "Singular Article": "article",
+        "Singularartikel": "article",
+        # plural word
+        "Plural": "plural",
+        # plural article
+        "Plural Article": "plural_article",
+        "Pluralartikel": "plural_article",
+        # example sentence
+        "Example sentence": "example",
+        "Beispielsatz": "example",
+        # For legacy imports
+        "Artikel": "article",
+        "Fachbegriff": "word",
+        "Begriff": "word",
+        "Sinneinheit": "unit",
+        "Sinneseinheit": "unit",
+    }
 
 
 @dataclass(frozen=True)
@@ -31,6 +53,8 @@ class ParsedRow:
     unit: str
     word: str
     article: str
+    plural: str = ""
+    plural_article: str = ""
     example: str = ""
 
 
@@ -51,6 +75,7 @@ class RowResult:
     created: int = 0
     updated: int = 0
     error: Optional[str] = None
+    word_id: Optional[int] = None
 
 
 def map_article_to_int(article: str) -> int:
@@ -63,6 +88,21 @@ def map_article_to_int(article: str) -> int:
     return ARTICLE_MAP.get(article, 0)
 
 
+def map_plural_article_to_int(plural_article: str) -> int | None:
+    """
+    Converts plural article string to its int in DB. Returns None for empty or
+    unknown values (the field is nullable).
+    """
+    ARTICLE_MAP: dict[str, int] = {
+        label.lower(): value for value, label in Static.plural_article_choices
+    } | {
+        label.lower().replace(" (plural)", ""): value
+        for value, label in Static.plural_article_choices
+    }
+    normalized = plural_article.lower().strip()
+    return ARTICLE_MAP.get(normalized)
+
+
 def create_unit(unit_title: str, job: Job) -> Unit:
     """
     Create a new unit - even if one already exists with the same title.
@@ -72,11 +112,18 @@ def create_unit(unit_title: str, job: Job) -> Unit:
     return unit
 
 
-def create_word(word_text: str, singular_article: int) -> Word:
+def create_word(
+    word_text: str, singular_article: int, plural_article: int | None, plural: str = ""
+) -> Word:
     """
     Creates a new word object.
     """
-    return Word.objects.create(word=word_text, singular_article=singular_article)
+    return Word.objects.create(
+        word=word_text,
+        singular_article=singular_article,
+        plural_article=plural_article,
+        plural=plural,
+    )
 
 
 def update_or_add_example_sentence(word_obj: Word, word_defaults: dict) -> None:
@@ -93,12 +140,13 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     Parses a single row and returns either a ParsedRow or a RowResult (error).
     """
     try:
+        column_mapping = {k.lower(): v for k, v in _build_column_mapping().items()}
         mapped = {
-            COLUMN_MAPPING[key.strip()]: (
+            column_mapping[key.strip().lower()]: (
                 value.strip() if isinstance(value, str) else value
             )
             for key, value in raw_row.items()
-            if key and COLUMN_MAPPING.get(key.strip())
+            if key and column_mapping.get(key.strip().lower())
         }
 
         if not mapped:
@@ -108,7 +156,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             )
 
         unknown_keys = {
-            k.strip() for k in raw_row.keys() if k and not COLUMN_MAPPING.get(k.strip())
+            k.strip() for k in raw_row.keys() if k and not column_mapping.get(k.strip())
         }
         if unknown_keys:
             logger.info(
@@ -132,9 +180,18 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             )
 
         article = mapped.get("article", "").lower()
+        plural = mapped.get("plural", "")
+        plural_article = mapped.get("plural_article", "")
         example = mapped.get("example", "")
 
-        return ParsedRow(unit=unit, word=word, article=article, example=example)
+        return ParsedRow(
+            unit=unit,
+            word=word,
+            article=article,
+            plural=plural,
+            plural_article=plural_article,
+            example=example,
+        )
 
     except (AttributeError, TypeError) as exc:
         logger.warning("Row %s – malformed column data: %s", row_number, exc)
@@ -179,20 +236,24 @@ def process_row(
             unit.jobs.add(job)
 
     article_int = map_article_to_int(parsed.article)
-    word = create_word(parsed.word, article_int)
+    plural_article_int = map_plural_article_to_int(parsed.plural_article)
+    word = create_word(parsed.word, article_int, plural_article_int, parsed.plural)
     created += 1
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 
     unit.words.add(word)
 
-    return RowResult(created=created, updated=updated)
+    return RowResult(created=created, updated=updated, word_id=word.pk)
 
 
-def import_words_from_csv(dataset: Dataset, job: Job) -> Tuple[int, int, list[str]]:
+def import_words_from_csv(
+    dataset: Dataset, job: Job
+) -> Tuple[int, int, list[str], list[int]]:
     """
     Imports the entire csv dataset to a job.
-    Returns a tuple of created_count, updated_count, error_messages
+    Returns a tuple of created_count, updated_count, error_messages,
+    imported_word_ids
 
     Important: During the import there is a local cache ``created_units`` because of the following scenario:
     In the CSV file there are ten words for the unit "tools"
@@ -203,6 +264,7 @@ def import_words_from_csv(dataset: Dataset, job: Job) -> Tuple[int, int, list[st
     total_created = 0
     total_updated = 0
     error_messages: list[str] = []
+    imported_word_ids: list[int] = []
 
     created_units: Dict[str, Unit] = {}
 
@@ -224,5 +286,7 @@ def import_words_from_csv(dataset: Dataset, job: Job) -> Tuple[int, int, list[st
 
         total_created += result.created
         total_updated += result.updated
+        if result.word_id is not None:
+            imported_word_ids.append(result.word_id)
 
-    return total_created, total_updated, error_messages
+    return total_created, total_updated, error_messages, imported_word_ids

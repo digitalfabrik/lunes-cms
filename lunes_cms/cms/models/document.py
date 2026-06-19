@@ -5,7 +5,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.files import File
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from pydub import AudioSegment
+
+from lunes_cms.core.audio import run_ffmpeg, validate_audio_upload
 
 from ..utils import document_to_string
 from ..validators import (
@@ -98,6 +99,13 @@ class Document(models.Model):
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
     feedback = GenericRelation(Feedback)
 
+    def clean(self):
+        """Validate new audio uploads with ffmpeg before saving to prevent storing invalid audio."""
+        super().clean()
+        if not self.audio or self.audio._committed:  # pylint: disable=protected-access
+            return
+        validate_audio_upload(self.audio.file)
+
     @property
     def converted(self):
         """
@@ -112,10 +120,8 @@ class Document(models.Model):
         """
         super().save()
         file_path = self.audio.path
-        original_extension = file_path.split(".")[-1]
-        mp3_converted_file = AudioSegment.from_file(file_path, original_extension)
-        new_path = file_path[:-4] + "-conv.mp3"
-        mp3_converted_file.export(new_path, format="mp3", bitrate="44.1k")
+        new_path = str(Path(file_path).with_suffix("")) + "-conv.mp3"
+        run_ffmpeg("-i", file_path, "-b:a", "44.1k", new_path)
 
         with open(new_path, "rb") as file:
             converted_audiofile = File(file, name=Path(new_path).name)

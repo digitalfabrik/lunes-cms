@@ -1,3 +1,5 @@
+import threading
+
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -10,6 +12,8 @@ from tablib.exceptions import InvalidDimensions
 
 from ..admins.word_import_resource import import_words_from_csv
 from ..models import Job
+from ..services.audio_generation import drain_pending_audio
+from ..services.image_generation import drain_pending_images
 
 
 class ImportCSVForm(forms.Form):
@@ -80,7 +84,9 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     try:
         data = Dataset()
         data.load(csv_file.read().decode("utf-8"), format="csv")
-        created_count, updated_count, errors = import_words_from_csv(data, selected_job)
+        created_count, updated_count, errors, imported_word_ids = import_words_from_csv(
+            data, selected_job
+        )
 
         if errors:
             error_summary = " | ".join(errors[:5])
@@ -92,9 +98,26 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
         else:
             messages.success(
                 request,
-                _("Import successful! %(created)s new entries, %(updated)s updated.")
+                _(
+                    "Import successful! %(created)s new entries, %(updated)s updated. "
+                    "Audio and images are being generated in the background. This may "
+                    "take a few minutes..."
+                )
                 % {"created": created_count, "updated": updated_count},
             )
+
+        if imported_word_ids:
+            threading.Thread(
+                target=drain_pending_audio,
+                args=(imported_word_ids,),
+                daemon=True,
+            ).start()
+            threading.Thread(
+                target=drain_pending_images,
+                args=(imported_word_ids,),
+                kwargs={"job_title": selected_job.name},
+                daemon=True,
+            ).start()
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))
 
     except InvalidDimensions:

@@ -256,7 +256,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         return form
 
     @admin.action(description=_("Release selected disciplines"))
-    def make_released(self, request, queryset):
+    def make_released(self, _request, queryset):
         """
         Action to release discipline objects. It sets the
         corresponding boolean field to true.
@@ -269,7 +269,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         queryset.update(released=True)
 
     @admin.action(description=_("Unrelease selected disciplines"))
-    def make_unreleased(self, request, queryset):
+    def make_unreleased(self, _request, queryset):
         """
         Action to hide discipline objects. It sets the
         corresponding boolean field to false.
@@ -282,7 +282,7 @@ class DisciplineAdmin(DraggableMPTTAdmin):
         queryset.update(released=False)
 
     @admin.action(description=_("Export all vocabulary for this discipline to CSV"))
-    def make_export_to_CSV(self, request, queryset):
+    def make_export_to_CSV(self, _request, queryset):
         """
         Export the documents of the selected disciplines.
 

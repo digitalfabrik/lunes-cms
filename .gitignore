@@ -6,8 +6,8 @@ db.sqlite3
 *.egg-info
 build
 dist
-.idea
 .vscode
+.idea/dataSources.xml
 .coverage
 docs/dist/
 docs/src/ref/
@@ -15,3 +15,6 @@ docs/src/changelog.rst
 lunes_cms/lunes-cms.log
 .python-version
 .env.local
+user_docs_site
+lunes_cms/static/js/
+node_modules/

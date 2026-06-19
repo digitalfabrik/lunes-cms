@@ -3,11 +3,12 @@ from __future__ import absolute_import, unicode_literals
 import io
 from zipfile import ZipFile
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
@@ -98,7 +99,7 @@ class JobAdmin(BaseAdmin):
     ]
     list_display_links = ["name"]
     list_filter = ["released", MigratedFilter]
-    actions = ["export_to_csv"]
+    actions = ["export_to_csv", "duplicate_jobs"]
     list_per_page = 25
     ordering = ["name"]
     change_list_template = "admin/cmsv2/import_csv_button.html"
@@ -154,11 +155,11 @@ class JobAdmin(BaseAdmin):
             str: HTML formatted badge showing migration status
         """
         if obj.v1_id is not None:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
                 'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
@@ -166,12 +167,11 @@ class JobAdmin(BaseAdmin):
     migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
 
     @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
-    def export_to_csv(self, request, queryset):
+    def export_to_csv(self, _, queryset):
         """
         Export the words of the selected jobs.
 
         :param request: current user request
-        :type request: django.http.request
         :param queryset: current queryset
         :type queryset: QuerySet
         """
@@ -180,7 +180,11 @@ class JobAdmin(BaseAdmin):
         for profession in queryset:
             resource = WordExportResource()
             units = Unit.objects.filter(jobs=profession)
-            words = Word.objects.filter(units__in=units).distinct()
+            words = (
+                Word.objects.filter(units__in=units)
+                .order_by("units__title", "word")
+                .distinct()
+            )
 
             dataset = Dataset(
                 *(resource.export_resource(word) for word in words),
@@ -198,6 +202,21 @@ class JobAdmin(BaseAdmin):
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
         response["Content-Disposition"] = 'attachment; filename="Lunes_vocabulary.zip"'
         return response
+
+    @admin.action(description=_("Duplicate selected jobs"))
+    def duplicate_jobs(self, request, queryset):
+        """Duplicate the selected jobs, including their related units."""
+        for job in queryset:
+            units = list(job.units.all())
+            job.pk = None
+            job.v1_id = None
+            job.released = False
+            new_label = _("New")
+            job.name = f"{job.name} ({new_label})"
+            job.created_by = request.user.groups.first()
+            job.save()
+            job.units.set(units)
+        messages.success(request, _("Selected jobs have been duplicated successfully."))
 
     def response_add(self, request, obj, post_url_continue=None):
         if "_save_and_import" in request.POST:

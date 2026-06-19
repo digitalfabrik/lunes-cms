@@ -11,10 +11,20 @@ class AnalyticsEvent(models.Model):
         Exercise types matching the app's ExerciseKeys.
         """
 
-        VOCABULARY_LIST = "vocabulary_list", "Vocabulary List"
+        WORD_LIST = "word_list", "Word List"
         WORD_CHOICE = "word_choice", "Word Choice"
-        ARTICLE_CHOICE = "article_choice", "Article Choice"
-        WRITE = "write", "Write"
+        IMAGE = "image", "Image Training"
+        SENTENCE = "sentence", "Sentence Training"
+        SPEECH = "speech", "Speech Training"
+
+    class ExerciseKeyType(models.TextChoices):
+        """
+        Discriminator for an exercise_key payload: standard (unit-based) vs
+        training (job-based).
+        """
+
+        STANDARD = "exercise"
+        TRAINING = "training"
 
     class EventType(models.TextChoices):
         """
@@ -26,6 +36,7 @@ class AnalyticsEvent(models.Model):
         SESSION_END = "session_end"
         MODULE_DURATION = "module_duration"
         EXERCISE_DROPOUT = "exercise_dropout"
+        EXERCISE_REPETITION = "exercise_repetition"
 
     installation_id = models.CharField(
         max_length=255,
@@ -40,6 +51,10 @@ class AnalyticsEvent(models.Model):
     payload = models.JSONField()
     created_at = models.DateTimeField(
         auto_now_add=True,
+    )
+    aggregated_at = models.DateTimeField(
+        null=True,
+        db_index=True,
     )
 
     class Meta:

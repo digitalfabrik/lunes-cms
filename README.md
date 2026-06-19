@@ -25,6 +25,7 @@ Following packages are required before installing the project (install them with
 * `libpq-dev` to compile psycopg2
 * `gettext` and `pcregrep` to use the translation features
 * `ffmpeg` for audio processing
+* `node` and `npm` to build the TypeScript frontend
 
 E.g. on Debian-based distributions, use:
 
@@ -40,9 +41,16 @@ cd lunes-cms
 ./tools/install.sh
 ```
 
+### IntelliJ with Python virtual environment
+
+Some IntelliJ versions do not activate Python virtual environment automatically.
+In this case can use IntelliJ together with the [direnv plugin](https://plugins.jetbrains.com/plugin/15285-direnv-integration) and the provided `.envrc`.
+It automatically activates the Python virtual environment (`.venv`) when opening the project.
+* Note: The direnv binary has to be installed on your system.
+
 ### Run development server
 
-```
+```bash
 ./tools/run.sh
 ```
 

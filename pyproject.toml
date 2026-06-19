@@ -27,6 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Framework :: Django",
     "Framework :: Django :: 5.1",
     "Operating System :: POSIX :: Linux",
@@ -47,7 +48,6 @@ dependencies = [
 	"openai",
 	"pillow",
 	"psycopg2",
-	"pydub",
 ]
 
 [project.optional-dependencies]
@@ -74,27 +74,31 @@ dev = [
 	"twine",
     "wheel"
 ]
+e2e = [
+	"mkdocs>=1.5,<2.0",
+	"mkdocs-material>=9.0,<10.0",
+	"pytest-playwright",
+	"pytest-xdist",
+]
 pinned = [
-	"django==5.2.12",
-	"django-import-export==4.4.0",
-	"django-jazzmin==3.0.1",
+	"django==5.2.14",
+	"django-import-export==4.4.1",
+	"django-jazzmin==3.0.4",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.17.1",
 	"drf-spectacular==0.29.0",
-	"ipython==9.10.1",
-	"openai==2.30.0",
-	"pillow==12.1.1",
-	"psycopg2==2.9.11",
-	"pydub==0.25.1",
-
+	"ipython==9.14.0",
+	"openai==2.38.0",
+	"pillow==12.2.0",
+	"psycopg2==2.9.12",
 ]
 dev-pinned = [
-	"black==26.3.1",
-    "build<=1.4.2",
-	"bumpver==2025.1131",
-	"pre-commit==4.5.1",
-	"pyjwt==2.12.1",
+	"black==26.5.1",
+    "build<=1.5.0",
+	"bumpver==2026.1132",
+	"pre-commit==4.6.0",
+	"pyjwt==2.13.0",
 	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
 	"pytest-circleci-parallelized==0.1.0",
@@ -108,7 +112,7 @@ dev-pinned = [
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
-	"wheel==0.46.3",
+	"wheel==0.47.0",
 ]
 
 [project.urls]
@@ -144,6 +148,10 @@ push = false
     'release = "{version}"',
 ]
 
+# Exclude e2e tests temporarily in pytest, will be removed in #747
+[tool.pytest.ini_options]
+addopts = "--ignore=e2e-tests"
+
 [tool.coverage.report]
 exclude_also = [
     "def __repr__",
@@ -152,7 +160,7 @@ exclude_also = [
 ]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.13"
 exclude = [
     '^lunes_cms/cms/',
     '^tests/api/',
@@ -162,6 +170,9 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 check_untyped_defs = false
 disallow_untyped_defs = false
+
+[tool.black]
+target-version = ["py311", "py312", "py313"]
 
 [tool.isort]
 profile = "black"

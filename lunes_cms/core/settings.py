@@ -31,6 +31,27 @@ TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
+#: OpenAI model used for all text-to-speech
+#: Must support the instructions parameter so word audio can be
+#: pinned to German pronunciation
+OPENAI_TTS_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
+
+#: OpenAI voice used for text-to-speech
+OPENAI_TTS_VOICE = os.environ.get("LUNES_CMS_OPENAI_TTS_VOICE", "nova")
+
+#: Loudness in LUFS (https://en.wikipedia.org/wiki/LUFS) for normalizing generated audio
+OPENAI_TTS_LOUDNESS_LUFS = float(
+    os.environ.get("LUNES_CMS_OPENAI_TTS_LOUDNESS_LUFS", "-16.0")
+)
+#: OpenAI model used for word image generation
+OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2")
+
+#: OpenAI image quality tier (low/medium/high)
+OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
+
+#: OpenAI model used for text generation (e.g. example sentences)
+OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
+
 ###################
 # MATOMO TRACKING #
 ###################
@@ -77,7 +98,6 @@ INSTALLED_APPS = [
     # Installed third-party-apps
     "drf_spectacular",
     "mptt",
-    "pydub",
     "rest_framework",
     "qr_code",
     "import_export",
@@ -224,8 +244,8 @@ LANGUAGE_CODE = "en"
 
 #: A list of all available languages (see :setting:`django:LANGUAGES` and :doc:`django:topics/i18n/index`)
 LANGUAGES = [
-    ("en", _("English")),
     ("de", _("German")),
+    ("en", _("English")),
 ]
 
 #: A string representing the time zone for this installation
@@ -508,6 +528,9 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
     },
+    # Render the Analytics app section directly below Dashboard. Jazzmin's
+    # sidebar lists apps in this order; anything not mentioned trails after.
+    "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
 }
 
 #: UI tweaks for Django Jazzmin
@@ -518,7 +541,7 @@ JAZZMIN_UI_TWEAKS = {
     "brand_small_text": True,
     "brand_colour": "navbar-dark",
     "accent": "accent-navy",
-    "dark_mode_theme": "darkly",
+    "default_theme_mode": "auto",
     "navbar": "navbar-primary navbar-dark",
     "no_navbar_border": True,
     "navbar_fixed": False,
