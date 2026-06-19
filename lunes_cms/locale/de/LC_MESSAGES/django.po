@@ -1122,6 +1122,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 msgid "help"
 msgstr "Hilfe"
 
+#~ msgid "%(name)s %(label)"
+#~ msgstr "%(name)s (Neu)"
+
 #~ msgid "Day"
 #~ msgstr "Tag"
 
@@ -1181,9 +1184,6 @@ msgstr "Hilfe"
 
 #~ msgid "Can view analytics"
 #~ msgstr "Kann Analytik einsehen"
-
-#~ msgid "%(name)s %(label)"
-#~ msgstr "%(name)s (Neu)"
 
 #~ msgid "Admins"
 #~ msgstr "Administrator:innen"

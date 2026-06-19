@@ -180,7 +180,11 @@ class JobAdmin(BaseAdmin):
         for profession in queryset:
             resource = WordExportResource()
             units = Unit.objects.filter(jobs=profession)
-            words = Word.objects.filter(units__in=units).distinct()
+            words = (
+                Word.objects.filter(units__in=units)
+                .order_by("units__title", "word")
+                .distinct()
+            )
 
             dataset = Dataset(
                 *(resource.export_resource(word) for word in words),

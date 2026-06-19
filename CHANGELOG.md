@@ -12,6 +12,7 @@ UNRELEASED
 * [ [#798](https://github.com/digitalfabrik/lunes-cms/issues/798) ] 798: Add bulk action to release units
 * [ [#667](https://github.com/digitalfabrik/lunes-cms/issues/667) ] 667: Show total session duration
 * [ [#625](https://github.com/digitalfabrik/lunes-cms/issues/625) ] 625: Generate example sentences via OpenAI
+* [ [#790](https://github.com/digitalfabrik/lunes-cms/issues/790) ] 790: Fix order of csv import
 
 2026.4.7
 --------
