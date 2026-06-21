@@ -6,7 +6,7 @@ from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from ...core import settings
-from ..utils import get_image_tag
+from ..utils import example_sentence_generate_html, get_image_tag
 from ..validators import (
     validate_file_extension,
     validate_file_size,
@@ -194,17 +194,16 @@ class UnitWordRelation(models.Model):
     generate_example_sentence_audio_link.short_description = _("Generate Example Sentence Audio")  # type: ignore[attr-defined]
 
     def example_sentence_generate(self):
-        """Display a button to generate an example sentence via OpenAI."""
+        """Display the inline example sentence generation widget."""
         if self.pk:
-            url = reverse(
-                "cmsv2:unitword_generate_example_sentence_via_openai", args=[self.pk]
-            )
-            return mark_safe(
-                f'<button type="button" class="button generate-example-sentence-btn" data-url="{url}">'
-                f"{_('Generate example sentence')}</button>"
-                '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
-                'style="display: none; margin-left: 8px;"></span>'
-                '<div class="generate-example-sentence-message" style="margin-top: 4px;"></div>'
+            return example_sentence_generate_html(
+                generate_url=reverse(
+                    "cmsv2:unitword_generate_example_sentence_via_openai",
+                    args=[self.pk],
+                ),
+                store_url=reverse(
+                    "cmsv2:unitword_store_generated_example_sentence", args=[self.pk]
+                ),
             )
         return _("Save to enable example sentence generation.")
 

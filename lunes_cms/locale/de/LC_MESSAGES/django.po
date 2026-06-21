@@ -689,7 +689,7 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
-#: cmsv2/admins/job_admin.py
+#: cmsv2/admins/job_admin.py cmsv2/admins/word_admin.py cmsv2/utils.py
 msgid "New"
 msgstr "Neu"
 
@@ -779,8 +779,40 @@ msgid "Miscellaneous"
 msgstr "Verschiedene"
 
 #: cmsv2/admins/word_admin.py
-msgid "Generate example sentence"
-msgstr "Beispielsatz generieren"
+msgid "Additional info (optional)"
+msgstr "Zusätzliche Infos (optional)"
+
+#: cmsv2/admins/word_admin.py
+msgid "Current"
+msgstr "Aktuell"
+
+#: cmsv2/admins/word_admin.py cmsv2/utils.py
+msgid "Keep new"
+msgstr "Neues übernehmen"
+
+#: cmsv2/admins/word_admin.py cmsv2/utils.py
+msgid "Discard new"
+msgstr "Neues verwerfen"
+
+#: cmsv2/admins/word_admin.py
+msgid "Save to enable audio generation."
+msgstr "Speichern, um die Audio-Generierung zu aktivieren."
+
+#: cmsv2/admins/word_admin.py
+msgid "No audio yet."
+msgstr "Noch kein Audio."
+
+#: cmsv2/admins/word_admin.py
+msgid "Generate audio"
+msgstr "Audio generieren"
+
+#: cmsv2/admins/word_admin.py
+msgid "Regenerate audio"
+msgstr "Audio neu generieren"
+
+#: cmsv2/admins/word_admin.py
+msgid "Audio Generation"
+msgstr "Audio-Generierung"
 
 #: cmsv2/admins/word_admin.py cmsv2/models/unit.py
 msgid "Save to enable example sentence generation."
@@ -791,8 +823,32 @@ msgid "Example Sentence Generation"
 msgstr "Beispielsatz-Generierung"
 
 #: cmsv2/admins/word_admin.py
+msgid "Example Sentence Audio Generation"
+msgstr "Beispielsatz-Audio-Generierung"
+
+#: cmsv2/admins/word_admin.py
 msgid "Image Preview"
 msgstr "Bild Vorschau"
+
+#: cmsv2/admins/word_admin.py
+msgid "Save to enable image generation."
+msgstr "Speichern, um die Bild-Generierung zu aktivieren."
+
+#: cmsv2/admins/word_admin.py
+msgid "No image yet."
+msgstr "Noch kein Bild."
+
+#: cmsv2/admins/word_admin.py
+msgid "Generate image"
+msgstr "Bild generieren"
+
+#: cmsv2/admins/word_admin.py
+msgid "Regenerate image"
+msgstr "Bild neu generieren"
+
+#: cmsv2/admins/word_admin.py
+msgid "Image Generation"
+msgstr "Bild-Generierung"
 
 #: cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "audio check status"
@@ -963,13 +1019,11 @@ msgstr "Gibt an, ob das Audio mit dem neuen TTS-Modell neu generiert wurde."
 
 #: cmsv2/models/unit.py cmsv2/templates/admin/generate_image_base.html
 #: cmsv2/templates/admin/unitword_generate_image.html
-#: cmsv2/templates/admin/word_generate_image.html
 msgid "Generate Image"
 msgstr "Bild generieren"
 
 #: cmsv2/models/unit.py
 #: cmsv2/templates/admin/unitword_generate_example_sentence_audio.html
-#: cmsv2/templates/admin/word_generate_example_sentence_audio.html
 msgid "Generate Example Sentence Audio"
 msgstr "Generiere Beispielsatz Audio"
 
@@ -993,9 +1047,7 @@ msgstr "Einheit"
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
-#: cmsv2/models/word.py cmsv2/templates/admin/word_generate_audio.html
-#: cmsv2/templates/admin/word_generate_example_sentence_audio.html
-#: cmsv2/templates/admin/word_generate_image.html
+#: cmsv2/models/word.py
 msgid "Words"
 msgstr "Vokabel"
 
@@ -1046,9 +1098,16 @@ msgid "Start import"
 msgstr "Import starten"
 
 #: cmsv2/templates/admin/generate_audio_base.html
-#: cmsv2/templates/admin/word_generate_audio.html
 msgid "Generate Audio"
 msgstr "Audio generieren"
+
+#: cmsv2/utils.py
+msgid "Generate example sentence"
+msgstr "Beispielsatz generieren"
+
+#: cmsv2/utils.py
+msgid "Regenerate example sentence"
+msgstr "Beispielsatz neu generieren"
 
 #: cmsv2/views/import_csv_view.py
 msgid "Select CSV file"

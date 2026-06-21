@@ -74,3 +74,47 @@ def unitword_generate_example_sentence_via_openai(_request, unitword_id):
     return _generate_sentence_response(
         relation.word.word, job_names, relation.unit.title
     )
+
+
+def _store_sentence_response(instance, sentence):
+    """
+    Persist a kept example sentence on the given instance and wrap the result in
+    a JsonResponse. Saving resets the example sentence check status and clears
+    any stale audio, mirroring a regular form save.
+    """
+    if sentence is None:
+        return JsonResponse(
+            {"status": "error", "message": "No example sentence provided."},
+            status=400,
+        )
+    instance.example_sentence = sentence
+    instance.save()
+    return JsonResponse(
+        {
+            "status": "success",
+            "message": "Example sentence saved.",
+            "example_sentence": instance.example_sentence,
+        }
+    )
+
+
+@staff_member_required
+@csrf_exempt
+@require_POST
+def word_store_generated_example_sentence(request, word_id):
+    """
+    AJAX endpoint to persist a kept example sentence on a Word.
+    """
+    word_instance = get_object_or_404(Word, pk=word_id)
+    return _store_sentence_response(word_instance, request.POST.get("example_sentence"))
+
+
+@staff_member_required
+@csrf_exempt
+@require_POST
+def unitword_store_generated_example_sentence(request, unitword_id):
+    """
+    AJAX endpoint to persist a kept example sentence on a UnitWordRelation.
+    """
+    relation = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    return _store_sentence_response(relation, request.POST.get("example_sentence"))

@@ -121,6 +121,48 @@
     display: none;
 }
 
+/* Inline (re)generation widget (word detail page) */
+.inline-regenerate {
+    margin-top: 4px;
+}
+
+.inline-regenerate .regen-compare {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.inline-regenerate .regen-col-label {
+    font-weight: bold;
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+}
+
+.inline-regenerate .regen-new {
+    border-left: 2px solid #28a745;
+    padding-left: 16px;
+}
+
+.inline-regenerate .regen-toolbar {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.inline-regenerate audio {
+    max-width: 100%;
+}
+
+.generate-example-sentence-preview {
+    border-left: 2px solid #28a745;
+    padding-left: 12px;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    max-width: 600px;
+}
+
 /* Image hover preview styles */
 .image-hover-container {
     position: relative;

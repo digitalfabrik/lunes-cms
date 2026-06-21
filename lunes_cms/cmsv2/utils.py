@@ -10,7 +10,7 @@ from typing import Optional
 
 from django.db.models.fields.files import ImageFieldFile
 from django.utils.crypto import get_random_string
-from django.utils.html import mark_safe
+from django.utils.html import format_html, mark_safe
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 from openai import OpenAI
@@ -190,3 +190,52 @@ def make_safe_filename(unsafe):
     Method to create a safe filename with regex.
     """
     return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)
+
+
+def is_ajax(request):
+    """
+    Checks whether the given request was sent via an AJAX call (fetch/XHR).
+    """
+    return request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+
+def example_sentence_generate_html(generate_url, store_url, target=None):
+    """
+    Render the inline example sentence generation widget.
+
+    The widget generates a sentence via OpenAI, shows it for review and lets the
+    user keep it (persisted right away, like the audio and image widgets) or
+    discard it, all without leaving the change page.
+
+    :param generate_url: URL of the AJAX endpoint generating the sentence
+    :param store_url: URL of the AJAX endpoint persisting the kept sentence
+    :param target: optional id of the textarea to fill (inline rows resolve it
+                   from the surrounding table row instead)
+    """
+    target_attr = format_html(' data-target="{}"', target) if target else ""
+    return format_html(
+        '<div class="generate-example-sentence">'
+        '<button type="button" class="btn btn-primary btn-sm generate-example-sentence-btn" '
+        'data-url="{generate_url}" data-store-url="{store_url}"{target_attr} '
+        'data-generate-label="{generate_label}" data-regenerate-label="{regenerate_label}">'
+        "{generate_label}</button>"
+        '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
+        'style="display: none; margin-left: 8px;"></span>'
+        '<span class="generate-example-sentence-message" style="margin-left: 8px;"></span>'
+        '<div class="generate-example-sentence-decision" style="display: none; margin-top: 8px;">'
+        '<div class="regen-col-label">{new_label}</div>'
+        '<div class="generate-example-sentence-preview"></div>'
+        '<button type="button" class="btn btn-success btn-sm generate-example-sentence-keep-btn">'
+        "{keep_label}</button> "
+        '<button type="button" class="btn btn-secondary btn-sm generate-example-sentence-discard-btn">'
+        "{discard_label}</button>"
+        "</div></div>",
+        generate_url=generate_url,
+        store_url=store_url,
+        target_attr=target_attr,
+        generate_label=_("Generate example sentence"),
+        regenerate_label=_("Regenerate example sentence"),
+        new_label=_("New"),
+        keep_label=_("Keep new"),
+        discard_label=_("Discard new"),
+    )
