@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from importlib.metadata import PackageNotFoundError, version as get_package_version
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
@@ -540,6 +541,11 @@ SPECTACULAR_SETTINGS = {
 # DJANGO JAZZMIN #
 ##################
 
+try:
+    _cms_version = get_package_version("lunes-cms")
+except PackageNotFoundError:
+    _cms_version = "unknown"
+
 #: Basic settings for Django Jazzmin
 JAZZMIN_SETTINGS = {
     "site_brand": _("Lunes Administration"),
@@ -568,6 +574,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
     },
+    "site_version": _cms_version,
     # Render the Analytics app section directly below Dashboard. Jazzmin's
     # sidebar lists apps in this order; anything not mentioned trails after.
     "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
