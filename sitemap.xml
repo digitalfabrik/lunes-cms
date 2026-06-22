@@ -2,94 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/add_group/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/add_job/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/add_unit/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/add_user/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/add_word/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/bulk_delete_jobs/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/bulk_delete_units/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/bulk_delete_words/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/delete_group/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/delete_job/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/delete_unit/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/delete_user/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/delete_word/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/edit_group/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/edit_job/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/edit_unit/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/edit_user_information/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/edit_user_permissions/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/edit_word/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/generate_word_audio_and_image/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
     <url>
          <loc>https://digitalfabrik.github.io/lunes-cms/login/</loc>
-         <lastmod>2026-06-04</lastmod>
-    </url>
-    <url>
-         <loc>https://digitalfabrik.github.io/lunes-cms/password_reset/</loc>
-         <lastmod>2026-06-04</lastmod>
+         <lastmod>2026-06-22</lastmod>
     </url>
 </urlset>
