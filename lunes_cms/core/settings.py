@@ -283,6 +283,20 @@ STATIC_URL = "/static/"
 #: In debug mode, this is not required since :mod:`django.contrib.staticfiles` can directly serve these files.
 STATIC_ROOT = os.environ.get("LUNES_CMS_STATIC_ROOT")
 
+#: Use ManifestStaticFilesStorage in production to append content hashes to static file names.
+#: This ensures browsers always load the latest version after a deploy (cache busting).
+#: In debug mode the default storage is used so that no STATIC_ROOT or manifest is required.
+#: See :class:`lunes_cms.core.utils.LaxManifestStaticFilesStorage`.
+if STATIC_ROOT:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "lunes_cms.core.utils.LaxManifestStaticFilesStorage",
+        },
+    }
+
 #: URL that handles the media served from :setting:`MEDIA_ROOT` (see :setting:`django:MEDIA_URL`)
 MEDIA_URL = "/media/"
 
@@ -453,7 +467,6 @@ LOGGING = {
     },
 }
 
-
 #########################
 # DJANGO REST FRAMEWORK #
 #########################
@@ -564,7 +577,6 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
-
 
 ############
 # QR CODES #

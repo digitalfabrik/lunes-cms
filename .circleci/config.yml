@@ -638,6 +638,7 @@ workflows:
           name: build-dev-package
           requires:
             - bump-dev-version
+            - build-js
       - publish-package:
           name: publish-dev-package
           context: pypi-test
