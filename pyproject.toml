@@ -37,50 +37,6 @@ classifiers = [
     "Natural Language :: German",
 ]
 dependencies = [
-	"django",
-	"django-import-export",
-	"django-jazzmin",
-	"django-mptt",
-	"django-qr-code",
-	"djangorestframework",
-	"drf-spectacular",
-	"ipython",
-	"openai",
-	"pillow",
-	"psycopg2",
-]
-
-[project.optional-dependencies]
-dev = [
-	"black",
-    "build",
-	"bumpver",
-	"isort",
-	"mypy",
-	"pre-commit",
-	"pyjwt",
-	"pylint-django",
-	"pylint-runner",
-	"pytest-circleci-parallelized",
-	"pytest-cov",
-	"pytest-django",
-	"pytest-icdiff",
-	"pytest-xdist",
-	"shellcheck-py",
-	"sphinx",
-	"sphinx-rtd-theme",
-	"sphinx-last-updated-by-git",
-	"sphinxcontrib-django",
-	"twine",
-    "wheel"
-]
-e2e = [
-	"mkdocs>=1.5,<2.0",
-	"mkdocs-material>=9.0,<10.0",
-	"pytest-playwright",
-	"pytest-xdist",
-]
-pinned = [
 	"django==5.2.14",
 	"django-import-export==4.4.1",
 	"django-jazzmin==3.0.4",
@@ -93,15 +49,18 @@ pinned = [
 	"pillow==12.2.0",
 	"psycopg2==2.9.12",
 ]
-dev-pinned = [
+
+[project.optional-dependencies]
+dev = [
 	"black==26.5.1",
-    "build<=1.5.0",
+	"build<=1.5.0",
 	"bumpver==2026.1132",
+	"isort",
+	"mypy",
 	"pre-commit==4.6.0",
 	"pyjwt==2.13.0",
 	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
-	"pytest-circleci-parallelized==0.1.0",
 	"pytest-cov==7.1.0",
 	"pytest-django==4.12.0",
 	"pytest-icdiff==0.9",
@@ -113,6 +72,12 @@ dev-pinned = [
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
 	"wheel==0.47.0",
+]
+e2e = [
+	"mkdocs>=1.5,<2.0",
+	"mkdocs-material>=9.0,<10.0",
+	"pytest-playwright",
+	"pytest-xdist",
 ]
 
 [project.urls]
