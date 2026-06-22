@@ -69,7 +69,7 @@ activate_venv
 # Install pip dependencies
 echo "Installing Lunes CMS including its python dependencies..." | print_info
 # shellcheck disable=SC2102
-pip install -e .[pinned,dev-pinned]
+pip install -e .[dev]
 
 # Install node dependencies
 echo "Installing Node.js dependencies..." | print_info

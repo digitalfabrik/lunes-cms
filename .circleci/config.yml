@@ -29,7 +29,7 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install -e .[dev,pinned,dev-pinned]
+              pip install -e .[dev]
             fi
       - save_cache:
           key: pip-{{ checksum "pyproject.toml" }}-v7
@@ -118,7 +118,7 @@ jobs:
           command: lunes-cms-cli migrate
       - run:
           name: Run tests
-          command: pytest --circleci-parallelize --disable-warnings --cov=lunes_cms --cov-report=xml:coverage.xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
+          command: pytest -n auto --disable-warnings --cov=lunes_cms --cov-report=xml:coverage.xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
       - store_test_results:
           path: test-results
       - store_artifacts:
@@ -153,7 +153,7 @@ jobs:
             else
               python3 -m venv .venv
               source .venv/bin/activate
-              pip install -e .[dev,pinned,dev-pinned]
+              pip install -e .[dev]
             fi
       - save_cache:
           key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
