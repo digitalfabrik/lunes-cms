@@ -155,6 +155,7 @@ class UnitInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
+    autocomplete_fields = ["unit"]
     fields = [
         "unit",
         "image_with_controls",

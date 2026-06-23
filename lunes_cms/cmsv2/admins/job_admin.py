@@ -27,6 +27,7 @@ class UnitInline(admin.TabularInline):
 
     model = Unit.jobs.through
     extra = 1
+    autocomplete_fields = ["unit"]
 
 
 class MigratedFilter(admin.SimpleListFilter):
