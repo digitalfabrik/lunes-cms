@@ -2,6 +2,7 @@
 E2E test: Mehrere Wörter löschen — generates user_docs/bulk_delete_words.md
 """
 
+from functools import partial
 from typing import Callable
 
 import re
@@ -36,7 +37,7 @@ def test_bulk_delete_words(
     request.addfinalizer(lambda: delete_job(JOB_NAME))
     request.addfinalizer(lambda: delete_unit(UNIT_NAME))
     for word, _ in WORDS:
-        request.addfinalizer(lambda w=word: delete_word(w))
+        request.addfinalizer(partial(delete_word, word))
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
     for word, plural in WORDS:
