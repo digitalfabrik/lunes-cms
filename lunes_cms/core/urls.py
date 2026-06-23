@@ -47,3 +47,6 @@ urlpatterns += i18n_patterns(path("", include("lunes_cms.cms.urls")))
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if getattr(settings, "DEBUG_TOOLBAR_ENABLED", False):
+    urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
