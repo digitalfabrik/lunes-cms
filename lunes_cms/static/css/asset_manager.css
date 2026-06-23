@@ -158,3 +158,11 @@
     border-radius: 4px;
     display: block;
 }
+
+/* The autocomplete (Select2) word/unit field in tabular inlines initialises
+   with width "resolve", which collapses to a sliver in the narrow inline cell
+   and hides the selected value. A min-width keeps it readable (min-width wins
+   over Select2's inline width style). */
+.inline-group .select2-container {
+    min-width: 18em;
+}
