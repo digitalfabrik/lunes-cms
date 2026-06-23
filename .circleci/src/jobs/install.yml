@@ -1,0 +1,26 @@
+executor: python
+steps:
+  - checkout
+  - restore_cache:
+      key: pip-{{ checksum "pyproject.toml" }}-v7
+  - run:
+      name: Creating virtual environment
+      command: |
+        if [[ -d ".venv" ]]; then
+          echo "Virtual environment restored from cache, skipping pip install"
+        else
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[dev]
+        fi
+  - save_cache:
+      key: pip-{{ checksum "pyproject.toml" }}-v7
+      paths:
+        - .venv
+        - lunes_cms.egg-info
+        - /home/circleci/.cache/pip
+  - persist_to_workspace:
+      root: .
+      paths:
+        - .venv
+        - lunes_cms.egg-info

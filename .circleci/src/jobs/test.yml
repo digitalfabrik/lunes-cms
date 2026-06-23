@@ -1,0 +1,33 @@
+docker:
+  - image: cimg/python:3.11
+    environment:
+      LUNES_CMS_SECRET_KEY: circleci-dummy-key
+  - image: cimg/postgres:15.1
+    environment:
+      POSTGRES_USER: lunes
+      POSTGRES_DB: lunes
+      POSTGRES_PASSWORD: password
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - run:
+      name: Activate virtual environment
+      command: echo "source .venv/bin/activate" >> $BASH_ENV
+  - run:
+      name: Check for missing migrations
+      command: lunes-cms-cli makemigrations cms --check
+  - run:
+      name: Migrate database
+      command: lunes-cms-cli migrate
+  - run:
+      name: Run tests
+      command: pytest -n auto --disable-warnings --cov=lunes_cms --cov-report=xml:coverage.xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
+  - store_test_results:
+      path: test-results
+  - store_artifacts:
+      path: test-results
+  - persist_to_workspace:
+      root: .
+      paths:
+        - coverage.xml

@@ -1,0 +1,18 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - run:
+      name: Check via twine
+      command: |
+        source .venv/bin/activate
+        pip install twine
+        twine check ./dist/lunes*.tar.gz
+  - run:
+      name: Publish lunes-cms package to (Test-)PyPI
+      command: |
+        source .venv/bin/activate
+        pip install twine
+        ls -lh ./dist/*
+        twine upload --non-interactive --verbose ./dist/lunes*.tar.gz

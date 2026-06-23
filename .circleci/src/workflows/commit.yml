@@ -1,0 +1,41 @@
+when:
+  and:
+    - << pipeline.parameters.run_commit >>
+    - not:
+        equal: [main, << pipeline.git.branch >>]
+jobs:
+  - shellcheck/check:
+      dir: ./tools
+      external_sources: true
+  - install
+  - lint-ts
+  - build-js
+  - compile-translations:
+      requires:
+        - install
+  - pylint:
+      requires:
+        - install
+  - test:
+      requires:
+        - compile-translations
+  - test-python313
+  - upload-test-coverage:
+      context: codeclimate-lunes-cms
+      requires:
+        - test
+  - black:
+      requires:
+        - install
+  - isort:
+      requires:
+        - install
+  - mypy:
+      requires:
+        - install
+  - check-translations:
+      requires:
+        - install
+  - build-documentation:
+      requires:
+        - install

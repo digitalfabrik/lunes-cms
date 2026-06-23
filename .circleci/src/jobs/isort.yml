@@ -1,0 +1,10 @@
+executor: python
+resource_class: small
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Check isort code style
+      command: isort . --skip-glob "**/migrations/**"

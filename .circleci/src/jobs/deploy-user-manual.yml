@@ -1,0 +1,23 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Install e2e dependencies
+      command: pip install -e ".[e2e]"
+  - run:
+      name: Request installation access token to authorize as Deliverino app
+      command: |
+        TOKEN=$(./.circleci/scripts/get_access_token.py)
+        echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+  - run:
+      name: Configure git to push as Deliverino app
+      command: |
+        git config user.name "deliverino[bot]"
+        git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
+        git remote set-url origin "https://x-access-token:$DELIVERINO_ACCESS_TOKEN@github.com/digitalfabrik/lunes-cms.git"
+  - run:
+      name: Deploy user manual to GitHub Pages
+      command: mkdocs gh-deploy --remote-branch gh-pages-user-docs

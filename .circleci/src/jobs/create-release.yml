@@ -1,0 +1,21 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Request installation access token to authorize as Deliverino app
+      command: |
+        TOKEN=$(./.circleci/scripts/get_access_token.py)
+        echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+  - run:
+      name: Assemble release body
+      command: |
+        PREV_TAG=$(git describe --abbrev=0 --tags "${CIRCLE_TAG}^") || true
+        CHANGELOG+=$(awk -v RS='\n\n\n' 'NR==2 {print $0}' CHANGELOG.md | tail -n +4)
+        echo "export PREV_TAG=\"${PREV_TAG}\"" >> $BASH_ENV
+        echo "export CHANGELOG=\"${CHANGELOG}\"" >> $BASH_ENV
+  - run:
+      name: Create release as Deliverino app
+      command: ./.circleci/scripts/create_release.py "${DELIVERINO_ACCESS_TOKEN}" "${CIRCLE_TAG}" "${PREV_TAG}" "${CHANGELOG}" ./dist/lunes_cms-*.tar.gz

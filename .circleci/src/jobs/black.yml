@@ -1,0 +1,9 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Check formatting of python files
+      command: black --check .
