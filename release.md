@@ -24,4 +24,4 @@ The tag is created by the CI pipeline on every merge to `main`:
 4. **Create release** — creates a GitHub release with changelog
 5. **Notify** — sends a Mattermost notification
 
-The production release will be installed fridays during the maintenance window.
+The production release will be installed on Fridays during the maintenance window.
