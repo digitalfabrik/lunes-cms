@@ -146,7 +146,10 @@ def delete_unit(page: Page, base_url: str) -> Callable[[str], None]:
 
     def _delete(title: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/unit/")
-        page.locator("th.field-title a", has_text=title).first.click()
+        locator = page.locator("th.field-title a", has_text=title)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
@@ -159,7 +162,10 @@ def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
 
     def _delete(job_name: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/job/")
-        page.locator("th.field-name a", has_text=job_name).first.click()
+        locator = page.locator("th.field-name a", has_text=job_name)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
@@ -320,7 +326,10 @@ def delete_group(page: Page, base_url: str) -> Callable[[str], None]:
         page.goto(f"{base_url}/de/admin/auth/group/")
         page.fill("#searchbar", group_name)
         page.get_by_role("button", name="Suchen").click()
-        page.get_by_role("link", name=group_name).first.click()
+        locator = page.get_by_role("link", name=group_name)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
@@ -356,7 +365,10 @@ def delete_user(page: Page, base_url: str) -> Callable[[str], None]:
         page.goto(f"{base_url}/de/admin/auth/user/")
         page.fill("#searchbar", username)
         page.get_by_role("button", name="Suchen").click()
-        page.get_by_role("link", name=username).first.click()
+        locator = page.get_by_role("link", name=username)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
