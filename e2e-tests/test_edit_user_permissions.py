@@ -12,7 +12,6 @@ PASSWORD = "lunes2024!"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("auth_management")
 def test_edit_user_permissions(
     page: Page,
     document,

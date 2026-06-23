@@ -23,7 +23,6 @@ ADDITIONAL_MEANING_2 = "Zeigegerät"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_add_word(
     page: Page,
     document,

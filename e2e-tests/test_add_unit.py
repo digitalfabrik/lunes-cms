@@ -14,7 +14,6 @@ UNIT_NAME = "Grundlagen und Methoden"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_add_unit(
     page: Page,
     document,

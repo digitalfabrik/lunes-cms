@@ -51,7 +51,6 @@ def password_reset_user(
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("auth")
 def test_password_reset(
     page: Page, document, base_url: str, email_outbox, password_reset_user
 ) -> None:

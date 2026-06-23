@@ -56,7 +56,6 @@ import pytest
 from playwright.sync_api import Page
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("my_feature")  # tests in the same group run on the same worker
 def test_my_feature(page: Page, document, base_url: str, login) -> None:
     with document.step(
         "Open page",

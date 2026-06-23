@@ -9,7 +9,6 @@ JOB_NAMES = ["Schlosser/-in", "Klempner/-in", "Dachdecker/-in"]
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_bulk_delete_jobs(page: Page, document, base_url: str, login, add_job) -> None:
     for job_name in JOB_NAMES:
         add_job(job_name)

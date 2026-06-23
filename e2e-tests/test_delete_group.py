@@ -11,7 +11,6 @@ GROUP_NAME = "Neue Vokabelverwalter:innen"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("auth_management")
 def test_delete_group(
     page: Page,
     document,

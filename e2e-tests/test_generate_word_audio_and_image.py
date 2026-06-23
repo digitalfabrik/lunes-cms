@@ -67,7 +67,6 @@ def _fulfill_mock_image_file(route: Route) -> None:
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_generate_word_audio_and_image(
     page: Page,
     document,

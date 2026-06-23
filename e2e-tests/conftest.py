@@ -16,17 +16,16 @@ Run mkdocs to build HTML: mkdocs build
 from __future__ import annotations
 
 import contextlib
-import json
 import os
 import re
 import subprocess
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Generator
+from typing import Callable, Generator
 
 import pytest
-from playwright.sync_api import Browser, Page, StorageState, expect
+from playwright.sync_api import Browser, Page, expect
 
 BASE_URL = "http://localhost:8080"
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
@@ -65,35 +64,6 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers", "e2e: end-to-end test that generates user manual entries"
     )
-    config.addinivalue_line(
-        "markers", "xdist_group: group tests to run on the same xdist worker"
-    )
-
-
-_auth_state: StorageState | None = None
-
-
-def pytest_configure_node(node: Any) -> None:
-    """xdist hook: runs once per worker in the controller process before workers start.
-    Performs login once and passes the auth state to all workers via workerinput."""
-    global _auth_state
-    if _auth_state is None:
-        from playwright.sync_api import sync_playwright
-
-        base_url = node.config.getoption("--base-url") or BASE_URL
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            context = browser.new_context(locale="de-DE")
-            page = context.new_page()
-            page.goto(f"{base_url}/de/admin/login/")
-            page.fill("[name=username]", "lunes")
-            page.fill("[name=password]", "lunes")
-            page.click("[type=submit]")
-            page.wait_for_url(f"{base_url}/de/admin/")
-            _auth_state = context.storage_state()
-            context.close()
-            browser.close()
-    node.workerinput["auth_state"] = json.dumps(_auth_state)
 
 
 @pytest.fixture(scope="session")
@@ -103,22 +73,16 @@ def browser_context_args(
     base_url: str,
     request: pytest.FixtureRequest,
 ) -> dict:
-    """Embed auth state into every test context.
-    With xdist: reads auth state passed from the controller via pytest_configure_node.
-    Without xdist: logs in directly using the browser fixture."""
-    worker_input = getattr(request.config, "workerinput", {})
-    if "auth_state" in worker_input:
-        state = json.loads(worker_input["auth_state"])
-    else:
-        context = browser.new_context(locale="de-DE")
-        page = context.new_page()
-        page.goto(f"{base_url}/de/admin/login/")
-        page.fill("[name=username]", "lunes")
-        page.fill("[name=password]", "lunes")
-        page.click("[type=submit]")
-        page.wait_for_url(f"{base_url}/de/admin/")
-        state = context.storage_state()
-        context.close()
+    """Embed auth state into every test context."""
+    context = browser.new_context(locale="de-DE")
+    page = context.new_page()
+    page.goto(f"{base_url}/de/admin/login/")
+    page.fill("[name=username]", "lunes")
+    page.fill("[name=password]", "lunes")
+    page.click("[type=submit]")
+    page.wait_for_url(f"{base_url}/de/admin/")
+    state = context.storage_state()
+    context.close()
     return {**browser_context_args, "locale": "de-DE", "storage_state": state}
 
 

@@ -16,7 +16,6 @@ UNIT_DESCRIPTION_UPDATED = f"Vokabeln zu {UNIT_NAME_UPDATED}"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_edit_unit(
     page: Page,
     document,

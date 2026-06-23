@@ -16,7 +16,6 @@ UNIT_NAMES = [
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_bulk_delete_units(
     page: Page,
     document,

@@ -13,7 +13,6 @@ JOB_NAME = "Tester/-in"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_add_job(
     page: Page, document, base_url: str, login, delete_job: Callable
 ) -> None:

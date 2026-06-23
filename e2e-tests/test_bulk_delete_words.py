@@ -20,7 +20,6 @@ WORDS = [
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_bulk_delete_words(
     page: Page,
     document,

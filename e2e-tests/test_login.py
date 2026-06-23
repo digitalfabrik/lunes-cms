@@ -15,7 +15,6 @@ def context(browser):
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("auth")
 def test_login(page: Page, document, base_url: str) -> None:
     with document.step(
         "Lunes CMS im Browser aufrufen",
