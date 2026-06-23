@@ -22,7 +22,7 @@ steps:
       command: lunes-cms-cli migrate
   - run:
       name: Run tests
-      command: pytest --circleci-parallelize --disable-warnings --cov=lunes_cms --cov-report=xml:coverage.xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
+      command: pytest -n auto --disable-warnings --cov=lunes_cms --cov-report=xml:coverage.xml --junitxml=test-results/junit.xml --ds=lunes_cms.core.settings
   - store_test_results:
       path: test-results
   - store_artifacts:
