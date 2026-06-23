@@ -19,7 +19,9 @@ def test_edit_user_permissions(
     login,
     add_user: Callable,
     delete_user: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_user(USERNAME))
     add_user(USERNAME, PASSWORD)
 
     page.goto(f"{base_url}/de/admin/auth/user/")
@@ -54,5 +56,3 @@ def test_edit_user_permissions(
     ):
         page.get_by_role("button", name="Sichern", exact=True).click()
         expect(page.locator(".alert-success")).to_be_visible()
-
-    delete_user(USERNAME)

@@ -222,7 +222,10 @@ def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
         page.goto(f"{base_url}/de/admin/cmsv2/word/")
         page.fill("#searchbar", word)
         page.get_by_role("button", name="Suchen").click()
-        page.locator("th.field-word a", has_text=re.compile(f"^{word}$")).first.click()
+        locator = page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 

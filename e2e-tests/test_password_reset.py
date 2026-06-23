@@ -75,7 +75,7 @@ def test_password_reset(
         "Bestätigungsseite",
         description="Sie erhalten in Kürze eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.",
     ):
-        expect(page.locator("h1")).to_be_visible()
+        expect(page.get_by_text("Wir haben eine E-Mail")).to_be_visible()
 
     email_body = email_outbox()
     match = re.search(r"(/\w{2}/reset/[\w-]+/[\w-]+/)", email_body)
@@ -97,4 +97,4 @@ def test_password_reset(
         "Passwort erfolgreich zurückgesetzt",
         description="Ihr Passwort wurde erfolgreich geändert. Sie können sich jetzt mit dem neuen Passwort anmelden.",
     ):
-        expect(page.locator("h1")).to_be_visible()
+        expect(page.get_by_text("Ihr Passwort wurde zurückgesetzt")).to_be_visible()

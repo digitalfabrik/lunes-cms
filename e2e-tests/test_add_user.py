@@ -18,7 +18,9 @@ def test_add_user(
     base_url: str,
     login,
     delete_user: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_user(USERNAME))
     with document.step(
         "Benutzer-Bereich öffnen",
         description='Klicken Sie im linken Navigationsmenü im Bereich **„Authentifizierung und Autorisierung"** auf **„Benutzer"**.',
@@ -35,7 +37,7 @@ def test_add_user(
 
     with document.step(
         "Benutzerdaten eingeben",
-        description=f'Geben Sie einen **Benutzernamen** ein. Das **Passwort** muss mindestens 8 Zeichen enthalten und darf nicht komplett aus Ziffern bestehen. Wiederholen Sie das Passwort im Feld **„Passwort bestätigen"**.',
+        description='Geben Sie einen **Benutzernamen** ein. Das **Passwort** muss mindestens 8 Zeichen enthalten und darf nicht komplett aus Ziffern bestehen. Wiederholen Sie das Passwort im Feld **„Passwort bestätigen"**.',
     ):
         page.fill("[name=username]", USERNAME)
         page.fill("[name=password1]", PASSWORD)
@@ -47,5 +49,3 @@ def test_add_user(
     ):
         page.click("[name=_save]")
         expect(page.locator(".alert-success")).to_be_visible()
-
-    delete_user(USERNAME)

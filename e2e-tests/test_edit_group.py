@@ -18,7 +18,9 @@ def test_edit_group(
     login,
     add_group: Callable,
     delete_group: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_group(GROUP_NAME))
     add_group(GROUP_NAME)
 
     with document.step(
@@ -54,5 +56,3 @@ def test_edit_group(
     ):
         page.get_by_role("button", name="Sichern", exact=True).click()
         expect(page.locator(".alert-success")).to_be_visible()
-
-    delete_group(GROUP_NAME)

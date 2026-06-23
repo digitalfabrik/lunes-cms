@@ -13,8 +13,21 @@ RENAMED_JOB_NAME = "Gartengestalter/-in"
 
 @pytest.mark.e2e
 def test_edit_job(
-    page: Page, document, base_url: str, login, add_job: Callable, delete_job: Callable
+    page: Page,
+    document,
+    base_url: str,
+    login,
+    add_job: Callable,
+    delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    def cleanup() -> None:
+        try:
+            delete_job(RENAMED_JOB_NAME)
+        except Exception:
+            delete_job(JOB_NAME)
+
+    request.addfinalizer(cleanup)
     add_job(JOB_NAME)
 
     with document.step(
@@ -50,5 +63,3 @@ def test_edit_job(
         expect(
             page.locator("th.field-name a", has_text=RENAMED_JOB_NAME)
         ).to_be_visible()
-
-    delete_job(RENAMED_JOB_NAME)

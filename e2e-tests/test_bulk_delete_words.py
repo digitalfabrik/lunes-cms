@@ -13,9 +13,9 @@ JOB_NAME = "Warentester/-in"
 UNIT_NAME = "Hardware"
 UNIT_DESCRIPTION = f"Vokabeln zu {UNIT_NAME}"
 WORDS = [
-    ("Abdeckung", "Abdeckungen"),
-    ("Adapter", "Adapter"),
-    ("Akku", "Akkus"),
+    ("Abflussrohr", "Abflussrohre"),
+    ("Abgasschlauch", "Abgasschläuche"),
+    ("Absteckpfahl", "Absteckpfähle"),
 ]
 
 
@@ -30,7 +30,13 @@ def test_bulk_delete_words(
     add_word: Callable,
     delete_unit: Callable,
     delete_job: Callable,
+    delete_word: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    request.addfinalizer(lambda: delete_unit(UNIT_NAME))
+    for word, _ in WORDS:
+        request.addfinalizer(lambda w=word: delete_word(w))
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
     for word, plural in WORDS:
@@ -95,6 +101,3 @@ def test_bulk_delete_words(
             expect(
                 page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))
             ).to_have_count(0)
-
-    delete_unit(UNIT_NAME)
-    delete_job(JOB_NAME)

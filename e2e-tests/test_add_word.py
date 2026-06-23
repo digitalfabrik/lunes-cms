@@ -33,7 +33,11 @@ def test_add_word(
     delete_unit: Callable,
     delete_job: Callable,
     delete_word: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    request.addfinalizer(lambda: delete_unit(UNIT_NAME))
+    request.addfinalizer(lambda: delete_word(WORD))
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
 
@@ -133,7 +137,3 @@ def test_add_word(
     ):
         expect(page.locator(".alert-success")).to_be_visible()
         expect(page.locator(".alert-success")).to_contain_text(WORD)
-
-    delete_word(WORD)
-    delete_unit(UNIT_NAME)
-    delete_job(JOB_NAME)

@@ -17,7 +17,9 @@ def test_add_group(
     base_url: str,
     login,
     delete_group,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_group(GROUP_NAME))
     with document.step(
         "Gruppen-Bereich öffnen",
         description='Klicken Sie im linken Navigationsmenü im Bereich **„Authentifizierung und Autorisierung"** auf **„Gruppen"**.',
@@ -60,5 +62,3 @@ def test_add_group(
         page.evaluate("window.scrollTo(0, 0)")
         page.get_by_role("button", name="Sichern", exact=True).click()
         expect(page.locator(".alert-success")).to_be_visible()
-
-    delete_group(GROUP_NAME)

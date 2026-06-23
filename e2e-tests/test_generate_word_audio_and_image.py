@@ -78,7 +78,16 @@ def test_generate_word_audio_and_image(
     delete_job: Callable,
     add_word: Callable,
     delete_word: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    def _cleanup_routes() -> None:
+        page.unroute("**/words/generate-image-via-openai")
+        page.unroute(f"**/temp_image/{_MOCK_IMAGE_FILENAME}")
+
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    request.addfinalizer(lambda: delete_unit(UNIT_NAME))
+    request.addfinalizer(lambda: delete_word(WORD))
+    request.addfinalizer(_cleanup_routes)
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
     add_word(WORD, WORD_PLURAL, UNIT_NAME)
@@ -159,10 +168,3 @@ def test_generate_word_audio_and_image(
         expect(page).to_have_url(
             re.compile(rf"{re.escape(base_url)}/de/admin/cmsv2/word/{word_id}/change/")
         )
-
-    page.unroute("**/words/generate-image-via-openai")
-    page.unroute(f"**/temp_image/{_MOCK_IMAGE_FILENAME}")
-
-    delete_word(WORD)
-    delete_unit(UNIT_NAME)
-    delete_job(JOB_NAME)

@@ -14,8 +14,14 @@ JOB_NAME = "Tester/-in"
 
 @pytest.mark.e2e
 def test_add_job(
-    page: Page, document, base_url: str, login, delete_job: Callable
+    page: Page,
+    document,
+    base_url: str,
+    login,
+    delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
     with document.step(
         "Berufe-Bereich öffnen",
         description="Klicken Sie im linken Navigationsmenü auf **Berufe**.",
@@ -57,5 +63,3 @@ def test_add_job(
         expect(page.locator(".alert-success")).to_be_visible()
         expect(page.locator(".alert-success")).to_contain_text(JOB_NAME)
         page.locator("th.field-name a", has_text=JOB_NAME).scroll_into_view_if_needed()
-
-    delete_job(JOB_NAME)

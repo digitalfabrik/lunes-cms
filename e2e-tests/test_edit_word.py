@@ -33,7 +33,17 @@ def test_edit_word(
     delete_unit: Callable,
     delete_job: Callable,
     delete_word: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    def _delete_word() -> None:
+        try:
+            delete_word(WORD_UPDATED)
+        except Exception:
+            delete_word(WORD)
+
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    request.addfinalizer(lambda: delete_unit(UNIT_NAME))
+    request.addfinalizer(_delete_word)
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
     add_word(WORD, WORD_PLURAL, UNIT_NAME)
@@ -108,7 +118,3 @@ def test_edit_word(
     ):
         expect(page.locator(".alert-success")).to_be_visible()
         expect(page.locator(".alert-success")).to_contain_text(WORD_UPDATED)
-
-    delete_word(WORD_UPDATED)
-    delete_unit(UNIT_NAME)
-    delete_job(JOB_NAME)
