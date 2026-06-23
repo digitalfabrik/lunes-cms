@@ -311,7 +311,7 @@ jobs:
                 command: dockerize -wait http://localhost:8080 -timeout 120s
                 name: Wait for Django server
             - run:
-                command: pytest e2e-tests/ -m e2e -n 4 --dist=loadgroup --generate=all --junitxml=test-results/e2e-junit.xml
+                command: pytest e2e-tests/ -m e2e --generate=all --junitxml=test-results/e2e-junit.xml
                 name: Run e2e tests
             - store_test_results:
                 path: test-results
