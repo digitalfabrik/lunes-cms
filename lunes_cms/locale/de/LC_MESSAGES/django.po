@@ -778,7 +778,7 @@ msgstr "Beispielsatz"
 msgid "Miscellaneous"
 msgstr "Verschiedene"
 
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+#: cmsv2/admins/word_admin.py
 msgid "Generate example sentence"
 msgstr "Beispielsatz generieren"
 
