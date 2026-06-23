@@ -11,7 +11,7 @@
 
 This is a Django 3 based content management system for the vocabulary trainer app Lunes, a project powered by [Tür an Tür – Digitalfabrik gGmbH](https://tuerantuer.de/digitalfabrik/).
 The main goal is to develop an application which facilitates migrants to acquire technical and subject-specific vocabulary.
-For more information please see our [GoVolunteer ad](https://translate.google.com/translate?hl=en&sl=de&tl=en&u=https%3A%2F%2Fgovolunteer.com%2Fde%2Fprojects%2Fehrenamtliche-entwickler-innen-fuer-vokabeltrainer).
+For more information please see our [wiki page](https://wiki.tuerantuer.org/ehrenamt).
 
 ## TL;DR
 
