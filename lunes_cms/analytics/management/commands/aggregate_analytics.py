@@ -21,9 +21,9 @@ from django.db.models.fields.json import KT
 from django.db.models.functions import Cast, TruncDate
 from django.utils import timezone
 
-from lunes_cms.analytics.influx import date_to_ns, push_lines, resolve_job
+from lunes_cms.analytics.influx import date_to_ns, push_lines, resolve_job, resolve_unit
 from lunes_cms.analytics.models import AnalyticsEvent
-from lunes_cms.cmsv2.models import Job
+from lunes_cms.cmsv2.models import Job, Unit
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +46,7 @@ class EventAggregator(ABC):
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
+        unit_names: dict[int, str],
     ) -> list[str]:
         """
         Aggregate the given events into InfluxDB line protocol strings and mark
@@ -73,6 +74,7 @@ class JobSelectionAggregator(EventAggregator):
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
+        unit_names: dict[int, str],
     ) -> list[str]:
         daily_stats = (
             events.annotate(job_id=KT("payload__job_id"))
@@ -129,6 +131,7 @@ class SessionAggregator(EventAggregator):
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
+        unit_names: dict[int, str],
     ) -> list[str]:
         # Accumulate per-date totals in Python before building lines
         daily: dict[Any, tuple[int, int]] = (
@@ -214,6 +217,7 @@ class ModuleDurationAggregator(EventAggregator):
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
+        unit_names: dict[int, str],
     ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
@@ -239,14 +243,20 @@ class ModuleDurationAggregator(EventAggregator):
             )
         )
         for event in standard_aggregated:
+            unit = resolve_unit(event["unit_id"], unit_names)
+            if unit is None:
+                logger.warning(
+                    "module_duration standard event has no unit_id, skipping"
+                )
+                continue
             ts = date_to_ns(event["event_date"])
             lines.append(
-                f"lunes_module_duration,unit_id={event['unit_id']},exercise_type={event['exercise_type']}"
+                f"lunes_module_duration,unit={unit},exercise_type={event['exercise_type']}"
                 f" total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
-                "Queued module_duration (standard) line: unit_id=%s exercise_type=%s date=%s",
-                event["unit_id"],
+                "Queued module_duration (standard) line: unit=%s exercise_type=%s date=%s",
+                unit,
                 event["exercise_type"],
                 event["event_date"],
             )
@@ -299,6 +309,7 @@ class DropoutAggregator(EventAggregator):
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
+        unit_names: dict[int, str],
     ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
@@ -320,19 +331,15 @@ class DropoutAggregator(EventAggregator):
                 "unit_id",
                 "payload__position",
                 "payload__total",
-                "payload__vocabulary_item_id",
             )
             .annotate(dropout_count=Count("pk"))
         )
         for event in standard_aggregated:
             ts = date_to_ns(event["event_date"])
-            vocab_id = event["payload__vocabulary_item_id"]
-            vocab_tag = f",vocab_id={vocab_id}" if vocab_id is not None else ""
             lines.append(
                 f"lunes_dropout"
                 f",unit_id={event['unit_id']}"
                 f",exercise_type={event['exercise_type']}"
-                f"{vocab_tag}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
                 f" dropout_count={event['dropout_count']}i {ts}"
@@ -355,7 +362,6 @@ class DropoutAggregator(EventAggregator):
                 "job_id",
                 "payload__position",
                 "payload__total",
-                "payload__vocabulary_item_id",
             )
             .annotate(dropout_count=Count("pk"))
         )
@@ -365,13 +371,10 @@ class DropoutAggregator(EventAggregator):
                 logger.warning("dropout training event has no job_id, skipping")
                 continue
             ts = date_to_ns(event["event_date"])
-            vocab_id = event["payload__vocabulary_item_id"]
-            vocab_tag = f",vocab_id={vocab_id}" if vocab_id is not None else ""
             lines.append(
                 f"lunes_dropout"
                 f",job={job}"
                 f",exercise_type={event['exercise_type']}"
-                f"{vocab_tag}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
                 f" dropout_count={event['dropout_count']}i {ts}"
@@ -387,11 +390,118 @@ class DropoutAggregator(EventAggregator):
         return lines
 
 
+class ExerciseRepetitionAggregator(EventAggregator):
+    """
+    Aggregates exercise_repetition events into a daily histogram per exercise:
+    for each (day, exercise, repetitions_per_session) bucket, reports how many sessions
+    landed there. This preserves the per-session difficulty signal (one user grinding an
+    exercise 5 times vs. five users doing it once) without storing session_id in InfluxDB.
+    """
+
+    event_types = [AnalyticsEvent.EventType.EXERCISE_REPETITION]
+
+    @staticmethod
+    def aggregate(
+        events: QuerySet[AnalyticsEvent],
+        aggregated_at: datetime,
+        job_names: dict[int, str],
+        unit_names: dict[int, str],
+    ) -> list[str]:
+        standard_events = events.filter(
+            payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
+        )
+        training_events = events.filter(
+            payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
+        )
+        lines = ExerciseRepetitionAggregator._standard_lines(
+            standard_events
+        ) + ExerciseRepetitionAggregator._training_lines(training_events, job_names)
+        events.update(aggregated_at=aggregated_at)
+        return lines
+
+    @staticmethod
+    def _standard_lines(standard_events: QuerySet[AnalyticsEvent]) -> list[str]:
+        per_session = (
+            standard_events.annotate(
+                exercise_type=KT("payload__exercise_key__exercise_type"),
+                unit_id=KT("payload__exercise_key__unit_id"),
+                session_id=KT("payload__session_id"),
+            )
+            .values("event_date", "exercise_type", "unit_id", "session_id")
+            .annotate(reps=Count("pk"))
+        )
+        dist: dict[tuple, int] = {}
+        for row in per_session:
+            key = (row["event_date"], row["exercise_type"], row["unit_id"], row["reps"])
+            dist[key] = dist.get(key, 0) + 1
+        lines = []
+        for (event_date, exercise_type, unit_id, reps), session_count in dist.items():
+            ts = date_to_ns(event_date)
+            lines.append(
+                f"lunes_exercise_repetition"
+                f",unit_id={unit_id}"
+                f",exercise_type={exercise_type}"
+                f",repetitions_per_session={reps}"
+                f" session_count={session_count}i {ts}"
+            )
+            logger.info(
+                "Queued exercise_repetition (standard) line: unit_id=%s exercise_type=%s reps=%d date=%s",
+                unit_id,
+                exercise_type,
+                reps,
+                event_date,
+            )
+        return lines
+
+    @staticmethod
+    def _training_lines(
+        training_events: QuerySet[AnalyticsEvent], job_names: dict[int, str]
+    ) -> list[str]:
+        per_session = (
+            training_events.annotate(
+                exercise_type=KT("payload__exercise_key__exercise_type"),
+                job_id=KT("payload__exercise_key__job_id"),
+                session_id=KT("payload__session_id"),
+            )
+            .values("event_date", "exercise_type", "job_id", "session_id")
+            .annotate(reps=Count("pk"))
+        )
+        dist: dict[tuple, int] = {}
+        for row in per_session:
+            job = resolve_job(row["job_id"], job_names)
+            if job is None:
+                logger.warning(
+                    "exercise_repetition training event has no job_id, skipping"
+                )
+                continue
+            key = (row["event_date"], job, row["exercise_type"], row["reps"])
+            dist[key] = dist.get(key, 0) + 1
+        lines = []
+        for (event_date, job, exercise_type, reps), session_count in dist.items():
+            ts = date_to_ns(event_date)
+            lines.append(
+                f"lunes_exercise_repetition"
+                f",job={job}"
+                f",exercise_type={exercise_type}"
+                f",repetitions_per_session={reps}"
+                f" session_count={session_count}i {ts}"
+            )
+            logger.info(
+                "Queued exercise_repetition (training) line: job=%s exercise_type=%s reps=%d date=%s",
+                job,
+                exercise_type,
+                reps,
+                event_date,
+            )
+        return lines
+
+
 EVENT_AGGREGATORS: list[type[EventAggregator]] = [
     JobSelectionAggregator,
     SessionAggregator,
     ModuleDurationAggregator,
     DropoutAggregator,
+    ExerciseRepetitionAggregator,
 ]
 
 
@@ -415,8 +525,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options) -> None:
         dry_run: bool = options["dry_run"]
         job_names: dict[int, str] = dict(Job.objects.values_list("id", "name"))
+        unit_names: dict[int, str] = dict(Unit.objects.values_list("id", "title"))
         for aggregator_class in EVENT_AGGREGATORS:
-            self._aggregate_event_type(aggregator_class, dry_run, job_names)
+            self._aggregate_event_type(aggregator_class, dry_run, job_names, unit_names)
 
     # Will be uncommented with #829
     # self._delete_old_unprocessed_events(dry_run)
@@ -461,6 +572,7 @@ class Command(BaseCommand):
         aggregator_class: type[EventAggregator],
         dry_run: bool,
         job_names: dict[int, str],
+        unit_names: dict[int, str],
     ) -> None:
         event_types = aggregator_class.event_types
 
@@ -481,7 +593,7 @@ class Command(BaseCommand):
         ).annotate(event_date=TruncDate("timestamp", tzinfo=UTC))
 
         aggregated_at = timezone.now()
-        lines = aggregator_class.aggregate(events, aggregated_at, job_names)
+        lines = aggregator_class.aggregate(events, aggregated_at, job_names, unit_names)
 
         marked_count = AnalyticsEvent.objects.filter(
             event_type__in=event_types,

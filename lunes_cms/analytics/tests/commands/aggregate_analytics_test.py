@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 import unittest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
@@ -6,6 +7,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from lunes_cms.analytics.models import AnalyticsEvent
+from lunes_cms.cmsv2.models import Unit
 from lunes_cms.cmsv2.models.job import Job
 
 PATCH_PUSH = "lunes_cms.analytics.management.commands.aggregate_analytics.push_lines"
@@ -365,6 +367,10 @@ class ModuleDurationAggregateTests(TestCase):
     Tests for module duration event aggregation.
     """
 
+    def setUp(self) -> None:
+        self.unit1 = Unit.objects.create(title="Unit 1")
+        self.unit2 = Unit.objects.create(title="Unit 2")
+
     def _create_standard_event(
         self, exercise_type: str, unit_id: int, timestamp: str, duration_seconds: int
     ) -> AnalyticsEvent:
@@ -401,8 +407,12 @@ class ModuleDurationAggregateTests(TestCase):
 
     def test_aggregates_single_day(self) -> None:
         """Test basic aggregation of standard module duration events into a single day"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 10, "2026-01-15T11:00:00", 90)
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T11:00:00", 90
+        )
 
         with patch(PATCH_PUSH) as mock_push:
             with self.captureOnCommitCallbacks(execute=True):
@@ -414,15 +424,19 @@ class ModuleDurationAggregateTests(TestCase):
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
         self.assertIn("lunes_module_duration", line)
-        self.assertIn("unit_id=10", line)
+        self.assertIn(r"unit=Unit\ 1", line)
         self.assertIn("exercise_type=word_choice", line)
         self.assertIn("total_sessions=2i", line)
         self.assertIn("total_duration_seconds=150i", line)
 
     def test_aggregates_multiple_days(self) -> None:
         """Test that events on different days create separate lines"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 10, "2026-01-16T10:00:00", 60)
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-16T10:00:00", 60
+        )
 
         with patch(PATCH_PUSH) as mock_push:
             with self.captureOnCommitCallbacks(execute=True):
@@ -433,8 +447,12 @@ class ModuleDurationAggregateTests(TestCase):
 
     def test_aggregates_different_exercise_types(self) -> None:
         """Test that different exercise types create separate lines"""
-        self._create_standard_event("word_list", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
+        self._create_standard_event(
+            "word_list", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
 
         with patch(PATCH_PUSH) as mock_push:
             with self.captureOnCommitCallbacks(execute=True):
@@ -447,8 +465,12 @@ class ModuleDurationAggregateTests(TestCase):
 
     def test_aggregates_different_units(self) -> None:
         """Test that different unit IDs create separate lines"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
-        self._create_standard_event("word_choice", 20, "2026-01-15T10:00:00", 90)
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
+        self._create_standard_event(
+            "word_choice", self.unit2.id, "2026-01-15T10:00:00", 90
+        )
 
         with patch(PATCH_PUSH) as mock_push:
             with self.captureOnCommitCallbacks(execute=True):
@@ -457,19 +479,29 @@ class ModuleDurationAggregateTests(TestCase):
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
         self.assertTrue(
-            any("unit_id=10" in l and "total_duration_seconds=60i" in l for l in lines)
+            any(
+                r"unit=Unit\ 1" in l and "total_duration_seconds=60i" in l
+                for l in lines
+            )
         )
         self.assertTrue(
-            any("unit_id=20" in l and "total_duration_seconds=90i" in l for l in lines)
+            any(
+                r"unit=Unit\ 2" in l and "total_duration_seconds=90i" in l
+                for l in lines
+            )
         )
 
     def test_second_run_pushes_only_new_events(self) -> None:
         """Test that running twice pushes new events in each run separately"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
         with self.captureOnCommitCallbacks(execute=True):
             call_command("aggregate_analytics")
 
-        self._create_standard_event("word_choice", 10, "2026-01-15T14:00:00", 40)
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T14:00:00", 40
+        )
         with patch(PATCH_PUSH) as mock_push:
             with self.captureOnCommitCallbacks(execute=True):
                 call_command("aggregate_analytics")
@@ -544,7 +576,9 @@ class ModuleDurationAggregateTests(TestCase):
 
     def test_standard_and_training_create_separate_lines(self) -> None:
         """Test that standard and training exercises produce separate lines"""
-        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00", 60)
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
         self._create_training_event("image", 5, "2026-01-15T10:00:00", 60)
 
         with patch(PATCH_PUSH) as mock_push:
@@ -553,7 +587,7 @@ class ModuleDurationAggregateTests(TestCase):
 
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
-        self.assertTrue(any("unit_id=10" in l for l in lines))
+        self.assertTrue(any(r"unit=Unit\ 1" in l for l in lines))
         self.assertTrue(any("job=unknown_5" in l for l in lines))
 
 
@@ -562,7 +596,7 @@ class DropoutAggregateTests(TestCase):
     Tests for exercise dropout event aggregation.
     """
 
-    def _create_standard_event(  # pylint: disable=too-many-arguments
+    def _create_standard_event(
         self,
         *,
         exercise_type: str,
@@ -840,11 +874,11 @@ class DropoutAggregateTests(TestCase):
         self.assertIn("exercise_type=image", line)
         self.assertIn("position=2", line)
         self.assertIn("total=8", line)
-        self.assertIn("vocab_id=99", line)
+        self.assertNotIn("vocab_id", line)
         self.assertIn("dropout_count=2i", line)
 
-    def test_different_vocabulary_items_create_separate_lines(self) -> None:
-        """Test that dropouts on different vocabulary items create separate lines"""
+    def test_different_vocabulary_items_are_aggregated_together(self) -> None:
+        """Test that dropouts on different vocabulary items are grouped into one line"""
         self._create_training_event(
             exercise_type="image",
             job_id=5,
@@ -867,13 +901,9 @@ class DropoutAggregateTests(TestCase):
                 call_command("aggregate_analytics")
 
         lines = mock_push.call_args[0][0]
-        self.assertEqual(len(lines), 2)
-        self.assertTrue(
-            any("vocab_id=10" in l and "dropout_count=1i" in l for l in lines)
-        )
-        self.assertTrue(
-            any("vocab_id=20" in l and "dropout_count=1i" in l for l in lines)
-        )
+        self.assertEqual(len(lines), 1)
+        self.assertIn("dropout_count=2i", lines[0])
+        self.assertNotIn("vocab_id", lines[0])
 
     def test_standard_and_training_dropout_separate(self) -> None:
         """Test that standard and training dropouts produce separate lines"""
@@ -903,6 +933,244 @@ class DropoutAggregateTests(TestCase):
         self.assertTrue(any("job=unknown_5" in l for l in lines))
 
 
+class ExerciseRepetitionAggregateTests(TestCase):
+    """
+    Tests for exercise repetition event aggregation.
+    """
+
+    def setUp(self) -> None:
+        self.job = Job.objects.create(name="Test Job")
+
+    def _create_standard_event(
+        self, exercise_type: str, unit_id: int, timestamp: str
+    ) -> AnalyticsEvent:
+        return AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type="exercise_repetition",
+            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
+            payload={
+                "exercise_key": {
+                    "type": "exercise",
+                    "exercise_type": exercise_type,
+                    "unit_id": unit_id,
+                },
+                "session_id": "session-1",
+            },
+        )
+
+    def _create_training_event(
+        self, exercise_type: str, job_id: int, timestamp: str
+    ) -> AnalyticsEvent:
+        return AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type="exercise_repetition",
+            timestamp=datetime.fromisoformat(timestamp).replace(tzinfo=timezone.utc),
+            payload={
+                "exercise_key": {
+                    "type": "training",
+                    "exercise_type": exercise_type,
+                    "job_id": job_id,
+                },
+                "session_id": "session-1",
+            },
+        )
+
+    def test_aggregates_standard_events_by_day(self) -> None:
+        """Multiple standard events from the same session are one bucket with reps=3"""
+        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00")
+        self._create_standard_event("word_choice", 10, "2026-01-15T11:00:00")
+        self._create_standard_event("word_choice", 10, "2026-01-15T12:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("lunes_exercise_repetition", line)
+        self.assertIn("unit_id=10", line)
+        self.assertIn("exercise_type=word_choice", line)
+        self.assertIn("repetitions_per_session=3", line)
+        self.assertIn("session_count=1i", line)
+        self.assertNotIn("session_id", line)
+
+    def test_aggregates_different_days(self) -> None:
+        """Events on different days create separate lines"""
+        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00")
+        self._create_standard_event("word_choice", 10, "2026-01-16T10:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(all("repetitions_per_session=1" in l for l in lines))
+        self.assertTrue(all("session_count=1i" in l for l in lines))
+
+    def test_aggregates_different_units(self) -> None:
+        """Events for different unit_ids create separate lines"""
+        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00")
+        self._create_standard_event("word_choice", 20, "2026-01-15T10:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(any("unit_id=10" in l for l in lines))
+        self.assertTrue(any("unit_id=20" in l for l in lines))
+
+    def test_aggregates_different_exercise_types(self) -> None:
+        """Events for different exercise types create separate lines"""
+        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00")
+        self._create_standard_event("word_list", 10, "2026-01-15T10:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+
+    def test_aggregates_training_events(self) -> None:
+        """Training events from the same session are one bucket with reps=2"""
+        self._create_training_event("image", self.job.id, "2026-01-15T10:00:00")
+        self._create_training_event("image", self.job.id, "2026-01-15T11:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("lunes_exercise_repetition", line)
+        self.assertIn("job=Test\\ Job", line)
+        self.assertIn("exercise_type=image", line)
+        self.assertIn("repetitions_per_session=2", line)
+        self.assertIn("session_count=1i", line)
+        self.assertNotIn("session_id", line)
+
+    def test_different_sessions_same_day_same_reps_are_bucketed(self) -> None:
+        """Two sessions each doing 1 rep land in the same bucket: session_count=2"""
+        AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type="exercise_repetition",
+            timestamp=datetime.fromisoformat("2026-01-15T10:00:00").replace(
+                tzinfo=timezone.utc
+            ),
+            payload={
+                "exercise_key": {
+                    "type": "exercise",
+                    "exercise_type": "word_choice",
+                    "unit_id": 10,
+                },
+                "session_id": "session-A",
+            },
+        )
+        AnalyticsEvent.objects.create(
+            installation_id="test-install",
+            event_type="exercise_repetition",
+            timestamp=datetime.fromisoformat("2026-01-15T11:00:00").replace(
+                tzinfo=timezone.utc
+            ),
+            payload={
+                "exercise_key": {
+                    "type": "exercise",
+                    "exercise_type": "word_choice",
+                    "unit_id": 10,
+                },
+                "session_id": "session-B",
+            },
+        )
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("repetitions_per_session=1", line)
+        self.assertIn("session_count=2i", line)
+        self.assertNotIn("session_id", line)
+
+    def test_distribution_buckets_with_different_rep_counts(self) -> None:
+        """Sessions with different rep counts produce separate distribution lines"""
+
+        def _make(session_id: str, timestamp: str) -> None:
+            AnalyticsEvent.objects.create(
+                installation_id="test-install",
+                event_type="exercise_repetition",
+                timestamp=datetime.fromisoformat(timestamp).replace(
+                    tzinfo=timezone.utc
+                ),
+                payload={
+                    "exercise_key": {
+                        "type": "exercise",
+                        "exercise_type": "word_choice",
+                        "unit_id": 10,
+                    },
+                    "session_id": session_id,
+                },
+            )
+
+        # session-A: 3 reps
+        _make("session-A", "2026-01-15T10:00:00")
+        _make("session-A", "2026-01-15T10:01:00")
+        _make("session-A", "2026-01-15T10:02:00")
+        # session-B: 1 rep
+        _make("session-B", "2026-01-15T11:00:00")
+        # session-C: 3 reps
+        _make("session-C", "2026-01-15T12:00:00")
+        _make("session-C", "2026-01-15T12:01:00")
+        _make("session-C", "2026-01-15T12:02:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        lines = mock_push.call_args[0][0]
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(
+            any(
+                "repetitions_per_session=3" in l and "session_count=2i" in l
+                for l in lines
+            )
+        )
+        self.assertTrue(
+            any(
+                "repetitions_per_session=1" in l and "session_count=1i" in l
+                for l in lines
+            )
+        )
+
+    def test_second_run_pushes_only_new_events(self) -> None:
+        """Running twice pushes new events in each run separately"""
+        self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00")
+        with self.captureOnCommitCallbacks(execute=True):
+            call_command("aggregate_analytics")
+
+        self._create_standard_event("word_choice", 10, "2026-01-15T14:00:00")
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        mock_push.assert_called_once()
+        [line] = mock_push.call_args[0][0]
+        self.assertIn("repetitions_per_session=1", line)
+        self.assertIn("session_count=1i", line)
+
+    def test_no_events(self) -> None:
+        """Running with no events does not push anything"""
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+        mock_push.assert_not_called()
+
+
 # 829 Enable cleanup
 @unittest.skip(
     "Cleanup is temporarily disabled — see issue for re-enabling _delete_old_unprocessed_events"
@@ -910,8 +1178,6 @@ class DropoutAggregateTests(TestCase):
 class UnprocessedEventCleanupTests(TestCase):
     """
     Tests for deletion of events not covered by batch aggregators.
-    exercise_repetition events are aggregated inline on receipt and must be cleaned
-    up by the management command after RETENTION_DAYS days.
     """
 
     OLD_TIMESTAMP = datetime.now(tz=timezone.utc) - timedelta(days=91)

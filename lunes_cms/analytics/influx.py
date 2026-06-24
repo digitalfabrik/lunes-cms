@@ -31,6 +31,17 @@ def resolve_job(job_id: int | str | None, job_names: dict[int, str]) -> str | No
     return _escape_tag(name)
 
 
+def resolve_unit(unit_id: int | str | None, unit_names: dict[int, str]) -> str | None:
+    """Return an escaped unit title for use as an InfluxDB tag value.
+
+    Returns None if unit_id is None, or a fallback string if the id is not found.
+    """
+    if unit_id is None:
+        return None
+    name = unit_names.get(int(unit_id), f"unknown_{unit_id}")
+    return _escape_tag(name)
+
+
 def push_lines(lines: list[str]) -> None:
     """Push InfluxDB line protocol lines to the configured write endpoint.
 

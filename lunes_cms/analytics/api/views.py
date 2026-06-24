@@ -4,9 +4,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
 
-from lunes_cms.analytics.influx import _escape_tag, push_lines
-from lunes_cms.cmsv2.models import Job
-
 from ..models import AnalyticsEvent
 from .serializers import AnalyticsEventSerializer
 
@@ -37,33 +34,7 @@ class AnalyticsEventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = AnalyticsEventSerializer
 
     def perform_create(self, serializer: AnalyticsEventSerializer) -> None:
-        event = serializer.save()
-        if event.event_type == AnalyticsEvent.EventType.EXERCISE_REPETITION:
-            payload = event.payload
-            exercise_key = payload["exercise_key"]
-            exercise_type = exercise_key["exercise_type"]
-            session_id = payload["session_id"]
-            job_id = exercise_key.get("job_id")
-            unit_id = exercise_key.get("unit_id")
-            ts = int(event.timestamp.timestamp() * 1_000_000_000)
-
-            if job_id is not None:
-                job_name = (
-                    Job.objects.filter(id=job_id).values_list("name", flat=True).first()
-                )
-                key_tag = f"job={_escape_tag(job_name or f'unknown_{job_id}')}"
-            else:
-                key_tag = f"unit_id={unit_id}"
-
-            push_lines(
-                [
-                    f"lunes_exercise_repetition"
-                    f",{key_tag}"
-                    f",exercise_type={exercise_type}"
-                    f",session_id={session_id}"
-                    f" repetition_count=1i {ts}"
-                ]
-            )
+        serializer.save()
 
 
 class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
