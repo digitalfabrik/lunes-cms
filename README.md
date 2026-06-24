@@ -67,7 +67,13 @@ For detailed instructions and the source code reference have a look at our docum
 
 The API usage documentation is available here:
 
-### <p align="center">:iphone: https://lunes.tuerantuer.org/api/docs/</p>
+### <p align="center">:iphone: https://lunes.tuerantuer.org/api/v2/</p>
+
+## User manual
+
+Our user manual can be found here:
+
+### <p align="center">:open_book: https://digitalfabrik.github.io/lunes-cms/</p>
 
 ## License
 
