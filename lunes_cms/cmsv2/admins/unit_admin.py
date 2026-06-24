@@ -24,6 +24,7 @@ class WordInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
+    autocomplete_fields = ["word"]
     fields = [
         "word",
         "image_with_controls",

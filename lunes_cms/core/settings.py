@@ -115,6 +115,29 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+########################
+# DJANGO DEBUG TOOLBAR #
+########################
+
+#: Whether the Django Debug Toolbar is enabled. Dev-only: requires :setting:`DEBUG`
+#: and the optional ``django-debug-toolbar`` dependency (part of the ``dev`` extra).
+DEBUG_TOOLBAR_ENABLED = False
+if DEBUG:
+    try:
+        import debug_toolbar  # noqa: F401  pylint: disable=unused-import
+    except ImportError:
+        pass
+    else:
+        DEBUG_TOOLBAR_ENABLED = True
+        INSTALLED_APPS.append("debug_toolbar")
+        MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+#: Configuration of the Django Debug Toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    # Keep history so JSON API requests can be inspected at /__debug__/.
+    "RESULTS_CACHE_SIZE": 100,
+}
+
 #: Default URL dispatcher (see :setting:`django:ROOT_URLCONF`)
 ROOT_URLCONF = "lunes_cms.core.urls"
 
