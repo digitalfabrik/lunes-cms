@@ -38,3 +38,4 @@ steps:
         - pyproject.toml
         - lunes_cms/__init__.py
         - lunes_cms/_manifest
+  - notify

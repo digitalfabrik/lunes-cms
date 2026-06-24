@@ -38,3 +38,4 @@ steps:
       command: |
         source .venv/bin/activate
         ./tools/test.sh --ci
+  - notify

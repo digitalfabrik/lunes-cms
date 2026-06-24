@@ -10,3 +10,4 @@ steps:
   - run:
       name: Build documentation
       command: ./tools/build_documentation.sh
+  - notify

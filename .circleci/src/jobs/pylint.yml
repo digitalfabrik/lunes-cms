@@ -12,3 +12,4 @@ steps:
       command: |
         pip install pylint
         ./tools/pylint.sh
+  - notify

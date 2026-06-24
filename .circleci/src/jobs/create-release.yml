@@ -48,3 +48,5 @@ steps:
           --message "${MESSAGE}" \
           --channel releases \
           --allow-all-branches
+  - notify:
+      allow_all_branches: true

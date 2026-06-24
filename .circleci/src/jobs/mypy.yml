@@ -7,3 +7,4 @@ steps:
   - run:
       name: Run mypy
       command: ./tools/mypy.sh
+  - notify

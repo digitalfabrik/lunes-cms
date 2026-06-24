@@ -26,3 +26,5 @@ steps:
           --repo "${CIRCLE_PROJECT_REPONAME}" \
           --branch "${CIRCLE_BRANCH}" \
           ${HOTFIX_FLAG}
+  - notify:
+      allow_all_branches: true

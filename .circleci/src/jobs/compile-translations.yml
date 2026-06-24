@@ -19,3 +19,4 @@ steps:
       paths:
         - lunes_cms/locale/de/LC_MESSAGES/django.mo
         - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
+  - notify

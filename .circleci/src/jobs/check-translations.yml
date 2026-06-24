@@ -9,3 +9,4 @@ steps:
   - run:
       name: Check translation file for missing or empty entries
       command: ./tools/check_translations.sh
+  - notify

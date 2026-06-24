@@ -17,3 +17,4 @@ steps:
   - run:
       name: Check TypeScript formatting
       command: npm run format:check
+  - notify

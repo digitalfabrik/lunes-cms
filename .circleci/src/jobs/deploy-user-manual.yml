@@ -11,3 +11,4 @@ steps:
   - run:
       name: Deploy user manual to GitHub Pages
       command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
+  - notify

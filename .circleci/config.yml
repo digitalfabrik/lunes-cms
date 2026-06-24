@@ -27,10 +27,10 @@ commands:
                 default: false
                 type: boolean
             channel:
-                default: lunes-notifications
+                default: lunes-app-notifications
                 type: string
             failure_mentions:
-                default: ""
+                default: '@leandra.hahn @johannes.stock @sascha.beele @david.venhoff @andreas.fischer'
                 type: string
             success_mentions:
                 default: ""
@@ -49,10 +49,41 @@ commands:
                 name: Mattermost - Prepare success message
                 when: on_success
             - run:
-                command: scripts/notify-mattermost << parameters.channel >> << parameters.allow_all_branches >>
+                command: |
+                    CHANNEL="<< parameters.channel >>"
+                    ALLOW_ALL_BRANCHES=<< parameters.allow_all_branches >>
+
+                    begins_with() { case $1 in "$2"*) true;; *) false;; esac; }
+
+                    echo $MM_MESSAGE
+
+                    if ! ($ALLOW_ALL_BRANCHES || [ "$CIRCLE_BRANCH" = "main" ] || begins_with $CIRCLE_BRANCH "release" || begins_with $CIRCLE_BRANCH "hotfix"); then
+                      echo "Not on main or release branch. Skipping."
+                      exit 0
+                    fi
+
+                    if [ -z "$MM_MESSAGE" ]; then
+                      echo "No message set. Skipping."
+                      exit 0
+                    fi
+
+                    if [ -z "${MM_WEBHOOK}" ]; then
+                      echo "No mattermost webhook set. Skipping."
+                      exit 0
+                    fi
+
+                    STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST -H 'Content-type: application/json' \
+                      --data "{\"channel\": \"$CHANNEL\", \"username\": \"circleci\", \"text\": \"$MM_MESSAGE\"}" \
+                      "${MM_WEBHOOK}")
+
+                    if [ "$STATUS" -ne "200" ]; then
+                      echo "Notification not sent. Status: $STATUS"
+                      exit 1
+                    fi
+
+                    echo "Notification sent!"
                 name: Mattermost Status Alert
                 when: always
-                working_directory: ~/project
 executors:
     python:
         docker:
@@ -68,6 +99,7 @@ jobs:
             - run:
                 command: black --check .
                 name: Check formatting of python files
+            - notify
     build-documentation:
         executor: python
         steps:
@@ -81,6 +113,7 @@ jobs:
             - run:
                 command: ./tools/build_documentation.sh
                 name: Build documentation
+            - notify
     build-js:
         docker:
             - image: cimg/node:lts
@@ -102,6 +135,7 @@ jobs:
                 paths:
                     - lunes_cms/static/js
                 root: .
+            - notify
     build-package:
         executor: python
         steps:
@@ -122,6 +156,7 @@ jobs:
                 paths:
                     - dist
                 root: .
+            - notify
     bump-dev-version:
         executor: python
         steps:
@@ -163,6 +198,7 @@ jobs:
                     - lunes_cms/__init__.py
                     - lunes_cms/_manifest
                 root: .
+            - notify
     bump-version:
         docker:
             - image: cimg/node:lts
@@ -192,6 +228,8 @@ jobs:
                       --branch "${CIRCLE_BRANCH}" \
                       ${HOTFIX_FLAG}
                 name: Bump git version
+            - notify:
+                allow_all_branches: true
     check-translations:
         executor: python
         steps:
@@ -204,6 +242,7 @@ jobs:
             - run:
                 command: ./tools/check_translations.sh
                 name: Check translation file for missing or empty entries
+            - notify
     compile-translations:
         executor: python
         steps:
@@ -226,6 +265,7 @@ jobs:
                     - lunes_cms/locale/de/LC_MESSAGES/django.mo
                     - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
                 root: .
+            - notify
     create-release:
         docker:
             - image: cimg/node:lts
@@ -277,6 +317,8 @@ jobs:
                       --channel releases \
                       --allow-all-branches
                 name: Notify mattermost about pre-release
+            - notify:
+                allow_all_branches: true
     deploy-user-manual:
         executor: python
         steps:
@@ -291,6 +333,7 @@ jobs:
             - run:
                 command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
                 name: Deploy user manual to GitHub Pages
+            - notify
     e2e:
         docker:
             - environment:
@@ -355,6 +398,7 @@ jobs:
                         paths:
                             - user_docs
                         root: .
+            - notify
     install:
         executor: python
         steps:
@@ -382,6 +426,7 @@ jobs:
                     - .venv
                     - lunes_cms.egg-info
                 root: .
+            - notify
     isort:
         executor: python
         resource_class: small
@@ -393,6 +438,7 @@ jobs:
             - run:
                 command: isort . --skip-glob "**/migrations/**"
                 name: Check isort code style
+            - notify
     lint-ts:
         docker:
             - image: cimg/node:lts
@@ -413,6 +459,7 @@ jobs:
             - run:
                 command: npm run format:check
                 name: Check TypeScript formatting
+            - notify
     mypy:
         executor: python
         steps:
@@ -423,6 +470,7 @@ jobs:
             - run:
                 command: ./tools/mypy.sh
                 name: Run mypy
+            - notify
     promote-release:
         docker:
             - image: cimg/node:lts
@@ -450,6 +498,8 @@ jobs:
                       --channel releases \
                       --allow-all-branches
                 name: Notify mattermost about production release
+            - notify:
+                allow_all_branches: true
     publish-package:
         executor: python
         steps:
@@ -468,6 +518,7 @@ jobs:
                     ls -lh ./dist/*
                     twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
                 name: Publish lunes-cms package to (Test-)PyPI
+            - notify
     publish-release-artifact:
         executor: python
         steps:
@@ -486,6 +537,7 @@ jobs:
                     pip install twine
                     twine upload --non-interactive --verbose dist/lunes_cms-*.tar.gz
                 name: Publish artifact to PyPI
+            - notify
     pylint:
         executor: python
         steps:
@@ -501,6 +553,7 @@ jobs:
                     pip install pylint
                     ./tools/pylint.sh
                 name: Run pylint
+            - notify
     test:
         docker:
             - environment:
@@ -535,6 +588,7 @@ jobs:
                 paths:
                     - coverage.xml
                 root: .
+            - notify
     test-python313:
         docker:
             - environment:
@@ -576,6 +630,7 @@ jobs:
                     source .venv/bin/activate
                     ./tools/test.sh --ci
                 name: Run tests
+            - notify
     upload-test-coverage:
         docker:
             - image: cimg/base:stable
@@ -584,6 +639,7 @@ jobs:
                 at: .
             - qlty/coverage_publish:
                 files: coverage.xml
+            - notify
 orbs:
     qlty: qltysh/qlty-orb@0.0.10
     shellcheck: circleci/shellcheck@2.2.4
