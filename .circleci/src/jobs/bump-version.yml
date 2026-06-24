@@ -19,8 +19,10 @@ steps:
   - run:
       name: Bump git version
       command: |
+        HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix" || true)
         npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" 0 \
           --private-key "${DELIVERINO_PRIVATE_KEY}" \
           --owner "${CIRCLE_PROJECT_USERNAME}" \
           --repo "${CIRCLE_PROJECT_REPONAME}" \
-          --branch "${CIRCLE_BRANCH}"
+          --branch "${CIRCLE_BRANCH}" \
+          ${HOTFIX_FLAG}

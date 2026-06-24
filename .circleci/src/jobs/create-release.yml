@@ -10,12 +10,13 @@ steps:
   - run:
       name: Create GitHub pre-release
       command: |
+        HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix --branch ${CIRCLE_BRANCH}" || true)
         NEW_VERSION=$(jq -r .versionName version.json)
         RELEASE=$(npx --no app-toolbelt v0 release create all "${NEW_VERSION}" \
           --private-key "${DELIVERINO_PRIVATE_KEY}" \
           --owner "${CIRCLE_PROJECT_USERNAME}" \
           --repo "${CIRCLE_PROJECT_REPONAME}" \
-          --branch main)
+          ${HOTFIX_FLAG})
         echo "export RELEASE_ID=$(echo ${RELEASE} | jq .id)" >> ${BASH_ENV}
         echo "export RELEASE_NOTES=$(echo ${RELEASE} | jq .releaseNotes)" >> ${BASH_ENV}
   - run:
