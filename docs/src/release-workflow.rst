@@ -61,12 +61,13 @@ The workflow runs the following steps in order:
    as a release asset, generates and commits the Software Bill of Materials (SBOM) via
    ``app-toolbelt``, and notifies Mattermost (context: ``deliverino``).
 
-After a successful beta delivery, the new package will be installed every night at 2am on the testserver
+8. Server installation: Can be triggered manually by doing ``sudo salt-call state.highstate`` on the ``lunes-test.tuerantuer.org`` or it will be installed every night at 2am automatically.
+
 
 
 Promotion
 =========
-
+IMPORTANT: If there are multiple beta release (pre-releases), the promotion workflow will promote the version that is listed in the ``version.json``. So check which version is on the branch where you trigger the promotion. On main it should be usually the latest beta release.
 Once the beta has been validated, trigger the ``promotion`` workflow from the CircleCI UI
 by setting the ``run_promotion`` pipeline parameter to ``true``.
 
@@ -79,8 +80,28 @@ The workflow runs the following steps in order:
 
 2. **promote-release** — Promotes the GitHub pre-release to the latest stable release
    using ``app-toolbelt`` and notifies Mattermost (context: ``deliverino``).
-3. Release will be installed on server every friday morning.
+3. Server installation: A renovate PR will be created within an hour here: ``https://git.tuerantuer.org/DF/salt/pulls``. The PR has to approved and merged. Then the highstate will be automatically triggered on the production server.
 
+Create a Hotfix Release
+=======================
+
+1. Apply the Fix to the Hotfix Branch
+--------------------------------------
+
+- Create an issue for the bug.
+- Get the latest tags::
+
+    git tag --sort=-creatordate | head -5
+
+- Create a hotfix branch from the release tag you want to fix.
+  The branch name **must start with** ``hotfix`` (e.g. ``hotfix-2025.6.5``)::
+
+    git checkout -b hotfix-2025.6.5 2025.6.4-all
+
+- Create the commits with the particular issue number prefix.
+- Push the hotfix branch.
+- Create a draft PR for reviews.
+- Trigger a beta delivery from this branch.
 
 Required CircleCI Contexts
 ==========================
