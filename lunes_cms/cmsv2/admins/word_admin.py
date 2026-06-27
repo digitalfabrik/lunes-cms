@@ -626,7 +626,7 @@ class WordAdmin(BaseAdmin):
         """
         unit_word_images = ""
 
-        for relation in obj.unit_word_relations.all():
+        for relation in obj.unit_word_relations.select_related("unit").all():
             unit_word_images += self._generate_unit_word_image(relation)
 
         return unit_word_images
