@@ -933,6 +933,14 @@ msgid "Image Reviews"
 msgstr "Bild Kontrollen"
 
 #: cmsv2/models/static.py
+msgid "Confirmed"
+msgstr "Bestätigt"
+
+#: cmsv2/models/static.py
+msgid "Not Checked"
+msgstr "Nicht geprüft"
+
+#: cmsv2/models/static.py
 msgid "Pending Review"
 msgstr "Freigabe ausstehend"
 

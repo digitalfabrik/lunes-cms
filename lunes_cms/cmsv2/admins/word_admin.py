@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models import Job
-from lunes_cms.cmsv2.models.static import Static
+from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.utils import cache_busted_url, get_image_tag, is_not_blank
 from lunes_cms.core import settings
@@ -521,7 +521,7 @@ class WordAdmin(BaseAdmin):
         )
 
         options = ""
-        for value, display in Static.check_status_choices:
+        for value, display in CheckStatus.choices:
             selected = "selected" if obj.audio_check_status == value else ""
             options += f'<option value="{value}" {selected}>{display}</option>'
 
@@ -598,7 +598,7 @@ class WordAdmin(BaseAdmin):
         """
 
         word_options = ""
-        for value, display in Static.check_status_choices:
+        for value, display in CheckStatus.choices:
             selected = "selected" if obj.image_check_status == value else ""
             word_options += f'<option value="{value}" {selected}>{display}</option>'
 
@@ -668,7 +668,7 @@ class WordAdmin(BaseAdmin):
         """
 
         unit_options = ""
-        for value, display in Static.check_status_choices:
+        for value, display in CheckStatus.choices:
             selected = "selected" if relation.image_check_status == value else ""
             unit_options += f'<option value="{value}" {selected}>{display}</option>'
 
