@@ -4,7 +4,8 @@ import io
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
-from django.http import HttpResponse
+from django.db.models import QuerySet
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
@@ -12,7 +13,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
-from ..models import Unit, Word
+from ..models import Job, Unit, Word
 from ..utils import make_safe_filename
 from .base import BaseAdmin
 from .word_export_resource import WordExportResource
@@ -117,7 +118,11 @@ class JobAdmin(BaseAdmin):
         js = ["js/job_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
 
-    def related_units(self, obj):
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Job]:
+        """Prefetch units to avoid N+1 queries in related_units"""
+        return super().get_queryset(request).prefetch_related("units")
+
+    def related_units(self, obj: Job) -> str:
         """
         Get a comma-separated list of unit titles related to this job.
 
