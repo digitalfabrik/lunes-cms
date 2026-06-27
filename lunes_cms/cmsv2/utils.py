@@ -8,8 +8,10 @@ import warnings
 from html import escape
 from typing import Optional
 
+from django.db.models.fields.files import ImageFieldFile
 from django.utils.crypto import get_random_string
 from django.utils.html import mark_safe
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 from openai import OpenAI
 
@@ -100,16 +102,16 @@ def cache_busted_url(file):
     return f"{file.url}?v={version}"
 
 
-def get_image_tag(image, width=330):
+def get_image_tag(image: ImageFieldFile, width: int = 330) -> SafeString:
     """
     Generate an HTML image tag for the given image.
 
     Args:
         image: The image object to render
-        width (int, optional): The width of the image in pixels. Defaults to 330.
+        width: The width of the image in pixels. Defaults to 330.
 
     Returns:
-        str: An HTML img tag with the appropriate attributes
+        SafeString (str): An HTML img tag with the appropriate attributes
     """
     src = ""
     if (
@@ -119,7 +121,7 @@ def get_image_tag(image, width=330):
     ):
         src = escape(f"{settings.MEDIA_URL}{image}")
     html_cls = "" if src else 'class="hidden"'
-    return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
+    return mark_safe(f'<img src="{src}" width={int(width)} height="auto" {html_cls} />')
 
 
 # pylint: disable=redefined-builtin
