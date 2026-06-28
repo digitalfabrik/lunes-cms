@@ -147,7 +147,7 @@ def test_generate_word_audio_and_image(
     ):
         with page.expect_response(re.compile(r"generate-audio-via-openai")):
             audio_widget.locator(".regen-generate-btn").click()
-        expect(audio_widget.locator(".regen-new")).to_be_visible()
+        expect(audio_widget.locator(".regen-new-preview audio")).to_be_visible()
         expect(audio_widget.locator(".regen-keep-btn")).to_be_enabled()
 
     with document.step(
@@ -166,7 +166,7 @@ def test_generate_word_audio_and_image(
     ):
         with page.expect_response(re.compile(r"generate-image-via-openai")):
             image_widget.locator(".regen-generate-btn").click()
-        expect(image_widget.locator(".regen-new")).to_be_visible()
+        expect(image_widget.locator(".regen-new-preview img")).to_be_visible()
         expect(image_widget.locator(".regen-keep-btn")).to_be_enabled()
 
     with document.step(

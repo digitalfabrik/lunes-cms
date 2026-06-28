@@ -786,6 +786,10 @@ msgstr "Zusätzliche Infos (optional)"
 msgid "Current"
 msgstr "Aktuell"
 
+#: cmsv2/admins/word_admin.py
+msgid "Not generated yet"
+msgstr "Noch nicht generiert"
+
 #: cmsv2/admins/word_admin.py cmsv2/utils.py
 msgid "Keep new"
 msgstr "Neues übernehmen"

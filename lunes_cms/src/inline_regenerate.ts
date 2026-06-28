@@ -33,19 +33,12 @@ function _initRegenerateWidget(widget: HTMLElement): void {
     const discardButton = widget.querySelector<HTMLButtonElement>(".regen-discard-btn")
     const spinner = widget.querySelector<HTMLElement>(".regen-spinner")
     const messageArea = widget.querySelector<HTMLElement>(".regen-message")
-    const newColumn = widget.querySelector<HTMLElement>(".regen-new")
+    const newEmpty = widget.querySelector<HTMLElement>(".regen-new-empty")
     const newPreview = widget.querySelector<HTMLElement>(".regen-new-preview")
     const decision = widget.querySelector<HTMLElement>(".regen-decision")
     const additionalInfo = widget.querySelector<HTMLInputElement>(".regen-additional-info")
 
-    if (
-        !generateButton ||
-        !keepButton ||
-        !discardButton ||
-        !newColumn ||
-        !newPreview ||
-        !decision
-    ) {
+    if (!generateButton || !keepButton || !discardButton || !newEmpty || !newPreview || !decision) {
         return
     }
 
@@ -76,7 +69,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
     const clearNew = (): void => {
         tempFilename = null
         newPreview.innerHTML = ""
-        newColumn.classList.add("is-hidden")
+        newEmpty.classList.remove("is-hidden")
         decision.classList.add("is-hidden")
     }
 
@@ -128,7 +121,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
                     throw new Error(gettext("No file was returned."))
                 }
                 renderNewPreview(url)
-                newColumn.classList.remove("is-hidden")
+                newEmpty.classList.add("is-hidden")
                 decision.classList.remove("is-hidden")
                 generateButton.textContent = regenerateLabel
                 showMessage(data.message ?? gettext("Generated!"), "success")

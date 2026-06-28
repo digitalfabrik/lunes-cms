@@ -351,8 +351,9 @@ class WordAdmin(BaseAdmin):
             '<div class="regen-col-label">{current_label}</div>'
             '<div class="regen-current-preview">{current_preview}</div>'
             "</div>"
-            '<div class="regen-col regen-new is-hidden">'
+            '<div class="regen-col regen-new">'
             '<div class="regen-col-label">{new_label}</div>'
+            '<div class="regen-new-empty">{empty_label}</div>'
             '<div class="regen-new-preview"></div>'
             "</div>"
             "</div>"
@@ -376,6 +377,7 @@ class WordAdmin(BaseAdmin):
             store_field=store_field,
             current_label=_("Current"),
             new_label=_("New"),
+            empty_label=_("Not generated yet"),
             current_preview=current_preview,
             additional_info_html=additional_info_html,
             generate_label=generate_label,
