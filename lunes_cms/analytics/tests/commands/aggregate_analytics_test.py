@@ -47,7 +47,8 @@ class JobSelectionAggregateTests(TestCase):
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
         self.assertIn("lunes_job_selection", line)
-        self.assertIn(r"job=Job\ 1", line)
+        self.assertIn(f"job_id={self.job1.id}", line)
+        self.assertIn('job_name="Job 1"', line)
         self.assertIn("selection_count=1i", line)
 
     def test_aggregates_multiple_days(self) -> None:
@@ -75,8 +76,8 @@ class JobSelectionAggregateTests(TestCase):
         mock_push.assert_called_once()
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
-        self.assertTrue(any(r"job=Job\ 1" in l for l in lines))
-        self.assertTrue(any(r"job=Job\ 2" in l for l in lines))
+        self.assertTrue(any(f"job_id={self.job1.id}" in l for l in lines))
+        self.assertTrue(any(f"job_id={self.job2.id}" in l for l in lines))
         self.assertTrue(all("selection_count=1i" in l for l in lines))
 
     def test_second_run_pushes_only_new_events(self) -> None:
@@ -117,7 +118,8 @@ class JobSelectionAggregateTests(TestCase):
         mock_push.assert_called_once()
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
-        self.assertTrue(any("job=unknown_99999" in l for l in lines))
+        self.assertTrue(any("job_id=99999" in l for l in lines))
+        self.assertTrue(any('job_name="unknown_99999"' in l for l in lines))
 
     def test_only_removes_count(self) -> None:
         """Test aggregation with only remove actions gives negative count"""
@@ -424,7 +426,8 @@ class ModuleDurationAggregateTests(TestCase):
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
         self.assertIn("lunes_module_duration", line)
-        self.assertIn(r"unit=Unit\ 1", line)
+        self.assertIn(f"unit_id={self.unit1.id}", line)
+        self.assertIn('unit_name="Unit 1"', line)
         self.assertIn("exercise_type=word_choice", line)
         self.assertIn("total_sessions=2i", line)
         self.assertIn("total_duration_seconds=150i", line)
@@ -480,13 +483,13 @@ class ModuleDurationAggregateTests(TestCase):
         self.assertEqual(len(lines), 2)
         self.assertTrue(
             any(
-                r"unit=Unit\ 1" in l and "total_duration_seconds=60i" in l
+                f"unit_id={self.unit1.id}" in l and "total_duration_seconds=60i" in l
                 for l in lines
             )
         )
         self.assertTrue(
             any(
-                r"unit=Unit\ 2" in l and "total_duration_seconds=90i" in l
+                f"unit_id={self.unit2.id}" in l and "total_duration_seconds=90i" in l
                 for l in lines
             )
         )
@@ -532,7 +535,8 @@ class ModuleDurationAggregateTests(TestCase):
         )
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
-        self.assertIn("job=unknown_5", line)
+        self.assertIn("job_id=5", line)
+        self.assertIn('job_name="unknown_5"', line)
         self.assertIn("exercise_type=image", line)
         self.assertIn("total_sessions=2i", line)
         self.assertIn("total_duration_seconds=200i", line)
@@ -562,16 +566,10 @@ class ModuleDurationAggregateTests(TestCase):
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
         self.assertTrue(
-            any(
-                "job=unknown_5" in l and "total_duration_seconds=60i" in l
-                for l in lines
-            )
+            any("job_id=5" in l and "total_duration_seconds=60i" in l for l in lines)
         )
         self.assertTrue(
-            any(
-                "job=unknown_6" in l and "total_duration_seconds=90i" in l
-                for l in lines
-            )
+            any("job_id=6" in l and "total_duration_seconds=90i" in l for l in lines)
         )
 
     def test_standard_and_training_create_separate_lines(self) -> None:
@@ -587,8 +585,8 @@ class ModuleDurationAggregateTests(TestCase):
 
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
-        self.assertTrue(any(r"unit=Unit\ 1" in l for l in lines))
-        self.assertTrue(any("job=unknown_5" in l for l in lines))
+        self.assertTrue(any(f"unit_id={self.unit1.id}" in l for l in lines))
+        self.assertTrue(any("job_id=5" in l for l in lines))
 
 
 class DropoutAggregateTests(TestCase):
@@ -782,7 +780,7 @@ class DropoutAggregateTests(TestCase):
 
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
-        self.assertIn("job=unknown_5", line)
+        self.assertIn("job_id=5", line)
         self.assertIn("dropout_count=2i", line)
 
     def test_training_and_standard_events_separate(self) -> None:
@@ -870,7 +868,8 @@ class DropoutAggregateTests(TestCase):
             AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
         )
         [line] = mock_push.call_args[0][0]
-        self.assertIn("job=unknown_5", line)
+        self.assertIn("job_id=5", line)
+        self.assertIn('job_name="unknown_5"', line)
         self.assertIn("exercise_type=image", line)
         self.assertIn("position=2", line)
         self.assertIn("total=8", line)
@@ -930,7 +929,7 @@ class DropoutAggregateTests(TestCase):
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
         self.assertTrue(any("unit_id=10" in l for l in lines))
-        self.assertTrue(any("job=unknown_5" in l for l in lines))
+        self.assertTrue(any("job_id=5" in l for l in lines))
 
 
 class ExerciseRepetitionAggregateTests(TestCase):
@@ -1049,7 +1048,8 @@ class ExerciseRepetitionAggregateTests(TestCase):
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
         self.assertIn("lunes_exercise_repetition", line)
-        self.assertIn("job=Test\\ Job", line)
+        self.assertIn(f"job_id={self.job.id}", line)
+        self.assertIn('job_name="Test Job"', line)
         self.assertIn("exercise_type=image", line)
         self.assertIn("repetitions_per_session=2", line)
         self.assertIn("session_count=1i", line)

@@ -89,17 +89,19 @@ class JobSelectionAggregator(EventAggregator):
 
         lines = []
         for stat in daily_stats:
-            job = resolve_job(stat["job_id"], job_names)
-            if job is None:
+            job_id = stat["job_id"]
+            job_name = resolve_job(job_id, job_names)
+            if job_name is None:
                 logger.warning("job_selected event has no job_id, skipping")
                 continue
             ts = date_to_ns(stat["event_date"])
             lines.append(
-                f"lunes_job_selection,job={job} selection_count={stat['selection_count']}i {ts}"
+                f"lunes_job_selection,job_id={job_id}"
+                f" job_name=\"{job_name}\",selection_count={stat['selection_count']}i {ts}"
             )
             logger.info(
-                "Queued job_selection line: job=%s date=%s count=%d",
-                job,
+                "Queued job_selection line: job_id=%s date=%s count=%d",
+                job_id,
                 stat["event_date"],
                 stat["selection_count"],
             )
@@ -243,20 +245,21 @@ class ModuleDurationAggregator(EventAggregator):
             )
         )
         for event in standard_aggregated:
-            unit = resolve_unit(event["unit_id"], unit_names)
-            if unit is None:
+            unit_id = event["unit_id"]
+            unit_name = resolve_unit(unit_id, unit_names)
+            if unit_name is None:
                 logger.warning(
                     "module_duration standard event has no unit_id, skipping"
                 )
                 continue
             ts = date_to_ns(event["event_date"])
             lines.append(
-                f"lunes_module_duration,unit={unit},exercise_type={event['exercise_type']}"
-                f" total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
+                f"lunes_module_duration,unit_id={unit_id},exercise_type={event['exercise_type']}"
+                f" unit_name=\"{unit_name}\",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
-                "Queued module_duration (standard) line: unit=%s exercise_type=%s date=%s",
-                unit,
+                "Queued module_duration (standard) line: unit_id=%s exercise_type=%s date=%s",
+                unit_id,
                 event["exercise_type"],
                 event["event_date"],
             )
@@ -276,18 +279,19 @@ class ModuleDurationAggregator(EventAggregator):
             )
         )
         for event in training_aggregated:
-            job = resolve_job(event["job_id"], job_names)
-            if job is None:
+            job_id = event["job_id"]
+            job_name = resolve_job(job_id, job_names)
+            if job_name is None:
                 logger.warning("module_duration training event has no job_id, skipping")
                 continue
             ts = date_to_ns(event["event_date"])
             lines.append(
-                f"lunes_module_duration,job={job},exercise_type={event['exercise_type']}"
-                f" total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
+                f"lunes_module_duration,job_id={job_id},exercise_type={event['exercise_type']}"
+                f" job_name=\"{job_name}\",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
-                "Queued module_duration (training) line: job=%s exercise_type=%s date=%s",
-                job,
+                "Queued module_duration (training) line: job_id=%s exercise_type=%s date=%s",
+                job_id,
                 event["exercise_type"],
                 event["event_date"],
             )
@@ -335,18 +339,23 @@ class DropoutAggregator(EventAggregator):
             .annotate(dropout_count=Count("pk"))
         )
         for event in standard_aggregated:
+            unit_id = event["unit_id"]
+            unit_name = resolve_unit(unit_id, unit_names)
+            if unit_name is None:
+                logger.warning("dropout standard event has no unit_id, skipping")
+                continue
             ts = date_to_ns(event["event_date"])
             lines.append(
                 f"lunes_dropout"
-                f",unit_id={event['unit_id']}"
+                f",unit_id={unit_id}"
                 f",exercise_type={event['exercise_type']}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
-                f" dropout_count={event['dropout_count']}i {ts}"
+                f" unit_name=\"{unit_name}\",dropout_count={event['dropout_count']}i {ts}"
             )
             logger.info(
                 "Queued dropout (standard) line: unit_id=%s exercise_type=%s date=%s",
-                event["unit_id"],
+                unit_id,
                 event["exercise_type"],
                 event["event_date"],
             )
@@ -366,22 +375,23 @@ class DropoutAggregator(EventAggregator):
             .annotate(dropout_count=Count("pk"))
         )
         for event in training_aggregated:
-            job = resolve_job(event["job_id"], job_names)
-            if job is None:
+            job_id = event["job_id"]
+            job_name = resolve_job(job_id, job_names)
+            if job_name is None:
                 logger.warning("dropout training event has no job_id, skipping")
                 continue
             ts = date_to_ns(event["event_date"])
             lines.append(
                 f"lunes_dropout"
-                f",job={job}"
+                f",job_id={job_id}"
                 f",exercise_type={event['exercise_type']}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
-                f" dropout_count={event['dropout_count']}i {ts}"
+                f" job_name=\"{job_name}\",dropout_count={event['dropout_count']}i {ts}"
             )
             logger.info(
-                "Queued dropout (training) line: job=%s exercise_type=%s date=%s",
-                job,
+                "Queued dropout (training) line: job_id=%s exercise_type=%s date=%s",
+                job_id,
                 event["exercise_type"],
                 event["event_date"],
             )
@@ -414,13 +424,15 @@ class ExerciseRepetitionAggregator(EventAggregator):
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
         lines = ExerciseRepetitionAggregator._standard_lines(
-            standard_events
+            standard_events, unit_names
         ) + ExerciseRepetitionAggregator._training_lines(training_events, job_names)
         events.update(aggregated_at=aggregated_at)
         return lines
 
     @staticmethod
-    def _standard_lines(standard_events: QuerySet[AnalyticsEvent]) -> list[str]:
+    def _standard_lines(
+        standard_events: QuerySet[AnalyticsEvent], unit_names: dict[int, str]
+    ) -> list[str]:
         per_session = (
             standard_events.annotate(
                 exercise_type=KT("payload__exercise_key__exercise_type"),
@@ -431,8 +443,17 @@ class ExerciseRepetitionAggregator(EventAggregator):
             .annotate(reps=Count("pk"))
         )
         dist: dict[tuple, int] = {}
+        unit_name_cache: dict[str, str] = {}
         for row in per_session:
-            key = (row["event_date"], row["exercise_type"], row["unit_id"], row["reps"])
+            unit_id = row["unit_id"]
+            unit_name = resolve_unit(unit_id, unit_names)
+            if unit_name is None:
+                logger.warning(
+                    "exercise_repetition standard event has no unit_id, skipping"
+                )
+                continue
+            unit_name_cache[unit_id] = unit_name
+            key = (row["event_date"], row["exercise_type"], unit_id, row["reps"])
             dist[key] = dist.get(key, 0) + 1
         lines = []
         for (event_date, exercise_type, unit_id, reps), session_count in dist.items():
@@ -442,7 +463,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
                 f",unit_id={unit_id}"
                 f",exercise_type={exercise_type}"
                 f",repetitions_per_session={reps}"
-                f" session_count={session_count}i {ts}"
+                f' unit_name="{unit_name_cache[unit_id]}",session_count={session_count}i {ts}'
             )
             logger.info(
                 "Queued exercise_repetition (standard) line: unit_id=%s exercise_type=%s reps=%d date=%s",
@@ -467,28 +488,31 @@ class ExerciseRepetitionAggregator(EventAggregator):
             .annotate(reps=Count("pk"))
         )
         dist: dict[tuple, int] = {}
+        job_name_cache: dict[str, str] = {}
         for row in per_session:
-            job = resolve_job(row["job_id"], job_names)
-            if job is None:
+            job_id = row["job_id"]
+            job_name = resolve_job(job_id, job_names)
+            if job_name is None:
                 logger.warning(
                     "exercise_repetition training event has no job_id, skipping"
                 )
                 continue
-            key = (row["event_date"], job, row["exercise_type"], row["reps"])
+            job_name_cache[job_id] = job_name
+            key = (row["event_date"], job_id, row["exercise_type"], row["reps"])
             dist[key] = dist.get(key, 0) + 1
         lines = []
-        for (event_date, job, exercise_type, reps), session_count in dist.items():
+        for (event_date, job_id, exercise_type, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
             lines.append(
                 f"lunes_exercise_repetition"
-                f",job={job}"
+                f",job_id={job_id}"
                 f",exercise_type={exercise_type}"
                 f",repetitions_per_session={reps}"
-                f" session_count={session_count}i {ts}"
+                f' job_name="{job_name_cache[job_id]}",session_count={session_count}i {ts}'
             )
             logger.info(
-                "Queued exercise_repetition (training) line: job=%s exercise_type=%s reps=%d date=%s",
-                job,
+                "Queued exercise_repetition (training) line: job_id=%s exercise_type=%s reps=%d date=%s",
+                job_id,
                 exercise_type,
                 reps,
                 event_date,
