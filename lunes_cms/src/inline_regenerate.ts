@@ -16,21 +16,6 @@ type RegenerateResponse = {
     temp_image_filename?: string
 }
 
-function _getRegenerateCookie(name: string): string | null {
-    let cookieValue: string | null = null
-    if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";")
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim()
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-                break
-            }
-        }
-    }
-    return cookieValue
-}
-
 function _initRegenerateWidget(widget: HTMLElement): void {
     const assetType = widget.dataset.assetType ?? "audio"
     const generateUrl = widget.dataset.generateUrl
@@ -69,10 +54,13 @@ function _initRegenerateWidget(widget: HTMLElement): void {
 
     let tempFilename: string | null = null
 
-    const showMessage = (text: string, color: string): void => {
+    const showMessage = (text: string, state: "" | "success" | "error"): void => {
         if (messageArea) {
             messageArea.textContent = text
-            messageArea.style.color = color
+            messageArea.classList.remove("regen-message-success", "regen-message-error")
+            if (state) {
+                messageArea.classList.add(`regen-message-${state}`)
+            }
         }
     }
 
@@ -81,15 +69,15 @@ function _initRegenerateWidget(widget: HTMLElement): void {
         keepButton.disabled = busy
         discardButton.disabled = busy
         if (spinner) {
-            spinner.style.display = busy ? "inline-block" : "none"
+            spinner.classList.toggle("is-hidden", !busy)
         }
     }
 
     const clearNew = (): void => {
         tempFilename = null
         newPreview.innerHTML = ""
-        newColumn.style.display = "none"
-        decision.style.display = "none"
+        newColumn.classList.add("is-hidden")
+        decision.classList.add("is-hidden")
     }
 
     const renderNewPreview = (url: string): void => {
@@ -98,7 +86,6 @@ function _initRegenerateWidget(widget: HTMLElement): void {
             const img = document.createElement("img")
             img.src = url
             img.alt = gettext("Newly generated image")
-            img.style.maxWidth = "min(200px, 100%)"
             newPreview.appendChild(img)
         } else {
             const audio = document.createElement("audio")
@@ -110,21 +97,21 @@ function _initRegenerateWidget(widget: HTMLElement): void {
 
     generateButton.addEventListener("click", () => {
         setBusy(true)
-        showMessage(gettext("Generating..."), "inherit")
+        showMessage(gettext("Generating..."), "")
 
         const formData = new FormData()
         formData.append(textField, textValue)
         if (assetType === "image" && additionalInfo) {
             formData.append("additional_info", additionalInfo.value)
         }
-        formData.append("csrfmiddlewaretoken", _getRegenerateCookie("csrftoken") ?? "")
+        formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         fetch(generateUrl, {
             method: "POST",
             body: formData,
             credentials: "same-origin",
             headers: {
-                "X-CSRFToken": _getRegenerateCookie("csrftoken") ?? "",
+                "X-CSRFToken": window.getCookie("csrftoken") ?? "",
             },
         })
             .then(async (response) => {
@@ -141,16 +128,16 @@ function _initRegenerateWidget(widget: HTMLElement): void {
                     throw new Error(gettext("No file was returned."))
                 }
                 renderNewPreview(url)
-                newColumn.style.display = ""
-                decision.style.display = ""
+                newColumn.classList.remove("is-hidden")
+                decision.classList.remove("is-hidden")
                 generateButton.textContent = regenerateLabel
-                showMessage(data.message ?? gettext("Generated!"), "green")
+                showMessage(data.message ?? gettext("Generated!"), "success")
             })
             .catch((error: unknown) => {
                 clearNew()
                 showMessage(
                     `${gettext("Error")}: ${error instanceof Error ? error.message : String(error)}`,
-                    "red",
+                    "error",
                 )
             })
             .finally(() => {
@@ -163,18 +150,18 @@ function _initRegenerateWidget(widget: HTMLElement): void {
             return
         }
         setBusy(true)
-        showMessage(gettext("Saving..."), "inherit")
+        showMessage(gettext("Saving..."), "")
 
         const formData = new FormData()
         formData.append(storeField, tempFilename)
-        formData.append("csrfmiddlewaretoken", _getRegenerateCookie("csrftoken") ?? "")
+        formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         fetch(storeUrl, {
             method: "POST",
             body: formData,
             credentials: "same-origin",
             headers: {
-                "X-CSRFToken": _getRegenerateCookie("csrftoken") ?? "",
+                "X-CSRFToken": window.getCookie("csrftoken") ?? "",
                 "X-Requested-With": "XMLHttpRequest",
             },
         })
@@ -192,7 +179,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
             .catch((error: unknown) => {
                 showMessage(
                     `${gettext("Error")}: ${error instanceof Error ? error.message : String(error)}`,
-                    "red",
+                    "error",
                 )
                 setBusy(false)
             })
@@ -201,7 +188,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
     discardButton.addEventListener("click", () => {
         clearNew()
         generateButton.textContent = generateLabel
-        showMessage("", "inherit")
+        showMessage("", "")
     })
 
     setBusy(false)

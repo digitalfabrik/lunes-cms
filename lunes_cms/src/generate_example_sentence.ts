@@ -4,21 +4,6 @@
 // audio and image widgets: generate a sentence for review, then either keep it
 // (persisted right away) or discard it, without leaving the change page.
 
-function _getSentenceCookie(name: string): string | null {
-    let cookieValue = null
-    if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";")
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim()
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-                break
-            }
-        }
-    }
-    return cookieValue
-}
-
 function _findSentenceTextarea(button: HTMLButtonElement): HTMLTextAreaElement | null {
     if (button.dataset.target) {
         return document.getElementById(button.dataset.target) as HTMLTextAreaElement | null
@@ -68,10 +53,16 @@ function _resolveWidget(button: HTMLElement): SentenceWidget | null {
     }
 }
 
-function _showMessage(widget: SentenceWidget, text: string, color: string): void {
+function _showMessage(widget: SentenceWidget, text: string, state: "" | "success" | "error"): void {
     if (widget.messageArea) {
         widget.messageArea.textContent = text
-        widget.messageArea.style.color = color
+        widget.messageArea.classList.remove(
+            "generate-example-sentence-message-success",
+            "generate-example-sentence-message-error",
+        )
+        if (state) {
+            widget.messageArea.classList.add(`generate-example-sentence-message-${state}`)
+        }
     }
 }
 
@@ -86,7 +77,7 @@ function _setDecisionDisabled(widget: SentenceWidget, disabled: boolean): void {
 
 function _hideDecision(widget: SentenceWidget): void {
     if (widget.decision) {
-        widget.decision.style.display = "none"
+        widget.decision.classList.add("is-hidden")
     }
     if (widget.preview) {
         widget.preview.textContent = ""
@@ -101,22 +92,22 @@ function _handleGenerate(button: HTMLButtonElement): void {
     }
 
     if (!widget.textarea) {
-        _showMessage(widget, gettext("Could not find the example sentence field."), "red")
+        _showMessage(widget, gettext("Could not find the example sentence field."), "error")
         return
     }
 
     button.disabled = true
     if (widget.spinner) {
-        widget.spinner.style.display = "inline-block"
+        widget.spinner.classList.remove("is-hidden")
     }
     _hideDecision(widget)
-    _showMessage(widget, gettext("Generating example sentence..."), "inherit")
+    _showMessage(widget, gettext("Generating example sentence..."), "")
 
     fetch(button.dataset.url, {
         method: "POST",
         credentials: "same-origin",
         headers: {
-            "X-CSRFToken": _getSentenceCookie("csrftoken") ?? "",
+            "X-CSRFToken": window.getCookie("csrftoken") ?? "",
         },
     })
         .then(async (response) => {
@@ -137,25 +128,25 @@ function _handleGenerate(button: HTMLButtonElement): void {
                 widget.preview.textContent = sentence
             }
             if (widget.decision) {
-                widget.decision.style.display = ""
+                widget.decision.classList.remove("is-hidden")
             }
             _setDecisionDisabled(widget, false)
             button.textContent =
                 button.dataset.regenerateLabel ?? gettext("Regenerate example sentence")
-            _showMessage(widget, data.message ?? gettext("Example sentence generated!"), "green")
+            _showMessage(widget, data.message ?? gettext("Example sentence generated!"), "success")
         })
         .catch((error: unknown) => {
             _hideDecision(widget)
             _showMessage(
                 widget,
                 `${gettext("Error")}: ${error instanceof Error ? error.message : String(error)}`,
-                "red",
+                "error",
             )
         })
         .finally(() => {
             button.disabled = false
             if (widget.spinner) {
-                widget.spinner.style.display = "none"
+                widget.spinner.classList.add("is-hidden")
             }
         })
 }
@@ -181,18 +172,18 @@ function _handleKeep(button: HTMLButtonElement): void {
     }
 
     _setDecisionDisabled(widget, true)
-    _showMessage(widget, gettext("Saving..."), "inherit")
+    _showMessage(widget, gettext("Saving..."), "")
 
     const formData = new FormData()
     formData.append("example_sentence", sentence)
-    formData.append("csrfmiddlewaretoken", _getSentenceCookie("csrftoken") ?? "")
+    formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
     fetch(storeUrl, {
         method: "POST",
         body: formData,
         credentials: "same-origin",
         headers: {
-            "X-CSRFToken": _getSentenceCookie("csrftoken") ?? "",
+            "X-CSRFToken": window.getCookie("csrftoken") ?? "",
             "X-Requested-With": "XMLHttpRequest",
         },
     })
@@ -212,7 +203,7 @@ function _handleKeep(button: HTMLButtonElement): void {
             _showMessage(
                 widget,
                 `${gettext("Error")}: ${error instanceof Error ? error.message : String(error)}`,
-                "red",
+                "error",
             )
         })
 }
@@ -225,7 +216,7 @@ function _handleDiscard(button: HTMLButtonElement): void {
     _hideDecision(widget)
     widget.generateButton.textContent =
         widget.generateButton.dataset.generateLabel ?? gettext("Generate example sentence")
-    _showMessage(widget, "", "inherit")
+    _showMessage(widget, "", "")
 }
 
 document.addEventListener("DOMContentLoaded", () => {

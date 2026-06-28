@@ -163,6 +163,46 @@
     max-width: 600px;
 }
 
+/* Toggled state classes for the (re)generation widgets, so the scripts flip
+   classes instead of writing inline styles. */
+.is-hidden {
+    display: none !important;
+}
+
+.regen-additional-info-row {
+    margin: 8px 0;
+}
+
+.regen-additional-info {
+    width: 100%;
+}
+
+.regen-spinner,
+.regen-message,
+.generate-example-sentence-spinner,
+.generate-example-sentence-message {
+    margin-left: 8px;
+}
+
+.regen-decision,
+.generate-example-sentence-decision {
+    margin-top: 8px;
+}
+
+.regen-message-success,
+.generate-example-sentence-message-success {
+    color: green;
+}
+
+.regen-message-error,
+.generate-example-sentence-message-error {
+    color: red;
+}
+
+.regen-new-preview img {
+    max-width: min(200px, 100%);
+}
+
 /* Image hover preview styles */
 .image-hover-container {
     position: relative;

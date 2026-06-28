@@ -152,6 +152,7 @@ class UnitAdmin(BaseAdmin):
         """
 
         js = [
+            "js/cookies.js",
             "js/unit_icon_asset_config.js",
             "js/asset_manager.js",
             "js/generate_example_sentence.js",

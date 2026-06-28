@@ -219,10 +219,10 @@ def example_sentence_generate_html(generate_url, store_url, target=None):
         'data-url="{generate_url}" data-store-url="{store_url}"{target_attr} '
         'data-generate-label="{generate_label}" data-regenerate-label="{regenerate_label}">'
         "{generate_label}</button>"
-        '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
-        'style="display: none; margin-left: 8px;"></span>'
-        '<span class="generate-example-sentence-message" style="margin-left: 8px;"></span>'
-        '<div class="generate-example-sentence-decision" style="display: none; margin-top: 8px;">'
+        '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm is-hidden">'
+        "</span>"
+        '<span class="generate-example-sentence-message"></span>'
+        '<div class="generate-example-sentence-decision is-hidden">'
         '<div class="regen-col-label">{new_label}</div>'
         '<div class="generate-example-sentence-preview"></div>'
         '<button type="button" class="btn btn-success btn-sm generate-example-sentence-keep-btn">'

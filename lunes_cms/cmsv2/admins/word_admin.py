@@ -295,6 +295,7 @@ class WordAdmin(BaseAdmin):
         """
 
         js = [
+            "js/cookies.js",
             "js/word_image_asset_config.js",
             "js/unitword_image_asset_config.js",
             "js/asset_manager.js",
@@ -333,9 +334,9 @@ class WordAdmin(BaseAdmin):
         additional_info_html = ""
         if with_additional_info:
             additional_info_html = format_html(
-                '<div class="regen-additional-info-row" style="margin: 8px 0;">'
+                '<div class="regen-additional-info-row">'
                 "<label>{} "
-                '<input type="text" class="regen-additional-info" style="width: 100%;"></label>'
+                '<input type="text" class="regen-additional-info"></label>'
                 "</div>",
                 _("Additional info (optional)"),
             )
@@ -350,7 +351,7 @@ class WordAdmin(BaseAdmin):
             '<div class="regen-col-label">{current_label}</div>'
             '<div class="regen-current-preview">{current_preview}</div>'
             "</div>"
-            '<div class="regen-col regen-new" style="display: none;">'
+            '<div class="regen-col regen-new is-hidden">'
             '<div class="regen-col-label">{new_label}</div>'
             '<div class="regen-new-preview"></div>'
             "</div>"
@@ -359,11 +360,10 @@ class WordAdmin(BaseAdmin):
             '<div class="regen-toolbar">'
             '<button type="button" class="btn btn-primary btn-sm regen-generate-btn" '
             'data-regenerate-label="{regenerate_label}">{generate_label}</button>'
-            '<span class="regen-spinner spinner-border spinner-border-sm" '
-            'style="display: none; margin-left: 8px;"></span>'
-            '<span class="regen-message" style="margin-left: 8px;"></span>'
+            '<span class="regen-spinner spinner-border spinner-border-sm is-hidden"></span>'
+            '<span class="regen-message"></span>'
             "</div>"
-            '<div class="regen-decision" style="display: none; margin-top: 8px;">'
+            '<div class="regen-decision is-hidden">'
             '<button type="button" class="btn btn-success btn-sm regen-keep-btn">{keep_label}</button> '
             '<button type="button" class="btn btn-secondary btn-sm regen-discard-btn">{discard_label}</button>'
             "</div>"

@@ -3,6 +3,7 @@ declare var django: { jQuery: JQueryStatic }
 declare function gettext(text: string): string
 
 interface Window {
+    getCookie: (name: string) => string | null
     assetManagerConfigs?: AssetManagerConfig[]
     audioAssetManagerConfig?: AudioAssetManagerConfig
     initAudioGenerator: (config: AudioGeneratorConfig) => void
