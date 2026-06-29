@@ -121,8 +121,12 @@ MIDDLEWARE = [
 
 #: Whether the Django Debug Toolbar is enabled. Dev-only: requires :setting:`DEBUG`
 #: and the optional ``django-debug-toolbar`` dependency (part of the ``dev`` extra).
+#: Can be turned off independently of :setting:`DEBUG` via
+#: ``LUNES_CMS_DEBUG_TOOLBAR`` — the e2e tests run with ``DEBUG=True`` (so the
+#: dev server serves static files) but disable the toolbar, whose overlay
+#: intercepts pointer events and breaks browser interactions.
 DEBUG_TOOLBAR_ENABLED = False
-if DEBUG:
+if DEBUG and bool(strtobool(os.environ.get("LUNES_CMS_DEBUG_TOOLBAR", "True"))):
     try:
         import debug_toolbar  # noqa: F401  pylint: disable=unused-import
     except ImportError:
