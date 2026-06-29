@@ -15,8 +15,9 @@ E2E tests using pytest-playwright that automatically generate a user manual (Mar
 ## Running tests
 
 ```sh
-# Start the dev server first: 
-./tools/run.sh
+# Start the dev server first, with the Django Debug Toolbar disabled.
+# Its overlay intercepts pointer events and makes every click time out:
+LUNES_CMS_DEBUG_TOOLBAR=False ./tools/run.sh
 ```
 
 ```bash
