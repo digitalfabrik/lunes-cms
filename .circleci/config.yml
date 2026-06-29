@@ -157,59 +157,11 @@ jobs:
                     - dist
                 root: .
             - notify
-    bump-dev-version:
-        executor: python
-        steps:
-            - checkout
-            - attach_workspace:
-                at: .
-            - activate-venv
-            - run:
-                command: |
-                    pip install bumpver
-                    echo "Upgrade pip to make sure 'pip index' is available"
-                    pip install --upgrade pip
-                    AVAILABLE_VERSIONS=$(pip index versions lunes-cms --pre -i https://test.pypi.org/simple/)
-                    echo "Current available versions on TestPyPI: ${AVAILABLE_VERSIONS}"
-                    CURRENT_ALPHA_VERSION=$(echo "${AVAILABLE_VERSIONS}" | head -n 1)
-                    echo "Most recent version on TestPyPI: ${CURRENT_ALPHA_VERSION}"
-                    CURRENT_ALPHA_VERSION=$(echo "${CURRENT_ALPHA_VERSION}" | sed "s/lunes-cms (\([^()]*\)a0)/\1-alpha/")
-                    echo "Version converted to alternative format: ${CURRENT_ALPHA_VERSION}"
-                    CURRENT_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-                    echo "Current production version: ${CURRENT_VERSION}"
-                    if python -c "from bumpver.version import parse_version; exit(parse_version('${CURRENT_VERSION}') > parse_version('${CURRENT_ALPHA_VERSION}'))"; then
-                      echo "Bump to the currently existing version"
-                      bumpver update -n --set-version="${CURRENT_ALPHA_VERSION}" --no-commit
-                    fi
-                    echo "Bump to the next version"
-                    bumpver update -n -t alpha --no-commit
-                name: Bump version
-            - run:
-                command: |
-                    curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
-                    export SYFT_SOURCE_VERSION=$(python -c "import lunes_cms; print(lunes_cms.__version__)")
-                    export SYFT_SOURCE_NAME="lunes-cms"
-                    export SYFT_FORMAT_SPDX_JSON_PRETTY=true
-                    syft scan . -o spdx-json=lunes_cms/_manifest/spdx_2.2/manifest.spdx.json
-                name: Generate SBOM
-            - persist_to_workspace:
-                paths:
-                    - pyproject.toml
-                    - lunes_cms/__init__.py
-                    - lunes_cms/_manifest
-                root: .
-            - notify
     bump-version:
         docker:
             - image: cimg/node:lts
         steps:
             - checkout
-            - run:
-                command: |
-                    if git log -1 --pretty=%s | grep -q "^Bump version to"; then
-                      circleci-agent step halt
-                    fi
-                name: Skip if already a version bump
             - run:
                 command: npm ci
                 name: Install app-toolbelt
@@ -484,7 +436,7 @@ jobs:
             - run:
                 command: |
                     npx --no app-toolbelt v0 release promote \
-                      --platform lunes-cms \
+                      --platform all \
                       --private-key "${DELIVERINO_PRIVATE_KEY}" \
                       --owner "${CIRCLE_PROJECT_USERNAME}" \
                       --repo "${CIRCLE_PROJECT_REPONAME}"

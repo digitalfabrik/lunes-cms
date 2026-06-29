@@ -80,7 +80,7 @@ The workflow runs the following steps in order:
 
 2. **promote-release** — Promotes the GitHub pre-release to the latest stable release
    using ``app-toolbelt`` and notifies Mattermost (context: ``deliverino``).
-3. Server installation: A renovate PR will be created within an hour here: ``https://git.tuerantuer.org/DF/salt/pulls``. The PR has to approved and merged. Then the highstate will be automatically triggered on the production server.
+3. Server installation: A renovate PR will be created within an hour (triggered 5 past full hour, every hour) here: ``https://git.tuerantuer.org/DF/salt/pulls``. The PR has to approved and merged. Then the highstate will be automatically triggered on the production server.
 
 Create a Hotfix Release
 =======================

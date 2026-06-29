@@ -3,12 +3,6 @@ docker:
 steps:
   - checkout
   - run:
-      name: Skip if already a version bump
-      command: |
-        if git log -1 --pretty=%s | grep -q "^Bump version to"; then
-          circleci-agent step halt
-        fi
-  - run:
       name: Install app-toolbelt
       command: npm ci
   - run:
