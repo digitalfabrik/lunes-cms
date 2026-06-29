@@ -10,7 +10,12 @@ from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.static import Static
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
-from lunes_cms.cmsv2.utils import cache_busted_url, get_image_tag, is_not_blank
+from lunes_cms.cmsv2.utils import (
+    cache_busted_url,
+    example_sentence_generate_html,
+    get_image_tag,
+    is_not_blank,
+)
 from lunes_cms.core import settings
 
 
@@ -290,6 +295,7 @@ class WordAdmin(BaseAdmin):
         """
 
         js = [
+            "js/cookies.js",
             "js/word_image_asset_config.js",
             "js/unitword_image_asset_config.js",
             "js/asset_manager.js",
@@ -299,27 +305,120 @@ class WordAdmin(BaseAdmin):
             "js/audio_check_status_update.js",
             "js/image_check_status_update.js",
             "js/generate_example_sentence.js",
+            "js/inline_regenerate.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 
+    def _render_regenerate_widget(  # pylint: disable=too-many-arguments
+        self,
+        *,
+        asset_type,
+        generate_url,
+        store_url,
+        text_field,
+        text_value,
+        store_field,
+        current_preview,
+        generate_label,
+        regenerate_label,
+        with_additional_info=False,
+    ):
+        """
+        Render an inline (re)generation widget for the change page.
+
+        The widget generates a new audio file or image via OpenAI without
+        leaving the page, shows the current and the newly generated version
+        side by side for comparison, and lets the user keep the new one or
+        discard it and keep the current one.
+        """
+        additional_info_html = ""
+        if with_additional_info:
+            additional_info_html = format_html(
+                '<div class="regen-additional-info-row">'
+                "<label>{} "
+                '<input type="text" class="regen-additional-info"></label>'
+                "</div>",
+                _("Additional info (optional)"),
+            )
+
+        return format_html(
+            '<div class="inline-regenerate" data-asset-type="{asset_type}" '
+            'data-generate-url="{generate_url}" data-store-url="{store_url}" '
+            'data-text-field="{text_field}" data-text="{text_value}" '
+            'data-store-field="{store_field}">'
+            '<div class="regen-compare">'
+            '<div class="regen-col regen-current">'
+            '<div class="regen-col-label">{current_label}</div>'
+            '<div class="regen-current-preview">{current_preview}</div>'
+            "</div>"
+            '<div class="regen-col regen-new">'
+            '<div class="regen-col-label">{new_label}</div>'
+            '<div class="regen-new-empty">{empty_label}</div>'
+            '<div class="regen-new-preview"></div>'
+            "</div>"
+            "</div>"
+            "{additional_info_html}"
+            '<div class="regen-toolbar">'
+            '<button type="button" class="btn btn-primary btn-sm regen-generate-btn" '
+            'data-regenerate-label="{regenerate_label}">{generate_label}</button>'
+            '<span class="regen-spinner spinner-border spinner-border-sm is-hidden"></span>'
+            '<span class="regen-message"></span>'
+            "</div>"
+            '<div class="regen-decision is-hidden">'
+            '<button type="button" class="btn btn-success btn-sm regen-keep-btn">{keep_label}</button> '
+            '<button type="button" class="btn btn-secondary btn-sm regen-discard-btn">{discard_label}</button>'
+            "</div>"
+            "</div>",
+            asset_type=asset_type,
+            generate_url=generate_url,
+            store_url=store_url,
+            text_field=text_field,
+            text_value=text_value,
+            store_field=store_field,
+            current_label=_("Current"),
+            new_label=_("New"),
+            empty_label=_("Not generated yet"),
+            current_preview=current_preview,
+            additional_info_html=additional_info_html,
+            generate_label=generate_label,
+            regenerate_label=regenerate_label,
+            keep_label=_("Keep new"),
+            discard_label=_("Discard new"),
+        )
+
     def audio_generate(self, obj):
         """
-        Generate HTML for the audio generation button.
+        Generate HTML for the inline audio (re)generation widget.
 
         Args:
             obj: The word object
 
         Returns:
-            str: HTML markup for the audio generation button
+            str: HTML markup for the audio generation widget
         """
-        if obj.pk:
-            url = reverse("cmsv2:word_generate_audio", args=[obj.pk])
-            return format_html(
-                '<a class="btn btn-primary btn-sm" href="{}">Generate Audio</a>', url
+        if not obj.pk:
+            return _("Save to enable audio generation.")
+        if obj.audio:
+            current_preview = format_html(
+                "<audio controls src='{}'></audio>", cache_busted_url(obj.audio)
             )
-        return "Save to enable audio generation."
+        else:
+            current_preview = _("No audio yet.")
+        return self._render_regenerate_widget(
+            asset_type="audio",
+            generate_url=reverse("cmsv2:word_generate_audio_via_openai"),
+            store_url=reverse(
+                "cmsv2:word_store_generated_audio_permanently", args=[obj.pk]
+            ),
+            text_field="word_text",
+            text_value=f"{obj.singular_article_for_audio_generation()} {obj.word}",
+            store_field="temp_audio_filename",
+            current_preview=current_preview,
+            generate_label=_("Generate audio"),
+            regenerate_label=_("Regenerate audio"),
+        )
 
-    audio_generate.short_description = "Audio Generation"  # type: ignore[attr-defined]
+    audio_generate.short_description = _("Audio Generation")  # type: ignore[attr-defined]
 
     def audio_player(self, obj):
         """
@@ -342,26 +441,23 @@ class WordAdmin(BaseAdmin):
 
     def example_sentence_generate(self, obj):
         """
-        Generate HTML for the example sentence generation button.
+        Generate HTML for the inline example sentence generation widget.
 
         Args:
             obj: The word object
 
         Returns:
-            str: HTML markup for the example sentence generation button
+            str: HTML markup for the example sentence generation widget
         """
         if obj.pk:
-            url = reverse(
-                "cmsv2:word_generate_example_sentence_via_openai", args=[obj.pk]
-            )
-            return format_html(
-                '<button type="button" class="btn btn-primary btn-sm generate-example-sentence-btn" '
-                'data-url="{}" data-target="id_example_sentence">{}</button>'
-                '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
-                'style="display: none; margin-left: 8px;"></span>'
-                '<span class="generate-example-sentence-message" style="margin-left: 8px;"></span>',
-                url,
-                _("Generate example sentence"),
+            return example_sentence_generate_html(
+                generate_url=reverse(
+                    "cmsv2:word_generate_example_sentence_via_openai", args=[obj.pk]
+                ),
+                store_url=reverse(
+                    "cmsv2:word_store_generated_example_sentence", args=[obj.pk]
+                ),
+                target="id_example_sentence",
             )
         return _("Save to enable example sentence generation.")
 
@@ -369,22 +465,41 @@ class WordAdmin(BaseAdmin):
 
     def example_sentence_audio_generate(self, obj):
         """
-        Generate HTML for the example sentence audio generation button.
+        Generate HTML for the inline example sentence audio (re)generation widget.
 
         Args:
             obj: The word object
 
         Returns:
-            str: HTML markup for the audio generation button
+            str: HTML markup for the audio generation widget
         """
-        if obj.pk and is_not_blank(obj.example_sentence):
-            url = reverse("cmsv2:word_generate_example_sentence_audio", args=[obj.pk])
-            return format_html(
-                '<a class="btn btn-primary btn-sm" href="{}">Generate Audio</a>', url
+        if not obj.pk or not is_not_blank(obj.example_sentence):
+            return _("Save to enable audio generation.")
+        if obj.example_sentence_audio:
+            current_preview = format_html(
+                "<audio controls src='{}'></audio>",
+                cache_busted_url(obj.example_sentence_audio),
             )
-        return "Save to enable audio generation."
+        else:
+            current_preview = _("No audio yet.")
+        return self._render_regenerate_widget(
+            asset_type="audio",
+            generate_url=reverse(
+                "cmsv2:word_generate_example_sentence_audio_via_openai"
+            ),
+            store_url=reverse(
+                "cmsv2:word_store_generated_example_sentence_audio_permanently",
+                args=[obj.pk],
+            ),
+            text_field="example_sentence_text",
+            text_value=obj.example_sentence,
+            store_field="temp_audio_filename",
+            current_preview=current_preview,
+            generate_label=_("Generate audio"),
+            regenerate_label=_("Regenerate audio"),
+        )
 
-    example_sentence_audio_generate.short_description = "Example Sentence Audio Generation"  # type: ignore[attr-defined]
+    example_sentence_audio_generate.short_description = _("Example Sentence Audio Generation")  # type: ignore[attr-defined]
 
     def example_sentence_audio_player(self, obj):
         """
@@ -434,22 +549,40 @@ class WordAdmin(BaseAdmin):
 
     def image_generate(self, obj):
         """
-        Generate HTML for the image generation button.
+        Generate HTML for the inline image (re)generation widget.
 
         Args:
             obj: The word object
 
         Returns:
-            str: HTML markup for the image generation button
+            str: HTML markup for the image generation widget
         """
-        if obj.pk:
-            url = reverse("cmsv2:word_generate_image", args=[obj.pk])
-            return format_html(
-                '<a class="btn btn-primary btn-sm" href="{}">Generate Image</a>', url
+        if not obj.pk:
+            return _("Save to enable image generation.")
+        if obj.image:
+            current_preview = format_html(
+                '<img src="{}" alt="{}" style="max-width: min(200px, 100%);">',
+                f"{settings.MEDIA_URL}{obj.image}",
+                obj.word,
             )
-        return "Save to enable image generation."
+        else:
+            current_preview = _("No image yet.")
+        return self._render_regenerate_widget(
+            asset_type="image",
+            generate_url=reverse("cmsv2:generate_image_via_openai"),
+            store_url=reverse(
+                "cmsv2:word_store_generated_image_permanently", args=[obj.pk]
+            ),
+            text_field="word_text",
+            text_value=obj.word,
+            store_field="temp_filename",
+            current_preview=current_preview,
+            generate_label=_("Generate image"),
+            regenerate_label=_("Regenerate image"),
+            with_additional_info=True,
+        )
 
-    image_generate.short_description = "Image Generation"  # type: ignore[attr-defined]
+    image_generate.short_description = _("Image Generation")  # type: ignore[attr-defined]
 
     def creator_group(self, obj):
         """

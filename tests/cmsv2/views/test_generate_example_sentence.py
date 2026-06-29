@@ -126,5 +126,88 @@ def test_endpoints_require_post(admin_client, word_with_job):
         reverse(
             "cmsv2:unitword_generate_example_sentence_via_openai", args=[relation.pk]
         ),
+        reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk]),
+        reverse("cmsv2:unitword_store_generated_example_sentence", args=[relation.pk]),
     ]:
         assert admin_client.get(url).status_code == 405
+
+
+def test_word_store_persists_kept_sentence(admin_client, word_with_job):
+    word, _job, _unit, _relation = word_with_job
+    url = reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk])
+
+    response = admin_client.post(
+        url,
+        {"example_sentence": "Der Hammer liegt auf der Werkbank."},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "success"
+    word.refresh_from_db()
+    assert word.example_sentence == "Der Hammer liegt auf der Werkbank."
+
+
+def test_word_store_resets_check_status_and_audio(admin_client, word_with_job):
+    from django.core.files.base import ContentFile
+
+    word, _job, _unit, _relation = word_with_job
+    word.example_sentence = "Alter Satz."
+    word.example_sentence_check_status = "CONFIRMED"
+    word.example_sentence_audio.save("old.mp3", ContentFile(b"audio"), save=False)
+    word.save()
+
+    url = reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk])
+    admin_client.post(
+        url,
+        {"example_sentence": "Neuer Satz."},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    word.refresh_from_db()
+    assert word.example_sentence == "Neuer Satz."
+    # Changing the sentence resets the check status and drops the stale audio.
+    assert word.example_sentence_check_status == "NOT_CHECKED"
+    assert not word.example_sentence_audio
+
+
+def test_word_store_requires_sentence(admin_client, word_with_job):
+    word, _job, _unit, _relation = word_with_job
+    url = reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk])
+
+    response = admin_client.post(url, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+
+    assert response.status_code == 400
+    assert response.json()["status"] == "error"
+
+
+def test_unitword_store_persists_kept_sentence(admin_client, word_with_job):
+    _word, _job, _unit, relation = word_with_job
+    url = reverse("cmsv2:unitword_store_generated_example_sentence", args=[relation.pk])
+
+    response = admin_client.post(
+        url,
+        {"example_sentence": "Im Werkzeugkasten liegt ein Hammer."},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    assert response.status_code == 200
+    relation.refresh_from_db()
+    assert relation.example_sentence == "Im Werkzeugkasten liegt ein Hammer."
+
+
+def test_example_sentence_widget_renders_keep_discard(db):
+    from django.contrib import admin as django_admin
+
+    from lunes_cms.cmsv2.admins.word_admin import WordAdmin
+
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    word_admin = WordAdmin(Word, django_admin.site)
+
+    html = str(word_admin.example_sentence_generate(word))
+    assert "generate-example-sentence-keep-btn" in html
+    assert "generate-example-sentence-discard-btn" in html
+    assert 'data-target="id_example_sentence"' in html
+    assert (
+        reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk]) in html
+    )

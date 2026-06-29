@@ -21,6 +21,12 @@ WORD_PLURAL = "Bohrmaschinen"
 _MOCK_AUDIO_FILENAME = "test_audio_mock.mp3"
 _MOCK_IMAGE_FILENAME = "test_image_mock.png"
 
+# The word audio and image (re)generation now happen inline on the word change
+# page: each widget posts to its generate endpoint, shows the new asset next to
+# the current one, and the user keeps or discards it without leaving the page.
+_AUDIO_WIDGET = '.inline-regenerate[data-generate-url*="generate-audio-via-openai"]'
+_IMAGE_WIDGET = '.inline-regenerate[data-generate-url*="generate-image-via-openai"]'
+
 
 def _fulfill_generate_audio(route: Route) -> None:
     route.fulfill(
@@ -66,6 +72,14 @@ def _fulfill_mock_image_file(route: Route) -> None:
     )
 
 
+def _fulfill_store_success(route: Route) -> None:
+    route.fulfill(
+        status=200,
+        content_type="application/json",
+        body=json.dumps({"status": "success", "message": "Saved!"}),
+    )
+
+
 @pytest.mark.e2e
 def test_generate_word_audio_and_image(
     page: Page,
@@ -81,8 +95,12 @@ def test_generate_word_audio_and_image(
     request: pytest.FixtureRequest,
 ) -> None:
     def _cleanup_routes() -> None:
+        page.unroute("**/words/generate-audio-via-openai")
+        page.unroute(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}")
+        page.unroute("**/store-generated-audio-permanently")
         page.unroute("**/words/generate-image-via-openai")
         page.unroute(f"**/temp_image/{_MOCK_IMAGE_FILENAME}")
+        page.unroute("**/store-generated-image-permanently")
 
     request.addfinalizer(lambda: delete_job(JOB_NAME))
     request.addfinalizer(lambda: delete_unit(UNIT_NAME))
@@ -101,6 +119,19 @@ def test_generate_word_audio_and_image(
     match = re.search(r"/word/(\d+)/change/", page.url)
     assert match, f"Could not find word ID in URL: {page.url}"
     word_id = match.group(1)
+    change_url = re.compile(
+        rf"{re.escape(base_url)}/de/admin/cmsv2/word/{word_id}/change/"
+    )
+
+    page.route("**/words/generate-audio-via-openai", _fulfill_generate_audio)
+    page.route(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}", _fulfill_mock_audio_file)
+    page.route("**/store-generated-audio-permanently", _fulfill_store_success)
+    page.route("**/words/generate-image-via-openai", _fulfill_generate_image)
+    page.route(f"**/temp_image/{_MOCK_IMAGE_FILENAME}", _fulfill_mock_image_file)
+    page.route("**/store-generated-image-permanently", _fulfill_store_success)
+
+    audio_widget = page.locator(_AUDIO_WIDGET)
+    image_widget = page.locator(_IMAGE_WIDGET)
 
     with document.step(
         "Öffnen Sie ein Wort",
@@ -108,63 +139,40 @@ def test_generate_word_audio_and_image(
     ):
         pass
 
-    page.get_by_role("link", name="Generate Audio").scroll_into_view_if_needed()
-
-    with document.step(
-        "Audio-Generator öffnen",
-        description='Scrollen Sie zum Bereich **„Audio"** und klicken Sie auf den Button **„Generate Audio"**, um zur KI-Audio-Generierung zu gelangen.',
-    ):
-        page.get_by_role("link", name="Generate Audio").click()
-        page.wait_for_url(re.compile(r"/words/\d+/generate-audio"))
-        page.route("**/words/generate-audio-via-openai", _fulfill_generate_audio)
-        page.route(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}", _fulfill_mock_audio_file)
+    audio_widget.scroll_into_view_if_needed()
 
     with document.step(
         "Audio generieren",
-        description='Klicken Sie auf **„Generate Audio"**. Nach kurzer Ladezeit erscheint eine Vorschau des generierten Audios.',
+        description='Scrollen Sie zum Bereich **„Audio"** und klicken Sie auf **„Audio generieren"**. Nach kurzer Ladezeit erscheint die Vorschau des generierten Audios neben dem aktuellen.',
     ):
         with page.expect_response(re.compile(r"generate-audio-via-openai")):
-            page.click("#generate_button")
-        expect(page.locator("#audio_preview_section")).to_be_visible()
+            audio_widget.locator(".regen-generate-btn").click()
+        expect(audio_widget.locator(".regen-new-preview audio")).to_be_visible()
+        expect(audio_widget.locator(".regen-keep-btn")).to_be_enabled()
 
     with document.step(
-        "Generiertes Audio speichern",
-        description='Klicken Sie auf **„Store to Audio Field"**, um das generierte Audio dauerhaft dem Wort zuzuweisen.',
+        "Generiertes Audio übernehmen",
+        description='Klicken Sie auf **„Neues übernehmen"**, um das generierte Audio dauerhaft dem Wort zuzuweisen.',
     ):
-        expect(page.locator("#store_button")).to_be_enabled()
-        page.click("#store_button")
-        expect(page).to_have_url(
-            re.compile(rf"{re.escape(base_url)}/de/admin/cmsv2/word/{word_id}/change/")
-        )
+        with page.expect_response(re.compile(r"store-generated-audio-permanently")):
+            audio_widget.locator(".regen-keep-btn").click()
+        expect(page).to_have_url(change_url)
 
-    page.unroute("**/words/generate-audio-via-openai")
-    page.unroute(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}")
-
-    page.get_by_role("link", name="Generate Image").first.scroll_into_view_if_needed()
-
-    with document.step(
-        "Zum Bereich Bilder scrollen",
-        description='Scrollen Sie auf der Wort-Detailseite zum Bereich **„Bilder"** und klicken Sie auf den Button **„Generate Image"**.',
-    ):
-        page.get_by_role("link", name="Generate Image").first.click()
-        page.wait_for_url(re.compile(r"/words/\d+/generate-image"))
-        page.route("**/words/generate-image-via-openai", _fulfill_generate_image)
-        page.route(f"**/temp_image/{_MOCK_IMAGE_FILENAME}", _fulfill_mock_image_file)
+    image_widget.scroll_into_view_if_needed()
 
     with document.step(
         "Bild generieren",
-        description='Klicken Sie auf **„Generate Image"**. Nach kurzer Ladezeit erscheint eine Vorschau des generierten Bildes.',
+        description='Scrollen Sie zum Bereich **„Bild"** und klicken Sie auf **„Bild generieren"**. Nach kurzer Ladezeit erscheint die Vorschau des generierten Bildes neben dem aktuellen.',
     ):
         with page.expect_response(re.compile(r"generate-image-via-openai")):
-            page.click("#generate_button")
-        expect(page.locator("#image_preview_section")).to_be_visible()
+            image_widget.locator(".regen-generate-btn").click()
+        expect(image_widget.locator(".regen-new-preview img")).to_be_visible()
+        expect(image_widget.locator(".regen-keep-btn")).to_be_enabled()
 
     with document.step(
-        "Generiertes Bild speichern",
-        description='Klicken Sie auf **„Store to Image Field"**, um das generierte Bild dauerhaft dem Wort zuzuweisen.',
+        "Generiertes Bild übernehmen",
+        description='Klicken Sie auf **„Neues übernehmen"**, um das generierte Bild dauerhaft dem Wort zuzuweisen.',
     ):
-        expect(page.locator("#store_button")).to_be_enabled()
-        page.click("#store_button")
-        expect(page).to_have_url(
-            re.compile(rf"{re.escape(base_url)}/de/admin/cmsv2/word/{word_id}/change/")
-        )
+        with page.expect_response(re.compile(r"store-generated-image-permanently")):
+            image_widget.locator(".regen-keep-btn").click()
+        expect(page).to_have_url(change_url)

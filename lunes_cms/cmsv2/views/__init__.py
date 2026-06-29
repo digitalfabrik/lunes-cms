@@ -1,6 +1,8 @@
 from .generate_example_sentence import (
     unitword_generate_example_sentence_via_openai,
+    unitword_store_generated_example_sentence,
     word_generate_example_sentence_via_openai,
+    word_store_generated_example_sentence,
 )
 from .generate_image import generate_image_via_openai
 from .import_csv_view import import_from_csv
@@ -22,19 +24,14 @@ from .update_word_audio_check_status import update_word_audio_check_status
 from .update_word_image import update_word_image
 from .update_word_image_check_status import update_word_image_check_status
 from .word_generate_audio import (
-    word_generate_audio,
     word_generate_audio_via_openai,
     word_store_generated_audio_permanently,
 )
 from .word_generate_example_sentence_audio import (
-    word_generate_example_sentence_audio,
     word_generate_example_sentence_audio_via_openai,
     word_store_generated_example_sentence_audio_permanently,
 )
-from .word_generate_image import (
-    word_generate_image,
-    word_store_generated_image_permanently,
-)
+from .word_generate_image import word_store_generated_image_permanently
 
 __all__ = [
     "import_from_csv",
@@ -44,6 +41,7 @@ __all__ = [
     "unitword_generate_example_sentence_audio",
     "unitword_generate_example_sentence_audio_via_openai",
     "unitword_generate_example_sentence_via_openai",
+    "unitword_store_generated_example_sentence",
     "unitword_store_generated_example_sentence_audio_permanently",
     "update_job_icon",
     "update_unit_icon",
@@ -53,12 +51,10 @@ __all__ = [
     "update_word_audio_check_status",
     "update_word_image",
     "update_word_image_check_status",
-    "word_generate_audio",
     "word_generate_audio_via_openai",
-    "word_generate_example_sentence_audio",
     "word_generate_example_sentence_audio_via_openai",
     "word_generate_example_sentence_via_openai",
-    "word_generate_image",
+    "word_store_generated_example_sentence",
     "word_store_generated_audio_permanently",
     "word_store_generated_example_sentence_audio_permanently",
     "word_store_generated_image_permanently",
