@@ -54,6 +54,8 @@ Debug Toolbar
 
 The `Django Debug Toolbar <https://django-debug-toolbar.readthedocs.io>`_ is available to inspect SQL queries (and their timing) when debug mode is enabled (``LUNES_CMS_DEBUG=True``) and the ``dev`` dependencies are installed.
 
+It can be turned off independently of debug mode by setting ``LUNES_CMS_DEBUG_TOOLBAR=False``. This is used by the end-to-end tests, which need ``LUNES_CMS_DEBUG=True`` (so the dev server serves static files) but cannot have the toolbar's overlay intercepting pointer events.
+
 Documentation
 =============
 

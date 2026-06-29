@@ -262,6 +262,7 @@ jobs:
         docker:
             - environment:
                 LUNES_CMS_DEBUG: "True"
+                LUNES_CMS_DEBUG_TOOLBAR: "False"
                 LUNES_CMS_SECRET_KEY: circleci-dummy-key
               image: cimg/python:3.11
             - environment:
