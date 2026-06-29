@@ -1074,12 +1074,13 @@ msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 #: cmsv2/views/import_csv_view.py
 #, python-format
 msgid ""
-"Import successful! %(created)s new entries, %(updated)s updated. Audio and "
-"images are being generated in the background. This may take a few minutes..."
+"Import successful! %(created)s new entries, %(updated)s updated. Example "
+"sentences, audio and images are being generated in the background. This may "
+"take a few minutes..."
 msgstr ""
 "Import erfolgreich! %(created)s neue Einträge, %(updated)s wurden "
-"aktualisiert. Audio und Bilder werden im Hintergrund generiert. Dies kann "
-"einige Minuten dauern..."
+"aktualisiert. Beispielsätze, Audio und Bilder werden im Hintergrund "
+"generiert. Dies kann einige Minuten dauern..."
 
 #: cmsv2/views/import_csv_view.py
 msgid ""
