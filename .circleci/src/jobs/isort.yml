@@ -8,3 +8,4 @@ steps:
   - run:
       name: Check isort code style
       command: isort . --skip-glob "**/migrations/**"
+  - notify

@@ -3,8 +3,8 @@ steps:
   - checkout
   - attach_workspace:
       at: .
+  - activate-venv
   - run:
       name: Run mypy
-      command: |
-        source .venv/bin/activate
-        ./tools/mypy.sh
+      command: ./tools/mypy.sh
+  - notify

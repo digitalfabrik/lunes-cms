@@ -7,3 +7,4 @@ steps:
   - run:
       name: Check formatting of python files
       command: black --check .
+  - notify

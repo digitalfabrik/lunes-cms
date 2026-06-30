@@ -4,14 +4,14 @@ parameters:
   run_commit:
     default: true
     type: boolean
-  run_commit_develop:
-    default: "run_if_on_develop"
+  run_commit_main:
+    default: "run_if_on_main"
     type: enum
-    enum: ["run_if_on_develop", "run", "skip"]
-  run_main:
+    enum: ["run_if_on_main", "run", "skip"]
+  run_delivery_beta:
     default: false
     type: boolean
-  run_deploy:
+  run_promotion:
     default: false
     type: boolean
 

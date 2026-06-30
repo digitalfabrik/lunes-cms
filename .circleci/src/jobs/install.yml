@@ -24,3 +24,4 @@ steps:
       paths:
         - .venv
         - lunes_cms.egg-info
+  - notify

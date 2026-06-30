@@ -3,13 +3,13 @@ steps:
   - checkout
   - attach_workspace:
       at: .
+  - activate-venv
   - run:
       name: Install gettext
       command: sudo apt-get update && sudo apt-get install gettext
   - run:
       name: Compile translation file
       command: |
-        source .venv/bin/activate
         cd lunes_cms
         lunes-cms-cli compilemessages
       environment:
@@ -19,3 +19,4 @@ steps:
       paths:
         - lunes_cms/locale/de/LC_MESSAGES/django.mo
         - lunes_cms/locale/de/LC_MESSAGES/djangojs.mo
+  - notify

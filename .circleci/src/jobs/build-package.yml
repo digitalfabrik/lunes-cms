@@ -3,13 +3,13 @@ steps:
   - checkout
   - attach_workspace:
       at: .
+  - activate-venv
   - run:
       name: Use alternative README.md file
       command: mv lunes_cms/README.md .
   - run:
       name: Build lunes-cms package
       command: |
-        source .venv/bin/activate
         pip install .
         python -m build --sdist .
         python -m build --wheel .
@@ -17,3 +17,4 @@ steps:
       root: .
       paths:
         - dist
+  - notify

@@ -31,3 +31,4 @@ steps:
       root: .
       paths:
         - coverage.xml
+  - notify

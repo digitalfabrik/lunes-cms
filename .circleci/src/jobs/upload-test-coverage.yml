@@ -5,3 +5,4 @@ steps:
       at: .
   - qlty/coverage_publish:
       files: coverage.xml
+  - notify
