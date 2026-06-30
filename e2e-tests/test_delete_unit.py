@@ -21,7 +21,9 @@ def test_delete_unit(
     add_job: Callable,
     add_unit: Callable,
     delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
 
@@ -55,5 +57,3 @@ def test_delete_unit(
         page.locator("input[type=submit]").click()
         expect(page).to_have_url(f"{base_url}/de/admin/cmsv2/unit/")
         expect(page.locator("th.field-title a", has_text=UNIT_NAME)).to_have_count(0)
-
-    delete_job(JOB_NAME)

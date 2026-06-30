@@ -5,9 +5,8 @@ E2E test: Wort hinzufügen — generates user_docs/add_word.md
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
-
-from conftest import ASSETS_DIR
+from conftest import ASSETS_DIR, select_autocomplete
+from playwright.sync_api import expect, Page
 
 JOB_NAME = "Warentester/-in"
 UNIT_NAME = "Hardware"
@@ -114,10 +113,7 @@ def test_add_word(
     ):
         pass
 
-    page.locator("[name='unit_word_relations-0-unit']").scroll_into_view_if_needed()
-    page.locator("[name='unit_word_relations-0-unit']").select_option(
-        label=UNIT_NAME, force=True
-    )
+    select_autocomplete(page, "unit_word_relations-0-unit", UNIT_NAME)
     with document.step(
         "Einheit zuordnen",
         description=f'Wählen Sie im Abschnitt **„Einheit-Wort Beziehungen"** die Einheit **„{UNIT_NAME}"** aus.',

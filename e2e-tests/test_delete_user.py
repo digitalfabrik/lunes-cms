@@ -18,7 +18,10 @@ def test_delete_user(
     base_url: str,
     login,
     add_user: Callable,
+    delete_user: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_user(USERNAME))
     add_user(USERNAME, PASSWORD)
 
     page.get_by_role("link", name="Benutzer", exact=True).click()

@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Callable, Generator
 
 import pytest
-from playwright.sync_api import Browser, Page, expect
+from playwright.sync_api import Browser, expect, Page
 
 BASE_URL = "http://localhost:8080"
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
@@ -35,6 +35,22 @@ EMAIL_OUTBOX_DIR = Path(
 SCREENSHOTS_DIR = DOCS_DIR / "screenshots"
 ASSETS_DIR = Path(__file__).parent / "assets"
 REPO_ROOT = Path(__file__).parent.parent
+
+
+def select_autocomplete(page: "Page", field_name: str, label: str) -> None:
+    """
+    Pick an option from a Django admin select2 autocomplete field.
+
+    ``select_option`` does not work on these widgets: the underlying ``<select>``
+    is empty and the options are fetched over AJAX only after the user types.
+    So open the select2 container, type the label, and click the matching result.
+    """
+    select = page.locator(f"select[name='{field_name}']")
+    select.scroll_into_view_if_needed()
+    select.locator("xpath=following-sibling::span[contains(@class, 'select2')]").click()
+    search = page.locator("input.select2-search__field")
+    search.fill(label)
+    page.locator(".select2-results__option", has_text=label).first.click()
 
 
 def _changed_test_files() -> set[str]:
@@ -209,10 +225,7 @@ def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], N
         page.set_input_files("[name=audio]", str(ASSETS_DIR / "test_sound.mp3"))
         page.locator("[name=image]").scroll_into_view_if_needed()
         page.set_input_files("[name=image]", str(ASSETS_DIR / "tester.png"))
-        page.locator("[name='unit_word_relations-0-unit']").scroll_into_view_if_needed()
-        page.locator("[name='unit_word_relations-0-unit']").select_option(
-            label=unit_name, force=True
-        )
+        select_autocomplete(page, "unit_word_relations-0-unit", unit_name)
         page.locator("[name=_save]").scroll_into_view_if_needed()
         page.click("[name=_save]")
         expect(page.locator(".alert-success")).to_be_visible()
