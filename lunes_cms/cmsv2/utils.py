@@ -8,8 +8,10 @@ import warnings
 from html import escape
 from typing import Optional
 
+from django.db.models.fields.files import ImageFieldFile
 from django.utils.crypto import get_random_string
-from django.utils.html import mark_safe
+from django.utils.html import format_html, mark_safe
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 from openai import OpenAI
 
@@ -100,16 +102,16 @@ def cache_busted_url(file):
     return f"{file.url}?v={version}"
 
 
-def get_image_tag(image, width=330):
+def get_image_tag(image: ImageFieldFile, width: int = 330) -> SafeString:
     """
     Generate an HTML image tag for the given image.
 
     Args:
         image: The image object to render
-        width (int, optional): The width of the image in pixels. Defaults to 330.
+        width: The width of the image in pixels. Defaults to 330.
 
     Returns:
-        str: An HTML img tag with the appropriate attributes
+        SafeString (str): An HTML img tag with the appropriate attributes
     """
     src = ""
     if (
@@ -119,7 +121,7 @@ def get_image_tag(image, width=330):
     ):
         src = escape(f"{settings.MEDIA_URL}{image}")
     html_cls = "" if src else 'class="hidden"'
-    return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
+    return mark_safe(f'<img src="{src}" width={int(width)} height="auto" {html_cls} />')
 
 
 # pylint: disable=redefined-builtin
@@ -188,3 +190,52 @@ def make_safe_filename(unsafe):
     Method to create a safe filename with regex.
     """
     return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)
+
+
+def is_ajax(request):
+    """
+    Checks whether the given request was sent via an AJAX call (fetch/XHR).
+    """
+    return request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+
+def example_sentence_generate_html(generate_url, store_url, target=None):
+    """
+    Render the inline example sentence generation widget.
+
+    The widget generates a sentence via OpenAI, shows it for review and lets the
+    user keep it (persisted right away, like the audio and image widgets) or
+    discard it, all without leaving the change page.
+
+    :param generate_url: URL of the AJAX endpoint generating the sentence
+    :param store_url: URL of the AJAX endpoint persisting the kept sentence
+    :param target: optional id of the textarea to fill (inline rows resolve it
+                   from the surrounding table row instead)
+    """
+    target_attr = format_html(' data-target="{}"', target) if target else ""
+    return format_html(
+        '<div class="generate-example-sentence">'
+        '<button type="button" class="btn btn-primary btn-sm generate-example-sentence-btn" '
+        'data-url="{generate_url}" data-store-url="{store_url}"{target_attr} '
+        'data-generate-label="{generate_label}" data-regenerate-label="{regenerate_label}">'
+        "{generate_label}</button>"
+        '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm is-hidden">'
+        "</span>"
+        '<span class="generate-example-sentence-message"></span>'
+        '<div class="generate-example-sentence-decision is-hidden">'
+        '<div class="regen-col-label">{new_label}</div>'
+        '<div class="generate-example-sentence-preview"></div>'
+        '<button type="button" class="btn btn-success btn-sm generate-example-sentence-keep-btn">'
+        "{keep_label}</button> "
+        '<button type="button" class="btn btn-secondary btn-sm generate-example-sentence-discard-btn">'
+        "{discard_label}</button>"
+        "</div></div>",
+        generate_url=generate_url,
+        store_url=store_url,
+        target_attr=target_attr,
+        generate_label=_("Generate example sentence"),
+        regenerate_label=_("Regenerate example sentence"),
+        new_label=_("New"),
+        keep_label=_("Keep new"),
+        discard_label=_("Discard new"),
+    )

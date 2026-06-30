@@ -1,0 +1,33 @@
+when: << pipeline.parameters.run_delivery_beta >>
+jobs:
+  - bump-version:
+      context: deliverino
+  - install:
+      requires:
+        - bump-version
+  - build-js
+  - compile-translations:
+      requires:
+        - install
+  - e2e:
+      persist_docs: true
+      requires:
+        - compile-translations
+  - build-package:
+      requires:
+        - install
+        - build-js
+        - e2e
+  - publish-package:
+      name: publish-beta-package
+      context: pypi-test
+      requires:
+        - build-package
+  - deploy-user-manual:
+      context: deliverino
+      requires:
+        - e2e
+  - create-release:
+      context: deliverino
+      requires:
+        - publish-beta-package

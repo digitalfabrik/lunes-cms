@@ -13,7 +13,6 @@ UNIT_DESCRIPTION = f"Vokabeln zu {UNIT_NAME}"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_delete_unit(
     page: Page,
     document,

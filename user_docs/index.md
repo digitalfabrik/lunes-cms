@@ -5,18 +5,29 @@ Willkommen im Benutzerhandbuch für das **Lunes CMS** – das Content Management
 ## Inhaltsverzeichnis
 
 1. [Anmelden](login.md) — Zugang zum Lunes CMS
-2. Jobs
+1. [Passwort zurücksetzen](password_reset.md) — Vergessenes Passwort per E-Mail zurücksetzen
+1. Benutzer:innen
+    1. [Benutzer:in anlegen](add_user.md) — Neues Benutzerkonto anlegen
+    2. [Benutzer:in bearbeiten (Informationen)](edit_user_information.md) — Persönliche Informationen eines Benutzerkontos bearbeiten
+    3. [Benutzer:in bearbeiten (Berechtigungen)](edit_user_permissions.md) — Gruppenberechtigungen eines Benutzerkontos bearbeiten
+    4. [Benutzer:in löschen](delete_user.md) — Bestehendes Benutzerkonto entfernen
+1. Gruppen
+    1. [Gruppe anlegen](add_group.md) — Neue Benutzergruppe mit Berechtigungen anlegen
+    2. [Gruppe bearbeiten](edit_group.md) — Berechtigungen einer Gruppe anpassen
+    3. [Gruppe löschen](delete_group.md) — Bestehende Benutzergruppe entfernen
+1. Jobs
     1. [Job hinzufügen](add_job.md) — Neuen Beruf mit Icon anlegen
     2. [Job bearbeiten](edit_job.md) — Bestehenden Job umbenennen
     3. [Job löschen](delete_job.md) — Bestehenden Job entfernen
     4. [Mehrere Jobs löschen](bulk_delete_jobs.md) — Mehrere Jobs gleichzeitig entfernen
-3. Einheiten
+1. Einheiten
     1. [Einheit hinzufügen](add_unit.md) — Neue Lerneinheit einem Job zuordnen
     2. [Einheit bearbeiten](edit_unit.md) — Bestehende Einheit ändern
     3. [Einheit löschen](delete_unit.md) — Bestehende Einheit entfernen
     4. [Mehrere Einheiten löschen](bulk_delete_units.md) — Mehrere Einheiten gleichzeitig entfernen
-4. Wörter
+1. Wörter
     1. [Wort hinzufügen](add_word.md) — Neues Vokabelwort mit Audio und Bild anlegen
-    2. [Wort bearbeiten](edit_word.md) — Bestehendes Vokabelwort ändern
-    3. [Wort löschen](delete_word.md) — Bestehendes Vokabelwort entfernen
-    4. [Mehrere Wörter löschen](bulk_delete_words.md) — Mehrere Vokabeln gleichzeitig entfernen
+    2. [Wort-Audio und -Bild generieren](generate_word_audio_and_image.md) — Audio und Bild per KI generieren und speichern
+    3. [Wort bearbeiten](edit_word.md) — Bestehendes Vokabelwort ändern
+    4. [Wort löschen](delete_word.md) — Bestehendes Vokabelwort entfernen
+    5. [Mehrere Wörter löschen](bulk_delete_words.md) — Mehrere Vokabeln gleichzeitig entfernen

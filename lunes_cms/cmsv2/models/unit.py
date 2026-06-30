@@ -6,7 +6,7 @@ from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from ...core import settings
-from ..utils import get_image_tag
+from ..utils import example_sentence_generate_html, get_image_tag
 from ..validators import (
     validate_file_extension,
     validate_file_size,
@@ -14,10 +14,10 @@ from ..validators import (
 )
 from .job import Job
 from .static import (
+    CheckStatus,
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
-    Static,
 )
 from .word import Word
 
@@ -42,10 +42,10 @@ class UnitWordRelation(models.Model):
     )
     image_check_status = models.CharField(
         max_length=20,
-        choices=Static.check_status_choices,
+        choices=CheckStatus.choices,
         null=True,
         verbose_name=_("image check status"),
-        default="NOT_CHECKED",
+        default=CheckStatus.NOT_CHECKED,
     )
     example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
     example_sentence_audio = models.FileField(
@@ -61,10 +61,10 @@ class UnitWordRelation(models.Model):
     )
     example_sentence_check_status = models.CharField(
         max_length=20,
-        choices=Static.check_status_choices,
+        choices=CheckStatus.choices,
         null=True,
         verbose_name=_("example sentence check status"),
-        default="NOT_CHECKED",
+        default=CheckStatus.NOT_CHECKED,
     )
     example_sentence_audio_regenerated = models.BooleanField(
         default=False,
@@ -110,10 +110,10 @@ class UnitWordRelation(models.Model):
                 previous_relation.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
             # Reset example sentence check status when example sentence changes
-            self.example_sentence_check_status = "NOT_CHECKED"
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
         if image_updated:
-            self.image_check_status = "NOT_CHECKED"
+            self.image_check_status = CheckStatus.NOT_CHECKED
 
         if not self.image:
             self.image_check_status = None
@@ -161,7 +161,6 @@ class UnitWordRelation(models.Model):
 
     def generate_image_link(self):
         """Generate link for image generation."""
-        # return format_html("<div>{}</div>", self.pk)
         if self.pk:
             url = reverse("cmsv2:unitword_generate_image", args=[self.pk])
             return format_html('<a class="button" href="{}">Generate Image</a>', url)
@@ -174,11 +173,11 @@ class UnitWordRelation(models.Model):
         Returns:
             list[str]: The url to the public images of this unit word relation
         """
-        if self.image and self.image_check_status != "CONFIRMED":
+        if self.image and self.image_check_status != CheckStatus.CONFIRMED:
             return []
-        if self.image and self.image_check_status == "CONFIRMED":
+        if self.image and self.image_check_status == CheckStatus.CONFIRMED:
             return [self.image]
-        if self.word.image and self.word.image_check_status == "CONFIRMED":
+        if self.word.image and self.word.image_check_status == CheckStatus.CONFIRMED:
             return [self.word.image]
         return []
 
@@ -194,17 +193,16 @@ class UnitWordRelation(models.Model):
     generate_example_sentence_audio_link.short_description = _("Generate Example Sentence Audio")  # type: ignore[attr-defined]
 
     def example_sentence_generate(self):
-        """Display a button to generate an example sentence via OpenAI."""
+        """Display the inline example sentence generation widget."""
         if self.pk:
-            url = reverse(
-                "cmsv2:unitword_generate_example_sentence_via_openai", args=[self.pk]
-            )
-            return mark_safe(
-                f'<button type="button" class="button generate-example-sentence-btn" data-url="{url}">'
-                f"{_('Generate example sentence')}</button>"
-                '<span class="generate-example-sentence-spinner spinner-border spinner-border-sm" '
-                'style="display: none; margin-left: 8px;"></span>'
-                '<div class="generate-example-sentence-message" style="margin-top: 4px;"></div>'
+            return example_sentence_generate_html(
+                generate_url=reverse(
+                    "cmsv2:unitword_generate_example_sentence_via_openai",
+                    args=[self.pk],
+                ),
+                store_url=reverse(
+                    "cmsv2:unitword_store_generated_example_sentence", args=[self.pk]
+                ),
             )
         return _("Save to enable example sentence generation.")
 
@@ -258,7 +256,7 @@ class UnitWordRelation(models.Model):
         status_html = ""
         if self.image and self.image_check_status:
             status_options = ""
-            for value, display in Static.check_status_choices:
+            for value, display in CheckStatus.choices:
                 selected = "selected" if self.image_check_status == value else ""
                 status_options += (
                     f'<option value="{value}" {selected}>{display}</option>'

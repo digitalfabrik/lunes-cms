@@ -24,6 +24,7 @@ class WordInline(admin.TabularInline):
 
     model = UnitWordRelation
     extra = 1
+    autocomplete_fields = ["word"]
     fields = [
         "word",
         "image_with_controls",
@@ -37,10 +38,6 @@ class WordInline(admin.TabularInline):
         "example_sentence_generate",
         "example_sentence_audio_player",
     ]
-
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
-        return formset
 
 
 class ReviewAssignmentInline(admin.TabularInline):
@@ -151,6 +148,7 @@ class UnitAdmin(BaseAdmin):
         """
 
         js = [
+            "js/cookies.js",
             "js/unit_icon_asset_config.js",
             "js/asset_manager.js",
             "js/generate_example_sentence.js",

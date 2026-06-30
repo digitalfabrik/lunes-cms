@@ -1,0 +1,8 @@
+when: << pipeline.parameters.run_promotion >>
+jobs:
+  - publish-release-artifact:
+      context: pypi
+  - promote-release:
+      context: deliverino
+      requires:
+        - publish-release-artifact

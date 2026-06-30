@@ -14,17 +14,18 @@ UNIT_NAME = "Grundlagen und Methoden"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_add_unit(
     page: Page,
     document,
     base_url: str,
     login,
     add_job: Callable,
-    add_unit: Callable,
     delete_unit: Callable,
     delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    request.addfinalizer(lambda: delete_unit(UNIT_NAME))
     add_job(JOB_NAME)
 
     with document.step(
@@ -85,6 +86,3 @@ def test_add_unit(
             "th.field-title a", has_text=UNIT_NAME
         ).scroll_into_view_if_needed()
         expect(page.locator("th.field-title a", has_text=UNIT_NAME)).to_be_visible()
-
-    delete_unit(UNIT_NAME)
-    delete_job(JOB_NAME)

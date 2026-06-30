@@ -138,7 +138,7 @@ def get_image_tag(image, width=330):
     # Hide preview if image is empty or has invalid type
     html_cls = "" if src else 'class="hidden"'
     # HTML image tag for previews
-    return mark_safe(f'<img src="{src}" width={width} height="auto" {html_cls} />')
+    return mark_safe(f'<img src="{src}" width={int(width)} height="auto" {html_cls} />')
 
 
 # pylint: disable=redefined-builtin

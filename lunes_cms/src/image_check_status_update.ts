@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener("change", function () {
             const wordId = select.getAttribute("data-word-id")
 
-            const csrftoken = getCookie("csrftoken")
+            const csrftoken = window.getCookie("csrftoken")
 
             const formData = new FormData()
             formData.append("image_check_status", select.value)
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener("change", function () {
             const unitwordId = select.getAttribute("data-unitword-id")
 
-            const csrftoken = getCookie("csrftoken")
+            const csrftoken = window.getCookie("csrftoken")
 
             const formData = new FormData()
             formData.append("image_check_status", select.value)
@@ -77,19 +77,4 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
         })
     })
-
-    function getCookie(name: string): string | null {
-        let cookieValue: string | null = null
-        if (document.cookie && document.cookie !== "") {
-            const cookies = document.cookie.split(";")
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim()
-                if (cookie.substring(0, name.length + 1) === name + "=") {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-                    break
-                }
-            }
-        }
-        return cookieValue
-    }
 })

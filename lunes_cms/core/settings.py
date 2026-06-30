@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from importlib.metadata import PackageNotFoundError, version as get_package_version
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
@@ -114,6 +115,33 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+########################
+# DJANGO DEBUG TOOLBAR #
+########################
+
+#: Whether the Django Debug Toolbar is enabled. Dev-only: requires :setting:`DEBUG`
+#: and the optional ``django-debug-toolbar`` dependency (part of the ``dev`` extra).
+#: Can be turned off independently of :setting:`DEBUG` via
+#: ``LUNES_CMS_DEBUG_TOOLBAR`` — the e2e tests run with ``DEBUG=True`` (so the
+#: dev server serves static files) but disable the toolbar, whose overlay
+#: intercepts pointer events and breaks browser interactions.
+DEBUG_TOOLBAR_ENABLED = False
+if DEBUG and bool(strtobool(os.environ.get("LUNES_CMS_DEBUG_TOOLBAR", "True"))):
+    try:
+        import debug_toolbar  # noqa: F401  pylint: disable=unused-import
+    except ImportError:
+        pass
+    else:
+        DEBUG_TOOLBAR_ENABLED = True
+        INSTALLED_APPS.append("debug_toolbar")
+        MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+#: Configuration of the Django Debug Toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    # Keep history so JSON API requests can be inspected at /__debug__/.
+    "RESULTS_CACHE_SIZE": 100,
+}
 
 #: Default URL dispatcher (see :setting:`django:ROOT_URLCONF`)
 ROOT_URLCONF = "lunes_cms.core.urls"
@@ -283,6 +311,20 @@ STATIC_URL = "/static/"
 #: In debug mode, this is not required since :mod:`django.contrib.staticfiles` can directly serve these files.
 STATIC_ROOT = os.environ.get("LUNES_CMS_STATIC_ROOT")
 
+#: Use ManifestStaticFilesStorage in production to append content hashes to static file names.
+#: This ensures browsers always load the latest version after a deploy (cache busting).
+#: In debug mode the default storage is used so that no STATIC_ROOT or manifest is required.
+#: See :class:`lunes_cms.core.utils.LaxManifestStaticFilesStorage`.
+if STATIC_ROOT:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "lunes_cms.core.utils.LaxManifestStaticFilesStorage",
+        },
+    }
+
 #: URL that handles the media served from :setting:`MEDIA_ROOT` (see :setting:`django:MEDIA_URL`)
 MEDIA_URL = "/media/"
 
@@ -300,7 +342,11 @@ TEMP_IMAGE_DIR = os.path.join(MEDIA_ROOT, "temp_image")
 
 if DEBUG:
     #: The backend to use for sending emails (see :setting:`django:EMAIL_BACKEND` and :doc:`django:topics/email`)
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    #: Directory where outgoing emails are stored as files in debug mode (see :setting:`django:EMAIL_FILE_PATH`)
+    EMAIL_FILE_PATH = os.environ.get(
+        "LUNES_CMS_EMAIL_FILE_PATH", "/tmp/django-email-outbox"
+    )
 else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -453,7 +499,6 @@ LOGGING = {
     },
 }
 
-
 #########################
 # DJANGO REST FRAMEWORK #
 #########################
@@ -500,6 +545,11 @@ SPECTACULAR_SETTINGS = {
 # DJANGO JAZZMIN #
 ##################
 
+try:
+    _cms_version = get_package_version("lunes-cms")
+except PackageNotFoundError:
+    _cms_version = "unknown"
+
 #: Basic settings for Django Jazzmin
 JAZZMIN_SETTINGS = {
     "site_brand": _("Lunes Administration"),
@@ -528,6 +578,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
     },
+    "site_version": _cms_version,
     # Render the Analytics app section directly below Dashboard. Jazzmin's
     # sidebar lists apps in this order; anything not mentioned trails after.
     "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
@@ -564,7 +615,6 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
-
 
 ############
 # QR CODES #

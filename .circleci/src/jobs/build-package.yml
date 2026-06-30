@@ -1,0 +1,20 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Use alternative README.md file
+      command: mv lunes_cms/README.md .
+  - run:
+      name: Build lunes-cms package
+      command: |
+        pip install .
+        python -m build --sdist .
+        python -m build --wheel .
+  - persist_to_workspace:
+      root: .
+      paths:
+        - dist
+  - notify
