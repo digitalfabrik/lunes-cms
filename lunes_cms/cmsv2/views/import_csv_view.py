@@ -14,6 +14,7 @@ from ..admins.word_import_resource import import_words_from_csv
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
 from ..services.image_generation import drain_pending_images
+from ..services.sentence_generation import drain_pending_sentences
 
 
 class ImportCSVForm(forms.Form):
@@ -100,22 +101,27 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
                 request,
                 _(
                     "Import successful! %(created)s new entries, %(updated)s updated. "
-                    "Audio and images are being generated in the background. This may "
-                    "take a few minutes..."
+                    "Example sentences, audio and images are being generated in the "
+                    "background. This may take a few minutes..."
                 )
                 % {"created": created_count, "updated": updated_count},
             )
 
         if imported_word_ids:
+            # Run the three drains sequentially in one thread:
+            #   1. sentences  — audio can only be made once the sentence exists
+            #   2. audio
+            #   3. images
+            # They must not run in parallel: each does a full ``Word.save()``,
+            # so concurrent drains would write back stale in-memory copies and
+            # clobber each other's file fields (re-triggering generation).
+            def _generate_word_assets() -> None:
+                drain_pending_sentences(imported_word_ids, job_title=selected_job.name)
+                drain_pending_audio(imported_word_ids)
+                drain_pending_images(imported_word_ids, job_title=selected_job.name)
+
             threading.Thread(
-                target=drain_pending_audio,
-                args=(imported_word_ids,),
-                daemon=True,
-            ).start()
-            threading.Thread(
-                target=drain_pending_images,
-                args=(imported_word_ids,),
-                kwargs={"job_title": selected_job.name},
+                target=_generate_word_assets,
                 daemon=True,
             ).start()
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))
