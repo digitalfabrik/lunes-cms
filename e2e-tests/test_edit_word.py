@@ -36,10 +36,10 @@ def test_edit_word(
     request: pytest.FixtureRequest,
 ) -> None:
     def _delete_word() -> None:
-        try:
-            delete_word(WORD_UPDATED)
-        except Exception:
-            delete_word(WORD)
+        # delete_word removes every match and is a no-op when none exist, so
+        # clean up both names regardless of how far the test got before failing.
+        delete_word(WORD)
+        delete_word(WORD_UPDATED)
 
     request.addfinalizer(lambda: delete_job(JOB_NAME))
     request.addfinalizer(lambda: delete_unit(UNIT_NAME))
@@ -64,7 +64,7 @@ def test_edit_word(
 
     page.fill("#searchbar", WORD)
     page.get_by_role("button", name="Suchen").click()
-    page.locator("th.field-word a", has_text=WORD).scroll_into_view_if_needed()
+    page.locator("th.field-word a", has_text=WORD).first.scroll_into_view_if_needed()
     with document.step(
         "Vokabel öffnen",
         description=f'Suchen Sie nach einem Wort z.B. **„{WORD}"** und klicken Sie auf den Eintrag in der Liste.',
