@@ -200,16 +200,46 @@ class Word(models.Model):
         update check statuses for audio and image files.
         """
         previous_word = Word.objects.get(pk=self.pk) if self.pk else None
-        audio_updated = (not self.pk and self.audio) or (
+        audio_updated = self._audio_changed(previous_word)
+        image_updated = self._image_changed(previous_word)
+
+        self._update_audio_status(previous_word, audio_updated)
+        self._update_image_status(image_updated)
+        self._handle_example_sentence_change(previous_word)
+
+        super().save(*args, **kwargs)
+        self._post_save_conversions(audio_updated, image_updated)
+
+    def _audio_changed(self, previous_word):
+        return (not self.pk and self.audio) or (
             self.pk
             and previous_word
             and previous_word.assemble_audio_checked_identifier()
             != self.assemble_audio_checked_identifier()
         )
-        image_updated = (not self.pk and self.image) or (
+
+    def _image_changed(self, previous_word):
+        return (not self.pk and self.image) or (
             self.pk and previous_word and previous_word.image != self.image
         )
 
+    def _update_audio_status(self, previous_word, audio_updated):
+        if audio_updated:
+            self.audio_check_status = CheckStatus.NOT_CHECKED
+            self.audio_checked_identifier = self.assemble_audio_checked_identifier()
+        if not self.audio:
+            self.audio_check_status = None
+            self.audio_checked_identifier = None
+        elif previous_word and previous_word.audio_check_status != self.audio_check_status:
+            self.audio_checked_identifier = self.assemble_audio_checked_identifier()
+
+    def _update_image_status(self, image_updated):
+        if image_updated:
+            self.image_check_status = CheckStatus.NOT_CHECKED
+        if not self.image:
+            self.image_check_status = None
+
+    def _handle_example_sentence_change(self, previous_word):
         example_sentence_changed = (
             self.pk
             and previous_word
@@ -217,36 +247,13 @@ class Word(models.Model):
         )
         if example_sentence_changed:
             if previous_word.example_sentence_audio:
-                # Delete the old audio file from storage
                 previous_word.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
-            # Reset example sentence check status when example sentence changes
             self.example_sentence_check_status = CheckStatus.NOT_CHECKED
-
-        if audio_updated:
-            self.audio_check_status = CheckStatus.NOT_CHECKED
-            self.audio_checked_identifier = self.assemble_audio_checked_identifier()
-
-        if not self.audio:
-            self.audio_check_status = None
-            self.audio_checked_identifier = None
-
-        if (
-            previous_word
-            and previous_word.audio_check_status != self.audio_check_status
-        ):
-            self.audio_checked_identifier = self.assemble_audio_checked_identifier()
-
-        if image_updated:
-            self.image_check_status = CheckStatus.NOT_CHECKED
-
-        if not self.image:
-            self.image_check_status = None
-
         if not self.example_sentence or not self.example_sentence.strip():
             self.example_sentence_check_status = None
 
-        super().save(*args, **kwargs)
+    def _post_save_conversions(self, audio_updated, image_updated):
         if audio_updated:
             self.convert_audio()
             super().save(update_fields=["audio"])
