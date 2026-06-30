@@ -1,12 +1,20 @@
 import os
 
 from django.contrib.auth.models import Group, User
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from ..utils import create_resource_path, make_safe_filename
+
+
+class CheckStatus(models.TextChoices):
+    """Possible states for unchecked/checked audios and images"""
+
+    CONFIRMED = "CONFIRMED", _("Confirmed")
+    NOT_CHECKED = "NOT_CHECKED", _("Not Checked")
 
 
 class Static:
@@ -44,12 +52,6 @@ class Static:
         (2, "Femininum"),
         (3, "Neutrum"),
         (4, "Plural"),
-    ]
-
-    # Audio check status choices
-    check_status_choices = [
-        ("NOT_CHECKED", "Not Checked"),
-        ("CONFIRMED", "Confirmed"),
     ]
 
     # Review status choices

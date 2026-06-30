@@ -19,6 +19,7 @@ from .static import (
     convert_umlaute_audio,
     convert_umlaute_images,
     Static,
+    CheckStatus,
 )
 
 
@@ -71,10 +72,10 @@ class Word(models.Model):
     )
     audio_check_status = models.CharField(
         max_length=20,
-        choices=Static.check_status_choices,
+        choices=CheckStatus.choices,
         null=True,
         verbose_name=_("audio check status"),
-        default="NOT_CHECKED",
+        default=CheckStatus.NOT_CHECKED,
     )
     audio_checked_identifier = models.CharField(
         max_length=255,
@@ -96,10 +97,10 @@ class Word(models.Model):
     )
     example_sentence_check_status = models.CharField(
         max_length=20,
-        choices=Static.check_status_choices,
+        choices=CheckStatus.choices,
         null=True,
         verbose_name=_("example sentence check status"),
-        default="NOT_CHECKED",
+        default=CheckStatus.NOT_CHECKED,
     )
     example_sentence_audio_regenerated = models.BooleanField(
         default=False,
@@ -144,10 +145,10 @@ class Word(models.Model):
     )
     image_check_status = models.CharField(
         max_length=20,
-        choices=Static.check_status_choices,
+        choices=CheckStatus.choices,
         null=True,
         verbose_name=_("image check status"),
-        default="NOT_CHECKED",
+        default=CheckStatus.NOT_CHECKED,
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
@@ -220,10 +221,10 @@ class Word(models.Model):
                 previous_word.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
             # Reset example sentence check status when example sentence changes
-            self.example_sentence_check_status = "NOT_CHECKED"
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
         if audio_updated:
-            self.audio_check_status = "NOT_CHECKED"
+            self.audio_check_status = CheckStatus.NOT_CHECKED
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
 
         if not self.audio:
@@ -237,7 +238,7 @@ class Word(models.Model):
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
 
         if image_updated:
-            self.image_check_status = "NOT_CHECKED"
+            self.image_check_status = CheckStatus.NOT_CHECKED
 
         if not self.image:
             self.image_check_status = None
@@ -300,7 +301,7 @@ class Word(models.Model):
             relation.image
             for relation in getattr(self, "unit_word_relations_of_job", [])
         ]
-        if self.image_check_status == "CONFIRMED":
+        if self.image_check_status == CheckStatus.CONFIRMED:
             images.append(self.image)
 
         return images
