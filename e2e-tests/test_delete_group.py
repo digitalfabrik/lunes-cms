@@ -17,7 +17,10 @@ def test_delete_group(
     base_url: str,
     login,
     add_group: Callable,
+    delete_group: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_group(GROUP_NAME))
     add_group(GROUP_NAME)
 
     with document.step(
