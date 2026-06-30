@@ -39,10 +39,6 @@ class WordInline(admin.TabularInline):
         "example_sentence_audio_player",
     ]
 
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
-        return formset
-
 
 class ReviewAssignmentInline(admin.TabularInline):
     """
