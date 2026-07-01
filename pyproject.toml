@@ -7,7 +7,7 @@ name = "lunes-cms"
 description = "Content Management System for the Lunes App"
 dynamic = ["version"]
 authors = [{name = "Tür an Tür – Digitalfabrik gGmbH", email = "tech@integreat-app.de"}]
-readme = "README.md"
+readme = "lunes_cms/README.md"
 requires-python = ">=3.11"
 keywords = [
     "lunes",
