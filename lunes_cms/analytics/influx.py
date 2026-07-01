@@ -9,11 +9,6 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
-def _escape_tag(value: str) -> str:
-    """Escape special characters in InfluxDB line protocol tag values."""
-    return value.replace(",", r"\,").replace("=", r"\=").replace(" ", r"\ ")
-
-
 def _escape_field_string(value: str) -> str:
     """Escape special characters in InfluxDB line protocol string field values."""
     return value.replace("\\", "\\\\").replace('"', '\\"')

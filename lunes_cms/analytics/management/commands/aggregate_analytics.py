@@ -443,27 +443,25 @@ class ExerciseRepetitionAggregator(EventAggregator):
             .annotate(reps=Count("pk"))
         )
         dist: dict[tuple, int] = {}
-        unit_name_cache: dict[str, str] = {}
         for row in per_session:
             unit_id = row["unit_id"]
-            unit_name = resolve_unit(unit_id, unit_names)
-            if unit_name is None:
+            if resolve_unit(unit_id, unit_names) is None:
                 logger.warning(
                     "exercise_repetition standard event has no unit_id, skipping"
                 )
                 continue
-            unit_name_cache[unit_id] = unit_name
             key = (row["event_date"], row["exercise_type"], unit_id, row["reps"])
             dist[key] = dist.get(key, 0) + 1
         lines = []
         for (event_date, exercise_type, unit_id, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
+            unit_name = resolve_unit(unit_id, unit_names)
             lines.append(
                 f"lunes_exercise_repetition"
                 f",unit_id={unit_id}"
                 f",exercise_type={exercise_type}"
                 f",repetitions_per_session={reps}"
-                f' unit_name="{unit_name_cache[unit_id]}",session_count={session_count}i {ts}'
+                f' unit_name="{unit_name}",session_count={session_count}i {ts}'
             )
             logger.info(
                 "Queued exercise_repetition (standard) line: unit_id=%s exercise_type=%s reps=%d date=%s",
@@ -488,27 +486,25 @@ class ExerciseRepetitionAggregator(EventAggregator):
             .annotate(reps=Count("pk"))
         )
         dist: dict[tuple, int] = {}
-        job_name_cache: dict[str, str] = {}
         for row in per_session:
             job_id = row["job_id"]
-            job_name = resolve_job(job_id, job_names)
-            if job_name is None:
+            if resolve_job(job_id, job_names) is None:
                 logger.warning(
                     "exercise_repetition training event has no job_id, skipping"
                 )
                 continue
-            job_name_cache[job_id] = job_name
             key = (row["event_date"], job_id, row["exercise_type"], row["reps"])
             dist[key] = dist.get(key, 0) + 1
         lines = []
         for (event_date, job_id, exercise_type, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
+            job_name = resolve_job(job_id, job_names)
             lines.append(
                 f"lunes_exercise_repetition"
                 f",job_id={job_id}"
                 f",exercise_type={exercise_type}"
                 f",repetitions_per_session={reps}"
-                f' job_name="{job_name_cache[job_id]}",session_count={session_count}i {ts}'
+                f' job_name="{job_name}",session_count={session_count}i {ts}'
             )
             logger.info(
                 "Queued exercise_repetition (training) line: job_id=%s exercise_type=%s reps=%d date=%s",
