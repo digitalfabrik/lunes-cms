@@ -12,6 +12,7 @@ jobs:
   - e2e:
       persist_docs: true
       requires:
+        - build-js
         - compile-translations
   - build-package:
       requires:

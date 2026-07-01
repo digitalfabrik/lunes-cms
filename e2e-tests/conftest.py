@@ -23,6 +23,7 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Generator
+from urllib.parse import quote
 
 import pytest
 from playwright.sync_api import Browser, expect, Page
@@ -238,15 +239,19 @@ def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a word by its singular form from the CMS admin."""
 
     def _delete(word: str) -> None:
-        page.goto(f"{base_url}/de/admin/cmsv2/word/")
-        page.fill("#searchbar", word)
-        page.get_by_role("button", name="Suchen").click()
-        locator = page.locator("th.field-word a", has_text=re.compile(f"^{word}$"))
-        if locator.count() == 0:
-            return
-        locator.first.click()
-        page.get_by_role("link", name="Löschen").click()
-        page.locator("input[type=submit]").click()
+        matching = page.locator(
+            "th.field-word a", has_text=re.compile(f"^{re.escape(word)}$")
+        )
+        # Delete every match: leftovers from a failed test would otherwise make
+        # the next search return multiple rows and break strict-mode locators.
+        # goto() waits for load, so count() does not race the search results.
+        while True:
+            page.goto(f"{base_url}/de/admin/cmsv2/word/?q={quote(word)}")
+            if matching.count() == 0:
+                return
+            matching.first.click()
+            page.get_by_role("link", name="Löschen").click()
+            page.locator("input[type=submit]").click()
 
     return _delete
 

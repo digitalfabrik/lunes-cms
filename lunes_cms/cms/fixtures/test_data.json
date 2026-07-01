@@ -64,6 +64,14 @@
     }
   },
   {
+    "model": "auth.group",
+    "fields": {
+      "name": "Vokabelverwalter:innen",
+      "icon": "",
+      "permissions": []
+    }
+  },
+  {
     "model": "cms.groupapikey",
     "pk": 1,
     "fields": {

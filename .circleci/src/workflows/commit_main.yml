@@ -12,4 +12,5 @@ jobs:
         - install
   - e2e:
       requires:
+        - build-js
         - compile-translations

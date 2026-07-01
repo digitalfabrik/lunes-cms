@@ -6,10 +6,9 @@ import re
 from typing import Generator
 
 import pytest
-from playwright.sync_api import Browser, Page, expect
+from playwright.sync_api import Page, expect
 
 NEW_PASSWORD = "Lunes-Test-2024!"
-TEST_USERNAME = "max.mustermann"
 TEST_EMAIL = "max.mustermann@berufsschule-musterstadt.de"
 
 
@@ -22,32 +21,10 @@ def context(browser):
 
 
 @pytest.fixture
-def password_reset_user(
-    browser: Browser, browser_context_args: dict, base_url: str
-) -> Generator[None, None, None]:
-    """Creates max.mustermann with a known email via admin UI, then deletes him."""
-    ctx = browser.new_context(**browser_context_args)
-    p = ctx.new_page()
-    p.goto(f"{base_url}/de/admin/auth/user/add/")
-    p.fill("[name=username]", TEST_USERNAME)
-    p.fill("[name=password1]", "Lunes-Init-2024!")
-    p.fill("[name=password2]", "Lunes-Init-2024!")
-    p.click("[name=_save]")
-    p.fill("[name=email]", TEST_EMAIL)
-    p.click("[name=_save]")
-    ctx.close()
-
+def password_reset_user() -> Generator[None, None, None]:
+    """max.mustermann is provided by the seed fixture (cms/fixtures/test_data.json)
+    with email TEST_EMAIL, so the password reset flow needs no extra setup."""
     yield
-
-    ctx2 = browser.new_context(**browser_context_args)
-    p2 = ctx2.new_page()
-    p2.goto(f"{base_url}/de/admin/auth/user/")
-    p2.fill("#searchbar", TEST_USERNAME)
-    p2.get_by_role("button", name="Suchen").click()
-    p2.get_by_role("link", name=TEST_USERNAME).first.click()
-    p2.get_by_role("link", name="Löschen").click()
-    p2.locator("input[type=submit]").click()
-    ctx2.close()
 
 
 @pytest.mark.e2e
