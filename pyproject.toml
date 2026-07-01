@@ -37,15 +37,15 @@ classifiers = [
     "Natural Language :: German",
 ]
 dependencies = [
-	"django==5.2.14",
+	"django==5.2.15",
 	"django-import-export==4.4.1",
 	"django-jazzmin==3.0.4",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.17.1",
 	"drf-spectacular==0.29.0",
-	"ipython==9.14.0",
-	"openai==2.38.0",
+	"ipython==9.15.0",
+	"openai==2.44.0",
 	"pillow==12.2.0",
 	"psycopg2==2.9.12",
 ]
