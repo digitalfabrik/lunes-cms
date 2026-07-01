@@ -3,14 +3,17 @@
     background-color: #000e38;
     border-color: #000e38;
 }
+
 .btn-primary:active {
     background-color: #000e38;
     border-color: #000e38;
 }
+
 .btn-primary:focus {
     background-color: #000e38;
     border-color: #000e38;
 }
+
 .btn-primary:hover {
     background-color: #000e38;
     border-color: #000e38;
@@ -22,16 +25,19 @@
     border-color: #000e38;
     color: #fff;
 }
+
 .btn-info:active {
     background-color: #000e38;
     border-color: #000e38;
     color: #fff;
 }
+
 .btn-info:focus {
     background-color: #000e38;
     border-color: #000e38;
     color: #fff;
 }
+
 .btn-info:hover {
     background-color: #000e38;
     border-color: #000e38;
@@ -43,14 +49,17 @@
     background-color: #0adb75;
     border-color: #0adb75;
 }
+
 .btn-success:focus {
     background-color: #0adb75;
     border-color: #0adb75;
 }
+
 .btn-success:active {
     background-color: #0adb75;
     border-color: #0adb75;
 }
+
 .btn-success:hover {
     background-color: #0adb75;
     border-color: #0adb75;
@@ -61,14 +70,17 @@
     background-color: #ff5252;
     border-color: #ff5252;
 }
+
 .btn-danger:focus {
     background-color: #ff5252;
     border-color: #ff5252;
 }
+
 .btn-danger:active {
     background-color: #ff5252;
     border-color: #ff5252;
 }
+
 .btn-danger:hover {
     background-color: #ff5252;
     border-color: #ff5252;
@@ -79,14 +91,17 @@
     background-color: #5b616a;
     border-color: #5b616a;
 }
+
 .btn-secondary:focus {
     background-color: #5b616a;
     border-color: #5b616a;
 }
+
 .btn-secondary:active {
     background-color: #5b616a;
     border-color: #5b616a;
 }
+
 .btn-secondary:hover {
     background-color: #5b616a;
     border-color: #5b616a;
@@ -117,9 +132,11 @@
 .bg-success {
     background-color: #0adb75;
 }
+
 .bg-danger {
     background-color: #ff5252;
 }
+
 .bg-gray {
     background-color: #5b616a;
 }
@@ -153,25 +170,30 @@
     border-top: 3px solid #425bee;
 }
 
-.login-box img{
+.login-box img {
     width: 100%;
 }
+
 /* dark mode */
 @media (prefers-color-scheme: dark) {
     .btn-info {
         color: #fff;
     }
+
     .btn-info:active,
     .btn-info:focus,
     .btn-info:hover {
         color: #fff;
     }
+
     :root {
         --selected-row: #2d2d4a;
     }
+
     body, .content-wrapper {
         background-color: #282838;
     }
+
     .card {
         background-color: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity)) !important;
     }
@@ -182,6 +204,7 @@
     .accent-navy a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn) {
         color: #8ba6fa;
     }
+
     .main-footer,
     .accent-navy .btn-link:hover,
     .accent-navy .nav-tabs .nav-link:hover,
@@ -201,7 +224,7 @@
         --bs-table-bg: transparent;
     }
 
-    .unitword-image-wrapper .unit-name{
+    .unitword-image-wrapper .unit-name {
         color: #dee2e6;
     }
 }
@@ -212,6 +235,7 @@
     border-color: #000e38;
     color: #fff;
 }
+
 .btn-default:hover,
 .btn-default:focus,
 .btn-default:active {
@@ -272,11 +296,25 @@ fieldset.module {
     align-items: center;
     gap: 0.5rem;
 }
+
 #changelist-search .form-group {
     margin-bottom: 0;
 }
 
-/*select2 — overrides select2.min.css which loads before this file */
+/* fixes selection in unit-job relation */
+.app-cmsv2 .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    display: inline-flex;
+    align-items: stretch;
+    padding: 0;
+}
+
+.app-cmsv2 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    position: static;
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+}
+
 .select2-container--default .select2-selection--single {
     height: calc(1.5em + 0.75rem + 2px) !important;
     border: 1px solid #ced4da;
@@ -387,20 +425,24 @@ fieldset.module {
     .app-cmsv2 .card {
         background-color: #282838;
     }
+
     .app-cmsv2 .table-striped thead tr,
     .app-cmsv2 .table-striped tbody tr.even,
     .app-cmsv2 .table-striped tbody tr.odd {
         background-color: transparent !important;
     }
+
     .app-cmsv2 .table-striped thead tr > th {
         background-color: var(--bs-card-bg);
         --bs-table-bg-type: transparent;
     }
+
     /* accent-navy link selector has specificity (0,7,1) — must use !important for links */
     .app-cmsv2 .table-striped thead th,
     .app-cmsv2 .table-striped thead th a {
         color: inherit !important;
     }
+
     .app-cmsv2 .table-striped tbody tr.odd > td,
     .app-cmsv2 .table-striped tbody tr.odd > th,
     .app-cmsv2 .table-striped tbody tr.even > td,
@@ -433,6 +475,7 @@ fieldset.module {
         color: inherit;
         border-bottom-color: #3d3d3d;
     }
+
     .app-cmsv2 .inline-group .table tbody tr > td,
     .app-cmsv2 .inline-group .table tbody tr > th {
         background-color: transparent;
@@ -440,14 +483,36 @@ fieldset.module {
         color: inherit;
         border-color: #3d3d3d;
     }
+
     .app-cmsv2 .inline-group .table tbody tr.form-row:hover > td,
     .app-cmsv2 .inline-group .table tbody tr.form-row:hover > th {
         background-color: #383838;
         --bs-table-bg-type: transparent;
     }
+
     .app-cmsv2 .inline-group .table tbody tr.empty-form > td,
     .app-cmsv2 .inline-group .table tbody tr.empty-form > th {
         background-color: #1f1f1f;
         --bs-table-bg-type: transparent;
+    }
+
+    .app-cmsv2 .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #263055;
+        border-color: #4a6baa;
+        color: #d0e4ff;
+    }
+
+    .app-cmsv2 .select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+        color: #d0e4ff;
+    }
+
+    .app-cmsv2 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: #8ba6fa;
+        border-right-color: #4a6baa;
+    }
+
+    .app-cmsv2 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        background-color: #3a1a2a;
+        color: #fff;
     }
 }
