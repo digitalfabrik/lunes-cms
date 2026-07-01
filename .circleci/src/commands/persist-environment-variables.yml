@@ -1,0 +1,11 @@
+description: Save the environment variables exported so far into a file and persist it to the workspace, so downstream jobs in this workflow can restore them.
+steps:
+  - run:
+      name: Save environment variables
+      command: |
+        cat ${BASH_ENV} >> environment_variables
+        cat environment_variables
+  - persist_to_workspace:
+      root: .
+      paths:
+        - environment_variables

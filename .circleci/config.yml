@@ -84,6 +84,27 @@ commands:
                     echo "Notification sent!"
                 name: Mattermost Status Alert
                 when: always
+    persist-environment-variables:
+        description: Save the environment variables exported so far into a file and persist it to the workspace, so downstream jobs in this workflow can restore them.
+        steps:
+            - run:
+                command: |
+                    cat ${BASH_ENV} >> environment_variables
+                    cat environment_variables
+                name: Save environment variables
+            - persist_to_workspace:
+                paths:
+                    - environment_variables
+                root: .
+    restore-environment-variables:
+        description: Restore environment variables persisted by bump-version. Must run after attach_workspace.
+        steps:
+            - run:
+                command: |
+                    touch environment_variables
+                    cat environment_variables >> ${BASH_ENV}
+                    cat environment_variables
+                name: Restore environment variables
 executors:
     python:
         docker:
@@ -142,12 +163,11 @@ jobs:
             - checkout
             - attach_workspace:
                 at: .
+            - restore-environment-variables
             - activate-venv
             - run:
-                command: mv lunes_cms/README.md .
-                name: Use alternative README.md file
-            - run:
                 command: |
+                    export SETUPTOOLS_SCM_PRETEND_VERSION="${NEW_VERSION}"
                     pip install .
                     python -m build --sdist .
                     python -m build --wheel .
@@ -180,6 +200,7 @@ jobs:
                       --branch "${CIRCLE_BRANCH}" \
                       ${HOTFIX_FLAG}
                 name: Bump git version
+            - persist-environment-variables
             - notify:
                 allow_all_branches: true
     check-translations:
@@ -225,13 +246,13 @@ jobs:
             - checkout
             - attach_workspace:
                 at: .
+            - restore-environment-variables
             - run:
                 command: npm ci
                 name: Install app-toolbelt
             - run:
                 command: |
                     HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix --branch ${CIRCLE_BRANCH}" || true)
-                    NEW_VERSION=$(jq -r .versionName version.json)
                     RELEASE=$(npx --no app-toolbelt v0 release create all "${NEW_VERSION}" \
                       --private-key "${DELIVERINO_PRIVATE_KEY}" \
                       --owner "${CIRCLE_PROJECT_USERNAME}" \
@@ -253,7 +274,7 @@ jobs:
                 command: |
                     npx --no app-toolbelt v0 generate sbom \
                       --version-name "${NEW_VERSION}" \
-                      --releaseId "${RELEASE_ID}" \
+                      --release-id "${RELEASE_ID}" \
                       --path lunes_cms/_manifest/spdx_2.2/manifest.spdx.json \
                       --branch "${CIRCLE_BRANCH}" \
                       --private-key "${DELIVERINO_PRIVATE_KEY}" \
@@ -262,7 +283,6 @@ jobs:
                 name: Generate SBOM
             - run:
                 command: |
-                    NEW_VERSION=$(jq -r .versionName version.json)
                     MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:\n${RELEASE_NOTES}\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
                     npx --no app-toolbelt v0 notify mattermost \
                       --message "${MESSAGE}" \

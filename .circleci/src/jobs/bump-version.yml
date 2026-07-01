@@ -20,5 +20,6 @@ steps:
           --repo "${CIRCLE_PROJECT_REPONAME}" \
           --branch "${CIRCLE_BRANCH}" \
           ${HOTFIX_FLAG}
+  - persist-environment-variables
   - notify:
       allow_all_branches: true
