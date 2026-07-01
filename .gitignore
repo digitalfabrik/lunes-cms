@@ -1,4 +1,5 @@
 .venv
+lunes-cms.ini
 *.pyc
 *.mo
 media
@@ -8,6 +9,7 @@ build
 dist
 .vscode
 .idea/dataSources.xml
+.idea/misc.xml
 .coverage
 docs/dist/
 docs/src/ref/
