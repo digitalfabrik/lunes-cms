@@ -140,12 +140,14 @@ jobs:
         executor: python
         steps:
             - checkout
+            - run:
+                command: |
+                    git fetch origin "${CIRCLE_BRANCH}" --tags
+                    git checkout "origin/${CIRCLE_BRANCH}"
+                name: Sync to latest commit (picks up the version bump tag from bump-version)
             - attach_workspace:
                 at: .
             - activate-venv
-            - run:
-                command: mv lunes_cms/README.md .
-                name: Use alternative README.md file
             - run:
                 command: |
                     pip install .
