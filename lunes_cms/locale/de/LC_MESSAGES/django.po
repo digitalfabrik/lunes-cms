@@ -1134,6 +1134,30 @@ msgstr ""
 "\"Beispielsatz\" enthalten."
 
 #: cmsv2/views/import_csv_view.py
+#, python-format
+msgid "%(count)s new word"
+msgid_plural "%(count)s new words"
+msgstr[0] "%(count)s neues Wort"
+msgstr[1] "%(count)s neue Wörter"
+
+#: cmsv2/views/import_csv_view.py
+#, python-format
+msgid "%(count)s new unit"
+msgid_plural "%(count)s new units"
+msgstr[0] "%(count)s neue Einheit"
+msgstr[1] "%(count)s neue Einheiten"
+
+#: cmsv2/views/import_csv_view.py
+#, python-format
+msgid ""
+"Import successful! %(words)s, %(units)s created. Example sentences, audio "
+"and images are being generated in the background. This may take a few "
+"minutes..."
+msgstr ""
+"Import erfolgreich! %(words)s, %(units)s erstellt. Beispielsätze, Audio und "
+"Bilder werden im Hintergrund generiert. Dies kann einige Minuten dauern..."
+
+#: cmsv2/views/import_csv_view.py
 msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
@@ -1141,17 +1165,6 @@ msgstr "CSV Import für Vokabeln"
 #, python-format
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
-
-#: cmsv2/views/import_csv_view.py
-#, python-format
-msgid ""
-"Import successful! %(created)s new entries, %(updated)s updated. Example "
-"sentences, audio and images are being generated in the background. This may "
-"take a few minutes..."
-msgstr ""
-"Import erfolgreich! %(created)s neue Einträge, %(updated)s wurden "
-"aktualisiert. Beispielsätze, Audio und Bilder werden im Hintergrund "
-"generiert. Dies kann einige Minuten dauern..."
 
 #: cmsv2/views/import_csv_view.py
 msgid ""

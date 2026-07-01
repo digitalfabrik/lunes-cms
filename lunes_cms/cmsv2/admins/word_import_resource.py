@@ -72,8 +72,8 @@ class RowResult:
     Return object of a single row.
     """
 
-    created: int = 0
-    updated: int = 0
+    unit_created: bool = False
+    word_created: bool = False
     error: Optional[str] = None
     word_id: Optional[int] = None
 
@@ -223,14 +223,13 @@ def process_row(
     Update example sentence
     Add word to newly created unit
     """
-    created = 0
-    updated = 0
+    unit_created = False
 
     unit = created_units.get(parsed.unit)
     if unit is None:
         unit = create_unit(parsed.unit, job)
         created_units[parsed.unit] = unit
-        created += 1
+        unit_created = True
     else:
         if not unit.jobs.filter(pk=job.pk).exists():
             unit.jobs.add(job)
@@ -238,13 +237,12 @@ def process_row(
     article_int = map_article_to_int(parsed.article)
     plural_article_int = map_plural_article_to_int(parsed.plural_article)
     word = create_word(parsed.word, article_int, plural_article_int, parsed.plural)
-    created += 1
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 
     unit.words.add(word)
 
-    return RowResult(created=created, updated=updated, word_id=word.pk)
+    return RowResult(unit_created=unit_created, word_created=True, word_id=word.pk)
 
 
 def import_words_from_csv(
@@ -252,7 +250,7 @@ def import_words_from_csv(
 ) -> Tuple[int, int, list[str], list[int]]:
     """
     Imports the entire csv dataset to a job.
-    Returns a tuple of created_count, updated_count, error_messages,
+    Returns a tuple of words_created_count, units_created_count, error_messages,
     imported_word_ids
 
     Important: During the import there is a local cache ``created_units`` because of the following scenario:
@@ -261,8 +259,8 @@ def import_words_from_csv(
     What we want to happen is: a second unit "tools" is created, distinct from the one that already exists. All words
     in the CSV file gets imported into that second instance of "tools".
     """
-    total_created = 0
-    total_updated = 0
+    total_words_created = 0
+    total_units_created = 0
     error_messages: list[str] = []
     imported_word_ids: list[int] = []
 
@@ -284,9 +282,11 @@ def import_words_from_csv(
             )
             continue
 
-        total_created += result.created
-        total_updated += result.updated
+        if result.word_created:
+            total_words_created += 1
+        if result.unit_created:
+            total_units_created += 1
         if result.word_id is not None:
             imported_word_ids.append(result.word_id)
 
-    return total_created, total_updated, error_messages, imported_word_ids
+    return total_words_created, total_units_created, error_messages, imported_word_ids
