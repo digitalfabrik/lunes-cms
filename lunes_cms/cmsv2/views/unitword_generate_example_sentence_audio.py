@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import uuid
 
@@ -5,7 +7,7 @@ from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -17,7 +19,9 @@ from lunes_cms.core import settings
 
 
 @staff_member_required
-def unitword_generate_example_sentence_audio(request, unitword_id):
+def unitword_generate_example_sentence_audio(
+    request: HttpRequest, unitword_id: int
+) -> HttpResponse:
     """
     Dedicated view for generating audio for a unit-word relation's example sentence.
     """
@@ -42,7 +46,9 @@ def unitword_generate_example_sentence_audio(request, unitword_id):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_generate_example_sentence_audio_via_openai(request):
+def unitword_generate_example_sentence_audio_via_openai(
+    request: HttpRequest,
+) -> JsonResponse:
     """
     AJAX endpoint to generate example sentence audio using OpenAI and save it temporarily.
     Returns the URL/path to the temporary file.
@@ -84,7 +90,9 @@ def unitword_generate_example_sentence_audio_via_openai(request):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_store_generated_example_sentence_audio_permanently(request, unitword_id):
+def unitword_store_generated_example_sentence_audio_permanently(
+    request: HttpRequest, unitword_id: int
+) -> HttpResponseRedirect:
     """
     Moves the temporary audio file to the UnitWordRelation instance's example_sentence_audio field
     and redirects back to the appropriate admin view.
@@ -115,6 +123,9 @@ def unitword_store_generated_example_sentence_audio_permanently(request, unitwor
             content_file = ContentFile(
                 f.read(), name=f"{word_text}_{unit_text}_example_sentence.mp3"
             )
+            # content_file.name is always the literal set above; ContentFile.name
+            # is typed Optional[str] only because the base File class allows it.
+            assert content_file.name is not None
             unitword_instance.example_sentence_audio.save(
                 content_file.name, content_file
             )

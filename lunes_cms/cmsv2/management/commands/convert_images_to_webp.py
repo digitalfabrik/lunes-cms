@@ -3,9 +3,12 @@ Management command to convert existing images to WebP format.
 
 """
 
-import logging
+from __future__ import annotations
 
-from django.core.management.base import BaseCommand
+import logging
+from typing import Any
+
+from django.core.management.base import BaseCommand, CommandParser
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.static import convert_image_to_webp
@@ -19,7 +22,7 @@ class Command(BaseCommand):
 
     help = "Convert existing images to WebP format for Word and UnitWordRelation instances."
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
             "--dry-run",
             action="store_true",
@@ -32,7 +35,7 @@ class Command(BaseCommand):
             help="Maximum number of items to process (default: no limit)",
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         dry_run = options["dry_run"]
         limit = options["limit"]
 
@@ -57,7 +60,7 @@ class Command(BaseCommand):
             )
         )
 
-    def _process_words(self, dry_run, limit):
+    def _process_words(self, dry_run: bool, limit: int | None) -> int:
         """Process Word instances."""
         self.stdout.write(self.style.NOTICE("Processing words..."))
 
@@ -88,7 +91,7 @@ class Command(BaseCommand):
         logger.info("Finished processing words. Count: %d", processed_count)
         return processed_count
 
-    def _process_unit_word_relations(self, dry_run, limit):
+    def _process_unit_word_relations(self, dry_run: bool, limit: int | None) -> int:
         """Process UnitWordRelation instances."""
         self.stdout.write(self.style.NOTICE("Processing unit-word relations..."))
 
@@ -132,7 +135,7 @@ class Command(BaseCommand):
         )
         return processed_count
 
-    def _convert_image(self, instance, label):
+    def _convert_image(self, instance: Word | UnitWordRelation, label: str) -> bool:
         """
         Convert the image of a Word or UnitWordRelation instance to WebP.
 

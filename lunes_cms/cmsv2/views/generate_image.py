@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import base64
 import os
 import uuid
 
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -15,7 +17,7 @@ from lunes_cms.core import settings
 @staff_member_required
 @csrf_exempt
 @require_POST
-def generate_image_via_openai(request):
+def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
     """
     AJAX endpoint to generate image using OpenAI and save it temporarily.
     Returns the URL/path to the temporary file.
@@ -35,11 +37,13 @@ def generate_image_via_openai(request):
     try:
         client = get_openai_client()
 
+        # quality is an env-configured str (LUNES_CMS_OPENAI_IMAGE_QUALITY), which the
+        # SDK's overloads can't statically narrow to their Literal[...] type.
         response = client.images.generate(
             model=settings.OPENAI_IMAGE_MODEL,
             prompt=prompt,
             size="1024x1024",
-            quality=settings.OPENAI_IMAGE_QUALITY,
+            quality=settings.OPENAI_IMAGE_QUALITY,  # type: ignore[call-overload]
             n=1,
         )
 

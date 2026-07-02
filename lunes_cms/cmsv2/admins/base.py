@@ -1,4 +1,11 @@
+from __future__ import annotations
+
+from typing import Any
+
 from django.contrib import admin
+from django.db.models import Model
+from django.forms import ModelForm
+from django.http import HttpRequest
 
 
 class BaseAdmin(admin.ModelAdmin):
@@ -10,7 +17,13 @@ class BaseAdmin(admin.ModelAdmin):
     set creator_is_admin based on whether the user is a superuser.
     """
 
-    def save_model(self, request, obj, form, change):
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: Any,
+        form: ModelForm[Model],
+        change: bool,
+    ) -> None:
         if not change:
             if len(request.user.groups.all()) >= 1:
                 obj.created_by = request.user.groups.all()[0]

@@ -1,4 +1,6 @@
-from django.db.models import Count, Q
+from __future__ import annotations
+
+from django.db.models import Count, Q, QuerySet
 from rest_framework import viewsets
 
 from ....cms.models import GroupAPIKey, TrainingSet
@@ -15,7 +17,7 @@ class TrainingSetByIdViewSet(viewsets.ReadOnlyModelViewSet):
 
     serializer_class = TrainingSetSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[TrainingSet]:
         """
         Defining custom queryset
 

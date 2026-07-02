@@ -2,12 +2,17 @@
 E2E test: Login-Flow — generates user_docs/login.md
 """
 
+from __future__ import annotations
+
+from typing import Generator
+
 import pytest
-from playwright.sync_api import expect, Page
+from conftest import DocPage
+from playwright.sync_api import Browser, BrowserContext, expect, Page
 
 
 @pytest.fixture
-def context(browser):
+def context(browser: Browser) -> Generator[BrowserContext, None, None]:
     """Fresh unauthenticated context for testing the login flow."""
     ctx = browser.new_context(locale="de-DE")
     yield ctx
@@ -15,7 +20,7 @@ def context(browser):
 
 
 @pytest.mark.e2e
-def test_login(page: Page, document, base_url: str) -> None:
+def test_login(page: Page, document: DocPage, base_url: str) -> None:
     with document.step(
         "Lunes CMS im Browser aufrufen",
         description=f"Rufen Sie folgende URL auf: https://lunes.tuerantuer.org/",

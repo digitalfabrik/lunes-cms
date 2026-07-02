@@ -2,9 +2,12 @@
 Tests for the example sentence generation AJAX endpoints.
 """
 
+from __future__ import annotations
+
 from unittest import mock
 
 import pytest
+from django.test import Client
 from django.urls import reverse
 
 from lunes_cms.cmsv2.models import Job, Word
@@ -12,9 +15,11 @@ from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.cmsv2.views import generate_example_sentence
 
+WordWithJob = tuple[Word, Job, Unit, UnitWordRelation]
+
 
 @pytest.fixture
-def word_with_job(db):
+def word_with_job(db: None) -> WordWithJob:
     word = Word.objects.create(word="Hammer", singular_article=1)
     job = Job.objects.create(name="Tischler")
     unit = Unit.objects.create(title="Werkzeuge")
@@ -23,7 +28,9 @@ def word_with_job(db):
     return word, job, unit, relation
 
 
-def test_word_endpoint_returns_generated_sentence(admin_client, word_with_job):
+def test_word_endpoint_returns_generated_sentence(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, _relation = word_with_job
     url = reverse("cmsv2:word_generate_example_sentence_via_openai", args=[word.pk])
 
@@ -39,7 +46,9 @@ def test_word_endpoint_returns_generated_sentence(admin_client, word_with_job):
     generate.assert_called_once_with("Hammer", "Tischler", None)
 
 
-def test_word_endpoint_joins_multiple_jobs(admin_client, word_with_job):
+def test_word_endpoint_joins_multiple_jobs(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, _relation = word_with_job
     other_job = Job.objects.create(name="Maler")
     other_unit = Unit.objects.create(title="Farben")
@@ -58,7 +67,7 @@ def test_word_endpoint_joins_multiple_jobs(admin_client, word_with_job):
     generate.assert_called_once_with("Hammer", "Maler, Tischler", None)
 
 
-def test_word_endpoint_requires_job(admin_client, db):
+def test_word_endpoint_requires_job(admin_client: Client, db: None) -> None:
     word = Word.objects.create(word="Hammer", singular_article=1)
     url = reverse("cmsv2:word_generate_example_sentence_via_openai", args=[word.pk])
 
@@ -72,7 +81,9 @@ def test_word_endpoint_requires_job(admin_client, db):
     generate.assert_not_called()
 
 
-def test_unitword_endpoint_passes_unit_title(admin_client, word_with_job):
+def test_unitword_endpoint_passes_unit_title(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     _word, _job, _unit, relation = word_with_job
     url = reverse(
         "cmsv2:unitword_generate_example_sentence_via_openai", args=[relation.pk]
@@ -89,7 +100,9 @@ def test_unitword_endpoint_passes_unit_title(admin_client, word_with_job):
     generate.assert_called_once_with("Hammer", "Tischler", "Werkzeuge")
 
 
-def test_endpoint_reports_missing_openai_configuration(admin_client, word_with_job):
+def test_endpoint_reports_missing_openai_configuration(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, _relation = word_with_job
     url = reverse("cmsv2:word_generate_example_sentence_via_openai", args=[word.pk])
 
@@ -104,7 +117,9 @@ def test_endpoint_reports_missing_openai_configuration(admin_client, word_with_j
     assert response.json()["error"] == "missing key"
 
 
-def test_endpoint_reports_generation_errors(admin_client, word_with_job):
+def test_endpoint_reports_generation_errors(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, _relation = word_with_job
     url = reverse("cmsv2:word_generate_example_sentence_via_openai", args=[word.pk])
 
@@ -119,7 +134,9 @@ def test_endpoint_reports_generation_errors(admin_client, word_with_job):
     assert response.json()["error"] == "boom"
 
 
-def test_endpoints_require_post(admin_client, word_with_job):
+def test_endpoints_require_post(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, relation = word_with_job
     for url in [
         reverse("cmsv2:word_generate_example_sentence_via_openai", args=[word.pk]),
@@ -132,7 +149,9 @@ def test_endpoints_require_post(admin_client, word_with_job):
         assert admin_client.get(url).status_code == 405
 
 
-def test_word_store_persists_kept_sentence(admin_client, word_with_job):
+def test_word_store_persists_kept_sentence(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, _relation = word_with_job
     url = reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk])
 
@@ -148,7 +167,9 @@ def test_word_store_persists_kept_sentence(admin_client, word_with_job):
     assert word.example_sentence == "Der Hammer liegt auf der Werkbank."
 
 
-def test_word_store_resets_check_status_and_audio(admin_client, word_with_job):
+def test_word_store_resets_check_status_and_audio(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     from django.core.files.base import ContentFile
 
     word, _job, _unit, _relation = word_with_job
@@ -171,7 +192,9 @@ def test_word_store_resets_check_status_and_audio(admin_client, word_with_job):
     assert not word.example_sentence_audio
 
 
-def test_word_store_requires_sentence(admin_client, word_with_job):
+def test_word_store_requires_sentence(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     word, _job, _unit, _relation = word_with_job
     url = reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk])
 
@@ -181,7 +204,9 @@ def test_word_store_requires_sentence(admin_client, word_with_job):
     assert response.json()["status"] == "error"
 
 
-def test_unitword_store_persists_kept_sentence(admin_client, word_with_job):
+def test_unitword_store_persists_kept_sentence(
+    admin_client: Client, word_with_job: WordWithJob
+) -> None:
     _word, _job, _unit, relation = word_with_job
     url = reverse("cmsv2:unitword_store_generated_example_sentence", args=[relation.pk])
 
@@ -196,7 +221,7 @@ def test_unitword_store_persists_kept_sentence(admin_client, word_with_job):
     assert relation.example_sentence == "Im Werkzeugkasten liegt ein Hammer."
 
 
-def test_example_sentence_widget_renders_keep_discard(db):
+def test_example_sentence_widget_renders_keep_discard(db: None) -> None:
     from django.contrib import admin as django_admin
 
     from lunes_cms.cmsv2.admins.word_admin import WordAdmin

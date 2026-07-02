@@ -1,7 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from rest_framework import permissions
 
 from ..cms.models import GroupAPIKey
 from .utils import get_key
+
+if TYPE_CHECKING:
+    from rest_framework.request import Request
+    from rest_framework.views import APIView
 
 
 class VerifyGroupKey(permissions.AllowAny):
@@ -11,7 +19,7 @@ class VerifyGroupKey(permissions.AllowAny):
     Inherits from `permissions.AllowAny`.
     """
 
-    def has_permission(self, request, view):
+    def has_permission(self, request: "Request", view: "APIView") -> bool:
         """
         Checks whether a valid API-Key is send
         by the user in the authorization header

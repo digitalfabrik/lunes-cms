@@ -7,13 +7,19 @@ For more information on this file, see
 https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
 """
 
+from __future__ import annotations
+
 import configparser
 import os
+from typing import Iterable
+from wsgiref.types import StartResponse, WSGIEnvironment
 
 from django.core.wsgi import get_wsgi_application
 
 
-def application(environ, start_response):
+def application(
+    environ: WSGIEnvironment, start_response: StartResponse
+) -> Iterable[bytes]:
     """
     This returns the WSGI callable
 

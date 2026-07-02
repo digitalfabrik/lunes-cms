@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
+from django.db.models import QuerySet
 from rest_framework import viewsets
 
 from ....cms.models import GroupAPIKey, TrainingSet
@@ -20,7 +23,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     http_method_names = ["get"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Group]:
         """
         Defining custom queryset
 

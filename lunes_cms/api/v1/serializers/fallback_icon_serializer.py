@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 from django.templatetags.static import static
 from rest_framework import serializers
+
+from ....cms.models import Discipline, TrainingSet
 
 
 class FallbackIconSerializer(serializers.ModelSerializer):
@@ -9,7 +13,7 @@ class FallbackIconSerializer(serializers.ModelSerializer):
 
     icon = serializers.SerializerMethodField()
 
-    def get_icon(self, obj):
+    def get_icon(self, obj: Discipline | TrainingSet) -> str:
         """
         Get the the icon if it exists and a fallback image otherwise
 

@@ -2,6 +2,12 @@
 Postprocessing hooks for the v2 API schema
 """
 
+from __future__ import annotations
+
+from typing import Any
+
+from drf_spectacular.generators import SchemaGenerator
+
 TRACKING_HEADERS = [
     {
         "in": "header",
@@ -29,7 +35,13 @@ TRACKING_HEADERS = [
 TRACKING_HEADER_METHODS = {"get", "post"}
 
 
-def add_tracking_headers(result, _generator, _request, _public, **_kwargs):
+def add_tracking_headers(
+    result: dict[str, Any],
+    _generator: SchemaGenerator,
+    _request: Any,
+    _public: bool,
+    **_kwargs: Any,
+) -> dict[str, Any]:
     """
     Hook into schema generation to add the tracking headers to all endpoints in `/api/v2`
     """

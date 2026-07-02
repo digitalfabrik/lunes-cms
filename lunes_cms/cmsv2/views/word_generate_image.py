@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import os
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -15,7 +17,9 @@ from lunes_cms.core import settings
 @staff_member_required
 @csrf_exempt
 @require_POST
-def word_store_generated_image_permanently(request, word_id):
+def word_store_generated_image_permanently(
+    request: HttpRequest, word_id: int
+) -> HttpResponse:
     """
     Saves the temporary image to the Word instance's image field.
 
@@ -26,7 +30,7 @@ def word_store_generated_image_permanently(request, word_id):
     word_instance = get_object_or_404(Word, pk=word_id)
     temp_filename = request.POST.get("temp_filename")
 
-    def failure(message, status=400):
+    def failure(message: str, status: int = 400) -> HttpResponse:
         if is_ajax(request):
             return JsonResponse({"status": "error", "message": message}, status=status)
         return redirect("admin:cmsv2_word_change", object_id=word_instance.pk)
@@ -44,6 +48,9 @@ def word_store_generated_image_permanently(request, word_id):
             content_file = ContentFile(
                 f.read(), name=f'{word_instance.word.replace(" ", "_")}.png'
             )
+            # content_file.name is always the literal set above; ContentFile.name
+            # is typed Optional[str] only because the base File class allows it.
+            assert content_file.name is not None
             word_instance.image.save(content_file.name, content_file)
         word_instance.save()
 

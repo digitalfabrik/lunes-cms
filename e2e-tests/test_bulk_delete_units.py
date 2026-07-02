@@ -2,11 +2,14 @@
 E2E test: Mehrere Einheiten löschen — generates user_docs/bulk_delete_units.md
 """
 
+from __future__ import annotations
+
 from functools import partial
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 JOB_NAME = "Maler/-in"
 UNIT_NAMES = [
@@ -19,9 +22,9 @@ UNIT_NAMES = [
 @pytest.mark.e2e
 def test_bulk_delete_units(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     add_unit: Callable,
     delete_unit: Callable,
@@ -56,11 +59,13 @@ def test_bulk_delete_units(
         pass
 
     page.locator("button[name=index][value='0']").scroll_into_view_if_needed()
-    page.evaluate("""
+    page.evaluate(
+        """
         const select = document.querySelector('select[name=action]');
         select.value = 'delete_selected';
         $(select).trigger('change');
-    """)
+    """
+    )
     with document.step(
         'Aktion "Ausgewählte Einheit löschen" auswählen und ausführen',
         description='Wählen Sie im Aktions-Dropdown **"Ausgewählte Einheit löschen"** aus und klicken Sie auf **„Go"**.',

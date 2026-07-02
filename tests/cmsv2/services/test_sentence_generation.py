@@ -2,7 +2,11 @@
 Tests for example sentence generation via OpenAI.
 """
 
+from __future__ import annotations
+
 import threading
+from collections.abc import Generator
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -13,7 +17,9 @@ from lunes_cms.cmsv2.services import sentence_generation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
-def _fake_openai_client(content="Der Hammer liegt auf der Werkbank."):
+def _fake_openai_client(
+    content: str | None = "Der Hammer liegt auf der Werkbank.",
+) -> mock.Mock:
     fake_message = mock.Mock()
     fake_message.content = content
     fake_choice = mock.Mock()
@@ -25,7 +31,7 @@ def _fake_openai_client(content="Der Hammer liegt auf der Werkbank."):
     return fake_client
 
 
-def test_prompt_contains_word_and_job():
+def test_prompt_contains_word_and_job() -> None:
     prompt = sentence_generation.build_example_sentence_prompt("Hammer", "Tischler")
     assert "Fachbegriff Hammer" in prompt
     assert "im Rahmen des Berufs Tischler" in prompt
@@ -34,14 +40,14 @@ def test_prompt_contains_word_and_job():
     assert "5-10 Wörter" in prompt
 
 
-def test_prompt_contains_unit_when_given():
+def test_prompt_contains_unit_when_given() -> None:
     prompt = sentence_generation.build_example_sentence_prompt(
         "Hammer", "Tischler", "Werkzeuge"
     )
     assert "im Rahmen des Berufs Tischler und der Lerneinheit Werkzeuge" in prompt
 
 
-def test_generation_uses_text_model_and_returns_sentence():
+def test_generation_uses_text_model_and_returns_sentence() -> None:
     fake_client = _fake_openai_client()
 
     with mock.patch.object(
@@ -63,7 +69,7 @@ def test_generation_uses_text_model_and_returns_sentence():
         ("  Der Hammer ist schwer.  ", "Der Hammer ist schwer."),
     ],
 )
-def test_generation_strips_quotes_and_whitespace(raw, expected):
+def test_generation_strips_quotes_and_whitespace(raw: str, expected: str) -> None:
     fake_client = _fake_openai_client(content=raw)
 
     with mock.patch.object(
@@ -76,7 +82,7 @@ def test_generation_strips_quotes_and_whitespace(raw, expected):
 
 
 @pytest.mark.parametrize("content", [None, "", '""'])
-def test_generation_raises_on_empty_response(content):
+def test_generation_raises_on_empty_response(content: str | None) -> None:
     fake_client = _fake_openai_client(content=content)
 
     with mock.patch.object(
@@ -92,7 +98,7 @@ def test_generation_raises_on_empty_response(content):
 
 
 @pytest.fixture
-def fast_worker(transactional_db):
+def fast_worker(transactional_db: None) -> Generator[None, None, None]:
     """
     Strip the throttle so tests don't sleep, and start from an empty Word table.
 
@@ -106,7 +112,7 @@ def fast_worker(transactional_db):
         yield
 
 
-def _run_drain(word_ids=None, job_title=None):
+def _run_drain(word_ids: list[int] | None = None, job_title: str | None = None) -> None:
     """
     Run the worker in a thread, like it runs in production.
 
@@ -128,14 +134,14 @@ def _run_drain(word_ids=None, job_title=None):
     assert not thread.is_alive()
 
 
-def _make_word(**overrides) -> Word:
-    defaults = {"word": "Hammer", "singular_article": 1}
+def _make_word(**overrides: Any) -> Word:
+    defaults: dict[str, Any] = {"word": "Hammer", "singular_article": 1}
     defaults.update(overrides)
     return Word.objects.create(**defaults)
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_generates_sentence_with_job_title(fast_worker):
+def test_drain_generates_sentence_with_job_title(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -155,7 +161,7 @@ def test_drain_generates_sentence_with_job_title(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_skips_word_that_already_has_a_sentence(fast_worker):
+def test_drain_skips_word_that_already_has_a_sentence(fast_worker: None) -> None:
     _make_word(word="Hammer", example_sentence="Schon vorhanden.")
 
     with mock.patch.object(sentence_generation, "openai_example_sentence") as gen:
@@ -165,7 +171,7 @@ def test_drain_skips_word_that_already_has_a_sentence(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_passes_unit_title_to_generation(fast_worker):
+def test_drain_passes_unit_title_to_generation(fast_worker: None) -> None:
     job = Job.objects.create(name="Tischler")
     unit = Unit.objects.create(title="Werkzeuge")
     unit.jobs.add(job)
@@ -183,7 +189,7 @@ def test_drain_passes_unit_title_to_generation(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_derives_job_from_units_when_no_job_title(fast_worker):
+def test_drain_derives_job_from_units_when_no_job_title(fast_worker: None) -> None:
     job = Job.objects.create(name="Maler")
     unit = Unit.objects.create(title="Farben")
     unit.jobs.add(job)
@@ -202,7 +208,7 @@ def test_drain_derives_job_from_units_when_no_job_title(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_skips_word_without_job_context(fast_worker):
+def test_drain_skips_word_without_job_context(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(sentence_generation, "openai_example_sentence") as gen:
@@ -215,7 +221,7 @@ def test_drain_skips_word_without_job_context(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_only_processes_given_word_ids(fast_worker):
+def test_drain_only_processes_given_word_ids(fast_worker: None) -> None:
     imported = _make_word(word="Hammer")
     other = _make_word(word="Säge")
 
@@ -234,11 +240,11 @@ def test_drain_only_processes_given_word_ids(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_isolates_failures_per_row(fast_worker):
+def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(word, _job, _unit=None):
+    def maybe_fail(word: str, _job: str, _unit: str | None = None) -> str:
         if word == "Schraubenzieher":
             raise ValueError("simulated openai 5xx")
         return "Ein Satz."
@@ -255,7 +261,7 @@ def test_drain_isolates_failures_per_row(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_does_not_repick_a_failed_row(fast_worker):
+def test_drain_does_not_repick_a_failed_row(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -272,7 +278,7 @@ def test_drain_does_not_repick_a_failed_row(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_exits_quietly_when_openai_not_configured(fast_worker):
+def test_drain_exits_quietly_when_openai_not_configured(fast_worker: None) -> None:
     _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -285,7 +291,7 @@ def test_drain_exits_quietly_when_openai_not_configured(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_skips_words_with_empty_word(fast_worker):
+def test_drain_skips_words_with_empty_word(fast_worker: None) -> None:
     Word.objects.create(word="", singular_article=0)
 
     with mock.patch.object(sentence_generation, "openai_example_sentence") as gen:
@@ -295,7 +301,7 @@ def test_drain_skips_words_with_empty_word(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_is_single_flight(fast_worker):
+def test_drain_is_single_flight(fast_worker: None) -> None:
     _make_word(word="Hammer")
 
     sentence_generation._drain_lock.acquire()  # pylint: disable=protected-access

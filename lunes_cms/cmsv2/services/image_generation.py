@@ -11,6 +11,8 @@ the drain single-flight; it is separate from the audio drain's lock so image
 and audio generation can run concurrently.
 """
 
+from __future__ import annotations
+
 import base64
 import logging
 import threading
@@ -65,11 +67,13 @@ def openai_word_image_bytes(word: Word, job_title: str | None = None) -> bytes:
     Generate PNG bytes for a single word via the OpenAI image API.
     """
     client = get_openai_client()
+    # quality is an env-configured str (LUNES_CMS_OPENAI_IMAGE_QUALITY), which the
+    # SDK's overloads can't statically narrow to their Literal[...] type.
     response = client.images.generate(
         model=settings.OPENAI_IMAGE_MODEL,
         prompt=build_image_prompt(word.word, job_title=job_title),
         size="1024x1024",
-        quality=settings.OPENAI_IMAGE_QUALITY,
+        quality=settings.OPENAI_IMAGE_QUALITY,  # type: ignore[call-overload]
         n=1,
     )
     return base64.b64decode(response.data[0].b64_json)
