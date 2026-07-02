@@ -1,4 +1,11 @@
-when: << pipeline.parameters.run_promotion >>
+when:
+  and:
+    - << pipeline.parameters.run_promotion >>
+    - or:
+        - equal: [main, << pipeline.git.branch >>]
+        - matches:
+            pattern: "^(release|hotfix)-.*"
+            value: << pipeline.git.branch >>
 jobs:
   - publish-release-artifact:
       context: pypi

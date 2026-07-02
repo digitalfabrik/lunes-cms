@@ -3,13 +3,12 @@ steps:
   - checkout
   - attach_workspace:
       at: .
+  - restore-environment-variables
   - activate-venv
-  - run:
-      name: Use alternative README.md file
-      command: mv lunes_cms/README.md .
   - run:
       name: Build lunes-cms package
       command: |
+        export SETUPTOOLS_SCM_PRETEND_VERSION="${NEW_VERSION}"
         pip install .
         python -m build --sdist .
         python -m build --wheel .
