@@ -2,10 +2,13 @@
 E2E test: Einheit löschen — generates user_docs/delete_unit.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 JOB_NAME = "Köchin/Koch"
 UNIT_NAME = "Arbeitssicherheit"
@@ -15,9 +18,9 @@ UNIT_DESCRIPTION = f"Vokabeln zu {UNIT_NAME}"
 @pytest.mark.e2e
 def test_delete_unit(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     add_unit: Callable,
     delete_job: Callable,

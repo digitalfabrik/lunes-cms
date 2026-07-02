@@ -2,10 +2,14 @@
 E2E test: Mehrere Jobs löschen — generates user_docs/bulk_delete_jobs.md
 """
 
+from __future__ import annotations
+
 from functools import partial
+from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 JOB_NAMES = ["Schlosser/-in", "Klempner/-in", "Dachdecker/-in"]
 
@@ -13,11 +17,11 @@ JOB_NAMES = ["Schlosser/-in", "Klempner/-in", "Dachdecker/-in"]
 @pytest.mark.e2e
 def test_bulk_delete_jobs(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
-    add_job,
-    delete_job,
+    login: None,
+    add_job: Callable,
+    delete_job: Callable,
     request: pytest.FixtureRequest,
 ) -> None:
     for job_name in JOB_NAMES:

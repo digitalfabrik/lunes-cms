@@ -2,7 +2,11 @@
 Tests for the background audio generation worker.
 """
 
+from __future__ import annotations
+
 import threading
+from collections.abc import Callable, Generator
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -15,7 +19,7 @@ from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
 @pytest.fixture(autouse=True)
-def _bypass_audio_conversion():
+def _bypass_audio_conversion() -> Generator[None, None, None]:
     """
     Word.save() runs ``convert_audio()`` (ffmpeg re-encodes the mp3) when an
     audio file is set. We feed dummy bytes through the worker, so skip the
@@ -26,7 +30,7 @@ def _bypass_audio_conversion():
 
 
 @pytest.fixture
-def fast_worker(transactional_db):
+def fast_worker(transactional_db: None) -> Generator[None, None, None]:
     """
     Strip the throttle so tests don't sleep, and start from an empty Word table.
 
@@ -40,7 +44,7 @@ def fast_worker(transactional_db):
         yield
 
 
-def _run_drain(word_ids=None):
+def _run_drain(word_ids: list[int] | None = None) -> None:
     """
     Run the worker in a thread, like it runs in production.
 
@@ -58,8 +62,8 @@ def _run_drain(word_ids=None):
     assert not thread.is_alive()
 
 
-def _make_word(**overrides) -> Word:
-    defaults = {
+def _make_word(**overrides: Any) -> Word:
+    defaults: dict[str, Any] = {
         "word": "Hammer",
         "singular_article": 1,
     }
@@ -68,7 +72,7 @@ def _make_word(**overrides) -> Word:
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_generates_audio_for_word_missing_audio(fast_worker):
+def test_drain_generates_audio_for_word_missing_audio(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -83,7 +87,7 @@ def test_drain_generates_audio_for_word_missing_audio(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_generates_sentence_audio_when_example_present(fast_worker):
+def test_drain_generates_sentence_audio_when_example_present(fast_worker: None) -> None:
     word = _make_word(word="Hammer", example_sentence="Der Hammer ist schwer.")
 
     with (
@@ -106,7 +110,7 @@ def test_drain_generates_sentence_audio_when_example_present(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_is_idempotent_for_already_generated_words(fast_worker):
+def test_drain_is_idempotent_for_already_generated_words(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
     word.audio.save("hammer.mp3", ContentFile(b"existing"))
     word.refresh_from_db()
@@ -126,7 +130,7 @@ def test_drain_is_idempotent_for_already_generated_words(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_isolates_failures_per_row(fast_worker):
+def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
@@ -147,7 +151,7 @@ def test_drain_isolates_failures_per_row(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_exits_quietly_when_openai_not_configured(fast_worker):
+def test_drain_exits_quietly_when_openai_not_configured(fast_worker: None) -> None:
     _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -160,7 +164,7 @@ def test_drain_exits_quietly_when_openai_not_configured(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_picks_word_missing_only_sentence_audio(fast_worker):
+def test_drain_picks_word_missing_only_sentence_audio(fast_worker: None) -> None:
     word = _make_word(word="Hammer", example_sentence="Der Hammer ist schwer.")
     word.audio.save("hammer.mp3", ContentFile(b"existing"))
     word.refresh_from_db()
@@ -184,7 +188,7 @@ def test_drain_picks_word_missing_only_sentence_audio(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_skips_words_with_empty_word(fast_worker):
+def test_drain_skips_words_with_empty_word(fast_worker: None) -> None:
     Word.objects.create(word="", singular_article=0)
 
     with mock.patch.object(
@@ -196,7 +200,7 @@ def test_drain_skips_words_with_empty_word(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_does_not_repick_a_failed_row(fast_worker):
+def test_drain_does_not_repick_a_failed_row(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -213,7 +217,7 @@ def test_drain_does_not_repick_a_failed_row(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_only_processes_given_word_ids(fast_worker):
+def test_drain_only_processes_given_word_ids(fast_worker: None) -> None:
     imported = _make_word(word="Hammer")
     other = _make_word(word="Säge")
 
@@ -230,7 +234,7 @@ def test_drain_only_processes_given_word_ids(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_is_single_flight(fast_worker):
+def test_drain_is_single_flight(fast_worker: None) -> None:
     _make_word(word="Hammer")
 
     audio_generation._drain_lock.acquire()  # pylint: disable=protected-access
@@ -257,8 +261,8 @@ def test_drain_is_single_flight(fast_worker):
     ],
 )
 def test_word_audio_text_includes_article_and_word(
-    fast_worker, singular_article, word, expected_text
-):
+    fast_worker: None, singular_article: int, word: str, expected_text: str
+) -> None:
     _make_word(word=word, singular_article=singular_article)
 
     with mock.patch.object(
@@ -270,7 +274,7 @@ def test_word_audio_text_includes_article_and_word(
     assert tts_call.call_args[0][0] == expected_text
 
 
-def _fake_openai_client(audio_bytes=b"raw-mp3"):
+def _fake_openai_client(audio_bytes: bytes = b"raw-mp3") -> mock.Mock:
     fake_response = mock.Mock()
     fake_response.iter_bytes.return_value = [audio_bytes]
     fake_client = mock.Mock()
@@ -278,7 +282,7 @@ def _fake_openai_client(audio_bytes=b"raw-mp3"):
     return fake_client
 
 
-def test_word_audio_pins_pronunciation_to_german():
+def test_word_audio_pins_pronunciation_to_german() -> None:
     """
     A single word has no sentence context, so the model otherwise reads German
     terms with the wrong accent. The TTS call must pass the German-pronunciation
@@ -304,7 +308,7 @@ def test_word_audio_pins_pronunciation_to_german():
     )
 
 
-def test_sentence_audio_reuses_german_instruction_with_intonation():
+def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
     """
     Sentence audio shares the single German-pronunciation instruction and only
     adds an intonation hint, rather than duplicating the pronunciation wording.
@@ -333,7 +337,9 @@ def test_sentence_audio_reuses_german_instruction_with_intonation():
         (audio_generation.openai_sentence_audio_bytes, ("Das ist ein Apfel.",)),
     ],
 )
-def test_generated_audio_is_loudness_normalized(generate, args):
+def test_generated_audio_is_loudness_normalized(
+    generate: Callable[..., bytes], args: tuple[str, ...]
+) -> None:
     """
     Word and sentence audio come back from the model at different levels, so
     both must run through loudness normalization to play back at one volume.
@@ -365,7 +371,10 @@ def test_generated_audio_is_loudness_normalized(generate, args):
         ("", "audio/audio.mp3"),
     ],
 )
-def test_convert_umlaute_audio_keeps_word_name(filename, expected):
+def test_convert_umlaute_audio_keeps_word_name(filename: str, expected: str) -> None:
     from lunes_cms.cmsv2.models.static import convert_umlaute_audio
 
-    assert convert_umlaute_audio(None, filename) == expected
+    # The Django `upload_to` callback signature requires a Model instance, but
+    # the implementation ignores its first argument entirely; passing None
+    # mirrors how Django itself would call this for an unsaved instance.
+    assert convert_umlaute_audio(None, filename) == expected  # type: ignore[arg-type]

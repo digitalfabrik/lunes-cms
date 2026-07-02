@@ -2,10 +2,13 @@
 E2E test: Gruppe anlegen — generates user_docs/add_group.md
 """
 
-import pytest
-from playwright.sync_api import Page, expect
+from __future__ import annotations
 
-from conftest import PERMISSION_GROUPS
+from typing import Callable
+
+import pytest
+from conftest import DocPage, PERMISSION_GROUPS
+from playwright.sync_api import expect, Page
 
 GROUP_NAME = "Neue Vokabelverwalter:innen"
 
@@ -13,10 +16,10 @@ GROUP_NAME = "Neue Vokabelverwalter:innen"
 @pytest.mark.e2e
 def test_add_group(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
-    delete_group,
+    login: None,
+    delete_group: Callable,
     request: pytest.FixtureRequest,
 ) -> None:
     request.addfinalizer(lambda: delete_group(GROUP_NAME))

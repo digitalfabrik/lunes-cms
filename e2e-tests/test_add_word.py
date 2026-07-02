@@ -2,10 +2,12 @@
 E2E test: Wort hinzufügen — generates user_docs/add_word.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from conftest import ASSETS_DIR, select_autocomplete
+from conftest import ASSETS_DIR, DocPage, select_autocomplete
 from playwright.sync_api import expect, Page
 
 JOB_NAME = "Warentester/-in"
@@ -24,9 +26,9 @@ ADDITIONAL_MEANING_2 = "Zeigegerät"
 @pytest.mark.e2e
 def test_add_word(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     add_unit: Callable,
     delete_unit: Callable,

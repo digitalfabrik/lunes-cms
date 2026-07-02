@@ -1,4 +1,11 @@
+from __future__ import annotations
+
+from typing import Any
+
+from django.db.models import QuerySet
 from rest_framework import viewsets
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from ....cmsv2.models import Word
 from ..matomo_tracking import matomo_tracking
@@ -14,16 +21,16 @@ class WordViewSet(viewsets.ModelViewSet):
     http_method_names = ["get"]
 
     @matomo_tracking(action_name="All words")
-    def list(self, request, *args, **kwargs):
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """List all words with Matomo tracking."""
         return super().list(request, *args, **kwargs)
 
     @matomo_tracking(action_name="Word", resource_id="pk")
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Retrieve a single word with Matomo tracking."""
         return super().retrieve(request, *args, **kwargs)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Word]:
         """
         Get the queryset of words/documents
 

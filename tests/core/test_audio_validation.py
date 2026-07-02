@@ -2,9 +2,12 @@
 Tests for the audio validation logic in Document.clean() and Word.clean().
 """
 
+from __future__ import annotations
+
 import json
 import shutil
 import subprocess
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -24,11 +27,11 @@ requires_ffmpeg = pytest.mark.skipif(
 
 
 class TestDocumentClean:
-    def test_passes_when_no_audio(self):
+    def test_passes_when_no_audio(self) -> None:
         document = Document(word="Hammer", singular_article=1)
         document.clean()
 
-    def test_skips_validation_for_committed_audio(self):
+    def test_skips_validation_for_committed_audio(self) -> None:
         document = Document(word="Hammer", singular_article=1)
         document.audio = "audio/existing.mp3"
 
@@ -39,7 +42,7 @@ class TestDocumentClean:
 
         mock_validate.assert_not_called()
 
-    def test_calls_validation_for_new_upload(self):
+    def test_calls_validation_for_new_upload(self) -> None:
         document = Document(word="Hammer", singular_article=1)
         document.audio = ContentFile(b"fake-mp3", name="test.mp3")
 
@@ -50,7 +53,7 @@ class TestDocumentClean:
 
         mock_validate.assert_called_once()
 
-    def test_raises_for_invalid_audio(self):
+    def test_raises_for_invalid_audio(self) -> None:
         document = Document(word="Hammer", singular_article=1)
         document.audio = ContentFile(b"not-audio", name="test.mp3")
 
@@ -63,11 +66,11 @@ class TestDocumentClean:
 
 
 class TestWordClean:
-    def test_passes_when_no_audio(self):
+    def test_passes_when_no_audio(self) -> None:
         word = Word(word="Hammer", singular_article=1)
         word.clean()
 
-    def test_calls_validation_for_new_upload(self):
+    def test_calls_validation_for_new_upload(self) -> None:
         word = Word(word="Hammer", singular_article=1)
         word.audio = ContentFile(b"fake-mp3", name="test.mp3")
 
@@ -78,7 +81,7 @@ class TestWordClean:
 
         mock_validate.assert_called_once()
 
-    def test_raises_for_invalid_audio(self):
+    def test_raises_for_invalid_audio(self) -> None:
         word = Word(word="Hammer", singular_article=1)
         word.audio = ContentFile(b"not-audio", name="test.mp3")
 
@@ -90,7 +93,7 @@ class TestWordClean:
                 word.clean()
 
     @pytest.mark.django_db
-    def test_skips_validation_for_unchanged_audio(self):
+    def test_skips_validation_for_unchanged_audio(self) -> None:
         word = Word.objects.create(word="Hammer", singular_article=1)
         Word.objects.filter(pk=word.pk).update(audio="audio/hammer.mp3")
         word.refresh_from_db()
@@ -103,7 +106,12 @@ class TestWordClean:
         mock_validate.assert_not_called()
 
 
-def _make_mp3(tmp_path, volume="0.2", sample_rate="24000", duration="0.7"):
+def _make_mp3(
+    tmp_path: Path,
+    volume: str = "0.2",
+    sample_rate: str = "24000",
+    duration: str = "0.7",
+) -> bytes:
     """Render a short, quiet mono mp3 with ffmpeg, mimicking a generated word clip."""
     path = tmp_path / "tone.mp3"
     subprocess.run(
@@ -130,7 +138,7 @@ def _make_mp3(tmp_path, volume="0.2", sample_rate="24000", duration="0.7"):
     return path.read_bytes()
 
 
-def _measure_lufs(audio_bytes, tmp_path):
+def _measure_lufs(audio_bytes: bytes, tmp_path: Path) -> float:
     path = tmp_path / "measure.mp3"
     path.write_bytes(audio_bytes)
     result = subprocess.run(
@@ -154,7 +162,7 @@ def _measure_lufs(audio_bytes, tmp_path):
 
 @requires_ffmpeg
 class TestNormalizeLoudness:
-    def test_brings_quiet_clip_to_target_loudness(self, tmp_path):
+    def test_brings_quiet_clip_to_target_loudness(self, tmp_path: Path) -> None:
         raw = _make_mp3(tmp_path, volume="0.2")
 
         normalized = normalize_loudness(raw, -16.0)
@@ -163,7 +171,7 @@ class TestNormalizeLoudness:
         # the very short clips that single-pass loudnorm handles poorly.
         assert abs(_measure_lufs(normalized, tmp_path) - (-16.0)) < 2.0
 
-    def test_preserves_source_sample_rate(self, tmp_path):
+    def test_preserves_source_sample_rate(self, tmp_path: Path) -> None:
         raw = _make_mp3(tmp_path, sample_rate="24000")
 
         normalized = normalize_loudness(raw, -16.0)
@@ -190,6 +198,6 @@ class TestNormalizeLoudness:
         # loudnorm would otherwise force 48 kHz; we re-encode at the source rate.
         assert probe.stdout.strip() == "24000"
 
-    def test_raises_validation_error_on_invalid_audio(self, tmp_path):
+    def test_raises_validation_error_on_invalid_audio(self, tmp_path: Path) -> None:
         with pytest.raises(ValidationError):
             normalize_loudness(b"not-an-mp3", -16.0)

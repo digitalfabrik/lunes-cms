@@ -5,6 +5,8 @@ This module provides a decorator to track API requests to Matomo asynchronously,
 without blocking the main request/response cycle.
 """
 
+from __future__ import annotations
+
 import atexit
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -15,6 +17,9 @@ from urllib import error, parse
 from urllib import request as urllib_request
 
 from django.conf import settings
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +114,7 @@ def matomo_tracking(
     action_name: str,
     category: str = "API",
     resource_id: Optional[str] = None,
-) -> Callable:
+) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
     """
     Decorator for tracking API endpoint access in Matomo.
 
@@ -123,9 +128,11 @@ def matomo_tracking(
     :return: Decorated function
     """
 
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Response]) -> Callable[..., Response]:
         @wraps(func)
-        def wrapper(self, http_request, *args: Any, **kwargs: Any):
+        def wrapper(
+            self: ViewSet, http_request: Request, *args: Any, **kwargs: Any
+        ) -> Response:
             # Execute the original function first
             response = func(self, http_request, *args, **kwargs)
 

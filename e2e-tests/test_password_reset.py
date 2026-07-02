@@ -2,18 +2,21 @@
 E2E test: Passwort zurücksetzen — generates user_docs/password_reset.md
 """
 
+from __future__ import annotations
+
 import re
-from typing import Generator
+from typing import Callable, Generator
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import Browser, BrowserContext, expect, Page
 
 NEW_PASSWORD = "Lunes-Test-2024!"
 TEST_EMAIL = "max.mustermann@berufsschule-musterstadt.de"
 
 
 @pytest.fixture
-def context(browser):
+def context(browser: Browser) -> Generator[BrowserContext, None, None]:
     """Fresh unauthenticated context for testing the password reset flow."""
     ctx = browser.new_context(locale="de-DE")
     yield ctx
@@ -29,7 +32,11 @@ def password_reset_user() -> Generator[None, None, None]:
 
 @pytest.mark.e2e
 def test_password_reset(
-    page: Page, document, base_url: str, email_outbox, password_reset_user
+    page: Page,
+    document: DocPage,
+    base_url: str,
+    email_outbox: Callable[[], str],
+    password_reset_user: None,
 ) -> None:
     page.goto(f"{base_url}/de/admin/login/")
 

@@ -57,6 +57,7 @@ dev = [
 	"build<=1.5.0",
 	"bumpver==2026.1132",
 	"django-debug-toolbar==7.0.0",
+	"django-stubs[compatible-mypy]==6.0.6",
 	"isort",
 	"mypy",
 	"pre-commit==4.6.0",
@@ -109,6 +110,7 @@ exclude_also = [
 ]
 
 [tool.mypy]
+plugins = ["mypy_django_plugin.main"]
 python_version = "3.13"
 exclude = [
     '^lunes_cms/cms/',
@@ -117,8 +119,19 @@ exclude = [
 ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
-check_untyped_defs = false
-disallow_untyped_defs = false
+check_untyped_defs = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "lunes_cms.cms.*"
+follow_imports = "skip"
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "lunes_cms.core.settings"
 
 [tool.black]
 target-version = ["py311", "py312", "py313"]

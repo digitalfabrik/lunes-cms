@@ -2,11 +2,17 @@
 Tests for the background image generation worker.
 """
 
+from __future__ import annotations
+
 import threading
+from collections.abc import Generator
+from pathlib import Path
+from typing import Any
 from unittest import mock
 
 import pytest
 from django.core.files.base import ContentFile
+from pytest_django.fixtures import SettingsWrapper
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models import word as word_module
@@ -15,7 +21,7 @@ from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
 @pytest.fixture(autouse=True)
-def _bypass_webp_conversion():
+def _bypass_webp_conversion() -> Generator[None, None, None]:
     """
     Word.save() runs ``convert_image_to_webp()`` (Pillow re-encodes the file)
     when an image is set. We feed dummy bytes through the worker, so skip the
@@ -28,7 +34,9 @@ def _bypass_webp_conversion():
 
 
 @pytest.fixture
-def fast_worker(transactional_db, settings, tmp_path):
+def fast_worker(
+    transactional_db: None, settings: SettingsWrapper, tmp_path: Path
+) -> Generator[None, None, None]:
     """
     Strip the throttle so tests don't sleep, start from an empty Word table,
     and write media to an isolated temp dir.
@@ -45,7 +53,7 @@ def fast_worker(transactional_db, settings, tmp_path):
         yield
 
 
-def _run_drain(word_ids=None):
+def _run_drain(word_ids: list[int] | None = None) -> None:
     """
     Run the worker in a thread, like it runs in production.
 
@@ -63,8 +71,8 @@ def _run_drain(word_ids=None):
     assert not thread.is_alive()
 
 
-def _make_word(**overrides) -> Word:
-    defaults = {
+def _make_word(**overrides: Any) -> Word:
+    defaults: dict[str, Any] = {
         "word": "Hammer",
         "singular_article": 1,
     }
@@ -73,7 +81,7 @@ def _make_word(**overrides) -> Word:
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_generates_image_for_word_missing_image(fast_worker):
+def test_drain_generates_image_for_word_missing_image(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -88,7 +96,7 @@ def test_drain_generates_image_for_word_missing_image(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_stores_image_under_standard_path(fast_worker):
+def test_drain_stores_image_under_standard_path(fast_worker: None) -> None:
     word = _make_word(word="Säge & Co")
 
     with mock.patch.object(
@@ -99,13 +107,14 @@ def test_drain_stores_image_under_standard_path(fast_worker):
     word.refresh_from_db()
     # Naming is delegated to the field's ``upload_to`` (a UUID under images/),
     # consistent with every other image in the system — never word-derived.
+    assert word.image.name is not None
     assert word.image.name.startswith("images/")
     assert word.image.name.endswith(".png")
     assert "Säge" not in word.image.name
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_is_idempotent_for_already_generated_words(fast_worker):
+def test_drain_is_idempotent_for_already_generated_words(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
     word.image.save("hammer.png", ContentFile(b"existing"))
     word.refresh_from_db()
@@ -117,7 +126,7 @@ def test_drain_is_idempotent_for_already_generated_words(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_isolates_failures_per_row(fast_worker):
+def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
@@ -138,7 +147,7 @@ def test_drain_isolates_failures_per_row(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_exits_quietly_when_openai_not_configured(fast_worker):
+def test_drain_exits_quietly_when_openai_not_configured(fast_worker: None) -> None:
     _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -151,7 +160,7 @@ def test_drain_exits_quietly_when_openai_not_configured(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_skips_words_with_empty_word(fast_worker):
+def test_drain_skips_words_with_empty_word(fast_worker: None) -> None:
     Word.objects.create(word="", singular_article=0)
 
     with mock.patch.object(image_generation, "openai_word_image_bytes") as image_call:
@@ -161,7 +170,7 @@ def test_drain_skips_words_with_empty_word(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_does_not_repick_a_failed_row(fast_worker):
+def test_drain_does_not_repick_a_failed_row(fast_worker: None) -> None:
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
@@ -178,7 +187,7 @@ def test_drain_does_not_repick_a_failed_row(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_only_processes_given_word_ids(fast_worker):
+def test_drain_only_processes_given_word_ids(fast_worker: None) -> None:
     imported = _make_word(word="Hammer")
     other = _make_word(word="Säge")
 
@@ -195,7 +204,7 @@ def test_drain_only_processes_given_word_ids(fast_worker):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_is_single_flight(fast_worker):
+def test_drain_is_single_flight(fast_worker: None) -> None:
     _make_word(word="Hammer")
 
     image_generation._drain_lock.acquire()  # pylint: disable=protected-access
@@ -210,7 +219,7 @@ def test_drain_is_single_flight(fast_worker):
         image_generation._drain_lock.release()  # pylint: disable=protected-access
 
 
-def test_build_image_prompt_includes_word_and_optional_hints():
+def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     bare = image_generation.build_image_prompt("Hammer")
     # Quotes around the the word make it more likely to have the word printed in the image
     assert "Hammer" in bare
@@ -229,7 +238,7 @@ def test_build_image_prompt_includes_word_and_optional_hints():
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_passes_job_title_to_image_generation(fast_worker):
+def test_drain_passes_job_title_to_image_generation(fast_worker: None) -> None:
     imported = _make_word(word="Hammer")
 
     with mock.patch.object(

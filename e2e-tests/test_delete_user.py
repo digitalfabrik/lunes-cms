@@ -2,10 +2,13 @@
 E2E test: Benutzer:in löschen — generates user_docs/delete_user.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 USERNAME = "test_lunes_user_neu"
 PASSWORD = "lunes2024!"
@@ -14,9 +17,9 @@ PASSWORD = "lunes2024!"
 @pytest.mark.e2e
 def test_delete_user(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_user: Callable,
     delete_user: Callable,
     request: pytest.FixtureRequest,

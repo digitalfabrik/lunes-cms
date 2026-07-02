@@ -2,15 +2,16 @@
 E2E test: Wort-Audio und -Bild mit KI generieren — generates user_docs/generate_word_audio_and_image.md
 """
 
+from __future__ import annotations
+
 import json
 import re
 from pathlib import Path
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, Route, expect
-
-from conftest import ASSETS_DIR
+from conftest import ASSETS_DIR, DocPage
+from playwright.sync_api import expect, Page, Route
 
 JOB_NAME = "Elektriker/-in"
 UNIT_NAME = "Elektrowerkzeuge"
@@ -83,9 +84,9 @@ def _fulfill_store_success(route: Route) -> None:
 @pytest.mark.e2e
 def test_generate_word_audio_and_image(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     add_unit: Callable,
     delete_unit: Callable,

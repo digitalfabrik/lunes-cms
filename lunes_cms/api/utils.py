@@ -2,14 +2,22 @@
 A collection of helper methods and classes
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Q
-from django.http import JsonResponse
+from django.db.models import Count, Q, QuerySet
+from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import routers
 
 from ..cms.models import Discipline, Document, GroupAPIKey
 from ..cms.utils import document_to_string, get_child_count
+
+if TYPE_CHECKING:
+    from rest_framework.request import Request
+    from rest_framework.viewsets import GenericViewSet
 
 
 class OptionalSlashRouter(routers.DefaultRouter):
@@ -17,12 +25,12 @@ class OptionalSlashRouter(routers.DefaultRouter):
     Custom router to allow routes with and without trailing slash to work without redirects
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.trailing_slash = "/?"
 
 
-def get_key(request, keyword="Api-Key"):
+def get_key(request: Request, keyword: str = "Api-Key") -> str | None:
     """Retrieve API Key from Authorization header of http request.
     Optionally, a custom keyword can be specified. The function
     espects the key to be delivered as follows:
@@ -45,7 +53,9 @@ def get_key(request, keyword="Api-Key"):
     return key
 
 
-def get_filtered_discipline_queryset(discipline_view_set):
+def get_filtered_discipline_queryset(
+    discipline_view_set: GenericViewSet,
+) -> list[Discipline]:
     """
     Returns child disciplines belonging to the discipline id
     of the passed discipline view set. Only released and non-empty
@@ -70,11 +80,10 @@ def get_filtered_discipline_queryset(discipline_view_set):
             "training_sets", filter=Q(training_sets__released=True)
         ),
     )
-    queryset = get_non_empty_disciplines(queryset)
-    return queryset
+    return get_non_empty_disciplines(queryset)
 
 
-def get_overview_discipline_queryset():
+def get_overview_discipline_queryset() -> list[Discipline]:
     """Returns the general disciplines created by super users if the are
     root nodes and recursively either has at least one sub-discipline or one
     training set. Additionally, they need to be released by the creator group.
@@ -89,12 +98,15 @@ def get_overview_discipline_queryset():
             "training_sets", filter=Q(training_sets__released=True)
         ),
     )
-    queryset = [discipline for discipline in queryset if discipline.is_root_node()]
-    queryset = get_non_empty_disciplines(queryset)
-    return queryset
+    root_disciplines = [
+        discipline for discipline in queryset if discipline.is_root_node()
+    ]
+    return get_non_empty_disciplines(root_disciplines)
 
 
-def get_discipline_by_group_queryset(discipline_view_set):
+def get_discipline_by_group_queryset(
+    discipline_view_set: GenericViewSet,
+) -> list[Discipline]:
     """Returns overview of disciplines for a given group id, which must be
     in the keyword arguments of the passed discipline view set. All elements are
     root nodes and recursively either have at least one sub-discipline or one
@@ -112,15 +124,16 @@ def get_discipline_by_group_queryset(discipline_view_set):
             "training_sets", filter=Q(training_sets__released=True)
         ),
     )
-    queryset = [
+    return [
         discipline
         for discipline in queryset
         if discipline.is_root_node() and discipline.is_valid()
     ]
-    return queryset
 
 
-def get_non_empty_disciplines(queryset):
+def get_non_empty_disciplines(
+    queryset: QuerySet[Discipline] | list[Discipline],
+) -> list[Discipline]:
     """
     Filters a discipline queryset so that every element recursively either have
     at least one sub-discipline or one training set.
@@ -130,16 +143,15 @@ def get_non_empty_disciplines(queryset):
     :return: (filtered) queryset
     :rtype: QuerySet
     """
-    queryset = [
+    return [
         discipline
         for discipline in queryset
         if get_child_count(discipline) > 0
         or discipline.training_sets.filter(released=True).count() > 0
     ]
-    return queryset
 
 
-def check_group_object_permissions(request, group_id):
+def check_group_object_permissions(request: Request, group_id: str | int) -> None:
     """Function to check if the API-Key of the passed request object
     matches one of the hashed keys stored in the database of the
     corresponding group id.
@@ -159,7 +171,7 @@ def check_group_object_permissions(request, group_id):
         raise PermissionDenied()
 
 
-def build_absolute_url(context, url):
+def build_absolute_url(context: dict, url: str | None) -> str | None:
     """
     Convert a relative URL to an absolute URL using the request from serializer context.
 
@@ -172,7 +184,7 @@ def build_absolute_url(context, url):
     return url
 
 
-def find_duplicates_for_word(_request, word):
+def find_duplicates_for_word(_request: HttpRequest, word: str) -> JsonResponse:
     """
     Function to find existing words that match the input in the "word" field of document
 
@@ -188,7 +200,7 @@ def find_duplicates_for_word(_request, word):
     """
 
     if duplicate := Document.objects.filter(word=word).first():
-        training_sets_description = _("This word is assigned to no training set.")
+        training_sets_description = str(_("This word is assigned to no training set."))
         if training_sets := duplicate.training_sets.all():
             training_sets_description = ", ".join(
                 str(training_set) for training_set in training_sets
@@ -198,11 +210,12 @@ def find_duplicates_for_word(_request, word):
             "message": _("This word is already registered in the system."),
             "word": document_to_string(duplicate) + " (" + duplicate.word_type + ")",
             "definition": (
-                _("Definition: ") + duplicate.definition
+                str(_("Definition: ")) + duplicate.definition
                 if duplicate.definition
-                else _("Definition: ") + _("No definition is provided for this word.")
+                else str(_("Definition: "))
+                + str(_("No definition is provided for this word."))
             ),
-            "training_sets": _("Training sets: ") + training_sets_description,
+            "training_sets": str(_("Training sets: ")) + training_sets_description,
         }
 
         return JsonResponse(result)

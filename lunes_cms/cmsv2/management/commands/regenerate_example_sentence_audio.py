@@ -6,11 +6,14 @@ their example sentence audio with the gpt-4o-mini-tts model which supports
 instructions for proper intonation.
 """
 
+from __future__ import annotations
+
 import logging
 import time
+from typing import Any
 
 from django.core.files.base import ContentFile
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandParser
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
@@ -27,7 +30,7 @@ class Command(BaseCommand):
         "using the new TTS model with proper intonation."
     )
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
             "--delay",
             type=float,
@@ -46,7 +49,7 @@ class Command(BaseCommand):
             help="Maximum number of items to process (default: no limit)",
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         delay = options["delay"]
         dry_run = options["dry_run"]
         limit = options["limit"]
@@ -74,7 +77,7 @@ class Command(BaseCommand):
             )
         )
 
-    def _process_words(self, delay, dry_run, limit):
+    def _process_words(self, delay: float, dry_run: bool, limit: int | None) -> int:
         """Process Word instances."""
         self.stdout.write(self.style.NOTICE("Processing words..."))
         processed_count = 0
@@ -132,7 +135,9 @@ class Command(BaseCommand):
         logger.info("Finished processing words. Count: %d", processed_count)
         return processed_count
 
-    def _process_unit_word_relations(self, delay, dry_run, limit):
+    def _process_unit_word_relations(
+        self, delay: float, dry_run: bool, limit: int | None
+    ) -> int:
         """Process UnitWordRelation instances."""
         self.stdout.write(self.style.NOTICE("Processing unit-word relations..."))
         processed_count = 0
@@ -195,7 +200,9 @@ class Command(BaseCommand):
         )
         return processed_count
 
-    def _regenerate_audio(self, instance, example_sentence, filename):
+    def _regenerate_audio(
+        self, instance: Word | UnitWordRelation, example_sentence: str, filename: str
+    ) -> bool:
         """
         Regenerate the example sentence audio for a Word or UnitWordRelation.
 
@@ -235,7 +242,7 @@ class Command(BaseCommand):
                 instance.example_sentence_audio.delete(save=False)
 
             # Save new audio
-            instance.example_sentence_audio.save(content_file.name, content_file)
+            instance.example_sentence_audio.save(filename, content_file)
             instance.example_sentence_audio_regenerated = True
             instance.save(
                 update_fields=[

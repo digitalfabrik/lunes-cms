@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from html import escape
 
 from django.conf import settings
@@ -5,7 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
@@ -28,7 +30,6 @@ class Feedback(models.Model):
         help_text=_("The id of the object this feedback entry refers to."),
     )
     content_object = GenericForeignKey("content_type", "object_id")
-    content_object.short_description = _("refers to")
 
     comment = models.TextField(
         verbose_name=_("comment"),
@@ -53,7 +54,7 @@ class Feedback(models.Model):
         help_text=_("The time and date when the feedback was submitted."),
     )
 
-    def content_object_link(self):
+    def content_object_link(self) -> SafeString:
         """
         Include a link to the edit form of the content object in list display
 
@@ -71,7 +72,7 @@ class Feedback(models.Model):
 
     content_object_link.short_description = _("refers to")  # type: ignore[attr-defined]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         String representation of feedback instance
 

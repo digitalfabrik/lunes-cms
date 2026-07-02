@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from django.db.models import QuerySet
 from rest_framework import viewsets
 
 from ....cms.models import Sponsor
@@ -12,7 +15,7 @@ class SponsorsViewSet(viewsets.ModelViewSet):
     serializer_class = SponsorSerializer
     http_method_names = ["get"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Sponsor]:
         """
         Get the queryset of the current sponsors managed by the cms.
 
