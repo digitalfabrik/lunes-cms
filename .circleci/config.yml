@@ -736,7 +736,16 @@ workflows:
                 context: deliverino
                 requires:
                     - publish-beta-package
-        when: << pipeline.parameters.run_delivery_beta >>
+        when:
+            and:
+                - << pipeline.parameters.run_delivery_beta >>
+                - or:
+                    - equal:
+                        - main
+                        - << pipeline.git.branch >>
+                    - matches:
+                        pattern: ^(release|hotfix)-.*
+                        value: << pipeline.git.branch >>
     promotion:
         jobs:
             - publish-release-artifact:
@@ -745,5 +754,14 @@ workflows:
                 context: deliverino
                 requires:
                     - publish-release-artifact
-        when: << pipeline.parameters.run_promotion >>
+        when:
+            and:
+                - << pipeline.parameters.run_promotion >>
+                - or:
+                    - equal:
+                        - main
+                        - << pipeline.git.branch >>
+                    - matches:
+                        pattern: ^(release|hotfix)-.*
+                        value: << pipeline.git.branch >>
 
