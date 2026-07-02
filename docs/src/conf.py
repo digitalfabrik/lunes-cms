@@ -90,6 +90,15 @@ intersphinx_mapping = {
 }
 #: The number of seconds for timeout. The default is None, meaning do not timeout.
 intersphinx_timeout = 5
+#: Render type hints with their fully qualified path for readability.
+autodoc_typehints_format = "fully-qualified"
+#: Several models (e.g. ``Discipline``) are both defined in a submodule and
+#: re-exported from their package's ``__init__.py``, so autodoc documents them
+#: as two separate objects. Self-referential fields (e.g. MPTT's ``parent``)
+#: then produce a short ``~Discipline`` cross-reference that matches both by
+#: suffix and can't be resolved uniquely — harmless, but ``-W`` turns it into
+#: a build failure. Suppress just this warning subtype, not others.
+suppress_warnings = ["ref.python"]
 #: The path for patched template files
 templates_path = ["templates"]
 #: Markup to shorten external links (see :doc:`sphinx:usage/extensions/extlinks`)

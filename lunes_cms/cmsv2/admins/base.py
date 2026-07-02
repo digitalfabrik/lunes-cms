@@ -1,11 +1,16 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
-from django.db.models import Model
 from django.forms import ModelForm
 from django.http import HttpRequest
+
+if TYPE_CHECKING:
+    # Only used in the type hint below. Importing it for real would make
+    # Sphinx try to document the abstract Model class itself, which crashes
+    # (it has no `_meta`, unlike its concrete subclasses).
+    from django.db.models import Model
 
 
 class BaseAdmin(admin.ModelAdmin):
