@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Any
 
 from rest_framework import serializers
@@ -18,10 +20,10 @@ TRAINING_EXERCISE_TYPES = [
 class PayloadSerializer(serializers.Serializer):
     """Common base class for all payload serializers"""
 
-    def update(self, instance, validated_data):
+    def update(self, instance: Any, validated_data: Any) -> Any:
         raise RuntimeError("Should not be called on a payload serializer")
 
-    def create(self, validated_data):
+    def create(self, validated_data: Any) -> Any:
         raise RuntimeError("Should not be called on a payload serializer")
 
 

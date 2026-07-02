@@ -1,13 +1,18 @@
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, annotations, unicode_literals
+
+from datetime import date
+from typing import Iterable, TYPE_CHECKING
 
 from django.contrib import admin
-from django.db.models import Q
+from django.db.models import Q, QuerySet
+from django.http import HttpRequest
 from django.urls import reverse
-from django.utils.html import escape, format_html, mark_safe
+from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
-from lunes_cms.cmsv2.models import Job
+from lunes_cms.cmsv2.models import Job, Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.utils import (
@@ -18,6 +23,10 @@ from lunes_cms.cmsv2.utils import (
 )
 from lunes_cms.core import settings
 
+if TYPE_CHECKING:
+    # `_StrOrPromise` only exists in django-stubs, not at runtime.
+    from django.utils.functional import _StrOrPromise
+
 
 class HasImageFilter(admin.SimpleListFilter):
     """Filter for displaying words with or without images."""
@@ -25,13 +34,17 @@ class HasImageFilter(admin.SimpleListFilter):
     title = _("Has Image")
     parameter_name = "has_image"
 
-    def lookups(self, request, model_admin):
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
         return [
             ("yes", _("Yes")),
             ("no", _("No")),
         ]
 
-    def queryset(self, request, queryset):
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
         if self.value() == "yes":
             return queryset.exclude(image="")
         if self.value() == "no":
@@ -45,7 +58,9 @@ class UnitOrJobDropdownFilter(admin.SimpleListFilter):
     title = _("Unit or Job")
     parameter_name = "unit_or_job_choice"
 
-    def lookups(self, request, model_admin):
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
         options = []
         for unit in Unit.objects.all():
             options.append((f"unit_{unit.pk}", f"Unit: {unit.title}"))
@@ -53,7 +68,9 @@ class UnitOrJobDropdownFilter(admin.SimpleListFilter):
             options.append((f"job_{job.pk}", f"Job: {job.name}"))
         return options
 
-    def queryset(self, request, queryset):
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
         value = self.value()
         if not value:
             return queryset
@@ -75,13 +92,17 @@ class HasCompleteExampleSentenceFilter(admin.SimpleListFilter):
     title = _("Has Complete Example Sentence")
     parameter_name = "has_complete_example_sentence"
 
-    def lookups(self, request, model_admin):
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
         return [
             ("yes", _("Yes")),
             ("no", _("No")),
         ]
 
-    def queryset(self, request, queryset):
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
         if self.value() == "yes":
             # Filter words that HAVE a complete example sentence package
             # (check status is CONFIRMED AND sentence audio file exists)
@@ -120,7 +141,9 @@ class MigratedFilter(admin.SimpleListFilter):
     title = _("migration status")
     parameter_name = "migrated"
 
-    def lookups(self, request, model_admin):
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
         """
         Return the filter options.
 
@@ -132,7 +155,9 @@ class MigratedFilter(admin.SimpleListFilter):
             ("no", _("Not migrated from old data model")),
         ]
 
-    def queryset(self, request, queryset):
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
         """
         Filter the queryset based on the selected option.
 
@@ -308,17 +333,17 @@ class WordAdmin(BaseAdmin):
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,
         *,
-        asset_type,
-        generate_url,
-        store_url,
-        text_field,
-        text_value,
-        store_field,
-        current_preview,
-        generate_label,
-        regenerate_label,
-        with_additional_info=False,
-    ):
+        asset_type: str,
+        generate_url: str,
+        store_url: str,
+        text_field: str,
+        text_value: _StrOrPromise,
+        store_field: str,
+        current_preview: _StrOrPromise,
+        generate_label: _StrOrPromise,
+        regenerate_label: _StrOrPromise,
+        with_additional_info: bool = False,
+    ) -> SafeString:
         """
         Render an inline (re)generation widget for the change page.
 
@@ -327,7 +352,7 @@ class WordAdmin(BaseAdmin):
         side by side for comparison, and lets the user keep the new one or
         discard it and keep the current one.
         """
-        additional_info_html = ""
+        additional_info_html: _StrOrPromise = ""
         if with_additional_info:
             additional_info_html = format_html(
                 '<div class="regen-additional-info-row">'
@@ -382,7 +407,7 @@ class WordAdmin(BaseAdmin):
             discard_label=_("Discard new"),
         )
 
-    def audio_generate(self, obj):
+    def audio_generate(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for the inline audio (re)generation widget.
 
@@ -394,6 +419,7 @@ class WordAdmin(BaseAdmin):
         """
         if not obj.pk:
             return _("Save to enable audio generation.")
+        current_preview: _StrOrPromise
         if obj.audio:
             current_preview = format_html(
                 "<audio controls src='{}'></audio>", cache_busted_url(obj.audio)
@@ -416,7 +442,7 @@ class WordAdmin(BaseAdmin):
 
     audio_generate.short_description = _("Audio Generation")  # type: ignore[attr-defined]
 
-    def audio_player(self, obj):
+    def audio_player(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for the audio player preview.
 
@@ -435,7 +461,7 @@ class WordAdmin(BaseAdmin):
 
     audio_player.short_description = "Audio Preview"  # type: ignore[attr-defined]
 
-    def example_sentence_generate(self, obj):
+    def example_sentence_generate(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for the inline example sentence generation widget.
 
@@ -459,7 +485,7 @@ class WordAdmin(BaseAdmin):
 
     example_sentence_generate.short_description = _("Example Sentence Generation")  # type: ignore[attr-defined]
 
-    def example_sentence_audio_generate(self, obj):
+    def example_sentence_audio_generate(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for the inline example sentence audio (re)generation widget.
 
@@ -471,6 +497,7 @@ class WordAdmin(BaseAdmin):
         """
         if not obj.pk or not is_not_blank(obj.example_sentence):
             return _("Save to enable audio generation.")
+        current_preview: _StrOrPromise
         if obj.example_sentence_audio:
             current_preview = format_html(
                 "<audio controls src='{}'></audio>",
@@ -497,7 +524,7 @@ class WordAdmin(BaseAdmin):
 
     example_sentence_audio_generate.short_description = _("Example Sentence Audio Generation")  # type: ignore[attr-defined]
 
-    def example_sentence_audio_player(self, obj):
+    def example_sentence_audio_player(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for the example sentence audio player preview.
 
@@ -516,7 +543,7 @@ class WordAdmin(BaseAdmin):
 
     example_sentence_audio_player.short_description = "Example Sentence Audio Preview"  # type: ignore[attr-defined]
 
-    def image_tag(self, obj):
+    def image_tag(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for displaying the word's image with hover-to-enlarge functionality.
 
@@ -543,7 +570,7 @@ class WordAdmin(BaseAdmin):
 
     image_tag.short_description = _("Image Preview")  # type: ignore[attr-defined]
 
-    def image_generate(self, obj):
+    def image_generate(self, obj: Word) -> _StrOrPromise:
         """
         Generate HTML for the inline image (re)generation widget.
 
@@ -555,6 +582,7 @@ class WordAdmin(BaseAdmin):
         """
         if not obj.pk:
             return _("Save to enable image generation.")
+        current_preview: _StrOrPromise
         if obj.image:
             current_preview = format_html(
                 '<img src="{}" alt="{}" style="max-width: min(200px, 100%);">',
@@ -580,7 +608,7 @@ class WordAdmin(BaseAdmin):
 
     image_generate.short_description = _("Image Generation")  # type: ignore[attr-defined]
 
-    def creator_group(self, obj):
+    def creator_group(self, obj: Word) -> str | None:
         """
         Determine the creator group for display in the admin interface.
 
@@ -594,12 +622,12 @@ class WordAdmin(BaseAdmin):
         if obj.creator_is_admin:
             return "Admin"
         if obj.created_by:
-            return obj.created_by
+            return str(obj.created_by)
         return None
 
     creator_group.short_description = _("creator group")  # type: ignore[attr-defined]
 
-    def list_audio(self, obj):
+    def list_audio(self, obj: Word) -> SafeString:
         """
         Generate HTML for displaying the word's audio with controls in the admin list view.
 
@@ -666,7 +694,7 @@ class WordAdmin(BaseAdmin):
 
     list_audio.short_description = _("audio")  # type: ignore[attr-defined]
 
-    def list_image(self, obj):
+    def list_image(self, obj: Word) -> SafeString:
         """
         Generate HTML for displaying the word's images with controls in the admin list view.
 
@@ -691,7 +719,7 @@ class WordAdmin(BaseAdmin):
 
         return mark_safe(all_images)
 
-    def _generate_word_image_container(self, obj):
+    def _generate_word_image_container(self, obj: Word) -> str:
         """
         Generate HTML for the word's main image container.
 
@@ -743,7 +771,7 @@ class WordAdmin(BaseAdmin):
 
         return html
 
-    def _generate_unit_word_images(self, obj):
+    def _generate_unit_word_images(self, obj: Word) -> str:
         """
         Generate HTML for the unit-specific image containers.
 
@@ -760,7 +788,7 @@ class WordAdmin(BaseAdmin):
 
         return unit_word_images
 
-    def _generate_unit_word_image(self, relation):
+    def _generate_unit_word_image(self, relation: UnitWordRelation) -> str:
         """
         Generate HTML for a single unit-word image container.
 
@@ -826,7 +854,7 @@ class WordAdmin(BaseAdmin):
 
     list_image.short_description = _("Image")  # type: ignore[attr-defined]
 
-    def singular_article_display(self, obj):
+    def singular_article_display(self, obj: Word) -> str:
         """
         Format the singular article for display in the admin list view.
 
@@ -840,7 +868,7 @@ class WordAdmin(BaseAdmin):
 
     singular_article_display.short_description = _("singular article")  # type: ignore[attr-defined]
 
-    def creation_date_display(self, obj):
+    def creation_date_display(self, obj: Word) -> date:
         """
         Format the creation date for display in the admin list view.
 
@@ -854,7 +882,7 @@ class WordAdmin(BaseAdmin):
 
     creation_date_display.short_description = _("creation date")  # type: ignore[attr-defined]
 
-    def migrated_status(self, obj):
+    def migrated_status(self, obj: Word) -> SafeString:
         """
         Display a badge indicating whether the word was migrated from v1 or created in v2.
 
@@ -876,7 +904,7 @@ class WordAdmin(BaseAdmin):
 
     migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
 
-    def audio_check_status_display(self, obj):
+    def audio_check_status_display(self, obj: Word) -> str:
         """
         Format the audio check status for display in the admin list view.
 
@@ -891,7 +919,7 @@ class WordAdmin(BaseAdmin):
     audio_check_status_display.short_description = _("audio check status")  # type: ignore[attr-defined]
     audio_check_status_display.admin_order_field = "audio_check_status"  # type: ignore[attr-defined]
 
-    def image_check_status_display(self, obj):
+    def image_check_status_display(self, obj: Word) -> str:
         """
         Format the image check status for display in the admin list view.
 

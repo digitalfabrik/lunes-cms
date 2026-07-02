@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 import os
+from typing import Any
 
 from django.contrib.auth.models import Group, User
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -111,7 +115,7 @@ class Permissions:
     ]
 
 
-def convert_image_to_webp(image_field):
+def convert_image_to_webp(image_field: ImageFieldFile) -> bool:
     """
     Converts an ImageField's file to WebP format in-place.
 
@@ -129,6 +133,9 @@ def convert_image_to_webp(image_field):
 
     old_path = image_field.path
     old_name = image_field.name
+    # `image_field` was truthy above, and FieldFile.__bool__ is defined as
+    # bool(self.name), so the name is guaranteed to be a non-empty string here.
+    assert old_name is not None
     new_path = os.path.splitext(old_path)[0] + ".webp"
     new_name = os.path.splitext(old_name)[0] + ".webp"
 
@@ -142,7 +149,7 @@ def convert_image_to_webp(image_field):
     return True
 
 
-def convert_umlaute_images(_, filename):
+def convert_umlaute_images(_: models.Model, filename: str) -> str:
     """
     Convert file name of images to handle all kind of characters (including "Umlaute" etc.).
 
@@ -156,7 +163,7 @@ def convert_umlaute_images(_, filename):
     return create_resource_path("images", filename)
 
 
-def convert_umlaute_audio(_, filename):
+def convert_umlaute_audio(_: models.Model, filename: str) -> str:
     """
     Convert file name of audios to handle all kind of
     characters (including "Umlaute" etc.).
@@ -175,7 +182,7 @@ def convert_umlaute_audio(_, filename):
     return os.path.join("audio", f"{safe_stem}.mp3")
 
 
-def upload_sponsor_logos(_, filename):
+def upload_sponsor_logos(_: models.Model, filename: str) -> str:
     """
     Upload path for sponsor logos
 
@@ -190,7 +197,7 @@ def upload_sponsor_logos(_, filename):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(instance, created, **_kwargs):
+def create_user_profile(instance: User, created: bool, **_kwargs: Any) -> bool:
     """
     Automatically adds a group when creating a new user
     if group name given in Roles.DEFAULT_GROUP_NAME

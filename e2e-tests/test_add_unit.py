@@ -2,12 +2,13 @@
 E2E test: Einheit hinzufügen — generates user_docs/add_unit.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
-
-from conftest import ASSETS_DIR
+from conftest import ASSETS_DIR, DocPage
+from playwright.sync_api import expect, Page
 
 JOB_NAME = "Eisverkäufer/-in"
 UNIT_NAME = "Grundlagen und Methoden"
@@ -16,9 +17,9 @@ UNIT_NAME = "Grundlagen und Methoden"
 @pytest.mark.e2e
 def test_add_unit(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     delete_unit: Callable,
     delete_job: Callable,

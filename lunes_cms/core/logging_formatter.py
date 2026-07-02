@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import logging
+from logging import LogRecord
 
 
 class ColorFormatter(logging.Formatter):
@@ -15,7 +18,7 @@ class ColorFormatter(logging.Formatter):
         logging.CRITICAL: 31,  # red
     }
 
-    def format(self, record):
+    def format(self, record: LogRecord) -> str:
         """
         Format the specified record as colored text (see :meth:`python:logging.Formatter.format`).
 
@@ -28,7 +31,9 @@ class ColorFormatter(logging.Formatter):
         # Define color escape sequence
         color = f"\x1b[0;{self.COLORS.get(record.levelno)}m"
         # Make level name bold
-        fmt = self._fmt.replace("{levelname}", "\x1b[1m{levelname}" + color)
+        # ``_fmt`` may be None if the formatter was constructed without an
+        # explicit format string; fall back to the empty string in that case.
+        fmt = (self._fmt or "").replace("{levelname}", "\x1b[1m{levelname}" + color)
         # Make entire line colored
         # pylint: disable=protected-access
         self._style._fmt = color + fmt + "\x1b[0m"

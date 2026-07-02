@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import Any, TYPE_CHECKING
+
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.db.models.fields.files import ImageFieldFile
 from django.urls import reverse
-from django.utils.html import escape, format_html, mark_safe
+from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from ...core import settings
@@ -20,6 +26,10 @@ from .static import (
     convert_umlaute_images,
 )
 from .word import Word
+
+if TYPE_CHECKING:
+    # `_StrOrPromise`/`_StrPromise` only exist in django-stubs, not at runtime.
+    from django.utils.functional import _StrPromise
 
 
 class UnitWordRelation(models.Model):
@@ -74,7 +84,7 @@ class UnitWordRelation(models.Model):
         ),
     )
 
-    def image_tag(self):
+    def image_tag(self) -> SafeString:
         """
         Generate an HTML image tag for the relation's image.
 
@@ -85,7 +95,7 @@ class UnitWordRelation(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """
         Override the save method to handle image check status.
 
@@ -105,6 +115,9 @@ class UnitWordRelation(models.Model):
             and previous_relation.example_sentence != self.example_sentence
         )
         if example_sentence_changed:
+            # `example_sentence_changed` is only true when `previous_relation`
+            # is truthy (see the "and" chain above), so this is never None here.
+            assert previous_relation is not None
             if previous_relation.example_sentence_audio:
                 # Delete the old audio file from storage
                 previous_relation.example_sentence_audio.delete(save=False)
@@ -125,7 +138,7 @@ class UnitWordRelation(models.Model):
         if image_updated and convert_image_to_webp(self.image):
             super().save(update_fields=["image"])
 
-    def list_image(self):
+    def list_image(self) -> SafeString:
         """
         Generate HTML for displaying the relation's image with controls in the admin list view.
 
@@ -159,7 +172,7 @@ class UnitWordRelation(models.Model):
 
     list_image.short_description = _("Image")  # type: ignore[attr-defined]
 
-    def generate_image_link(self):
+    def generate_image_link(self) -> str | SafeString:
         """Generate link for image generation."""
         if self.pk:
             url = reverse("cmsv2:unitword_generate_image", args=[self.pk])
@@ -168,7 +181,7 @@ class UnitWordRelation(models.Model):
 
     generate_image_link.short_description = _("Generate Image")  # type: ignore[attr-defined]
 
-    def effective_public_images(self):
+    def effective_public_images(self) -> list[ImageFieldFile]:
         """
         Returns:
             list[str]: The url to the public images of this unit word relation
@@ -181,7 +194,7 @@ class UnitWordRelation(models.Model):
             return [self.word.image]
         return []
 
-    def generate_example_sentence_audio_link(self):
+    def generate_example_sentence_audio_link(self) -> str | SafeString:
         """Generate link for example sentence audio generation."""
         if self.pk and self.example_sentence and self.example_sentence.strip():
             url = reverse(
@@ -192,7 +205,7 @@ class UnitWordRelation(models.Model):
 
     generate_example_sentence_audio_link.short_description = _("Generate Example Sentence Audio")  # type: ignore[attr-defined]
 
-    def example_sentence_generate(self):
+    def example_sentence_generate(self) -> "SafeString | _StrPromise":
         """Display the inline example sentence generation widget."""
         if self.pk:
             return example_sentence_generate_html(
@@ -208,16 +221,16 @@ class UnitWordRelation(models.Model):
 
     example_sentence_generate.short_description = _("Generate Example Sentence")  # type: ignore[attr-defined]
 
-    def example_sentence_audio_with_player(self):
+    def example_sentence_audio_with_player(self) -> str | SafeString:
         """Display audio player and generate button in a single column."""
-        audio_html = ""
+        audio_html: str | SafeString = ""
         if self.example_sentence_audio:
             audio_html = format_html(
                 '<audio controls style="max-width: 100%;"><source src="{}" type="audio/mpeg"></audio><br>',
                 self.example_sentence_audio.url,
             )
 
-        generate_html = ""
+        generate_html: str | SafeString = ""
         if self.pk and self.example_sentence and self.example_sentence.strip():
             url = reverse(
                 "cmsv2:unitword_generate_example_sentence_audio", args=[self.pk]
@@ -232,7 +245,7 @@ class UnitWordRelation(models.Model):
 
     example_sentence_audio_with_player.short_description = _("example sentence audio")  # type: ignore[attr-defined]
 
-    def image_with_controls(self):
+    def image_with_controls(self) -> SafeString:
         """Display image, upload controls, check status, and generate button in a single column."""
         image_html = ""
         if self.image:
@@ -280,16 +293,16 @@ class UnitWordRelation(models.Model):
 
     image_with_controls.short_description = _("Image")  # type: ignore[attr-defined]
 
-    def example_sentence_audio_player(self):
+    def example_sentence_audio_player(self) -> str | SafeString:
         """Display an audio player for the example sentence audio and a button to generate it."""
-        audio_html = ""
+        audio_html: str | SafeString = ""
         if self.example_sentence_audio:
             audio_html = format_html(
                 '<audio controls style="max-width: 100%; margin-bottom: 8px;"><source src="{}" type="audio/mpeg"></audio>',
                 self.example_sentence_audio.url,
             )
 
-        generate_html = ""
+        generate_html: str | SafeString = ""
         if self.pk and self.example_sentence and self.example_sentence.strip():
             url = reverse(
                 "cmsv2:unitword_generate_example_sentence_audio", args=[self.pk]
@@ -334,7 +347,7 @@ class Unit(models.Model):
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
     jobs = models.ManyToManyField(Job, related_name="units", verbose_name=_("job"))
-    words = models.ManyToManyField(
+    words: "models.ManyToManyField[Word, UnitWordRelation]" = models.ManyToManyField(
         Word, through="UnitWordRelation", related_name="units", verbose_name=_("word")
     )
     created_by = models.ForeignKey(
@@ -344,7 +357,7 @@ class Unit(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
-    def image_tag(self):
+    def image_tag(self) -> SafeString:
         """
         Generates an HTML image tag for the unit's icon.
 
@@ -355,7 +368,7 @@ class Unit(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def list_icon(self):
+    def list_icon(self) -> SafeString:
         """
         Generates an HTML representation of the unit's icon along with controls
         for adding, replacing, and deleting the icon. This is intended for display
@@ -388,7 +401,7 @@ class Unit(models.Model):
 
     list_icon.short_description = _("Icon")  # type: ignore[attr-defined]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns a string representation of the Unit, which is its title.
 
@@ -397,7 +410,7 @@ class Unit(models.Model):
         """
         return str(self.title)
 
-    def style_description_field(self):
+    def style_description_field(self) -> SafeString:
         """
         Formats the description field for display, ensuring text wraps and
         has a maximum width. This is useful for displaying descriptions in

@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import json
 
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from ...cms.models import Discipline, Document, DocumentImage, TrainingSet
 
 
-def public_upload(request):
+def public_upload(request: HttpRequest) -> HttpResponse:
     """Public form to upload missing images
 
     :param request: current user request
@@ -48,7 +51,7 @@ def public_upload(request):
         .distinct()
     )
 
-    new_map = {}
+    new_map: dict[int, list[int]] = {}
     for key, value in disc_sets_map:
         if key in new_map:
             new_map[key].append(value)

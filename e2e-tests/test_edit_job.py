@@ -2,10 +2,13 @@
 E2E test: Job bearbeiten — generates user_docs/edit_job.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 JOB_NAME = "Gärtner/-in"
 RENAMED_JOB_NAME = "Gartengestalter/-in"
@@ -14,9 +17,9 @@ RENAMED_JOB_NAME = "Gartengestalter/-in"
 @pytest.mark.e2e
 def test_edit_job(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     delete_job: Callable,
     request: pytest.FixtureRequest,

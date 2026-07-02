@@ -1,4 +1,6 @@
-from django.db.models import Q
+from __future__ import annotations
+
+from django.db.models import Q, QuerySet
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 
@@ -16,7 +18,7 @@ class WordViewSet(viewsets.ModelViewSet):
     http_method_names = ["get"]
     authentication_classes = [SessionAuthentication, BasicAuthentication]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Document]:
         """
         Get the queryset of words/documents
 

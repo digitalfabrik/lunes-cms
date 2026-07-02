@@ -1,12 +1,21 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
 from .static import ReviewStatus
 
+if TYPE_CHECKING:
+    from .unit import Unit
+    from .word import Word
 
-def upload_review_suggestions(_, filename):
+
+def upload_review_suggestions(_: models.Model, filename: str) -> str:
     """
     Upload path for reviewer-suggested images.
     """
@@ -56,7 +65,7 @@ class ReviewAssignment(models.Model):
         verbose_name = _("Review Assignment")
         verbose_name_plural = _("Review Assignments")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.unit} – {self.reviewer}"
 
 
@@ -120,21 +129,21 @@ class ImageReview(models.Model):
         verbose_name_plural = _("Image Reviews")
         ordering = ["-created_at"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.unit_word_relation} – {self.reviewer} ({self.status})"
 
     @property
-    def word(self):
+    def word(self) -> "Word":
         """Returns the word being reviewed."""
         return self.unit_word_relation.word
 
     @property
-    def unit(self):
+    def unit(self) -> "Unit":
         """Returns the unit context of the review."""
         return self.unit_word_relation.unit
 
     @property
-    def reviewed_image(self):
+    def reviewed_image(self) -> ImageFieldFile:
         """Returns the actual image being reviewed."""
         if self.is_unit_specific_image:
             return self.unit_word_relation.image

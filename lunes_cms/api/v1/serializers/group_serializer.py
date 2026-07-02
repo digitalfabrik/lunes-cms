@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
@@ -27,7 +29,7 @@ class GroupSerializer(serializers.ModelSerializer):
             "total_discipline_children",
         )
 
-    def get_total_discipline_children(self, group):
+    def get_total_discipline_children(self, group: Group) -> int:
         """Returns the total child count of a group.
         A child itself or one of its sub-children needs to
         contain at least one training set.
@@ -38,9 +40,9 @@ class GroupSerializer(serializers.ModelSerializer):
         :rtype: int
         """
         queryset = Discipline.objects.filter(released=True, created_by=group.id)
-        queryset = [
+        valid_root_disciplines = [
             discipline
             for discipline in queryset
             if discipline.is_root_node() and discipline.is_valid()
         ]
-        return len(queryset)
+        return len(valid_root_disciplines)

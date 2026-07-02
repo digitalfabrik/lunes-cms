@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any
+
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
@@ -25,7 +29,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
         },
     )
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         try:
             attrs["content_type"].model_class().objects.get(pk=attrs["object_id"])
         except ObjectDoesNotExist as e:

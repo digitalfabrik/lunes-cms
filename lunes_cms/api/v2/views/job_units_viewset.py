@@ -1,6 +1,12 @@
-from django.db.models import Count, Q
+from __future__ import annotations
+
+from typing import Any
+
+from django.db.models import Count, Q, QuerySet
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from ....cmsv2.models import Job, Unit
 from ..matomo_tracking import matomo_tracking
@@ -16,16 +22,16 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
     http_method_names = ["get"]
 
     @matomo_tracking(action_name="All units of job", resource_id="job_id")
-    def list(self, request, *args, **kwargs):
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """List all units of a job with Matomo tracking."""
         return super().list(request, *args, **kwargs)
 
     @matomo_tracking(action_name="Unit", resource_id="pk")
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Retrieve a single unit with Matomo tracking."""
         return super().retrieve(request, *args, **kwargs)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Unit]:
         """
         Get the queryset of all released units of a job
 

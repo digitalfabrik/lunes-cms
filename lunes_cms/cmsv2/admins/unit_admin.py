@@ -1,17 +1,24 @@
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, annotations, unicode_literals
+
+from datetime import date
+from typing import Any, Iterable, TYPE_CHECKING
 
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
-from django.http import HttpRequest
+from django.forms import BaseModelFormSet, ModelForm
+from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models.review import ReviewAssignment
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
+
+if TYPE_CHECKING:
+    from django.utils.functional import _StrOrPromise
 
 
 class WordInline(admin.TabularInline):
@@ -54,13 +61,17 @@ class ReviewAssignmentInline(admin.TabularInline):
     verbose_name = _("assigned user")
     verbose_name_plural = _("assigned users")
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request: HttpRequest, obj: Unit | None = None) -> bool:
         return request.user.is_superuser
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(
+        self, request: HttpRequest, obj: Unit | None = None
+    ) -> bool:
         return request.user.is_superuser
 
-    def has_delete_permission(self, request, obj=None):
+    def has_delete_permission(
+        self, request: HttpRequest, obj: Unit | None = None
+    ) -> bool:
         return request.user.is_superuser
 
 
@@ -74,7 +85,9 @@ class MigratedFilter(admin.SimpleListFilter):
     title = _("migration status")
     parameter_name = "migrated"
 
-    def lookups(self, request, model_admin):
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin
+    ) -> Iterable[tuple[str, "_StrOrPromise"]]:
         """
         Return the filter options.
 
@@ -86,7 +99,9 @@ class MigratedFilter(admin.SimpleListFilter):
             ("no", _("Not migrated from old data model")),
         ]
 
-    def queryset(self, request, queryset):
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Unit]
+    ) -> QuerySet[Unit]:
         """
         Filter the queryset based on the selected option.
 
@@ -155,10 +170,16 @@ class UnitAdmin(BaseAdmin):
         ]
         css = {"all": ["css/asset_manager.css"]}
 
-    def get_queryset(self, request):
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Unit]:
         return super().get_queryset(request).prefetch_related("jobs")
 
-    def save_formset(self, request, form, formset, change):
+    def save_formset(
+        self,
+        request: HttpRequest,
+        form: ModelForm[Any],
+        formset: BaseModelFormSet,
+        change: bool,
+    ) -> None:
         if formset.model is ReviewAssignment:
             instances = formset.save(commit=False)
             for obj in formset.deleted_objects:
@@ -194,7 +215,9 @@ class UnitAdmin(BaseAdmin):
         )
 
     @admin.action(description=_("Assign selected units to user"))
-    def assign_to_user(self, request, queryset):
+    def assign_to_user(
+        self, request: HttpRequest, queryset: QuerySet[Unit]
+    ) -> HttpResponse | None:
         """
         Bulk-create ReviewAssignments linking each selected unit to a chosen
         user. Superusers only. Units already assigned to the target user are
@@ -240,7 +263,7 @@ class UnitAdmin(BaseAdmin):
         )
         return None
 
-    def related_jobs(self, obj):
+    def related_jobs(self, obj: Unit) -> str:
         """
         Get a comma-separated list of job names related to this unit.
 
@@ -254,7 +277,7 @@ class UnitAdmin(BaseAdmin):
 
     related_jobs.short_description = _("jobs")  # type: ignore[attr-defined]
 
-    def creator_group(self, obj):
+    def creator_group(self, obj: Unit) -> str | Group | None:
         """
         Determine the creator group for display in the admin interface.
 
@@ -273,7 +296,7 @@ class UnitAdmin(BaseAdmin):
 
     creator_group.short_description = _("creator group")  # type: ignore[attr-defined]
 
-    def created_at_date(self, obj):
+    def created_at_date(self, obj: Unit) -> date:
         """
         Format the created_at timestamp as a date.
 
@@ -287,7 +310,7 @@ class UnitAdmin(BaseAdmin):
 
     created_at_date.short_description = _("created at")  # type: ignore[attr-defined]
 
-    def migrated_status(self, obj):
+    def migrated_status(self, obj: Unit) -> SafeString:
         """
         Display a badge indicating whether the unit was migrated from v1 or created in v2.
 

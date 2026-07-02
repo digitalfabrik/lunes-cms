@@ -1,6 +1,12 @@
-from django.db.models import Q
+from __future__ import annotations
+
+from typing import Any
+
+from django.db.models import Q, QuerySet
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from ....cmsv2.models import Unit
 from ....cmsv2.models.unit import UnitWordRelation
@@ -17,16 +23,16 @@ class UnitWordViewSet(viewsets.ModelViewSet):
     http_method_names = ["get"]
 
     @matomo_tracking(action_name="All words of unit", resource_id="unit_id")
-    def list(self, request, *args, **kwargs):
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """List all words of a unit with Matomo tracking."""
         return super().list(request, *args, **kwargs)
 
     @matomo_tracking(action_name="Word", resource_id="pk")
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Retrieve a single word with Matomo tracking."""
         return super().retrieve(request, *args, **kwargs)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[UnitWordRelation]:
         """
         Get the queryset of unit word relations
 
