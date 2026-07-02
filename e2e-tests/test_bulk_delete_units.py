@@ -59,13 +59,11 @@ def test_bulk_delete_units(
         pass
 
     page.locator("button[name=index][value='0']").scroll_into_view_if_needed()
-    page.evaluate(
-        """
+    page.evaluate("""
         const select = document.querySelector('select[name=action]');
         select.value = 'delete_selected';
         $(select).trigger('change');
-    """
-    )
+    """)
     with document.step(
         'Aktion "Ausgewählte Einheit löschen" auswählen und ausführen',
         description='Wählen Sie im Aktions-Dropdown **"Ausgewählte Einheit löschen"** aus und klicken Sie auf **„Go"**.',
