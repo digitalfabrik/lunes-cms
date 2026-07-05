@@ -3,7 +3,7 @@ from import_export import fields, resources
 from import_export.admin import ExportActionMixin
 
 from ..models import Word
-from ..models.static import Static
+from ..models.static import PluralArticle, SingularArticle
 
 
 class WordExportResource(resources.ModelResource):
@@ -34,10 +34,10 @@ class WordExportResource(resources.ModelResource):
         """
         Method to show the actual singular article and not their integer.
         """
-        for article_choice in Static.singular_article_choices:
-            if article_choice[0] == word.singular_article:
-                return article_choice[1]
-        return "-"
+        try:
+            return SingularArticle(word.singular_article).label
+        except ValueError:
+            return "-"
 
     plural = fields.Field(column_name=_("Plural"), attribute="plural")
 
@@ -50,10 +50,10 @@ class WordExportResource(resources.ModelResource):
         """
         Method to show the actual plural article and not their integer.
         """
-        for article_choice in Static.plural_article_choices:
-            if article_choice[0] == word.plural_article:
-                return article_choice[1].replace(" (Plural)", "")
-        return "-"
+        try:
+            return PluralArticle(word.plural_article).label.replace(" (Plural)", "")
+        except ValueError:
+            return "-"
 
     has_audio = fields.Field(column_name=_("Has audio?"), attribute="word")
 
