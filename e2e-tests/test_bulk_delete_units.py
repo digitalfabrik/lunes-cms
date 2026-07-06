@@ -2,6 +2,7 @@
 E2E test: Mehrere Einheiten löschen — generates user_docs/bulk_delete_units.md
 """
 
+from functools import partial
 from typing import Callable
 
 import pytest
@@ -16,7 +17,6 @@ UNIT_NAMES = [
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_bulk_delete_units(
     page: Page,
     document,
@@ -24,8 +24,13 @@ def test_bulk_delete_units(
     login,
     add_job: Callable,
     add_unit: Callable,
+    delete_unit: Callable,
     delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    for unit_name in UNIT_NAMES:
+        request.addfinalizer(partial(delete_unit, unit_name))
     add_job(JOB_NAME)
     for unit_name in UNIT_NAMES:
         add_unit(unit_name, f"Vokabeln zu {unit_name}", JOB_NAME)
@@ -89,5 +94,3 @@ def test_bulk_delete_units(
             expect(page.locator("th.field-title a", has_text=unit_name)).to_have_count(
                 0
             )
-
-    delete_job(JOB_NAME)

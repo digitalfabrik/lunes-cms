@@ -18,11 +18,15 @@ def unitword_generate_image(request, unitword_id):
     """
 
     unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    # We only want the job name as a hint to the AI when the unit is in exactly one job.
+    # Fetching 2 (LIMIT 2) is enough to tell "exactly one" from "more than one".
+    jobs = list(unitword_instance.unit.jobs.all()[:2])
 
     context = admin.site.each_context(request)
     context.update(
         {
             "unitword_instance": unitword_instance,
+            "job_title": jobs[0].name if len(jobs) == 1 else None,
             "temp_image_url": None,
         }
     )

@@ -16,21 +16,42 @@ Run mkdocs to build HTML: mkdocs build
 from __future__ import annotations
 
 import contextlib
-import json
+import os
 import re
 import subprocess
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Generator
+from typing import Callable, Generator
+from urllib.parse import quote
 
 import pytest
-from playwright.sync_api import Browser, Page, expect
+from playwright.sync_api import Browser, expect, Page
 
 BASE_URL = "http://localhost:8080"
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
+EMAIL_OUTBOX_DIR = Path(
+    os.environ.get("LUNES_CMS_EMAIL_FILE_PATH", "/tmp/django-email-outbox")
+)
 SCREENSHOTS_DIR = DOCS_DIR / "screenshots"
 ASSETS_DIR = Path(__file__).parent / "assets"
 REPO_ROOT = Path(__file__).parent.parent
+
+
+def select_autocomplete(page: "Page", field_name: str, label: str) -> None:
+    """
+    Pick an option from a Django admin select2 autocomplete field.
+
+    ``select_option`` does not work on these widgets: the underlying ``<select>``
+    is empty and the options are fetched over AJAX only after the user types.
+    So open the select2 container, type the label, and click the matching result.
+    """
+    select = page.locator(f"select[name='{field_name}']")
+    select.scroll_into_view_if_needed()
+    select.locator("xpath=following-sibling::span[contains(@class, 'select2')]").click()
+    search = page.locator("input.select2-search__field")
+    search.fill(label)
+    page.locator(".select2-results__option", has_text=label).first.click()
 
 
 def _changed_test_files() -> set[str]:
@@ -60,35 +81,6 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers", "e2e: end-to-end test that generates user manual entries"
     )
-    config.addinivalue_line(
-        "markers", "xdist_group: group tests to run on the same xdist worker"
-    )
-
-
-_auth_state: dict | None = None
-
-
-def pytest_configure_node(node: Any) -> None:
-    """xdist hook: runs once per worker in the controller process before workers start.
-    Performs login once and passes the auth state to all workers via workerinput."""
-    global _auth_state
-    if _auth_state is None:
-        from playwright.sync_api import sync_playwright
-
-        base_url = node.config.getoption("--base-url") or BASE_URL
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            context = browser.new_context(locale="de-DE")
-            page = context.new_page()
-            page.goto(f"{base_url}/de/admin/login/")
-            page.fill("[name=username]", "lunes")
-            page.fill("[name=password]", "lunes")
-            page.click("[type=submit]")
-            page.wait_for_url(f"{base_url}/de/admin/")
-            _auth_state = context.storage_state()
-            context.close()
-            browser.close()
-    node.workerinput["auth_state"] = json.dumps(_auth_state)
 
 
 @pytest.fixture(scope="session")
@@ -98,22 +90,16 @@ def browser_context_args(
     base_url: str,
     request: pytest.FixtureRequest,
 ) -> dict:
-    """Embed auth state into every test context.
-    With xdist: reads auth state passed from the controller via pytest_configure_node.
-    Without xdist: logs in directly using the browser fixture."""
-    worker_input = getattr(request.config, "workerinput", {})
-    if "auth_state" in worker_input:
-        state = json.loads(worker_input["auth_state"])
-    else:
-        context = browser.new_context(locale="de-DE")
-        page = context.new_page()
-        page.goto(f"{base_url}/de/admin/login/")
-        page.fill("[name=username]", "lunes")
-        page.fill("[name=password]", "lunes")
-        page.click("[type=submit]")
-        page.wait_for_url(f"{base_url}/de/admin/")
-        state = context.storage_state()
-        context.close()
+    """Embed auth state into every test context."""
+    context = browser.new_context(locale="de-DE")
+    page = context.new_page()
+    page.goto(f"{base_url}/de/admin/login/")
+    page.fill("[name=username]", "lunes")
+    page.fill("[name=password]", "lunes")
+    page.click("[type=submit]")
+    page.wait_for_url(f"{base_url}/de/admin/")
+    state = context.storage_state()
+    context.close()
     return {**browser_context_args, "locale": "de-DE", "storage_state": state}
 
 
@@ -177,7 +163,10 @@ def delete_unit(page: Page, base_url: str) -> Callable[[str], None]:
 
     def _delete(title: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/unit/")
-        page.locator("th.field-title a", has_text=title).first.click()
+        locator = page.locator("th.field-title a", has_text=title)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
@@ -190,7 +179,10 @@ def delete_job(page: Page, base_url: str) -> Callable[[str], None]:
 
     def _delete(job_name: str) -> None:
         page.goto(f"{base_url}/de/admin/cmsv2/job/")
-        page.locator("th.field-name a", has_text=job_name).first.click()
+        locator = page.locator("th.field-name a", has_text=job_name)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 
@@ -234,10 +226,7 @@ def add_word(page: Page, base_url: str) -> Callable[[str, str, str, str, str], N
         page.set_input_files("[name=audio]", str(ASSETS_DIR / "test_sound.mp3"))
         page.locator("[name=image]").scroll_into_view_if_needed()
         page.set_input_files("[name=image]", str(ASSETS_DIR / "tester.png"))
-        page.locator("[name='unit_word_relations-0-unit']").scroll_into_view_if_needed()
-        page.locator("[name='unit_word_relations-0-unit']").select_option(
-            label=unit_name, force=True
-        )
+        select_autocomplete(page, "unit_word_relations-0-unit", unit_name)
         page.locator("[name=_save]").scroll_into_view_if_needed()
         page.click("[name=_save]")
         expect(page.locator(".alert-success")).to_be_visible()
@@ -250,10 +239,154 @@ def delete_word(page: Page, base_url: str) -> Callable[[str], None]:
     """Returns a function that deletes a word by its singular form from the CMS admin."""
 
     def _delete(word: str) -> None:
-        page.goto(f"{base_url}/de/admin/cmsv2/word/")
-        page.fill("#searchbar", word)
+        matching = page.locator(
+            "th.field-word a", has_text=re.compile(f"^{re.escape(word)}$")
+        )
+        # Delete every match: leftovers from a failed test would otherwise make
+        # the next search return multiple rows and break strict-mode locators.
+        # goto() waits for load, so count() does not race the search results.
+        while True:
+            page.goto(f"{base_url}/de/admin/cmsv2/word/?q={quote(word)}")
+            if matching.count() == 0:
+                return
+            matching.first.click()
+            page.get_by_role("link", name="Löschen").click()
+            page.locator("input[type=submit]").click()
+
+    return _delete
+
+
+@pytest.fixture
+def add_user(page: Page, base_url: str) -> Callable[[str, str], None]:
+    """Returns a function that creates a user from the Django admin.
+    Asserts the user does not already exist before creating it."""
+
+    def _add(username: str, password: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/user/")
+        page.fill("#searchbar", username)
         page.get_by_role("button", name="Suchen").click()
-        page.locator("th.field-word a", has_text=re.compile(f"^{word}$")).first.click()
+        expect(page.get_by_role("link", name=username)).to_have_count(0)
+        page.goto(f"{base_url}/de/admin/auth/user/add/")
+        page.fill("[name=username]", username)
+        page.fill("[name=password1]", password)
+        page.fill("[name=password2]", password)
+        page.click("[name=_save]")
+
+    return _add
+
+
+PERMISSION_GROUPS = [
+    (
+        "Beruf",
+        [
+            "Beruf | Can add Job",
+            "Beruf | Can change Job",
+            "Beruf | Can delete Job",
+            "Beruf | Can view Job",
+        ],
+    ),
+    (
+        "Einheit-Wort",
+        [
+            "Einheit-Wort Beziehung | Can add Unit-Word Relation",
+            "Einheit-Wort Beziehung | Can change Unit-Word Relation",
+            "Einheit-Wort Beziehung | Can delete Unit-Word Relation",
+            "Einheit-Wort Beziehung | Can view Unit-Word Relation",
+        ],
+    ),
+    (
+        "Einheit",
+        [
+            "Einheit | Can add Unit",
+            "Einheit | Can change Unit",
+            "Einheit | Can delete Unit",
+            "Einheit | Can view Unit",
+        ],
+    ),
+    (
+        "Vokabel",
+        [
+            "Vokabel | Can add Word",
+            "Vokabel | Can change Word",
+            "Vokabel | Can delete Word",
+            "Vokabel | Can view Word",
+        ],
+    ),
+]
+
+
+@pytest.fixture
+def add_group(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that creates a group with standard permissions from the Django admin."""
+
+    def _add(group_name: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/group/add/")
+        page.fill("[name=name]", group_name)
+        filter_input = page.locator("#id_permissions_input")
+        choose_all = page.locator("#id_permissions_add_all")
+        for search_term, _ in PERMISSION_GROUPS:
+            filter_input.press_sequentially(search_term)
+            page.wait_for_timeout(200)
+            choose_all.click()
+            filter_input.select_text()
+            filter_input.press("Backspace")
+            page.wait_for_timeout(200)
+        page.get_by_role("button", name="Sichern", exact=True).click()
+
+    return _add
+
+
+@pytest.fixture
+def delete_group(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that deletes a group by name from the Django admin."""
+
+    def _delete(group_name: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/group/")
+        page.fill("#searchbar", group_name)
+        page.get_by_role("button", name="Suchen").click()
+        locator = page.get_by_role("link", name=group_name)
+        if locator.count() == 0:
+            return
+        locator.first.click()
+        page.get_by_role("link", name="Löschen").click()
+        page.locator("input[type=submit]").click()
+
+    return _delete
+
+
+@pytest.fixture
+def email_outbox() -> Generator[Callable[[], str], None, None]:
+    """Clears the email outbox before the test and provides a function to read the latest email body."""
+    EMAIL_OUTBOX_DIR.mkdir(parents=True, exist_ok=True)
+    for f in EMAIL_OUTBOX_DIR.glob("*.log"):
+        f.unlink()
+
+    def get_latest(timeout: int = 10) -> str:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            files = sorted(
+                EMAIL_OUTBOX_DIR.glob("*.log"), key=lambda f: f.stat().st_mtime
+            )
+            if files:
+                return files[-1].read_text()
+            time.sleep(0.2)
+        raise TimeoutError(f"No email appeared in {EMAIL_OUTBOX_DIR} within {timeout}s")
+
+    yield get_latest
+
+
+@pytest.fixture
+def delete_user(page: Page, base_url: str) -> Callable[[str], None]:
+    """Returns a function that deletes a user by username from the Django admin."""
+
+    def _delete(username: str) -> None:
+        page.goto(f"{base_url}/de/admin/auth/user/")
+        page.fill("#searchbar", username)
+        page.get_by_role("button", name="Suchen").click()
+        locator = page.get_by_role("link", name=username)
+        if locator.count() == 0:
+            return
+        locator.first.click()
         page.get_by_role("link", name="Löschen").click()
         page.locator("input[type=submit]").click()
 

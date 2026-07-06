@@ -19,6 +19,16 @@ theme:
 nav:
   - Startseite: index.md
   - Anmelden: login.md
+  - Passwort zurücksetzen: password_reset.md
+  - Benutzer:innen:
+    - Benutzer:in anlegen: add_user.md
+    - Benutzer:in bearbeiten (Informationen): edit_user_information.md
+    - Benutzer:in bearbeiten (Berechtigungen): edit_user_permissions.md
+    - Benutzer:in löschen: delete_user.md
+  - Gruppen:
+    - Gruppe anlegen: add_group.md
+    - Gruppe bearbeiten: edit_group.md
+    - Gruppe löschen: delete_group.md
   - Jobs:
     - Job hinzufügen: add_job.md
     - Job bearbeiten: edit_job.md
@@ -31,6 +41,7 @@ nav:
     - Mehrere Einheiten löschen: bulk_delete_units.md
   - Wörter:
     - Wort hinzufügen: add_word.md
+    - Wort-Audio und -Bild generieren: generate_word_audio_and_image.md
     - Wort bearbeiten: edit_word.md
     - Wort löschen: delete_word.md
     - Mehrere Wörter löschen: bulk_delete_words.md

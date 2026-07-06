@@ -4,21 +4,6 @@ type AudioGeneratorConfig = {
     generateUrl: string
 }
 
-function _getAudioCookie(name: string): string | null {
-    let cookieValue: string | null = null
-    if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";")
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim()
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-                break
-            }
-        }
-    }
-    return cookieValue
-}
-
 // Called from Django template (generate_audio_base.html)
 window.initAudioGenerator = function (config: AudioGeneratorConfig): void {
     const generateButton = document.getElementById("generate_button") as HTMLButtonElement
@@ -56,13 +41,13 @@ window.initAudioGenerator = function (config: AudioGeneratorConfig): void {
 
         const formData = new FormData()
         formData.append(config.textFieldName, config.textValue)
-        formData.append("csrfmiddlewaretoken", _getAudioCookie("csrftoken") ?? "")
+        formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         fetch(config.generateUrl, {
             method: "POST",
             body: formData,
             headers: {
-                "X-CSRFToken": _getAudioCookie("csrftoken") ?? "",
+                "X-CSRFToken": window.getCookie("csrftoken") ?? "",
             },
         })
             .then((response) => {

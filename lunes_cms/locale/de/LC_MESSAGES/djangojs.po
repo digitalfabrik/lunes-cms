@@ -29,3 +29,51 @@ msgstr "Kein Bild verfügbar"
 #: lunes_cms/static/js/manytomany_overlay.js:75
 msgid "No audio available"
 msgstr "Kein Audio verfügbar"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Could not find the example sentence field."
+msgstr "Das Beispielsatz-Feld konnte nicht gefunden werden."
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Generating example sentence..."
+msgstr "Beispielsatz wird generiert …"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Example sentence generated!"
+msgstr "Beispielsatz generiert!"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Error"
+msgstr "Fehler"
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Generate"
+msgstr "Generieren"
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Regenerate"
+msgstr "Neu generieren"
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Generating..."
+msgstr "Wird generiert …"
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Generated!"
+msgstr "Generiert!"
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Saving..."
+msgstr "Wird gespeichert …"
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "No file was returned."
+msgstr "Es wurde keine Datei zurückgegeben."
+
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Newly generated image"
+msgstr "Neu generiertes Bild"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Regenerate example sentence"
+msgstr "Beispielsatz neu generieren"

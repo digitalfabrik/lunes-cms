@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import configparser
 import os
+from importlib.metadata import PackageNotFoundError, version as get_package_version
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
@@ -25,22 +27,40 @@ from .utils import strtobool
 #: Build paths inside the project like this: ``os.path.join(BASE_DIR, ...)``
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Load config from /etc/lunes-cms.ini (production) or a local override file.
+# The local override is never committed and takes precedence over the system file.
+_config = configparser.ConfigParser(interpolation=None)
+_config.read(["/etc/lunes-cms.ini", os.path.join(BASE_DIR, "..", "lunes-cms.ini")])
+for _section in _config.sections():
+    for _key, _value in _config.items(_section):
+        os.environ.setdefault(f"LUNES_CMS_{_key.upper()}", _value)
+
 #: How many documents a training sets needs at least to get released
 TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
 
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
 
-#: OpenAI model used for single-word/term text-to-speech
-OPENAI_TTS_WORD_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_WORD_MODEL", "tts-1-hd")
-
-#: OpenAI model used for example-sentence text-to-speech
-OPENAI_TTS_SENTENCE_MODEL = os.environ.get(
-    "LUNES_CMS_OPENAI_TTS_SENTENCE_MODEL", "gpt-4o-mini-tts"
-)
+#: OpenAI model used for all text-to-speech
+#: Must support the instructions parameter so word audio can be
+#: pinned to German pronunciation
+OPENAI_TTS_MODEL = os.environ.get("LUNES_CMS_OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
 
 #: OpenAI voice used for text-to-speech
 OPENAI_TTS_VOICE = os.environ.get("LUNES_CMS_OPENAI_TTS_VOICE", "nova")
+
+#: Loudness in LUFS (https://en.wikipedia.org/wiki/LUFS) for normalizing generated audio
+OPENAI_TTS_LOUDNESS_LUFS = float(
+    os.environ.get("LUNES_CMS_OPENAI_TTS_LOUDNESS_LUFS", "-16.0")
+)
+#: OpenAI model used for word image generation
+OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2")
+
+#: OpenAI image quality tier (low/medium/high)
+OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
+
+#: OpenAI model used for text generation (e.g. example sentences)
+OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
 
 ###################
 # MATOMO TRACKING #
@@ -58,6 +78,24 @@ MATOMO_SITE_ID = os.environ.get("LUNES_CMS_MATOMO_SITE_ID", "")
 #: Authentication token for Matomo API
 MATOMO_TOKEN = os.environ.get("LUNES_CMS_MATOMO_TOKEN", "")
 
+###########
+# INFLUXDB #
+###########
+
+#: InfluxDB write endpoint
+INFLUX_URL = os.environ.get(
+    "LUNES_CMS_INFLUX_URL", "https://monitoring.tuerantuer.org/write"
+)
+
+#: Path to the client TLS certificate for InfluxDB mTLS auth
+INFLUX_CERT = os.environ.get("LUNES_CMS_INFLUX_CERT", "/etc/pki/client.crt")
+
+#: Path to the client TLS key for InfluxDB mTLS auth
+INFLUX_KEY = os.environ.get("LUNES_CMS_INFLUX_KEY", "/etc/pki/client.key")
+
+#: Path to the CA certificate for verifying the InfluxDB server certificate
+INFLUX_CA = os.environ.get("LUNES_CMS_INFLUX_CA", "/etc/pki/ca.crt")
+
 ########################
 # DJANGO CORE SETTINGS #
 ########################
@@ -67,6 +105,11 @@ MATOMO_TOKEN = os.environ.get("LUNES_CMS_MATOMO_TOKEN", "")
 #: .. warning::
 #:     Never deploy a site into production with :setting:`DEBUG` turned on!
 DEBUG = bool(strtobool(os.environ.get("LUNES_CMS_DEBUG", "False")))
+
+#: InfluxDB database name — defaults to lunes_test in debug mode, lunes_production otherwise
+INFLUX_DB = os.environ.get(
+    "LUNES_CMS_INFLUX_DB", "lunes_test" if DEBUG else "lunes_production"
+)
 
 #: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
@@ -104,6 +147,33 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+########################
+# DJANGO DEBUG TOOLBAR #
+########################
+
+#: Whether the Django Debug Toolbar is enabled. Dev-only: requires :setting:`DEBUG`
+#: and the optional ``django-debug-toolbar`` dependency (part of the ``dev`` extra).
+#: Can be turned off independently of :setting:`DEBUG` via
+#: ``LUNES_CMS_DEBUG_TOOLBAR`` — the e2e tests run with ``DEBUG=True`` (so the
+#: dev server serves static files) but disable the toolbar, whose overlay
+#: intercepts pointer events and breaks browser interactions.
+DEBUG_TOOLBAR_ENABLED = False
+if DEBUG and bool(strtobool(os.environ.get("LUNES_CMS_DEBUG_TOOLBAR", "True"))):
+    try:
+        import debug_toolbar  # noqa: F401  pylint: disable=unused-import
+    except ImportError:
+        pass
+    else:
+        DEBUG_TOOLBAR_ENABLED = True
+        INSTALLED_APPS.append("debug_toolbar")
+        MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+#: Configuration of the Django Debug Toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    # Keep history so JSON API requests can be inspected at /__debug__/.
+    "RESULTS_CACHE_SIZE": 100,
+}
 
 #: Default URL dispatcher (see :setting:`django:ROOT_URLCONF`)
 ROOT_URLCONF = "lunes_cms.core.urls"
@@ -273,6 +343,20 @@ STATIC_URL = "/static/"
 #: In debug mode, this is not required since :mod:`django.contrib.staticfiles` can directly serve these files.
 STATIC_ROOT = os.environ.get("LUNES_CMS_STATIC_ROOT")
 
+#: Use ManifestStaticFilesStorage in production to append content hashes to static file names.
+#: This ensures browsers always load the latest version after a deploy (cache busting).
+#: In debug mode the default storage is used so that no STATIC_ROOT or manifest is required.
+#: See :class:`lunes_cms.core.utils.LaxManifestStaticFilesStorage`.
+if STATIC_ROOT:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "lunes_cms.core.utils.LaxManifestStaticFilesStorage",
+        },
+    }
+
 #: URL that handles the media served from :setting:`MEDIA_ROOT` (see :setting:`django:MEDIA_URL`)
 MEDIA_URL = "/media/"
 
@@ -290,7 +374,11 @@ TEMP_IMAGE_DIR = os.path.join(MEDIA_ROOT, "temp_image")
 
 if DEBUG:
     #: The backend to use for sending emails (see :setting:`django:EMAIL_BACKEND` and :doc:`django:topics/email`)
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    #: Directory where outgoing emails are stored as files in debug mode (see :setting:`django:EMAIL_FILE_PATH`)
+    EMAIL_FILE_PATH = os.environ.get(
+        "LUNES_CMS_EMAIL_FILE_PATH", "/tmp/django-email-outbox"
+    )
 else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -443,7 +531,6 @@ LOGGING = {
     },
 }
 
-
 #########################
 # DJANGO REST FRAMEWORK #
 #########################
@@ -490,6 +577,11 @@ SPECTACULAR_SETTINGS = {
 # DJANGO JAZZMIN #
 ##################
 
+try:
+    _cms_version = get_package_version("lunes-cms")
+except PackageNotFoundError:
+    _cms_version = "unknown"
+
 #: Basic settings for Django Jazzmin
 JAZZMIN_SETTINGS = {
     "site_brand": _("Lunes Administration"),
@@ -518,6 +610,10 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
     },
+    "site_version": _cms_version,
+    # Render the Analytics app section directly below Dashboard. Jazzmin's
+    # sidebar lists apps in this order; anything not mentioned trails after.
+    "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
 }
 
 #: UI tweaks for Django Jazzmin
@@ -528,7 +624,7 @@ JAZZMIN_UI_TWEAKS = {
     "brand_small_text": True,
     "brand_colour": "navbar-dark",
     "accent": "accent-navy",
-    "dark_mode_theme": None,
+    "default_theme_mode": "auto",
     "navbar": "navbar-primary navbar-dark",
     "no_navbar_border": True,
     "navbar_fixed": False,
@@ -551,7 +647,6 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
-
 
 ############
 # QR CODES #

@@ -1,0 +1,16 @@
+when:
+  or:
+    - equal: [<< pipeline.parameters.run_commit_main >>, "run"]
+    - and:
+        - equal: [<< pipeline.parameters.run_commit_main >>, "run_if_on_main"]
+        - equal: [main, << pipeline.git.branch >>]
+jobs:
+  - install
+  - build-js
+  - compile-translations:
+      requires:
+        - install
+  - e2e:
+      requires:
+        - build-js
+        - compile-translations

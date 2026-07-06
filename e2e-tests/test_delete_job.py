@@ -11,10 +11,16 @@ JOB_NAME = "Reinigungskraft"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_delete_job(
-    page: Page, document, base_url: str, login, add_job: Callable
+    page: Page,
+    document,
+    base_url: str,
+    login,
+    add_job: Callable,
+    delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
     add_job(JOB_NAME)
 
     with document.step(

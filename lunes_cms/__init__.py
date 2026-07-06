@@ -2,4 +2,9 @@
 Content Management System for the Lunes Vocabulary Trainer App
 """
 
-__version__ = "2026.4.7"
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("lunes-cms")
+except PackageNotFoundError:
+    __version__ = "unknown"

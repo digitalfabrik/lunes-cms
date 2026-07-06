@@ -1,0 +1,10 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Run mypy
+      command: ./tools/mypy.sh
+  - notify

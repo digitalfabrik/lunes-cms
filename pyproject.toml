@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lunes-cms"
 description = "Content Management System for the Lunes App"
-version = "2026.4.7"
+dynamic = ["version"]
 authors = [{name = "Tür an Tür – Digitalfabrik gGmbH", email = "tech@integreat-app.de"}]
 readme = "README.md"
 requires-python = ">=3.11"
@@ -37,71 +37,32 @@ classifiers = [
     "Natural Language :: German",
 ]
 dependencies = [
-	"django",
-	"django-import-export",
-	"django-jazzmin",
-	"django-mptt",
-	"django-qr-code",
-	"djangorestframework",
-	"drf-spectacular",
-	"ipython",
-	"openai",
-	"pillow",
-	"psycopg2",
-]
-
-[project.optional-dependencies]
-dev = [
-	"black",
-    "build",
-	"bumpver",
-	"isort",
-	"mypy",
-	"pre-commit",
-	"pyjwt",
-	"pylint-django",
-	"pylint-runner",
-	"pytest-circleci-parallelized",
-	"pytest-cov",
-	"pytest-django",
-	"pytest-icdiff",
-	"pytest-xdist",
-	"shellcheck-py",
-	"sphinx",
-	"sphinx-rtd-theme",
-	"sphinx-last-updated-by-git",
-	"sphinxcontrib-django",
-	"twine",
-    "wheel"
-]
-e2e = [
-	"mkdocs>=1.5,<2.0",
-	"mkdocs-material>=9.0,<10.0",
-	"pytest-playwright",
-	"pytest-xdist",
-]
-pinned = [
-	"django==5.2.14",
+	"django==5.2.15",
 	"django-import-export==4.4.1",
-	"django-jazzmin==3.0.1",
+	"django-jazzmin==3.0.4",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
 	"djangorestframework==3.17.1",
 	"drf-spectacular==0.29.0",
-	"ipython==9.14.0",
-	"openai==2.38.0",
+	"ipython==9.15.0",
+	"openai==2.44.0",
 	"pillow==12.2.0",
 	"psycopg2==2.9.12",
+	"requests==2.33.0",
 ]
-dev-pinned = [
+
+[project.optional-dependencies]
+dev = [
 	"black==26.5.1",
-    "build<=1.5.0",
+	"build<=1.5.0",
 	"bumpver==2026.1132",
+	"django-debug-toolbar==7.0.0",
+	"isort",
+	"mypy",
 	"pre-commit==4.6.0",
 	"pyjwt==2.13.0",
 	"pylint-django==2.7.0",
 	"pylint-runner==0.7.0",
-	"pytest-circleci-parallelized==0.1.0",
 	"pytest-cov==7.1.0",
 	"pytest-django==4.12.0",
 	"pytest-icdiff==0.9",
@@ -113,6 +74,12 @@ dev-pinned = [
 	"sphinxcontrib-django==2.5",
 	"twine==6.2.0",
 	"wheel==0.47.0",
+]
+e2e = [
+	"mkdocs>=1.5,<2.0",
+	"mkdocs-material>=9.0,<10.0",
+	"pytest-playwright",
+	"pytest-xdist",
 ]
 
 [project.urls]
@@ -128,25 +95,7 @@ script-files = ["lunes_cms/lunes-cms-cli"]
 [tool.setuptools.packages.find]
 include = ["lunes_cms*"]
 
-[tool.bumpver]
-current_version = "2026.4.7"
-version_pattern = "YYYY.MM.INC0[-TAG]"
-commit_message = "Bump version to {new_version}"
-commit = true
-tag = false
-push = false
-
-[tool.bumpver.file_patterns]
-"pyproject.toml" = [
-    'current_version = "{version}"',
-    'version = "{version}"',
-]
-"lunes_cms/__init__.py" = [
-    '__version__ = "{version}"',
-]
-"docs/src/conf.py" = [
-    'release = "{version}"',
-]
+[tool.setuptools_scm]
 
 # Exclude e2e tests temporarily in pytest, will be removed in #747
 [tool.pytest.ini_options]

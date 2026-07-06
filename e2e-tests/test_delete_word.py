@@ -15,7 +15,6 @@ WORD_PLURAL = "Mäuse"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_delete_word(
     page: Page,
     document,
@@ -26,7 +25,12 @@ def test_delete_word(
     add_word: Callable,
     delete_unit: Callable,
     delete_job: Callable,
+    delete_word: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    request.addfinalizer(lambda: delete_job(JOB_NAME))
+    request.addfinalizer(lambda: delete_unit(UNIT_NAME))
+    request.addfinalizer(lambda: delete_word(WORD))
     add_job(JOB_NAME)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME)
     add_word(WORD, WORD_PLURAL, UNIT_NAME)
@@ -47,7 +51,7 @@ def test_delete_word(
 
     page.fill("#searchbar", WORD)
     page.get_by_role("button", name="Suchen").click()
-    page.locator("th.field-word a", has_text=WORD).scroll_into_view_if_needed()
+    page.locator("th.field-word a", has_text=WORD).first.scroll_into_view_if_needed()
     with document.step(
         "Vokabel öffnen",
         description=f'Suchen Sie nach **„{WORD}"** und klicken Sie auf den Eintrag in der Liste.',
@@ -68,6 +72,3 @@ def test_delete_word(
         page.locator("input[type=submit]").click()
         expect(page).to_have_url(f"{base_url}/de/admin/cmsv2/word/?q={WORD}")
         expect(page.locator("th.field-word a", has_text=WORD)).to_have_count(0)
-
-    delete_unit(UNIT_NAME)
-    delete_job(JOB_NAME)

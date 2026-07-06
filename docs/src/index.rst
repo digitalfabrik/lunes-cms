@@ -36,11 +36,17 @@ Basic Concepts
     documentation
     continous-integration
     audio-generation
+    image-generation
+    analytics
+    example-sentence-generation
 
 * :doc:`internationalization`: Internationalization (i18n)
 * :doc:`documentation`: Documentation (Sphinx)
 * :doc:`continous-integration`: Continous Integration (Circle CI)
 * :doc:`audio-generation`: OpenAI audio generation for vocabulary
+* :doc:`image-generation`: OpenAI image generation for vocabulary
+* :doc:`analytics`: Analytics
+* :doc:`example-sentence-generation`: OpenAI example sentence generation for vocabulary
 
 Deployment
 ==========
@@ -50,10 +56,12 @@ Deployment
     :hidden:
 
     packaging
+    release-workflow
     prod-server
     changelog
 
 * :doc:`packaging`: Create an easy installable python
+* :doc:`release-workflow`: Release process (beta delivery & promotion)
 * :doc:`prod-server`: Setup the production server
 * :doc:`changelog`: The release history including all relevant changes
 

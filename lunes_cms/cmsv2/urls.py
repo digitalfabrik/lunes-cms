@@ -15,11 +15,6 @@ urlpatterns = [
         "jobs/<int:job_id>/update-icon/", views.update_job_icon, name="update_job_icon"
     ),
     path(
-        "words/<int:word_id>/generate-audio",
-        views.word_generate_audio,
-        name="word_generate_audio",
-    ),
-    path(
         "words/generate-audio-via-openai",
         views.word_generate_audio_via_openai,
         name="word_generate_audio_via_openai",
@@ -30,19 +25,9 @@ urlpatterns = [
         name="generate_image_via_openai",
     ),
     path(
-        "words/<int:word_id>/generate-image",
-        views.word_generate_image,
-        name="word_generate_image",
-    ),
-    path(
         "words/<int:word_id>/store-generated-audio-permanently",
         views.word_store_generated_audio_permanently,
         name="word_store_generated_audio_permanently",
-    ),
-    path(
-        "words/<int:word_id>/generate-example-sentence-audio",
-        views.word_generate_example_sentence_audio,
-        name="word_generate_example_sentence_audio",
     ),
     path(
         "words/generate-example-sentence-audio-via-openai",
@@ -53,6 +38,16 @@ urlpatterns = [
         "words/<int:word_id>/store-generated-example-sentence-audio-permanently",
         views.word_store_generated_example_sentence_audio_permanently,
         name="word_store_generated_example_sentence_audio_permanently",
+    ),
+    path(
+        "words/<int:word_id>/generate-example-sentence-via-openai",
+        views.word_generate_example_sentence_via_openai,
+        name="word_generate_example_sentence_via_openai",
+    ),
+    path(
+        "words/<int:word_id>/store-generated-example-sentence",
+        views.word_store_generated_example_sentence,
+        name="word_store_generated_example_sentence",
     ),
     path(
         "words/<int:word_id>/store-generated-image-permanently",
@@ -113,6 +108,16 @@ urlpatterns = [
         "unitwordrelations/generate-example-sentence-audio-via-openai",
         views.unitword_generate_example_sentence_audio_via_openai,
         name="unitword_generate_example_sentence_audio_via_openai",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/generate-example-sentence-via-openai",
+        views.unitword_generate_example_sentence_via_openai,
+        name="unitword_generate_example_sentence_via_openai",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/store-generated-example-sentence",
+        views.unitword_store_generated_example_sentence,
+        name="unitword_store_generated_example_sentence",
     ),
     path(
         "unitwordrelations/<int:unitword_id>/store-generated-example-sentence-audio-permanently",

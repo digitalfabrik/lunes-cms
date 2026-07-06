@@ -15,21 +15,10 @@ cd "${PACKAGE_DIR}" || exit 1
 TRANSLATION_FILE="locale/de/LC_MESSAGES/django.po"
 
 # Re-generating translation file
-lunes-cms-cli makemessages -l de > /dev/null
-
-# Remove python-brace-format flags added by xgettext, as they vary between gettext versions and cause CI diffs
-tmp=$(mktemp) && grep -v '^#, python-brace-format$' "$TRANSLATION_FILE" > "$tmp" && mv "$tmp" "$TRANSLATION_FILE"
+bash "${DEV_TOOL_DIR}/translate.sh" --skip-compile > /dev/null
 
 # Check if translation file is up to date
-TRANSLATION_DIFF=$(git diff --shortstat $TRANSLATION_FILE)
-# The translation file is up to date if the diff is either empty (which means the last change was less than a minute ago)
-# or has exactly one changed line (which means only the timestamp changed)
-[[ -z "$TRANSLATION_DIFF" ]] || echo "$TRANSLATION_DIFF" | grep -q "1 file changed, 1 insertion(+), 1 deletion(-)" && UP_TO_DATE=$? || UP_TO_DATE=$?
-
-if [ $UP_TO_DATE -eq 0 ]; then
-    # Reset the translation file if only the POT-Creation-Date changed
-    git checkout -- $TRANSLATION_FILE
-fi
+git diff --quiet $TRANSLATION_FILE && UP_TO_DATE=$? || UP_TO_DATE=$?
 
 # Check for empty entries
 pcregrep -Mq 'msgstr ""\n\n' $TRANSLATION_FILE && EMPTY_ENTRIES=$? || EMPTY_ENTRIES=$?
@@ -54,7 +43,7 @@ if [ $UP_TO_DATE -ne 0 ] || [ $EMPTY_ENTRIES -eq 0 ] || [ $FUZZY_ENTRIES -eq 0 ]
     if [ $EMPTY_ENTRIES -eq 0 ]; then
         echo -e "❌ You have empty entries in your translation file. Please translate them manually:\n" | print_error
         echo -e "${PACKAGE_DIR_REL}/${TRANSLATION_FILE}"
-        pcregrep -M -B2 -n --color=never 'msgstr ""\n\n' $TRANSLATION_FILE | sed '4~5d' | format_grep_output | print_with_borders
+        pcregrep -M -B2 -n --color=never 'msgstr ""\n\n' $TRANSLATION_FILE | awk 'NR % 5 != 4' | format_grep_output | print_with_borders
     fi
     # Check for fuzzy headers (automatic translation proposals)
     if [ $FUZZY_ENTRIES -eq 0 ]; then

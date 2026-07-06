@@ -14,6 +14,8 @@ echo "Importing test data..." | print_info
 lunes-cms-cli loaddata "${PACKAGE_DIR}/cms/fixtures/test_data.json"
 # Load cmsv2 test data (jobs, units, words)
 lunes-cms-cli loaddata "${PACKAGE_DIR}/cmsv2/fixtures/test_data.json"
+# Load analytics test data (session aggregates)
+lunes-cms-cli loaddata "${PACKAGE_DIR}/analytics/fixtures/test_data.json"
 # Restore test media files
 git restore --source origin/assets lunes_cms/media
 echo "✔ Imported test data" | print_success

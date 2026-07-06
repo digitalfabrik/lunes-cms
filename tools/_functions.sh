@@ -77,7 +77,7 @@ function print_with_borders {
 # This function applies different sed replacements to make sure the matched lines from grep are aligned and colored
 function format_grep_output {
     while read -r line; do
-        echo "$line" | sed --regexp-extended \
+        echo "$line" | sed -E \
             -e "s/^([0-9])([:-])(.*)/\1\2      \3/"         `# Pad line numbers with 1 digit` \
             -e "s/^([0-9]{2})([:-])(.*)/\1\2     \3/"       `# Pad line numbers with 2 digits` \
             -e "s/^([0-9]{3})([:-])(.*)/\1\2    \3/"        `# Pad line numbers with 3 digits` \
@@ -142,10 +142,15 @@ function require_installed {
             export LUNES_CMS_SECRET_KEY
             echo "Setting dummy secret key..." | print_info
         fi
-        # Use sqlite as database backend for local development
-        LUNES_CMS_DB_BACKEND="sqlite"
-        export LUNES_CMS_DB_BACKEND
-        echo "Enabling SQLite database for local development..." | print_info
+        # Use sqlite as database backend for local development unless the developer
+        # has chosen a different backend (e.g. LUNES_CMS_DB_BACKEND=postgres).
+        if [[ -z "$LUNES_CMS_DB_BACKEND" ]]; then
+            LUNES_CMS_DB_BACKEND="sqlite"
+            export LUNES_CMS_DB_BACKEND
+            echo "Enabling SQLite database for local development..." | print_info
+        else
+            echo "Using LUNES_CMS_DB_BACKEND=$LUNES_CMS_DB_BACKEND from environment..." | print_info
+        fi
         # Check if lunes-cms-cli can be started
         if ! lunes-cms-cli > /dev/null; then
             echo -e "The Lunes CMS could not be started due to the above error. Please install it again with:\n"  | print_error

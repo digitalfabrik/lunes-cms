@@ -1,0 +1,14 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Install e2e dependencies
+      command: pip install -e ".[e2e]"
+  - configure-deliverino
+  - run:
+      name: Deploy user manual to GitHub Pages
+      command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
+  - notify

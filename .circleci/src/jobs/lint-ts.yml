@@ -1,0 +1,20 @@
+docker:
+  - image: cimg/node:lts
+steps:
+  - checkout
+  - restore_cache:
+      key: npm-{{ checksum "package.json" }}-v1
+  - run:
+      name: Install npm dependencies
+      command: npm install
+  - save_cache:
+      key: npm-{{ checksum "package.json" }}-v1
+      paths:
+        - node_modules
+  - run:
+      name: Lint TypeScript
+      command: npm run lint
+  - run:
+      name: Check TypeScript formatting
+      command: npm run format:check
+  - notify

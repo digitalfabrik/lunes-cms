@@ -4,14 +4,16 @@ import io
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
-from django.http import HttpResponse
+from django.db.models import QuerySet
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
-from ..models import Unit, Word
+from ..models import Job, Unit, Word
 from ..utils import make_safe_filename
 from .base import BaseAdmin
 from .word_export_resource import WordExportResource
@@ -26,6 +28,7 @@ class UnitInline(admin.TabularInline):
 
     model = Unit.jobs.through
     extra = 1
+    autocomplete_fields = ["unit"]
 
 
 class MigratedFilter(admin.SimpleListFilter):
@@ -112,10 +115,14 @@ class JobAdmin(BaseAdmin):
         particularly for asset management functionality.
         """
 
-        js = ["js/job_icon_asset_config.js", "js/asset_manager.js"]
+        js = ["js/cookies.js", "js/job_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
 
-    def related_units(self, obj):
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Job]:
+        """Prefetch units to avoid N+1 queries in related_units"""
+        return super().get_queryset(request).prefetch_related("units")
+
+    def related_units(self, obj: Job) -> str:
         """
         Get a comma-separated list of unit titles related to this job.
 
@@ -154,11 +161,11 @@ class JobAdmin(BaseAdmin):
             str: HTML formatted badge showing migration status
         """
         if obj.v1_id is not None:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
                 'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
         )
@@ -179,7 +186,11 @@ class JobAdmin(BaseAdmin):
         for profession in queryset:
             resource = WordExportResource()
             units = Unit.objects.filter(jobs=profession)
-            words = Word.objects.filter(units__in=units).distinct()
+            words = (
+                Word.objects.filter(units__in=units)
+                .order_by("units__title", "word")
+                .distinct()
+            )
 
             dataset = Dataset(
                 *(resource.export_resource(word) for word in words),
@@ -206,8 +217,8 @@ class JobAdmin(BaseAdmin):
             job.pk = None
             job.v1_id = None
             job.released = False
-            new_label = "New"
-            job.name = _("%(name)s %(label)") % {"name": job.name, "label": new_label}
+            new_label = _("New")
+            job.name = f"{job.name} ({new_label})"
             job.created_by = request.user.groups.first()
             job.save()
             job.units.set(units)

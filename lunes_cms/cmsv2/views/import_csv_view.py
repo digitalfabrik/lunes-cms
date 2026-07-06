@@ -7,12 +7,15 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 from tablib import Dataset
 from tablib.exceptions import InvalidDimensions
 
 from ..admins.word_import_resource import import_words_from_csv
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
+from ..services.image_generation import drain_pending_images
+from ..services.sentence_generation import drain_pending_sentences
 
 
 class ImportCSVForm(forms.Form):
@@ -31,6 +34,23 @@ class ImportCSVForm(forms.Form):
             'The file should contain the columns "Einheit", "Artikel", "Vokabel" and "Beispielsatz".'
         ),
     )
+
+
+def _build_success_message(words_created: int, units_created: int) -> str:
+    """
+    Builds the pluralized success message shown after a completed CSV import.
+    """
+    words_phrase = ngettext(
+        "%(count)s new word", "%(count)s new words", words_created
+    ) % {"count": words_created}
+    units_phrase = ngettext(
+        "%(count)s new unit", "%(count)s new units", units_created
+    ) % {"count": units_created}
+    return _(
+        "Import successful! %(words)s, %(units)s created. Example "
+        "sentences, audio and images are being generated in the "
+        "background. This may take a few minutes..."
+    ) % {"words": words_phrase, "units": units_phrase}
 
 
 def _build_context(
@@ -83,7 +103,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     try:
         data = Dataset()
         data.load(csv_file.read().decode("utf-8"), format="csv")
-        created_count, updated_count, errors, imported_word_ids = import_words_from_csv(
+        words_created, units_created, errors, imported_word_ids = import_words_from_csv(
             data, selected_job
         )
 
@@ -96,18 +116,24 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
             )
         else:
             messages.success(
-                request,
-                _(
-                    "Import successful! %(created)s new entries, %(updated)s updated. "
-                    "Audio is being generated in the background."
-                )
-                % {"created": created_count, "updated": updated_count},
+                request, _build_success_message(words_created, units_created)
             )
 
         if imported_word_ids:
+            # Run the three drains sequentially in one thread:
+            #   1. sentences  — audio can only be made once the sentence exists
+            #   2. audio
+            #   3. images
+            # They must not run in parallel: each does a full ``Word.save()``,
+            # so concurrent drains would write back stale in-memory copies and
+            # clobber each other's file fields (re-triggering generation).
+            def _generate_word_assets() -> None:
+                drain_pending_sentences(imported_word_ids, job_title=selected_job.name)
+                drain_pending_audio(imported_word_ids)
+                drain_pending_images(imported_word_ids, job_title=selected_job.name)
+
             threading.Thread(
-                target=drain_pending_audio,
-                args=(imported_word_ids,),
+                target=_generate_word_assets,
                 daemon=True,
             ).start()
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))

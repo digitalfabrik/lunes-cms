@@ -16,7 +16,6 @@ UNIT_DESCRIPTION_UPDATED = f"Vokabeln zu {UNIT_NAME_UPDATED}"
 
 
 @pytest.mark.e2e
-@pytest.mark.xdist_group("vocabulary_management")
 def test_edit_unit(
     page: Page,
     document,
@@ -26,7 +25,17 @@ def test_edit_unit(
     add_unit: Callable,
     delete_unit: Callable,
     delete_job: Callable,
+    request: pytest.FixtureRequest,
 ) -> None:
+    def _delete_unit() -> None:
+        try:
+            delete_unit(UNIT_NAME_UPDATED)
+        except Exception:
+            delete_unit(UNIT_NAME)
+
+    request.addfinalizer(lambda: delete_job(JOB_NAME_2))
+    request.addfinalizer(lambda: delete_job(JOB_NAME_1))
+    request.addfinalizer(_delete_unit)
     add_job(JOB_NAME_1)
     add_job(JOB_NAME_2)
     add_unit(UNIT_NAME, UNIT_DESCRIPTION, JOB_NAME_1)
@@ -70,7 +79,3 @@ def test_edit_unit(
     ):
         expect(page.locator(".alert-success")).to_be_visible()
         expect(page.locator(".alert-success")).to_contain_text(UNIT_NAME_UPDATED)
-
-    delete_unit(UNIT_NAME_UPDATED)
-    delete_job(JOB_NAME_1)
-    delete_job(JOB_NAME_2)

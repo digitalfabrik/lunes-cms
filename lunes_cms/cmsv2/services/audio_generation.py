@@ -31,6 +31,8 @@ from django.db import connection
 from django.db.models import Q
 from openai import RateLimitError
 
+from lunes_cms.core.audio import normalize_loudness
+
 from ..models import Word
 from ..utils import get_openai_client, make_safe_filename, OpenAIConfigurationError
 
@@ -38,38 +40,61 @@ logger = logging.getLogger(__name__)
 
 _drain_lock = threading.Lock()
 
+#: Instruction that pins TTS pronunciation to German, shared by word and
+#: sentence audio. Phrased as a positive target ("read as German") rather than
+#: a prohibition ("don't use an English accent"): negative instructions are
+#: less reliable and can prime the very accent we want to avoid.
+GERMAN_PRONUNCIATION_INSTRUCTION = (
+    "Read this as German, the way an educated native speaker would. "
+    "Pronounce proper nouns, plant names, and loanwords as they are "
+    "conventionally pronounced in German, preserving the original-language "
+    "sounds of borrowed words."
+)
+
 
 def openai_word_audio_bytes(text: str) -> bytes:
     """
     Generate mp3 bytes for a single word/term via OpenAI TTS.
+
+    A single word carries no sentence context, so the model otherwise guesses
+    the language and may read German words with the wrong accent; the German
+    pronunciation instruction prevents that. Requires an instruction-capable
+    model (e.g. gpt-4o-mini-tts).
     """
     client = get_openai_client()
     response = client.audio.speech.create(
-        model=settings.OPENAI_TTS_WORD_MODEL,
+        model=settings.OPENAI_TTS_MODEL,
         voice=settings.OPENAI_TTS_VOICE,
         input=text,
+        instructions=GERMAN_PRONUNCIATION_INSTRUCTION,
     )
-    return b"".join(response.iter_bytes(chunk_size=4096))
+    audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
+    return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
 
 def openai_sentence_audio_bytes(sentence: str) -> bytes:
     """
     Generate mp3 bytes for an example sentence via OpenAI TTS.
 
-    Picks intonation hint from sentence ending so questions sound like questions.
+    Pins pronunciation to German (shared with single-word audio) and adds an
+    intonation hint from the sentence ending so questions sound like questions.
     """
     if sentence.strip().endswith("?"):
-        instruction = "Read this sentence as a question with rising intonation."
+        intonation = "Read it as a question with rising intonation."
     else:
-        instruction = "Read this sentence as a declarative statement with neutral, falling intonation."
+        intonation = (
+            "Read it as a declarative statement with neutral, falling intonation."
+        )
+    instruction = f"{GERMAN_PRONUNCIATION_INSTRUCTION} {intonation}"
     client = get_openai_client()
     response = client.audio.speech.create(
-        model=settings.OPENAI_TTS_SENTENCE_MODEL,
+        model=settings.OPENAI_TTS_MODEL,
         voice=settings.OPENAI_TTS_VOICE,
         input=sentence,
         instructions=instruction,
     )
-    return b"".join(response.iter_bytes(chunk_size=4096))
+    audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
+    return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
 
 def _generate_for_word(word: Word) -> None:

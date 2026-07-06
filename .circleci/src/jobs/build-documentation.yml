@@ -1,0 +1,13 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - run:
+      name: Install requirements
+      command: sudo apt-get update && sudo apt-get install ffmpeg
+  - activate-venv
+  - run:
+      name: Build documentation
+      command: ./tools/build_documentation.sh
+  - notify
