@@ -585,7 +585,6 @@ msgstr ""
 "ebenfalls löschen, die allerdings geschützt sind."
 
 #: cms/templates/admin/delete_confirmation.html
-#: cms/templates/admin/delete_selected_confirmation.html
 #, python-format
 msgid ""
 "Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
@@ -627,6 +626,24 @@ msgid ""
 msgstr ""
 "Löschen der ausgewählten %(objects_name)s würde die folgenden verwandten "
 "Objekte ebenfalls löschen, die allerdings geschützt sind:"
+
+#: cms/templates/admin/delete_selected_confirmation.html
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? It eventually "
+"will delete related objects as well, as shown in the summary:"
+msgstr ""
+"Bist du sicher, dass du die ausgewählten %(objects_name)s löschen möchtest? "
+"Eventuell werden verwandte Objekte ebenfalls gelöscht, wie du in der "
+"Zusammenfassung sehen kannst:"
+
+#: cms/templates/admin/delete_selected_confirmation.html
+#, python-format
+msgid "and %(remaining)s more object will be deleted"
+msgid_plural "and %(remaining)s more objects will be deleted"
+msgstr[0] "und %(remaining)s weiteres Objekt wird gelöscht"
+msgstr[1] "und %(remaining)s weitere Objekte werden gelöscht"
+
 
 #: cms/templates/admin/object_delete_summary.html
 msgid "Summary"

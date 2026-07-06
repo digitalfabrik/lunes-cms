@@ -48,7 +48,15 @@
                         {% endfor %}
                     </ol>
                 {% else %}
-                <p>{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object_name }} "{{ escaped_object }}"? It eventually will delete related objects as well, as shown in the summary:{% endblocktrans %}</p>
+                    <p>{% blocktrans %}Are you sure you want to delete the selected {{ objects_name }}? It eventually will delete related objects as well, as shown in the summary:{% endblocktrans %}</p>
+                    <ol>
+                        {% for obj in queryset|slice:":3" %}
+                            <li>{{ obj }}</li>
+                        {% endfor %}
+                        {% if queryset|length > 3 %}
+                            <li>{% blocktrans count remaining=queryset|length|add:"-3" %}and {{ remaining }} more object will be deleted{% plural %}and {{ remaining }} more objects will be deleted{% endblocktrans %}</li>
+                        {% endif %}
+                    </ol>
                     <div class="row">
                         <div class="col-12 col-sm-3">
                             {% include "admin/object_delete_summary.html" %}

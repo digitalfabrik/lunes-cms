@@ -56,11 +56,18 @@ def test_bulk_delete_jobs(
         page.click("button[name=index][value='0']")
 
     with document.step(
-        "Löschung bestätigen",
-        description='Bestätigen Sie die Löschung mit einem Klick auf **„Ja, ich bin mir sicher"**.',
+        "Löschung prüfen und bestätigen",
+        description='Prüfen Sie die Liste der ausgewählten Berufe und die Zusammenfassung. Bestätigen Sie die Löschung mit einem Klick auf **„Ja, ich bin mir sicher"**.',
     ):
+        selected_objects = page.locator("#content-main > ol")
+        expect(page.locator("#content-main > ol > li")).to_have_count(len(JOB_NAMES))
+        for job_name in JOB_NAMES:
+            expect(selected_objects.get_by_text(job_name, exact=True)).to_be_visible()
+
+        summary_table = page.locator("#content-main table.table-striped")
+        expect(page.get_by_role("heading", name="Zusammenfassung")).to_be_visible()
         expect(
-            page.locator("tr", has=page.get_by_text("Berufe", exact=True))
+            summary_table.locator("tr", has=page.get_by_text("Berufe", exact=True))
             .locator("td")
             .nth(1)
         ).to_have_text(str(len(JOB_NAMES)))
