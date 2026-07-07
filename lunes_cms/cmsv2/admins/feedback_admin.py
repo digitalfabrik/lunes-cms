@@ -43,7 +43,7 @@ class FeedbackAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(
-        self, request: HttpRequest, obj: Feedback | None = None
+        self, request: HttpRequest, _obj: Feedback | None = None
     ) -> bool:
         return False
 

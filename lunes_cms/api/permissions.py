@@ -19,7 +19,7 @@ class VerifyGroupKey(permissions.AllowAny):
     Inherits from `permissions.AllowAny`.
     """
 
-    def has_permission(self, request: "Request", view: "APIView") -> bool:
+    def has_permission(self, request: Request, view: APIView) -> bool:
         """
         Checks whether a valid API-Key is send
         by the user in the authorization header

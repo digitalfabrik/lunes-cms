@@ -64,7 +64,7 @@ def get_random_key(length: int = 10, excluded_chars: Optional[list[str]] = None)
     return key
 
 
-def word_to_string(word: "Word") -> str:
+def word_to_string(word: Word) -> str:
     """
     Convert a word object to a formatted string representation.
 

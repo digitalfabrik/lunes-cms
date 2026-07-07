@@ -20,7 +20,7 @@ class InstallationRateThrottle(SimpleRateThrottle):
 
     scope = "installation"
 
-    def get_cache_key(self, request: Request, view: APIView) -> str | None:
+    def get_cache_key(self, request: Request, _view: APIView) -> str | None:
         """
         Get the cache key for this request if exists
         """

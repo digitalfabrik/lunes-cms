@@ -16,9 +16,9 @@ class JobSerializer(serializers.ModelSerializer):
     migrated = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.BOOL)
-    def get_migrated(self, obj: Job) -> bool:
+    def get_migrated(self, job: Job) -> bool:
         """Return True if the job was migrated from the old data model"""
-        return obj.v1_id is not None
+        return job.v1_id is not None
 
     class Meta:
         """
