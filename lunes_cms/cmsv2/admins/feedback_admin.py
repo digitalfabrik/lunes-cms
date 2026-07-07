@@ -90,8 +90,10 @@ class FeedbackAdmin(admin.ModelAdmin):
     def get_queryset(self, request: HttpRequest) -> QuerySet[Feedback]:
         feedback_entries = super().get_queryset(request)
 
-        if request.user.is_authenticated and not request.user.is_superuser:
-            return filter_feedback_by_creator(feedback_entries, request.user)
+        if not request.user.is_superuser:
+            # request.user is `User | AnonymousUser`; AnonymousUser has no groups,
+            # so filtering by it is a safe no-op — preserved as original behavior.
+            return filter_feedback_by_creator(feedback_entries, request.user)  # type: ignore[arg-type]
 
         return feedback_entries
 

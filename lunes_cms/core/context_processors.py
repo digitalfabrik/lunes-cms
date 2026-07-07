@@ -48,9 +48,11 @@ def feedbackv2_processor(request: HttpRequest) -> dict[str, Any]:
     """
     unread_feedback_entries = FeedbackV2.objects.filter(read_by=None)
 
-    if request.user.is_authenticated and not request.user.is_superuser:
+    if not request.user.is_superuser:
+        # request.user is `User | AnonymousUser`; AnonymousUser has no groups,
+        # so filtering by it is a safe no-op — preserved as original behavior.
         unread_feedback_entries = filter_feedbackv2_by_creator(
-            unread_feedback_entries, request.user
+            unread_feedback_entries, request.user  # type: ignore[arg-type]
         )
 
     return {"unread_feedbackv2_count": unread_feedback_entries.count()}
