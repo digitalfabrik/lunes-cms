@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
-from .static import REVIEW_STATUS_CHOICES
+from .static import ReviewStatus
 
 
 def upload_review_suggestions(_, filename):
@@ -87,8 +87,8 @@ class ImageReview(models.Model):
     )
     status = models.CharField(
         max_length=20,
-        choices=REVIEW_STATUS_CHOICES,
-        default=REVIEW_STATUS_CHOICES[0][0],
+        choices=ReviewStatus.choices,
+        default=ReviewStatus.PENDING,
         verbose_name=_("status"),
     )
     comment = models.TextField(blank=True, verbose_name=_("comment"))

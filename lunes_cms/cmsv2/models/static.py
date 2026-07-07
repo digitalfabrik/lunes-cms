@@ -10,6 +10,44 @@ from PIL import Image
 from ..utils import create_resource_path, make_safe_filename
 
 
+class SingularArticle(models.IntegerChoices):
+    """Possible singular articles"""
+
+    NONE = 0, "keiner"
+    DER = 1, "der"
+    DIE = 2, "die"
+    DAS = 3, "das"
+    DIE_PLURAL = 4, "die (Plural)"
+
+
+class PluralArticle(models.IntegerChoices):
+    """Possible plural articles"""
+
+    NONE = 0, "keiner"
+    DIE_PLURAL = 1, "die (Plural)"
+
+
+class WordType(models.TextChoices):
+    """Possible word types"""
+
+    NOUN = "Nomen", "Substantiv"
+    VERB = "Verb", "Verb"
+    ADJECTIVE = "Adjektiv", "Adjektiv"
+    NUMERAL = "Numeral", "Numeral"
+    PRONOUN = "Pronomen", "Pronomen"
+    ADVERB = "Adverb", "Adverb"
+
+
+class GrammaticalGenders(models.IntegerChoices):
+    """Possible grammatical genders"""
+
+    NONE = 0, "kein"
+    MASCULINUM = 1, "Maskulinum"
+    FEMININUM = 2, "Femininum"
+    NEUTRUM = 3, "Neutrum"
+    PLURAL = 4, "Plural"
+
+
 class CheckStatus(models.TextChoices):
     """Possible states for unchecked/checked audios and images"""
 
@@ -17,60 +55,24 @@ class CheckStatus(models.TextChoices):
     NOT_CHECKED = "NOT_CHECKED", _("Not Checked")
 
 
-class Static:
-    """
-    Module for static and global variables
-    """
+class ReviewStatus(models.TextChoices):
+    """Possible states for reviews"""
 
-    # Possible articles
-    singular_article_choices = [
-        (0, "keiner"),
-        (1, "der"),
-        (2, "die"),
-        (3, "das"),
-        (4, "die (Plural)"),
-    ]
-    plural_article_choices = [
-        (0, "keiner"),
-        (1, "die (Plural)"),
-    ]
+    PENDING = "PENDING", _("Pending Review")
+    APPROVED = "APPROVED", _("Approved")
 
-    # Possible word types
-    word_type_choices = [
-        ("Nomen", "Substantiv"),
-        ("Verb", "Verb"),
-        ("Adjektiv", "Adjektiv"),
-        ("Numeral", "Numeral"),
-        ("Pronomen", "Pronomen"),
-        ("Adverb", "Adverb"),
-    ]
 
-    # Possible grammatical genders
-    grammatical_genders = [
-        (0, "kein"),
-        (1, "Maskulinum"),
-        (2, "Femininum"),
-        (3, "Neutrum"),
-        (4, "Plural"),
-    ]
+class Roles:
+    """Possible user roles"""
 
-    # Review status choices
-    review_status_choices = [
-        ("PENDING", _("Pending Review")),
-        ("APPROVED", _("Approved")),
-    ]
+    DEFAULT_GROUP_NAME = None
+    ADMIN_GROUP = "Lunes"
+    REVIEWER_GROUP = _("Reviewer")
 
-    # number of pixels used for box blur
-    blurr_radius = 30
-    # maximum (width, height) of images
-    img_size = (1024, 768)
 
-    # super admin group name
-    admin_group = "Lunes"
-    reviewer_group = _("Reviewer")
+class Permissions:
+    """Possible permissions"""
 
-    # default group name
-    default_group_name = None
     STAFF_PERMISSIONS = [
         "add_job",
         "change_job",
@@ -107,9 +109,6 @@ class Static:
         "delete_reviewassignment",
         "view_reviewassignment",
     ]
-
-
-REVIEW_STATUS_CHOICES = Static.review_status_choices
 
 
 def convert_image_to_webp(image_field):
@@ -194,21 +193,21 @@ def upload_sponsor_logos(_, filename):
 def create_user_profile(instance, created, **_kwargs):
     """
     Automatically adds a group when creating a new user
-    if group name given in Static module
+    if group name given in Roles.DEFAULT_GROUP_NAME
 
     :param instance: user that eventually will be added to a new group
     :type instance: django.contrib.auth.models
     :param created: checks if User is creator
     :type created: bool
 
-    :return: False if User is not creator and not part of Static.default_group_name
+    :return: False if User is not creator and not part of Roles.DEFAULT_GROUP_NAME
     :rtype: bool
     """
-    if Static.default_group_name:
-        default_group = Group.objects.filter(name=Static.default_group_name)
+    if Roles.DEFAULT_GROUP_NAME:
+        default_group = Group.objects.filter(name=Roles.DEFAULT_GROUP_NAME)
         if not created or not default_group:
             return False
-        instance.groups.add(Group.objects.get(name=Static.default_group_name))
+        instance.groups.add(Group.objects.get(name=Roles.DEFAULT_GROUP_NAME))
     return True
 
 
@@ -216,4 +215,4 @@ def is_reviewer(user: User) -> bool:
     """
     Check if the user is a reviewer.
     """
-    return user.groups.filter(name=Static.admin_group).exists()
+    return user.groups.filter(name=Roles.ADMIN_GROUP).exists()

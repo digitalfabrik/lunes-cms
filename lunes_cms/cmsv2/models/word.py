@@ -18,8 +18,11 @@ from .static import (
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
-    Static,
     CheckStatus,
+    GrammaticalGenders,
+    PluralArticle,
+    SingularArticle,
+    WordType,
 )
 
 
@@ -31,19 +34,19 @@ class Word(models.Model):
 
     word_type = models.CharField(
         max_length=255,
-        choices=Static.word_type_choices,
+        choices=WordType.choices,
         default="",
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
     grammatical_gender = models.IntegerField(
-        choices=Static.grammatical_genders,
+        choices=GrammaticalGenders.choices,
         verbose_name=_("Grammatical gender"),
         blank=True,
         null=True,
     )
     singular_article = models.IntegerField(
-        choices=Static.singular_article_choices,
+        choices=SingularArticle.choices,
         default="",
         verbose_name=_("singular article"),
     )
@@ -54,7 +57,7 @@ class Word(models.Model):
         default="",
     )
     plural_article = models.IntegerField(
-        choices=Static.plural_article_choices,
+        choices=PluralArticle.choices,
         verbose_name=_("plural article"),
         blank=True,
         null=True,
@@ -275,14 +278,11 @@ class Word(models.Model):
 
     def singular_article_for_audio_generation(self):
         """Get singular article for audio generation."""
-        if self.singular_article == 0:
+        if self.singular_article == SingularArticle.NONE:
             return ""
-        if self.singular_article == 4:
+        if self.singular_article == SingularArticle.DIE_PLURAL:
             return "die"
-        for num, article in Static.singular_article_choices:
-            if num == self.singular_article:
-                return article
-        return ""
+        return SingularArticle(self.singular_article).label
 
     def image_tag(self, width=120):
         """
@@ -322,8 +322,7 @@ class Word(models.Model):
         Returns:
             str: The singular article of this word as text
         """
-        # pylint: disable=invalid-sequence-index
-        return Static.singular_article_choices[self.singular_article][1]
+        return SingularArticle(self.singular_article).label
 
     def __str__(self):
         """
