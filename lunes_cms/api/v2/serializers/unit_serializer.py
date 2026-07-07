@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
@@ -14,9 +16,9 @@ class UnitSerializer(serializers.ModelSerializer):
     migrated = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.BOOL)
-    def get_migrated(self, obj):
+    def get_migrated(self, unit: Unit) -> bool:
         """Return True if the unit was migrated from the old data model."""
-        return obj.v1_id is not None
+        return unit.v1_id is not None
 
     class Meta:
         """

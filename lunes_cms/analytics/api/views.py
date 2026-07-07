@@ -1,8 +1,13 @@
+from __future__ import annotations
+
+from typing import Any
+
 from django.db.models import QuerySet
 from rest_framework import mixins, status, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
+from rest_framework.views import APIView
 
 from ..models import AnalyticsEvent
 from .serializers import AnalyticsEventSerializer
@@ -15,7 +20,7 @@ class InstallationRateThrottle(SimpleRateThrottle):
 
     scope = "installation"
 
-    def get_cache_key(self, request: Request, _) -> str | None:
+    def get_cache_key(self, request: Request, _view: APIView) -> str | None:
         """
         Get the cache key for this request if exists
         """
@@ -49,7 +54,7 @@ class AnalyticsGDPRViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             installation_id=self.kwargs["installation_id"]
         )
 
-    def destroy(self, _, *_args, **_kwargs) -> Response:
+    def destroy(self, _: Request, *_args: Any, **_kwargs: Any) -> Response:
         """
         Deletes all events with a matching installation_id
         """

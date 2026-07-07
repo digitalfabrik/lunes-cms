@@ -1,6 +1,8 @@
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, annotations, unicode_literals
 
 import io
+from datetime import date
+from typing import Iterable, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
@@ -9,7 +11,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
@@ -17,6 +19,9 @@ from ..models import Job, Unit, Word
 from ..utils import make_safe_filename
 from .base import BaseAdmin
 from .word_export_resource import WordExportResource
+
+if TYPE_CHECKING:
+    from django.utils.functional import _StrOrPromise
 
 
 class UnitInline(admin.TabularInline):
@@ -41,7 +46,9 @@ class MigratedFilter(admin.SimpleListFilter):
     title = _("migration status")
     parameter_name = "migrated"
 
-    def lookups(self, request, model_admin):
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin
+    ) -> Iterable[tuple[str, "_StrOrPromise"]]:
         """
         Return the filter options.
 
@@ -53,7 +60,7 @@ class MigratedFilter(admin.SimpleListFilter):
             ("no", _("Not migrated from old data model")),
         ]
 
-    def queryset(self, request, queryset):
+    def queryset(self, request: HttpRequest, queryset: QuerySet[Job]) -> QuerySet[Job]:
         """
         Filter the queryset based on the selected option.
 
@@ -136,7 +143,7 @@ class JobAdmin(BaseAdmin):
 
     related_units.short_description = _("units")  # type: ignore[attr-defined]
 
-    def created_at_date(self, obj):
+    def created_at_date(self, obj: Job) -> date:
         """
         Format the created_at timestamp as a date.
 
@@ -150,7 +157,7 @@ class JobAdmin(BaseAdmin):
 
     created_at_date.short_description = _("created at")  # type: ignore[attr-defined]
 
-    def migrated_status(self, obj):
+    def migrated_status(self, obj: Job) -> SafeString:
         """
         Display a badge indicating whether the job was migrated from v1 or created in v2.
 
@@ -173,7 +180,7 @@ class JobAdmin(BaseAdmin):
     migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
 
     @admin.action(description=_("Export all vocabulary for these jobs to CSV"))
-    def export_to_csv(self, _, queryset):
+    def export_to_csv(self, _: HttpRequest, queryset: QuerySet[Job]) -> HttpResponse:
         """
         Export the words of the selected jobs.
 
@@ -210,7 +217,7 @@ class JobAdmin(BaseAdmin):
         return response
 
     @admin.action(description=_("Duplicate selected jobs"))
-    def duplicate_jobs(self, request, queryset):
+    def duplicate_jobs(self, request: HttpRequest, queryset: QuerySet[Job]) -> None:
         """Duplicate the selected jobs, including their related units."""
         for job in queryset:
             units = list(job.units.all())
@@ -224,17 +231,22 @@ class JobAdmin(BaseAdmin):
             job.units.set(units)
         messages.success(request, _("Selected jobs have been duplicated successfully."))
 
-    def response_add(self, request, obj, post_url_continue=None):
+    def response_add(
+        self,
+        request: HttpRequest,
+        obj: Job,
+        post_url_continue: str | None = None,
+    ) -> HttpResponse:
         if "_save_and_import" in request.POST:
             return redirect(reverse("cmsv2:import_csv_for_job", args=[obj.pk]))
         return super().response_add(request, obj, post_url_continue)
 
-    def response_change(self, request, obj):
+    def response_change(self, request: HttpRequest, obj: Job) -> HttpResponse:
         if "_save_and_import" in request.POST:
             return redirect(reverse("cmsv2:import_csv_for_job", args=[obj.pk]))
         return super().response_change(request, obj)
 
-    def import_csv_link(self, obj) -> str:
+    def import_csv_link(self, obj: Job) -> str:
         """
         Add link/button for importing csv files from job list view
         """

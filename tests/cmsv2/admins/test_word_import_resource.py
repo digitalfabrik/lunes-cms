@@ -3,16 +3,21 @@ Tests for the CSV word import resource (column mapping, row parsing, full import
 Covers the re-import workflow described in issue #775.
 """
 
+from __future__ import annotations
+
+from typing import Any
+
 import pytest
+from django.db.models import QuerySet
 from tablib import Dataset
 
 from lunes_cms.cmsv2.admins.word_import_resource import (
-    ParsedRow,
-    RowResult,
     _build_column_mapping,
     import_words_from_csv,
     map_plural_article_to_int,
     parse_row,
+    ParsedRow,
+    RowResult,
 )
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.job import Job
@@ -22,7 +27,7 @@ from lunes_cms.cmsv2.models.job import Job
 # ---------------------------------------------------------------------------
 
 
-def test_german_export_columns_are_mapped():
+def test_german_export_columns_are_mapped() -> None:
     """German column names produced by the exporter are recognised."""
     mapping = _build_column_mapping()
     assert mapping["Einheit"] == "unit"
@@ -33,7 +38,7 @@ def test_german_export_columns_are_mapped():
     assert mapping["Beispielsatz"] == "example"
 
 
-def test_english_export_columns_are_mapped():
+def test_english_export_columns_are_mapped() -> None:
     """English column names produced by the exporter are recognised."""
     mapping = _build_column_mapping()
     assert mapping["Units"] == "unit"
@@ -44,7 +49,7 @@ def test_english_export_columns_are_mapped():
     assert mapping["Example sentence"] == "example"
 
 
-def test_legacy_column_names_are_mapped():
+def test_legacy_column_names_are_mapped() -> None:
     """Legacy column names from older import templates are still recognised."""
     mapping = _build_column_mapping()
     assert mapping["Sinneinheit"] == "unit"
@@ -72,7 +77,7 @@ def test_legacy_column_names_are_mapped():
         ("unknown", None),
     ],
 )
-def test_map_plural_article_to_int(value, expected):
+def test_map_plural_article_to_int(value: str, expected: int | None) -> None:
     assert map_plural_article_to_int(value) == expected
 
 
@@ -81,13 +86,13 @@ def test_map_plural_article_to_int(value, expected):
 # ---------------------------------------------------------------------------
 
 
-def _make_row(**overrides) -> dict:
+def _make_row(**overrides: str) -> dict[str, str]:
     row = {"Einheit": "Werkzeug", "Vokabel": "Hammer", "Artikel": "der"}
     row.update(overrides)
     return row
 
 
-def test_parse_row_returns_parsed_row():
+def test_parse_row_returns_parsed_row() -> None:
     result = parse_row(_make_row(), 1)
     assert isinstance(result, ParsedRow)
     assert result.unit == "Werkzeug"
@@ -95,19 +100,19 @@ def test_parse_row_returns_parsed_row():
     assert result.article == "der"
 
 
-def test_parse_row_parses_plural_article():
+def test_parse_row_parses_plural_article() -> None:
     result = parse_row(_make_row(**{"Pluralartikel": "die (Plural)"}), 1)
     assert isinstance(result, ParsedRow)
     assert result.plural_article == "die (Plural)"
 
 
-def test_parse_row_parses_example_sentence():
+def test_parse_row_parses_example_sentence() -> None:
     result = parse_row(_make_row(Beispielsatz="Der Hammer ist schwer."), 1)
     assert isinstance(result, ParsedRow)
     assert result.example == "Der Hammer ist schwer."
 
 
-def test_parse_row_english_column_names():
+def test_parse_row_english_column_names() -> None:
     row = {
         "Units": "Werkzeug",
         "Word": "Hammer",
@@ -124,25 +129,25 @@ def test_parse_row_english_column_names():
     assert result.example == "Der Hammer ist schwer."
 
 
-def test_parse_row_missing_unit_returns_error():
+def test_parse_row_missing_unit_returns_error() -> None:
     result = parse_row(_make_row(Einheit=""), 1)
     assert isinstance(result, RowResult)
     assert result.error is not None
 
 
-def test_parse_row_missing_word_returns_error():
+def test_parse_row_missing_word_returns_error() -> None:
     result = parse_row(_make_row(Vokabel=""), 1)
     assert isinstance(result, RowResult)
     assert result.error is not None
 
 
-def test_parse_row_no_recognised_columns_returns_error():
+def test_parse_row_no_recognised_columns_returns_error() -> None:
     result = parse_row({"Unknown": "value"}, 1)
     assert isinstance(result, RowResult)
     assert result.error is not None
 
 
-def test_parse_row_strips_whitespace_from_column_names():
+def test_parse_row_strips_whitespace_from_column_names() -> None:
     row = {" Einheit ": "Werkzeug", " Vokabel ": "Hammer", " Artikel ": "der"}
     result = parse_row(row, 1)
     assert isinstance(result, ParsedRow)
@@ -153,7 +158,7 @@ def test_parse_row_strips_whitespace_from_column_names():
 # ---------------------------------------------------------------------------
 
 
-def _make_dataset(headers: list[str], rows: list[list]) -> Dataset:
+def _make_dataset(headers: list[str], rows: list[list[Any]]) -> Dataset:
     ds = Dataset(headers=headers)
     for row in rows:
         ds.append(row)
@@ -161,17 +166,17 @@ def _make_dataset(headers: list[str], rows: list[list]) -> Dataset:
 
 
 @pytest.fixture
-def job(db) -> Job:
+def job(db: None) -> Job:
     return Job.objects.create(name="Test Job")
 
 
-def _job_words(job: Job):
+def _job_words(job: Job) -> QuerySet[Word]:
     """Return queryset of words imported into the given job."""
     return Word.objects.filter(units__jobs=job)
 
 
 @pytest.mark.django_db
-def test_import_with_german_headers(job):
+def test_import_with_german_headers(job: Job) -> None:
     ds = _make_dataset(
         ["Einheit", "Vokabel", "Artikel"],
         [["Werkzeug", "Hammer", "der"], ["Werkzeug", "Säge", "die"]],
@@ -182,7 +187,7 @@ def test_import_with_german_headers(job):
 
 
 @pytest.mark.django_db
-def test_reimport_with_english_headers(job):
+def test_reimport_with_english_headers(job: Job) -> None:
     """Re-import of a CSV exported with English admin locale works (issue #775)."""
     ds = _make_dataset(
         ["Units", "Word", "Singular Article", "Plural Article", "Example sentence"],
@@ -196,7 +201,7 @@ def test_reimport_with_english_headers(job):
 
 
 @pytest.mark.django_db
-def test_reimport_with_german_headers(job):
+def test_reimport_with_german_headers(job: Job) -> None:
     """Re-import of a CSV exported with German admin locale works (issue #775)."""
     ds = _make_dataset(
         ["Einheit", "Vokabel", "Singularartikel", "Pluralartikel", "Beispielsatz"],
@@ -208,7 +213,7 @@ def test_reimport_with_german_headers(job):
 
 
 @pytest.mark.django_db
-def test_import_plural_word(job):
+def test_import_plural_word(job: Job) -> None:
     """The Plural column is imported and stored on the word."""
     ds = _make_dataset(
         ["Units", "Word", "Singular Article", "Plural", "Plural Article"],
@@ -222,7 +227,7 @@ def test_import_plural_word(job):
 
 
 @pytest.mark.django_db
-def test_plural_article_short_form_stored(job):
+def test_plural_article_short_form_stored(job: Job) -> None:
     """'die' (short form exported by the exporter) is stored as plural article 1."""
     ds = _make_dataset(
         ["Units", "Word", "Singular Article", "Plural Article"],
@@ -233,7 +238,7 @@ def test_plural_article_short_form_stored(job):
 
 
 @pytest.mark.django_db
-def test_plural_article_dash_stored_as_none(job):
+def test_plural_article_dash_stored_as_none(job: Job) -> None:
     """'-' in the plural article column (exporter default) is stored as None."""
     ds = _make_dataset(
         ["Units", "Word", "Singular Article", "Plural Article"],
@@ -244,7 +249,7 @@ def test_plural_article_dash_stored_as_none(job):
 
 
 @pytest.mark.django_db
-def test_extra_export_columns_are_ignored(job):
+def test_extra_export_columns_are_ignored(job: Job) -> None:
     """Extra columns from the export (Word type, Has audio?, Creation date) don't cause errors."""
     ds = _make_dataset(
         [
@@ -263,7 +268,7 @@ def test_extra_export_columns_are_ignored(job):
 
 
 @pytest.mark.django_db
-def test_empty_rows_produce_errors(job):
+def test_empty_rows_produce_errors(job: Job) -> None:
     ds = _make_dataset(
         ["Einheit", "Vokabel", "Artikel"],
         [["", "Hammer", "der"], ["Werkzeug", "", "der"]],

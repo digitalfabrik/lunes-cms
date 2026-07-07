@@ -1,5 +1,9 @@
+from __future__ import annotations
+
+from typing import Optional, Union
+
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -11,7 +15,9 @@ from lunes_cms.cmsv2.services.sentence_generation import openai_example_sentence
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
-def _generate_sentence_response(word, job_names, unit_title=None):
+def _generate_sentence_response(
+    word: str, job_names: list[str], unit_title: Optional[str] = None
+) -> JsonResponse:
     """
     Run the OpenAI generation and wrap the result/errors in a JsonResponse.
     """
@@ -41,7 +47,9 @@ def _generate_sentence_response(word, job_names, unit_title=None):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def word_generate_example_sentence_via_openai(_request, word_id):
+def word_generate_example_sentence_via_openai(
+    _request: HttpRequest, word_id: int
+) -> JsonResponse:
     """
     AJAX endpoint to generate an example sentence for a Word via OpenAI.
 
@@ -64,7 +72,9 @@ def word_generate_example_sentence_via_openai(_request, word_id):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_generate_example_sentence_via_openai(_request, unitword_id):
+def unitword_generate_example_sentence_via_openai(
+    _request: HttpRequest, unitword_id: int
+) -> JsonResponse:
     """
     AJAX endpoint to generate an example sentence for a UnitWordRelation via
     OpenAI, scoped to the relation's unit and its jobs.
@@ -76,7 +86,9 @@ def unitword_generate_example_sentence_via_openai(_request, unitword_id):
     )
 
 
-def _store_sentence_response(instance, sentence):
+def _store_sentence_response(
+    instance: Union[Word, UnitWordRelation], sentence: Optional[str]
+) -> JsonResponse:
     """
     Persist a kept example sentence on the given instance and wrap the result in
     a JsonResponse. Saving resets the example sentence check status and clears
@@ -101,7 +113,9 @@ def _store_sentence_response(instance, sentence):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def word_store_generated_example_sentence(request, word_id):
+def word_store_generated_example_sentence(
+    request: HttpRequest, word_id: int
+) -> JsonResponse:
     """
     AJAX endpoint to persist a kept example sentence on a Word.
     """
@@ -112,7 +126,9 @@ def word_store_generated_example_sentence(request, word_id):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_store_generated_example_sentence(request, unitword_id):
+def unitword_store_generated_example_sentence(
+    request: HttpRequest, unitword_id: int
+) -> JsonResponse:
     """
     AJAX endpoint to persist a kept example sentence on a UnitWordRelation.
     """

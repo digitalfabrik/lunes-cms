@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from django.db.models import QuerySet
 from rest_framework import mixins, viewsets
 
 from ....cms.models import Discipline
@@ -22,7 +25,7 @@ class DisciplineFilteredViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Discipline] | list[Discipline]:
         """
         Defining custom queryset
 

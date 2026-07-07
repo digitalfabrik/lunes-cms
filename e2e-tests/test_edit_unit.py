@@ -2,10 +2,13 @@
 E2E test: Einheit bearbeiten — generates user_docs/edit_unit.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 JOB_NAME_1 = "Informatiker/-in"
 JOB_NAME_2 = "Einzelhandelskaufmann/-frau"
@@ -18,9 +21,9 @@ UNIT_DESCRIPTION_UPDATED = f"Vokabeln zu {UNIT_NAME_UPDATED}"
 @pytest.mark.e2e
 def test_edit_unit(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_job: Callable,
     add_unit: Callable,
     delete_unit: Callable,

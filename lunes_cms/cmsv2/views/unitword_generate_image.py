@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import os
 
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -12,7 +15,7 @@ from lunes_cms.core import settings
 
 
 @staff_member_required
-def unitword_generate_image(request, unitword_id):
+def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpResponse:
     """
     Dedicated view for generating image for a specific Unit<>Word relation.
     """
@@ -37,7 +40,9 @@ def unitword_generate_image(request, unitword_id):
 @staff_member_required
 @csrf_exempt
 @require_POST
-def unitword_store_generated_image_permanently(request, unitword_id):
+def unitword_store_generated_image_permanently(
+    request: HttpRequest, unitword_id: int
+) -> HttpResponseRedirect:
     """
     Downloads and save the image to the Unittword instance's image field
     and redirects back to the edit view.
@@ -60,6 +65,9 @@ def unitword_store_generated_image_permanently(request, unitword_id):
                 f.read(),
                 name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}.png',
             )
+            # content_file.name is always the literal set above; ContentFile.name
+            # is typed Optional[str] only because the base File class allows it.
+            assert content_file.name is not None
             unitword_instance.image.save(content_file.name, content_file)
 
         os.remove(temp_filepath)

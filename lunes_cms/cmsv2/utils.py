@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import os
 import pathlib
@@ -6,16 +8,20 @@ import string
 import uuid
 import warnings
 from html import escape
-from typing import Optional
+from typing import Any, Iterable, Optional, TYPE_CHECKING
 
-from django.db.models.fields.files import ImageFieldFile
+from django.db.models.fields.files import FieldFile, ImageFieldFile
+from django.http import HttpRequest
 from django.utils.crypto import get_random_string
-from django.utils.html import format_html, mark_safe
-from django.utils.safestring import SafeString
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext as _
 from openai import OpenAI
 
 from lunes_cms.core import settings
+
+if TYPE_CHECKING:
+    from lunes_cms.cmsv2.models.word import Word
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +30,7 @@ class OpenAIConfigurationError(Exception):
     """Exception raised when OpenAI API is not properly configured."""
 
 
-def create_resource_path(parent_dir, filename):
+def create_resource_path(parent_dir: str, filename: str) -> str:
     """
     Create a unique path for a resource file.
 
@@ -58,7 +64,7 @@ def get_random_key(length: int = 10, excluded_chars: Optional[list[str]] = None)
     return key
 
 
-def word_to_string(word):
+def word_to_string(word: Word) -> str:
     """
     Convert a word object to a formatted string representation.
 
@@ -79,7 +85,7 @@ def word_to_string(word):
     )
 
 
-def cache_busted_url(file):
+def cache_busted_url(file: FieldFile) -> str:
     """
     Return a media file's URL with a ?v= query that changes when the file does.
 
@@ -96,7 +102,7 @@ def cache_busted_url(file):
         str: The file URL, cache-busted when possible.
     """
     try:
-        version = int(file.storage.get_modified_time(file.name).timestamp())
+        version = int(file.storage.get_modified_time(file.name or "").timestamp())
     except (NotImplementedError, OSError, ValueError):
         return file.url
     return f"{file.url}?v={version}"
@@ -116,6 +122,7 @@ def get_image_tag(image: ImageFieldFile, width: int = 330) -> SafeString:
     src = ""
     if (
         image
+        and image.name
         and image.storage.exists(image.name)
         and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png", ".webp"])
     ):
@@ -125,7 +132,7 @@ def get_image_tag(image: ImageFieldFile, width: int = 330) -> SafeString:
 
 
 # pylint: disable=redefined-builtin
-def iter_to_string(iter):
+def iter_to_string(iter: Iterable[Any]) -> str:
     """
     Convert an iterable to a formatted string with quotes and conjunctions.
 
@@ -143,7 +150,7 @@ def iter_to_string(iter):
     return list_str
 
 
-def get_openai_client():
+def get_openai_client() -> OpenAI:
     """
     Get OpenAI client if API key is available.
 
@@ -161,7 +168,7 @@ def get_openai_client():
     return OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
-def check_openai_availability():
+def check_openai_availability() -> bool:
     """
     Check if OpenAI functionality is available and issue warnings if not.
 
@@ -178,28 +185,30 @@ def check_openai_availability():
     return True
 
 
-def is_not_blank(s):
+def is_not_blank(s: Optional[str]) -> bool:
     """
     Checks if s is not an empty string.
     """
     return s is not None and s.strip() != ""
 
 
-def make_safe_filename(unsafe):
+def make_safe_filename(unsafe: str) -> str:
     """
     Method to create a safe filename with regex.
     """
     return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)
 
 
-def is_ajax(request):
+def is_ajax(request: HttpRequest) -> bool:
     """
     Checks whether the given request was sent via an AJAX call (fetch/XHR).
     """
     return request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
 
-def example_sentence_generate_html(generate_url, store_url, target=None):
+def example_sentence_generate_html(
+    generate_url: str, store_url: str, target: Optional[str] = None
+) -> SafeString:
     """
     Render the inline example sentence generation widget.
 

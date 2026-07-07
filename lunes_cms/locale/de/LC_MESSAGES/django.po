@@ -644,7 +644,6 @@ msgid_plural "and %(remaining)s more objects will be deleted"
 msgstr[0] "und %(remaining)s weiteres Objekt wird gelöscht"
 msgstr[1] "und %(remaining)s weitere Objekte werden gelöscht"
 
-
 #: cms/templates/admin/object_delete_summary.html
 msgid "Summary"
 msgstr "Zusammenfassung"

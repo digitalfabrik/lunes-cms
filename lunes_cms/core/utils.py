@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+from typing import Any
+
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
+from django.core.files.base import File
 
 
 class LaxManifestStaticFilesStorage(ManifestStaticFilesStorage):
@@ -13,23 +18,25 @@ class LaxManifestStaticFilesStorage(ManifestStaticFilesStorage):
 
     manifest_strict = False
 
-    def hashed_name(self, name, content=None, filename=None):
+    def hashed_name(
+        self, name: str, content: File[Any] | None = None, filename: str | None = None
+    ) -> str:
         try:
             return super().hashed_name(name, content, filename)
         except ValueError:
             return name
 
 
-def strtobool(val):
+def strtobool(string: str) -> int:
     """Convert a string representation of truth to true (1) or false (0).
 
     True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
     are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'val' is anything else.
+    'string' is anything else.
     """
-    val = val.lower()
-    if val in ("y", "yes", "t", "true", "on", "1"):
+    string = string.lower()
+    if string in ("y", "yes", "t", "true", "on", "1"):
         return 1
-    if val in ("n", "no", "f", "false", "off", "0"):
+    if string in ("n", "no", "f", "false", "off", "0"):
         return 0
-    raise ValueError(f"invalid truth value {val}")
+    raise ValueError(f"invalid truth value {string}")

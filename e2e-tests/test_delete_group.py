@@ -2,10 +2,13 @@
 E2E test: Gruppe löschen — generates user_docs/delete_group.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 GROUP_NAME = "Neue Vokabelverwalter:innen"
 
@@ -13,9 +16,9 @@ GROUP_NAME = "Neue Vokabelverwalter:innen"
 @pytest.mark.e2e
 def test_delete_group(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_group: Callable,
     delete_group: Callable,
     request: pytest.FixtureRequest,

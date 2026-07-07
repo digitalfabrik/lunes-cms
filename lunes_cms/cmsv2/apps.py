@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
@@ -13,7 +15,7 @@ class CmsV2Config(AppConfig):
     name = "lunes_cms.cmsv2"
     verbose_name = _("Vocabulary Management v2")
 
-    def ready(self):
+    def ready(self) -> None:
         """
         Called when the app is ready.
         Performs startup checks including OpenAI availability.

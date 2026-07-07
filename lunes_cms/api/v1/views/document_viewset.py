@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from django.db.models import QuerySet
 from rest_framework import viewsets
 
 from ....cms.models import Document, TrainingSet
@@ -18,7 +21,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     http_method_names = ["get"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Document]:
         """
         Defining custom queryset
 

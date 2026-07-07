@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from rest_framework import serializers
 
 from ....cmsv2.models.unit import UnitWordRelation
@@ -19,7 +23,7 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
     example_sentence = serializers.SerializerMethodField()
     example_sentence_audio = serializers.SerializerMethodField()
 
-    def get_example_sentence(self, obj):
+    def get_example_sentence(self, obj: UnitWordRelation) -> Optional[str]:
         """
         Return the example sentence from the relation if it exists with audio and confirmed status,
         otherwise fallback to the word's example sentence with the same requirements.
@@ -43,12 +47,12 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
 
         return None
 
-    def get_example_sentence_audio(self, obj):
+    def get_example_sentence_audio(self, obj: UnitWordRelation) -> Optional[str]:
         """
         Return the example sentence audio from the relation if it exists with sentence and confirmed status,
         otherwise fallback to the word's example sentence audio with the same requirements.
         """
-        url = None
+        url: Optional[str] = None
 
         # Check relation's example sentence audio
         if (
@@ -59,7 +63,7 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
             url = (
                 obj.example_sentence_audio.url
                 if hasattr(obj.example_sentence_audio, "url")
-                else obj.example_sentence_audio
+                else str(obj.example_sentence_audio)
             )
         # Fallback to word's example sentence audio
         elif (
@@ -70,7 +74,7 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
             url = (
                 obj.word.example_sentence_audio.url
                 if hasattr(obj.word.example_sentence_audio, "url")
-                else obj.word.example_sentence_audio
+                else str(obj.word.example_sentence_audio)
             )
 
         return build_absolute_url(self.context, url)

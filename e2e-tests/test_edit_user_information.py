@@ -2,10 +2,13 @@
 E2E test: Benutzer:in bearbeiten (Informationen) — generates user_docs/edit_user_information.md
 """
 
+from __future__ import annotations
+
 from typing import Callable
 
 import pytest
-from playwright.sync_api import Page, expect
+from conftest import DocPage
+from playwright.sync_api import expect, Page
 
 USERNAME = "test_lunes_user_edit_info"
 PASSWORD = "lunes2024!"
@@ -14,9 +17,9 @@ PASSWORD = "lunes2024!"
 @pytest.mark.e2e
 def test_edit_user_information(
     page: Page,
-    document,
+    document: DocPage,
     base_url: str,
-    login,
+    login: None,
     add_user: Callable,
     delete_user: Callable,
     request: pytest.FixtureRequest,

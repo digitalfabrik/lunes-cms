@@ -1,9 +1,16 @@
+from __future__ import annotations
+
+from typing import Any, TYPE_CHECKING
+
 from django.utils.translation import gettext_lazy as _
 from import_export import fields, resources
 from import_export.admin import ExportActionMixin
 
 from ..models import Word
 from ..models.static import PluralArticle, SingularArticle
+
+if TYPE_CHECKING:
+    from django.utils.functional import _StrOrPromise
 
 
 class WordExportResource(resources.ModelResource):
@@ -15,7 +22,7 @@ class WordExportResource(resources.ModelResource):
     ExportActionMixin.export_admin_action
 
     # pylint: disable=super-init-not-called
-    def __init__(self, for_profession=None):
+    def __init__(self, for_profession: Any = None) -> None:
         self.for_profession = for_profession
         self.relevant_units = (
             for_profession.get_nested_units() if for_profession else None
@@ -30,7 +37,7 @@ class WordExportResource(resources.ModelResource):
         attribute="singular_article",
     )
 
-    def dehydrate_singular_article(self, word):
+    def dehydrate_singular_article(self, word: Word) -> str:
         """
         Method to show the actual singular article and not their integer.
         """
@@ -46,10 +53,12 @@ class WordExportResource(resources.ModelResource):
         attribute="plural_article_choices",
     )
 
-    def dehydrate_plural_article(self, word):
+    def dehydrate_plural_article(self, word: Word) -> str:
         """
         Method to show the actual plural article and not their integer.
         """
+        if word.plural_article is None:
+            return "-"
         try:
             return PluralArticle(word.plural_article).label.replace(" (Plural)", "")
         except ValueError:
@@ -57,7 +66,7 @@ class WordExportResource(resources.ModelResource):
 
     has_audio = fields.Field(column_name=_("Has audio?"), attribute="word")
 
-    def dehydrate_has_audio(self, word):
+    def dehydrate_has_audio(self, word: Word) -> "_StrOrPromise":
         """
         Returns yes if audio exists and no if it doesn't.
         """
@@ -73,7 +82,7 @@ class WordExportResource(resources.ModelResource):
         column_name=_("Creation date"), attribute="creation_date"
     )
 
-    def dehydrate_creation_date(self, word):
+    def dehydrate_creation_date(self, word: Word) -> str:
         """
         Only show first 16 characters of date (date, and hours & minutes).
         """
@@ -81,7 +90,7 @@ class WordExportResource(resources.ModelResource):
 
     units = fields.Field(column_name=_("Units"), attribute="units")
 
-    def dehydrate_units(self, word):
+    def dehydrate_units(self, word: Word) -> str:
         """
         Method to get relevant units.
         """

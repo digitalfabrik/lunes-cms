@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
@@ -19,7 +23,7 @@ class WordSerializer(serializers.ModelSerializer):
     example_sentence_audio = serializers.SerializerMethodField()
     migrated = serializers.SerializerMethodField()
 
-    def get_example_sentence(self, obj):
+    def get_example_sentence(self, obj: Word) -> Optional[str]:
         """Return None for empty example sentences instead of empty string and if it's not confirmed."""
         if (
             obj.example_sentence
@@ -29,7 +33,7 @@ class WordSerializer(serializers.ModelSerializer):
             return obj.example_sentence
         return None
 
-    def get_example_sentence_audio(self, obj):
+    def get_example_sentence_audio(self, obj: Word) -> Optional[str]:
         """
         Return None for example sentence audio if it's not confirmed.
         :param obj: The word object
@@ -40,16 +44,16 @@ class WordSerializer(serializers.ModelSerializer):
             and obj.example_sentence
             and obj.example_sentence_check_status == "CONFIRMED"
         ):
-            url = (
+            url: str = (
                 obj.example_sentence_audio.url
                 if hasattr(obj.example_sentence_audio, "url")
-                else obj.example_sentence_audio
+                else str(obj.example_sentence_audio)
             )
             return build_absolute_url(self.context, url)
         return None
 
     @extend_schema_field(OpenApiTypes.BOOL)
-    def get_migrated(self, obj):
+    def get_migrated(self, obj: Word) -> bool:
         """Return True if the word was migrated from the old data model"""
         return obj.v1_id is not None
 
