@@ -1,0 +1,8 @@
+description: Restore environment variables persisted by bump-version. Must run after attach_workspace.
+steps:
+  - run:
+      name: Restore environment variables
+      command: |
+        touch environment_variables
+        cat environment_variables >> ${BASH_ENV}
+        cat environment_variables
