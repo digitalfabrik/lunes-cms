@@ -111,15 +111,6 @@ class Permissions:
     ]
 
 
-class ImageProcessingConfig:
-    """Configuration for image processing"""
-
-    # number of pixels used for box blur
-    BLURR_RADIUS = 30
-    # maximum (width, height) of images
-    IMG_SIZE = (1024, 768)
-
-
 def convert_image_to_webp(image_field):
     """
     Converts an ImageField's file to WebP format in-place.
