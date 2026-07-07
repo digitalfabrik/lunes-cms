@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from rest_framework import serializers
 
 from ....cms.models import Discipline
@@ -36,7 +38,7 @@ class DisciplineSerializer(FallbackIconSerializer):
             "nested_training_sets",
         )
 
-    def get_total_discipline_children(self, discipline):
+    def get_total_discipline_children(self, discipline: Discipline) -> int:
         """Returns the total child count by calling
         utils.get_child_count(discipline).
 

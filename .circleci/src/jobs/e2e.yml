@@ -7,6 +7,7 @@ docker:
     environment:
       LUNES_CMS_SECRET_KEY: circleci-dummy-key
       LUNES_CMS_DEBUG: "True"
+      LUNES_CMS_DEBUG_TOOLBAR: "False"
   - image: cimg/postgres:15.1
     environment:
       POSTGRES_USER: lunes

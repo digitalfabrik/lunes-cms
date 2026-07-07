@@ -1,9 +1,13 @@
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, annotations, unicode_literals
+
+from typing import Any
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.forms import BaseModelFormSet, ModelForm
+from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.models.review import ReviewAssignment
@@ -51,13 +55,17 @@ class UserReviewAssignmentInline(admin.TabularInline):
     verbose_name = _("assigned unit")
     verbose_name_plural = _("assigned units")
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request: HttpRequest, obj: User | None = None) -> bool:
         return request.user.is_superuser
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(
+        self, request: HttpRequest, obj: User | None = None
+    ) -> bool:
         return request.user.is_superuser
 
-    def has_delete_permission(self, request, obj=None):
+    def has_delete_permission(
+        self, request: HttpRequest, obj: User | None = None
+    ) -> bool:
         return request.user.is_superuser
 
 
@@ -86,7 +94,13 @@ class LunesUserAdmin(DjangoUserAdmin):
     )
     inlines = [*DjangoUserAdmin.inlines, UserReviewAssignmentInline]
 
-    def save_formset(self, request, form, formset, change):
+    def save_formset(
+        self,
+        request: HttpRequest,
+        form: ModelForm[Any],
+        formset: BaseModelFormSet,
+        change: bool,
+    ) -> None:
         if formset.model is ReviewAssignment:
             instances = formset.save(commit=False)
             for obj in formset.deleted_objects:

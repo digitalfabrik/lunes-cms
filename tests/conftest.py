@@ -2,13 +2,16 @@
 This module contains shared fixtures for pytest
 """
 
+from __future__ import annotations
+
 import pytest
 from django.core.management import call_command
+from pytest_django.plugin import DjangoDbBlocker
 
 
 # pylint: disable=unused-argument
 @pytest.fixture(scope="session")
-def load_test_data(django_db_setup, django_db_blocker):
+def load_test_data(django_db_setup: None, django_db_blocker: DjangoDbBlocker) -> None:
     """
     Load the test data initially for all test cases
 

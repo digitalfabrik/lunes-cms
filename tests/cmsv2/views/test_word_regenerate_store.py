@@ -6,13 +6,17 @@ These endpoints back issues #822 (show/keep the old or new asset) and #835
 otherwise fall back to the legacy redirect behaviour.
 """
 
+from __future__ import annotations
+
 import io
+from pathlib import Path
 
 import pytest
 from django.contrib import admin
-from django.test import RequestFactory
+from django.test import Client, RequestFactory
 from django.urls import reverse
 from PIL import Image
+from pytest_django.fixtures import SettingsWrapper
 
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
 from lunes_cms.cmsv2.models import Word
@@ -21,7 +25,9 @@ from lunes_cms.core import settings as core_settings
 
 
 @pytest.fixture
-def media_dirs(settings, tmp_path, monkeypatch):
+def media_dirs(
+    settings: SettingsWrapper, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> tuple[Path, Path]:
     """Isolate stored files and the temp directories the store views read from."""
     settings.MEDIA_ROOT = str(tmp_path)
     temp_image_dir = tmp_path / "temp_image"
@@ -33,19 +39,21 @@ def media_dirs(settings, tmp_path, monkeypatch):
     return temp_image_dir, temp_audio_dir
 
 
-def _png_bytes():
+def _png_bytes() -> bytes:
     buf = io.BytesIO()
     Image.new("RGB", (4, 4), "red").save(buf, format="PNG")
     return buf.getvalue()
 
 
-def test_is_ajax_detects_xhr_header():
+def test_is_ajax_detects_xhr_header() -> None:
     factory = RequestFactory()
     assert is_ajax(factory.post("/", HTTP_X_REQUESTED_WITH="XMLHttpRequest"))
     assert not is_ajax(factory.post("/"))
 
 
-def test_store_image_ajax_returns_json_and_saves(admin_client, db, media_dirs):
+def test_store_image_ajax_returns_json_and_saves(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
     temp_image_dir, _ = media_dirs
     word = Word.objects.create(word="Hammer", singular_article=1)
     temp_name = "temp_image_keepme.png"
@@ -66,7 +74,9 @@ def test_store_image_ajax_returns_json_and_saves(admin_client, db, media_dirs):
     assert not (temp_image_dir / temp_name).exists()
 
 
-def test_store_image_ajax_missing_temp_returns_400(admin_client, db, media_dirs):
+def test_store_image_ajax_missing_temp_returns_400(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
     word = Word.objects.create(word="Hammer", singular_article=1)
     url = reverse("cmsv2:word_store_generated_image_permanently", args=[word.pk])
 
@@ -76,7 +86,9 @@ def test_store_image_ajax_missing_temp_returns_400(admin_client, db, media_dirs)
     assert response.json()["status"] == "error"
 
 
-def test_store_image_non_ajax_missing_temp_redirects(admin_client, db, media_dirs):
+def test_store_image_non_ajax_missing_temp_redirects(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
     word = Word.objects.create(word="Hammer", singular_article=1)
     url = reverse("cmsv2:word_store_generated_image_permanently", args=[word.pk])
 
@@ -85,7 +97,9 @@ def test_store_image_non_ajax_missing_temp_redirects(admin_client, db, media_dir
     assert response.status_code == 302
 
 
-def test_store_audio_ajax_missing_temp_returns_400(admin_client, db, media_dirs):
+def test_store_audio_ajax_missing_temp_returns_400(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
     word = Word.objects.create(word="Hammer", singular_article=1)
     url = reverse("cmsv2:word_store_generated_audio_permanently", args=[word.pk])
 
@@ -96,8 +110,8 @@ def test_store_audio_ajax_missing_temp_returns_400(admin_client, db, media_dirs)
 
 
 def test_store_sentence_audio_ajax_missing_temp_returns_400(
-    admin_client, db, media_dirs
-):
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
     word = Word.objects.create(
         word="Hammer", singular_article=1, example_sentence="Der Hammer ist schwer."
     )
@@ -111,7 +125,7 @@ def test_store_sentence_audio_ajax_missing_temp_returns_400(
     assert response.json()["status"] == "error"
 
 
-def test_admin_methods_render_inline_regenerate_widget(db):
+def test_admin_methods_render_inline_regenerate_widget(db: None) -> None:
     word = Word.objects.create(
         word="Hammer", singular_article=1, example_sentence="Der Hammer ist schwer."
     )
@@ -142,7 +156,7 @@ def test_admin_methods_render_inline_regenerate_widget(db):
     )
 
 
-def test_admin_methods_prompt_to_save_for_unsaved_word(db):
+def test_admin_methods_prompt_to_save_for_unsaved_word(db: None) -> None:
     word_admin = WordAdmin(Word, admin.site)
     unsaved = Word(word="Hammer", singular_article=1)
 

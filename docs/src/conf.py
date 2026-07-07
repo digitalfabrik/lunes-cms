@@ -1,10 +1,4 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# -- Path setup --------------------------------------------------------------
+from __future__ import annotations
 
 import importlib
 import inspect
@@ -17,7 +11,16 @@ import os
 import sys
 from datetime import date
 
-from django import VERSION as django_version
+from django import VERSION as _django_version_info
+
+# Configuration file for the Sphinx documentation builder.
+#
+# This file only contains a selection of the most common options. For a full
+# list see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Path setup --------------------------------------------------------------
+
 
 # Append project source directory to path environment variable
 sys.path.append(os.path.abspath(".."))
@@ -26,7 +29,7 @@ sys.path.append(os.path.abspath("."))
 #: The path to the django settings module (see :doc:`sphinxcontrib-django:readme`)
 django_settings = "lunes_cms.core.settings"
 #: The "major.minor" version of Django
-django_version = f"{django_version[0]}.{django_version[1]}"
+django_version = f"{_django_version_info[0]}.{_django_version_info[1]}"
 
 
 # -- Project information -----------------------------------------------------
@@ -87,6 +90,15 @@ intersphinx_mapping = {
 }
 #: The number of seconds for timeout. The default is None, meaning do not timeout.
 intersphinx_timeout = 5
+#: Render type hints with their fully qualified path for readability.
+autodoc_typehints_format = "fully-qualified"
+#: Several models (e.g. ``Discipline``) are both defined in a submodule and
+#: re-exported from their package's ``__init__.py``, so autodoc documents them
+#: as two separate objects. Self-referential fields (e.g. MPTT's ``parent``)
+#: then produce a short ``~Discipline`` cross-reference that matches both by
+#: suffix and can't be resolved uniquely — harmless, but ``-W`` turns it into
+#: a build failure. Suppress just this warning subtype, not others.
+suppress_warnings = ["ref.python"]
 #: The path for patched template files
 templates_path = ["templates"]
 #: Markup to shorten external links (see :doc:`sphinx:usage/extensions/extlinks`)
@@ -135,7 +147,7 @@ html_last_updated_fmt = "%b %d, %Y"
 # -- Source Code links to GitHub ---------------------------------------------
 
 
-def linkcode_resolve(domain, info):
+def linkcode_resolve(domain: str, info: dict[str, str]) -> str | None:
     """
     This function adds source code links to all modules (see :mod:`sphinx:sphinx.ext.linkcode`).
     It links all classes and functions to their source files on GitHub including line numbers.
@@ -163,7 +175,10 @@ def linkcode_resolve(domain, info):
             pass
     module = importlib.import_module(module_str)
     module_path = module_str.replace(".", "/")
-    filename = module.__file__.partition(module_path)[2]
+    # ``__file__`` is None for namespace packages and some builtin/frozen
+    # modules; fall back to an empty filename suffix in that case.
+    module_file = module.__file__ or ""
+    filename = module_file.partition(module_path)[2]
     if module_str.startswith("django."):
         url = django_github_url
     else:

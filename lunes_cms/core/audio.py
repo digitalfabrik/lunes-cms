@@ -1,12 +1,15 @@
+from __future__ import annotations
+
 import json
 import subprocess
 import tempfile
 
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import UploadedFile
 from django.utils.translation import gettext_lazy as _
 
 
-def validate_audio_upload(uploaded_file):
+def validate_audio_upload(uploaded_file: UploadedFile) -> None:
     """Probe an uploaded audio file with ffmpeg before it is saved to storage."""
     with tempfile.NamedTemporaryFile(suffix=".tmp") as tmp:
         for chunk in uploaded_file.chunks():
@@ -16,7 +19,7 @@ def validate_audio_upload(uploaded_file):
     uploaded_file.seek(0)
 
 
-def run_ffmpeg(*args):
+def run_ffmpeg(*args: str) -> "subprocess.CompletedProcess[bytes]":
     """
     Run ffmpeg with the given arguments, raising ValidationError on failure.
 
@@ -28,7 +31,7 @@ def run_ffmpeg(*args):
         raise ValidationError({"audio": _("Invalid audio file")}) from e
 
 
-def probe_ffmpeg(path):
+def probe_ffmpeg(path: str) -> None:
     """Probe an audio file path with ffmpeg to check that it contains a valid audio stream."""
     run_ffmpeg("-v", "error", "-i", path, "-map", "0:a:0", "-f", "null", "-")
 
@@ -43,7 +46,7 @@ _DEFAULT_SAMPLE_RATE = "24000"
 _DEFAULT_BITRATE = "96k"
 
 
-def _probe_audio_params(path):
+def _probe_audio_params(path: str) -> tuple[str, str]:
     """
     Read the sample rate and bitrate of an audio file via ffprobe.
 
@@ -81,16 +84,17 @@ def _probe_audio_params(path):
     return sample_rate, bitrate
 
 
-def _parse_loudnorm_stats(stderr):
+def _parse_loudnorm_stats(stderr: bytes) -> dict[str, str]:
     """Extract the JSON loudness measurement ffmpeg's loudnorm prints to stderr."""
     text = stderr.decode("utf-8", "replace")
     start, end = text.rfind("{"), text.rfind("}")
     if start == -1 or end < start:
         raise ValidationError({"audio": _("Could not measure audio loudness")})
-    return json.loads(text[start : end + 1])
+    result: dict[str, str] = json.loads(text[start : end + 1])
+    return result
 
 
-def normalize_loudness(audio_bytes, target_lufs):
+def normalize_loudness(audio_bytes: bytes, target_lufs: float) -> bytes:
     """
     Normalize mp3 audio to a target integrated loudness (EBU R128 loudnorm).
 

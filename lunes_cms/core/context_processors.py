@@ -2,6 +2,12 @@
 Context processors pass additional variables to templates (see :ref:`context-processors`).
 """
 
+from __future__ import annotations
+
+from typing import Any
+
+from django.http import HttpRequest
+
 from ..cms.feedback_filter import filter_feedback_by_creator
 from ..cms.models import Feedback
 from ..cmsv2.feedback_filter import (
@@ -10,7 +16,7 @@ from ..cmsv2.feedback_filter import (
 from ..cmsv2.models import Feedback as FeedbackV2
 
 
-def feedback_processor(request):
+def feedback_processor(request: HttpRequest) -> dict[str, Any]:
     """
     This context processor injects the number of unread feedback entries into the template context.
 
@@ -30,7 +36,7 @@ def feedback_processor(request):
     return {"unread_feedback_count": unread_feedback_entries.count()}
 
 
-def feedbackv2_processor(request):
+def feedbackv2_processor(request: HttpRequest) -> dict[str, Any]:
     """
     This context processor injects the number of unread feedback (cms v2) entries into the template context.
 
@@ -43,8 +49,10 @@ def feedbackv2_processor(request):
     unread_feedback_entries = FeedbackV2.objects.filter(read_by=None)
 
     if not request.user.is_superuser:
+        # request.user is `User | AnonymousUser`; AnonymousUser has no groups,
+        # so filtering by it is a safe no-op — preserved as original behavior.
         unread_feedback_entries = filter_feedbackv2_by_creator(
-            unread_feedback_entries, request.user
+            unread_feedback_entries, request.user  # type: ignore[arg-type]
         )
 
     return {"unread_feedbackv2_count": unread_feedback_entries.count()}

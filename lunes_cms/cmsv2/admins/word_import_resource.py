@@ -5,7 +5,7 @@ from typing import Dict, Optional, Tuple
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
-from ..models import Job, Static, Unit, Word
+from ..models import Job, PluralArticle, SingularArticle, Unit, Word
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ def map_article_to_int(article: str) -> int:
     Converts article string to article int in DB.
     """
     ARTICLE_MAP: dict[str, int] = {
-        label.lower(): value for value, label in Static.singular_article_choices
+        label.lower(): value for value, label in SingularArticle.choices
     } | {"": 0}
     return ARTICLE_MAP.get(article, 0)
 
@@ -94,10 +94,10 @@ def map_plural_article_to_int(plural_article: str) -> int | None:
     unknown values (the field is nullable).
     """
     ARTICLE_MAP: dict[str, int] = {
-        label.lower(): value for value, label in Static.plural_article_choices
+        label.lower(): value for value, label in PluralArticle.choices
     } | {
         label.lower().replace(" (plural)", ""): value
-        for value, label in Static.plural_article_choices
+        for value, label in PluralArticle.choices
     }
     normalized = plural_article.lower().strip()
     return ARTICLE_MAP.get(normalized)

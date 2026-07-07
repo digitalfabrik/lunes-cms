@@ -2,21 +2,13 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from datetime import UTC, datetime, timedelta
-from typing import Any
+from datetime import datetime, timedelta, UTC
+from typing import Any, Mapping
 
 from django.core.management import CommandParser
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
-from django.db.models import (
-    Count,
-    IntegerField,
-    OuterRef,
-    Q,
-    QuerySet,
-    Subquery,
-    Sum,
-)
+from django.db.models import Count, IntegerField, OuterRef, Q, QuerySet, Subquery, Sum
 from django.db.models.fields.json import KT
 from django.db.models.functions import Cast, TruncDate
 from django.utils import timezone
@@ -167,7 +159,7 @@ class SessionAggregator(EventAggregator):
     @staticmethod
     def sessions(
         events: QuerySet[AnalyticsEvent],
-    ) -> QuerySet[AnalyticsEvent, dict[str, Any]]:
+    ) -> QuerySet[AnalyticsEvent, Mapping[str, Any]]:
         """
         Converts the query set of session_start and session_end events into a query set of
         valid sessions with `event_date`, `timestamp`, `end_timestamp` and `payload__session_id` keys.
@@ -542,7 +534,7 @@ class Command(BaseCommand):
             help="Run the full aggregation pipeline but roll back all DB changes and skip InfluxDB push.",
         )
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:
         dry_run: bool = options["dry_run"]
         job_names: dict[int, str] = dict(Job.objects.values_list("id", "name"))
         unit_names: dict[int, str] = dict(Unit.objects.values_list("id", "title"))

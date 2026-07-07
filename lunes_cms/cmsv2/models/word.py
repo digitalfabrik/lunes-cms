@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
+from typing import Any
 
 from django.contrib.auth.models import Group
 from django.core.files import File
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.core.audio import run_ffmpeg, validate_audio_upload
@@ -18,8 +23,11 @@ from .static import (
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
-    Static,
     CheckStatus,
+    GrammaticalGenders,
+    PluralArticle,
+    SingularArticle,
+    WordType,
 )
 
 
@@ -31,19 +39,19 @@ class Word(models.Model):
 
     word_type = models.CharField(
         max_length=255,
-        choices=Static.word_type_choices,
+        choices=WordType.choices,
         default="",
         verbose_name=_("word type"),
     )
     word = models.CharField(max_length=255, verbose_name=_("word"))
     grammatical_gender = models.IntegerField(
-        choices=Static.grammatical_genders,
+        choices=GrammaticalGenders.choices,
         verbose_name=_("Grammatical gender"),
         blank=True,
         null=True,
     )
     singular_article = models.IntegerField(
-        choices=Static.singular_article_choices,
+        choices=SingularArticle.choices,
         default="",
         verbose_name=_("singular article"),
     )
@@ -54,7 +62,7 @@ class Word(models.Model):
         default="",
     )
     plural_article = models.IntegerField(
-        choices=Static.plural_article_choices,
+        choices=PluralArticle.choices,
         verbose_name=_("plural article"),
         blank=True,
         null=True,
@@ -152,7 +160,7 @@ class Word(models.Model):
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
-    def clean(self):
+    def clean(self) -> None:
         """Validate changed audio with ffmpeg before saving to prevent storing invalid audio."""
         super().clean()
         if not self.audio:
@@ -166,7 +174,7 @@ class Word(models.Model):
             return
         validate_audio_upload(self.audio.file)
 
-    def convert_audio(self):
+    def convert_audio(self) -> None:
         """
         Converts the uploaded audio file to MP3 format and sets, but doesn't save, it as a Django File object.
         """
@@ -185,6 +193,9 @@ class Word(models.Model):
         target_filename = f"{make_safe_filename(self.word) or 'audio'}.mp3"
         target_name = self.audio.field.generate_filename(self, target_filename)
         storage = self.audio.storage
+        # `self.audio` was truthy above, and FieldFile.__bool__ is defined as
+        # bool(self.name), so the name is guaranteed to be a non-empty string here.
+        assert original_name is not None
         storage.delete(original_name)
         if storage.exists(target_name):
             storage.delete(target_name)
@@ -194,7 +205,7 @@ class Word(models.Model):
 
         os.remove(new_path)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """
         Overrides the default save method to handle audio conversion and
         update check statuses for audio and image files.
@@ -210,20 +221,22 @@ class Word(models.Model):
         super().save(*args, **kwargs)
         self._post_save_conversions(audio_updated, image_updated)
 
-    def _audio_changed(self, previous_word):
-        return (not self.pk and self.audio) or (
+    def _audio_changed(self, previous_word: "Word | None") -> bool:
+        return bool(not self.pk and self.audio) or bool(
             self.pk
             and previous_word
             and previous_word.assemble_audio_checked_identifier()
             != self.assemble_audio_checked_identifier()
         )
 
-    def _image_changed(self, previous_word):
-        return (not self.pk and self.image) or (
+    def _image_changed(self, previous_word: "Word | None") -> bool:
+        return bool(not self.pk and self.image) or bool(
             self.pk and previous_word and previous_word.image != self.image
         )
 
-    def _update_audio_status(self, previous_word, audio_updated):
+    def _update_audio_status(
+        self, previous_word: "Word | None", audio_updated: bool
+    ) -> None:
         if audio_updated:
             self.audio_check_status = CheckStatus.NOT_CHECKED
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
@@ -236,19 +249,20 @@ class Word(models.Model):
         ):
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
 
-    def _update_image_status(self, image_updated):
+    def _update_image_status(self, image_updated: bool) -> None:
         if image_updated:
             self.image_check_status = CheckStatus.NOT_CHECKED
         if not self.image:
             self.image_check_status = None
 
-    def _handle_example_sentence_change(self, previous_word):
-        example_sentence_changed = (
+    def _handle_example_sentence_change(self, previous_word: "Word | None") -> None:
+        example_sentence_changed = bool(
             self.pk
             and previous_word
             and previous_word.example_sentence != self.example_sentence
         )
         if example_sentence_changed:
+            assert previous_word is not None
             if previous_word.example_sentence_audio:
                 previous_word.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
@@ -256,14 +270,14 @@ class Word(models.Model):
         if not self.example_sentence or not self.example_sentence.strip():
             self.example_sentence_check_status = None
 
-    def _post_save_conversions(self, audio_updated, image_updated):
+    def _post_save_conversions(self, audio_updated: bool, image_updated: bool) -> None:
         if audio_updated:
             self.convert_audio()
             super().save(update_fields=["audio"])
         if image_updated and convert_image_to_webp(self.image):
             super().save(update_fields=["image"])
 
-    def assemble_audio_checked_identifier(self):
+    def assemble_audio_checked_identifier(self) -> str | None:
         """
         Assembles an identifier for the audio file, typically its URL,
         used to track changes for audio checking.
@@ -273,18 +287,15 @@ class Word(models.Model):
         """
         return self.audio.url if self.audio else None
 
-    def singular_article_for_audio_generation(self):
+    def singular_article_for_audio_generation(self) -> str:
         """Get singular article for audio generation."""
-        if self.singular_article == 0:
+        if self.singular_article == SingularArticle.NONE:
             return ""
-        if self.singular_article == 4:
+        if self.singular_article == SingularArticle.DIE_PLURAL:
             return "die"
-        for num, article in Static.singular_article_choices:
-            if num == self.singular_article:
-                return article
-        return ""
+        return SingularArticle(self.singular_article).label
 
-    def image_tag(self, width=120):
+    def image_tag(self, width: int = 120) -> SafeString:
         """
         Generates an HTML image tag for the word's associated image.
 
@@ -298,7 +309,7 @@ class Word(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def images_for_api(self):
+    def images_for_api(self) -> list[ImageFieldFile]:
         """
         Returns all images that belong to this word to be returned in the api.
         By default, this only includes the default image of this word, if it is checked.
@@ -317,15 +328,14 @@ class Word(models.Model):
         return images
 
     @property
-    def singular_article_as_text(self):
+    def singular_article_as_text(self) -> str:
         """
         Returns:
             str: The singular article of this word as text
         """
-        # pylint: disable=invalid-sequence-index
-        return Static.singular_article_choices[self.singular_article][1]
+        return SingularArticle(self.singular_article).label
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns a string representation of the Word instance, which is its actual word.
 

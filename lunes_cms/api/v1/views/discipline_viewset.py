@@ -1,4 +1,6 @@
-from django.db.models import Count, Q
+from __future__ import annotations
+
+from django.db.models import Count, Q, QuerySet
 from rest_framework import viewsets
 
 from ....cms.models import Discipline, GroupAPIKey
@@ -15,7 +17,7 @@ class DisciplineViewSet(viewsets.ModelViewSet):
     serializer_class = DisciplineSerializer
     http_method_names = ["get"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Discipline]:
         """
         Get the queryset of disciplines - either those created by admins or by the group of the given key
 

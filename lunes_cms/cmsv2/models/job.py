@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import get_image_tag
@@ -34,7 +36,7 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
-    def image_tag(self):
+    def image_tag(self) -> SafeString:
         """
         Generate an HTML image tag for the job's icon.
 
@@ -45,7 +47,7 @@ class Job(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
-    def list_icon(self):
+    def list_icon(self) -> SafeString:
         """
         Generate HTML for displaying the job's icon with controls in the admin list view.
 
@@ -78,7 +80,7 @@ class Job(models.Model):
 
     list_icon.short_description = _("Icon")  # type: ignore[attr-defined]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.name)
 
     class Meta:

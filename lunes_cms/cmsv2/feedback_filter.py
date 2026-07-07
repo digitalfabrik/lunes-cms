@@ -1,10 +1,15 @@
+from __future__ import annotations
+
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 
-from .models import Job, Unit, Word
+from .models import Feedback, Job, Unit, Word
 
 
-def filter_feedback_by_creator(feedback_queryset, user):
+def filter_feedback_by_creator(
+    feedback_queryset: QuerySet[Feedback], user: User
+) -> QuerySet[Feedback]:
     """
     Exclude feedback entries that are not related to objects created by the user
     """
