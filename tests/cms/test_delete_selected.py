@@ -1,15 +1,27 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.auth import get_user_model
+from django.db.models import Model
 from django.template.loader import render_to_string
 from django.test.client import Client
 from django.urls import reverse
+from pytest_django.fixtures import SettingsWrapper
 
 from lunes_cms.cms.models import Discipline, Document, TrainingSet
 
+if TYPE_CHECKING:
+    # Client.post() returns this test-only response subclass (adds .content,
+    # .context, .json(), etc.) — it doesn't inherit from HttpResponse, only
+    # from the shared HttpResponseBase, so HttpResponse would be the wrong type.
+    from django.test.client import _MonkeyPatchedWSGIResponse
+
 
 @pytest.fixture(name="admin_client")
-def admin_client_fixture(settings):
+def admin_client_fixture(settings: SettingsWrapper) -> Client:
     """
     Create an authenticated admin client.
 
@@ -29,7 +41,12 @@ def admin_client_fixture(settings):
     return client
 
 
-def post_delete_selected_confirmation(admin_client, model_name, objects, post=False):
+def post_delete_selected_confirmation(
+    admin_client: Client,
+    model_name: str,
+    objects: list[Model],
+    post: bool = False,
+) -> _MonkeyPatchedWSGIResponse:
     """
     Post the admin delete-selected action for objects of a CMS model.
 
@@ -54,7 +71,9 @@ def post_delete_selected_confirmation(admin_client, model_name, objects, post=Fa
 
 
 @pytest.mark.django_db()
-def test_delete_selected_single_discipline_shows_selected_name(admin_client):
+def test_delete_selected_single_discipline_shows_selected_name(
+    admin_client: Client,
+) -> None:
     """
     Verify that the bulk delete confirmation shows a single selected discipline name.
 
@@ -74,7 +93,9 @@ def test_delete_selected_single_discipline_shows_selected_name(admin_client):
 
 
 @pytest.mark.django_db()
-def test_delete_selected_three_documents_shows_all_selected_names(admin_client):
+def test_delete_selected_three_documents_shows_all_selected_names(
+    admin_client: Client,
+) -> None:
     """
     Verify that three selected documents are all listed on the confirmation page.
 
@@ -97,8 +118,8 @@ def test_delete_selected_three_documents_shows_all_selected_names(admin_client):
 
 @pytest.mark.django_db()
 def test_delete_selected_five_training_sets_shows_first_three_and_remainder(
-    admin_client,
-):
+    admin_client: Client,
+) -> None:
     """
     Verify that five selected training sets are truncated after three names.
 
@@ -126,7 +147,9 @@ def test_delete_selected_five_training_sets_shows_first_three_and_remainder(
 
 
 @pytest.mark.django_db()
-def test_delete_selected_post_deletes_full_selected_queryset(admin_client):
+def test_delete_selected_post_deletes_full_selected_queryset(
+    admin_client: Client,
+) -> None:
     """
     Verify that confirming the action deletes every selected object.
 
@@ -148,7 +171,7 @@ def test_delete_selected_post_deletes_full_selected_queryset(admin_client):
     ).exists()
 
 
-def test_object_delete_summary_hides_training_set_relationships():
+def test_object_delete_summary_hides_training_set_relationships() -> None:
     """
     Verify that the delete summary table omits training set relationship rows.
     """

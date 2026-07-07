@@ -57,6 +57,8 @@ class WordExportResource(resources.ModelResource):
         """
         Method to show the actual plural article and not their integer.
         """
+        if word.plural_article is None:
+            return "-"
         try:
             return PluralArticle(word.plural_article).label.replace(" (Plural)", "")
         except ValueError:
