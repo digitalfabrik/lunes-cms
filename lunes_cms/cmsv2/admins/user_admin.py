@@ -26,7 +26,7 @@ class LunesUserCreationForm(AdminUserCreationForm):
         model = User
         fields = ("username", "email")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.fields["email"].required = True
 
@@ -36,7 +36,7 @@ class LunesUserChangeForm(UserChangeForm):
     User change form that requires an email address.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.fields["email"].required = True
 

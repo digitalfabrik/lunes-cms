@@ -268,6 +268,7 @@ def add_user(page: Page, base_url: str) -> Callable[[str, str], None]:
         expect(page.get_by_role("link", name=username)).to_have_count(0)
         page.goto(f"{base_url}/de/admin/auth/user/add/")
         page.fill("[name=username]", username)
+        page.fill("[name=email]", f"{username}@example.com")
         page.fill("[name=password1]", password)
         page.fill("[name=password2]", password)
         page.click("[name=_save]")

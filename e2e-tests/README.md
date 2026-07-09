@@ -26,6 +26,9 @@ LUNES_CMS_DEBUG=True LUNES_CMS_DEBUG_TOOLBAR=False ./tools/run.sh
 ```
 
 ```bash
+# First activate the venv
+source .venv/bin/activate
+
 # Run all tests in sequence, regenerate screenshots only for changed tests (default)
 pytest e2e-tests/ -m e2e
 
