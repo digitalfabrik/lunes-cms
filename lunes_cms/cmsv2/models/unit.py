@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import Any, TYPE_CHECKING
 
+from django.conf import settings as django_settings
 from django.contrib.auth.models import Group
 from django.db import models
-from django.db.models.deletion import CASCADE
 from django.db.models.fields.files import ImageFieldFile
 from django.urls import reverse
 from django.utils.html import escape, format_html
@@ -351,9 +351,17 @@ class Unit(models.Model):
         Word, through="UnitWordRelation", related_name="units", verbose_name=_("word")
     )
     created_by = models.ForeignKey(
-        Group, on_delete=CASCADE, null=True, blank=True, verbose_name=_("created by")
+        Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_("group")
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    created_by_user = models.ForeignKey(
+        django_settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("creator"),
+        related_name="created_units",
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 

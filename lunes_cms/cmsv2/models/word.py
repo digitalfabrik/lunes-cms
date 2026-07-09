@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.files import File
 from django.db import models
@@ -20,10 +21,10 @@ from ..validators import (
     validate_multiple_extensions,
 )
 from .static import (
+    CheckStatus,
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
-    CheckStatus,
     GrammaticalGenders,
     PluralArticle,
     SingularArticle,
@@ -143,11 +144,19 @@ class Word(models.Model):
         max_length=255,
         null=True,
         blank=True,
-        verbose_name=_("created by"),
+        verbose_name=_("group"),
         to=Group,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    created_by_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("creator"),
+        related_name="created_words",
+    )
     image = models.ImageField(
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("image")
     )

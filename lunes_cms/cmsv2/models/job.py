@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
-from django.db.models.deletion import CASCADE
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
@@ -26,13 +26,21 @@ class Job(models.Model):
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         Group,
-        on_delete=CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name=_("created by"),
+        verbose_name=_("group"),
         related_name="job",
     )
     creator_is_admin = models.BooleanField(default=True, verbose_name=_("admin"))
+    created_by_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("creator"),
+        related_name="created_jobs",
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 

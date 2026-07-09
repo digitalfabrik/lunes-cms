@@ -135,9 +135,10 @@ class UnitAdmin(BaseAdmin):
         "image_tag",
         "jobs",
         "created_by",
+        "created_by_user",
         "released",
     ]
-    readonly_fields = ["created_by", "image_tag", "migrated_status"]
+    readonly_fields = ["created_by", "created_by_user", "image_tag", "migrated_status"]
     inlines = [WordInline, ReviewAssignmentInline]
     search_fields = ["title"]
     list_display = [
@@ -147,6 +148,7 @@ class UnitAdmin(BaseAdmin):
         "list_icon",
         "related_jobs",
         "creator_group",
+        "created_by_user",
         "created_at_date",
     ]
     list_display_links = ["title"]
@@ -294,7 +296,7 @@ class UnitAdmin(BaseAdmin):
             return obj.created_by
         return None
 
-    creator_group.short_description = _("creator group")  # type: ignore[attr-defined]
+    creator_group.short_description = _("group")  # type: ignore[attr-defined]
 
     def created_at_date(self, obj: Unit) -> date:
         """

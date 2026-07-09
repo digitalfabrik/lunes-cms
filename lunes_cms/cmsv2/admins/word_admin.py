@@ -278,6 +278,7 @@ class WordAdmin(BaseAdmin):
         "example_sentence_audio_player",
         "example_sentence_generate",
         "created_by",
+        "created_by_user",
         "image_generate",
         "image_tag",
         "migrated_status",
@@ -293,6 +294,7 @@ class WordAdmin(BaseAdmin):
         "list_audio",
         "list_image",
         "creator_group",
+        "created_by_user",
         "creation_date_display",
     )
     list_filter = [
@@ -625,7 +627,7 @@ class WordAdmin(BaseAdmin):
             return str(obj.created_by)
         return None
 
-    creator_group.short_description = _("creator group")  # type: ignore[attr-defined]
+    creator_group.short_description = _("group")  # type: ignore[attr-defined]
 
     def list_audio(self, obj: Word) -> SafeString:
         """
