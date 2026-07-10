@@ -19,7 +19,7 @@ steps:
       name: Notify mattermost about production release
       command: |
         NEW_VERSION=$(jq -r .versionName version.json)
-        MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) has been released successfully :tada:\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
+        MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}) has been released successfully :tada:"
         npx --no app-toolbelt v0 notify mattermost \
           --message "${MESSAGE}" \
           --channel releases \
