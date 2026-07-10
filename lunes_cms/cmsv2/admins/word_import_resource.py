@@ -2,6 +2,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, Optional, Tuple
 
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
@@ -103,17 +104,21 @@ def map_plural_article_to_int(plural_article: str) -> int | None:
     return ARTICLE_MAP.get(normalized)
 
 
-def create_unit(unit_title: str, job: Job) -> Unit:
+def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
     """
     Create a new unit - even if one already exists with the same title.
     """
-    unit = Unit.objects.create(title=unit_title)
+    unit = Unit.objects.create(title=unit_title, **creator_fields)
     unit.jobs.add(job)
     return unit
 
 
 def create_word(
-    word_text: str, singular_article: int, plural_article: int | None, plural: str = ""
+    word_text: str,
+    singular_article: int,
+    plural_article: int | None,
+    creator_fields: dict,
+    plural: str = "",
 ) -> Word:
     """
     Creates a new word object.
@@ -123,7 +128,27 @@ def create_word(
         singular_article=singular_article,
         plural_article=plural_article,
         plural=plural,
+        **creator_fields,
     )
+
+
+def _creator_fields_for_user(user: User) -> dict:
+    """
+    Builds the created_by/created_by_user/creator_is_admin values a CSV
+    import should stamp on the units and words it creates, mirroring how
+    BaseAdmin.save_model attributes objects created through the admin forms.
+    """
+    if user.groups.exists():
+        group = user.groups.first()
+    elif not user.is_superuser:
+        raise IndexError("No group assigned. Please add the user to a group")
+    else:
+        group = None
+    return {
+        "created_by": group,
+        "created_by_user": user,
+        "creator_is_admin": user.is_superuser,
+    }
 
 
 def update_or_add_example_sentence(word_obj: Word, word_defaults: dict) -> None:
@@ -214,6 +239,7 @@ def process_row(
     parsed: ParsedRow,
     job: Job,
     created_units: Dict[str, Unit],
+    creator_fields: dict,
 ) -> RowResult:
     """
     Processes a single parsed row.
@@ -227,7 +253,7 @@ def process_row(
 
     unit = created_units.get(parsed.unit)
     if unit is None:
-        unit = create_unit(parsed.unit, job)
+        unit = create_unit(parsed.unit, job, creator_fields)
         created_units[parsed.unit] = unit
         unit_created = True
     else:
@@ -236,7 +262,9 @@ def process_row(
 
     article_int = map_article_to_int(parsed.article)
     plural_article_int = map_plural_article_to_int(parsed.plural_article)
-    word = create_word(parsed.word, article_int, plural_article_int, parsed.plural)
+    word = create_word(
+        parsed.word, article_int, plural_article_int, creator_fields, parsed.plural
+    )
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 
@@ -246,7 +274,7 @@ def process_row(
 
 
 def import_words_from_csv(
-    dataset: Dataset, job: Job
+    dataset: Dataset, job: Job, user: User
 ) -> Tuple[int, int, list[str], list[int]]:
     """
     Imports the entire csv dataset to a job.
@@ -264,6 +292,7 @@ def import_words_from_csv(
     error_messages: list[str] = []
     imported_word_ids: list[int] = []
 
+    creator_fields = _creator_fields_for_user(user)
     created_units: Dict[str, Unit] = {}
 
     for row_number, raw_row in enumerate(dataset.dict, start=1):
@@ -274,7 +303,7 @@ def import_words_from_csv(
                 error_messages.append(parsed_or_error.error)
             continue
 
-        result = process_row(parsed_or_error, job, created_units)
+        result = process_row(parsed_or_error, job, created_units, creator_fields)
 
         if result.error:
             error_messages.append(

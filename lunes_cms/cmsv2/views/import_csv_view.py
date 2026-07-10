@@ -103,8 +103,10 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     try:
         data = Dataset()
         data.load(csv_file.read().decode("utf-8"), format="csv")
+        # request.user is `User | AnonymousUser`, but this view is only
+        # reachable by authenticated staff users.
         words_created, units_created, errors, imported_word_ids = import_words_from_csv(
-            data, selected_job
+            data, selected_job, request.user  # type: ignore[arg-type]
         )
 
         if errors:
@@ -148,7 +150,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
         return render(
             request, "admin/csv_form.html", _build_context(request, form, job, job_id)
         )
-    except (AttributeError, TypeError, ValueError) as e:
+    except (AttributeError, IndexError, TypeError, ValueError) as e:
         messages.error(
             request,
             _("Import failed: %(e)s") % {"e": e},
