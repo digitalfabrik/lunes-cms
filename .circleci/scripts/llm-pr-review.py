@@ -109,6 +109,14 @@ Analyse the diff and the commit messages and report on:
    vague ("fix stuff", "update"), tautological ("change X to X"), or that
    don't explain a non-obvious change.
  Dependabot commits are exempt from these rules.
+9. CircleCI config: `.circleci/config.yml` is auto-generated from
+ `.circleci/src/{commands,jobs,workflows}/*.yml` via `circleci config pack`
+ (see `npm run circleci:update-config`). Only check it for **consistency**:
+ if a PR changes a command/job/workflow file under `.circleci/src/`, verify
+ that `.circleci/config.yml` was regenerated and reflects that exact
+ change. Do not review `.circleci/config.yml`'s full content on its own —
+ it's mechanical output, not hand-written, so treating it as a second,
+ duplicate review target adds no value.
 
 Be specific and reference file paths and line numbers where possible.
 Be concise. Do not approve or reject — provide comments only.
@@ -164,7 +172,7 @@ def main():
     auth_headers = {
         "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2026-03-10",
+        "X-GitHub-Api-Version": "2022-11-28",
     }
 
     # -------------------------------------------------------------------------
