@@ -433,6 +433,22 @@ jobs:
                 command: npm run format:check
                 name: Check TypeScript formatting
             - notify
+    llm-pr-review:
+        executor: python
+        steps:
+            - checkout
+            - attach_workspace:
+                at: .
+            - activate-venv
+            - run:
+                command: |
+                    TOKEN=$(./.circleci/scripts/get_access_token.py)
+                    echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+                name: Request Deliverino installation access token
+            - run:
+                command: python .circleci/scripts/llm-pr-review.py
+                name: Run LLM PR review
+            - notify
     mypy:
         executor: python
         steps:
@@ -670,6 +686,12 @@ workflows:
                 requires:
                     - install
             - build-documentation:
+                requires:
+                    - install
+            - llm-pr-review:
+                context:
+                    - deliverino
+                    - digitalfabrik-llm-api
                 requires:
                     - install
         when:

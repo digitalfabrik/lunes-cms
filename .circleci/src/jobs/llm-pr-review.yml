@@ -1,0 +1,15 @@
+executor: python
+steps:
+  - checkout
+  - attach_workspace:
+      at: .
+  - activate-venv
+  - run:
+      name: Request Deliverino installation access token
+      command: |
+        TOKEN=$(./.circleci/scripts/get_access_token.py)
+        echo "export DELIVERINO_ACCESS_TOKEN=$TOKEN" >> $BASH_ENV
+  - run:
+      name: Run LLM PR review
+      command: python .circleci/scripts/llm-pr-review.py
+  - notify
