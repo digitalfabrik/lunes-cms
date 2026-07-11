@@ -4,12 +4,41 @@ from typing import Any
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.models.review import ReviewAssignment
+
+
+class LunesUserCreationForm(AdminUserCreationForm):
+    """
+    User creation form that requires an email address.
+    """
+
+    class Meta(AdminUserCreationForm.Meta):
+        """
+        Meta class of the user creation form
+        """
+
+        model = User
+        fields = ("username", "email")
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["email"].required = True
+
+
+class LunesUserChangeForm(UserChangeForm):
+    """
+    User change form that requires an email address.
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["email"].required = True
 
 
 class UserReviewAssignmentInline(admin.TabularInline):
@@ -46,6 +75,23 @@ class LunesUserAdmin(DjangoUserAdmin):
     per-unit access to individual users.
     """
 
+    add_form = LunesUserCreationForm
+    form = LunesUserChangeForm
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "usable_password",
+                    "password1",
+                    "password2",
+                ),
+            },
+        ),
+    )
     inlines = [*DjangoUserAdmin.inlines, UserReviewAssignmentInline]
 
     def save_formset(

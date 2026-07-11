@@ -40,9 +40,10 @@ def test_add_user(
 
     with document.step(
         "Benutzerdaten eingeben",
-        description='Geben Sie einen **Benutzernamen** ein. Das **Passwort** muss mindestens 8 Zeichen enthalten und darf nicht komplett aus Ziffern bestehen. Wiederholen Sie das Passwort im Feld **„Passwort bestätigen"**.',
+        description='Geben Sie einen **Benutzernamen** und eine **E-Mail-Adresse** ein. Das **Passwort** muss mindestens 8 Zeichen enthalten und darf nicht komplett aus Ziffern bestehen. Wiederholen Sie das Passwort im Feld **„Passwort bestätigen"**.',
     ):
         page.fill("[name=username]", USERNAME)
+        page.fill("[name=email]", f"{USERNAME}@example.com")
         page.fill("[name=password1]", PASSWORD)
         page.fill("[name=password2]", PASSWORD)
 
