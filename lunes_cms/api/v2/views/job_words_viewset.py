@@ -51,7 +51,7 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
-        if not job.released:
+        if not job.released or job.archived:
             raise PermissionDenied()
 
         unit_word_relations = UnitWordRelation.objects.filter(

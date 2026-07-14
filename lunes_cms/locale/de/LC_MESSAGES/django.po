@@ -684,6 +684,22 @@ msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
 
 #: cmsv2/admins/job_admin.py
+msgid "archive status"
+msgstr "Archivstatus"
+
+#: cmsv2/admins/job_admin.py
+msgid "Archived jobs"
+msgstr "Archivierte Berufe"
+
+#: cmsv2/admins/job_admin.py
+msgid "All jobs"
+msgstr "Alle Berufe"
+
+#: cmsv2/admins/job_admin.py
+msgid "Active jobs"
+msgstr "Aktive Berufe"
+
+#: cmsv2/admins/job_admin.py
 msgid "units"
 msgstr "Einheiten"
 
@@ -712,6 +728,24 @@ msgstr "Neu"
 #: cmsv2/admins/job_admin.py
 msgid "Selected jobs have been duplicated successfully."
 msgstr "Die ausgewählten Berufe wurden erfolgreich dupliziert."
+
+#: cmsv2/admins/job_admin.py
+msgid "Archive selected jobs"
+msgstr "Ausgewählte Berufe archivieren"
+
+#: cmsv2/admins/job_admin.py
+#, python-format
+msgid "%(count)d job(s) have been archived successfully."
+msgstr "%(count)d Beruf(e) wurden erfolgreich archiviert."
+
+#: cmsv2/admins/job_admin.py
+msgid "Restore selected jobs from archive"
+msgstr "Ausgewählte Berufe aus dem Archiv wiederherstellen"
+
+#: cmsv2/admins/job_admin.py
+#, python-format
+msgid "%(count)d job(s) have been restored successfully."
+msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 
 #: cmsv2/admins/job_admin.py
 msgid "Import"
@@ -921,6 +955,19 @@ msgstr "Zeile %(n)s: %(msg)s"
 #: cmsv2/templates/admin/generate_image_base.html
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
+
+#: cmsv2/models/job.py
+msgid "archived"
+msgstr "archiviert"
+
+#: cmsv2/models/job.py
+msgid ""
+"Archived jobs are hidden from the default job list and are not published via "
+"the API. They can be restored at any time."
+msgstr ""
+"Archivierte Berufe sind in der Standard-Übersicht ausgeblendet und werden "
+"nicht über die API veröffentlicht. Sie können jederzeit wiederhergestellt "
+"werden."
 
 #: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "job"
