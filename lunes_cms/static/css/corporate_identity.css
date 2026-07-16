@@ -350,6 +350,12 @@ fieldset.module {
     color: #0F1419;
 }
 
+/* Jazzmin floats its clear-sorting icon to the cell's right edge, making it look like it's for the next cell */
+.app-cmsv2 #result_list thead th .text .fa-times {
+    float: none !important;
+    margin-left: 0.4em;
+}
+
 /* tbody cells: specificity (0,3,3) beats Bootstrap's striped (0,2,2) and base (0,1,1) */
 .app-cmsv2 .table-striped tbody tr > td,
 .app-cmsv2 .table-striped tbody tr > th {
