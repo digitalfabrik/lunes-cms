@@ -664,7 +664,7 @@ class WordAdmin(BaseAdmin):
                 <span class="audio-add">+</span>
             </button>
             <button type="button" class="replace-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};">
-                <span class="audio-replace">↻</span>
+                <span class="audio-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};">
                 <span class="audio-delete">×</span>
@@ -745,7 +745,7 @@ class WordAdmin(BaseAdmin):
                 <span class="image-add">+</span>
             </button>
             <button type="button" class="replace-image-btn" style="display: {'inline-flex' if obj.image else 'none'};">
-                <span class="image-replace">↻</span>
+                <span class="image-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-image-btn" style="display: {'inline-flex' if obj.image else 'none'};">
                 <span class="image-delete">×</span>
@@ -815,7 +815,7 @@ class WordAdmin(BaseAdmin):
                 <span class="unitword-image-add">+</span>
             </button>
             <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};">
-                <span class="unitword-image-replace">↻</span>
+                <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};">
                 <span class="unitword-image-delete">×</span>
