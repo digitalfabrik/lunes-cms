@@ -539,7 +539,20 @@ class Command(BaseCommand):
         job_names: dict[int, str] = dict(Job.objects.values_list("id", "name"))
         unit_names: dict[int, str] = dict(Unit.objects.values_list("id", "title"))
         for aggregator_class in EVENT_AGGREGATORS:
-            self._aggregate_event_type(aggregator_class, dry_run, job_names, unit_names)
+            try:
+                self._aggregate_event_type(
+                    aggregator_class, dry_run, job_names, unit_names
+                )
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                # The InfluxDB push (see push_lines) already logged the details;
+                # @transaction.atomic rolled back the aggregated_at markers for
+                # this event type, so it will be retried on the next run.
+                self.stderr.write(
+                    self.style.ERROR(
+                        f"Aggregation failed for {aggregator_class.event_types}, "
+                        f"rolled back and will retry on the next run: {exc}"
+                    )
+                )
 
     # Will be uncommented with #829
     # self._delete_old_unprocessed_events(dry_run)
@@ -618,13 +631,17 @@ class Command(BaseCommand):
                 f"[DRY RUN] Would aggregate and mark {marked_count} {event_types} events "
                 f"({len(lines)} InfluxDB lines skipped)."
             )
-        else:
-            # Push after the transaction commits so we only push data that was successfully marked.
-            if lines:
-                transaction.on_commit(lambda: push_lines(lines))
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Aggregated and marked {marked_count} {event_types} events "
-                    f"({len(lines)} InfluxDB lines queued)."
-                )
+            return
+
+        # Push before the transaction commits: if the push fails, push_lines
+        # raises, so @transaction.atomic rolls back the aggregated_at markers
+        # too and the events are retried on the next run instead of being
+        # stuck marked-but-never-sent.
+        if lines:
+            push_lines(lines)
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Aggregated and marked {marked_count} {event_types} events "
+                f"({len(lines)} InfluxDB lines pushed)."
             )
+        )

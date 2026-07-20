@@ -45,8 +45,9 @@ def resolve_unit(unit_id: int | str | None, unit_names: dict[int, str]) -> str |
 def push_lines(lines: list[str]) -> None:
     """Push InfluxDB line protocol lines to the configured write endpoint.
 
-    Failures are logged but never raise, so a monitoring outage cannot break
-    the aggregation pipeline.
+    Raises on failure so callers that push before committing their DB
+    transaction (see aggregate_analytics) can roll back the corresponding
+    ``aggregated_at`` markers instead of losing data silently.
     """
     if not lines:
         return
@@ -63,5 +64,6 @@ def push_lines(lines: list[str]) -> None:
         logger.debug(
             "Pushed %d lines to InfluxDB (db=%s)", len(lines), settings.INFLUX_DB
         )
-    except Exception as exc:  # pylint: disable=broad-exception-caught
+    except Exception as exc:
         logger.error("InfluxDB push failed (%d lines): %s", len(lines), exc)
+        raise
