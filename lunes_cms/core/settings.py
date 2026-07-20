@@ -95,7 +95,9 @@ INFLUX_CERT = os.environ.get("LUNES_CMS_INFLUX_CERT", "/etc/pki/client.crt")
 INFLUX_KEY = os.environ.get("LUNES_CMS_INFLUX_KEY", "/etc/pki/client.key")
 
 #: Path to the CA certificate for verifying the InfluxDB server certificate
-INFLUX_CA = os.environ.get("LUNES_CMS_INFLUX_CA", "/etc/pki/ca.crt")
+INFLUX_CA = os.environ.get(
+    "LUNES_CMS_INFLUX_CA", "/usr/local/share/ca-certificates/ca.crt"
+)
 
 ########################
 # DJANGO CORE SETTINGS #
