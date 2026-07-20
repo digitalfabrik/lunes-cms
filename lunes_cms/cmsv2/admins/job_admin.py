@@ -92,10 +92,17 @@ class JobAdmin(BaseAdmin):
         "icon",
         "image_tag",
         "created_by",
+        "created_by_user",
         "released",
         "import_csv_link",
     ]
-    readonly_fields = ["created_by", "image_tag", "migrated_status", "import_csv_link"]
+    readonly_fields = [
+        "created_by",
+        "created_by_user",
+        "image_tag",
+        "migrated_status",
+        "import_csv_link",
+    ]
     inlines = [UnitInline]
     search_fields = ["name"]
     list_display = [
@@ -104,10 +111,12 @@ class JobAdmin(BaseAdmin):
         "released",
         "list_icon",
         "created_by",
+        "created_by_user",
         "created_at_date",
     ]
     list_display_links = ["name"]
     list_filter = ["released", MigratedFilter]
+    list_select_related = ["created_by", "created_by_user"]
     actions = ["export_to_csv", "duplicate_jobs"]
     list_per_page = 25
     ordering = ["name"]
@@ -227,6 +236,9 @@ class JobAdmin(BaseAdmin):
             new_label = _("New")
             job.name = f"{job.name} ({new_label})"
             job.created_by = request.user.groups.first()
+            # request.user is `User | AnonymousUser`, but this action is only
+            # reachable by authenticated staff users.
+            job.created_by_user = request.user  # type: ignore[assignment]
             job.save()
             job.units.set(units)
         messages.success(request, _("Selected jobs have been duplicated successfully."))

@@ -111,8 +111,7 @@ msgid "published words in released modules"
 msgstr "veröffentlichte Vokabeln in veröffentlichten Modulen"
 
 #: cms/admins/discipline_admin.py cms/admins/document_admin.py
-#: cms/admins/training_set_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cms/admins/training_set_admin.py
 msgid "creator group"
 msgstr "Besitzergruppe"
 
@@ -362,7 +361,6 @@ msgid "icon"
 msgstr "Icon"
 
 #: cms/models/discipline.py cms/models/document.py cms/models/training_set.py
-#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "created by"
 msgstr "Erstellt von"
 
@@ -460,7 +458,9 @@ msgstr "Uhrzeit und Datum, an dem das Feedback eingereicht wurde."
 msgid "feedback entries"
 msgstr "Feedback-Einträge"
 
-#: cms/models/group_api_key.py
+#: cms/models/group_api_key.py cmsv2/admins/unit_admin.py
+#: cmsv2/admins/word_admin.py cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/models/word.py
 msgid "group"
 msgstr "Gruppe"
 
@@ -925,6 +925,10 @@ msgstr "Vokabelverwaltung v2"
 #: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "job"
 msgstr "Beruf"
+
+#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
+msgid "creator"
+msgstr "Ersteller"
 
 #: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"
