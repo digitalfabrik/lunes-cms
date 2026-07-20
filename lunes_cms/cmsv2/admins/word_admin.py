@@ -307,6 +307,7 @@ class WordAdmin(BaseAdmin):
         MigratedFilter,
         "created_by",
     ]
+    list_select_related = ["created_by", "created_by_user"]
     list_per_page = 25
 
     class Media:

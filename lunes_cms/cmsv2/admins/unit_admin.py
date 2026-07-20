@@ -153,6 +153,7 @@ class UnitAdmin(BaseAdmin):
     ]
     list_display_links = ["title"]
     list_filter = ["released", MigratedFilter, "jobs"]
+    list_select_related = ["created_by", "created_by_user"]
     list_per_page = 25
     actions = ["bulk_release", "assign_to_user"]
 

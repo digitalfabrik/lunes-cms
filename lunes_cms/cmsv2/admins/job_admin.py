@@ -116,6 +116,7 @@ class JobAdmin(BaseAdmin):
     ]
     list_display_links = ["name"]
     list_filter = ["released", MigratedFilter]
+    list_select_related = ["created_by", "created_by_user"]
     actions = ["export_to_csv", "duplicate_jobs"]
     list_per_page = 25
     ordering = ["name"]
