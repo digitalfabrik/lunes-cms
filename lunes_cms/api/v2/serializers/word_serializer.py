@@ -8,6 +8,7 @@ from rest_framework import serializers
 
 from ....cmsv2.models import Word
 from ...utils import build_absolute_url
+from .alternative_word_serializer import AlternativeWordSerializer
 
 
 class WordSerializer(serializers.ModelSerializer):
@@ -16,6 +17,7 @@ class WordSerializer(serializers.ModelSerializer):
     """
 
     article = serializers.CharField(source="singular_article_as_text")
+    alternative_words = AlternativeWordSerializer(many=True, read_only=True)
     images = serializers.ListSerializer(
         child=serializers.ImageField(), source="images_for_api"
     )
@@ -67,6 +69,7 @@ class WordSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
+            "alternative_words",
             "images",
             "audio",
             "example_sentence",

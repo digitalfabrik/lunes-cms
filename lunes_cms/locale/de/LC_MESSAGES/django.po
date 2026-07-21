@@ -130,7 +130,8 @@ msgid "image"
 msgstr "Bild"
 
 #: cms/admins/document_admin.py cms/models/alternative_word.py
-#: cms/models/document.py cmsv2/admins/word_admin.py cmsv2/models/word.py
+#: cms/models/document.py cmsv2/admins/word_admin.py
+#: cmsv2/models/alternative_word.py cmsv2/models/word.py
 msgid "singular article"
 msgstr "Singular-Artikel"
 
@@ -322,7 +323,8 @@ msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py
+#: cms/models/alternative_word.py cmsv2/admins/word_admin.py
+#: cmsv2/models/alternative_word.py
 msgid "alternative word"
 msgstr "Alternatives Wort"
 
@@ -330,15 +332,17 @@ msgstr "Alternatives Wort"
 msgid "grammatical gender"
 msgstr "Genus"
 
-#: cms/models/alternative_word.py cms/models/document.py cmsv2/models/word.py
+#: cms/models/alternative_word.py cms/models/document.py
+#: cmsv2/models/alternative_word.py cmsv2/models/word.py
 msgid "plural"
 msgstr "Plural"
 
-#: cms/models/alternative_word.py cms/models/document.py cmsv2/models/word.py
+#: cms/models/alternative_word.py cms/models/document.py
+#: cmsv2/models/alternative_word.py cmsv2/models/word.py
 msgid "plural article"
 msgstr "Plural-Artikel"
 
-#: cms/models/alternative_word.py
+#: cms/models/alternative_word.py cmsv2/models/alternative_word.py
 msgid "alternative words"
 msgstr "Alternative Wörter"
 
@@ -377,11 +381,12 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py cmsv2/models/unit.py cmsv2/models/word.py
+#: cms/models/document.py cmsv2/models/alternative_word.py cmsv2/models/unit.py
+#: cmsv2/models/word.py
 msgid "word"
 msgstr "Wort"
 
-#: cms/models/document.py cmsv2/models/word.py
+#: cms/models/document.py cmsv2/models/alternative_word.py cmsv2/models/word.py
 msgid "Grammatical gender"
 msgstr "Genus"
 
@@ -394,15 +399,15 @@ msgstr "Beispielsatz"
 msgid "creation date"
 msgstr "Erstellt am"
 
-#: cms/models/document.py cmsv2/models/word.py
+#: cms/models/document.py
 msgid "definition"
 msgstr "Definition"
 
-#: cms/models/document.py cmsv2/models/word.py
+#: cms/models/document.py
 msgid "additional meaning 1"
 msgstr "Zusätzliche Bedeutung 1"
 
-#: cms/models/document.py cmsv2/models/word.py
+#: cms/models/document.py
 msgid "additional meaning 2"
 msgstr "Zusätzliche Bedeutung 2"
 
@@ -775,6 +780,10 @@ msgid "Has Complete Example Sentence"
 msgstr "Hat vollständigen Beispielsatz"
 
 #: cmsv2/admins/word_admin.py
+msgid "So heißt das auch"
+msgstr "So heißt das auch"
+
+#: cmsv2/admins/word_admin.py
 msgid "Word Information"
 msgstr "Wort Informationen"
 
@@ -789,10 +798,6 @@ msgstr "Bilder"
 #: cmsv2/admins/word_admin.py
 msgid "Example Sentence"
 msgstr "Beispielsatz"
-
-#: cmsv2/admins/word_admin.py
-msgid "Miscellaneous"
-msgstr "Verschiedene"
 
 #: cmsv2/admins/word_admin.py
 msgid "Additional info (optional)"
@@ -1226,6 +1231,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Verschiedene"
 
 #~ msgid "%(name)s %(label)"
 #~ msgstr "%(name)s (Neu)"

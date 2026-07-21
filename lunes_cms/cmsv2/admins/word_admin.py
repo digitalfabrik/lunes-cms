@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
-from lunes_cms.cmsv2.models import Job, Word
+from lunes_cms.cmsv2.models import AlternativeWord, Job, Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.utils import (
@@ -175,6 +175,26 @@ class MigratedFilter(admin.SimpleListFilter):
         return queryset
 
 
+class AlternativeWordInline(admin.TabularInline):
+    """
+    Inline admin for the AlternativeWord model.
+
+    This inline allows editing alternative words directly from the Word admin page.
+    """
+
+    model = AlternativeWord
+    extra = 1
+    verbose_name = _("alternative word")
+    verbose_name_plural = _("So heißt das auch")
+    fields = [
+        "grammatical_gender",
+        "singular_article",
+        "alt_word",
+        "plural_article",
+        "plural",
+    ]
+
+
 class UnitInline(admin.TabularInline):
     """
     Inline admin for UnitWordRelation model.
@@ -260,16 +280,6 @@ class WordAdmin(BaseAdmin):
                 )
             },
         ),
-        (
-            _("Miscellaneous"),
-            {
-                "fields": (
-                    "definition",
-                    "additional_meaning_1",
-                    "additional_meaning_2",
-                )
-            },
-        ),
     )
     readonly_fields = (
         "audio_generate",
@@ -285,7 +295,7 @@ class WordAdmin(BaseAdmin):
     )
     search_fields = ["word"]
     ordering = ["word", "creation_date"]
-    inlines = [UnitInline]
+    inlines = [AlternativeWordInline, UnitInline]
     list_display = (
         "word",
         "migrated_status",

@@ -18,9 +18,7 @@ WORD_PLURAL = "Mäuse"
 EXAMPLE_SENTENCE = (
     "Die Maus ist ein Eingabegerät zur Steuerung des Mauszeigers auf dem Bildschirm."
 )
-DEFINITION = "Eingabegerät zur Steuerung des Mauszeigers auf einem Computerbildschirm."
-ADDITIONAL_MEANING_1 = "Computermaus"
-ADDITIONAL_MEANING_2 = "Zeigegerät"
+ALTERNATIVE_WORD = "Computermaus"
 
 
 @pytest.mark.e2e
@@ -105,13 +103,14 @@ def test_add_word(
     ):
         pass
 
-    page.locator("[name=definition]").scroll_into_view_if_needed()
-    page.fill("[name=definition]", DEFINITION)
-    page.fill("[name=additional_meaning_1]", ADDITIONAL_MEANING_1)
-    page.fill("[name=additional_meaning_2]", ADDITIONAL_MEANING_2)
+    page.locator("[name=alternative_words-0-alt_word]").scroll_into_view_if_needed()
+    page.fill("[name=alternative_words-0-alt_word]", ALTERNATIVE_WORD)
+    page.locator("[name=alternative_words-0-singular_article]").select_option(
+        label="die", force=True
+    )
     with document.step(
-        "Verschiedenes ausfüllen (optional)",
-        description=f'Geben Sie im Feld **„Definition"** eine Definition ein. Füllen Sie bei Bedarf auch die Felder **„Zusätzliche Bedeutung 1+2"** aus.',
+        "Alternatives Wort eingeben (optional)",
+        description=f'Geben Sie im Abschnitt **„So heißt das auch"** ein alternatives Wort ein, z. B. **„{ALTERNATIVE_WORD}"** mit dem Artikel **„die"**.',
     ):
         pass
 

@@ -46,4 +46,6 @@ class WordViewSet(viewsets.ModelViewSet):
             audio_check_status="CONFIRMED",
             image_check_status="CONFIRMED",
         )
-        return queryset.distinct().order_by("word")
+        return (
+            queryset.prefetch_related("alternative_words").distinct().order_by("word")
+        )

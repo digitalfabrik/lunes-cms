@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#573](https://github.com/digitalfabrik/lunes-cms/issues/573) ] 573: Reintroduce alternative words for words and remove unused definition and additional meaning fields
+
 
 2026.6.1
 --------
