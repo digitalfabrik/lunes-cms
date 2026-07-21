@@ -134,6 +134,28 @@ class JobSelectionAggregateTests(TestCase):
         [line] = mock_push.call_args[0][0]
         self.assertIn("selection_count=-2i", line)
 
+    def test_rolls_back_marking_when_push_fails(self) -> None:
+        """If the InfluxDB push fails, the events are not left marked as aggregated"""
+        self._create_event(self.job1.id, "add", "2026-01-15T10:00:00")
+
+        with patch(PATCH_PUSH, side_effect=RuntimeError("boom")):
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 1
+        )
+
+        # A subsequent run (once InfluxDB is reachable again) picks the event back up.
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        mock_push.assert_called_once()
+        self.assertEqual(
+            AnalyticsEvent.objects.filter(aggregated_at__isnull=True).count(), 0
+        )
+
 
 class SessionAggregateTests(TestCase):
     """
@@ -224,8 +246,9 @@ class SessionAggregateTests(TestCase):
     def test_does_not_push_on_rerun_with_no_new_events(self) -> None:
         """Re-running with no new events does not push"""
         self._create_session("s1", "2026-01-15T10:00:00", "2026-01-15T10:00:30")
-        with self.captureOnCommitCallbacks(execute=True):
-            call_command("aggregate_analytics")
+        with patch(PATCH_PUSH):
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         with patch(PATCH_PUSH) as mock_push:
             with self.captureOnCommitCallbacks(execute=True):
@@ -499,8 +522,9 @@ class ModuleDurationAggregateTests(TestCase):
         self._create_standard_event(
             "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
         )
-        with self.captureOnCommitCallbacks(execute=True):
-            call_command("aggregate_analytics")
+        with patch(PATCH_PUSH):
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self._create_standard_event(
             "word_choice", self.unit1.id, "2026-01-15T14:00:00", 40
@@ -816,8 +840,9 @@ class DropoutAggregateTests(TestCase):
             total=10,
             timestamp="2026-01-15T10:00:00",
         )
-        with self.captureOnCommitCallbacks(execute=True):
-            call_command("aggregate_analytics")
+        with patch(PATCH_PUSH):
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self._create_standard_event(
             exercise_type="word_choice",
@@ -1150,8 +1175,9 @@ class ExerciseRepetitionAggregateTests(TestCase):
     def test_second_run_pushes_only_new_events(self) -> None:
         """Running twice pushes new events in each run separately"""
         self._create_standard_event("word_choice", 10, "2026-01-15T10:00:00")
-        with self.captureOnCommitCallbacks(execute=True):
-            call_command("aggregate_analytics")
+        with patch(PATCH_PUSH):
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
 
         self._create_standard_event("word_choice", 10, "2026-01-15T14:00:00")
         with patch(PATCH_PUSH) as mock_push:
