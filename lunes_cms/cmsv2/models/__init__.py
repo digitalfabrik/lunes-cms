@@ -1,3 +1,4 @@
+from .alternative_word import AlternativeWord
 from .feedback import Feedback
 from .job import Job
 from .review import ImageReview, ReviewAssignment
