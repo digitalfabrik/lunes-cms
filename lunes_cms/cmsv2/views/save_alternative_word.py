@@ -33,8 +33,13 @@ def save_alternative_word(request: HttpRequest) -> JsonResponse:
                 {"status": "error", "message": "Alternative word not found"}, status=404
             )
     else:
+        word_id = request.POST.get("word_id")
+        if not word_id:
+            return JsonResponse(
+                {"status": "error", "message": "No word id provided"}, status=400
+            )
         try:
-            word = Word.objects.get(id=request.POST.get("word_id"))
+            word = Word.objects.get(id=word_id)
         except (Word.DoesNotExist, ValueError):
             return JsonResponse(
                 {"status": "error", "message": "Word not found"}, status=404
