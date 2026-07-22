@@ -784,6 +784,18 @@ msgid "So heißt das auch"
 msgstr "So heißt das auch"
 
 #: cmsv2/admins/word_admin.py
+msgid "Add alternative word"
+msgstr "Alternatives Wort hinzufügen"
+
+#: cmsv2/admins/word_admin.py
+msgid "Save alternative word"
+msgstr "Alternatives Wort speichern"
+
+#: cmsv2/admins/word_admin.py
+msgid "Delete alternative word"
+msgstr "Alternatives Wort löschen"
+
+#: cmsv2/admins/word_admin.py
 msgid "Word Information"
 msgstr "Wort Informationen"
 
