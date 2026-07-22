@@ -2,24 +2,55 @@ from __future__ import annotations
 
 from typing import Any
 
-from django.db.models import QuerySet
+from django.db.models import Prefetch, QuerySet
+from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from ....cmsv2.areas import published_words
-from ....cmsv2.models import Word
+from ....cmsv2.areas import published_units, published_words
+from ....cmsv2.models import Unit, Word
+from ....cmsv2.models.unit import UnitWordRelation
 from ..matomo_tracking import matomo_tracking
 from ..serializers import WordSerializer
 from .area_scoped_mixin import AreaScopedMixin
 
+#: The minimum length a ``search`` term has to have
+MIN_SEARCH_LENGTH = 3
 
+
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            required=False,
+            description=(
+                "Case-insensitive substring the returned words have to contain "
+                "(at least 3 characters, otherwise the request is rejected with "
+                "HTTP 400). When given, all public images of a word are returned, "
+                "including the images defined on its released unit relations (not "
+                "only the word's default image)."
+            ),
+        )
+    ]
+)
 class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     """
-    Retrieve the list of all words with their default images, or a single word by id
+    Retrieve the list of all words with their default images, or a single word by id.
 
     Without an area access token these are the words of the main app, with one
     they are the words of that area.
+
+    Supports an optional ``search`` query parameter that keeps only the words whose
+    term contains the given string (case-insensitive). The term has to be at least
+    three characters long, otherwise the request is rejected with HTTP 400. When
+    searching, the returned images include the images defined on the word's released
+    unit relations in addition to the word's default image.
     """
 
     serializer_class = WordSerializer
@@ -57,6 +88,49 @@ class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
             ),
             area,
         )
+
+        search = self.request.query_params.get("search")
+        if search is not None:
+            search = search.strip()
+            if len(search) < MIN_SEARCH_LENGTH:
+                raise ValidationError(
+                    {
+                        "search": _(
+                            "The search term has to be at least %(min)d characters long."
+                        )
+                        % {"min": MIN_SEARCH_LENGTH}
+                    }
+                )
+            queryset = queryset.filter(word__icontains=search)
+            # When searching we expose all public images of a word, so prefetch the
+            # images of its released unit relations into the attribute that
+            # ``Word.images_for_api`` reads from. Only units the API publishes for
+            # this area are considered, so no image of another area or of an
+            # archived job leaks.
+            public_units = published_units(
+                Unit.objects.filter(
+                    released=True,
+                    jobs__released=True,
+                    jobs__archived=False,
+                ),
+                area,
+            )
+            public_relations = (
+                UnitWordRelation.objects.filter(
+                    unit__in=public_units,
+                    image_check_status="CONFIRMED",
+                )
+                .exclude(image="")
+                .order_by("unit__title")
+            )
+            queryset = queryset.prefetch_related(
+                Prefetch(
+                    "unit_word_relations",
+                    public_relations,
+                    to_attr="unit_word_relations_of_job",
+                )
+            )
+
         return (
             queryset.prefetch_related("alternative_words").distinct().order_by("word")
         )

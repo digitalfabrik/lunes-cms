@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bildschatz – Die offene Bilddatenbank für Wörter</title>
+<meta name="description" content="Bildschatz ist die offene Bilddatenbank für Wörter. Gib ein Wort ein und finde passende, frei nutzbare Bilder.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+{% verbatim %}
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:#070C22;
+    font-family:'DM Sans',sans-serif;
+    color:#EAECF7;
+    min-height:100vh;
+    background-image:radial-gradient(1200px 700px at 50% -10%, #12204F 0%, #0A1230 45%, #070C22 100%);
+    background-attachment:fixed;
+  }
+  ::selection{ background:#5A6CF3; color:#fff; }
+  input{ font-family:inherit; }
+  a{ color:#93A0FF; text-decoration:none; }
+  a:hover{ color:#B9C2FF; }
+  button{ font-family:inherit; }
+  .bs-scroll::-webkit-scrollbar{ width:10px; height:10px; }
+  .bs-scroll::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.12); border-radius:20px; }
+  @keyframes bsFloat{ 0%,100%{ transform:translateY(0) rotate(0); } 50%{ transform:translateY(-14px) rotate(6deg); } }
+  input::placeholder{ color:#5A628C; }
+
+  .bs-hidden{ display:none !important; }
+
+  /* ---------- pills / buttons ---------- */
+  .bs-pill{
+    border:none; border-radius:999px; font-family:'DM Sans',sans-serif;
+    font-size:14px; font-weight:600; padding:9px 16px; cursor:pointer;
+    background:#5A6CF3; color:#fff;
+  }
+  .bs-pill:hover{ background:#4a5cf0; }
+  .bs-pill:disabled{ opacity:.5; cursor:default; }
+
+  /* ---------- home ---------- */
+  .bs-home{
+    position:relative; min-height:100vh; overflow:hidden;
+    display:flex; align-items:center; justify-content:center; padding:40px;
+  }
+  .bs-motif{ position:absolute; }
+  .bs-home-inner{ position:relative; z-index:2; width:100%; max-width:640px; text-align:center; }
+  .bs-logo-dots{ display:flex; gap:8px; justify-content:center; margin-bottom:26px; }
+  .bs-logo-dots > div{ width:14px; height:14px; border-radius:4px; }
+  .bs-title{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:clamp(44px, 12vw, 72px); line-height:1; letter-spacing:-.02em; margin:0 0 14px;
+  }
+  .bs-title span{ color:#5A6CF3; }
+  .bs-lede{ font-size:clamp(16px,4vw,18px); color:#8B93B8; margin:0 auto 42px; max-width:440px; line-height:1.5; }
+
+  .bs-searchbar{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 8px 8px 22px; border-radius:999px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 20px 60px -20px rgba(0,0,0,.6);
+  }
+  .bs-searchbar input{
+    flex:1; min-width:0; background:transparent; border:none; outline:none;
+    color:#EAECF7; font-size:19px; padding:12px 0;
+  }
+  .bs-searchbar .bs-pill{ font-size:16px; padding:13px 28px; flex:none; }
+
+  /* ---------- validation ---------- */
+  .bs-invalid{ border-color:#F26B5E !important; }
+  .bs-hint{ font-size:14px; color:#F26B5E; }
+  .bs-home-hint{ margin-top:14px; min-height:20px; }
+
+  /* ---------- results ---------- */
+  .bs-header{
+    position:sticky; top:0; z-index:30;
+    display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+    padding:16px 32px; background:rgba(9,14,38,.82);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .bs-brand{ display:flex; align-items:center; gap:9px; cursor:pointer; flex:none; }
+  .bs-brand-dots{ display:flex; gap:4px; }
+  .bs-brand-dots > div{ width:9px; height:9px; border-radius:2px; }
+  .bs-brand-name{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; letter-spacing:-.01em; }
+  .bs-brand-name span{ color:#5A6CF3; }
+  .bs-header-search-wrap{ position:relative; flex:1; min-width:200px; max-width:560px; display:flex; }
+  .bs-header-search{
+    flex:1; min-width:0;
+    display:flex; align-items:center; gap:10px;
+    padding:9px 9px 9px 18px; border-radius:999px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+  }
+  .bs-header-search input{
+    flex:1; min-width:0; background:transparent; border:none; outline:none;
+    color:#EAECF7; font-size:16px; padding:4px 0;
+  }
+  .bs-header-search .bs-pill{ flex:none; }
+  .bs-results-hint{ position:absolute; top:100%; left:18px; margin-top:6px; font-size:13px; color:#F26B5E; }
+
+  .bs-results-body{ max-width:1080px; margin:0 auto; padding:36px 32px 100px; }
+  .bs-count-row{ display:flex; align-items:baseline; gap:12px; margin-bottom:32px; flex-wrap:wrap; }
+  .bs-count-row h2{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(22px,6vw,30px); margin:0; letter-spacing:-.01em; }
+  .bs-count-sub{ font-size:16px; color:#8B93B8; }
+  .bs-count-sub span{ color:#93A0FF; font-weight:600; }
+
+  .bs-state{ padding:80px 20px; text-align:center; color:#5A628C; }
+  .bs-state .bs-state-icon{ font-size:40px; margin-bottom:12px; }
+  .bs-state .bs-state-text{ font-size:18px; color:#8B93B8; }
+
+  .bs-word-list{ display:flex; flex-direction:column; gap:44px; }
+  .bs-word-head{
+    display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+    margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .bs-word-article{ font-size:14px; color:#5A628C; font-weight:500; }
+  .bs-word-head h3{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:24px; margin:0; }
+  .bs-word-count{
+    margin-left:auto; font-size:13px; font-weight:600; color:#93A0FF;
+    padding:4px 12px; border-radius:999px; background:rgba(90,108,243,.14);
+  }
+  .bs-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:16px; }
+  @media (min-width:640px){ .bs-grid{ grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); } }
+
+  .bs-card{
+    position:relative; aspect-ratio:4/3; border-radius:14px; overflow:hidden;
+    cursor:pointer; border:1px solid rgba(255,255,255,.09); background:#0A1230;
+  }
+  .bs-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .bs-card-dim{
+    position:absolute; left:10px; bottom:10px; font-family:monospace; font-size:11px;
+    color:#B9C2FF; background:rgba(7,12,34,.6); padding:3px 8px; border-radius:6px;
+  }
+  .bs-card-dl{
+    position:absolute; top:10px; right:10px; width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center; border-radius:9px;
+    border:none; background:rgba(7,12,34,.72); cursor:pointer;
+  }
+  .bs-card-dl:hover{ background:rgba(90,108,243,.9); }
+
+  /* ---------- modal ---------- */
+  .bs-modal-overlay{
+    position:fixed; inset:0; z-index:60; background:rgba(4,7,20,.82);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center; padding:32px;
+  }
+  .bs-modal{
+    background:#0C1330; border:1px solid rgba(255,255,255,.12); border-radius:20px;
+    padding:24px; max-width:92vw; max-height:90vh; overflow:auto;
+    box-shadow:0 40px 100px -30px rgba(0,0,0,.8);
+  }
+  .bs-modal-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:18px; }
+  .bs-modal-article{ font-size:13px; color:#5A628C; }
+  .bs-modal-label{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; }
+  .bs-modal-close{
+    margin-left:auto; width:32px; height:32px; border-radius:8px;
+    border:1px solid rgba(255,255,255,.12); background:transparent;
+    color:#8B93B8; font-size:18px; cursor:pointer;
+  }
+  .bs-modal-close:hover{ color:#EAECF7; }
+  .bs-modal-imgwrap{ display:flex; justify-content:center; margin-bottom:20px; }
+  .bs-modal-img{
+    max-width:100%; max-height:70vh; width:auto; height:auto; display:block;
+    border-radius:14px; border:1px solid rgba(255,255,255,.1); background:#0A1230;
+  }
+  .bs-modal-controls{
+    display:flex; align-items:center; justify-content:flex-end; gap:16px; flex-wrap:wrap;
+    padding:14px 18px; border-radius:12px;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  }
+  .bs-modal-controls .bs-pill{ display:inline-flex; align-items:center; gap:8px; flex:none; }
+
+  @media (max-width:600px){
+    .bs-header{ padding:12px 16px; gap:12px; }
+    .bs-results-body{ padding:24px 16px 80px; }
+    .bs-home{ padding:24px; }
+  }
+</style>
+{% endverbatim %}
+</head>
+<body>
+
+<!-- ================= HOME ================= -->
+<div id="bs-home" class="bs-home">
+  <div class="bs-motif" style="top:12%; left:9%; width:44px; height:44px; border:3px solid #5A6CF3; opacity:.35; animation:bsFloat 9s ease-in-out infinite;"></div>
+  <div class="bs-motif" style="top:20%; right:13%; width:52px; height:52px; border-radius:50%; border:4px solid #F26B5E; opacity:.30; animation:bsFloat 11s ease-in-out infinite;"></div>
+  <div class="bs-motif" style="bottom:16%; left:14%; width:40px; height:40px; border-radius:50%; border:4px solid #3FD0C9; opacity:.30; animation:bsFloat 10s ease-in-out infinite .5s;"></div>
+  <div class="bs-motif" style="bottom:20%; right:10%; width:46px; height:46px; background:#9A6BF0; opacity:.22; transform:rotate(18deg); animation:bsFloat 12s ease-in-out infinite .3s;"></div>
+  <div class="bs-motif" style="top:44%; left:6%; display:flex; gap:6px; opacity:.30; animation:bsFloat 13s ease-in-out infinite;">
+    <div style="width:5px; height:34px; background:#5A6CF3;"></div>
+    <div style="width:5px; height:24px; background:#93A0FF;"></div>
+    <div style="width:5px; height:40px; background:#5A6CF3;"></div>
+  </div>
+
+  <div class="bs-home-inner">
+    <div class="bs-logo-dots">
+      <div style="background:#5A6CF3;"></div>
+      <div style="background:#F26B5E;"></div>
+      <div style="background:#3FD0C9;"></div>
+    </div>
+    <h1 class="bs-title">Bild<span>schatz</span></h1>
+    <p class="bs-lede">Die offene Bilddatenbank für Wörter. Gib ein Wort ein und finde passende Bilder — frei nutzbar.</p>
+
+    <div class="bs-searchbar" id="bs-home-bar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex:none; opacity:.6;"><circle cx="11" cy="11" r="7" stroke="#93A0FF" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#93A0FF" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="bs-home-input" placeholder="Suche ein Wort …" autocomplete="off" minlength="3" />
+      <button id="bs-home-go" class="bs-pill">Suchen</button>
+    </div>
+    <div id="bs-home-hint" class="bs-hint bs-home-hint bs-hidden">Bitte gib mindestens 3 Zeichen ein.</div>
+  </div>
+</div>
+
+<!-- ================= RESULTS ================= -->
+<div id="bs-results" class="bs-hidden">
+  <div class="bs-header">
+    <div class="bs-brand" id="bs-brand">
+      <div class="bs-brand-dots">
+        <div style="background:#5A6CF3;"></div>
+        <div style="background:#F26B5E;"></div>
+        <div style="background:#3FD0C9;"></div>
+      </div>
+      <span class="bs-brand-name">Bild<span>schatz</span></span>
+    </div>
+    <div class="bs-header-search-wrap">
+      <div class="bs-header-search" id="bs-results-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none; opacity:.55;"><circle cx="11" cy="11" r="7" stroke="#93A0FF" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#93A0FF" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="bs-results-input" autocomplete="off" minlength="3" />
+        <button id="bs-results-go" class="bs-pill">Suchen</button>
+      </div>
+      <div id="bs-results-hint" class="bs-results-hint bs-hidden">Bitte gib mindestens 3 Zeichen ein.</div>
+    </div>
+  </div>
+
+  <div class="bs-scroll bs-results-body">
+    <div class="bs-count-row">
+      <h2 id="bs-count">&nbsp;</h2>
+      <span class="bs-count-sub" id="bs-count-sub"></span>
+    </div>
+    <div id="bs-word-list" class="bs-word-list"></div>
+  </div>
+</div>
+
+<!-- ================= IMAGE VIEWER ================= -->
+<div id="bs-modal-overlay" class="bs-modal-overlay bs-hidden">
+  <div class="bs-modal" id="bs-modal">
+    <div class="bs-modal-head">
+      <span class="bs-modal-article" id="bs-modal-article"></span>
+      <span class="bs-modal-label" id="bs-modal-label"></span>
+      <button class="bs-modal-close" id="bs-modal-close" title="Schließen">✕</button>
+    </div>
+    <div class="bs-modal-imgwrap">
+      <img class="bs-modal-img" id="bs-modal-img-el" alt="" />
+    </div>
+    <div class="bs-modal-controls">
+      <button class="bs-pill" id="bs-modal-download">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4v10m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Herunterladen
+      </button>
+    </div>
+  </div>
+</div>
+
+{% verbatim %}
+<script>
+(function () {
+  "use strict";
+
+  var API_URL = "/api/v2/words/";
+  var MIN_CHARS = 3;
+  var DOWNLOAD_ICON =
+    '<svg width="17" height="17" viewBox="0 0 24 24" fill="none">' +
+    '<path d="M12 4v10m0 0l-4-4m4 4l4-4" stroke="#EAECF7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<path d="M5 18h14" stroke="#EAECF7" stroke-width="2" stroke-linecap="round"/></svg>';
+
+  var els = {
+    home: document.getElementById("bs-home"),
+    homeBar: document.getElementById("bs-home-bar"),
+    homeInput: document.getElementById("bs-home-input"),
+    homeGo: document.getElementById("bs-home-go"),
+    homeHint: document.getElementById("bs-home-hint"),
+    results: document.getElementById("bs-results"),
+    resultsBar: document.getElementById("bs-results-bar"),
+    resultsInput: document.getElementById("bs-results-input"),
+    resultsGo: document.getElementById("bs-results-go"),
+    resultsHint: document.getElementById("bs-results-hint"),
+    brand: document.getElementById("bs-brand"),
+    count: document.getElementById("bs-count"),
+    countSub: document.getElementById("bs-count-sub"),
+    wordList: document.getElementById("bs-word-list"),
+    overlay: document.getElementById("bs-modal-overlay"),
+    modal: document.getElementById("bs-modal"),
+    modalArticle: document.getElementById("bs-modal-article"),
+    modalLabel: document.getElementById("bs-modal-label"),
+    modalImgEl: document.getElementById("bs-modal-img-el"),
+    modalClose: document.getElementById("bs-modal-close"),
+    modalDownload: document.getElementById("bs-modal-download")
+  };
+
+  var currentModal = null;
+
+  // ---------- helpers ----------
+  function esc(str) {
+    var d = document.createElement("div");
+    d.textContent = str == null ? "" : String(str);
+    return d.innerHTML;
+  }
+
+  function currentQuery() {
+    return new URLSearchParams(window.location.search).get("q") || "";
+  }
+
+  function fileNameFor(word, url) {
+    var clean = (url || "").split("?")[0];
+    var ext = clean.indexOf(".") >= 0 ? clean.split(".").pop() : "jpg";
+    if (ext.length > 5) ext = "jpg";
+    var slug = (word || "bild").toLowerCase().replace(/[^a-z0-9äöüß]+/g, "-").replace(/^-+|-+$/g, "");
+    return "bildschatz-" + (slug || "bild") + "." + ext;
+  }
+
+  function downloadImage(url, word) {
+    var name = fileNameFor(word, url);
+    fetch(url)
+      .then(function (r) { return r.blob(); })
+      .then(function (blob) {
+        var objUrl = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = objUrl;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objUrl);
+      })
+      .catch(function () {
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = name;
+        a.target = "_blank";
+        a.click();
+      });
+  }
+
+  // ---------- validation ----------
+  function isValidTerm(term) {
+    return (term || "").trim().length >= MIN_CHARS;
+  }
+
+  function toggleHint(bar, hint, show) {
+    if (bar) bar.classList.toggle("bs-invalid", show);
+    if (hint) hint.classList.toggle("bs-hidden", !show);
+  }
+
+  function clearHints() {
+    toggleHint(els.homeBar, els.homeHint, false);
+    toggleHint(els.resultsBar, els.resultsHint, false);
+  }
+
+  function showInvalid() {
+    var onResults = !els.results.classList.contains("bs-hidden");
+    if (onResults) {
+      toggleHint(els.resultsBar, els.resultsHint, true);
+    } else {
+      toggleHint(els.homeBar, els.homeHint, true);
+    }
+  }
+
+  // ---------- navigation ----------
+  function goHome() {
+    history.pushState({}, "", window.location.pathname);
+    render();
+  }
+
+  function search(term) {
+    if (!isValidTerm(term)) {
+      showInvalid();
+      return;
+    }
+    clearHints();
+    var q = term.trim();
+    history.pushState({}, "", window.location.pathname + "?q=" + encodeURIComponent(q));
+    render();
+  }
+
+  function showHome() {
+    clearHints();
+    els.home.classList.remove("bs-hidden");
+    els.results.classList.add("bs-hidden");
+    els.homeInput.value = "";
+    els.homeInput.focus();
+  }
+
+  function showResults(q) {
+    clearHints();
+    els.home.classList.add("bs-hidden");
+    els.results.classList.remove("bs-hidden");
+    els.resultsInput.value = q;
+    fetchResults(q);
+  }
+
+  function render() {
+    closeModal();
+    var q = currentQuery();
+    // Only treat the query parameter as a search when it satisfies the
+    // minimum length; otherwise fall back to the home screen.
+    if (isValidTerm(q)) {
+      showResults(q.trim());
+    } else {
+      showHome();
+    }
+  }
+
+  // ---------- rendering results ----------
+  function setStatus(iconHtml, text) {
+    els.wordList.innerHTML =
+      '<div class="bs-state"><div class="bs-state-icon">' + iconHtml +
+      '</div><div class="bs-state-text">' + esc(text) + "</div></div>";
+  }
+
+  function fetchResults(q) {
+    els.count.innerHTML = "&nbsp;";
+    els.countSub.innerHTML = 'zu „<span>' + esc(q) + "</span>“";
+    setStatus("…", "Suche läuft …");
+
+    fetch(API_URL + "?search=" + encodeURIComponent(q), {
+      headers: { Accept: "application/json" }
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var words = (Array.isArray(data) ? data : []).filter(function (w) {
+          return w.images && w.images.length;
+        });
+        renderWords(words, q);
+      })
+      .catch(function () {
+        els.count.textContent = "Fehler";
+        setStatus("!", "Die Suche konnte nicht geladen werden. Bitte später erneut versuchen.");
+      });
+  }
+
+  function renderWords(words, q) {
+    var count = words.length;
+    els.count.textContent = count === 1 ? "1 Wort passt" : count + " Wörter passen";
+    els.countSub.innerHTML = 'zu „<span>' + esc(q) + "</span>“";
+
+    if (!count) {
+      setStatus("∅", "Keine Wörter gefunden. Versuch ein anderes Wort.");
+      return;
+    }
+
+    els.wordList.innerHTML = "";
+    words.forEach(function (word) {
+      els.wordList.appendChild(renderWord(word));
+    });
+  }
+
+  function renderWord(word) {
+    var images = word.images || [];
+    var section = document.createElement("div");
+
+    var head = document.createElement("div");
+    head.className = "bs-word-head";
+    var countLabel = images.length === 1 ? "1 Bild" : images.length + " Bilder";
+    head.innerHTML =
+      '<span class="bs-word-article">' + esc(word.article || "") + "</span>" +
+      "<h3>" + esc(word.word) + "</h3>" +
+      '<span class="bs-word-count">' + esc(countLabel) + "</span>";
+    section.appendChild(head);
+
+    var grid = document.createElement("div");
+    grid.className = "bs-grid";
+    images.forEach(function (url) {
+      grid.appendChild(renderCard(word, url));
+    });
+    section.appendChild(grid);
+
+    return section;
+  }
+
+  function renderCard(word, url) {
+    var card = document.createElement("div");
+    card.className = "bs-card";
+
+    var img = document.createElement("img");
+    img.loading = "lazy";
+    img.alt = word.word;
+    img.src = url;
+
+    var dim = document.createElement("div");
+    dim.className = "bs-card-dim";
+    dim.textContent = "…";
+    img.addEventListener("load", function () {
+      dim.textContent = img.naturalWidth + "×" + img.naturalHeight;
+    });
+    img.addEventListener("error", function () {
+      dim.classList.add("bs-hidden");
+    });
+
+    var dl = document.createElement("button");
+    dl.className = "bs-card-dl";
+    dl.title = "Herunterladen";
+    dl.innerHTML = DOWNLOAD_ICON;
+    dl.addEventListener("click", function (e) {
+      e.stopPropagation();
+      downloadImage(url, word.word);
+    });
+
+    card.appendChild(img);
+    card.appendChild(dim);
+    card.appendChild(dl);
+    card.addEventListener("click", function () {
+      openModal(word, url);
+    });
+    return card;
+  }
+
+  // ---------- modal ----------
+  function openModal(word, url) {
+    currentModal = { word: word, url: url };
+    els.modalArticle.textContent = word.article || "";
+    els.modalLabel.textContent = word.word;
+    els.modalImgEl.src = url;
+    els.modalImgEl.alt = word.word;
+    els.overlay.classList.remove("bs-hidden");
+  }
+
+  function closeModal() {
+    currentModal = null;
+    els.overlay.classList.add("bs-hidden");
+  }
+
+  // ---------- wire up ----------
+  els.homeGo.addEventListener("click", function () { search(els.homeInput.value); });
+  els.homeInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") search(els.homeInput.value);
+  });
+  els.homeInput.addEventListener("input", function () {
+    if (isValidTerm(els.homeInput.value)) toggleHint(els.homeBar, els.homeHint, false);
+  });
+  els.resultsGo.addEventListener("click", function () { search(els.resultsInput.value); });
+  els.resultsInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") search(els.resultsInput.value);
+  });
+  els.resultsInput.addEventListener("input", function () {
+    if (isValidTerm(els.resultsInput.value)) toggleHint(els.resultsBar, els.resultsHint, false);
+  });
+  els.brand.addEventListener("click", goHome);
+
+  els.overlay.addEventListener("click", closeModal);
+  els.modal.addEventListener("click", function (e) { e.stopPropagation(); });
+  els.modalClose.addEventListener("click", closeModal);
+  els.modalDownload.addEventListener("click", function () {
+    if (currentModal) downloadImage(currentModal.url, currentModal.word.word);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeModal();
+  });
+
+  window.addEventListener("popstate", render);
+
+  render();
+})();
+</script>
+{% endverbatim %}
+</body>
+</html>

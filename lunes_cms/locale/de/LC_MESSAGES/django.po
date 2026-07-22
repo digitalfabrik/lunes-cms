@@ -77,6 +77,15 @@ msgstr "Der Inhaltstyp muss entweder 'job', 'unit' oder 'word' sein."
 msgid "This code is not valid."
 msgstr "Dieser Code ist nicht gültig."
 
+#: api/v2/views/word_viewset.py
+#, python-format
+msgid "The search term has to be at least %(min)d characters long."
+msgstr "Der Suchbegriff muss mindestens %(min)d Zeichen lang sein."
+
+#: bildschatz/apps.py
+msgid "Bildschatz"
+msgstr "Bildschatz"
+
 #: cms/admin.py cms/admins/document_admin.py cms/admins/training_set_admin.py
 #: cms/forms.py cms/list_filter.py cms/models/discipline.py
 msgid "disciplines"
