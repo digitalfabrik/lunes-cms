@@ -168,6 +168,16 @@ def test_save_alternative_word_unknown_word(admin_client: Client) -> None:
 
 
 @pytest.mark.django_db
+def test_save_alternative_word_missing_word_id(admin_client: Client) -> None:
+    """The save view rejects a creation request without a word id."""
+    response = admin_client.post(
+        "/en/admin/cmsv2/alternativewords/save/",
+        {"alt_word": "Weck"},
+    )
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
 def test_save_alternative_word_requires_staff(word: Word) -> None:
     """The save view redirects anonymous users to the login page."""
     response = Client().post(
