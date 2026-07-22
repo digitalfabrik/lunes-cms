@@ -279,3 +279,20 @@
 .inline-group .select2-container {
     min-width: 18em;
 }
+
+/* Alternative word inline: the text columns are sized by their (short)
+   header text, which squeezes the inputs — give them a readable minimum.
+   The action buttons are wrapped in a bootstrap <p> whose bottom margin
+   pushes them off-center in the row. */
+#alternative_words-group td.field-alt_word input,
+#alternative_words-group td.field-plural input {
+    min-width: 12em;
+}
+
+#alternative_words-group td.field-action_buttons {
+    vertical-align: middle;
+}
+
+#alternative_words-group td.field-action_buttons p {
+    margin: 0;
+}
