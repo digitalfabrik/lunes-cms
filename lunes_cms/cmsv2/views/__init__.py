@@ -4,7 +4,9 @@ from .generate_example_sentence import (
     word_generate_example_sentence_via_openai,
     word_store_generated_example_sentence,
 )
+from .delete_alternative_word import delete_alternative_word
 from .generate_image import generate_image_via_openai
+from .save_alternative_word import save_alternative_word
 from .import_csv_view import import_from_csv
 from .unitword_generate_example_sentence_audio import (
     unitword_generate_example_sentence_audio,
@@ -34,6 +36,8 @@ from .word_generate_example_sentence_audio import (
 from .word_generate_image import word_store_generated_image_permanently
 
 __all__ = [
+    "delete_alternative_word",
+    "save_alternative_word",
     "import_from_csv",
     "generate_image_via_openai",
     "unitword_generate_image",

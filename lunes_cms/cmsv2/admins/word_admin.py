@@ -184,6 +184,7 @@ class AlternativeWordInline(admin.TabularInline):
 
     model = AlternativeWord
     extra = 1
+    can_delete = False
     verbose_name = _("alternative word")
     verbose_name_plural = _("So heißt das auch")
     fields = [
@@ -192,7 +193,41 @@ class AlternativeWordInline(admin.TabularInline):
         "alt_word",
         "plural_article",
         "plural",
+        "action_buttons",
     ]
+    readonly_fields = ["action_buttons"]
+
+    def action_buttons(self, obj: AlternativeWord) -> SafeString:
+        """
+        Render buttons which instantly add, save or delete the alternative
+        word of the row, so no separate save of the whole word is needed.
+
+        Args:
+            obj: The alternative word object
+
+        Returns:
+            str: HTML markup for the action buttons
+        """
+        if not obj.pk:
+            return format_html(
+                '<button type="button" class="add-alternative-word-btn" title="{}">'
+                '<span class="alternative-word-add">+</span></button>',
+                _("Add alternative word"),
+            )
+        return format_html(
+            '<button type="button" class="save-alternative-word-btn" '
+            'data-alternative-word-id="{}" title="{}">'
+            '<span class="alternative-word-save">✓</span></button>'
+            '<button type="button" class="delete-alternative-word-btn" '
+            'data-alternative-word-id="{}" title="{}">'
+            '<span class="alternative-word-delete">×</span></button>',
+            obj.pk,
+            _("Save alternative word"),
+            obj.pk,
+            _("Delete alternative word"),
+        )
+
+    action_buttons.short_description = ""  # type: ignore[attr-defined]
 
 
 class UnitInline(admin.TabularInline):
@@ -340,6 +375,7 @@ class WordAdmin(BaseAdmin):
             "js/image_check_status_update.js",
             "js/generate_example_sentence.js",
             "js/inline_regenerate.js",
+            "js/alternative_word_actions.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 

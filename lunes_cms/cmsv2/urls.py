@@ -5,6 +5,16 @@ from . import views
 app_name = "cmsv2"
 
 urlpatterns = [
+    path(
+        "alternativewords/<int:alternative_word_id>/delete/",
+        views.delete_alternative_word,
+        name="delete_alternative_word",
+    ),
+    path(
+        "alternativewords/save/",
+        views.save_alternative_word,
+        name="save_alternative_word",
+    ),
     path("jobs/import-csv/", views.import_from_csv, name="import_csv"),
     path(
         "jobs/<int:job_id>/import-csv/",
