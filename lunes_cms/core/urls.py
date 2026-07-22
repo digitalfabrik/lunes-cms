@@ -35,6 +35,7 @@ urlpatterns = [
         RedirectView.as_view(url=get_static_url("images/logo.svg")),
     ),
     path("api/", include("lunes_cms.api.urls", namespace="api")),
+    path("bildschatz/", include("lunes_cms.bildschatz.urls", namespace="bildschatz")),
     path("", include("lunes_cms.help.urls")),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),

@@ -65,6 +65,15 @@ msgstr "{} mit der ID {} existiert nicht."
 msgid "The content type must be either 'job', 'unit' or 'word'."
 msgstr "Der Inhaltstyp muss entweder 'job', 'unit' oder 'word' sein."
 
+#: api/v2/views/word_viewset.py
+#, python-format
+msgid "The search term has to be at least %(min)d characters long."
+msgstr "Der Suchbegriff muss mindestens %(min)d Zeichen lang sein."
+
+#: bildschatz/apps.py
+msgid "Bildschatz"
+msgstr "Bildschatz"
+
 #: cms/admin.py cms/admins/document_admin.py cms/admins/training_set_admin.py
 #: cms/forms.py cms/list_filter.py cms/models/discipline.py
 msgid "disciplines"
