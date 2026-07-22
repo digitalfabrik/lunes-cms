@@ -2,7 +2,7 @@ from __future__ import absolute_import, annotations, unicode_literals
 
 import io
 from datetime import date
-from typing import Iterable, TYPE_CHECKING
+from typing import Iterable, Iterator, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
@@ -21,6 +21,8 @@ from .base import BaseAdmin
 from .word_export_resource import WordExportResource
 
 if TYPE_CHECKING:
+    from django.contrib.admin.filters import _ListFilterChoices
+    from django.contrib.admin.views.main import ChangeList
     from django.utils.functional import _StrOrPromise
 
 
@@ -78,6 +80,69 @@ class MigratedFilter(admin.SimpleListFilter):
         return queryset
 
 
+class ArchivedFilter(admin.SimpleListFilter):
+    """
+    Admin filter for the archive status of jobs.
+
+    By default only active (non-archived) jobs are shown. The filter allows
+    content managers to view archived jobs or all jobs.
+    """
+
+    title = _("archive status")
+    parameter_name = "archived"
+
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin
+    ) -> Iterable[tuple[str, "_StrOrPromise"]]:
+        """
+        Return the additional filter options.
+
+        Returns:
+            list: A list of tuples containing (value, label) pairs for the filter options
+        """
+        return [
+            ("archived", _("Archived jobs")),
+            ("all", _("All jobs")),
+        ]
+
+    def queryset(self, request: HttpRequest, queryset: QuerySet[Job]) -> QuerySet[Job]:
+        """
+        Filter the queryset based on the selected option.
+
+        Defaults to showing only active jobs when no option is selected.
+
+        Args:
+            request: The HTTP request
+            queryset: The queryset to filter
+
+        Returns:
+            QuerySet: The filtered queryset
+        """
+        if self.value() == "archived":
+            return queryset.filter(archived=True)
+        if self.value() == "all":
+            return queryset
+        return queryset.filter(archived=False)
+
+    def choices(self, changelist: "ChangeList") -> Iterator["_ListFilterChoices"]:
+        """
+        Yield the filter choices, using "Active jobs" as the default selection.
+        """
+        yield {
+            "selected": self.value() is None,
+            "query_string": changelist.get_query_string(remove=[self.parameter_name]),
+            "display": _("Active jobs"),
+        }
+        for lookup, title in self.lookup_choices:
+            yield {
+                "selected": self.value() == str(lookup),
+                "query_string": changelist.get_query_string(
+                    {self.parameter_name: lookup}
+                ),
+                "display": title,
+            }
+
+
 class JobAdmin(BaseAdmin):
     """
     Admin interface for the Job model.
@@ -94,6 +159,7 @@ class JobAdmin(BaseAdmin):
         "created_by",
         "created_by_user",
         "released",
+        "archived",
         "import_csv_link",
     ]
     readonly_fields = [
@@ -109,15 +175,16 @@ class JobAdmin(BaseAdmin):
         "name",
         "migrated_status",
         "released",
+        "archived",
         "list_icon",
         "created_by",
         "created_by_user",
         "created_at_date",
     ]
     list_display_links = ["name"]
-    list_filter = ["released", MigratedFilter]
+    list_filter = [ArchivedFilter, "released", MigratedFilter]
     list_select_related = ["created_by", "created_by_user"]
-    actions = ["export_to_csv", "duplicate_jobs"]
+    actions = ["export_to_csv", "duplicate_jobs", "archive_jobs", "restore_jobs"]
     list_per_page = 25
     ordering = ["name"]
     change_list_template = "admin/cmsv2/import_csv_button.html"
@@ -233,6 +300,7 @@ class JobAdmin(BaseAdmin):
             job.pk = None
             job.v1_id = None
             job.released = False
+            job.archived = False
             new_label = _("New")
             job.name = f"{job.name} ({new_label})"
             job.created_by = request.user.groups.first()
@@ -242,6 +310,24 @@ class JobAdmin(BaseAdmin):
             job.save()
             job.units.set(units)
         messages.success(request, _("Selected jobs have been duplicated successfully."))
+
+    @admin.action(description=_("Archive selected jobs"))
+    def archive_jobs(self, request: HttpRequest, queryset: QuerySet[Job]) -> None:
+        """Archive the selected jobs so they are no longer published or listed."""
+        updated = queryset.update(archived=True, released=False)
+        messages.success(
+            request,
+            _("%(count)d job(s) have been archived successfully.") % {"count": updated},
+        )
+
+    @admin.action(description=_("Restore selected jobs from archive"))
+    def restore_jobs(self, request: HttpRequest, queryset: QuerySet[Job]) -> None:
+        """Restore the selected jobs from the archive."""
+        updated = queryset.update(archived=False)
+        messages.success(
+            request,
+            _("%(count)d job(s) have been restored successfully.") % {"count": updated},
+        )
 
     def response_add(
         self,
