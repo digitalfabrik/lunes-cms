@@ -71,7 +71,8 @@ class JobWordsViewSet(viewsets.ModelViewSet):
                     "unit_word_relations",
                     unit_word_relations.exclude(image="").order_by("unit__title"),
                     to_attr="unit_word_relations_of_job",
-                )
+                ),
+                "alternative_words",
             )
             .order_by("word")
         )
