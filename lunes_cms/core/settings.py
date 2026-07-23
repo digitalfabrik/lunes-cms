@@ -120,6 +120,7 @@ INSTALLED_APPS = [
     "lunes_cms.api",
     "lunes_cms.cms",
     "lunes_cms.cmsv2",
+    "lunes_cms.analysis",
     "lunes_cms.help",
     "lunes_cms.analytics",
     # Django jazzmin needs to be installed before Django admin
@@ -612,11 +613,13 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Feedback": "fas fa-comment",
+        "analysis.DuplicatedVocabulary": "fas fa-clone",
     },
     "site_version": _cms_version,
-    # Render the Analytics app section directly below Dashboard. Jazzmin's
-    # sidebar lists apps in this order; anything not mentioned trails after.
-    "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
+    # Render the Analytics app section directly below Dashboard, and the new
+    # Analyse section (issue #531) right after Vocabulary Management v2.
+    # Jazzmin's sidebar lists apps in this order; anything not mentioned trails after.
+    "order_with_respect_to": ["cmsv2", "analysis", "analytics", "auth", "cms"],
 }
 
 #: UI tweaks for Django Jazzmin
