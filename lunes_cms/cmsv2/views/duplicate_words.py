@@ -9,7 +9,7 @@ from django.utils.html import format_html
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 
-from ..models import Word
+from ..models import AcceptedWordDuplicate, Word
 from ..services import duplicate_words, remove_duplicate_word
 
 
@@ -57,6 +57,21 @@ def duplicated_vocabulary(request: HttpRequest) -> HttpResponse:
             "duplicate_groups": duplicate_words.find_duplicate_word_groups(),
         },
     )
+
+
+@staff_member_required
+def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
+    """
+    Mark a duplicate-vocabulary group as an intentional duplicate - e.g. the
+    same word taught with a different example sentence in a different unit -
+    so it stops showing up in the analysis section (issue #531).
+    """
+    if request.method == "POST":
+        words = Word.objects.filter(pk__in=request.POST.getlist("word"))
+        accepted = AcceptedWordDuplicate.objects.create()
+        accepted.words.set(words)
+        messages.success(request, _("The duplicate has been accepted as intentional."))
+    return redirect("cmsv2:duplicated_vocabulary")
 
 
 @staff_member_required

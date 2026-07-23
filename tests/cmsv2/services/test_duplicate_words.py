@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import pytest
 
-from lunes_cms.cmsv2.models import Job, Unit, Word
+from lunes_cms.cmsv2.models import AcceptedWordDuplicate, Job, Unit, Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services import duplicate_words
@@ -152,6 +152,41 @@ def test_two_unassigned_words_land_in_unassigned_bucket() -> None:
     assert len(results) == 1
     assert results[0].job_names == []
     assert {w.pk for w in results[0].words} == {a.pk, b.pk}
+
+
+@pytest.mark.django_db()
+def test_accepted_duplicate_is_excluded() -> None:
+    job = Job.objects.create(name="Tischler")
+    unit = _make_unit(job)
+    a = Word.objects.create(singular_article=1, word="Hammer")
+    b = Word.objects.create(singular_article=1, word="Hammer")
+    _link(unit, a)
+    _link(unit, b)
+    accepted = AcceptedWordDuplicate.objects.create()
+    accepted.words.set([a, b])
+
+    assert duplicate_words.find_duplicate_word_groups() == []
+    assert duplicate_words.duplicate_word_group_count() == 0
+
+
+@pytest.mark.django_db()
+def test_accepting_one_group_does_not_hide_a_new_occurrence() -> None:
+    """Accepting a specific pair doesn't blanket-accept every future duplicate of that text."""
+    job = Job.objects.create(name="Tischler")
+    unit = _make_unit(job)
+    a = Word.objects.create(singular_article=1, word="Hammer")
+    b = Word.objects.create(singular_article=1, word="Hammer")
+    _link(unit, a)
+    _link(unit, b)
+    accepted = AcceptedWordDuplicate.objects.create()
+    accepted.words.set([a, b])
+
+    c = Word.objects.create(singular_article=1, word="Hammer")
+    _link(unit, c)
+
+    results = duplicate_words.find_duplicate_word_groups()
+    assert len(results) == 1
+    assert {w.pk for w in results[0].words} == {a.pk, b.pk, c.pk}
 
 
 @pytest.mark.django_db()

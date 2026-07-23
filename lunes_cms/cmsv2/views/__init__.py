@@ -1,4 +1,5 @@
 from .duplicate_words import (
+    accept_word_duplicate,
     delete_duplicate_word,
     duplicated_vocabulary,
     word_check_duplicate,
@@ -39,6 +40,7 @@ from .word_generate_example_sentence_audio import (
 from .word_generate_image import word_store_generated_image_permanently
 
 __all__ = [
+    "accept_word_duplicate",
     "delete_duplicate_word",
     "duplicated_vocabulary",
     "word_check_duplicate",
