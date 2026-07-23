@@ -6,6 +6,21 @@ app_name = "cmsv2"
 
 urlpatterns = [
     path(
+        "analysis/duplicated-vocabulary/",
+        views.duplicated_vocabulary,
+        name="duplicated_vocabulary",
+    ),
+    path(
+        "analysis/duplicated-vocabulary/delete/",
+        views.delete_duplicate_word,
+        name="delete_duplicate_word",
+    ),
+    path(
+        "words/check-duplicate/",
+        views.word_check_duplicate,
+        name="word_check_duplicate",
+    ),
+    path(
         "alternativewords/<int:alternative_word_id>/delete/",
         views.delete_alternative_word,
         name="delete_alternative_word",
