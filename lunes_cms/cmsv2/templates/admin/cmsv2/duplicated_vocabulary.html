@@ -1,0 +1,75 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Duplicated vocabulary" %}{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    <li class="breadcrumb-item active">{% trans "Duplicated vocabulary" %}</li>
+</ol>
+{% endblock %}
+
+{% block content_title %}{% trans "Duplicated vocabulary" %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="col-12">
+    {% if not duplicate_groups %}
+        <div class="card">
+            <div class="card-body">
+                <p class="mb-0">{% trans "No unresolved duplicate vocabulary found." %}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for group in duplicate_groups %}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {{ group.word_text }}
+                    <small class="text-muted">
+                        —
+                        {% if group.job_names %}
+                            {{ group.job_names|join:", " }}
+                        {% else %}
+                            {% trans "Not assigned to a profession" %}
+                        {% endif %}
+                    </small>
+                </h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Word" %}</th>
+                            <th>{% trans "Units" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in group.words %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'admin:cmsv2_word_change' word.pk %}">{{ word }}</a>
+                                    {% if forloop.first %}
+                                        <span class="badge badge-success">{% trans "Suggested to keep" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ word.units.all|join:", " }}</td>
+                                <td>
+                                    {% if not forloop.first %}
+                                        <a class="btn btn-sm btn-primary"
+                                           href="{% url 'cmsv2:delete_duplicate_word' %}?keeper={{ group.words.0.pk }}&loser={{ word.pk }}">
+                                            {% trans "Delete duplicate" %}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
