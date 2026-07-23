@@ -77,3 +77,7 @@ msgstr "Neu generiertes Bild"
 #: lunes_cms/static/js/generate_example_sentence.js
 msgid "Regenerate example sentence"
 msgstr "Beispielsatz neu generieren"
+
+#: lunes_cms/static/js/word_duplicate_check.js
+msgid "A word with this name already exists:"
+msgstr "Ein Wort mit diesem Namen existiert bereits:"

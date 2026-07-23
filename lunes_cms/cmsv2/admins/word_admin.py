@@ -1,12 +1,13 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Iterable, TYPE_CHECKING
+from typing import Any, Iterable, TYPE_CHECKING
 
+from django import forms
 from django.contrib import admin
 from django.db.models import Q, QuerySet
 from django.http import HttpRequest
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
@@ -201,6 +202,29 @@ class UnitInline(admin.TabularInline):
     ]
 
 
+class WordAdminForm(forms.ModelForm):
+    """
+    Adds the AJAX endpoint URL to the ``word`` field's widget, so
+    ``word_duplicate_check.js`` can warn about existing words with the same
+    name without hard-blocking the save (issue #531).
+    """
+
+    class Meta:
+        """Meta class for the WordAdminForm."""
+
+        model = Word
+        fields = "__all__"
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Only add the attribute to the field's existing widget rather than
+        # replacing it via Meta.widgets, so it keeps the same admin-applied
+        # classes (full width etc.) as every other field, e.g. "plural".
+        super().__init__(*args, **kwargs)
+        self.fields["word"].widget.attrs["data-check-url"] = reverse_lazy(
+            "cmsv2:word_check_duplicate"
+        )
+
+
 class WordAdmin(BaseAdmin):
     """
     Admin interface for the Word model.
@@ -209,6 +233,8 @@ class WordAdmin(BaseAdmin):
     including their attributes, audio files, images, and relationships with units.
     It includes custom display methods for showing and managing assets.
     """
+
+    form = WordAdminForm
 
     fieldsets = (
         (
@@ -330,6 +356,7 @@ class WordAdmin(BaseAdmin):
             "js/image_check_status_update.js",
             "js/generate_example_sentence.js",
             "js/inline_regenerate.js",
+            "js/word_duplicate_check.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 

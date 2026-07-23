@@ -44,7 +44,7 @@ class Word(models.Model):
         default="",
         verbose_name=_("word type"),
     )
-    word = models.CharField(max_length=255, verbose_name=_("word"))
+    word = models.CharField(max_length=255, db_index=True, verbose_name=_("word"))
     grammatical_gender = models.IntegerField(
         choices=GrammaticalGenders.choices,
         verbose_name=_("Grammatical gender"),

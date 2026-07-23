@@ -17,6 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: analysis/apps.py
+msgid "Analysis"
+msgstr "Analyse"
+
+#: analysis/models.py cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid "Duplicated vocabulary"
+msgstr "Doppelte Vokabeln"
+
 #: analytics/apps.py
 msgid "Analytics"
 msgstr "Analytik"
@@ -135,7 +144,7 @@ msgid "singular article"
 msgstr "Singular-Artikel"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
-#: cmsv2/models/word.py
+#: cmsv2/models/word.py cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
 msgid "Word"
 msgstr "Vokabel"
 
@@ -157,11 +166,13 @@ msgstr "Audio"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_admin.py
 #: cmsv2/admins/word_export_resource.py
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
 msgid "Yes"
 msgstr "Ja"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_admin.py
 #: cmsv2/admins/word_export_resource.py
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
 msgid "No"
 msgstr "Nein"
 
@@ -245,7 +256,7 @@ msgid_plural "The training sets {} were successfully unreleased."
 msgstr[0] "Das Modul {} wurde erfolgreich zurückgehalten."
 msgstr[1] "Die Module {} wurden erfolgreich zurückgehalten."
 
-#: cms/admins/training_set_admin.py
+#: cms/admins/training_set_admin.py cmsv2/models/word_duplicate.py
 msgid "words"
 msgstr "Vokabeln"
 
@@ -555,6 +566,8 @@ msgstr ""
 #: cms/templates/admin/delete_confirmation.html
 #: cms/templates/admin/delete_selected_confirmation.html
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
 #: cmsv2/templates/admin/csv_form.html
 #: cmsv2/templates/admin/generate_audio_base.html
 #: cmsv2/templates/admin/generate_image_base.html
@@ -562,6 +575,7 @@ msgid "Home"
 msgstr "Home"
 
 #: cms/templates/admin/delete_confirmation.html
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
 msgid "Delete"
 msgstr "Löschen"
 
@@ -688,7 +702,7 @@ msgid "units"
 msgstr "Einheiten"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py cmsv2/models/job.py
-#: cmsv2/models/review.py cmsv2/models/unit.py
+#: cmsv2/models/review.py cmsv2/models/unit.py cmsv2/models/word_duplicate.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -884,6 +898,7 @@ msgstr "Plural"
 
 #: cmsv2/admins/word_export_resource.py cmsv2/models/unit.py
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
 msgid "Units"
 msgstr "Einheit"
 
@@ -1083,6 +1098,14 @@ msgstr "Audio Checked Identifier"
 msgid "Words"
 msgstr "Vokabel"
 
+#: cmsv2/models/word_duplicate.py
+msgid "accepted word duplicate"
+msgstr "akzeptiertes Wortduplikat"
+
+#: cmsv2/models/word_duplicate.py
+msgid "accepted word duplicates"
+msgstr "akzeptierte Wortduplikate"
+
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign to user"
 msgstr "An nutzende Person zuweisen"
@@ -1112,9 +1135,45 @@ msgid "Assign"
 msgstr "Zuweisen"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
 #: cmsv2/templates/admin/csv_form.html
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid "Delete duplicate"
+msgstr "Duplikat löschen"
+
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
+#, python-format
+msgid "%(loser)s will be deleted, keeping %(keeper)s."
+msgstr "%(loser)s wird gelöscht, %(keeper)s bleibt erhalten."
+
+#: cmsv2/templates/admin/cmsv2/delete_duplicate_word.html
+#, python-format
+msgid ""
+"The word to be deleted, %(word)s, still belongs to the unit "
+"\"%(unit_title)s\". Should the kept word be added to this unit?"
+msgstr ""
+"Das zu löschende Wort %(word)s gehört noch zur Einheit „%(unit_title)s“. "
+"Soll das bestehende Wort zu dieser Einheit hinzugefügt werden?"
+
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid "No unresolved duplicate vocabulary found."
+msgstr "Keine ungeklärten doppelten Vokabeln gefunden."
+
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid "Not assigned to a profession"
+msgstr "Keinem Beruf zugeordnet"
+
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid "Accept as intentional duplicate"
+msgstr "Als beabsichtigtes Duplikat akzeptieren"
+
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid "Suggested to keep"
+msgstr "Zum Behalten vorgeschlagen"
 
 #: cmsv2/templates/admin/cmsv2/import_csv_button.html
 #: cmsv2/templates/admin/csv_form.html
@@ -1140,6 +1199,19 @@ msgstr "Beispielsatz generieren"
 #: cmsv2/utils.py
 msgid "Regenerate example sentence"
 msgstr "Beispielsatz neu generieren"
+
+#: cmsv2/views/duplicate_words.py
+msgid "The duplicate has been accepted as intentional."
+msgstr "Das Duplikat wurde als beabsichtigt akzeptiert."
+
+#: cmsv2/views/duplicate_words.py
+msgid "Cannot delete a word as a duplicate of itself."
+msgstr "Ein Wort kann nicht als Duplikat von sich selbst gelöscht werden."
+
+#: cmsv2/views/duplicate_words.py
+#, python-format
+msgid "The duplicate \"%(word)s\" has been deleted."
+msgstr "Das Duplikat „%(word)s“ wurde gelöscht."
 
 #: cmsv2/views/import_csv_view.py
 msgid "Select CSV file"
