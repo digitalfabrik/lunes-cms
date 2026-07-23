@@ -105,8 +105,13 @@ function activate_venv {
     if [[ -z "$LUNES_VENV_ACTIVATED" ]]; then
         # Create virtual environment if not exists
         if [[ ! -f ".venv/bin/activate" ]]; then
+            if [[ ! -x "$(command -v uv)" ]]; then
+                echo -e "uv is not installed. Please install it manually and run this script again:\n" | print_error
+                echo -e "\thttps://docs.astral.sh/uv/getting-started/installation/\n" | print_bold
+                exit 1
+            fi
             echo "Creating virtual environment..." | print_info
-            python3 -m venv .venv
+            uv venv .venv
             echo "✔ Created virtual environment" | print_success
         fi
         # Activate virtual environment

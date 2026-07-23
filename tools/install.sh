@@ -24,6 +24,12 @@ if [[ ! -x "$(command -v pip3)" ]]; then
     echo "Pip for Python3 is not installed. Please install python3-pip manually and run this script again."  | print_error
     exit 1
 fi
+# Check if uv is installed
+if [[ ! -x "$(command -v uv)" ]]; then
+    echo -e "uv is not installed. Please install it manually and run this script again:\n" | print_error
+    echo -e "\thttps://docs.astral.sh/uv/getting-started/installation/\n" | print_bold
+    exit 1
+fi
 # Check if prerequisite for psycopg2 is installed
 if [[ ! -x "$(command -v pg_config)" ]]; then
     echo "The command pg_config is not available. Please install libpq-dev manually and run this script again."  | print_error
@@ -66,10 +72,9 @@ fi
 # Activate virtual environment
 activate_venv
 
-# Install pip dependencies
+# Install pinned dependencies from the lock file
 echo "Installing Lunes CMS including its python dependencies..." | print_info
-# shellcheck disable=SC2102
-pip install -e .[dev]
+uv sync --extra dev
 
 # Install node dependencies
 echo "Installing Node.js dependencies..." | print_info
