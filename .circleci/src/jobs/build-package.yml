@@ -5,11 +5,12 @@ steps:
       at: .
   - restore-environment-variables
   - activate-venv
+  - install-uv
   - run:
       name: Build lunes-cms package
       command: |
         export SETUPTOOLS_SCM_PRETEND_VERSION="${NEW_VERSION}"
-        pip install .
+        uv pip install .
         python -m build --sdist .
         python -m build --wheel .
   - persist_to_workspace:

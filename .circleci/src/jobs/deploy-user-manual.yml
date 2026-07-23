@@ -3,10 +3,11 @@ steps:
   - checkout
   - attach_workspace:
       at: .
-  - activate-venv
+  - install-uv
   - run:
       name: Install e2e dependencies
-      command: pip install -e ".[e2e]"
+      command: uv sync --extra dev --extra e2e --locked
+  - activate-venv
   - configure-deliverino
   - run:
       name: Deploy user manual to GitHub Pages

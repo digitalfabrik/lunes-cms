@@ -1,0 +1,5 @@
+steps:
+  - run:
+      name: Install uv
+      # Pinned so CI reproducibly installs the same uv release; bump deliberately.
+      command: pip install uv==0.11.31
