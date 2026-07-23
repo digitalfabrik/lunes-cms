@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0025_job_created_by_user_unit_created_by_user_and_more"),
+        ("cmsv2", "0026_job_archived"),
     ]
 
     operations = [
