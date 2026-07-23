@@ -19,6 +19,10 @@ Two things are deliberately *not* flagged:
   "Tischler" and "Maurer").
 - One ``Word`` row linked to two units of the *same* job — that's one word
   taught in two contexts, not a data-quality problem.
+
+A group a content manager has explicitly reviewed and accepted as an
+intentional duplicate (``AcceptedWordDuplicate``) is excluded too, so it
+doesn't keep reappearing once someone has decided it's fine as-is.
 """
 
 from __future__ import annotations
@@ -26,7 +30,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 
-from ..models import Job, Word
+from ..models import AcceptedWordDuplicate, Job, Word
 from .remove_duplicate_word import completeness_score
 
 
@@ -57,13 +61,23 @@ def _word_ids_by_text() -> dict[str, list[int]]:
     return ids_by_text
 
 
+def _accepted_member_id_sets() -> set[frozenset[int]]:
+    """Every group of words a content manager has already accepted as an intentional duplicate."""
+    return {
+        frozenset(accepted.words.values_list("id", flat=True))
+        for accepted in AcceptedWordDuplicate.objects.prefetch_related("words")
+    }
+
+
 def _build_groups() -> dict[tuple[str, frozenset[int]], set[int]]:
     """
     Returns ``{(word_text, member_ids): job_ids}`` — each distinct duplicate
     group (by text and exact set of words involved) mapped to every job it's
     reachable from. An empty job-id set means every member is unassigned.
+    Groups accepted as intentional duplicates are left out entirely.
     """
     job_ids_by_word_id = _job_ids_by_word_id()
+    accepted_member_id_sets = _accepted_member_id_sets()
     groups: dict[tuple[str, frozenset[int]], set[int]] = defaultdict(set)
 
     for word_text, word_ids in _word_ids_by_text().items():
@@ -76,7 +90,9 @@ def _build_groups() -> dict[tuple[str, frozenset[int]], set[int]]:
 
         if not all_job_ids:
             # Every occurrence is unassigned — no job to attach this to.
-            groups[(word_text, frozenset(word_ids))] |= set()
+            members = frozenset(word_ids)
+            if members not in accepted_member_id_sets:
+                groups[(word_text, members)] |= set()
             continue
 
         for job_id in all_job_ids:
@@ -84,7 +100,7 @@ def _build_groups() -> dict[tuple[str, frozenset[int]], set[int]]:
                 [wid for wid in word_ids if job_id in job_ids_by_word_id.get(wid, ())]
                 + orphan_ids
             )
-            if len(members) >= 2:
+            if len(members) >= 2 and members not in accepted_member_id_sets:
                 groups[(word_text, members)].add(job_id)
 
     return groups

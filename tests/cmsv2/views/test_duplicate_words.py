@@ -8,7 +8,7 @@ import pytest
 from django.test import Client
 from django.urls import reverse
 
-from lunes_cms.cmsv2.models import Job, Unit, Word
+from lunes_cms.cmsv2.models import AcceptedWordDuplicate, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -82,6 +82,31 @@ def test_duplicated_vocabulary_keeps_full_sidebar(admin_client: Client) -> None:
     content = response.content.decode()
     assert "Vocabulary Management v2" in content
     assert "Jobs" in content
+
+
+@pytest.mark.django_db()
+def test_accept_word_duplicate_hides_group_from_list(admin_client: Client) -> None:
+    job = Job.objects.create(name="Tischler")
+    unit = _make_unit(job)
+    a = Word.objects.create(word="Hammer", singular_article=1)
+    b = Word.objects.create(word="Hammer", singular_article=1)
+    UnitWordRelation.objects.create(unit=unit, word=a)
+    UnitWordRelation.objects.create(unit=unit, word=b)
+
+    response = admin_client.post(
+        reverse("cmsv2:accept_word_duplicate"), {"word": [a.pk, b.pk]}
+    )
+
+    assert response.status_code == 302
+    assert AcceptedWordDuplicate.objects.count() == 1
+    assert set(
+        AcceptedWordDuplicate.objects.get().words.values_list("pk", flat=True)
+    ) == {
+        a.pk,
+        b.pk,
+    }
+    content = admin_client.get(reverse("cmsv2:duplicated_vocabulary")).content.decode()
+    assert "No unresolved duplicate vocabulary found." in content
 
 
 @pytest.mark.django_db()
