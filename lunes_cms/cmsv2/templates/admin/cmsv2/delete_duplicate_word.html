@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete duplicate" %}{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'cmsv2:duplicated_vocabulary' %}">{% trans 'Duplicated vocabulary' %}</a></li>
+    <li class="breadcrumb-item active">{% trans "Delete duplicate" %}</li>
+</ol>
+{% endblock %}
+
+{% block content_title %}{% trans "Delete duplicate" %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="col-12">
+    <form method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="keeper" value="{{ preview.keeper.pk }}">
+        <input type="hidden" name="loser" value="{{ preview.loser.pk }}">
+
+        <div class="row">
+            <div class="col-12 col-lg-9">
+                <div class="card">
+                    <div class="card-body">
+                        <p>
+                            {% blocktrans trimmed with loser=loser_link keeper=keeper_link %}
+                                {{ loser }} will be deleted, keeping {{ keeper }}.
+                            {% endblocktrans %}
+                        </p>
+
+                        {% for unit in preview.extra_units %}
+                            <div class="form-group unit-carryover-row">
+                                <label>
+                                    {% blocktrans trimmed with word=loser_link unit_title=unit.title %}
+                                        The word to be deleted, {{ word }}, still belongs to the unit "{{ unit_title }}".
+                                        Should the kept word be added to this unit?
+                                    {% endblocktrans %}
+                                </label>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input"
+                                           id="add_to_unit_{{ unit.pk }}_yes"
+                                           name="add_to_unit_{{ unit.pk }}"
+                                           value="yes" checked>
+                                    <label class="custom-control-label" for="add_to_unit_{{ unit.pk }}_yes">
+                                        {% trans "Yes" %}
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input"
+                                           id="add_to_unit_{{ unit.pk }}_no"
+                                           name="add_to_unit_{{ unit.pk }}"
+                                           value="no">
+                                    <label class="custom-control-label" for="add_to_unit_{{ unit.pk }}_no">
+                                        {% trans "No" %}
+                                    </label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <div class="{{ jazzmin_ui.actions_classes }}">
+                    <div class="form-group">
+                        <button type="submit" class="btn {{ jazzmin_ui.button_classes.success }} form-control">
+                            {% trans "Delete" %}
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <a href="{% url 'cmsv2:duplicated_vocabulary' %}" class="btn {{ jazzmin_ui.button_classes.danger }} form-control">
+                            {% trans "Cancel" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
