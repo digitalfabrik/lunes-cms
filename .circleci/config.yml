@@ -714,6 +714,10 @@ workflows:
                 requires:
                     - build-js
                     - compile-translations
+            - build-package:
+                requires:
+                    - build-js
+                    - compile-translations
         when:
             or:
                 - equal:
