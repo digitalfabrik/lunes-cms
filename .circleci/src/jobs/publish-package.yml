@@ -6,13 +6,10 @@ steps:
   - activate-venv
   - run:
       name: Check via twine
-      command: |
-        pip install twine
-        twine check ./dist/lunes*.tar.gz
+      command: twine check ./dist/lunes*.tar.gz
   - run:
       name: Publish lunes-cms package to (Test-)PyPI
       command: |
-        pip install twine
         ls -lh ./dist/*
         twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
   - notify

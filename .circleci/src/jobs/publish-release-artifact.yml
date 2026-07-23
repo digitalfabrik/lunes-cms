@@ -13,6 +13,6 @@ steps:
   - run:
       name: Publish artifact to PyPI
       command: |
-        pip install twine
+        pip install twine==6.2.0
         twine upload --non-interactive --verbose dist/lunes_cms-*.tar.gz
   - notify

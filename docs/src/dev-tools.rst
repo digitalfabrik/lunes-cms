@@ -12,6 +12,10 @@ Install all project dependencies and the local python package with :github-sourc
 
     ./tools/install.sh [--clean] [--pre-commit]
 
+Python dependencies (including transitive/sub-dependencies) are pinned in :github-source:`uv.lock`
+and installed via `uv <https://docs.astral.sh/uv/>`_ (``uv sync --extra dev``), so every
+install resolves to the exact same versions.
+
 * ``--clean``: Remove all installed dependencies in the ``.venv/`` and ``node_modules/`` directories as well as compiled
   static files in ``lunes_cms/static/dist/``. 
 * ``--pre-commit``: Install all :ref:`pre-commit-hooks`
