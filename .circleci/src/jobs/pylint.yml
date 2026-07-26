@@ -9,7 +9,5 @@ steps:
       command: sudo apt-get update && sudo apt-get install ffmpeg
   - run:
       name: Run pylint
-      command: |
-        pip install pylint
-        ./tools/pylint.sh
+      command: ./tools/pylint.sh
   - notify

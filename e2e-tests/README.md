@@ -5,8 +5,9 @@ E2E tests using pytest-playwright that automatically generate a user manual (Mar
 ## Setup
 
 ```bash
-# Install dependencies
-.venv/bin/pip install pytest-playwright mkdocs mkdocs-material
+# Install dependencies (pytest-playwright, mkdocs, mkdocs-material are pinned in uv.lock
+# under the "e2e" extra)
+uv sync --extra dev --extra e2e
 
 # Install Playwright browser
 .venv/bin/python -m playwright install chromium

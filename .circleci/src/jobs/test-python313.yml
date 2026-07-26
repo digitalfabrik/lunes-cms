@@ -5,24 +5,23 @@ docker:
       LUNES_CMS_DB_BACKEND: sqlite
 steps:
   - checkout
+  - install-uv
   - restore_cache:
-      key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
+      key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
   - run:
       name: Create virtual environment
       command: |
         if [[ -d ".venv" ]]; then
-          echo "Virtual environment restored from cache, skipping pip install"
+          echo "Virtual environment restored from cache, skipping install"
         else
-          python3 -m venv .venv
-          source .venv/bin/activate
-          pip install -e .[dev]
+          uv sync --extra dev --locked
         fi
   - save_cache:
-      key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
+      key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
       paths:
         - .venv
         - lunes_cms.egg-info
-        - /home/circleci/.cache/pip
+        - /home/circleci/.cache/uv
   - run:
       name: Migrate database
       command: |

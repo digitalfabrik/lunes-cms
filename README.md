@@ -22,6 +22,7 @@ Following packages are required before installing the project (install them with
 * `python3.11` or higher
 * `python3-pip`
 * `python3-venv`
+* [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to install the pinned/locked python dependencies
 * `libpq-dev` to compile psycopg2
 * `gettext` and `pcregrep` to use the translation features
 * `ffmpeg` for audio processing

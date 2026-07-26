@@ -20,6 +20,11 @@ commands:
                     git config user.email "62934656+deliverino[bot]@users.noreply.github.com"
                     git remote set-url origin "https://x-access-token:${DELIVERINO_ACCESS_TOKEN}@github.com/digitalfabrik/lunes-cms.git"
                 name: Configure git to commit & push as Deliverino app
+    install-uv:
+        steps:
+            - run:
+                command: pip install uv==0.11.31
+                name: Install uv
     notify:
         description: Send a notification (to Mattermost) at the end of a job, based on success or failure. Must be the last step in a job.
         parameters:
@@ -165,10 +170,11 @@ jobs:
                 at: .
             - restore-environment-variables
             - activate-venv
+            - install-uv
             - run:
                 command: |
                     export SETUPTOOLS_SCM_PRETEND_VERSION="${NEW_VERSION}"
-                    pip install .
+                    uv pip install .
                     python -m build --sdist .
                     python -m build --wheel .
                 name: Build lunes-cms package
@@ -297,10 +303,11 @@ jobs:
             - checkout
             - attach_workspace:
                 at: .
-            - activate-venv
+            - install-uv
             - run:
-                command: pip install -e ".[e2e]"
+                command: uv sync --extra dev --extra e2e --locked
                 name: Install e2e dependencies
+            - activate-venv
             - configure-deliverino
             - run:
                 command: mkdocs gh-deploy --remote-branch gh-pages-user-docs
@@ -326,12 +333,13 @@ jobs:
             - checkout
             - attach_workspace:
                 at: .
+            - install-uv
             - restore_cache:
-                key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
-            - activate-venv
+                key: uv-e2e-{{ checksum "uv.lock" }}-v1
             - run:
-                command: pip install -e ".[e2e]"
+                command: uv sync --extra dev --extra e2e --locked
                 name: Install e2e dependencies
+            - activate-venv
             - run:
                 command: sudo apt-get update && sudo apt-get install -y ffmpeg
                 name: Install system dependencies
@@ -342,9 +350,10 @@ jobs:
                 command: python -m playwright install chromium
                 name: Install Playwright browser
             - save_cache:
-                key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
+                key: uv-e2e-{{ checksum "uv.lock" }}-v1
                 paths:
                     - .venv
+                    - /home/circleci/.cache/uv
                     - /home/circleci/.cache/ms-playwright
             - run:
                 command: lunes-cms-cli migrate
@@ -376,24 +385,23 @@ jobs:
         executor: python
         steps:
             - checkout
+            - install-uv
             - restore_cache:
-                key: pip-{{ checksum "pyproject.toml" }}-v7
+                key: uv-{{ checksum "uv.lock" }}-v1
             - run:
                 command: |
                     if [[ -d ".venv" ]]; then
-                      echo "Virtual environment restored from cache, skipping pip install"
+                      echo "Virtual environment restored from cache, skipping install"
                     else
-                      python3 -m venv .venv
-                      source .venv/bin/activate
-                      pip install -e .[dev]
+                      uv sync --extra dev --locked
                     fi
                 name: Creating virtual environment
             - save_cache:
-                key: pip-{{ checksum "pyproject.toml" }}-v7
+                key: uv-{{ checksum "uv.lock" }}-v1
                 paths:
                     - .venv
                     - lunes_cms.egg-info
-                    - /home/circleci/.cache/pip
+                    - /home/circleci/.cache/uv
             - persist_to_workspace:
                 paths:
                     - .venv
@@ -497,13 +505,10 @@ jobs:
                 at: .
             - activate-venv
             - run:
-                command: |
-                    pip install twine
-                    twine check ./dist/lunes*.tar.gz
+                command: twine check ./dist/lunes*.tar.gz
                 name: Check via twine
             - run:
                 command: |
-                    pip install twine
                     ls -lh ./dist/*
                     twine upload --non-interactive --verbose ./dist/lunes*.tar.gz
                 name: Publish lunes-cms package to (Test-)PyPI
@@ -523,7 +528,7 @@ jobs:
                 name: Download artifact from GitHub pre-release
             - run:
                 command: |
-                    pip install twine
+                    pip install twine==6.2.0
                     twine upload --non-interactive --verbose dist/lunes_cms-*.tar.gz
                 name: Publish artifact to PyPI
             - notify
@@ -538,9 +543,7 @@ jobs:
                 command: sudo apt-get update && sudo apt-get install ffmpeg
                 name: Install pylint requirements
             - run:
-                command: |
-                    pip install pylint
-                    ./tools/pylint.sh
+                command: ./tools/pylint.sh
                 name: Run pylint
             - notify
     test:
@@ -586,24 +589,23 @@ jobs:
               image: cimg/python:3.13.13
         steps:
             - checkout
+            - install-uv
             - restore_cache:
-                key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
+                key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
             - run:
                 command: |
                     if [[ -d ".venv" ]]; then
-                      echo "Virtual environment restored from cache, skipping pip install"
+                      echo "Virtual environment restored from cache, skipping install"
                     else
-                      python3 -m venv .venv
-                      source .venv/bin/activate
-                      pip install -e .[dev]
+                      uv sync --extra dev --locked
                     fi
                 name: Create virtual environment
             - save_cache:
-                key: pip-3.13.13-{{ checksum "pyproject.toml" }}-v1
+                key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
                 paths:
                     - .venv
                     - lunes_cms.egg-info
-                    - /home/circleci/.cache/pip
+                    - /home/circleci/.cache/uv
             - run:
                 command: |
                     source .venv/bin/activate
@@ -709,6 +711,10 @@ workflows:
                 requires:
                     - install
             - e2e:
+                requires:
+                    - build-js
+                    - compile-translations
+            - build-package:
                 requires:
                     - build-js
                     - compile-translations

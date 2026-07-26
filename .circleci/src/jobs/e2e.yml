@@ -17,12 +17,13 @@ steps:
   - checkout
   - attach_workspace:
       at: .
+  - install-uv
   - restore_cache:
-      key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
-  - activate-venv
+      key: uv-e2e-{{ checksum "uv.lock" }}-v1
   - run:
       name: Install e2e dependencies
-      command: pip install -e ".[e2e]"
+      command: uv sync --extra dev --extra e2e --locked
+  - activate-venv
   - run:
       name: Install system dependencies
       command: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -33,9 +34,10 @@ steps:
       name: Install Playwright browser
       command: python -m playwright install chromium
   - save_cache:
-      key: pip-e2e-{{ checksum "pyproject.toml" }}-v1
+      key: uv-e2e-{{ checksum "uv.lock" }}-v1
       paths:
         - .venv
+        - /home/circleci/.cache/uv
         - /home/circleci/.cache/ms-playwright
   - run:
       name: Migrate database
