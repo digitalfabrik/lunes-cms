@@ -37,5 +37,6 @@ class JobViewSet(viewsets.ModelViewSet):
 
         queryset = Job.objects.filter(
             released=True,
+            archived=False,
         ).annotate(number_units=Count("units", filter=Q(units__released=True)))
         return queryset.order_by("name")

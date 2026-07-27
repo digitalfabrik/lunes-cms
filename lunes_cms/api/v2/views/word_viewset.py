@@ -43,6 +43,7 @@ class WordViewSet(viewsets.ModelViewSet):
         queryset = Word.objects.filter(
             unit_word_relations__unit__released=True,
             unit_word_relations__unit__jobs__released=True,
+            unit_word_relations__unit__jobs__archived=False,
             audio_check_status="CONFIRMED",
             image_check_status="CONFIRMED",
         )

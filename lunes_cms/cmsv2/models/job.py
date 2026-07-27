@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
@@ -19,6 +21,14 @@ class Job(models.Model):
     """
 
     released = models.BooleanField(default=False, verbose_name=_("released"))
+    archived = models.BooleanField(
+        default=False,
+        verbose_name=_("archived"),
+        help_text=_(
+            "Archived jobs are hidden from the default job list and are not "
+            "published via the API. They can be restored at any time."
+        ),
+    )
     name = models.CharField(max_length=255, verbose_name=_("job"))
     icon = models.ImageField(
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
@@ -43,6 +53,18 @@ class Job(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Persist the job, enforcing that archived jobs are never published.
+
+        Archived jobs must not be released so they are reliably excluded from the
+        API regardless of how the ``archived`` flag was set (change form, shell,
+        imports, ...). See issue #890.
+        """
+        if self.archived:
+            self.released = False
+        super().save(*args, **kwargs)
 
     def image_tag(self) -> SafeString:
         """

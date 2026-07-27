@@ -46,7 +46,7 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
-        if not job.released:
+        if not job.released or job.archived:
             raise PermissionDenied()
 
         queryset = Unit.objects.filter(jobs__pk=job.pk, released=True).annotate(
