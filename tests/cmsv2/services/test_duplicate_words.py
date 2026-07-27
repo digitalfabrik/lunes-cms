@@ -1,5 +1,5 @@
 """
-Tests for detecting duplicate vocabulary within a profession (issue #531).
+Tests for detecting duplicate vocabulary across units and jobs (issue #531).
 """
 
 from __future__ import annotations
@@ -40,7 +40,10 @@ def test_two_distinct_words_same_text_same_job_is_a_duplicate() -> None:
 
 
 @pytest.mark.django_db()
-def test_same_text_across_different_jobs_is_not_a_duplicate() -> None:
+def test_same_text_across_different_jobs_is_shown_as_a_duplicate() -> None:
+    """Cross-job reuse (e.g. "Hammer" in both "Tischler" and "Maurer") may be
+    intentional, but it's still surfaced so a content manager can decide —
+    and accept it explicitly — instead of it being silently assumed fine."""
     job_a = Job.objects.create(name="Tischler")
     job_b = Job.objects.create(name="Maurer")
     unit_a = _make_unit(job_a)
@@ -50,7 +53,12 @@ def test_same_text_across_different_jobs_is_not_a_duplicate() -> None:
     _link(unit_a, a)
     _link(unit_b, b)
 
-    assert duplicate_words.find_duplicate_word_groups() == []
+    results = duplicate_words.find_duplicate_word_groups()
+
+    assert len(results) == 1
+    assert results[0].word_text == "Hammer"
+    assert results[0].job_names == ["Maurer", "Tischler"]
+    assert {w.pk for w in results[0].words} == {a.pk, b.pk}
 
 
 @pytest.mark.django_db()
@@ -162,6 +170,25 @@ def test_accepted_duplicate_is_excluded() -> None:
     b = Word.objects.create(singular_article=1, word="Hammer")
     _link(unit, a)
     _link(unit, b)
+    accepted = AcceptedWordDuplicate.objects.create()
+    accepted.words.set([a, b])
+
+    assert duplicate_words.find_duplicate_word_groups() == []
+    assert duplicate_words.duplicate_word_group_count() == 0
+
+
+@pytest.mark.django_db()
+def test_accepted_cross_job_duplicate_is_excluded() -> None:
+    """The same accept flow that resolves same-job duplicates also lets a
+    content manager mark intentional cross-job reuse as resolved."""
+    job_a = Job.objects.create(name="Tischler")
+    job_b = Job.objects.create(name="Maurer")
+    unit_a = _make_unit(job_a)
+    unit_b = _make_unit(job_b, title="Baustelle")
+    a = Word.objects.create(singular_article=1, word="Hammer")
+    b = Word.objects.create(singular_article=1, word="Hammer")
+    _link(unit_a, a)
+    _link(unit_b, b)
     accepted = AcceptedWordDuplicate.objects.create()
     accepted.words.set([a, b])
 

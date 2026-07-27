@@ -1157,7 +1157,8 @@ msgid ""
 "\"%(unit_title)s\". Should the kept word be added to this unit?"
 msgstr ""
 "Das zu löschende Wort %(word)s gehört noch zur Einheit „%(unit_title)s“. "
-"Soll das bestehende Wort zu dieser Einheit hinzugefügt werden?"
+"Damit das Wort in der Einheit weiterhin bestehen bleibt, soll das bestehende "
+"Wort zu dieser Einheit hinzugefügt werden?"
 
 #: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
 msgid "No unresolved duplicate vocabulary found."
@@ -1169,7 +1170,15 @@ msgstr "Keinem Beruf zugeordnet"
 
 #: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
 msgid "Accept as intentional duplicate"
-msgstr "Als beabsichtigtes Duplikat akzeptieren"
+msgstr "Duplikat akzeptieren"
+
+#: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
+msgid ""
+"This entry has the most complete content (definition, example sentence, "
+"image, audio, etc.)"
+msgstr ""
+"Dieser Eintrag hat die vollständigsten Angaben (Definition, Beispielsatz, "
+"Bild, Audio, etc.)"
 
 #: cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
 msgid "Suggested to keep"

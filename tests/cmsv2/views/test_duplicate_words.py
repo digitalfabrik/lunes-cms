@@ -144,6 +144,29 @@ def test_delete_duplicate_word_get_links_both_words(admin_client: Client) -> Non
 
 
 @pytest.mark.django_db()
+def test_delete_duplicate_word_get_shows_each_words_own_units(
+    admin_client: Client,
+) -> None:
+    """Each word's link is annotated with the unit(s) it currently belongs
+    to, so the admin can see at a glance which unit would lose the word."""
+    job = Job.objects.create(name="Bäcker/-in")
+    unit_keeper = _make_unit(job, title="Grundlagen Backen")
+    unit_loser = _make_unit(job, title="Grundlagen Metallverarbeitung")
+    keeper = Word.objects.create(word="Pinsel", singular_article=1)
+    loser = Word.objects.create(word="Pinsel", singular_article=1)
+    UnitWordRelation.objects.create(unit=unit_keeper, word=keeper)
+    UnitWordRelation.objects.create(unit=unit_loser, word=loser)
+
+    response = admin_client.get(
+        reverse("cmsv2:delete_duplicate_word"), {"keeper": keeper.pk, "loser": loser.pk}
+    )
+
+    content = response.content.decode()
+    assert "Pinsel</a> (Grundlagen Metallverarbeitung)" in content
+    assert "Pinsel</a> (Grundlagen Backen)" in content
+
+
+@pytest.mark.django_db()
 def test_delete_duplicate_word_get_with_no_relations_at_all(
     admin_client: Client,
 ) -> None:
