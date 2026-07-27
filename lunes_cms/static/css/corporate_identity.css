@@ -421,10 +421,20 @@ fieldset.module {
     --bs-table-bg: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.app-cmsv2 .btn.btn-primary {
+.app-cmsv2 .btn {
     font-weight: bold;
+    font-size: 14px;
     padding: 8px 32px;
+}
+
+.app-cmsv2 .btn.btn-primary {
     background-color: #3F6BEE;
+}
+
+/* duplicated-vocabulary analysis page (issue #531): keep every row the same
+   height whether or not it carries the "Delete duplicate" button */
+.app-cmsv2 .duplicate-row {
+    height: 2.75rem;
 }
 
 @media (prefers-color-scheme: dark) {

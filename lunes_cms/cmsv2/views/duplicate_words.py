@@ -19,6 +19,15 @@ def _word_link(word: Word) -> SafeString:
     )
 
 
+def _word_link_with_units(word: Word) -> SafeString:
+    """Like ``_word_link``, but also names the unit(s) the word currently
+    belongs to — only where that isn't already stated in the surrounding
+    sentence, to avoid naming the same unit twice."""
+    units = ", ".join(word.units.order_by("title").values_list("title", flat=True))
+    suffix = f" ({units})" if units else ""
+    return format_html("{}{}", _word_link(word), suffix)
+
+
 @staff_member_required
 def word_check_duplicate(request: HttpRequest) -> JsonResponse:
     """
@@ -116,5 +125,7 @@ def delete_duplicate_word(request: HttpRequest) -> HttpResponse:
             "preview": preview,
             "keeper_link": _word_link(keeper),
             "loser_link": _word_link(loser),
+            "keeper_link_with_units": _word_link_with_units(keeper),
+            "loser_link_with_units": _word_link_with_units(loser),
         },
     )
