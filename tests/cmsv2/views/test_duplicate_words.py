@@ -5,6 +5,7 @@ Tests for the "Duplicated vocabulary" analysis views (issue #531).
 from __future__ import annotations
 
 import pytest
+from django.contrib.auth import get_user_model
 from django.test import Client
 from django.urls import reverse
 
@@ -16,6 +17,25 @@ def _make_unit(job: Job, title: str = "Werkzeuge") -> Unit:
     unit = Unit.objects.create(title=title)
     unit.jobs.add(job)
     return unit
+
+
+def _staff_client() -> Client:
+    """A logged-in staff user who is *not* a superuser."""
+    user = get_user_model().objects.create_user(
+        username="staff-not-admin", password="password", is_staff=True
+    )
+    client = Client()
+    client.force_login(user)
+    return client
+
+
+@pytest.mark.django_db()
+def test_duplicated_vocabulary_denies_staff_who_is_not_superuser() -> None:
+    """Only superusers may see/manage duplicate vocabulary — a plain staff
+    user must be redirected (e.g. to the admin login), not let in."""
+    response = _staff_client().get(reverse("cmsv2:duplicated_vocabulary"))
+
+    assert response.status_code == 302
 
 
 @pytest.mark.django_db()

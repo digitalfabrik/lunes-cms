@@ -53,10 +53,10 @@ class DuplicatedVocabularyAdmin(admin.ModelAdmin):
         return redirect("cmsv2:duplicated_vocabulary")
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        return request.user.is_staff
+        return request.user.is_superuser
 
     def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return request.user.is_staff
+        return request.user.is_superuser
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
