@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from django.contrib import admin, messages
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -11,6 +11,13 @@ from django.utils.translation import gettext as _
 
 from ..models import AcceptedWordDuplicate, Word
 from ..services import duplicate_words, remove_duplicate_word
+
+#: Duplicate-vocabulary analysis and cleanup is restricted to superusers,
+#: same as the rest of the admin's data-management actions (see e.g.
+#: ``UserAdmin``/``UnitAdmin``) - not just any staff user.
+superuser_required = user_passes_test(
+    lambda user: user.is_active and user.is_superuser, login_url="admin:login"
+)
 
 
 def _word_link(word: Word) -> SafeString:
@@ -28,7 +35,7 @@ def _word_link_with_units(word: Word) -> SafeString:
     return format_html("{}{}", _word_link(word), suffix)
 
 
-@staff_member_required
+@superuser_required
 def word_check_duplicate(request: HttpRequest) -> JsonResponse:
     """
     AJAX endpoint backing the create-time "a word like this already exists"
@@ -55,7 +62,7 @@ def word_check_duplicate(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"matches": matches})
 
 
-@staff_member_required
+@superuser_required
 def duplicated_vocabulary(request: HttpRequest) -> HttpResponse:
     """The "Analysis" page listing duplicate-vocabulary groups (issue #531)."""
     return render(
@@ -68,7 +75,7 @@ def duplicated_vocabulary(request: HttpRequest) -> HttpResponse:
     )
 
 
-@staff_member_required
+@superuser_required
 def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
     """
     Mark a duplicate-vocabulary group as an intentional duplicate - e.g. the
@@ -83,7 +90,7 @@ def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
     return redirect("cmsv2:duplicated_vocabulary")
 
 
-@staff_member_required
+@superuser_required
 def delete_duplicate_word(request: HttpRequest) -> HttpResponse:
     """
     Review and perform deletion of a duplicate ``Word`` row (issue #531).
