@@ -206,8 +206,9 @@ class ModuleDurationAggregator(EventAggregator):
 
     event_types = [AnalyticsEvent.EventType.MODULE_DURATION]
 
-    @staticmethod
+    @classmethod
     def aggregate(
+        cls,
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
@@ -219,9 +220,16 @@ class ModuleDurationAggregator(EventAggregator):
         training_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
+        lines = cls._standard_lines(standard_events, unit_names) + cls._training_lines(
+            training_events, job_names
+        )
+        events.update(aggregated_at=aggregated_at)
+        return lines
 
-        lines = []
-
+    @staticmethod
+    def _standard_lines(
+        standard_events: QuerySet[AnalyticsEvent], unit_names: dict[int, str]
+    ) -> list[str]:
         standard_aggregated = (
             standard_events.annotate(
                 exercise_type=KT("payload__exercise_key__exercise_type"),
@@ -236,6 +244,7 @@ class ModuleDurationAggregator(EventAggregator):
                 total_sessions=Count("pk"),
             )
         )
+        lines = []
         for event in standard_aggregated:
             unit_id = event["unit_id"]
             unit_name = resolve_unit(unit_id, unit_names)
@@ -255,7 +264,12 @@ class ModuleDurationAggregator(EventAggregator):
                 event["exercise_type"],
                 event["event_date"],
             )
+        return lines
 
+    @staticmethod
+    def _training_lines(
+        training_events: QuerySet[AnalyticsEvent], job_names: dict[int, str]
+    ) -> list[str]:
         training_aggregated = (
             training_events.annotate(
                 exercise_type=KT("payload__exercise_key__exercise_type"),
@@ -270,6 +284,7 @@ class ModuleDurationAggregator(EventAggregator):
                 total_sessions=Count("pk"),
             )
         )
+        lines = []
         for event in training_aggregated:
             job_id = event["job_id"]
             job_name = resolve_job(job_id, job_names)
@@ -287,8 +302,6 @@ class ModuleDurationAggregator(EventAggregator):
                 event["exercise_type"],
                 event["event_date"],
             )
-
-        events.update(aggregated_at=aggregated_at)
         return lines
 
 
@@ -300,8 +313,9 @@ class DropoutAggregator(EventAggregator):
 
     event_types = [AnalyticsEvent.EventType.EXERCISE_DROPOUT]
 
-    @staticmethod
+    @classmethod
     def aggregate(
+        cls,
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
         job_names: dict[int, str],
@@ -313,9 +327,16 @@ class DropoutAggregator(EventAggregator):
         training_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
+        lines = cls._standard_lines(standard_events, unit_names) + cls._training_lines(
+            training_events, job_names
+        )
+        events.update(aggregated_at=aggregated_at)
+        return lines
 
-        lines = []
-
+    @staticmethod
+    def _standard_lines(
+        standard_events: QuerySet[AnalyticsEvent], unit_names: dict[int, str]
+    ) -> list[str]:
         standard_aggregated = (
             standard_events.annotate(
                 exercise_type=KT("payload__exercise_key__exercise_type"),
@@ -330,6 +351,7 @@ class DropoutAggregator(EventAggregator):
             )
             .annotate(dropout_count=Count("pk"))
         )
+        lines = []
         for event in standard_aggregated:
             unit_id = event["unit_id"]
             unit_name = resolve_unit(unit_id, unit_names)
@@ -351,7 +373,12 @@ class DropoutAggregator(EventAggregator):
                 event["exercise_type"],
                 event["event_date"],
             )
+        return lines
 
+    @staticmethod
+    def _training_lines(
+        training_events: QuerySet[AnalyticsEvent], job_names: dict[int, str]
+    ) -> list[str]:
         training_aggregated = (
             training_events.annotate(
                 exercise_type=KT("payload__exercise_key__exercise_type"),
@@ -366,6 +393,7 @@ class DropoutAggregator(EventAggregator):
             )
             .annotate(dropout_count=Count("pk"))
         )
+        lines = []
         for event in training_aggregated:
             job_id = event["job_id"]
             job_name = resolve_job(job_id, job_names)
@@ -387,8 +415,6 @@ class DropoutAggregator(EventAggregator):
                 event["exercise_type"],
                 event["event_date"],
             )
-
-        events.update(aggregated_at=aggregated_at)
         return lines
 
 
