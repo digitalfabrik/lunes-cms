@@ -1,0 +1,94 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Duplicated vocabulary" %}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-cmsv2{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    <li class="breadcrumb-item active">{% trans "Duplicated vocabulary" %}</li>
+</ol>
+{% endblock %}
+
+{% block content_title %}{% trans "Duplicated vocabulary" %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="col-12">
+    {% if not duplicate_groups %}
+        <div class="card">
+            <div class="card-body">
+                <p class="mb-0">{% trans "No unresolved duplicate vocabulary found." %}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for group in duplicate_groups %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">
+                    {{ group.word_text }}
+                    <small class="text-muted">
+                        —
+                        {% if group.job_names %}
+                            {{ group.job_names|join:", " }}
+                        {% else %}
+                            {% trans "Not assigned to a profession" %}
+                        {% endif %}
+                    </small>
+                </h3>
+                <form method="post" action="{% url 'cmsv2:accept_word_duplicate' %}" class="flex-shrink-0 ms-auto">
+                    {% csrf_token %}
+                    {% for word in group.words %}
+                        <input type="hidden" name="word" value="{{ word.pk }}">
+                    {% endfor %}
+                    <button type="submit" class="btn btn-secondary text-nowrap">
+                        {% trans "Accept as intentional duplicate" %}
+                    </button>
+                </form>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm" style="table-layout: fixed;">
+                    <colgroup>
+                        <col style="width: 45%;">
+                        <col style="width: 45%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Word" %}</th>
+                            <th>{% trans "Units" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in group.words %}
+                            <tr class="duplicate-row">
+                                <td class="align-middle">
+                                    <a href="{% url 'admin:cmsv2_word_change' word.pk %}" target="_blank" rel="noopener noreferrer">{{ word }}</a>
+                                    {% if forloop.first %}
+                                        <span class="badge text-bg-success"
+                                              title="{% trans 'This entry has the most complete content (definition, example sentence, image, audio, etc.)' %}">
+                                            {% trans "Suggested to keep" %}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="align-middle">{{ word.units.all|join:", " }}</td>
+                                <td class="align-middle text-end">
+                                    {% if not forloop.first %}
+                                        <a class="btn btn-sm btn-primary text-nowrap"
+                                           href="{% url 'cmsv2:delete_duplicate_word' %}?keeper={{ group.words.0.pk }}&loser={{ word.pk }}">
+                                            {% trans "Delete duplicate" %}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

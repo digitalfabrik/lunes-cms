@@ -1,3 +1,9 @@
+from .duplicate_words import (
+    accept_word_duplicate,
+    delete_duplicate_word,
+    duplicated_vocabulary,
+    word_check_duplicate,
+)
 from .generate_example_sentence import (
     unitword_generate_example_sentence_via_openai,
     unitword_store_generated_example_sentence,
@@ -34,6 +40,10 @@ from .word_generate_example_sentence_audio import (
 from .word_generate_image import word_store_generated_image_permanently
 
 __all__ = [
+    "accept_word_duplicate",
+    "delete_duplicate_word",
+    "duplicated_vocabulary",
+    "word_check_duplicate",
     "import_from_csv",
     "generate_image_via_openai",
     "unitword_generate_image",

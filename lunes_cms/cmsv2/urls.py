@@ -5,6 +5,26 @@ from . import views
 app_name = "cmsv2"
 
 urlpatterns = [
+    path(
+        "analysis/duplicated-vocabulary/",
+        views.duplicated_vocabulary,
+        name="duplicated_vocabulary",
+    ),
+    path(
+        "analysis/duplicated-vocabulary/delete/",
+        views.delete_duplicate_word,
+        name="delete_duplicate_word",
+    ),
+    path(
+        "analysis/duplicated-vocabulary/accept/",
+        views.accept_word_duplicate,
+        name="accept_word_duplicate",
+    ),
+    path(
+        "words/check-duplicate/",
+        views.word_check_duplicate,
+        name="word_check_duplicate",
+    ),
     path("jobs/import-csv/", views.import_from_csv, name="import_csv"),
     path(
         "jobs/<int:job_id>/import-csv/",
