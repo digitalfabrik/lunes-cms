@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
-from lunes_cms.cmsv2.models import Job, Word
+from lunes_cms.cmsv2.models import AlternativeWord, Job, Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.utils import (
@@ -175,6 +175,61 @@ class MigratedFilter(admin.SimpleListFilter):
         return queryset
 
 
+class AlternativeWordInline(admin.TabularInline):
+    """
+    Inline admin for the AlternativeWord model.
+
+    This inline allows editing alternative words directly from the Word admin page.
+    """
+
+    model = AlternativeWord
+    extra = 1
+    can_delete = False
+    verbose_name = _("alternative word")
+    verbose_name_plural = _("So heißt das auch")
+    fields = [
+        "grammatical_gender",
+        "singular_article",
+        "alt_word",
+        "plural_article",
+        "plural",
+        "action_buttons",
+    ]
+    readonly_fields = ["action_buttons"]
+
+    def action_buttons(self, obj: AlternativeWord) -> SafeString:
+        """
+        Render buttons which instantly add, save or delete the alternative
+        word of the row, so no separate save of the whole word is needed.
+
+        Args:
+            obj: The alternative word object
+
+        Returns:
+            str: HTML markup for the action buttons
+        """
+        if not obj.pk:
+            return format_html(
+                '<button type="button" class="add-alternative-word-btn" title="{}">'
+                '<span class="alternative-word-add">+</span></button>',
+                _("Add alternative word"),
+            )
+        return format_html(
+            '<button type="button" class="save-alternative-word-btn" '
+            'data-alternative-word-id="{}" title="{}">'
+            '<span class="alternative-word-save">✓</span></button>'
+            '<button type="button" class="delete-alternative-word-btn" '
+            'data-alternative-word-id="{}" title="{}">'
+            '<span class="alternative-word-delete">×</span></button>',
+            obj.pk,
+            _("Save alternative word"),
+            obj.pk,
+            _("Delete alternative word"),
+        )
+
+    action_buttons.short_description = ""  # type: ignore[attr-defined]
+
+
 class UnitInline(admin.TabularInline):
     """
     Inline admin for UnitWordRelation model.
@@ -260,16 +315,6 @@ class WordAdmin(BaseAdmin):
                 )
             },
         ),
-        (
-            _("Miscellaneous"),
-            {
-                "fields": (
-                    "definition",
-                    "additional_meaning_1",
-                    "additional_meaning_2",
-                )
-            },
-        ),
     )
     readonly_fields = (
         "audio_generate",
@@ -285,7 +330,7 @@ class WordAdmin(BaseAdmin):
     )
     search_fields = ["word"]
     ordering = ["word", "creation_date"]
-    inlines = [UnitInline]
+    inlines = [AlternativeWordInline, UnitInline]
     list_display = (
         "word",
         "migrated_status",
@@ -330,6 +375,7 @@ class WordAdmin(BaseAdmin):
             "js/image_check_status_update.js",
             "js/generate_example_sentence.js",
             "js/inline_regenerate.js",
+            "js/alternative_word_actions.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 

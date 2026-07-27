@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from ....cmsv2.models.unit import UnitWordRelation
 from ...utils import build_absolute_url
+from .alternative_word_serializer import AlternativeWordSerializer
 
 
 class UnitWordRelationSerializer(serializers.ModelSerializer):
@@ -16,6 +17,9 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="word.id")
     word = serializers.CharField(source="word.word")
     article = serializers.CharField(source="word.singular_article_as_text")
+    alternative_words = AlternativeWordSerializer(
+        many=True, read_only=True, source="word.alternative_words"
+    )
     images = serializers.ListSerializer(
         child=serializers.ImageField(), source="effective_public_images"
     )
@@ -89,6 +93,7 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
+            "alternative_words",
             "images",
             "audio",
             "example_sentence",
