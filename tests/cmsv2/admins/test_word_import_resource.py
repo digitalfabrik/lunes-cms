@@ -17,6 +17,7 @@ from lunes_cms.cmsv2.admins.word_import_resource import (
     _build_column_mapping,
     import_words_from_csv,
     map_plural_article_to_int,
+    map_word_type,
     parse_row,
     ParsedRow,
     RowResult,
@@ -45,10 +46,16 @@ def test_english_export_columns_are_mapped() -> None:
     mapping = _build_column_mapping()
     assert mapping["Units"] == "unit"
     assert mapping["Word"] == "word"
+    assert mapping["Word type"] == "word_type"
     assert mapping["Singular Article"] == "article"
     assert mapping["Plural"] == "plural"
     assert mapping["Plural Article"] == "plural_article"
     assert mapping["Example sentence"] == "example"
+
+
+def test_german_word_type_column_is_mapped() -> None:
+    """The German "Wortart" header produced by the exporter is recognised."""
+    assert _build_column_mapping()["Wortart"] == "word_type"
 
 
 def test_legacy_column_names_are_mapped() -> None:
@@ -84,6 +91,26 @@ def test_map_plural_article_to_int(value: str, expected: int | None) -> None:
 
 
 # ---------------------------------------------------------------------------
+# map_word_type
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("Nomen", "Nomen"),
+        ("NOMEN", "Nomen"),
+        (" verb ", "Verb"),
+        ("", ""),
+        ("unknown", ""),
+        ("noun", ""),  # English label isn't a stored value, unlike Nomen
+    ],
+)
+def test_map_word_type(value: str, expected: str) -> None:
+    assert map_word_type(value) == expected
+
+
+# ---------------------------------------------------------------------------
 # parse_row
 # ---------------------------------------------------------------------------
 
@@ -112,6 +139,12 @@ def test_parse_row_parses_example_sentence() -> None:
     result = parse_row(_make_row(Beispielsatz="Der Hammer ist schwer."), 1)
     assert isinstance(result, ParsedRow)
     assert result.example == "Der Hammer ist schwer."
+
+
+def test_parse_row_parses_word_type() -> None:
+    result = parse_row(_make_row(Wortart="Nomen"), 1)
+    assert isinstance(result, ParsedRow)
+    assert result.word_type == "Nomen"
 
 
 def test_parse_row_english_column_names() -> None:

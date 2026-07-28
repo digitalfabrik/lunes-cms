@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
-from ..models import Job, PluralArticle, SingularArticle, Unit, Word
+from ..models import Job, PluralArticle, SingularArticle, Unit, Word, WordType
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +25,9 @@ def _build_column_mapping() -> dict[str, str]:
         # word
         "Word": "word",
         "Vokabel": "word",
+        # word type
+        "Word type": "word_type",
+        "Wortart": "word_type",
         # singular article
         "Singular Article": "article",
         "Singularartikel": "article",
@@ -57,6 +60,7 @@ class ParsedRow:
     plural: str = ""
     plural_article: str = ""
     example: str = ""
+    word_type: str = ""
 
 
 class InvalidRowError(ValueError):
@@ -104,6 +108,16 @@ def map_plural_article_to_int(plural_article: str) -> int | None:
     return ARTICLE_MAP.get(normalized)
 
 
+def map_word_type(word_type: str) -> str:
+    """
+    Validates a word type string (as produced by the exporter) against the
+    known ``WordType`` values, case-insensitively. Returns "" (the model
+    default) for empty or unrecognised values, rather than failing the row.
+    """
+    WORD_TYPE_MAP: dict[str, str] = {value.lower(): value for value in WordType.values}
+    return WORD_TYPE_MAP.get(word_type.lower().strip(), "")
+
+
 def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
     """
     Create a new unit - even if one already exists with the same title.
@@ -113,21 +127,28 @@ def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
     return unit
 
 
+@dataclass(frozen=True)
+class WordAttributes:
+    """The (already converted/validated) word fields a CSV row contributes."""
+
+    singular_article: int
+    plural_article: int | None
+    plural: str = ""
+    word_type: str = ""
+
+
 def create_word(
-    word_text: str,
-    singular_article: int,
-    plural_article: int | None,
-    creator_fields: dict,
-    plural: str = "",
+    word_text: str, attributes: WordAttributes, creator_fields: dict
 ) -> Word:
     """
     Creates a new word object.
     """
     return Word.objects.create(
         word=word_text,
-        singular_article=singular_article,
-        plural_article=plural_article,
-        plural=plural,
+        singular_article=attributes.singular_article,
+        plural_article=attributes.plural_article,
+        plural=attributes.plural,
+        word_type=attributes.word_type,
         **creator_fields,
     )
 
@@ -208,6 +229,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         plural = mapped.get("plural", "")
         plural_article = mapped.get("plural_article", "")
         example = mapped.get("example", "")
+        word_type = mapped.get("word_type", "")
 
         return ParsedRow(
             unit=unit,
@@ -216,6 +238,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             plural=plural,
             plural_article=plural_article,
             example=example,
+            word_type=word_type,
         )
 
     except (AttributeError, TypeError) as exc:
@@ -260,11 +283,13 @@ def process_row(
         if not unit.jobs.filter(pk=job.pk).exists():
             unit.jobs.add(job)
 
-    article_int = map_article_to_int(parsed.article)
-    plural_article_int = map_plural_article_to_int(parsed.plural_article)
-    word = create_word(
-        parsed.word, article_int, plural_article_int, creator_fields, parsed.plural
+    attributes = WordAttributes(
+        singular_article=map_article_to_int(parsed.article),
+        plural_article=map_plural_article_to_int(parsed.plural_article),
+        plural=parsed.plural,
+        word_type=map_word_type(parsed.word_type),
     )
+    word = create_word(parsed.word, attributes, creator_fields)
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 
