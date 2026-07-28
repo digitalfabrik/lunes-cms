@@ -77,7 +77,7 @@ class RowResult:
     Return object of a single row.
     """
 
-    unit_created: bool = False
+    units_created: int = 0
     word_created: bool = False
     error: Optional[str] = None
     word_id: Optional[int] = None
@@ -258,6 +258,41 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         )
 
 
+def _split_unit_titles(unit_column: str) -> list[str]:
+    """
+    Splits the "unit" column into individual unit titles. The exporter joins
+    a word's units with " | " when it belongs to several units of the same
+    job (see ``WordExportResource.dehydrate_units``) — on re-import that
+    joined string must resolve back to each of those units individually,
+    not to one new unit literally named e.g. "Werkzeuge | Baustelle".
+    """
+    titles = (part.strip() for part in unit_column.split("|"))
+    return [title for title in titles if title]
+
+
+def _resolve_unit(
+    unit_title: str,
+    job: Job,
+    created_units: Dict[str, Unit],
+    creator_fields: dict,
+) -> Tuple[Unit, bool]:
+    """
+    Looks up ``unit_title`` in the ``created_units`` cache, creating it (even
+    if a unit with the same title already exists elsewhere) if this is the
+    first time this import encounters it. Returns the unit and whether it
+    was newly created.
+    """
+    unit = created_units.get(unit_title)
+    if unit is None:
+        unit = create_unit(unit_title, job, creator_fields)
+        created_units[unit_title] = unit
+        return unit, True
+
+    if not unit.jobs.filter(pk=job.pk).exists():
+        unit.jobs.add(job)
+    return unit, False
+
+
 def process_row(
     parsed: ParsedRow,
     job: Job,
@@ -267,21 +302,18 @@ def process_row(
     """
     Processes a single parsed row.
 
-    If unit is not yet in ``created_units`` cache, a new unit gets created, even if there is already one in the system with the same name.
-    If there is a unit in the cache, use that one
-    Update example sentence
-    Add word to newly created unit
+    The "unit" column may name more than one unit (see
+    ``_split_unit_titles``); each one is resolved/created and linked to the
+    word individually. Update example sentence. Add word to newly created
+    unit(s).
     """
-    unit_created = False
-
-    unit = created_units.get(parsed.unit)
-    if unit is None:
-        unit = create_unit(parsed.unit, job, creator_fields)
-        created_units[parsed.unit] = unit
-        unit_created = True
-    else:
-        if not unit.jobs.filter(pk=job.pk).exists():
-            unit.jobs.add(job)
+    units_created = 0
+    units = []
+    for unit_title in _split_unit_titles(parsed.unit):
+        unit, created = _resolve_unit(unit_title, job, created_units, creator_fields)
+        units.append(unit)
+        if created:
+            units_created += 1
 
     attributes = WordAttributes(
         singular_article=map_article_to_int(parsed.article),
@@ -293,9 +325,10 @@ def process_row(
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 
-    unit.words.add(word)
+    for unit in units:
+        unit.words.add(word)
 
-    return RowResult(unit_created=unit_created, word_created=True, word_id=word.pk)
+    return RowResult(units_created=units_created, word_created=True, word_id=word.pk)
 
 
 def import_words_from_csv(
@@ -338,8 +371,7 @@ def import_words_from_csv(
 
         if result.word_created:
             total_words_created += 1
-        if result.unit_created:
-            total_units_created += 1
+        total_units_created += result.units_created
         if result.word_id is not None:
             imported_word_ids.append(result.word_id)
 

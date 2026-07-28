@@ -213,8 +213,12 @@ def user(db: None) -> User:
 
 
 def _job_words(job: Job) -> QuerySet[Word]:
-    """Return queryset of words imported into the given job."""
-    return Word.objects.filter(units__jobs=job)
+    """
+    Return queryset of words imported into the given job. ``distinct()`` is
+    required because a word linked to more than one unit of the same job
+    would otherwise join into more than one row.
+    """
+    return Word.objects.filter(units__jobs=job).distinct()
 
 
 @pytest.mark.django_db
@@ -292,21 +296,40 @@ def test_plural_article_dash_stored_as_none(job: Job, user: User) -> None:
 
 @pytest.mark.django_db
 def test_extra_export_columns_are_ignored(job: Job, user: User) -> None:
-    """Extra columns from the export (Word type, Has audio?, Creation date) don't cause errors."""
+    """Has audio? and Creation date are export-only metadata columns with no
+    matching field to import into — they must not cause errors."""
     ds = _make_dataset(
-        [
-            "Units",
-            "Word",
-            "Singular Article",
-            "Word type",
-            "Has audio?",
-            "Creation date",
-        ],
-        [["Werkzeug", "Hammer", "der", "noun", "No", "01.01.2026 10:00"]],
+        ["Units", "Word", "Singular Article", "Has audio?", "Creation date"],
+        [["Werkzeug", "Hammer", "der", "No", "01.01.2026 10:00"]],
     )
     _, _, errors, _ = import_words_from_csv(ds, job, user)
     assert errors == []
     assert _job_words(job).count() == 1
+
+
+@pytest.mark.django_db
+def test_word_type_column_is_imported(job: Job, user: User) -> None:
+    """Word type — previously silently dropped on re-import — is now stored."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Word type"],
+        [["Werkzeug", "Hammer", "der", "Nomen"]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    assert errors == []
+    assert _job_words(job).get(word="Hammer").word_type == "Nomen"
+
+
+@pytest.mark.django_db
+def test_unrecognised_word_type_defaults_to_empty(job: Job, user: User) -> None:
+    """An unrecognised word type value doesn't fail the row, just falls back
+    to the model default instead of being stored verbatim."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Word type"],
+        [["Werkzeug", "Hammer", "der", "not-a-real-type"]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    assert errors == []
+    assert _job_words(job).get(word="Hammer").word_type == ""
 
 
 @pytest.mark.django_db
@@ -373,3 +396,64 @@ def test_import_raises_if_user_has_no_group_and_is_not_superuser(
     )
     with pytest.raises(IndexError):
         import_words_from_csv(ds, job, orphan_user)
+
+
+# ---------------------------------------------------------------------------
+# Multi-unit words ("Units" column joined with " | ", see issue #738)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_pipe_separated_units_are_split_and_both_linked(job: Job, user: User) -> None:
+    """A word exported from two units of the same job (joined with " | " by
+    ``WordExportResource.dehydrate_units``) must re-import into *both* of
+    those units, not into one new unit literally named "A | B"."""
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["Werkzeuge | Baustelle", "Hammer", "der"]],
+    )
+    _, units_created, errors, _ = import_words_from_csv(ds, job, user)
+    assert errors == []
+    word = _job_words(job).get(word="Hammer")
+    assert set(word.units.values_list("title", flat=True)) == {
+        "Werkzeuge",
+        "Baustelle",
+    }
+    assert units_created == 2
+
+
+@pytest.mark.django_db
+def test_pipe_separated_units_tolerate_missing_spaces(job: Job, user: User) -> None:
+    """The split is lenient about whitespace around the "|" separator, not
+    just the exact " | " the exporter happens to produce."""
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["Werkzeuge|Baustelle", "Hammer", "der"]],
+    )
+    import_words_from_csv(ds, job, user)
+    word = _job_words(job).get(word="Hammer")
+    assert set(word.units.values_list("title", flat=True)) == {
+        "Werkzeuge",
+        "Baustelle",
+    }
+
+
+@pytest.mark.django_db
+def test_pipe_separated_units_reuse_the_row_cache(job: Job, user: User) -> None:
+    """Two rows naming the same multi-unit combination reuse the same two
+    units (via the ``created_units`` cache) instead of creating duplicates."""
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [
+            ["Werkzeuge | Baustelle", "Hammer", "der"],
+            ["Werkzeuge | Baustelle", "Säge", "die"],
+        ],
+    )
+    _, units_created, errors, _ = import_words_from_csv(ds, job, user)
+    assert errors == []
+    assert units_created == 2
+    hammer = _job_words(job).get(word="Hammer")
+    saege = _job_words(job).get(word="Säge")
+    assert set(hammer.units.values_list("pk", flat=True)) == set(
+        saege.units.values_list("pk", flat=True)
+    )
