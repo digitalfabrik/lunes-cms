@@ -1,12 +1,15 @@
 import logging
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, TYPE_CHECKING
 
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
-from ..models import Job, PluralArticle, SingularArticle, Unit, Word
+from ..models import Job, PluralArticle, SingularArticle, Unit, Word, WordType
+
+if TYPE_CHECKING:
+    from django.utils.functional import _StrOrPromise
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +28,9 @@ def _build_column_mapping() -> dict[str, str]:
         # word
         "Word": "word",
         "Vokabel": "word",
+        # word type
+        "Word type": "word_type",
+        "Wortart": "word_type",
         # singular article
         "Singular Article": "article",
         "Singularartikel": "article",
@@ -45,6 +51,38 @@ def _build_column_mapping() -> dict[str, str]:
     }
 
 
+def _lowered_column_mapping() -> dict[str, str]:
+    return {key.lower(): value for key, value in _build_column_mapping().items()}
+
+
+#: Internal fields without which a row can't be imported at all — every
+#: other recognised column (article, plural, example sentence, word type)
+#: has a usable default and doesn't need to be filled in.
+REQUIRED_FIELDS = ("unit", "word")
+
+
+def validate_header_structure(
+    headers: Optional[list[str]],
+) -> "Optional[_StrOrPromise]":
+    """
+    Checks that the dataset's header row contains the structurally required
+    columns (unit and word). Returns a translated error message if the file
+    doesn't look like an import file at all, or ``None`` if the required
+    columns were found. The expected columns themselves are already named in
+    ``ImportCSVForm``'s ``csv_file`` help text, so the message doesn't repeat
+    them.
+    """
+    column_mapping = _lowered_column_mapping()
+    mapped_fields = {
+        column_mapping[header.strip().lower()]
+        for header in headers or []
+        if header and column_mapping.get(header.strip().lower())
+    }
+    if set(REQUIRED_FIELDS) <= mapped_fields:
+        return None
+    return _("The file is not in the correct format.")
+
+
 @dataclass(frozen=True)
 class ParsedRow:
     """
@@ -57,6 +95,7 @@ class ParsedRow:
     plural: str = ""
     plural_article: str = ""
     example: str = ""
+    word_type: str = ""
 
 
 class InvalidRowError(ValueError):
@@ -73,7 +112,7 @@ class RowResult:
     Return object of a single row.
     """
 
-    unit_created: bool = False
+    units_created: int = 0
     word_created: bool = False
     error: Optional[str] = None
     word_id: Optional[int] = None
@@ -104,6 +143,16 @@ def map_plural_article_to_int(plural_article: str) -> int | None:
     return ARTICLE_MAP.get(normalized)
 
 
+def map_word_type(word_type: str) -> str:
+    """
+    Validates a word type string (as produced by the exporter) against the
+    known ``WordType`` values, case-insensitively. Returns "" (the model
+    default) for empty or unrecognised values, rather than failing the row.
+    """
+    WORD_TYPE_MAP: dict[str, str] = {value.lower(): value for value in WordType.values}
+    return WORD_TYPE_MAP.get(word_type.lower().strip(), "")
+
+
 def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
     """
     Create a new unit - even if one already exists with the same title.
@@ -113,21 +162,28 @@ def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
     return unit
 
 
+@dataclass(frozen=True)
+class WordAttributes:
+    """The (already converted/validated) word fields a CSV row contributes."""
+
+    singular_article: int
+    plural_article: int | None
+    plural: str = ""
+    word_type: str = ""
+
+
 def create_word(
-    word_text: str,
-    singular_article: int,
-    plural_article: int | None,
-    creator_fields: dict,
-    plural: str = "",
+    word_text: str, attributes: WordAttributes, creator_fields: dict
 ) -> Word:
     """
     Creates a new word object.
     """
     return Word.objects.create(
         word=word_text,
-        singular_article=singular_article,
-        plural_article=plural_article,
-        plural=plural,
+        singular_article=attributes.singular_article,
+        plural_article=attributes.plural_article,
+        plural=attributes.plural,
+        word_type=attributes.word_type,
         **creator_fields,
     )
 
@@ -165,7 +221,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     Parses a single row and returns either a ParsedRow or a RowResult (error).
     """
     try:
-        column_mapping = {k.lower(): v for k, v in _build_column_mapping().items()}
+        column_mapping = _lowered_column_mapping()
         mapped = {
             column_mapping[key.strip().lower()]: (
                 value.strip() if isinstance(value, str) else value
@@ -208,6 +264,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         plural = mapped.get("plural", "")
         plural_article = mapped.get("plural_article", "")
         example = mapped.get("example", "")
+        word_type = mapped.get("word_type", "")
 
         return ParsedRow(
             unit=unit,
@@ -216,6 +273,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             plural=plural,
             plural_article=plural_article,
             example=example,
+            word_type=word_type,
         )
 
     except (AttributeError, TypeError) as exc:
@@ -235,6 +293,41 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         )
 
 
+def _split_unit_titles(unit_column: str) -> list[str]:
+    """
+    Splits the "unit" column into individual unit titles. The exporter joins
+    a word's units with " | " when it belongs to several units of the same
+    job (see ``WordExportResource.dehydrate_units``) — on re-import that
+    joined string must resolve back to each of those units individually,
+    not to one new unit literally named e.g. "Werkzeuge | Baustelle".
+    """
+    titles = (part.strip() for part in unit_column.split("|"))
+    return [title for title in titles if title]
+
+
+def _resolve_unit(
+    unit_title: str,
+    job: Job,
+    created_units: Dict[str, Unit],
+    creator_fields: dict,
+) -> Tuple[Unit, bool]:
+    """
+    Looks up ``unit_title`` in the ``created_units`` cache, creating it (even
+    if a unit with the same title already exists elsewhere) if this is the
+    first time this import encounters it. Returns the unit and whether it
+    was newly created.
+    """
+    unit = created_units.get(unit_title)
+    if unit is None:
+        unit = create_unit(unit_title, job, creator_fields)
+        created_units[unit_title] = unit
+        return unit, True
+
+    if not unit.jobs.filter(pk=job.pk).exists():
+        unit.jobs.add(job)
+    return unit, False
+
+
 def process_row(
     parsed: ParsedRow,
     job: Job,
@@ -244,33 +337,33 @@ def process_row(
     """
     Processes a single parsed row.
 
-    If unit is not yet in ``created_units`` cache, a new unit gets created, even if there is already one in the system with the same name.
-    If there is a unit in the cache, use that one
-    Update example sentence
-    Add word to newly created unit
+    The "unit" column may name more than one unit (see
+    ``_split_unit_titles``); each one is resolved/created and linked to the
+    word individually. Update example sentence. Add word to newly created
+    unit(s).
     """
-    unit_created = False
+    units_created = 0
+    units = []
+    for unit_title in _split_unit_titles(parsed.unit):
+        unit, created = _resolve_unit(unit_title, job, created_units, creator_fields)
+        units.append(unit)
+        if created:
+            units_created += 1
 
-    unit = created_units.get(parsed.unit)
-    if unit is None:
-        unit = create_unit(parsed.unit, job, creator_fields)
-        created_units[parsed.unit] = unit
-        unit_created = True
-    else:
-        if not unit.jobs.filter(pk=job.pk).exists():
-            unit.jobs.add(job)
-
-    article_int = map_article_to_int(parsed.article)
-    plural_article_int = map_plural_article_to_int(parsed.plural_article)
-    word = create_word(
-        parsed.word, article_int, plural_article_int, creator_fields, parsed.plural
+    attributes = WordAttributes(
+        singular_article=map_article_to_int(parsed.article),
+        plural_article=map_plural_article_to_int(parsed.plural_article),
+        plural=parsed.plural,
+        word_type=map_word_type(parsed.word_type),
     )
+    word = create_word(parsed.word, attributes, creator_fields)
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 
-    unit.words.add(word)
+    for unit in units:
+        unit.words.add(word)
 
-    return RowResult(unit_created=unit_created, word_created=True, word_id=word.pk)
+    return RowResult(units_created=units_created, word_created=True, word_id=word.pk)
 
 
 def import_words_from_csv(
@@ -313,8 +406,7 @@ def import_words_from_csv(
 
         if result.word_created:
             total_words_created += 1
-        if result.unit_created:
-            total_units_created += 1
+        total_units_created += result.units_created
         if result.word_id is not None:
             imported_word_ids.append(result.word_id)
 

@@ -11,7 +11,10 @@ from django.utils.translation import ngettext
 from tablib import Dataset
 from tablib.exceptions import InvalidDimensions
 
-from ..admins.word_import_resource import import_words_from_csv
+from ..admins.word_import_resource import (
+    import_words_from_csv,
+    validate_header_structure,
+)
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
 from ..services.image_generation import drain_pending_images
@@ -51,6 +54,25 @@ def _build_success_message(words_created: int, units_created: int) -> str:
         "sentences, audio and images are being generated in the "
         "background. This may take a few minutes..."
     ) % {"words": words_phrase, "units": units_phrase}
+
+
+def _report_dataset_issue(request: HttpRequest, data: Dataset) -> bool:
+    """
+    Checks whether the uploaded dataset can be imported at all, adding the
+    appropriate user-facing message if not. Returns True if the caller
+    should stop (nothing to import), False if the dataset is ready for
+    ``import_words_from_csv``.
+    """
+    format_error = validate_header_structure(data.headers)
+    if format_error:
+        messages.error(request, format_error)
+        return True
+    if len(data) == 0:
+        messages.warning(
+            request, _("The file contains no entries. Nothing was imported.")
+        )
+        return True
+    return False
 
 
 def _build_context(
@@ -103,6 +125,14 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     try:
         data = Dataset()
         data.load(csv_file.read().decode("utf-8"), format="csv")
+
+        if _report_dataset_issue(request, data):
+            return render(
+                request,
+                "admin/csv_form.html",
+                _build_context(request, form, job, job_id),
+            )
+
         # request.user is `User | AnonymousUser`, but this view is only
         # reachable by authenticated staff users.
         words_created, units_created, errors, imported_word_ids = import_words_from_csv(
