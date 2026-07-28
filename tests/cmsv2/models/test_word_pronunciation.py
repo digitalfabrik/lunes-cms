@@ -63,7 +63,7 @@ def test_saving_without_touching_pronunciation_keeps_confirmed_status() -> None:
     """An unrelated edit must not create review work."""
     word = _word_with_audio()
 
-    word.definition = "Gebäck aus Eiweiß und Zucker"
+    word.plural = "Baisers"
     word.save()
 
     word.refresh_from_db()

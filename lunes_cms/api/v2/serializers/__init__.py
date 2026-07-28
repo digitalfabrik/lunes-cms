@@ -2,6 +2,7 @@
 This module contains the model serializers, see :doc:`django:topics/serialization`.
 """
 
+from .alternative_word_serializer import AlternativeWordSerializer
 from .feedback_serializer import FeedbackSerializer
 from .job_serializer import JobSerializer
 from .sponsor_serializer import SponsorSerializer

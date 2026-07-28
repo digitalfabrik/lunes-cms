@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
     """Add optional pronunciation field to Word model."""
 
     dependencies = [
-        ("cmsv2", "0026_job_archived"),
+        ("cmsv2", "0027_remove_word_additional_meaning_1_and_more"),
     ]
 
     operations = [

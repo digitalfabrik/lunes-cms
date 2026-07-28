@@ -54,6 +54,7 @@ class UnitWordViewSet(viewsets.ModelViewSet):
 
         queryset = (
             UnitWordRelation.objects.select_related("word")
+            .prefetch_related("word__alternative_words")
             .filter(
                 unit=unit,
                 word__audio_check_status="CONFIRMED",

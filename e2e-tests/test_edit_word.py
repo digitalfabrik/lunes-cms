@@ -19,9 +19,7 @@ WORD_PLURAL = "Mäuse"
 WORD_UPDATED = "Bildschirm"
 WORD_PLURAL_UPDATED = "Bildschirme"
 EXAMPLE_SENTENCE_UPDATED = "Der Bildschirm zeigt alle Informationen des Computers an."
-DEFINITION_UPDATED = "Ausgabegerät zur visuellen Darstellung von Daten eines Computers."
-ADDITIONAL_MEANING_1_UPDATED = "Monitor"
-ADDITIONAL_MEANING_2_UPDATED = "Display"
+ALTERNATIVE_WORD_UPDATED = "Monitor"
 
 
 @pytest.mark.e2e
@@ -98,13 +96,14 @@ def test_edit_word(
     ):
         pass
 
-    page.locator("[name=definition]").scroll_into_view_if_needed()
-    page.fill("[name=definition]", DEFINITION_UPDATED)
-    page.fill("[name=additional_meaning_1]", ADDITIONAL_MEANING_1_UPDATED)
-    page.fill("[name=additional_meaning_2]", ADDITIONAL_MEANING_2_UPDATED)
+    page.locator("[name=alternative_words-0-alt_word]").scroll_into_view_if_needed()
+    page.fill("[name=alternative_words-0-alt_word]", ALTERNATIVE_WORD_UPDATED)
+    page.locator("[name=alternative_words-0-singular_article]").select_option(
+        label="der", force=True
+    )
     with document.step(
-        "Verschiedenes anpassen",
-        description=f'Ändern Sie die **„Definition"** sowie **„Zusätzliche Bedeutung 1+2"**.',
+        "Alternatives Wort anpassen",
+        description=f'Geben Sie im Abschnitt **„So heißt das auch"** ein alternatives Wort ein, z. B. **„{ALTERNATIVE_WORD_UPDATED}"** mit dem Artikel **„der"**.',
     ):
         pass
 
