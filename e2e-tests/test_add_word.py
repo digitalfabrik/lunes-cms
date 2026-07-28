@@ -83,7 +83,7 @@ def test_add_word(
     page.locator("[name=pronunciation]").scroll_into_view_if_needed()
     with document.step(
         "Aussprache prüfen (optional)",
-        description='Lassen Sie das Feld **„Aussprache"** in der Regel leer. Füllen Sie es nur aus, wenn die Sprachausgabe ein Lehnwort falsch ausspricht - tragen Sie dann ein, wie das Wort klingen soll, z. B. `Bessee` für **„Baiser"**. Der Eintrag wird für die Audiogenerierung der Vokabel und des Beispielsatzes verwendet, die Schreibweise in der App bleibt unverändert.',
+        description='Lassen Sie das Feld **„Aussprache"** in der Regel leer. Füllen Sie es nur aus, wenn die Sprachausgabe ein Lehnwort falsch ausspricht - tragen Sie dann ein, wie das Wort klingen soll, z. B. `Besee` für **„Baiser"**. Der Eintrag wird für die Audiogenerierung der Vokabel und des Beispielsatzes verwendet, die Schreibweise in der App bleibt unverändert.',
     ):
         pass
 
