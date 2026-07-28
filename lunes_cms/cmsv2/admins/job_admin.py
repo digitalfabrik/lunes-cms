@@ -267,7 +267,7 @@ class JobAdmin(BaseAdmin):
         csvs = {}
 
         for profession in queryset:
-            resource = WordExportResource()
+            resource = WordExportResource(for_profession=profession)
             units = Unit.objects.filter(jobs=profession)
             words = (
                 Word.objects.filter(units__in=units)

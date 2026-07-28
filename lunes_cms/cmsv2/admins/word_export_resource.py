@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from django.utils.translation import gettext_lazy as _
 from import_export import fields, resources
 from import_export.admin import ExportActionMixin
 
-from ..models import Word
+from ..models import Job, Word
 from ..models.static import PluralArticle, SingularArticle
 
 if TYPE_CHECKING:
@@ -22,10 +22,12 @@ class WordExportResource(resources.ModelResource):
     ExportActionMixin.export_admin_action
 
     # pylint: disable=super-init-not-called
-    def __init__(self, for_profession: Any = None) -> None:
+    def __init__(self, for_profession: Job | None = None) -> None:
         self.for_profession = for_profession
         self.relevant_units = (
-            for_profession.get_nested_units() if for_profession else None
+            for_profession.units.values_list("id", flat=True)
+            if for_profession
+            else None
         )
 
     word = fields.Field(column_name=_("Word"), attribute="word")
