@@ -947,9 +947,13 @@ msgid "Units"
 msgstr "Einheit"
 
 #: cmsv2/admins/word_import_resource.py
+msgid "The file is not in the correct format."
+msgstr "Die Datei hat nicht das richtige Format."
+
+#: cmsv2/admins/word_import_resource.py
 #, python-format
 msgid "Row %(n)s: No recognised columns – row will be skipped."
-msgstr "Zeile %(n)s: Die Spalte Einheit ist leer, wird übersprungen."
+msgstr "Zeile %(n)s: Keine erkannten Spalten – Zeile wird übersprungen."
 
 #: cmsv2/admins/word_import_resource.py
 #, python-format
@@ -1262,6 +1266,10 @@ msgid ""
 msgstr ""
 "Import erfolgreich! %(words)s, %(units)s erstellt. Beispielsätze, Audio und "
 "Bilder werden im Hintergrund generiert. Dies kann einige Minuten dauern..."
+
+#: cmsv2/views/import_csv_view.py
+msgid "The file contains no entries. Nothing was imported."
+msgstr "Die Datei enthält keine Einträge. Es wurde nichts importiert."
 
 #: cmsv2/views/import_csv_view.py
 msgid "CSV import for vocabulary"
