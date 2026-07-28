@@ -156,13 +156,13 @@ msgstr "Pluralartikel"
 msgid "Has audio?"
 msgstr "Audio"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
-#: cmsv2/admins/word_export_resource.py
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/admins/word_filters.py
 msgid "Yes"
 msgstr "Ja"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
-#: cmsv2/admins/word_export_resource.py
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/admins/word_filters.py
 msgid "No"
 msgstr "Nein"
 
@@ -674,17 +674,17 @@ msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_filters.py
 msgid "migration status"
 msgstr "Ablaufdatum"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_filters.py
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_filters.py
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
 
@@ -800,18 +800,6 @@ msgstr "Zugewiesene Einheit"
 #: cmsv2/admins/user_admin.py
 msgid "assigned units"
 msgstr "Zugewiesene Einheiten"
-
-#: cmsv2/admins/word_admin.py
-msgid "Has Image"
-msgstr "Hat Bild"
-
-#: cmsv2/admins/word_admin.py
-msgid "Unit or Job"
-msgstr "Einheit oder Job"
-
-#: cmsv2/admins/word_admin.py
-msgid "Has Complete Example Sentence"
-msgstr "Hat vollständigen Beispielsatz"
 
 #: cmsv2/admins/word_admin.py
 msgid "So heißt das auch"
@@ -945,6 +933,18 @@ msgstr "Plural"
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Units"
 msgstr "Einheit"
+
+#: cmsv2/admins/word_filters.py
+msgid "Has Image"
+msgstr "Hat Bild"
+
+#: cmsv2/admins/word_filters.py
+msgid "Unit or Job"
+msgstr "Einheit oder Job"
+
+#: cmsv2/admins/word_filters.py
+msgid "Has Complete Example Sentence"
+msgstr "Hat vollständigen Beispielsatz"
 
 #: cmsv2/admins/word_import_resource.py
 msgid "The file is not in the correct format."
