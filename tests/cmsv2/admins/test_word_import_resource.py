@@ -21,6 +21,7 @@ from lunes_cms.cmsv2.admins.word_import_resource import (
     parse_row,
     ParsedRow,
     RowResult,
+    validate_header_structure,
 )
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.job import Job
@@ -66,6 +67,46 @@ def test_legacy_column_names_are_mapped() -> None:
     assert mapping["Fachbegriff"] == "word"
     assert mapping["Begriff"] == "word"
     assert mapping["Artikel"] == "article"
+
+
+# ---------------------------------------------------------------------------
+# validate_header_structure
+# ---------------------------------------------------------------------------
+
+
+def test_validate_header_structure_accepts_german_headers() -> None:
+    assert validate_header_structure(["Einheit", "Vokabel", "Artikel"]) is None
+
+
+def test_validate_header_structure_accepts_english_headers() -> None:
+    assert validate_header_structure(["Units", "Word", "Singular Article"]) is None
+
+
+def test_validate_header_structure_does_not_require_optional_columns() -> None:
+    """Article, plural, plural article, example sentence and word type all
+    have usable defaults — only unit and word are structurally required."""
+    assert validate_header_structure(["Einheit", "Vokabel"]) is None
+
+
+def test_validate_header_structure_rejects_missing_unit_column() -> None:
+    assert validate_header_structure(["Vokabel", "Artikel"]) is not None
+
+
+def test_validate_header_structure_rejects_missing_word_column() -> None:
+    error = validate_header_structure(["Einheit", "Artikel"])
+    assert error is not None
+
+
+def test_validate_header_structure_rejects_unrecognised_headers() -> None:
+    """A file whose header row matches none of the known columns at all
+    (e.g. a non-CSV text file tablib parsed as one giant header) is rejected."""
+    error = validate_header_structure(["this is not a csv file at all"])
+    assert error is not None
+
+
+def test_validate_header_structure_rejects_no_headers_at_all() -> None:
+    """A completely empty file (tablib reports ``headers=None``) is rejected."""
+    assert validate_header_structure(None) is not None
 
 
 # ---------------------------------------------------------------------------

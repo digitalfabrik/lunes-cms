@@ -1,12 +1,15 @@
 import logging
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, TYPE_CHECKING
 
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
 from ..models import Job, PluralArticle, SingularArticle, Unit, Word, WordType
+
+if TYPE_CHECKING:
+    from django.utils.functional import _StrOrPromise
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +49,38 @@ def _build_column_mapping() -> dict[str, str]:
         "Sinneinheit": "unit",
         "Sinneseinheit": "unit",
     }
+
+
+def _lowered_column_mapping() -> dict[str, str]:
+    return {k.lower(): v for k, v in _build_column_mapping().items()}
+
+
+#: Internal fields without which a row can't be imported at all — every
+#: other recognised column (article, plural, example sentence, word type)
+#: has a usable default and doesn't need to be filled in.
+REQUIRED_FIELDS = ("unit", "word")
+
+
+def validate_header_structure(
+    headers: Optional[list[str]],
+) -> "Optional[_StrOrPromise]":
+    """
+    Checks that the dataset's header row contains the structurally required
+    columns (unit and word). Returns a translated error message if the file
+    doesn't look like an import file at all, or ``None`` if the required
+    columns were found. The expected columns themselves are already named in
+    ``ImportCSVForm``'s ``csv_file`` help text, so the message doesn't repeat
+    them.
+    """
+    column_mapping = _lowered_column_mapping()
+    mapped_fields = {
+        column_mapping[header.strip().lower()]
+        for header in headers or []
+        if header and column_mapping.get(header.strip().lower())
+    }
+    if set(REQUIRED_FIELDS) <= mapped_fields:
+        return None
+    return _("The file is not in the correct format.")
 
 
 @dataclass(frozen=True)
@@ -186,7 +221,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     Parses a single row and returns either a ParsedRow or a RowResult (error).
     """
     try:
-        column_mapping = {k.lower(): v for k, v in _build_column_mapping().items()}
+        column_mapping = _lowered_column_mapping()
         mapped = {
             column_mapping[key.strip().lower()]: (
                 value.strip() if isinstance(value, str) else value
