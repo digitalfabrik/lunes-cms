@@ -5,7 +5,10 @@ specify autocomplete_fields, search_fields and nested modules
 
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from django.contrib import admin
+from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from .admins import (
@@ -19,18 +22,21 @@ from .admins import (
 from .models import Discipline, Document, Feedback, GroupAPIKey, Sponsor, TrainingSet
 
 
-def get_app_list(self, request):
+def get_app_list(
+    self: admin.AdminSite, request: HttpRequest, app_label: str | None = None
+) -> list[dict[str, Any]]:
     """
     Function that returns a sorted list of all the installed apps that have been
     registered in this site.
 
     :param self: A handle to the :class:`admin.AdminSite`
-    :type self: class: `admin.AdminSite`
     :param request: current user request
-    :type request: django.http.request
+    :param app_label: restrict the list to a single app (see
+        :class:`admin.AdminSite`'s ``app_index`` view) - forwarding this is
+        required, or visiting an app's own index page (e.g. via a breadcrumb
+        link) crashes with a ``TypeError`` (issue #896).
 
     :return: list of app dictionaries (e.g. containing models)
-    :rtype: list
     """
     ordering = {
         _("disciplines").capitalize(): 1,
@@ -41,7 +47,7 @@ def get_app_list(self, request):
     }
 
     # pylint: disable=protected-access
-    app_dict = self._build_app_dict(request)
+    app_dict = self._build_app_dict(request, app_label)
 
     # Sort the apps alphabetically.
     app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
@@ -55,7 +61,7 @@ def get_app_list(self, request):
     return app_list
 
 
-admin.AdminSite.get_app_list = get_app_list
+admin.AdminSite.get_app_list = get_app_list  # type: ignore[method-assign,assignment]
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(TrainingSet, TrainingSetAdmin)
 admin.site.register(Document, DocumentAdmin)
