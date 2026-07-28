@@ -52,7 +52,7 @@ def _build_column_mapping() -> dict[str, str]:
 
 
 def _lowered_column_mapping() -> dict[str, str]:
-    return {k.lower(): v for k, v in _build_column_mapping().items()}
+    return {key.lower(): value for key, value in _build_column_mapping().items()}
 
 
 #: Internal fields without which a row can't be imported at all — every
