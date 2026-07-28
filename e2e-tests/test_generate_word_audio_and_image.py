@@ -96,7 +96,7 @@ def test_generate_word_audio_and_image(
     request: pytest.FixtureRequest,
 ) -> None:
     def _cleanup_routes() -> None:
-        page.unroute("**/words/generate-audio-via-openai")
+        page.unroute("**/words/*/generate-audio-via-openai")
         page.unroute(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}")
         page.unroute("**/store-generated-audio-permanently")
         page.unroute("**/words/generate-image-via-openai")
