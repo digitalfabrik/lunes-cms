@@ -22,6 +22,7 @@ we should switch to a persistent queue (e.g. Celery).
 """
 
 import logging
+import re
 import threading
 import time
 
@@ -52,6 +53,35 @@ GERMAN_PRONUNCIATION_INSTRUCTION = (
 )
 
 
+def apply_pronunciation(text: str, word: str, pronunciation: str) -> tuple[str, str]:
+    """
+    Apply a word's pronunciation variant, returning ``(text, instruction)``.
+
+    Loanwords like "Baiser" are read wrong from their spelling, so editors can
+    supply a German-spelled variant. Simple occurrences are just swapped, but
+    that doesn't work for inflected forms like plurals ("Baisers"), so when
+    nothing matches we leave the text as it is and tell the model to use a
+    different pronunciation.
+
+    Returns the text unchanged and an empty instruction when no variant is set,
+    which is the case for the overwhelming majority of words.
+    """
+    if not word or not pronunciation:
+        return text, ""
+    # The replacement is a function, not a string: as a string, ``re`` would
+    # interpret backslash escapes in it, so an editor typing "Bes\see" would
+    # raise re.error instead of just being read out.
+    substituted, replacements = re.subn(
+        rf"\b{re.escape(word)}\b",
+        lambda _match: pronunciation,
+        text,
+        flags=re.IGNORECASE,
+    )
+    if replacements:
+        return substituted, ""
+    return text, (f'Pronounce "{word}" and its inflected forms as "{pronunciation}".')
+
+
 def openai_word_audio_bytes(text: str) -> bytes:
     """
     Generate mp3 bytes for a single word/term via OpenAI TTS.
@@ -72,7 +102,7 @@ def openai_word_audio_bytes(text: str) -> bytes:
     return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
 
-def openai_sentence_audio_bytes(sentence: str) -> bytes:
+def openai_sentence_audio_bytes(sentence: str, word: Word) -> bytes:
     """
     Generate mp3 bytes for an example sentence via OpenAI TTS.
 
@@ -85,12 +115,19 @@ def openai_sentence_audio_bytes(sentence: str) -> bytes:
         intonation = (
             "Read it as a declarative statement with neutral, falling intonation."
         )
-    instruction = f"{GERMAN_PRONUNCIATION_INSTRUCTION} {intonation}"
+    spoken_sentence, pronunciation_hint = apply_pronunciation(
+        sentence, word.word, word.pronunciation
+    )
+    instruction = " ".join(
+        part
+        for part in (GERMAN_PRONUNCIATION_INSTRUCTION, intonation, pronunciation_hint)
+        if part
+    )
     client = get_openai_client()
     response = client.audio.speech.create(
         model=settings.OPENAI_TTS_MODEL,
         voice=settings.OPENAI_TTS_VOICE,
-        input=sentence,
+        input=spoken_sentence,
         instructions=instruction,
     )
     audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
@@ -106,8 +143,7 @@ def _generate_for_word(word: Word) -> None:
     between them, holding no lock.
     """
     if not word.audio:
-        text = f"{word.singular_article_for_audio_generation()} {word.word}".strip()
-        data = openai_word_audio_bytes(text)
+        data = openai_word_audio_bytes(word.text_for_audio_generation())
         word.audio.save(
             f"{make_safe_filename(word.word)}.mp3",
             ContentFile(data),
@@ -115,7 +151,7 @@ def _generate_for_word(word: Word) -> None:
         logger.info("Generated word audio for word_id=%s (%s)", word.pk, word.word)
 
     if word.example_sentence and not word.example_sentence_audio:
-        data = openai_sentence_audio_bytes(word.example_sentence)
+        data = openai_sentence_audio_bytes(word.example_sentence, word)
         word.example_sentence_audio_regenerated = True
         word.example_sentence_audio.save(
             f"{make_safe_filename(word.word)}_example_sentence.mp3",

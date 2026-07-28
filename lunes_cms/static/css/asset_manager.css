@@ -191,6 +191,12 @@
     display: none !important;
 }
 
+.regen-spoken-text {
+    margin: 8px 0 0;
+    font-size: 0.9em;
+    opacity: 0.85;
+}
+
 .regen-additional-info-row {
     margin: 8px 0;
 }

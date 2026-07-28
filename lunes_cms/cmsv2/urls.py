@@ -15,7 +15,7 @@ urlpatterns = [
         "jobs/<int:job_id>/update-icon/", views.update_job_icon, name="update_job_icon"
     ),
     path(
-        "words/generate-audio-via-openai",
+        "words/<int:word_id>/generate-audio-via-openai",
         views.word_generate_audio_via_openai,
         name="word_generate_audio_via_openai",
     ),
@@ -30,7 +30,7 @@ urlpatterns = [
         name="word_store_generated_audio_permanently",
     ),
     path(
-        "words/generate-example-sentence-audio-via-openai",
+        "words/<int:word_id>/generate-example-sentence-audio-via-openai",
         views.word_generate_example_sentence_audio_via_openai,
         name="word_generate_example_sentence_audio_via_openai",
     ),
@@ -105,7 +105,7 @@ urlpatterns = [
         name="unitword_generate_example_sentence_audio",
     ),
     path(
-        "unitwordrelations/generate-example-sentence-audio-via-openai",
+        "unitwordrelations/<int:unitword_id>/generate-example-sentence-audio-via-openai",
         views.unitword_generate_example_sentence_audio_via_openai,
         name="unitword_generate_example_sentence_audio_via_openai",
     ),

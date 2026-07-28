@@ -21,7 +21,7 @@ from lunes_cms.core import settings
 @csrf_exempt
 @require_POST
 def word_generate_example_sentence_audio_via_openai(
-    request: HttpRequest,
+    request: HttpRequest, word_id: int
 ) -> JsonResponse:
     """
     AJAX endpoint to generate example sentence audio using OpenAI and save it temporarily.
@@ -32,10 +32,12 @@ def word_generate_example_sentence_audio_via_openai(
     if not example_sentence_text:
         return JsonResponse({"error": "No example_sentence_text provided."}, status=400)
 
+    word = get_object_or_404(Word, pk=word_id)
+
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
-        audio_bytes = openai_sentence_audio_bytes(example_sentence_text)
+        audio_bytes = openai_sentence_audio_bytes(example_sentence_text, word)
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)

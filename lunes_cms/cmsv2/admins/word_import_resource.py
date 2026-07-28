@@ -33,6 +33,9 @@ def _build_column_mapping() -> dict[str, str]:
         # plural article
         "Plural Article": "plural_article",
         "Pluralartikel": "plural_article",
+        # pronunciation
+        "Pronunciation": "pronunciation",
+        "Aussprache": "pronunciation",
         # example sentence
         "Example sentence": "example",
         "Beispielsatz": "example",
@@ -56,6 +59,7 @@ class ParsedRow:
     article: str
     plural: str = ""
     plural_article: str = ""
+    pronunciation: str = ""
     example: str = ""
 
 
@@ -114,20 +118,20 @@ def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
 
 
 def create_word(
-    word_text: str,
+    parsed: ParsedRow,
     singular_article: int,
     plural_article: int | None,
     creator_fields: dict,
-    plural: str = "",
 ) -> Word:
     """
     Creates a new word object.
     """
     return Word.objects.create(
-        word=word_text,
+        word=parsed.word,
         singular_article=singular_article,
         plural_article=plural_article,
-        plural=plural,
+        plural=parsed.plural,
+        pronunciation=parsed.pronunciation,
         **creator_fields,
     )
 
@@ -207,6 +211,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         article = mapped.get("article", "").lower()
         plural = mapped.get("plural", "")
         plural_article = mapped.get("plural_article", "")
+        pronunciation = mapped.get("pronunciation", "")
         example = mapped.get("example", "")
 
         return ParsedRow(
@@ -215,6 +220,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             article=article,
             plural=plural,
             plural_article=plural_article,
+            pronunciation=pronunciation,
             example=example,
         )
 
@@ -262,9 +268,7 @@ def process_row(
 
     article_int = map_article_to_int(parsed.article)
     plural_article_int = map_plural_article_to_int(parsed.plural_article)
-    word = create_word(
-        parsed.word, article_int, plural_article_int, creator_fields, parsed.plural
-    )
+    word = create_word(parsed, article_int, plural_article_int, creator_fields)
 
     update_or_add_example_sentence(word, {"example_sentence": parsed.example})
 

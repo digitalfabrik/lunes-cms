@@ -68,6 +68,17 @@ class Word(models.Model):
         blank=True,
         null=True,
     )
+    pronunciation = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        verbose_name=_("pronunciation"),
+        help_text=_(
+            "Only for loanwords that the speech synthesis mispronounces (e.g. "
+            "'Baiser'). Write how the word should sound, spelled out in German "
+            "(e.g. 'Besee') - not phonetic notation! Leave empty otherwise."
+        ),
+    )
     audio = models.FileField(
         upload_to=convert_umlaute_audio,
         validators=[
@@ -223,6 +234,8 @@ class Word(models.Model):
         audio_updated = self._audio_changed(previous_word)
         image_updated = self._image_changed(previous_word)
 
+        if self._pronunciation_changed(previous_word):
+            self._flag_stale_audio_for_review()
         self._update_audio_status(previous_word, audio_updated)
         self._update_image_status(image_updated)
         self._handle_example_sentence_change(previous_word)
@@ -279,6 +292,22 @@ class Word(models.Model):
         if not self.example_sentence or not self.example_sentence.strip():
             self.example_sentence_check_status = None
 
+    def _pronunciation_changed(self, previous_word: "Word | None") -> bool:
+        return bool(
+            self.pk
+            and previous_word
+            and previous_word.pronunciation != self.pronunciation
+        )
+
+    def _flag_stale_audio_for_review(self) -> None:
+        if self.audio:
+            self.audio_check_status = CheckStatus.NOT_CHECKED
+        if self.example_sentence_audio:
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
+        self.unit_word_relations.exclude(example_sentence_audio="").exclude(
+            example_sentence_audio__isnull=True
+        ).update(example_sentence_check_status=CheckStatus.NOT_CHECKED)
+
     def _post_save_conversions(self, audio_updated: bool, image_updated: bool) -> None:
         if audio_updated:
             self.convert_audio()
@@ -303,6 +332,13 @@ class Word(models.Model):
         if self.singular_article == SingularArticle.DIE_PLURAL:
             return "die"
         return SingularArticle(self.singular_article).label
+
+    def text_for_audio_generation(self) -> str:
+        """
+        The text spoken for this word's own audio: article plus term (or pronunciation)
+        """
+        spoken_term = self.pronunciation or self.word
+        return f"{self.singular_article_for_audio_generation()} {spoken_term}".strip()
 
     def image_tag(self, width: int = 120) -> SafeString:
         """

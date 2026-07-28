@@ -20,15 +20,16 @@ from lunes_cms.core import settings
 @staff_member_required
 @csrf_exempt
 @require_POST
-def word_generate_audio_via_openai(request: HttpRequest) -> JsonResponse:
+def word_generate_audio_via_openai(_request: HttpRequest, word_id: int) -> JsonResponse:
     """
     AJAX endpoint to generate audio using OpenAI and save it temporarily.
     Returns the URL/path to the temporary file.
     """
 
-    word_text = request.POST.get("word_text")
+    word = get_object_or_404(Word, pk=word_id)
+    word_text = word.text_for_audio_generation()
     if not word_text:
-        return JsonResponse({"error": "No word_text provided."}, status=400)
+        return JsonResponse({"error": "Word has no text to speak."}, status=400)
 
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 

@@ -812,6 +812,10 @@ msgstr "Hat vollständigen Beispielsatz"
 msgid "Word Information"
 msgstr "Wort Informationen"
 
+#: cmsv2/admins/word_admin.py cmsv2/admins/word_export_resource.py
+msgid "Pronunciation"
+msgstr "Aussprache"
+
 #: cmsv2/admins/word_admin.py
 msgid "Audio"
 msgstr "Audio"
@@ -827,6 +831,10 @@ msgstr "Beispielsatz"
 #: cmsv2/admins/word_admin.py
 msgid "Miscellaneous"
 msgstr "Verschiedene"
+
+#: cmsv2/admins/word_admin.py
+msgid "Will be spoken:"
+msgstr "Gesprochen wird:"
 
 #: cmsv2/admins/word_admin.py
 msgid "Additional info (optional)"
@@ -1123,6 +1131,20 @@ msgid "Unit"
 msgstr "Einheit"
 
 #: cmsv2/models/word.py
+msgid "pronunciation"
+msgstr "Aussprache"
+
+#: cmsv2/models/word.py
+msgid ""
+"Only for loanwords that the speech synthesis mispronounces (e.g. 'Baiser'). "
+"Write how the word should sound, spelled out in German (e.g. 'Besee') - not "
+"phonetic notation! Leave empty otherwise."
+msgstr ""
+"Nur für Lehnwörter, die die Sprachausgabe falsch ausspricht (z. B. "
+"„Baiser“). Schreibe, wie das Wort klingen soll, in deutscher Lautschreibung "
+"(z.B. „Besee“) - keine phonetische Umschrift! Ansonsten leer lassen."
+
+#: cmsv2/models/word.py
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
@@ -1195,10 +1217,10 @@ msgstr "CSV Datei auswählen"
 #: cmsv2/views/import_csv_view.py
 msgid ""
 "The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
-"and \"Beispielsatz\"."
+"and \"Beispielsatz\", optionally also \"Aussprache\"."
 msgstr ""
 "Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
-"\"Beispielsatz\" enthalten."
+"\"Beispielsatz\" enthalten, optional zusätzlich \"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format

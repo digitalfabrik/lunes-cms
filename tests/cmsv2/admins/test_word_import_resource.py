@@ -340,3 +340,46 @@ def test_import_raises_if_user_has_no_group_and_is_not_superuser(
     )
     with pytest.raises(IndexError):
         import_words_from_csv(ds, job, orphan_user)
+
+
+# ---------------------------------------------------------------------------
+# pronunciation column
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("header", ["Aussprache", "Pronunciation"])
+def test_parse_row_reads_the_pronunciation_column(header: str) -> None:
+    row = {
+        "Einheit": "Backwaren",
+        "Vokabel": "Baiser",
+        "Artikel": "das",
+        header: "Bessee",
+    }
+
+    result = parse_row(row, 1)
+
+    assert isinstance(result, ParsedRow)
+    assert result.pronunciation == "Bessee"
+
+
+def test_parse_row_defaults_pronunciation_to_empty() -> None:
+    row = {"Einheit": "Werkzeug", "Vokabel": "Hammer", "Artikel": "der"}
+
+    result = parse_row(row, 1)
+
+    assert isinstance(result, ParsedRow)
+    assert result.pronunciation == ""
+
+
+@pytest.mark.django_db
+def test_import_stores_pronunciation_on_the_word(job: Job, user: User) -> None:
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel", "Aussprache"],
+        [["Backwaren", "Baiser", "das", "Bessee"], ["Werkzeug", "Hammer", "der", ""]],
+    )
+
+    _, _, errors, _ = import_words_from_csv(ds, job, user)
+
+    assert errors == []
+    assert _job_words(job).get(word="Baiser").pronunciation == "Bessee"
+    assert _job_words(job).get(word="Hammer").pronunciation == ""

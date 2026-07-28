@@ -226,6 +226,10 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
+            _("Pronunciation"),
+            {"fields": ("pronunciation",)},
+        ),
+        (
             _("Audio"),
             {
                 "fields": (
@@ -346,6 +350,7 @@ class WordAdmin(BaseAdmin):
         generate_label: _StrOrPromise,
         regenerate_label: _StrOrPromise,
         with_additional_info: bool = False,
+        spoken_text: str = "",
     ) -> SafeString:
         """
         Render an inline (re)generation widget for the change page.
@@ -354,7 +359,17 @@ class WordAdmin(BaseAdmin):
         leaving the page, shows the current and the newly generated version
         side by side for comparison, and lets the user keep the new one or
         discard it and keep the current one.
+
+        ``spoken_text`` is shown above the buttons as a reminder to save first.
         """
+        spoken_text_html: _StrOrPromise = ""
+        if spoken_text:
+            spoken_text_html = format_html(
+                '<div class="regen-spoken-text">{} „{}“</div>',
+                _("Will be spoken:"),
+                spoken_text,
+            )
+
         additional_info_html: _StrOrPromise = ""
         if with_additional_info:
             additional_info_html = format_html(
@@ -381,6 +396,7 @@ class WordAdmin(BaseAdmin):
             '<div class="regen-new-preview"></div>'
             "</div>"
             "</div>"
+            "{spoken_text_html}"
             "{additional_info_html}"
             '<div class="regen-toolbar">'
             '<button type="button" class="btn btn-primary btn-sm regen-generate-btn" '
@@ -403,6 +419,7 @@ class WordAdmin(BaseAdmin):
             new_label=_("New"),
             empty_label=_("Not generated yet"),
             current_preview=current_preview,
+            spoken_text_html=spoken_text_html,
             additional_info_html=additional_info_html,
             generate_label=generate_label,
             regenerate_label=regenerate_label,
@@ -431,16 +448,17 @@ class WordAdmin(BaseAdmin):
             current_preview = _("No audio yet.")
         return self._render_regenerate_widget(
             asset_type="audio",
-            generate_url=reverse("cmsv2:word_generate_audio_via_openai"),
+            generate_url=reverse("cmsv2:word_generate_audio_via_openai", args=[obj.pk]),
             store_url=reverse(
                 "cmsv2:word_store_generated_audio_permanently", args=[obj.pk]
             ),
             text_field="word_text",
-            text_value=f"{obj.singular_article_for_audio_generation()} {obj.word}",
+            text_value=obj.text_for_audio_generation(),
             store_field="temp_audio_filename",
             current_preview=current_preview,
             generate_label=_("Generate audio"),
             regenerate_label=_("Regenerate audio"),
+            spoken_text=obj.text_for_audio_generation(),
         )
 
     audio_generate.short_description = _("Audio Generation")  # type: ignore[attr-defined]
@@ -511,7 +529,7 @@ class WordAdmin(BaseAdmin):
         return self._render_regenerate_widget(
             asset_type="audio",
             generate_url=reverse(
-                "cmsv2:word_generate_example_sentence_audio_via_openai"
+                "cmsv2:word_generate_example_sentence_audio_via_openai", args=[obj.pk]
             ),
             store_url=reverse(
                 "cmsv2:word_store_generated_example_sentence_audio_permanently",

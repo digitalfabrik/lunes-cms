@@ -47,7 +47,7 @@ def unitword_generate_example_sentence_audio(
 @csrf_exempt
 @require_POST
 def unitword_generate_example_sentence_audio_via_openai(
-    request: HttpRequest,
+    request: HttpRequest, unitword_id: int
 ) -> JsonResponse:
     """
     AJAX endpoint to generate example sentence audio using OpenAI and save it temporarily.
@@ -58,10 +58,16 @@ def unitword_generate_example_sentence_audio_via_openai(
     if not example_sentence_text:
         return JsonResponse({"error": "No example_sentence_text provided."}, status=400)
 
+    unitword_instance = get_object_or_404(
+        UnitWordRelation.objects.select_related("word"), pk=unitword_id
+    )
+
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
-        audio_bytes = openai_sentence_audio_bytes(example_sentence_text)
+        audio_bytes = openai_sentence_audio_bytes(
+            example_sentence_text, unitword_instance.word
+        )
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)

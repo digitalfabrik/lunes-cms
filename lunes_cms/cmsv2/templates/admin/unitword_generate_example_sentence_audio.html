@@ -26,7 +26,7 @@
     </div>
 {% endblock %}
 
-{% block generate_url %}{% url "cmsv2:unitword_generate_example_sentence_audio_via_openai" %}{% endblock %}
+{% block generate_url %}{% url "cmsv2:unitword_generate_example_sentence_audio_via_openai" unitword_instance.pk %}{% endblock %}
 
 {% block text_field_name %}example_sentence_text{% endblock %}
 
