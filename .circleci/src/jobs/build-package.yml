@@ -13,6 +13,9 @@ steps:
         uv pip install .
         python -m build --sdist .
         python -m build --wheel .
+  - store_artifacts:
+      path: dist
+      destination: dist
   - persist_to_workspace:
       root: .
       paths:

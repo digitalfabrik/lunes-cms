@@ -8,19 +8,11 @@ steps:
   - install-uv
   - restore_cache:
       key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
-  - run:
-      name: Create virtual environment
-      command: |
-        if [[ -d ".venv" ]]; then
-          echo "Virtual environment restored from cache, skipping install"
-        else
-          uv sync --extra dev --locked
-        fi
+  - sync-venv
   - save_cache:
       key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
       paths:
         - .venv
-        - lunes_cms.egg-info
         - /home/circleci/.cache/uv
   - run:
       name: Migrate database
