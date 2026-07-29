@@ -96,7 +96,7 @@ def test_generate_word_audio_and_image(
     request: pytest.FixtureRequest,
 ) -> None:
     def _cleanup_routes() -> None:
-        page.unroute("**/words/generate-audio-via-openai")
+        page.unroute("**/words/*/generate-audio-via-openai")
         page.unroute(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}")
         page.unroute("**/store-generated-audio-permanently")
         page.unroute("**/words/generate-image-via-openai")
@@ -124,7 +124,7 @@ def test_generate_word_audio_and_image(
         rf"{re.escape(base_url)}/de/admin/cmsv2/word/{word_id}/change/"
     )
 
-    page.route("**/words/generate-audio-via-openai", _fulfill_generate_audio)
+    page.route("**/words/*/generate-audio-via-openai", _fulfill_generate_audio)
     page.route(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}", _fulfill_mock_audio_file)
     page.route("**/store-generated-audio-permanently", _fulfill_store_success)
     page.route("**/words/generate-image-via-openai", _fulfill_generate_image)
@@ -158,6 +158,14 @@ def test_generate_word_audio_and_image(
         with page.expect_response(re.compile(r"store-generated-audio-permanently")):
             audio_widget.locator(".regen-keep-btn").click()
         expect(page).to_have_url(change_url)
+
+    page.locator("[name=pronunciation]").scroll_into_view_if_needed()
+
+    with document.step(
+        "Falsche Aussprache korrigieren (optional)",
+        description='Klingt das generierte Audio falsch — typisch bei Lehnwörtern wie **„Baiser"** —, tragen Sie im Bereich **„Aussprache"** ein, wie das Wort klingen soll, z. B. `Besee`. **Speichern Sie das Wort anschließend** und generieren Sie das Audio erneut. Ohne Speichern verwendet die Generierung weiterhin die alte Aussprache — unter dem Button steht jeweils, was tatsächlich gesprochen wird.',
+    ):
+        pass
 
     image_widget.scroll_into_view_if_needed()
 

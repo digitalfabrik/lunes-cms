@@ -69,6 +69,7 @@ class WordSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
+            "pronunciation",
             "alternative_words",
             "images",
             "audio",

@@ -77,6 +77,14 @@ def test_add_word(
     ):
         pass
 
+    # left empty: "Maus" is pronounced as it is written
+    page.locator("[name=pronunciation]").scroll_into_view_if_needed()
+    with document.step(
+        "Aussprache prüfen (optional)",
+        description='Lassen Sie das Feld **„Aussprache"** in der Regel leer. Füllen Sie es nur aus, wenn die Sprachausgabe ein Lehnwort falsch ausspricht - tragen Sie dann ein, wie das Wort klingen soll, z. B. `Besee` für **„Baiser"**. Der Eintrag wird für die Audiogenerierung der Vokabel und des Beispielsatzes verwendet, die Schreibweise in der App bleibt unverändert.',
+    ):
+        pass
+
     page.locator("[name=audio]").scroll_into_view_if_needed()
     page.set_input_files("[name=audio]", str(ASSETS_DIR / "test_sound.mp3"))
     with document.step(

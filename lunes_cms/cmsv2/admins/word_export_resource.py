@@ -66,6 +66,10 @@ class WordExportResource(resources.ModelResource):
         except ValueError:
             return "-"
 
+    pronunciation = fields.Field(
+        column_name=_("Pronunciation"), attribute="pronunciation"
+    )
+
     has_audio = fields.Field(column_name=_("Has audio?"), attribute="word")
 
     def dehydrate_has_audio(self, word: Word) -> "_StrOrPromise":
@@ -115,6 +119,7 @@ class WordExportResource(resources.ModelResource):
             "singular_article",
             "plural",
             "plural_article",
+            "pronunciation",
             "has_audio",
             "example_sentence",
             "creation_date",

@@ -134,7 +134,7 @@ def test_admin_methods_render_inline_regenerate_widget(db: None) -> None:
     audio_html = str(word_admin.audio_generate(word))
     assert "inline-regenerate" in audio_html
     assert 'data-asset-type="audio"' in audio_html
-    assert reverse("cmsv2:word_generate_audio_via_openai") in audio_html
+    assert reverse("cmsv2:word_generate_audio_via_openai", args=[word.pk]) in audio_html
     assert (
         reverse("cmsv2:word_store_generated_audio_permanently", args=[word.pk])
         in audio_html

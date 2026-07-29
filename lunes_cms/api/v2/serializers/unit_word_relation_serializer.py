@@ -17,6 +17,7 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="word.id")
     word = serializers.CharField(source="word.word")
     article = serializers.CharField(source="word.singular_article_as_text")
+    pronunciation = serializers.CharField(source="word.pronunciation")
     alternative_words = AlternativeWordSerializer(
         many=True, read_only=True, source="word.alternative_words"
     )
@@ -93,6 +94,7 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
             "id",
             "word",
             "article",
+            "pronunciation",
             "alternative_words",
             "images",
             "audio",

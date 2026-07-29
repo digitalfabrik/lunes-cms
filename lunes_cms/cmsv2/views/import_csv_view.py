@@ -34,7 +34,8 @@ class ImportCSVForm(forms.Form):
     csv_file = forms.FileField(
         label=_("Select CSV file"),
         help_text=_(
-            'The file should contain the columns "Einheit", "Artikel", "Vokabel" and "Beispielsatz".'
+            'The file should contain the columns "Einheit", "Artikel", "Vokabel" '
+            'and "Beispielsatz", optionally also "Aussprache".'
         ),
     )
 

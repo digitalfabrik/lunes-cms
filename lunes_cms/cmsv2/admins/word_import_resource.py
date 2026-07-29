@@ -39,6 +39,9 @@ def _build_column_mapping() -> dict[str, str]:
         # plural article
         "Plural Article": "plural_article",
         "Pluralartikel": "plural_article",
+        # pronunciation
+        "Pronunciation": "pronunciation",
+        "Aussprache": "pronunciation",
         # example sentence
         "Example sentence": "example",
         "Beispielsatz": "example",
@@ -84,9 +87,9 @@ def validate_header_structure(
 
 
 @dataclass(frozen=True)
-class ParsedRow:
+class ParsedRow:  # pylint: disable=too-many-instance-attributes
     """
-    Cleaned data for a single row
+    Cleaned data for a single row: one attribute per recognised CSV column.
     """
 
     unit: str
@@ -94,6 +97,7 @@ class ParsedRow:
     article: str
     plural: str = ""
     plural_article: str = ""
+    pronunciation: str = ""
     example: str = ""
     word_type: str = ""
 
@@ -169,6 +173,7 @@ class WordAttributes:
     singular_article: int
     plural_article: int | None
     plural: str = ""
+    pronunciation: str = ""
     word_type: str = ""
 
 
@@ -183,6 +188,7 @@ def create_word(
         singular_article=attributes.singular_article,
         plural_article=attributes.plural_article,
         plural=attributes.plural,
+        pronunciation=attributes.pronunciation,
         word_type=attributes.word_type,
         **creator_fields,
     )
@@ -263,6 +269,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
         article = mapped.get("article", "").lower()
         plural = mapped.get("plural", "")
         plural_article = mapped.get("plural_article", "")
+        pronunciation = mapped.get("pronunciation", "")
         example = mapped.get("example", "")
         word_type = mapped.get("word_type", "")
 
@@ -272,6 +279,7 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             article=article,
             plural=plural,
             plural_article=plural_article,
+            pronunciation=pronunciation,
             example=example,
             word_type=word_type,
         )
@@ -354,6 +362,7 @@ def process_row(
         singular_article=map_article_to_int(parsed.article),
         plural_article=map_plural_article_to_int(parsed.plural_article),
         plural=parsed.plural,
+        pronunciation=parsed.pronunciation,
         word_type=map_word_type(parsed.word_type),
     )
     word = create_word(parsed.word, attributes, creator_fields)

@@ -156,13 +156,13 @@ msgstr "Pluralartikel"
 msgid "Has audio?"
 msgstr "Audio"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
-#: cmsv2/admins/word_export_resource.py
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/admins/word_filters.py
 msgid "Yes"
 msgstr "Ja"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
-#: cmsv2/admins/word_export_resource.py
+#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/admins/word_filters.py
 msgid "No"
 msgstr "Nein"
 
@@ -674,17 +674,17 @@ msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_filters.py
 msgid "migration status"
 msgstr "Ablaufdatum"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_filters.py
 msgid "Migrated from old data model"
 msgstr "Migriert aus altem Datenmodell"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_filters.py
 msgid "Not migrated from old data model"
 msgstr "Nicht migriert aus altem Datenmodell"
 
@@ -802,18 +802,6 @@ msgid "assigned units"
 msgstr "Zugewiesene Einheiten"
 
 #: cmsv2/admins/word_admin.py
-msgid "Has Image"
-msgstr "Hat Bild"
-
-#: cmsv2/admins/word_admin.py
-msgid "Unit or Job"
-msgstr "Einheit oder Job"
-
-#: cmsv2/admins/word_admin.py
-msgid "Has Complete Example Sentence"
-msgstr "Hat vollständigen Beispielsatz"
-
-#: cmsv2/admins/word_admin.py
 msgid "So heißt das auch"
 msgstr "So heißt das auch"
 
@@ -833,6 +821,10 @@ msgstr "Alternatives Wort löschen"
 msgid "Word Information"
 msgstr "Wort Informationen"
 
+#: cmsv2/admins/word_admin.py cmsv2/admins/word_export_resource.py
+msgid "Pronunciation"
+msgstr "Aussprache"
+
 #: cmsv2/admins/word_admin.py
 msgid "Audio"
 msgstr "Audio"
@@ -844,6 +836,10 @@ msgstr "Bilder"
 #: cmsv2/admins/word_admin.py
 msgid "Example Sentence"
 msgstr "Beispielsatz"
+
+#: cmsv2/admins/word_admin.py
+msgid "Will be spoken:"
+msgstr "Gesprochen wird:"
 
 #: cmsv2/admins/word_admin.py
 msgid "Additional info (optional)"
@@ -937,6 +933,18 @@ msgstr "Plural"
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Units"
 msgstr "Einheit"
+
+#: cmsv2/admins/word_filters.py
+msgid "Has Image"
+msgstr "Hat Bild"
+
+#: cmsv2/admins/word_filters.py
+msgid "Unit or Job"
+msgstr "Einheit oder Job"
+
+#: cmsv2/admins/word_filters.py
+msgid "Has Complete Example Sentence"
+msgstr "Hat vollständigen Beispielsatz"
 
 #: cmsv2/admins/word_import_resource.py
 msgid "The file is not in the correct format."
@@ -1144,6 +1152,20 @@ msgid "Unit"
 msgstr "Einheit"
 
 #: cmsv2/models/word.py
+msgid "pronunciation"
+msgstr "Aussprache"
+
+#: cmsv2/models/word.py
+msgid ""
+"Only for loanwords that the speech synthesis mispronounces (e.g. 'Baiser'). "
+"Write how the word should sound, spelled out in German (e.g. 'Besee') - not "
+"phonetic notation! Leave empty otherwise."
+msgstr ""
+"Nur für Lehnwörter, die die Sprachausgabe falsch ausspricht (z. B. "
+"„Baiser“). Schreibe, wie das Wort klingen soll, in deutscher Lautschreibung "
+"(z.B. „Besee“) - keine phonetische Umschrift! Ansonsten leer lassen."
+
+#: cmsv2/models/word.py
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
 
@@ -1216,10 +1238,10 @@ msgstr "CSV Datei auswählen"
 #: cmsv2/views/import_csv_view.py
 msgid ""
 "The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
-"and \"Beispielsatz\"."
+"and \"Beispielsatz\", optionally also \"Aussprache\"."
 msgstr ""
 "Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
-"\"Beispielsatz\" enthalten."
+"\"Beispielsatz\" enthalten, optional zusätzlich \"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format

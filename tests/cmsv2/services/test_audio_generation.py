@@ -18,17 +18,6 @@ from lunes_cms.cmsv2.services import audio_generation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
-@pytest.fixture(autouse=True)
-def _bypass_audio_conversion() -> Generator[None, None, None]:
-    """
-    Word.save() runs ``convert_audio()`` (ffmpeg re-encodes the mp3) when an
-    audio file is set. We feed dummy bytes through the worker, so skip the
-    conversion step in tests.
-    """
-    with mock.patch.object(Word, "convert_audio", lambda self: None):
-        yield
-
-
 @pytest.fixture
 def fast_worker(transactional_db: None) -> Generator[None, None, None]:
     """
@@ -323,7 +312,9 @@ def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
             audio_generation, "normalize_loudness", side_effect=lambda data, _lufs: data
         ),
     ):
-        audio_generation.openai_sentence_audio_bytes("Ist das eine Robinie?")
+        audio_generation.openai_sentence_audio_bytes(
+            "Ist das eine Robinie?", Word(word="Robinie")
+        )
 
     instructions = fake_client.audio.speech.create.call_args.kwargs["instructions"]
     assert instructions.startswith(audio_generation.GERMAN_PRONUNCIATION_INSTRUCTION)
@@ -334,11 +325,14 @@ def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
     "generate, args",
     [
         (audio_generation.openai_word_audio_bytes, ("der Apfel",)),
-        (audio_generation.openai_sentence_audio_bytes, ("Das ist ein Apfel.",)),
+        (
+            audio_generation.openai_sentence_audio_bytes,
+            ("Das ist ein Apfel.", Word(word="Apfel")),
+        ),
     ],
 )
 def test_generated_audio_is_loudness_normalized(
-    generate: Callable[..., bytes], args: tuple[str, ...]
+    generate: Callable[..., bytes], args: tuple[Any, ...]
 ) -> None:
     """
     Word and sentence audio come back from the model at different levels, so
@@ -378,3 +372,143 @@ def test_convert_umlaute_audio_keeps_word_name(filename: str, expected: str) -> 
     # the implementation ignores its first argument entirely; passing None
     # mirrors how Django itself would call this for an unsaved instance.
     assert convert_umlaute_audio(None, filename) == expected  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    "sentence, expected_text",
+    [
+        # Whole-word match: swapped outright.
+        ("Ich backe ein Baiser.", "Ich backe ein Bessee."),
+        # Case-insensitive, because the headword may open the sentence.
+        ("baiser schmeckt süß.", "Bessee schmeckt süß."),
+        # Every occurrence, not just the first.
+        ("Ein Baiser ist ein Baiser.", "Ein Bessee ist ein Bessee."),
+    ],
+)
+def test_apply_pronunciation_substitutes_whole_words(
+    sentence: str, expected_text: str
+) -> None:
+    text, instruction = audio_generation.apply_pronunciation(
+        sentence, "Baiser", "Bessee"
+    )
+
+    assert text == expected_text
+    assert instruction == ""
+
+
+def test_apply_pronunciation_ignores_substring_matches() -> None:
+    """
+    "Baiser" inside "Baiserboden" is a different word; respelling part of a
+    compound would produce nonsense audio.
+    """
+    text, instruction = audio_generation.apply_pronunciation(
+        "Der Baiserboden ist fertig.", "Baiser", "Bessee"
+    )
+
+    assert text == "Der Baiserboden ist fertig."
+    assert "Baiser" in instruction
+
+
+@pytest.mark.parametrize("variant", ["Bes\\see", "\\1Bessee", "Bes\\gee"])
+def test_apply_pronunciation_treats_the_variant_as_literal_text(variant: str) -> None:
+    """
+    A backslash typed into the field is just a character, not a regex escape -
+    otherwise the substitution would raise re.error and 500 the admin widget.
+    """
+    text, instruction = audio_generation.apply_pronunciation(
+        "Ich backe ein Baiser.", "Baiser", variant
+    )
+
+    assert text == f"Ich backe ein {variant}."
+    assert instruction == ""
+
+
+def test_apply_pronunciation_falls_back_to_instruction_for_inflected_form() -> None:
+    """
+    German inflects, so the exact headword often doesn't appear. Rather than
+    leave the loanword mispronounced, steer the model with an instruction.
+    """
+    text, instruction = audio_generation.apply_pronunciation(
+        "Die Baisers sind fertig.", "Baiser", "Bessee"
+    )
+
+    assert text == "Die Baisers sind fertig."
+    assert instruction == 'Pronounce "Baiser" and its inflected forms as "Bessee".'
+
+
+@pytest.mark.parametrize(
+    "word, pronunciation",
+    [("Baiser", ""), ("", "Bessee"), ("", "")],
+)
+def test_apply_pronunciation_is_a_noop_without_a_variant(
+    word: str, pronunciation: str
+) -> None:
+    """The overwhelming majority of words carry no variant."""
+    text, instruction = audio_generation.apply_pronunciation(
+        "Ich backe ein Baiser.", word, pronunciation
+    )
+
+    assert text == "Ich backe ein Baiser."
+    assert instruction == ""
+
+
+@pytest.mark.parametrize(
+    "sentence, expected_input, expected_hint",
+    [
+        # Exact occurrence: swapped in the text, no hint needed.
+        ("Ich backe ein Baiser.", "Ich backe ein Bessee.", ""),
+        # Inflected: text untouched, the model is steered instead.
+        ("Die Baisers sind fertig.", "Die Baisers sind fertig.", 'as "Bessee"'),
+    ],
+)
+def test_sentence_audio_applies_the_pronunciation_variant(
+    sentence: str, expected_input: str, expected_hint: str
+) -> None:
+    fake_client = _fake_openai_client()
+
+    with (
+        mock.patch.object(
+            audio_generation, "get_openai_client", return_value=fake_client
+        ),
+        mock.patch.object(
+            audio_generation, "normalize_loudness", side_effect=lambda data, _lufs: data
+        ),
+    ):
+        audio_generation.openai_sentence_audio_bytes(
+            sentence, Word(word="Baiser", pronunciation="Bessee")
+        )
+
+    create_kwargs = fake_client.audio.speech.create.call_args.kwargs
+    assert create_kwargs["input"] == expected_input
+    instructions = create_kwargs["instructions"]
+    # The shared German instruction survives the variant.
+    assert instructions.startswith(audio_generation.GERMAN_PRONUNCIATION_INSTRUCTION)
+    assert expected_hint in instructions
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_uses_pronunciation_for_word_and_sentence_audio(
+    fast_worker: None,
+) -> None:
+    """
+    A CSV import must respect the variant for both recordings it generates,
+    not just the word-level one.
+    """
+    word = _make_word(
+        word="Baiser",
+        pronunciation="Bessee",
+        example_sentence="Ich backe ein Baiser.",
+    )
+
+    with (
+        mock.patch.object(
+            audio_generation, "openai_word_audio_bytes", return_value=b"w"
+        ) as word_call,
+        mock.patch.object(
+            audio_generation, "openai_sentence_audio_bytes", return_value=b"s"
+        ) as sentence_call,
+    ):
+        _run_drain()
+
+    assert word_call.call_args.args[0] == "der Bessee"
+    assert sentence_call.call_args.args == ("Ich backe ein Baiser.", word)

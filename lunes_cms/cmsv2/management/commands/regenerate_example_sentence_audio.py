@@ -2,8 +2,9 @@
 Management command to regenerate example sentence audio using the new TTS model.
 
 This command processes words and unit-word relations one at a time, regenerating
-their example sentence audio with the gpt-4o-mini-tts model which supports
-instructions for proper intonation.
+their example sentence audio through the same service the admin and the CSV
+import use, so intonation, the German pronunciation instruction, pronunciation
+variants and loudness normalisation all match everywhere.
 """
 
 from __future__ import annotations
@@ -17,7 +18,8 @@ from django.core.management.base import BaseCommand, CommandParser
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
-from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
+from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
+from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -206,6 +208,9 @@ class Command(BaseCommand):
         """
         Regenerate the example sentence audio for a Word or UnitWordRelation.
 
+        Any pronunciation variant on the word is applied, same as in the admin
+        and the CSV import.
+
         Args:
             instance: The Word or UnitWordRelation instance to process.
             example_sentence: The example sentence text.
@@ -215,25 +220,10 @@ class Command(BaseCommand):
             bool: True if successful, False otherwise.
         """
         try:
-            client = get_openai_client()
-
-            # Determine instruction based on sentence ending
-            if example_sentence.strip().endswith("?"):
-                instruction = "Read this sentence as a question with rising intonation."
-            else:
-                instruction = "Read this sentence as a declarative statement with neutral, falling intonation."
-
-            response = client.audio.speech.create(
-                model="gpt-4o-mini-tts",
-                voice="nova",
-                input=example_sentence,
-                instructions=instruction,
-            )
-
-            # Read the audio content
-            audio_content = b""
-            for chunk in response.iter_bytes(chunk_size=4096):
-                audio_content += chunk
+            # A UnitWordRelation has its own sentence but uses the pronunciation
+            # helper of the word
+            word = instance.word if isinstance(instance, UnitWordRelation) else instance
+            audio_content = openai_sentence_audio_bytes(example_sentence, word)
 
             content_file = ContentFile(audio_content, name=filename)
 
