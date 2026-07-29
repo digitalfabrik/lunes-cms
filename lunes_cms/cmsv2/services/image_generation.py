@@ -37,10 +37,16 @@ def build_image_prompt(
     unit_title: str | None = None,
     additional_info: str | None = None,
     job_title: str | None = None,
+    allow_text_in_image: bool = False,
 ) -> str:
     """
     Build the German image-generation prompt shared by the on-demand admin
     view and the background import drain.
+
+    Most vocabulary items look wrong with any text/numbers/logos in the
+    picture (issue #918), so that's banned by default. Some items (a receipt,
+    a clock face, a calendar) are inherently defined by the text/numbers on
+    them, so ``allow_text_in_image`` lets an editor lift the ban for those.
     """
     prompt = (
         f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
@@ -55,10 +61,11 @@ def build_image_prompt(
     )
     if additional_info:
         prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
-    prompt += (
-        " Das Bild enthält keinerlei Text, Buchstaben, Zahlen,"
-        " Beschriftungen, Untertitel oder Logos."
-    )
+    if not allow_text_in_image:
+        prompt += (
+            " Das Bild enthält keinerlei Text, Buchstaben, Zahlen,"
+            " Beschriftungen, Untertitel oder Logos."
+        )
     return prompt
 
 

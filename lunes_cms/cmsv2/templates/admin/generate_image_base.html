@@ -20,7 +20,14 @@
     <div class="module">
         {% block image_info %}{% endblock %}
 
-        <div style="margin-top: 16px; margin-bottom: 16px;">
+        <div style="margin-top: 16px;">
+            <label>
+                <input id="prompt-allow-text" type="checkbox">
+                {% translate "Allow text/numbers in the image (e.g. for a receipt or a clock face)" %}
+            </label>
+        </div>
+
+        <div style="margin-top: 8px; margin-bottom: 16px;">
             <label for="prompt-additional-info">
                <strong>Additional Info (optional):</strong>
             </label>

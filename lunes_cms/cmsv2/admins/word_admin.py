@@ -276,10 +276,16 @@ class WordAdmin(BaseAdmin):
         additional_info_html: _StrOrPromise = ""
         if with_additional_info:
             additional_info_html = format_html(
+                '<div class="regen-allow-text-row">'
+                '<label><input type="checkbox" class="regen-allow-text"> {}</label>'
+                "</div>"
                 '<div class="regen-additional-info-row">'
                 "<label>{} "
                 '<input type="text" class="regen-additional-info"></label>'
                 "</div>",
+                _(
+                    "Allow text/numbers in the image (e.g. for a receipt or a clock face)"
+                ),
                 _("Additional info (optional)"),
             )
 

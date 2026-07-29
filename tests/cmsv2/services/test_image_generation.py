@@ -237,6 +237,20 @@ def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     assert "Tischler/in" in enriched
 
 
+def test_build_image_prompt_bans_text_by_default() -> None:
+    prompt = image_generation.build_image_prompt("Rechnung")
+
+    assert "keinerlei Text" in prompt
+
+
+def test_build_image_prompt_allows_text_when_requested() -> None:
+    """Issue #918: items like a receipt need text/numbers to look right."""
+    prompt = image_generation.build_image_prompt("Rechnung", allow_text_in_image=True)
+
+    assert "keinerlei Text" not in prompt
+    assert "Rechnung" in prompt
+
+
 @pytest.mark.django_db(transaction=True)
 def test_drain_passes_job_title_to_image_generation(fast_worker: None) -> None:
     imported = _make_word(word="Hammer")

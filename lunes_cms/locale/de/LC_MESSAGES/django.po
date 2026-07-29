@@ -841,6 +841,11 @@ msgstr "Beispielsatz"
 msgid "Will be spoken:"
 msgstr "Gesprochen wird:"
 
+#: cmsv2/admins/word_admin.py cmsv2/templates/admin/generate_image_base.html
+msgid "Allow text/numbers in the image (e.g. for a receipt or a clock face)"
+msgstr ""
+"Text/Zahlen im Bild erlauben (z. B. für eine Rechnung oder ein Zifferblatt)"
+
 #: cmsv2/admins/word_admin.py
 msgid "Additional info (optional)"
 msgstr "Zusätzliche Infos (optional)"

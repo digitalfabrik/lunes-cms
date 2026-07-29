@@ -206,6 +206,10 @@
     opacity: 0.85;
 }
 
+.regen-allow-text-row {
+    margin: 8px 0 0;
+}
+
 .regen-additional-info-row {
     margin: 8px 0;
 }

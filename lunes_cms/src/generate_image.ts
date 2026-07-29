@@ -43,6 +43,8 @@ window.initImageGenerator = function (config: ImageGeneratorConfig): void {
 
         const inputElement = document.getElementById("prompt-additional-info") as HTMLInputElement
         formData.append("additional_info", inputElement.value)
+        const allowTextElement = document.getElementById("prompt-allow-text") as HTMLInputElement
+        formData.append("allow_text_in_image", allowTextElement.checked ? "true" : "false")
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         fetch(config.generateUrl, {

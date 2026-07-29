@@ -37,6 +37,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
     const newPreview = widget.querySelector<HTMLElement>(".regen-new-preview")
     const decision = widget.querySelector<HTMLElement>(".regen-decision")
     const additionalInfo = widget.querySelector<HTMLInputElement>(".regen-additional-info")
+    const allowText = widget.querySelector<HTMLInputElement>(".regen-allow-text")
 
     if (!generateButton || !keepButton || !discardButton || !newEmpty || !newPreview || !decision) {
         return
@@ -96,6 +97,9 @@ function _initRegenerateWidget(widget: HTMLElement): void {
         formData.append(textField, textValue)
         if (assetType === "image" && additionalInfo) {
             formData.append("additional_info", additionalInfo.value)
+        }
+        if (assetType === "image" && allowText) {
+            formData.append("allow_text_in_image", allowText.checked ? "true" : "false")
         }
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
