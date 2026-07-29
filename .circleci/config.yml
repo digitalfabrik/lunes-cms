@@ -265,7 +265,8 @@ jobs:
                       --repo "${CIRCLE_PROJECT_REPONAME}" \
                       ${HOTFIX_FLAG})
                     echo "export RELEASE_ID=$(echo ${RELEASE} | jq .id)" >> ${BASH_ENV}
-                    echo "export RELEASE_NOTES=$(echo ${RELEASE} | jq .releaseNotes)" >> ${BASH_ENV}
+                    RELEASE_NOTES_QUOTED=$(printf '%q' "$(echo ${RELEASE} | jq -r .releaseNotes)")
+                    echo "export RELEASE_NOTES=${RELEASE_NOTES_QUOTED}" >> ${BASH_ENV}
                 name: Create GitHub pre-release
             - run:
                 command: |
@@ -289,7 +290,7 @@ jobs:
                 name: Generate SBOM
             - run:
                 command: |
-                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:\n${RELEASE_NOTES}\nhttps://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
+                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:"$'\n'"${RELEASE_NOTES}"$'\n'"https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
                     npx --no app-toolbelt v0 notify mattermost \
                       --message "${MESSAGE}" \
                       --channel releases \
