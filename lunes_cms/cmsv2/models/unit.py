@@ -97,10 +97,10 @@ class UnitWordRelation(models.Model):
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
-        Override the save method to handle image check status.
+        Override the save method to handle image and example sentence check status.
 
-        This method ensures that when an image is updated, its check status is set to
-        "NOT_CHECKED", and when an image is removed, its check status is set to None.
+        This method ensures that when an image or example sentence is
+        updated or removed, its check status is (re)set to "NOT_CHECKED".
         """
         previous_relation = (
             UnitWordRelation.objects.get(pk=self.pk) if self.pk else None
@@ -129,10 +129,10 @@ class UnitWordRelation(models.Model):
             self.image_check_status = CheckStatus.NOT_CHECKED
 
         if not self.image:
-            self.image_check_status = None
+            self.image_check_status = CheckStatus.NOT_CHECKED
 
         if not self.example_sentence or not self.example_sentence.strip():
-            self.example_sentence_check_status = None
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
         super().save(*args, **kwargs)
         if image_updated and convert_image_to_webp(self.image):
