@@ -1,0 +1,20 @@
+description: >
+  Create the venv from uv.lock if it wasn't restored from cache, then always
+  refresh the project's own (editable) install. Must run after a restore_cache
+  step targeting ".venv".
+steps:
+  - run:
+      name: Creating virtual environment
+      command: |
+        if [[ -d ".venv" ]]; then
+          echo "Virtual environment restored from cache, skipping dependency install"
+        else
+          uv sync --extra dev --locked
+        fi
+        # The cache key only depends on uv.lock, so a restored .venv can be
+        # many commits/releases old. Always reinstall the project itself
+        # (cheap, no third-party deps to resolve) so lunes_cms.egg-info -
+        # and the version setuptools_scm derives from it - reflects the
+        # commit actually checked out here, not whatever commit populated
+        # the cache.
+        uv pip install --no-deps -e .

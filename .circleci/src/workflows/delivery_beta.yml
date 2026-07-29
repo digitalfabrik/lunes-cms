@@ -9,6 +9,7 @@ when:
 jobs:
   - bump-version:
       context: deliverino
+      prepare_delivery: true
   - install:
       requires:
         - bump-version

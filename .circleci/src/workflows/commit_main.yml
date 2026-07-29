@@ -5,7 +5,11 @@ when:
         - equal: [<< pipeline.parameters.run_commit_main >>, "run_if_on_main"]
         - equal: [main, << pipeline.git.branch >>]
 jobs:
-  - install
+  - bump-version:
+      prepare_delivery: false
+  - install:
+      requires:
+        - bump-version
   - build-js
   - compile-translations:
       requires:

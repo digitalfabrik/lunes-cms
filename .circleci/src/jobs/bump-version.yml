@@ -1,3 +1,8 @@
+parameters:
+  prepare_delivery:
+    description: Whether to prepare for a delivery. If true, the version bump is committed and tagged.
+    type: boolean
+    default: false
 docker:
   - image: cimg/node:lts
 steps:
@@ -10,16 +15,19 @@ steps:
       command: |
         NEW_VERSION=$(npx --no app-toolbelt v0 version calc | jq -r .versionName)
         echo "export NEW_VERSION=$NEW_VERSION" >> $BASH_ENV
-  - run:
-      name: Bump git version
-      command: |
-        HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix" || true)
-        npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" \
-          --private-key "${DELIVERINO_PRIVATE_KEY}" \
-          --owner "${CIRCLE_PROJECT_USERNAME}" \
-          --repo "${CIRCLE_PROJECT_REPONAME}" \
-          --branch "${CIRCLE_BRANCH}" \
-          ${HOTFIX_FLAG}
+  - when:
+      condition: << parameters.prepare_delivery >>
+      steps:
+        - run:
+            name: Bump git version
+            command: |
+              HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix" || true)
+              npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" \
+                --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                --owner "${CIRCLE_PROJECT_USERNAME}" \
+                --repo "${CIRCLE_PROJECT_REPONAME}" \
+                --branch "${CIRCLE_BRANCH}" \
+                ${HOTFIX_FLAG}
   - persist-environment-variables
   - notify:
       allow_all_branches: true

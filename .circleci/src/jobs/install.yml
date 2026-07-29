@@ -4,23 +4,14 @@ steps:
   - install-uv
   - restore_cache:
       key: uv-{{ checksum "uv.lock" }}-v1
-  - run:
-      name: Creating virtual environment
-      command: |
-        if [[ -d ".venv" ]]; then
-          echo "Virtual environment restored from cache, skipping install"
-        else
-          uv sync --extra dev --locked
-        fi
+  - sync-venv
   - save_cache:
       key: uv-{{ checksum "uv.lock" }}-v1
       paths:
         - .venv
-        - lunes_cms.egg-info
         - /home/circleci/.cache/uv
   - persist_to_workspace:
       root: .
       paths:
         - .venv
-        - lunes_cms.egg-info
   - notify

@@ -110,6 +110,25 @@ commands:
                     cat environment_variables >> ${BASH_ENV}
                     cat environment_variables
                 name: Restore environment variables
+    sync-venv:
+        description: |
+            Create the venv from uv.lock if it wasn't restored from cache, then always refresh the project's own (editable) install. Must run after a restore_cache step targeting ".venv".
+        steps:
+            - run:
+                command: |
+                    if [[ -d ".venv" ]]; then
+                      echo "Virtual environment restored from cache, skipping dependency install"
+                    else
+                      uv sync --extra dev --locked
+                    fi
+                    # The cache key only depends on uv.lock, so a restored .venv can be
+                    # many commits/releases old. Always reinstall the project itself
+                    # (cheap, no third-party deps to resolve) so lunes_cms.egg-info -
+                    # and the version setuptools_scm derives from it - reflects the
+                    # commit actually checked out here, not whatever commit populated
+                    # the cache.
+                    uv pip install --no-deps -e .
+                name: Creating virtual environment
 executors:
     python:
         docker:
@@ -178,6 +197,9 @@ jobs:
                     python -m build --sdist .
                     python -m build --wheel .
                 name: Build lunes-cms package
+            - store_artifacts:
+                destination: dist
+                path: dist
             - persist_to_workspace:
                 paths:
                     - dist
@@ -186,6 +208,11 @@ jobs:
     bump-version:
         docker:
             - image: cimg/node:lts
+        parameters:
+            prepare_delivery:
+                default: false
+                description: Whether to prepare for a delivery. If true, the version bump is committed and tagged.
+                type: boolean
         steps:
             - checkout
             - run:
@@ -196,16 +223,19 @@ jobs:
                     NEW_VERSION=$(npx --no app-toolbelt v0 version calc | jq -r .versionName)
                     echo "export NEW_VERSION=$NEW_VERSION" >> $BASH_ENV
                 name: Calculate next version
-            - run:
-                command: |
-                    HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix" || true)
-                    npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" \
-                      --private-key "${DELIVERINO_PRIVATE_KEY}" \
-                      --owner "${CIRCLE_PROJECT_USERNAME}" \
-                      --repo "${CIRCLE_PROJECT_REPONAME}" \
-                      --branch "${CIRCLE_BRANCH}" \
-                      ${HOTFIX_FLAG}
-                name: Bump git version
+            - when:
+                condition: << parameters.prepare_delivery >>
+                steps:
+                    - run:
+                        command: |
+                            HOTFIX_FLAG=$([[ "${CIRCLE_BRANCH}" == hotfix* ]] && echo "--hotfix" || true)
+                            npx --no app-toolbelt v0 release bump-to "${NEW_VERSION}" \
+                              --private-key "${DELIVERINO_PRIVATE_KEY}" \
+                              --owner "${CIRCLE_PROJECT_USERNAME}" \
+                              --repo "${CIRCLE_PROJECT_REPONAME}" \
+                              --branch "${CIRCLE_BRANCH}" \
+                              ${HOTFIX_FLAG}
+                        name: Bump git version
             - persist-environment-variables
             - notify:
                 allow_all_branches: true
@@ -389,24 +419,15 @@ jobs:
             - install-uv
             - restore_cache:
                 key: uv-{{ checksum "uv.lock" }}-v1
-            - run:
-                command: |
-                    if [[ -d ".venv" ]]; then
-                      echo "Virtual environment restored from cache, skipping install"
-                    else
-                      uv sync --extra dev --locked
-                    fi
-                name: Creating virtual environment
+            - sync-venv
             - save_cache:
                 key: uv-{{ checksum "uv.lock" }}-v1
                 paths:
                     - .venv
-                    - lunes_cms.egg-info
                     - /home/circleci/.cache/uv
             - persist_to_workspace:
                 paths:
                     - .venv
-                    - lunes_cms.egg-info
                 root: .
             - notify
     isort:
@@ -593,19 +614,11 @@ jobs:
             - install-uv
             - restore_cache:
                 key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
-            - run:
-                command: |
-                    if [[ -d ".venv" ]]; then
-                      echo "Virtual environment restored from cache, skipping install"
-                    else
-                      uv sync --extra dev --locked
-                    fi
-                name: Create virtual environment
+            - sync-venv
             - save_cache:
                 key: uv-3.13.13-{{ checksum "uv.lock" }}-v1
                 paths:
                     - .venv
-                    - lunes_cms.egg-info
                     - /home/circleci/.cache/uv
             - run:
                 command: |
@@ -706,7 +719,11 @@ workflows:
                         - << pipeline.git.branch >>
     commit_main:
         jobs:
-            - install
+            - bump-version:
+                prepare_delivery: false
+            - install:
+                requires:
+                    - bump-version
             - build-js
             - compile-translations:
                 requires:
@@ -735,6 +752,7 @@ workflows:
         jobs:
             - bump-version:
                 context: deliverino
+                prepare_delivery: true
             - install:
                 requires:
                     - bump-version
