@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0027_remove_word_additional_meaning_1_and_more"),
+        ("cmsv2", "0028_word_pronunciation"),
     ]
 
     operations = [

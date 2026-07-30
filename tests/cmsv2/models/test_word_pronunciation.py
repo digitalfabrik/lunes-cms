@@ -80,8 +80,8 @@ def test_pronunciation_change_does_not_invent_a_status_without_audio() -> None:
     word.save()
 
     word.refresh_from_db()
-    assert word.audio_check_status is None
-    assert word.example_sentence_check_status is None
+    assert word.audio_check_status == CheckStatus.NOT_CHECKED
+    assert word.example_sentence_check_status == CheckStatus.NOT_CHECKED
 
 
 @pytest.mark.django_db()
@@ -94,7 +94,7 @@ def test_pronunciation_change_respects_the_no_sentence_no_status_rule() -> None:
     word.save()
 
     word.refresh_from_db()
-    assert word.example_sentence_check_status is None
+    assert word.example_sentence_check_status == CheckStatus.NOT_CHECKED
 
 
 @pytest.mark.django_db()
