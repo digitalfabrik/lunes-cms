@@ -14,6 +14,23 @@ from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
 
 
+def _prompt_from_request(request: HttpRequest) -> str | None:
+    """
+    Builds the image-generation prompt from POST data, or None if the
+    required word text is missing.
+    """
+    word_text = request.POST.get("word_text")
+    if not word_text:
+        return None
+    return build_image_prompt(
+        word_text,
+        request.POST.get("unit_title"),
+        request.POST.get("additional_info"),
+        job_title=request.POST.get("job_title"),
+        allow_text_in_image=request.POST.get("allow_text_in_image") == "true",
+    )
+
+
 @staff_member_required
 @csrf_exempt
 @require_POST
@@ -23,16 +40,9 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
     Returns the URL/path to the temporary file.
     """
 
-    word_text = request.POST.get("word_text")
-    if not word_text:
+    prompt = _prompt_from_request(request)
+    if prompt is None:
         return JsonResponse({"error": "No word_text provided."}, status=400)
-    additional_info = request.POST.get("additional_info")
-    unit_title = request.POST.get("unit_title")
-    job_title = request.POST.get("job_title")
-
-    prompt = build_image_prompt(
-        word_text, unit_title, additional_info, job_title=job_title
-    )
 
     try:
         client = get_openai_client()
