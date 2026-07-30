@@ -245,7 +245,7 @@ class Word(models.Model):
             self.audio_check_status = CheckStatus.NOT_CHECKED
             self.audio_checked_identifier = self.assemble_audio_checked_identifier()
         if not self.audio:
-            self.audio_check_status = None
+            self.audio_check_status = CheckStatus.NOT_CHECKED
             self.audio_checked_identifier = None
         elif (
             previous_word
@@ -257,7 +257,7 @@ class Word(models.Model):
         if image_updated:
             self.image_check_status = CheckStatus.NOT_CHECKED
         if not self.image:
-            self.image_check_status = None
+            self.image_check_status = CheckStatus.NOT_CHECKED
 
     def _handle_example_sentence_change(self, previous_word: "Word | None") -> None:
         example_sentence_changed = bool(
@@ -272,7 +272,7 @@ class Word(models.Model):
                 self.example_sentence_audio = None
             self.example_sentence_check_status = CheckStatus.NOT_CHECKED
         if not self.example_sentence or not self.example_sentence.strip():
-            self.example_sentence_check_status = None
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
     def _pronunciation_changed(self, previous_word: "Word | None") -> bool:
         return bool(

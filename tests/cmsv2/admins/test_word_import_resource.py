@@ -288,6 +288,26 @@ def test_reimport_with_english_headers(job: Job, user: User) -> None:
 
 
 @pytest.mark.django_db
+def test_imported_word_with_example_sentence_is_not_checked(
+    job: Job, user: User
+) -> None:
+    """Issue #917: a word imported with an example sentence must not appear
+    pre-confirmed — its example_sentence_check_status must persist as
+    NOT_CHECKED, matching the default a manually created word gets."""
+    ds = _make_dataset(
+        ["Units", "Word", "Singular Article", "Example sentence"],
+        [["Werkzeug", "Hammer", "der", "Der Hammer ist schwer."]],
+    )
+    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    assert errors == []
+    word = _job_words(job).get(word="Hammer")
+    assert word.example_sentence == "Der Hammer ist schwer."
+    assert word.example_sentence_check_status == "NOT_CHECKED"
+    assert word.audio_check_status == "NOT_CHECKED"
+    assert word.image_check_status == "NOT_CHECKED"
+
+
+@pytest.mark.django_db
 def test_reimport_with_german_headers(job: Job, user: User) -> None:
     """Re-import of a CSV exported with German admin locale works (issue #775)."""
     ds = _make_dataset(
