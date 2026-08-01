@@ -45,7 +45,7 @@ dependencies = [
 	"djangorestframework==3.17.1",
 	"drf-spectacular==0.30.0",
 	"ipython==9.15.0",
-	"openai==2.48.0",
+	"openai==2.50.0",
 	"pillow==12.3.0",
 	"psycopg2==2.9.12",
 	"requests==2.34.2",
@@ -73,7 +73,7 @@ dev = [
 	"sphinx-rtd-theme==3.1.0",
 	"sphinx-last-updated-by-git==0.3.8",
 	"sphinxcontrib-django==2.5",
-	"twine==6.2.0",
+	"twine==7.0.0",
 	"wheel==0.47.0",
 ]
 e2e = [
