@@ -2,9 +2,11 @@
 """
 LLM-based PR review script for CircleCI.
 
-Fetches the PR diff via the GitHub API, sends it to the LiteLLM endpoint
-for a Django/lunes-cms-specific review, then posts (or updates) a single
-comment on the PR. The step only comments — it never approves or rejects.
+Fetches the PR diff, the commit messages and the labels currently set on
+the PR via the GitHub API, sends them to the LiteLLM endpoint for a
+Django/lunes-cms-specific review, then posts (or updates) a single
+comment on the PR. The step only comments — it never approves or
+rejects, and it never changes labels itself.
 
 This script always exits 0 so that LLM or network failures never block
 a merge. Errors are printed to stderr and visible in the CI log.
@@ -59,7 +61,8 @@ newer one (the `cmsv2` app: Job/Unit/Word) — both apps run side by side, so
 check that changes land in the right one and don't reintroduce v1 patterns
 into v2 code.
 
-Analyse the diff and the commit messages and report on:
+Analyse the diff, the commit messages and the PR's current labels and
+report on:
 1. Django correctness:
  - Any model field change (new field, altered verbose_name/on_delete/
    null/blank) must be accompanied by a matching migration; the PR should
@@ -122,6 +125,25 @@ Analyse the diff and the commit messages and report on:
  change. Do not review `.circleci/config.yml`'s full content on its own —
  it's mechanical output, not hand-written, so treating it as a second,
  duplicate review target adds no value.
+10. Release-note labels. The release notes are generated from the labels
+ on merged PRs (see `.github/release.yml`), so every PR needs the right
+ one. Exactly three labels exist for this purpose:
+ - `dependencies`: dependency updates — Dependabot PRs and manual bumps
+   of `uv.lock`, `pyproject.toml`, `package.json` or `package-lock.json`.
+ - `maintenance`: changes that are not user-facing — CI configuration,
+   dev tooling, tests, refactorings, type annotations, documentation.
+ - `exclude-changelog`: changes that should not appear in the release
+   notes at all. Only suggest this one when it is clearly warranted.
+ Anything user-facing needs no label; it lands in the "Features, Fixes &
+ Enhancements" catch-all category. The message lists the labels currently
+ set on this PR. That list may also contain labels that have nothing to
+ do with the release notes; ignore those and never comment on them.
+ Only suggest a label that is missing from that list, and say nothing
+ about labels at all when the current ones already fit the change. Never
+ suggest a label other than the three named above. If the label list says
+ the labels could not be determined, skip this check entirely. If the PR
+ changes `.github/release.yml`, check whether this list of labels in
+ `.circleci/scripts/llm-pr-review.py` needs the same update.
 
 The message starts with the complete list of files changed in this PR.
 The diff itself may be incomplete: oversized per-file diffs are replaced
@@ -314,6 +336,35 @@ def main():
         warn(f"Could not fetch commits: {exc}")
 
     # -------------------------------------------------------------------------
+    # Step 2c: Fetch the labels currently set on the PR
+    # -------------------------------------------------------------------------
+
+    print(f"Fetching labels from {pr_url} ...")
+
+    current_labels_block = "(could not be determined)"
+    try:
+        pr_response = requests.get(
+            pr_url,
+            headers=auth_headers,
+            timeout=30,
+        )
+        if pr_response.status_code == 200:
+            label_names = [
+                label.get("name", "") for label in pr_response.json().get("labels", [])
+            ]
+            current_labels_block = (
+                "\n".join(f"- {name}" for name in label_names if name) or "(none)"
+            )
+            print(f"Fetched {len(label_names)} label(s).")
+        else:
+            warn(
+                f"Could not fetch labels (HTTP {pr_response.status_code}): "
+                f"{pr_response.text[:200]}"
+            )
+    except requests.RequestException as exc:
+        warn(f"Could not fetch labels: {exc}")
+
+    # -------------------------------------------------------------------------
     # Step 3: Send diff to LiteLLM
     # -------------------------------------------------------------------------
 
@@ -328,6 +379,9 @@ def main():
         user_content_parts.append(
             "Commit messages in this PR:\n\n" + commit_messages_block
         )
+    user_content_parts.append(
+        "Labels currently set on this PR:\n\n" + current_labels_block
+    )
     user_content_parts.append("Diff:\n\n" + diff_text)
     user_content = "\n\n".join(user_content_parts)
     if truncated:
