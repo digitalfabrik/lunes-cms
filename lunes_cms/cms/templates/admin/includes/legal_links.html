@@ -1,0 +1,14 @@
+{% load i18n %}
+{% if privacy_policy_url or imprint_url %}
+    <span class="legal-links">
+        {% if privacy_policy_url %}
+            <a href="{{ privacy_policy_url }}" target="_blank" rel="noopener noreferrer">{% translate "Privacy policy" %}</a>
+        {% endif %}
+        {% if privacy_policy_url and imprint_url %}
+            <span aria-hidden="true">&middot;</span>
+        {% endif %}
+        {% if imprint_url %}
+            <a href="{{ imprint_url }}" target="_blank" rel="noopener noreferrer">{% translate "Imprint" %}</a>
+        {% endif %}
+    </span>
+{% endif %}

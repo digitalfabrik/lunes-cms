@@ -4,6 +4,7 @@ from typing import Any
 
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from django.core.files.base import File
+from django.utils.translation import gettext_lazy as _
 
 
 class LaxManifestStaticFilesStorage(ManifestStaticFilesStorage):
@@ -25,6 +26,31 @@ class LaxManifestStaticFilesStorage(ManifestStaticFilesStorage):
             return super().hashed_name(name, content, filename)
         except ValueError:
             return name
+
+
+def legal_menu_links(privacy_policy_url: str, imprint_url: str) -> list[dict[str, Any]]:
+    """Build the Jazzmin user menu entries for the legal links.
+
+    Entries without a configured URL are left out, so an installation which
+    only configures one of the two links does not end up with a dead menu item.
+    Jazzmin passes absolute URLs through unchanged, only URL names without a
+    slash are reversed.
+    """
+    links: list[dict[str, Any]] = [
+        {
+            "name": _("Privacy policy"),
+            "url": privacy_policy_url,
+            "new_window": True,
+            "icon": "fas fa-user-shield",
+        },
+        {
+            "name": _("Imprint"),
+            "url": imprint_url,
+            "new_window": True,
+            "icon": "fas fa-building",
+        },
+    ]
+    return [link for link in links if link["url"]]
 
 
 def strtobool(string: str) -> int:

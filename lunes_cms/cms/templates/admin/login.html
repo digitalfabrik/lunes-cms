@@ -1,0 +1,10 @@
+{% extends "admin/login.html" %}
+
+{# Appends the legal links below the login form. Jazzmin's login template only #}
+{# defines the "content" block, so the form itself is reused via block.super. #}
+{% block content %}
+    {{ block.super }}
+    <div class="text-center mt-3">
+        {% include "admin/includes/legal_links.html" %}
+    </div>
+{% endblock %}
