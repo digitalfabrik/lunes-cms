@@ -1,7 +1,7 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Any, Iterable, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 from django import forms
 from django.contrib import admin

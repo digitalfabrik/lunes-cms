@@ -224,7 +224,7 @@ def test_words_within_group_ordered_by_completeness_first() -> None:
     rich = Word.objects.create(
         singular_article=1,
         word="Hammer",
-        definition="Ein Werkzeug",
+        pronunciation="Hamer",
         example_sentence="Der Hammer liegt auf der Werkbank.",
         example_sentence_check_status=CheckStatus.CONFIRMED,
     )

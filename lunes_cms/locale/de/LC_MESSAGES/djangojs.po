@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 22:04+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: lunes_cms/static/js/manytomany_overlay.js:53
-msgid "Image cannot be previewed"
-msgstr "Bild kann nicht in der Vorschau angezeigt werden"
-
-#: lunes_cms/static/js/manytomany_overlay.js:55
-msgid "No image available"
-msgstr "Kein Bild verfügbar"
-
-#: lunes_cms/static/js/manytomany_overlay.js:75
-msgid "No audio available"
-msgstr "Kein Audio verfügbar"
 
 #: lunes_cms/static/js/generate_example_sentence.js
 msgid "Could not find the example sentence field."
@@ -39,12 +27,26 @@ msgid "Generating example sentence..."
 msgstr "Beispielsatz wird generiert …"
 
 #: lunes_cms/static/js/generate_example_sentence.js
+msgid "Regenerate example sentence"
+msgstr "Beispielsatz neu generieren"
+
+#: lunes_cms/static/js/generate_example_sentence.js
 msgid "Example sentence generated!"
 msgstr "Beispielsatz generiert!"
 
 #: lunes_cms/static/js/generate_example_sentence.js
+#: lunes_cms/static/js/inline_regenerate.js
 msgid "Error"
 msgstr "Fehler"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+#: lunes_cms/static/js/inline_regenerate.js
+msgid "Saving..."
+msgstr "Wird gespeichert …"
+
+#: lunes_cms/static/js/generate_example_sentence.js
+msgid "Generate example sentence"
+msgstr "Beispielsatz generieren"
 
 #: lunes_cms/static/js/inline_regenerate.js
 msgid "Generate"
@@ -55,29 +57,33 @@ msgid "Regenerate"
 msgstr "Neu generieren"
 
 #: lunes_cms/static/js/inline_regenerate.js
+msgid "Newly generated image"
+msgstr "Neu generiertes Bild"
+
+#: lunes_cms/static/js/inline_regenerate.js
 msgid "Generating..."
 msgstr "Wird generiert …"
-
-#: lunes_cms/static/js/inline_regenerate.js
-msgid "Generated!"
-msgstr "Generiert!"
-
-#: lunes_cms/static/js/inline_regenerate.js
-msgid "Saving..."
-msgstr "Wird gespeichert …"
 
 #: lunes_cms/static/js/inline_regenerate.js
 msgid "No file was returned."
 msgstr "Es wurde keine Datei zurückgegeben."
 
 #: lunes_cms/static/js/inline_regenerate.js
-msgid "Newly generated image"
-msgstr "Neu generiertes Bild"
+msgid "Generated!"
+msgstr "Generiert!"
 
-#: lunes_cms/static/js/generate_example_sentence.js
-msgid "Regenerate example sentence"
-msgstr "Beispielsatz neu generieren"
+#: lunes_cms/static/js/manytomany_overlay.js
+msgid "Image cannot be previewed"
+msgstr "Bild kann nicht in der Vorschau angezeigt werden"
 
-#: lunes_cms/static/js/generate_example_sentence.js
-msgid "Generate example sentence"
-msgstr "Beispielsatz generieren"
+#: lunes_cms/static/js/manytomany_overlay.js
+msgid "No image available"
+msgstr "Kein Bild verfügbar"
+
+#: lunes_cms/static/js/manytomany_overlay.js
+msgid "No audio available"
+msgstr "Kein Audio verfügbar"
+
+#: lunes_cms/static/js/word_duplicate_check.js
+msgid "A word with this name already exists:"
+msgstr "Ein Wort mit diesem Namen existiert bereits:"

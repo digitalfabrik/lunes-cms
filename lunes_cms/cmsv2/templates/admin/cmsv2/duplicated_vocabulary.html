@@ -69,7 +69,7 @@
                                     <a href="{% url 'admin:cmsv2_word_change' word.pk %}" target="_blank" rel="noopener noreferrer">{{ word }}</a>
                                     {% if forloop.first %}
                                         <span class="badge text-bg-success"
-                                              title="{% trans 'This entry has the most complete content (definition, example sentence, image, audio, etc.)' %}">
+                                              title="{% trans 'This entry has the most complete content (pronunciation, example sentence, image, audio, etc.)' %}">
                                             {% trans "Suggested to keep" %}
                                         </span>
                                     {% endif %}

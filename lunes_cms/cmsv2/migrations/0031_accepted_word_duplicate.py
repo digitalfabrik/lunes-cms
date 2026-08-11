@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
     """Track duplicate-vocabulary groups accepted as intentional (#531)."""
 
     dependencies = [
-        ("cmsv2", "0026_index_word_word"),
+        ("cmsv2", "0030_index_word_word"),
     ]
 
     operations = [

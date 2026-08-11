@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("cmsv2", "0026_index_word_word"),
+        ("cmsv2", "0030_index_word_word"),
     ]
 
     operations = [

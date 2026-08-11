@@ -43,11 +43,7 @@ def completeness_score(word: Word) -> int:
         score += 2
         if word.example_sentence_audio:
             score += 1
-    if word.definition and word.definition.strip():
-        score += 1
-    if word.additional_meaning_1 and word.additional_meaning_1.strip():
-        score += 1
-    if word.additional_meaning_2 and word.additional_meaning_2.strip():
+    if word.pronunciation and word.pronunciation.strip():
         score += 1
     if word.plural and word.plural.strip():
         score += 1
