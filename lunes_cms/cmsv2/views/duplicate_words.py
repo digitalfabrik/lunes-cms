@@ -8,18 +8,18 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from ...analysis.models import AcceptedDuplicates
+from ...core.permissions import can_view_duplicates
 from ..models import AcceptedWordDuplicate, Word
 from ..services import duplicate_words
 
-#: Duplicate-vocabulary analysis and cleanup is restricted to superusers,
-#: same as the rest of the admin's data-management actions (see e.g.
-#: ``UserAdmin``/``UnitAdmin``) - not just any staff user.
-superuser_required = user_passes_test(
-    lambda user: user.is_active and user.is_superuser, login_url="admin:login"
+#: Duplicate-vocabulary analysis and cleanup is gated by the
+#: ``analysis.can_view_duplicates`` permission
+can_view_duplicates_required = user_passes_test(
+    lambda user: user.is_active and can_view_duplicates(user), login_url="admin:login"
 )
 
 
-@superuser_required
+@can_view_duplicates_required
 def word_check_duplicate(request: HttpRequest) -> JsonResponse:
     """
     AJAX endpoint backing the create-time "a word like this already exists"
@@ -46,7 +46,7 @@ def word_check_duplicate(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"matches": matches})
 
 
-@superuser_required
+@can_view_duplicates_required
 def duplicated_vocabulary(request: HttpRequest) -> HttpResponse:
     """The "Analysis" page listing duplicate-vocabulary groups (issue #531)."""
     return render(
@@ -59,7 +59,7 @@ def duplicated_vocabulary(request: HttpRequest) -> HttpResponse:
     )
 
 
-@superuser_required
+@can_view_duplicates_required
 def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
     """
     Mark a duplicate-vocabulary group as an intentional duplicate - e.g. the
@@ -74,7 +74,7 @@ def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
     return redirect("cmsv2:duplicated_vocabulary")
 
 
-@superuser_required
+@can_view_duplicates_required
 def accepted_duplicates(request: HttpRequest) -> HttpResponse:
     """
     A nicer-looking URL for the "Accepted duplicates" analysis page (issue

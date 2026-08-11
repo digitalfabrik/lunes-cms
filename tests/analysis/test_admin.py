@@ -7,10 +7,28 @@ from __future__ import annotations
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import Client
 from django.urls import reverse
 
 from lunes_cms.cmsv2.models import AcceptedWordDuplicate, Word
+
+
+def _staff_client(*, with_can_view_duplicates: bool = False) -> Client:
+    """A logged-in staff user who is *not* a superuser, optionally with the
+    ``can_view_duplicates`` permission (issue #531)."""
+    user = get_user_model().objects.create_user(
+        username=f"staff-{with_can_view_duplicates}", password="password", is_staff=True
+    )
+    if with_can_view_duplicates:
+        user.user_permissions.add(
+            Permission.objects.get(
+                codename="can_view_duplicates", content_type__app_label="analysis"
+            )
+        )
+    client = Client()
+    client.force_login(user)
+    return client
 
 
 @pytest.mark.django_db()
@@ -112,16 +130,23 @@ def test_accepted_duplicates_shows_shared_word_text_only_once(
 
 
 @pytest.mark.django_db()
-def test_accepted_duplicates_pretty_url_denies_staff_who_is_not_superuser() -> None:
-    user = get_user_model().objects.create_user(
-        username="staff-not-admin", password="password", is_staff=True
-    )
-    client = Client()
-    client.force_login(user)
+def test_accepted_duplicates_pretty_url_denies_staff_without_permission() -> None:
+    client = _staff_client()
 
     response = client.get(reverse("cmsv2:accepted_duplicates"))
 
     assert response.status_code == 302
+
+
+@pytest.mark.django_db()
+def test_accepted_duplicates_pretty_url_allows_staff_with_permission() -> None:
+    """Not just superusers - any staff user granted ``can_view_duplicates``
+    (e.g. Vokabelverwaltung, Partnermanagement) gets in too (issue #531)."""
+    client = _staff_client(with_can_view_duplicates=True)
+
+    response = client.get(reverse("cmsv2:accepted_duplicates"))
+
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db()
@@ -182,16 +207,21 @@ def test_accepted_duplicates_cannot_be_added_manually(admin_client: Client) -> N
 
 
 @pytest.mark.django_db()
-def test_accepted_duplicates_denies_staff_who_is_not_superuser() -> None:
-    user = get_user_model().objects.create_user(
-        username="staff-not-admin", password="password", is_staff=True
-    )
-    client = Client()
-    client.force_login(user)
+def test_accepted_duplicates_denies_staff_without_permission() -> None:
+    client = _staff_client()
 
     response = client.get(reverse("admin:analysis_acceptedduplicates_changelist"))
 
-    # Unlike the custom views (superuser_required -> redirect to login),
-    # this is a regular ModelAdmin: a failed permission check raises
+    # Unlike the custom views (can_view_duplicates_required -> redirect to
+    # login), this is a regular ModelAdmin: a failed permission check raises
     # PermissionDenied, which Django turns into a plain 403.
     assert response.status_code == 403
+
+
+@pytest.mark.django_db()
+def test_accepted_duplicates_allows_staff_with_permission() -> None:
+    client = _staff_client(with_can_view_duplicates=True)
+
+    response = client.get(reverse("admin:analysis_acceptedduplicates_changelist"))
+
+    assert response.status_code == 200

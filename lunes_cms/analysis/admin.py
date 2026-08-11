@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from ..cmsv2.services.duplicate_words import duplicate_word_group_count
+from ..core.permissions import can_view_duplicates
 from .models import AcceptedDuplicates, DuplicatedVocabulary
 
 _previous_get_app_list = admin.AdminSite.get_app_list
@@ -64,10 +65,10 @@ class DuplicatedVocabularyAdmin(admin.ModelAdmin):
         return redirect("cmsv2:duplicated_vocabulary")
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        return request.user.is_superuser
+        return can_view_duplicates(request.user)
 
     def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return request.user.is_superuser
+        return can_view_duplicates(request.user)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
@@ -106,10 +107,10 @@ class AcceptedDuplicatesAdmin(admin.ModelAdmin):
     words_display.short_description = _("word")  # type: ignore[attr-defined]
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        return request.user.is_superuser
+        return can_view_duplicates(request.user)
 
     def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return request.user.is_superuser
+        return can_view_duplicates(request.user)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
@@ -118,7 +119,7 @@ class AcceptedDuplicatesAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return request.user.is_superuser
+        return can_view_duplicates(request.user)
 
     def get_actions(
         self, request: HttpRequest

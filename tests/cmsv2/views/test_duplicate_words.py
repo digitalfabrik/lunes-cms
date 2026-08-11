@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import Client
 from django.urls import reverse
 
@@ -19,23 +20,41 @@ def _make_unit(job: Job, title: str = "Werkzeuge") -> Unit:
     return unit
 
 
-def _staff_client() -> Client:
-    """A logged-in staff user who is *not* a superuser."""
+def _staff_client(*, with_can_view_duplicates: bool = False) -> Client:
+    """A logged-in staff user who is *not* a superuser, optionally with the
+    ``can_view_duplicates`` permission (issue #531)."""
     user = get_user_model().objects.create_user(
-        username="staff-not-admin", password="password", is_staff=True
+        username=f"staff-{with_can_view_duplicates}", password="password", is_staff=True
     )
+    if with_can_view_duplicates:
+        user.user_permissions.add(
+            Permission.objects.get(
+                codename="can_view_duplicates", content_type__app_label="analysis"
+            )
+        )
     client = Client()
     client.force_login(user)
     return client
 
 
 @pytest.mark.django_db()
-def test_duplicated_vocabulary_denies_staff_who_is_not_superuser() -> None:
-    """Only superusers may see/manage duplicate vocabulary — a plain staff
-    user must be redirected (e.g. to the admin login), not let in."""
+def test_duplicated_vocabulary_denies_staff_without_permission() -> None:
+    """A plain staff user without ``can_view_duplicates`` must be redirected
+    (e.g. to the admin login), not let in (issue #531)."""
     response = _staff_client().get(reverse("cmsv2:duplicated_vocabulary"))
 
     assert response.status_code == 302
+
+
+@pytest.mark.django_db()
+def test_duplicated_vocabulary_allows_staff_with_permission() -> None:
+    """Not just superusers - any staff user granted ``can_view_duplicates``
+    (e.g. Vokabelverwaltung, Partnermanagement) gets in too (issue #531)."""
+    response = _staff_client(with_can_view_duplicates=True).get(
+        reverse("cmsv2:duplicated_vocabulary")
+    )
+
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db()

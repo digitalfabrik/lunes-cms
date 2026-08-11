@@ -20,6 +20,7 @@ class DuplicatedVocabulary(Word):
         app_label = "analysis"
         verbose_name = _("Open duplicates")
         verbose_name_plural = _("Open duplicates")
+        permissions = [("can_view_duplicates", "Can view and manage duplicates")]
 
 
 class AcceptedDuplicates(AcceptedWordDuplicate):
