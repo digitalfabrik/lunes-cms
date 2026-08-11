@@ -30,6 +30,9 @@ steps:
           --owner "${CIRCLE_PROJECT_USERNAME}" \
           --repo "${CIRCLE_PROJECT_REPONAME}"
   - run:
+      name: Install syft
+      command: curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+  - run:
       name: Generate SBOM
       command: |
         npx --no app-toolbelt v0 generate sbom \

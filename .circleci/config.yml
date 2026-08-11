@@ -308,6 +308,9 @@ jobs:
                       --repo "${CIRCLE_PROJECT_REPONAME}"
                 name: Upload package to GitHub release
             - run:
+                command: curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+                name: Install syft
+            - run:
                 command: |
                     npx --no app-toolbelt v0 generate sbom \
                       --version-name "${NEW_VERSION}" \
