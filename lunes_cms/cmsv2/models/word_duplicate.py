@@ -34,7 +34,7 @@ class AcceptedWordDuplicate(models.Model):
         rather than repeating e.g. "(der) X, (der) X" for each underlying
         row (issue #531).
         """
-        words = list(self.words.order_by("pk"))
+        words = list(self.words.all())
         if not words:
             return ""
         texts = {word.word for word in words}

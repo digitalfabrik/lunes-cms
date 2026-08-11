@@ -35,13 +35,14 @@ def _get_app_list(
     # accepts `request` — it doesn't support `app_label` filtering, so this
     # wrapper doesn't either.
     app_list = _previous_get_app_list(self, request)
-    count = duplicate_word_group_count()
     for app in app_list:
         if app["app_label"] != "analysis":
             continue
         for model in app["models"]:
-            if count and model["object_name"] == "DuplicatedVocabulary":
-                model["name"] = f"{model['name']} ({count})"
+            if model["object_name"] == "DuplicatedVocabulary":
+                count = duplicate_word_group_count()
+                if count:
+                    model["name"] = f"{model['name']} ({count})"
             elif model["object_name"] == "AcceptedDuplicates":
                 model["admin_url"] = reverse("cmsv2:accepted_duplicates")
     return app_list
@@ -99,6 +100,11 @@ class AcceptedDuplicatesAdmin(admin.ModelAdmin):
     list_display_links: None = None
     ordering = ("-created_at",)
     actions = ["undo_accepted_duplicates"]
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[AcceptedDuplicates]:
+        # `words_display` below reads `self.words.all()` per row via
+        # `str(obj)` - without this, that's one query per row (N+1).
+        return super().get_queryset(request).prefetch_related("words")
 
     def words_display(self, obj: AcceptedDuplicates) -> str:
         """Delegates to ``str(obj)``, which already shows the group's shared word text once."""

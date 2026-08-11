@@ -102,7 +102,10 @@ def find_duplicate_word_groups() -> list[DuplicateWordGroup]:
     job_ids_by_word_id = _job_ids_by_word_id()
 
     all_word_ids = {wid for members in groups.values() for wid in members}
-    words_by_id = {word.pk: word for word in Word.objects.filter(pk__in=all_word_ids)}
+    words_by_id = {
+        word.pk: word
+        for word in Word.objects.filter(pk__in=all_word_ids).prefetch_related("units")
+    }
 
     all_job_ids = {
         jid
