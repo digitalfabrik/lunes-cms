@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from django.conf import settings
 from django.http import HttpRequest
 
 from ..cms.feedback_filter import filter_feedback_by_creator
@@ -14,6 +15,26 @@ from ..cmsv2.feedback_filter import (
     filter_feedback_by_creator as filter_feedbackv2_by_creator,
 )
 from ..cmsv2.models import Feedback as FeedbackV2
+
+
+def legal_links_processor(  # pylint: disable=unused-argument
+    request: HttpRequest,
+) -> dict[str, Any]:
+    """
+    This context processor injects the URLs of the privacy policy and the imprint into the
+    template context. They are read per request instead of being passed as static template
+    context, so that the login page (which is rendered for anonymous users) gets them, too.
+
+    :param request: The current http request
+    :type request: ~django.http.HttpRequest
+
+    :return: The template context containing the legal link URLs
+    :rtype: dict
+    """
+    return {
+        "privacy_policy_url": settings.PRIVACY_POLICY_URL,
+        "imprint_url": settings.IMPRINT_URL,
+    }
 
 
 def feedback_processor(request: HttpRequest) -> dict[str, Any]:

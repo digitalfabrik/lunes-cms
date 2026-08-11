@@ -19,7 +19,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
 from .logging_formatter import ColorFormatter
-from .utils import strtobool
+from .utils import legal_menu_links, strtobool
 
 ###################
 # CUSTOM SETTINGS #
@@ -38,6 +38,14 @@ for _section in _config.sections():
 
 #: How many documents a training sets needs at least to get released
 TRAININGSET_MIN_DOCS = int(os.environ.get("LUNES_CMS_TRAININGSET_MIN_DOCS", 4))
+
+#: URL of the privacy policy which is linked in the admin (user menu, footer and
+#: login page) and on the public upload page. If empty, no link is shown.
+PRIVACY_POLICY_URL = os.environ.get("LUNES_CMS_PRIVACY_POLICY_URL", "")
+
+#: URL of the imprint which is linked in the same places as the privacy policy
+#: (see :attr:`~lunes_cms.core.settings.PRIVACY_POLICY_URL`). If empty, no link is shown.
+IMPRINT_URL = os.environ.get("LUNES_CMS_IMPRINT_URL", "")
 
 #: API Key for OpenAI
 OPENAI_API_KEY = os.environ.get("LUNES_CMS_OPENAI_API_KEY")
@@ -195,6 +203,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "lunes_cms.core.context_processors.feedback_processor",
                 "lunes_cms.core.context_processors.feedbackv2_processor",
+                "lunes_cms.core.context_processors.legal_links_processor",
             ],
         },
     },
@@ -614,6 +623,8 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Feedback": "fas fa-comment",
     },
     "site_version": _cms_version,
+    # Legal links in the user menu. Only rendered if the respective URL is configured.
+    "usermenu_links": legal_menu_links(PRIVACY_POLICY_URL, IMPRINT_URL),
     # Render the Analytics app section directly below Dashboard. Jazzmin's
     # sidebar lists apps in this order; anything not mentioned trails after.
     "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
