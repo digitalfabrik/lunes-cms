@@ -11,11 +11,6 @@ urlpatterns = [
         name="duplicated_vocabulary",
     ),
     path(
-        "analysis/duplicated-vocabulary/delete/",
-        views.delete_duplicate_word,
-        name="delete_duplicate_word",
-    ),
-    path(
         "analysis/duplicated-vocabulary/accept/",
         views.accept_word_duplicate,
         name="accept_word_duplicate",

@@ -1,6 +1,6 @@
+from .delete_alternative_word import delete_alternative_word
 from .duplicate_words import (
     accept_word_duplicate,
-    delete_duplicate_word,
     duplicated_vocabulary,
     word_check_duplicate,
 )
@@ -10,10 +10,9 @@ from .generate_example_sentence import (
     word_generate_example_sentence_via_openai,
     word_store_generated_example_sentence,
 )
-from .delete_alternative_word import delete_alternative_word
 from .generate_image import generate_image_via_openai
-from .save_alternative_word import save_alternative_word
 from .import_csv_view import import_from_csv
+from .save_alternative_word import save_alternative_word
 from .unitword_generate_example_sentence_audio import (
     unitword_generate_example_sentence_audio,
     unitword_generate_example_sentence_audio_via_openai,
@@ -45,7 +44,6 @@ __all__ = [
     "delete_alternative_word",
     "save_alternative_word",
     "accept_word_duplicate",
-    "delete_duplicate_word",
     "duplicated_vocabulary",
     "word_check_duplicate",
     "import_from_csv",

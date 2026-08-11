@@ -15,6 +15,7 @@
 {% block content_title %}{% trans "Duplicated vocabulary" %}{% endblock %}
 
 {% block content %}
+{% url 'cmsv2:duplicated_vocabulary' as duplicated_vocabulary_url %}
 <div id="content-main" class="col-12">
     {% if not duplicate_groups %}
         <div class="card">
@@ -44,7 +45,7 @@
                         <input type="hidden" name="word" value="{{ word.pk }}">
                     {% endfor %}
                     <button type="submit" class="btn btn-secondary text-nowrap">
-                        {% trans "Accept as intentional duplicate" %}
+                        {% trans "Accept duplicate" %}
                     </button>
                 </form>
             </div>
@@ -76,12 +77,10 @@
                                 </td>
                                 <td class="align-middle">{{ word.units.all|join:", " }}</td>
                                 <td class="align-middle text-end">
-                                    {% if not forloop.first %}
-                                        <a class="btn btn-sm btn-primary text-nowrap"
-                                           href="{% url 'cmsv2:delete_duplicate_word' %}?keeper={{ group.words.0.pk }}&loser={{ word.pk }}">
-                                            {% trans "Delete duplicate" %}
-                                        </a>
-                                    {% endif %}
+                                    <a class="btn btn-sm btn-primary text-nowrap"
+                                       href="{% url 'admin:cmsv2_word_delete' word.pk %}?next={{ duplicated_vocabulary_url|urlencode }}">
+                                        {% trans "Delete duplicate" %}
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}

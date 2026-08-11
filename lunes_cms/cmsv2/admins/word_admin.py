@@ -4,9 +4,12 @@ from datetime import date
 from typing import Any, TYPE_CHECKING
 
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.html import escape, format_html
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
@@ -890,3 +893,30 @@ class WordAdmin(BaseAdmin):
 
     image_check_status_display.short_description = _("image check status")  # type: ignore[attr-defined]
     image_check_status_display.admin_order_field = "image_check_status"  # type: ignore[attr-defined]
+
+    def response_delete(
+        self, request: HttpRequest, obj_display: str, obj_id: int
+    ) -> HttpResponse:
+        """
+        Honour a ``?next=`` redirect target (issue #531), e.g. so deleting a
+        duplicate from the "Duplicated vocabulary" analysis page returns
+        there instead of the regular changelist. Falls back to the default
+        behaviour if there is none, or it doesn't point back into this site.
+        """
+        next_url = request.POST.get("next") or request.GET.get("next")
+        if not next_url or not url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure(),
+        ):
+            return super().response_delete(request, obj_display, obj_id)
+
+        # Mirrors ModelAdmin.response_delete()'s own success message - the
+        # only thing we're changing here is the redirect target.
+        self.message_user(
+            request,
+            _("The %(name)s “%(obj)s” was deleted successfully.")
+            % {"name": self.opts.verbose_name, "obj": obj_display},
+            messages.SUCCESS,
+        )
+        return redirect(next_url)

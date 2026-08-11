@@ -3,14 +3,12 @@ from __future__ import annotations
 from django.contrib import admin, messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.html import format_html
-from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 
 from ..models import AcceptedWordDuplicate, Word
-from ..services import duplicate_words, remove_duplicate_word
+from ..services import duplicate_words
 
 #: Duplicate-vocabulary analysis and cleanup is restricted to superusers,
 #: same as the rest of the admin's data-management actions (see e.g.
@@ -18,21 +16,6 @@ from ..services import duplicate_words, remove_duplicate_word
 superuser_required = user_passes_test(
     lambda user: user.is_active and user.is_superuser, login_url="admin:login"
 )
-
-
-def _word_link(word: Word) -> SafeString:
-    return format_html(
-        '<a href="{}">{}</a>', reverse("admin:cmsv2_word_change", args=[word.pk]), word
-    )
-
-
-def _word_link_with_units(word: Word) -> SafeString:
-    """Like ``_word_link``, but also names the unit(s) the word currently
-    belongs to — only where that isn't already stated in the surrounding
-    sentence, to avoid naming the same unit twice."""
-    units = ", ".join(word.units.order_by("title").values_list("title", flat=True))
-    suffix = f" ({units})" if units else ""
-    return format_html("{}{}", _word_link(word), suffix)
 
 
 @superuser_required
@@ -88,51 +71,3 @@ def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
         accepted.words.set(words)
         messages.success(request, _("The duplicate has been accepted as intentional."))
     return redirect("cmsv2:duplicated_vocabulary")
-
-
-@superuser_required
-def delete_duplicate_word(request: HttpRequest) -> HttpResponse:
-    """
-    Review and perform deletion of a duplicate ``Word`` row (issue #531).
-
-    This is a straight deletion of ``loser``, not a content merge — the
-    kept word's own fields are never touched. GET renders a review page
-    asking, for each unit the loser belongs to that the keeper doesn't,
-    whether the keeper should be added to it (so the word doesn't silently
-    disappear from that unit). POST performs the deletion.
-    """
-    keeper_pk = request.GET.get("keeper") or request.POST.get("keeper")
-    loser_pk = request.GET.get("loser") or request.POST.get("loser")
-    keeper = get_object_or_404(Word, pk=keeper_pk)
-    loser = get_object_or_404(Word, pk=loser_pk)
-
-    if keeper.pk == loser.pk:
-        messages.error(request, _("Cannot delete a word as a duplicate of itself."))
-        return redirect("cmsv2:duplicated_vocabulary")
-
-    if request.method == "POST":
-        add_to_unit_ids = {
-            int(key[len("add_to_unit_") :])
-            for key, value in request.POST.items()
-            if key.startswith("add_to_unit_") and value == "yes"
-        }
-        remove_duplicate_word.apply_removal(keeper, loser, add_to_unit_ids)
-        messages.success(
-            request,
-            _('The duplicate "%(word)s" has been deleted.') % {"word": loser.word},
-        )
-        return redirect("cmsv2:duplicated_vocabulary")
-
-    preview = remove_duplicate_word.prepare_removal(keeper, loser)
-    return render(
-        request,
-        "admin/cmsv2/delete_duplicate_word.html",
-        {
-            **admin.site.each_context(request),
-            "preview": preview,
-            "keeper_link": _word_link(keeper),
-            "loser_link": _word_link(loser),
-            "keeper_link_with_units": _word_link_with_units(keeper),
-            "loser_link_with_units": _word_link_with_units(loser),
-        },
-    )

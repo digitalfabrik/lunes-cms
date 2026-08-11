@@ -94,6 +94,29 @@ def test_duplicated_vocabulary_lists_job_and_word(admin_client: Client) -> None:
 
 
 @pytest.mark.django_db()
+def test_duplicated_vocabulary_offers_delete_for_the_suggested_word_too(
+    admin_client: Client,
+) -> None:
+    """Even the "Suggested to keep" entry must be deletable - e.g. if one of
+    the other duplicates should be kept instead."""
+    job = Job.objects.create(name="Tischler")
+    unit = _make_unit(job)
+    # A distinctive, nonsense word text - see test_check_duplicate_returns_matches.
+    a = Word.objects.create(word="Flimmerquastenzange", singular_article=1)
+    b = Word.objects.create(word="Flimmerquastenzange", singular_article=1)
+    UnitWordRelation.objects.create(unit=unit, word=a)
+    UnitWordRelation.objects.create(unit=unit, word=b)
+
+    response = admin_client.get(reverse("cmsv2:duplicated_vocabulary"))
+
+    content = response.content.decode()
+    # Every word in the group gets Django's regular delete-confirmation page,
+    # regardless of which one is suggested to keep.
+    assert reverse("admin:cmsv2_word_delete", args=[a.pk]) in content
+    assert reverse("admin:cmsv2_word_delete", args=[b.pk]) in content
+
+
+@pytest.mark.django_db()
 def test_duplicated_vocabulary_keeps_full_sidebar(admin_client: Client) -> None:
     """The page must include the admin site's normal context (available_apps
     etc.), or Jazzmin's sidebar collapses to just "Dashboard"."""
@@ -127,143 +150,3 @@ def test_accept_word_duplicate_hides_group_from_list(admin_client: Client) -> No
     }
     content = admin_client.get(reverse("cmsv2:duplicated_vocabulary")).content.decode()
     assert "No unresolved duplicate vocabulary found." in content
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_get_shows_extra_unit(admin_client: Client) -> None:
-    job = Job.objects.create(name="Tischler")
-    unit_keeper = _make_unit(job, title="Werkzeuge")
-    unit_loser = _make_unit(job, title="Baustelle")
-    keeper = Word.objects.create(word="Hammer", singular_article=1)
-    loser = Word.objects.create(word="Hammer", singular_article=1)
-    UnitWordRelation.objects.create(unit=unit_keeper, word=keeper)
-    UnitWordRelation.objects.create(unit=unit_loser, word=loser)
-
-    response = admin_client.get(
-        reverse("cmsv2:delete_duplicate_word"), {"keeper": keeper.pk, "loser": loser.pk}
-    )
-
-    assert response.status_code == 200
-    content = response.content.decode()
-    assert "Baustelle" in content
-    assert "Vocabulary Management v2" in content
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_get_links_both_words(admin_client: Client) -> None:
-    keeper = Word.objects.create(word="Hammer", singular_article=1)
-    loser = Word.objects.create(word="Hammer", singular_article=1)
-
-    response = admin_client.get(
-        reverse("cmsv2:delete_duplicate_word"), {"keeper": keeper.pk, "loser": loser.pk}
-    )
-
-    content = response.content.decode()
-    assert reverse("admin:cmsv2_word_change", args=[keeper.pk]) in content
-    assert reverse("admin:cmsv2_word_change", args=[loser.pk]) in content
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_get_shows_each_words_own_units(
-    admin_client: Client,
-) -> None:
-    """Each word's link is annotated with the unit(s) it currently belongs
-    to, so the admin can see at a glance which unit would lose the word."""
-    job = Job.objects.create(name="Bäcker/-in")
-    unit_keeper = _make_unit(job, title="Grundlagen Backen")
-    unit_loser = _make_unit(job, title="Grundlagen Metallverarbeitung")
-    keeper = Word.objects.create(word="Pinsel", singular_article=1)
-    loser = Word.objects.create(word="Pinsel", singular_article=1)
-    UnitWordRelation.objects.create(unit=unit_keeper, word=keeper)
-    UnitWordRelation.objects.create(unit=unit_loser, word=loser)
-
-    response = admin_client.get(
-        reverse("cmsv2:delete_duplicate_word"), {"keeper": keeper.pk, "loser": loser.pk}
-    )
-
-    content = response.content.decode()
-    assert "Pinsel</a> (Grundlagen Metallverarbeitung)" in content
-    assert "Pinsel</a> (Grundlagen Backen)" in content
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_get_with_no_relations_at_all(
-    admin_client: Client,
-) -> None:
-    """Both duplicates are orphans (no unit relation) — must render fine, no unit questions."""
-    keeper = Word.objects.create(word="Hammer", singular_article=1)
-    loser = Word.objects.create(word="Hammer", singular_article=1)
-
-    response = admin_client.get(
-        reverse("cmsv2:delete_duplicate_word"), {"keeper": keeper.pk, "loser": loser.pk}
-    )
-
-    assert response.status_code == 200
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_post_deletes_loser(admin_client: Client) -> None:
-    keeper = Word.objects.create(word="Hammer", singular_article=1)
-    loser = Word.objects.create(word="Hammer", singular_article=1)
-
-    response = admin_client.post(
-        reverse("cmsv2:delete_duplicate_word"), {"keeper": keeper.pk, "loser": loser.pk}
-    )
-
-    assert response.status_code == 302
-    assert not Word.objects.filter(pk=loser.pk).exists()
-    assert Word.objects.filter(pk=keeper.pk).exists()
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_post_yes_carries_unit_over(admin_client: Client) -> None:
-    job = Job.objects.create(name="Tischler")
-    unit = _make_unit(job, title="Baustelle")
-    keeper = Word.objects.create(word="Hammer", singular_article=1)
-    loser = Word.objects.create(word="Hammer", singular_article=1)
-    UnitWordRelation.objects.create(unit=unit, word=loser)
-
-    admin_client.post(
-        reverse("cmsv2:delete_duplicate_word"),
-        {
-            "keeper": keeper.pk,
-            "loser": loser.pk,
-            f"add_to_unit_{unit.pk}": "yes",
-        },
-    )
-
-    assert keeper.units.filter(pk=unit.pk).exists()
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_post_no_drops_unit(admin_client: Client) -> None:
-    job = Job.objects.create(name="Tischler")
-    unit = _make_unit(job, title="Baustelle")
-    keeper = Word.objects.create(word="Hammer", singular_article=1)
-    loser = Word.objects.create(word="Hammer", singular_article=1)
-    UnitWordRelation.objects.create(unit=unit, word=loser)
-
-    admin_client.post(
-        reverse("cmsv2:delete_duplicate_word"),
-        {
-            "keeper": keeper.pk,
-            "loser": loser.pk,
-            f"add_to_unit_{unit.pk}": "no",
-        },
-    )
-
-    assert not keeper.units.filter(pk=unit.pk).exists()
-
-
-@pytest.mark.django_db()
-def test_delete_duplicate_word_rejects_deleting_as_duplicate_of_itself(
-    admin_client: Client,
-) -> None:
-    word = Word.objects.create(word="Hammer", singular_article=1)
-
-    response = admin_client.get(
-        reverse("cmsv2:delete_duplicate_word"), {"keeper": word.pk, "loser": word.pk}
-    )
-
-    assert response.status_code == 302
-    assert Word.objects.filter(pk=word.pk).exists()
