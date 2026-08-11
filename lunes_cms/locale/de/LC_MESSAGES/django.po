@@ -17,13 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: analysis/admin.py cms/models/document.py cmsv2/models/alternative_word.py
+#: cmsv2/models/unit.py cmsv2/models/word.py
+msgid "word"
+msgstr "Wort"
+
+#: analysis/admin.py
+msgid "Undo selected accepted duplicates"
+msgstr "Ausgewählte akzeptierte Duplikate rückgängig machen"
+
+#: analysis/admin.py
+#, python-format
+msgid "%(count)d accepted duplicate(s) undone."
+msgstr "%(count)d akzeptierte(s) Duplikat(e) rückgängig gemacht."
+
 #: analysis/apps.py
 msgid "Analysis"
 msgstr "Analyse"
 
 #: analysis/models.py cmsv2/templates/admin/cmsv2/duplicated_vocabulary.html
-msgid "Duplicated vocabulary"
-msgstr "Doppelte Vokabeln"
+msgid "Open duplicates"
+msgstr "Offene Duplikate"
+
+#: analysis/models.py
+msgid "Accepted duplicates"
+msgstr "Akzeptierte Duplikate"
 
 #: analytics/apps.py
 msgid "Analytics"
@@ -388,11 +406,6 @@ msgstr "Übergeordnete Modulgruppe"
 #: cms/models/document.py cmsv2/models/word.py
 msgid "word type"
 msgstr "Wortart"
-
-#: cms/models/document.py cmsv2/models/alternative_word.py cmsv2/models/unit.py
-#: cmsv2/models/word.py
-msgid "word"
-msgstr "Wort"
 
 #: cms/models/document.py cmsv2/models/alternative_word.py cmsv2/models/word.py
 msgid "Grammatical gender"
@@ -1380,6 +1393,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Duplicated vocabulary"
+#~ msgstr "Doppelte Vokabeln"
 
 #, python-format
 #~ msgid "%(loser)s will be deleted, keeping %(keeper)s."

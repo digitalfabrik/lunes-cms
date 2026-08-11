@@ -7,9 +7,9 @@ from django.utils.translation import gettext_lazy as _
 class AnalysisConfig(AppConfig):
     """
     Application settings for the `analysis` app, which groups analysis/report
-    pages (currently just "Duplicated vocabulary", issue #531) under their
-    own "Analyse" section in the admin sidebar, separate from the actual
-    vocabulary CRUD apps.
+    pages (currently "Open duplicates" and "Accepted duplicates", issue #531)
+    under their own "Analyse" section in the admin sidebar, separate from the
+    actual vocabulary CRUD apps.
     """
 
     name = "lunes_cms.analysis"

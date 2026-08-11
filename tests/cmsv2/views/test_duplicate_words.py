@@ -1,5 +1,5 @@
 """
-Tests for the "Duplicated vocabulary" analysis views (issue #531).
+Tests for the "Open duplicates" analysis views (issue #531).
 """
 
 from __future__ import annotations

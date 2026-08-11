@@ -16,6 +16,11 @@ urlpatterns = [
         name="accept_word_duplicate",
     ),
     path(
+        "analysis/accepted-duplicates/",
+        views.accepted_duplicates,
+        name="accepted_duplicates",
+    ),
+    path(
         "words/check-duplicate/",
         views.word_check_duplicate,
         name="word_check_duplicate",

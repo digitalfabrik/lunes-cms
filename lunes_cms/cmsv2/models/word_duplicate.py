@@ -2,7 +2,7 @@
 Tracks duplicate-vocabulary groups a content manager has explicitly reviewed
 and accepted as intentional - e.g. the same word taught with a different
 example sentence in a different unit - so they stop showing up in the
-"Duplicated vocabulary" analysis section (issue #531).
+"Open duplicates" analysis section (issue #531).
 """
 
 from __future__ import annotations
@@ -28,4 +28,19 @@ class AcceptedWordDuplicate(models.Model):
         verbose_name_plural = _("accepted word duplicates")
 
     def __str__(self) -> str:
-        return ", ".join(str(word) for word in self.words.all())
+        """
+        Every ``Word`` here shares the same text by definition - that's
+        what makes them duplicates - so show it once, with its article,
+        rather than repeating e.g. "(der) X, (der) X" for each underlying
+        row (issue #531).
+        """
+        words = list(self.words.order_by("pk"))
+        if not words:
+            return ""
+        texts = {word.word for word in words}
+        if len(texts) == 1:
+            return f"({words[0].get_singular_article_display()}) {words[0].word}"
+        # Not expected in practice - accepted groups are always same-text -
+        # but fall back to listing everything rather than silently hiding
+        # a mismatch.
+        return ", ".join(str(word) for word in words)

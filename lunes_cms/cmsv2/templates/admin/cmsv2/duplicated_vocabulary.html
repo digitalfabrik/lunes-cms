@@ -1,18 +1,18 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Duplicated vocabulary" %}{% endblock %}
+{% block title %}{% trans "Open duplicates" %}{% endblock %}
 
 {% block bodyclass %}{{ block.super }} app-cmsv2{% endblock %}
 
 {% block breadcrumbs %}
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
-    <li class="breadcrumb-item active">{% trans "Duplicated vocabulary" %}</li>
+    <li class="breadcrumb-item active">{% trans "Open duplicates" %}</li>
 </ol>
 {% endblock %}
 
-{% block content_title %}{% trans "Duplicated vocabulary" %}{% endblock %}
+{% block content_title %}{% trans "Open duplicates" %}{% endblock %}
 
 {% block content %}
 {% url 'cmsv2:duplicated_vocabulary' as duplicated_vocabulary_url %}

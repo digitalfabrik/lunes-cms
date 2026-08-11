@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from ...analysis.models import AcceptedDuplicates
 from ..models import AcceptedWordDuplicate, Word
 from ..services import duplicate_words
 
@@ -71,3 +72,19 @@ def accept_word_duplicate(request: HttpRequest) -> HttpResponse:
         accepted.words.set(words)
         messages.success(request, _("The duplicate has been accepted as intentional."))
     return redirect("cmsv2:duplicated_vocabulary")
+
+
+@superuser_required
+def accepted_duplicates(request: HttpRequest) -> HttpResponse:
+    """
+    A nicer-looking URL for the "Accepted duplicates" analysis page (issue
+    #531). Unlike "Open duplicates", that page is a real Django changelist
+    (``analysis.AcceptedDuplicatesAdmin``) rather than a custom template —
+    Django names a model's admin URL after its class (``acceptedduplicates``,
+    no way to add a hyphen without renaming the class), so this just
+    delegates straight to that same changelist view under a prettier path.
+    Pagination/sorting/search on the page keep working exactly as they do at
+    the admin's own URL, since they're built from ``request.path``.
+    """
+    model_admin = admin.site.get_model_admin(AcceptedDuplicates)
+    return model_admin.changelist_view(request)

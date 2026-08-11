@@ -899,8 +899,8 @@ class WordAdmin(BaseAdmin):
     ) -> HttpResponse:
         """
         Honour a ``?next=`` redirect target (issue #531), e.g. so deleting a
-        duplicate from the "Duplicated vocabulary" analysis page returns
-        there instead of the regular changelist. Falls back to the default
+        duplicate from the "Open duplicates" analysis page returns there
+        instead of the regular changelist. Falls back to the default
         behaviour if there is none, or it doesn't point back into this site.
         """
         next_url = request.POST.get("next") or request.GET.get("next")

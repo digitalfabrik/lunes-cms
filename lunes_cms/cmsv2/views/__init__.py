@@ -1,6 +1,7 @@
 from .delete_alternative_word import delete_alternative_word
 from .duplicate_words import (
     accept_word_duplicate,
+    accepted_duplicates,
     duplicated_vocabulary,
     word_check_duplicate,
 )
@@ -44,6 +45,7 @@ __all__ = [
     "delete_alternative_word",
     "save_alternative_word",
     "accept_word_duplicate",
+    "accepted_duplicates",
     "duplicated_vocabulary",
     "word_check_duplicate",
     "import_from_csv",
