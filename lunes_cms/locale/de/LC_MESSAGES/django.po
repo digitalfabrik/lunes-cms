@@ -166,7 +166,8 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_export_resource.py
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
@@ -1405,6 +1406,9 @@ msgstr "Hilfe"
 
 #~ msgid "Image Reviews"
 #~ msgstr "Bild Kontrollen"
+
+#~ msgid "more"
+#~ msgstr "mehr"
 
 #~ msgid "Miscellaneous"
 #~ msgstr "Verschiedene"
