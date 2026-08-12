@@ -120,7 +120,7 @@ msgid "training set"
 msgstr "Modul"
 
 #: cms/admins/document_admin.py cms/models/document.py
-#: cmsv2/admins/word_admin.py cmsv2/models/word.py
+#: cmsv2/admins/word_admin_list_renderers.py cmsv2/models/word.py
 msgid "audio"
 msgstr "Audio"
 
@@ -166,7 +166,7 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
+#: cms/admins/document_resource.py cmsv2/admins/word_admin_list_renderers.py
 #: cmsv2/admins/word_export_resource.py
 msgid "Example sentence"
 msgstr "Beispielsatz"
@@ -324,7 +324,7 @@ msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py cmsv2/admins/word_admin.py
+#: cms/models/alternative_word.py cmsv2/admins/word_inlines.py
 #: cmsv2/models/alternative_word.py
 msgid "alternative word"
 msgstr "Alternatives Wort"
@@ -727,7 +727,8 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
 
-#: cmsv2/admins/job_admin.py cmsv2/admins/word_admin.py cmsv2/utils.py
+#: cmsv2/admins/job_admin.py cmsv2/admins/word_admin_asset_widgets.py
+#: cmsv2/utils.py
 msgid "New"
 msgstr "Neu"
 
@@ -803,22 +804,6 @@ msgid "assigned units"
 msgstr "Zugewiesene Einheiten"
 
 #: cmsv2/admins/word_admin.py
-msgid "So heißt das auch"
-msgstr "So heißt das auch"
-
-#: cmsv2/admins/word_admin.py
-msgid "Add alternative word"
-msgstr "Alternatives Wort hinzufügen"
-
-#: cmsv2/admins/word_admin.py
-msgid "Save alternative word"
-msgstr "Alternatives Wort speichern"
-
-#: cmsv2/admins/word_admin.py
-msgid "Delete alternative word"
-msgstr "Alternatives Wort löschen"
-
-#: cmsv2/admins/word_admin.py
 msgid "Word Information"
 msgstr "Wort Informationen"
 
@@ -830,98 +815,14 @@ msgstr "Aussprache"
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+#: cmsv2/admins/word_admin.py cmsv2/admins/word_admin_list_renderers.py
+#: cmsv2/models/unit.py
 msgid "Image"
 msgstr "Bilder"
 
 #: cmsv2/admins/word_admin.py
 msgid "Example Sentence"
 msgstr "Beispielsatz"
-
-#: cmsv2/admins/word_admin.py
-msgid "Will be spoken:"
-msgstr "Gesprochen wird:"
-
-#: cmsv2/admins/word_admin.py cmsv2/templates/admin/generate_image_base.html
-msgid "Allow text/numbers in the image (e.g. for a receipt or a clock face)"
-msgstr ""
-"Text/Zahlen im Bild erlauben (z. B. für eine Rechnung oder ein Zifferblatt)"
-
-#: cmsv2/admins/word_admin.py
-msgid "Additional info (optional)"
-msgstr "Zusätzliche Infos (optional)"
-
-#: cmsv2/admins/word_admin.py
-msgid "Current"
-msgstr "Aktuell"
-
-#: cmsv2/admins/word_admin.py
-msgid "Not generated yet"
-msgstr "Noch nicht generiert"
-
-#: cmsv2/admins/word_admin.py cmsv2/utils.py
-msgid "Keep new"
-msgstr "Neues übernehmen"
-
-#: cmsv2/admins/word_admin.py cmsv2/utils.py
-msgid "Discard new"
-msgstr "Neues verwerfen"
-
-#: cmsv2/admins/word_admin.py
-msgid "Save to enable audio generation."
-msgstr "Speichern, um die Audio-Generierung zu aktivieren."
-
-#: cmsv2/admins/word_admin.py
-msgid "No audio yet."
-msgstr "Noch kein Audio."
-
-#: cmsv2/admins/word_admin.py
-msgid "Generate audio"
-msgstr "Audio generieren"
-
-#: cmsv2/admins/word_admin.py
-msgid "Regenerate audio"
-msgstr "Audio neu generieren"
-
-#: cmsv2/admins/word_admin.py
-msgid "Audio Generation"
-msgstr "Audio-Generierung"
-
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
-msgid "Save to enable example sentence generation."
-msgstr "Speichern, um die Beispielsatz-Generierung zu aktivieren."
-
-#: cmsv2/admins/word_admin.py
-msgid "Example Sentence Generation"
-msgstr "Beispielsatz-Generierung"
-
-#: cmsv2/admins/word_admin.py
-msgid "Example Sentence Audio Generation"
-msgstr "Beispielsatz-Audio-Generierung"
-
-#: cmsv2/admins/word_admin.py
-msgid "Image Preview"
-msgstr "Bild Vorschau"
-
-#: cmsv2/admins/word_admin.py
-msgid "Save to enable image generation."
-msgstr "Speichern, um die Bild-Generierung zu aktivieren."
-
-#: cmsv2/admins/word_admin.py
-msgid "No image yet."
-msgstr "Noch kein Bild."
-
-#: cmsv2/admins/word_admin.py
-msgid "Generate image"
-msgstr "Bild generieren"
-
-#: cmsv2/admins/word_admin.py
-msgid "Regenerate image"
-msgstr "Bild neu generieren"
-
-#: cmsv2/admins/word_admin.py
-msgid "Image Generation"
-msgstr "Bild-Generierung"
 
 #: cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "audio check status"
@@ -930,6 +831,92 @@ msgstr "Audio Prüfstatus"
 #: cmsv2/admins/word_admin.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "image check status"
 msgstr "Bild Prüfstatus"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Will be spoken:"
+msgstr "Gesprochen wird:"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+#: cmsv2/templates/admin/generate_image_base.html
+msgid "Allow text/numbers in the image (e.g. for a receipt or a clock face)"
+msgstr ""
+"Text/Zahlen im Bild erlauben (z. B. für eine Rechnung oder ein Zifferblatt)"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Additional info (optional)"
+msgstr "Zusätzliche Infos (optional)"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Current"
+msgstr "Aktuell"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Not generated yet"
+msgstr "Noch nicht generiert"
+
+#: cmsv2/admins/word_admin_asset_widgets.py cmsv2/utils.py
+msgid "Keep new"
+msgstr "Neues übernehmen"
+
+#: cmsv2/admins/word_admin_asset_widgets.py cmsv2/utils.py
+msgid "Discard new"
+msgstr "Neues verwerfen"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Save to enable audio generation."
+msgstr "Speichern, um die Audio-Generierung zu aktivieren."
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "No audio yet."
+msgstr "Noch kein Audio."
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Generate audio"
+msgstr "Audio generieren"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Regenerate audio"
+msgstr "Audio neu generieren"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Audio Generation"
+msgstr "Audio-Generierung"
+
+#: cmsv2/admins/word_admin_asset_widgets.py cmsv2/models/unit.py
+msgid "Save to enable example sentence generation."
+msgstr "Speichern, um die Beispielsatz-Generierung zu aktivieren."
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Example Sentence Generation"
+msgstr "Beispielsatz-Generierung"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Example Sentence Audio Generation"
+msgstr "Beispielsatz-Audio-Generierung"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Image Preview"
+msgstr "Bild Vorschau"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Save to enable image generation."
+msgstr "Speichern, um die Bild-Generierung zu aktivieren."
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "No image yet."
+msgstr "Noch kein Bild."
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Generate image"
+msgstr "Bild generieren"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Regenerate image"
+msgstr "Bild neu generieren"
+
+#: cmsv2/admins/word_admin_asset_widgets.py
+msgid "Image Generation"
+msgstr "Bild-Generierung"
 
 #: cmsv2/admins/word_export_resource.py
 msgid "Plural"
@@ -985,6 +972,22 @@ msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
+
+#: cmsv2/admins/word_inlines.py
+msgid "So heißt das auch"
+msgstr "So heißt das auch"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Add alternative word"
+msgstr "Alternatives Wort hinzufügen"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Save alternative word"
+msgstr "Alternatives Wort speichern"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Delete alternative word"
+msgstr "Alternatives Wort löschen"
 
 #: cmsv2/apps.py cmsv2/templates/admin/generate_audio_base.html
 #: cmsv2/templates/admin/generate_image_base.html
