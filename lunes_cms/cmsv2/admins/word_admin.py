@@ -199,6 +199,7 @@ class WordAdmin(BaseAdmin):
         "singular_article_display",
         "list_audio",
         "list_image",
+        "list_example_sentence",
         "creator_group",
         "created_by_user",
         "creation_date_display",
@@ -234,6 +235,7 @@ class WordAdmin(BaseAdmin):
             "js/audio_player.js",
             "js/audio_check_status_update.js",
             "js/image_check_status_update.js",
+            "js/example_sentence_check_status_update.js",
             "js/generate_example_sentence.js",
             "js/inline_regenerate.js",
             "js/alternative_word_actions.js",
@@ -648,6 +650,149 @@ class WordAdmin(BaseAdmin):
         all_images = f'<div class="all-images-container"><div>{word_image_container}</div><div>{unit_word_images}</div></div>'
 
         return mark_safe(all_images)
+
+    def list_example_sentence(self, obj: Word) -> SafeString:
+        """
+        Generate HTML for displaying the word's example sentence with controls in the admin list view.
+
+        This method creates HTML that includes the word's example sentence (as text),
+        along with controls for listening to the audio, uploading new audio and dropdowns for the check status.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for displaying the word's example sentence with controls
+        """
+        example_sentence_html = self._generate_word_example_sentence_container(obj)
+        example_sentence_audio_html = (
+            self._generate_word_example_sentence_audio_container(obj)
+        )
+        example_sentence_combined = f'<div class="example-sentence-container"><div>{example_sentence_html}</div><div>{example_sentence_audio_html}</div></div>'
+        return mark_safe(example_sentence_combined)
+
+    list_example_sentence.short_description = _("Example sentence")  # type: ignore[attr-defined]
+
+    def _generate_example_sentence_text_html(
+        self, sentence: str, truncate_at: int = 40
+    ) -> str:
+        """Generate HTML for an example sentence, truncated with an expandable
+        "more" toggle if it exceeds `truncate_at` characters.
+
+        Args:
+            sentence: The raw example sentence text
+            truncate_at: The character count above which the sentence gets truncated
+
+        Returns:
+            str: HTML markup for the (optionally truncated) example sentence
+        """
+        if len(sentence) <= truncate_at:
+            return f"""<div class="example-sentence-hover-container">
+                <span>{escape(sentence)}</span>
+            </div>"""
+
+        truncated = escape(sentence[:truncate_at])
+        full = escape(sentence)
+        return f"""<div class="example-sentence-hover-container py-2">
+            <details class="example-sentence-details">
+                <summary class="example-sentence-summary">
+                    <span class="example-sentence-truncated">{truncated}&hellip;</span>
+                    <span class="example-sentence-full">{full}</span>
+                    <span class="example-sentence-more">{_("more")}</span>
+                </summary>
+            </details>
+        </div>"""
+
+    def _generate_word_example_sentence_container(self, obj: Word) -> str:
+        """Generate HTML for the word's example sentence container.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the word's example sentence container"""
+
+        example_sentence_html = (
+            self._generate_example_sentence_text_html(obj.example_sentence)
+            if obj.example_sentence
+            else ""
+        )
+
+        controls_html = f"""
+        <div class="example-sentence-controls" data-word-id="{obj.id}">
+            <button disabled type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
+                <span class="example-sentence-edit">✎</span>
+            </button>
+            <button disabled type="button" class="replace-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
+                <span class="example-sentence-replace">↻</span>
+            </button>
+            <button disabled type="button" class="delete-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
+                <span class="example-sentence-delete">×</span>
+            </button>
+            <input type="file" class="example-sentence-file-input" style="display: none;" accept="example_sentence/*">
+        </div>
+        """
+
+        word_options = ""
+        for value, display in CheckStatus.choices:
+            selected = "selected" if obj.example_sentence_check_status == value else ""
+            word_options += f'<option value="{value}" {selected}>{display}</option>'
+
+        word_example_sentence_check_status_html = f"""
+        <select name="example_sentence_check_status_{obj.id}" data-word-id="{obj.id}" class="example-sentence-check-status-select" style="margin-top: 8px;">
+            {word_options}
+        </select>
+        """
+
+        html = f'<div class="word-example-sentence-container">{example_sentence_html}{controls_html}</div>'
+        if obj.example_sentence:
+            html += word_example_sentence_check_status_html
+
+        return html
+
+    def _generate_word_example_sentence_audio_container(self, obj: Word) -> str:
+        """Generate HTML for the word's example sentence audio container.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            str: HTML markup for the word's example sentence audio container"""
+
+        audio_html = ""
+        if obj.example_sentence_audio:
+            audio_html = f"""
+            <div class="audio-player-container">
+                <audio class="minimal-audio-player"><source src="{cache_busted_url(obj.example_sentence_audio)}" type="audio/mpeg"></audio>
+                <div class="play-btn">
+                    <div>
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="pause-btn" style="display: none;">
+                    <div>
+                        <i class="fas fa-pause"></i>
+                    </div>
+                </div>
+            </div>
+            """
+
+        controls_html = f"""
+        <div class="example-sentence-audio-controls" data-word-id="{obj.id}">
+            <button disabled type="button" class="add-example-sentence-audio-btn" style="display: {'none' if obj.example_sentence_audio else 'inline-flex'};">
+                <span class="example-sentence-audio-add">+</span>
+            </button>
+            <button disabled type="button" class="replace-example-sentence-audio-btn" style="display: {'inline-flex' if obj.example_sentence_audio else 'none'};">
+                <span class="example-sentence-audio-replace">↻</span>
+            </button>
+            <button disabled type="button" class="delete-example-sentence-audio-btn" style="display: {'inline-flex' if obj.example_sentence_audio else 'none'};">
+                <span class="example-sentence-audio-delete">×</span>
+            </button>
+            <input type="file" class="example-sentence-audio-file-input" style="display: none;" accept="audio/*">
+        </div>
+        """
+
+        return f'<div class="word-example-sentence-audio-container py-2">{audio_html}{controls_html}</div>'
 
     def _generate_word_image_container(self, obj: Word) -> str:
         """

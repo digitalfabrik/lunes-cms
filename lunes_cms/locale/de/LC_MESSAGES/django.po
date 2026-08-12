@@ -166,7 +166,8 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cms/admins/document_resource.py cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_export_resource.py
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
@@ -1325,6 +1326,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "more"
+#~ msgstr "mehr"
 
 #~ msgid "Miscellaneous"
 #~ msgstr "Verschiedene"

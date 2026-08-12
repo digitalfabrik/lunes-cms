@@ -1,6 +1,7 @@
 .asset-container,
 .word-image-container,
 .word-audio-container,
+.word-example-sentence-audio-container,
 .job-icon-container,
 .unit-icon-container,
 .unitword-image-container {
@@ -23,22 +24,31 @@
 .image-controls,
 .audio-asset-controls,
 .icon-controls,
+.example-sentence-controls,
+.example-sentence-audio-controls,
 .unitword-image-controls {
     display: flex;
 }
 
 .add-btn,
+.add-example-sentence-btn,
 .replace-btn,
 .delete-btn,
 .add-image-btn,
 .add-icon-btn,
 .add-audio-btn,
+.edit-example-sentence-btn,
 .replace-image-btn,
 .replace-icon-btn,
 .replace-audio-btn,
+.replace-example-sentence-btn,
 .delete-image-btn,
 .delete-icon-btn,
 .delete-audio-btn,
+.delete-example-sentence-btn,
+.add-example-sentence-audio-btn,
+.replace-example-sentence-audio-btn,
+.delete-example-sentence-audio-btn,
 .add-unitword-image-btn,
 .replace-unitword-image-btn,
 .delete-unitword-image-btn,
@@ -62,6 +72,7 @@
 .replace-image-btn,
 .replace-icon-btn,
 .replace-audio-btn,
+.replace-example-sentence-audio-btn,
 .replace-unitword-image-btn {
     margin-left: 12px;
 }
@@ -74,6 +85,8 @@
 .replace-image-btn:hover,
 .replace-icon-btn:hover,
 .replace-audio-btn:hover,
+.add-example-sentence-audio-btn:hover,
+.replace-example-sentence-audio-btn:hover,
 .add-unitword-image-btn:hover,
 .replace-unitword-image-btn:hover,
 .add-alternative-word-btn:hover,
@@ -85,6 +98,7 @@
 .delete-image-btn:hover,
 .delete-icon-btn:hover,
 .delete-audio-btn:hover,
+.delete-example-sentence-audio-btn:hover,
 .delete-unitword-image-btn:hover,
 .delete-alternative-word-btn:hover {
     background-color: #ffeeee;
@@ -242,6 +256,41 @@
 
 .regen-new-preview img {
     max-width: min(200px, 100%);
+}
+
+/* Example sentence truncation with expandable "more" */
+.example-sentence-details {
+    display: inline;
+}
+
+.example-sentence-summary {
+    display: inline;
+    cursor: pointer;
+    list-style: none;
+}
+
+.example-sentence-summary::-webkit-details-marker {
+    display: none;
+}
+
+.example-sentence-full {
+    display: none;
+}
+
+.example-sentence-details[open] .example-sentence-truncated,
+.example-sentence-details[open] .example-sentence-more {
+    display: none;
+}
+
+.example-sentence-details[open] .example-sentence-full {
+    display: inline;
+}
+
+.example-sentence-more {
+    margin-left: 4px;
+    color: #0645ad;
+    text-decoration: underline;
+    font-size: 0.9em;
 }
 
 /* Image hover preview styles */
