@@ -1,190 +1,23 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
-from datetime import date
-from typing import TYPE_CHECKING
-
-from django.utils.functional import lazy
-from django.utils.html import escape, format_html
+from django.urls import reverse
+from django.utils.html import escape
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.cmsv2.admins.base import BaseAdmin
-from lunes_cms.cmsv2.admins.word_admin_asset_widgets import WordAdminAssetWidgetsMixin
-from lunes_cms.cmsv2.admins.word_admin_list_renderers import (
-    WordAdminListRenderersMixin,
-)
-from lunes_cms.cmsv2.admins.word_filters import (
-    HasCompleteExampleSentenceFilter,
-    HasImageFilter,
-    MigratedFilter,
-    UnitOrJobDropdownFilter,
-)
-from lunes_cms.cmsv2.admins.word_inlines import AlternativeWordInline, UnitInline
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
-from lunes_cms.cmsv2.utils import (
-    cache_busted_url,
-    get_image_tag,
-)
+from lunes_cms.cmsv2.utils import cache_busted_url, get_image_tag
 from lunes_cms.core import settings
 
-if TYPE_CHECKING:
-    # These only exist in django-stubs, not at runtime.
-    from django.contrib.admin.options import _FieldGroups
-    from django.utils.functional import _StrOrPromise
 
-_format_html_lazy = lazy(format_html, SafeString)
-
-
-class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMixin):
+class WordAdminListRenderersMixin:
     """
-    Admin interface for the Word model.
-
-    This admin class provides a comprehensive interface for managing words,
-    including their attributes, audio files, images, and relationships with units.
-    It includes custom display methods for showing and managing assets.
+    Mixin providing the ``list_display`` HTML renderers for the Word admin
+    list view (audio, image and example sentence columns with their
+    inline controls).
     """
-
-    fieldsets = (
-        (
-            _format_html_lazy("<h2>{}</h2>", _("Word Information")),
-            {
-                "fields": (
-                    "word_type",
-                    "grammatical_gender",
-                    "singular_article",
-                    "word",
-                    "plural_article",
-                    "plural",
-                    "migrated_status",
-                )
-            },
-        ),
-        (
-            _format_html_lazy("<h2>{}</h2>", _("Pronunciation")),
-            {"fields": ("pronunciation",)},
-        ),
-        (
-            _format_html_lazy("<h2>{}</h2>", _("Audio")),
-            {
-                "fields": (
-                    "audio",
-                    "audio_player",
-                    "audio_generate",
-                    "audio_check_status",
-                )
-            },
-        ),
-        (
-            _format_html_lazy("<h2>{}</h2>", _("Image")),
-            {
-                "fields": (
-                    "image",
-                    "image_check_status",
-                    "image_generate",
-                    "image_tag",
-                )
-            },
-        ),
-        (
-            _format_html_lazy("<h2>{}</h2>", _("Example Sentence")),
-            {
-                "fields": (
-                    "example_sentence",
-                    "example_sentence_generate",
-                    "example_sentence_check_status",
-                    "example_sentence_audio",
-                    "example_sentence_audio_player",
-                    "example_sentence_audio_generate",
-                )
-            },
-        ),
-    )
-    readonly_fields = (
-        "audio_generate",
-        "audio_player",
-        "example_sentence_audio_generate",
-        "example_sentence_audio_player",
-        "example_sentence_generate",
-        "created_by",
-        "created_by_user",
-        "image_generate",
-        "image_tag",
-        "migrated_status",
-    )
-    search_fields = ["word"]
-    ordering = ["word", "creation_date"]
-    inlines = [AlternativeWordInline, UnitInline]
-    list_display = (
-        "word",
-        "migrated_status",
-        "word_type",
-        "singular_article_display",
-        "list_audio",
-        "list_image",
-        "list_example_sentence",
-        "creator_group",
-        "created_by_user",
-        "creation_date_display",
-    )
-    list_filter = [
-        "word_type",
-        "audio_check_status",
-        "image_check_status",
-        HasImageFilter,
-        UnitOrJobDropdownFilter,
-        HasCompleteExampleSentenceFilter,
-        MigratedFilter,
-        "created_by",
-    ]
-    list_select_related = ["created_by", "created_by_user"]
-    list_per_page = 25
-
-    class Media:
-        """
-        Media class for including JavaScript and CSS files in the admin interface.
-
-        This class specifies the static files needed for the word admin interface,
-        including scripts for asset management, audio playback, and status updates.
-        """
-
-        js = [
-            "js/cookies.js",
-            "js/word_image_asset_config.js",
-            "js/unitword_image_asset_config.js",
-            "js/asset_manager.js",
-            "js/word_audio_asset_config.js",
-            "js/audio_asset_manager.js",
-            "js/audio_player.js",
-            "js/audio_check_status_update.js",
-            "js/image_check_status_update.js",
-            "js/example_sentence_check_status_update.js",
-            "js/example_sentence_edit.js",
-            "js/generate_example_sentence.js",
-            "js/inline_regenerate.js",
-            "js/alternative_word_actions.js",
-        ]
-        css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
-
-    def creator_group(self, obj: Word) -> str | None:
-        """
-        Determine the creator group for display in the admin interface.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            str or None: "Admin" if created by an admin, the group name if created by a group,
-                         or None if no creator information is available
-        """
-        if obj.creator_is_admin:
-            return "Admin"
-        if obj.created_by:
-            return str(obj.created_by)
-        return None
-
-    creator_group.short_description = _("group")  # type: ignore[attr-defined]
 
     def list_audio(self, obj: Word) -> SafeString:
         """
@@ -217,18 +50,15 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
             </div>
             """
 
-        add_title = _("Add audio")
-        upload_title = _("Upload audio")
-        delete_title = _("Delete audio")
         controls_html = f"""
         <div class="audio-asset-controls" data-word-id="{obj.id}">
-            <button type="button" class="add-audio-btn" style="display: {'none' if obj.audio else 'inline-flex'};" title="{add_title}">
+            <button type="button" class="add-audio-btn" style="display: {'none' if obj.audio else 'inline-flex'};">
                 <span class="audio-add">+</span>
             </button>
-            <button type="button" class="replace-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};" title="{upload_title}">
-                <span class="audio-replace"><i class="fas fa-upload"></i></span>
+            <button type="button" class="replace-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};">
+                <span class="audio-replace">↻</span>
             </button>
-            <button type="button" class="delete-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};" title="{delete_title}">
+            <button type="button" class="delete-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};">
                 <span class="audio-delete">×</span>
             </button>
             <input type="file" class="audio-file-input" style="display: none;" accept="audio/*">
@@ -280,6 +110,8 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
         all_images = f'<div class="all-images-container"><div>{word_image_container}</div><div>{unit_word_images}</div></div>'
 
         return mark_safe(all_images)
+
+    list_image.short_description = _("Image")  # type: ignore[attr-defined]
 
     def list_example_sentence(self, obj: Word) -> SafeString:
         """
@@ -350,7 +182,7 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
 
         controls_html = f"""
         <div class="example-sentence-controls" data-word-id="{obj.id}">
-            <button disabled type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
+            <button type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
                 <span class="example-sentence-edit">✎</span>
             </button>
             <button disabled type="button" class="replace-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
@@ -363,6 +195,31 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
         </div>
         """
 
+        display_html = f"""
+        <div class="example-sentence-display">
+            {example_sentence_html}{controls_html}
+        </div>
+        """
+
+        edit_form_html = ""
+        if obj.example_sentence:
+            store_url = reverse(
+                "cmsv2:word_store_generated_example_sentence", args=[obj.id]
+            )
+            edit_form_html = f"""
+            <div class="example-sentence-edit-form" style="display: none;">
+                <textarea class="example-sentence-textarea" rows="3" data-original-value="{escape(obj.example_sentence)}">{escape(obj.example_sentence)}</textarea>
+                <div class="example-sentence-edit-controls">
+                    <button type="button" class="save-example-sentence-btn" data-store-url="{store_url}">
+                        <span class="example-sentence-save">✓</span>
+                    </button>
+                    <button type="button" class="cancel-example-sentence-btn">
+                        <span class="example-sentence-cancel">×</span>
+                    </button>
+                </div>
+            </div>
+            """
+
         word_options = ""
         for value, display in CheckStatus.choices:
             selected = "selected" if obj.example_sentence_check_status == value else ""
@@ -374,7 +231,7 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
         </select>
         """
 
-        html = f'<div class="word-example-sentence-container">{example_sentence_html}{controls_html}</div>'
+        html = f'<div class="word-example-sentence-container">{display_html}{edit_form_html}</div>'
         if obj.example_sentence:
             html += word_example_sentence_check_status_html
 
@@ -444,18 +301,15 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
         else:
             image_html = ""
 
-        add_title = _("Add image")
-        upload_title = _("Upload image")
-        delete_title = _("Delete image")
         controls_html = f"""
         <div class="image-controls" data-word-id="{obj.id}">
-            <button type="button" class="add-image-btn" style="display: {'none' if obj.image else 'inline-flex'};" title="{add_title}">
+            <button type="button" class="add-image-btn" style="display: {'none' if obj.image else 'inline-flex'};">
                 <span class="image-add">+</span>
             </button>
-            <button type="button" class="replace-image-btn" style="display: {'inline-flex' if obj.image else 'none'};" title="{upload_title}">
-                <span class="image-replace"><i class="fas fa-upload"></i></span>
+            <button type="button" class="replace-image-btn" style="display: {'inline-flex' if obj.image else 'none'};">
+                <span class="image-replace">↻</span>
             </button>
-            <button type="button" class="delete-image-btn" style="display: {'inline-flex' if obj.image else 'none'};" title="{delete_title}">
+            <button type="button" class="delete-image-btn" style="display: {'inline-flex' if obj.image else 'none'};">
                 <span class="image-delete">×</span>
             </button>
             <input type="file" class="image-file-input" style="display: none;" accept="image/*">
@@ -517,18 +371,15 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
         else:
             unit_image_html = ""
 
-        add_title = _("Add image")
-        upload_title = _("Upload image")
-        delete_title = _("Delete image")
         unit_controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{relation.id}">
-            <button type="button" class="add-unitword-image-btn" style="display: {'none' if relation.image else 'inline-flex'};" title="{add_title}">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if relation.image else 'inline-flex'};">
                 <span class="unitword-image-add">+</span>
             </button>
-            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};" title="{upload_title}">
-                <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};">
+                <span class="unitword-image-replace">↻</span>
             </button>
-            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};" title="{delete_title}">
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};">
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
@@ -562,85 +413,3 @@ class WordAdmin(BaseAdmin, WordAdminAssetWidgetsMixin, WordAdminListRenderersMix
             html += unit_image_check_status_html
 
         return html
-
-    list_image.short_description = _("Image")  # type: ignore[attr-defined]
-
-    def singular_article_display(self, obj: Word) -> str:
-        """
-        Format the singular article for display in the admin list view.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            str: The display value of the singular article
-        """
-        return obj.get_singular_article_display()
-
-    singular_article_display.short_description = _("singular article")  # type: ignore[attr-defined]
-
-    def creation_date_display(self, obj: Word) -> date:
-        """
-        Format the creation date for display in the admin list view.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            date: The date portion of the creation_date timestamp
-        """
-        return obj.creation_date.date()
-
-    creation_date_display.short_description = _("creation date")  # type: ignore[attr-defined]
-
-    def migrated_status(self, obj: Word) -> SafeString:
-        """
-        Display a badge indicating whether the word was migrated from v1 or created in v2.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            str: HTML formatted badge showing migration status
-        """
-        if obj.v1_id is not None:
-            return mark_safe(
-                '<span style="background-color: #28a745; color: white; padding: 3px 8px; '
-                'border-radius: 3px; font-size: 13px; font-weight: 500;">Migrated</span>'
-            )
-        return mark_safe(
-            '<span style="background-color: #007bff; color: white; padding: 3px 8px; '
-            'border-radius: 3px; font-size: 13px; font-weight: 500;">New</span>'
-        )
-
-    migrated_status.short_description = _("migrated")  # type: ignore[attr-defined]
-
-    def audio_check_status_display(self, obj: Word) -> str:
-        """
-        Format the audio check status for display in the admin list view.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            str: The display value of the audio check status
-        """
-        return obj.get_audio_check_status_display()
-
-    audio_check_status_display.short_description = _("audio check status")  # type: ignore[attr-defined]
-    audio_check_status_display.admin_order_field = "audio_check_status"  # type: ignore[attr-defined]
-
-    def image_check_status_display(self, obj: Word) -> str:
-        """
-        Format the image check status for display in the admin list view.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            str: The display value of the image check status
-        """
-        return obj.get_image_check_status_display()
-
-    image_check_status_display.short_description = _("image check status")  # type: ignore[attr-defined]
-    image_check_status_display.admin_order_field = "image_check_status"  # type: ignore[attr-defined]

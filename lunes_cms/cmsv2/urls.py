@@ -85,6 +85,11 @@ urlpatterns = [
         name="update_word_image_check_status",
     ),
     path(
+        "words/<int:word_id>/update-example-sentence-check-status/",
+        views.update_word_example_sentence_check_status,
+        name="update_word_example_sentence_check_status",
+    ),
+    path(
         "units/<int:unit_id>/update-icon/",
         views.update_unit_icon,
         name="update_unit_icon",
