@@ -44,9 +44,9 @@ function _handleCancel(button: HTMLButtonElement): void {
 
 function _setEditFormDisabled(container: HTMLElement, disabled: boolean): void {
     container
-        .querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>(
-            ".example-sentence-edit-form button, .example-sentence-textarea",
-        )
+        .querySelectorAll<
+            HTMLButtonElement | HTMLTextAreaElement
+        >(".example-sentence-edit-form button, .example-sentence-textarea")
         .forEach((el) => {
             el.disabled = disabled
         })
@@ -87,9 +87,7 @@ function _handleSave(button: HTMLButtonElement): void {
         })
         .catch((error: unknown) => {
             _setEditFormDisabled(container, false)
-            alert(
-                `${gettext("Error")}: ${error instanceof Error ? error.message : String(error)}`,
-            )
+            alert(`${gettext("Error")}: ${error instanceof Error ? error.message : String(error)}`)
         })
 }
 
