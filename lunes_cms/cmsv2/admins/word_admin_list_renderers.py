@@ -1,5 +1,6 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
+from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
@@ -181,7 +182,7 @@ class WordAdminListRenderersMixin:
 
         controls_html = f"""
         <div class="example-sentence-controls" data-word-id="{obj.id}">
-            <button disabled type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
+            <button type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
                 <span class="example-sentence-edit">✎</span>
             </button>
             <button disabled type="button" class="replace-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
@@ -194,6 +195,31 @@ class WordAdminListRenderersMixin:
         </div>
         """
 
+        display_html = f"""
+        <div class="example-sentence-display">
+            {example_sentence_html}{controls_html}
+        </div>
+        """
+
+        edit_form_html = ""
+        if obj.example_sentence:
+            store_url = reverse(
+                "cmsv2:word_store_generated_example_sentence", args=[obj.id]
+            )
+            edit_form_html = f"""
+            <div class="example-sentence-edit-form" style="display: none;">
+                <textarea class="example-sentence-textarea" rows="3" data-original-value="{escape(obj.example_sentence)}">{escape(obj.example_sentence)}</textarea>
+                <div class="example-sentence-edit-controls">
+                    <button type="button" class="save-example-sentence-btn" data-store-url="{store_url}">
+                        <span class="example-sentence-save">✓</span>
+                    </button>
+                    <button type="button" class="cancel-example-sentence-btn">
+                        <span class="example-sentence-cancel">×</span>
+                    </button>
+                </div>
+            </div>
+            """
+
         word_options = ""
         for value, display in CheckStatus.choices:
             selected = "selected" if obj.example_sentence_check_status == value else ""
@@ -205,7 +231,7 @@ class WordAdminListRenderersMixin:
         </select>
         """
 
-        html = f'<div class="word-example-sentence-container">{example_sentence_html}{controls_html}</div>'
+        html = f'<div class="word-example-sentence-container">{display_html}{edit_form_html}</div>'
         if obj.example_sentence:
             html += word_example_sentence_check_status_html
 

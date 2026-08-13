@@ -54,7 +54,9 @@
 .delete-unitword-image-btn,
 .add-alternative-word-btn,
 .save-alternative-word-btn,
-.delete-alternative-word-btn {
+.delete-alternative-word-btn,
+.save-example-sentence-btn,
+.cancel-example-sentence-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -90,7 +92,9 @@
 .add-unitword-image-btn:hover,
 .replace-unitword-image-btn:hover,
 .add-alternative-word-btn:hover,
-.save-alternative-word-btn:hover {
+.save-alternative-word-btn:hover,
+.edit-example-sentence-btn:hover,
+.save-example-sentence-btn:hover {
     background-color: #e8e8e8;
 }
 
@@ -100,7 +104,8 @@
 .delete-audio-btn:hover,
 .delete-example-sentence-audio-btn:hover,
 .delete-unitword-image-btn:hover,
-.delete-alternative-word-btn:hover {
+.delete-alternative-word-btn:hover,
+.cancel-example-sentence-btn:hover {
     background-color: #ffeeee;
 }
 
@@ -110,7 +115,8 @@
 .audio-add,
 .unitword-image-add,
 .alternative-word-add,
-.alternative-word-save {
+.alternative-word-save,
+.example-sentence-save {
     font-size: 16px;
     font-weight: bold;
     color: #28a745;
@@ -120,7 +126,8 @@
 .image-replace,
 .icon-replace,
 .audio-replace,
-.unitword-image-replace {
+.unitword-image-replace,
+.example-sentence-edit {
     font-size: 16px;
     color: #007bff;
 }
@@ -130,10 +137,30 @@
 .icon-delete,
 .audio-delete,
 .unitword-image-delete,
-.alternative-word-delete {
+.alternative-word-delete,
+.example-sentence-cancel {
     font-size: 16px;
     font-weight: bold;
     color: #dc3545;
+}
+
+.example-sentence-edit-form {
+    margin-top: 8px;
+}
+
+.example-sentence-textarea {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 0.9em;
+    resize: vertical;
+}
+
+.example-sentence-edit-controls {
+    display: flex;
+    margin-top: 4px;
 }
 
 .file-input,
