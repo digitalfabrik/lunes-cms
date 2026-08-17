@@ -1,6 +1,6 @@
 """
 Tests for alternative words (issue #573): serialization in the v2 API
-and the "So heißt das auch" inline on the word admin page.
+and the alternative-word inline on the word admin page.
 """
 
 from __future__ import annotations
@@ -64,7 +64,8 @@ def test_word_admin_page_shows_alternative_words_section(
     response = admin_client.get(f"/en/admin/cmsv2/word/{word.pk}/change/")
     assert response.status_code == 200
     content = response.content.decode()
-    assert "So heißt das auch" in content
+    assert "<h2>Alternative Words</h2>" in content
+    assert "<h2>Unit-Word Relations</h2>" in content
     assert "Semmel" in content
     assert "Miscellaneous" not in content
     assert "save-alternative-word-btn" in content
