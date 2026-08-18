@@ -128,7 +128,7 @@ class WordAdmin(BaseAdmin):
 
     fieldsets = (
         (
-            _("Word Information"),
+            _format_html_lazy("<h2>{}</h2>", _("Word Information")),
             {
                 "fields": (
                     "word_type",
@@ -142,11 +142,11 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
-            _("Pronunciation"),
+            _format_html_lazy("<h2>{}</h2>", _("Pronunciation")),
             {"fields": ("pronunciation",)},
         ),
         (
-            _("Audio"),
+            _format_html_lazy("<h2>{}</h2>", _("Audio")),
             {
                 "fields": (
                     "audio",
@@ -157,7 +157,7 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
-            _("Image"),
+            _format_html_lazy("<h2>{}</h2>", _("Image")),
             {
                 "fields": (
                     "image",
@@ -168,7 +168,7 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
-            _("Example Sentence"),
+            _format_html_lazy("<h2>{}</h2>", _("Example Sentence")),
             {
                 "fields": (
                     "example_sentence",

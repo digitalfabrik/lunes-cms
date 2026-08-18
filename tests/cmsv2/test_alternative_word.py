@@ -64,8 +64,16 @@ def test_word_admin_page_shows_alternative_words_section(
     response = admin_client.get(f"/en/admin/cmsv2/word/{word.pk}/change/")
     assert response.status_code == 200
     content = response.content.decode()
-    assert "<h2>Alternative Words</h2>" in content
-    assert "<h2>Unit-Word Relations</h2>" in content
+    for heading in (
+        "Word Information",
+        "Pronunciation",
+        "Audio",
+        "Image",
+        "Example Sentence",
+        "Alternative Words",
+        "Unit-Word Relations",
+    ):
+        assert f"<h2>{heading}</h2>" in content
     assert "Semmel" in content
     assert "Miscellaneous" not in content
     assert "save-alternative-word-btn" in content
