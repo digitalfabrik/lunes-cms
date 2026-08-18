@@ -116,9 +116,10 @@ commands:
         steps:
             - run:
                 command: |
-                    if [[ -d ".venv" ]]; then
+                    if [[ -x ".venv/bin/python" ]]; then
                       echo "Virtual environment restored from cache, skipping dependency install"
                     else
+                      rm -rf .venv
                       uv sync --extra dev --locked
                     fi
                     # The cache key only depends on uv.lock, so a restored .venv can be
