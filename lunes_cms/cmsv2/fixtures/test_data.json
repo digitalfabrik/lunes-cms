@@ -44998,14 +44998,10 @@
       "name": "Expert:innen",
       "icon": "",
       "permissions": [
-        ["add_reviewassignment", "cmsv2", "reviewassignment"],
-        ["change_reviewassignment", "cmsv2", "reviewassignment"],
-        ["delete_reviewassignment", "cmsv2", "reviewassignment"],
-        ["view_reviewassignment", "cmsv2", "reviewassignment"],
-        ["add_imagereview", "cmsv2", "imagereview"],
-        ["change_imagereview", "cmsv2", "imagereview"],
-        ["delete_imagereview", "cmsv2", "imagereview"],
-        ["view_imagereview", "cmsv2", "imagereview"]
+        ["add_review", "cmsv2", "review"],
+        ["change_review", "cmsv2", "review"],
+        ["delete_review", "cmsv2", "review"],
+        ["view_review", "cmsv2", "review"]
       ]
     }
   }, {
