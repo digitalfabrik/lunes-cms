@@ -1,21 +1,21 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Any, Iterable, TYPE_CHECKING
+from typing import Iterable, TYPE_CHECKING
 
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
-from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
-from lunes_cms.cmsv2.models.review import ReviewAssignment
+from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
+from lunes_cms.cmsv2.models.word import Word
 
 if TYPE_CHECKING:
     from django.utils.functional import _StrOrPromise
@@ -45,34 +45,6 @@ class WordInline(admin.TabularInline):
         "example_sentence_generate",
         "example_sentence_audio_player",
     ]
-
-
-class ReviewAssignmentInline(admin.TabularInline):
-    """
-    Inline admin for ReviewAssignment.
-    """
-
-    model = ReviewAssignment
-    fk_name = "unit"
-    extra = 0
-    fields = ["reviewer", "assigned_by", "assigned_at"]
-    readonly_fields = ["assigned_by", "assigned_at"]
-    autocomplete_fields = ["reviewer"]
-    verbose_name = _("assigned user")
-    verbose_name_plural = _("assigned users")
-
-    def has_add_permission(self, request: HttpRequest, obj: Unit | None = None) -> bool:
-        return request.user.is_superuser
-
-    def has_change_permission(
-        self, request: HttpRequest, obj: Unit | None = None
-    ) -> bool:
-        return request.user.is_superuser
-
-    def has_delete_permission(
-        self, request: HttpRequest, obj: Unit | None = None
-    ) -> bool:
-        return request.user.is_superuser
 
 
 class MigratedFilter(admin.SimpleListFilter):
@@ -139,7 +111,7 @@ class UnitAdmin(BaseAdmin):
         "released",
     ]
     readonly_fields = ["created_by", "created_by_user", "image_tag", "migrated_status"]
-    inlines = [WordInline, ReviewAssignmentInline]
+    inlines = [WordInline]
     search_fields = ["title"]
     list_display = [
         "title",
@@ -176,25 +148,6 @@ class UnitAdmin(BaseAdmin):
     def get_queryset(self, request: HttpRequest) -> QuerySet[Unit]:
         return super().get_queryset(request).prefetch_related("jobs")
 
-    def save_formset(
-        self,
-        request: HttpRequest,
-        form: ModelForm[Any],
-        formset: BaseModelFormSet,
-        change: bool,
-    ) -> None:
-        if formset.model is ReviewAssignment:
-            instances = formset.save(commit=False)
-            for obj in formset.deleted_objects:
-                obj.delete()
-            for instance in instances:
-                if instance.assigned_by_id is None:
-                    instance.assigned_by = request.user
-                instance.save()
-            formset.save_m2m()
-        else:
-            super().save_formset(request, form, formset, change)
-
     @admin.action(description=_("Release all selected units"))
     def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:
         """
@@ -222,9 +175,9 @@ class UnitAdmin(BaseAdmin):
         self, request: HttpRequest, queryset: QuerySet[Unit]
     ) -> HttpResponse | None:
         """
-        Bulk-create ReviewAssignments linking each selected unit to a chosen
-        user. Superusers only. Units already assigned to the target user are
-        silently skipped via the (unit, reviewer) unique constraint.
+        Bulk-create Reviews linking every word of each selected unit to a
+        chosen user. Superusers only. Words already assigned to the target
+        user are silently skipped via the (word, reviewer) unique constraint.
         """
         if not request.user.is_superuser:
             raise PermissionDenied
@@ -244,23 +197,24 @@ class UnitAdmin(BaseAdmin):
             )
 
         user = User.objects.get(pk=request.POST["user"])
-        existing_unit_ids = set(
-            ReviewAssignment.objects.filter(
-                reviewer=user, unit__in=queryset
-            ).values_list("unit_id", flat=True)
+        words = Word.objects.filter(units__in=queryset).distinct()
+        existing_word_ids = set(
+            Review.objects.filter(reviewer=user, word__in=words).values_list(
+                "word_id", flat=True
+            )
         )
         to_create = [
-            ReviewAssignment(unit=unit, reviewer=user, assigned_by=request.user)
-            for unit in queryset
-            if unit.pk not in existing_unit_ids
+            Review(word=word, reviewer=user, assigned_by=request.user)
+            for word in words
+            if word.pk not in existing_word_ids
         ]
-        ReviewAssignment.objects.bulk_create(to_create, ignore_conflicts=True)
+        Review.objects.bulk_create(to_create, ignore_conflicts=True)
         self.message_user(
             request,
-            _("Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned).")
+            _("Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned).")
             % {
                 "new": len(to_create),
-                "skipped": len(existing_unit_ids),
+                "skipped": len(existing_word_ids),
                 "user": user,
             },
         )
