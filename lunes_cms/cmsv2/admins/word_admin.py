@@ -1,7 +1,7 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
 from django.http import HttpRequest
@@ -58,6 +58,27 @@ class AlternativeWordInline(admin.TabularInline):
         "action_buttons",
     ]
     readonly_fields = ["action_buttons"]
+
+    def get_max_num(
+        self, request: HttpRequest, obj: Word | None = None, **kwargs: Any
+    ) -> int | None:
+        """
+        Limit the formset to the existing rows plus one empty row on the
+        change page, so Django hides its "Add another" link there. New rows
+        are added instantly via the "+" button instead, which reloads the
+        page with a fresh empty row. On the add page (no ``obj``), the
+        default is kept so multiple rows can be added before the first save.
+
+        Args:
+            request: The current request
+            obj: The word object, or None on the add page
+
+        Returns:
+            int or None: The maximum number of forms in the formset
+        """
+        if obj:
+            return obj.alternative_words.count() + 1
+        return super().get_max_num(request, obj, **kwargs)
 
     def get_fields(self, request: HttpRequest, obj: Word | None = None) -> _FieldGroups:
         """
