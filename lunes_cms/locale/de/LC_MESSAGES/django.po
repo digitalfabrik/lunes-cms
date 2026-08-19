@@ -802,7 +802,7 @@ msgid "assigned units"
 msgstr "Zugewiesene Einheiten"
 
 #: cmsv2/admins/word_admin.py
-msgid "So heißt das auch"
+msgid "Alternative Words"
 msgstr "So heißt das auch"
 
 #: cmsv2/admins/word_admin.py
@@ -816,6 +816,10 @@ msgstr "Alternatives Wort speichern"
 #: cmsv2/admins/word_admin.py
 msgid "Delete alternative word"
 msgstr "Alternatives Wort löschen"
+
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+msgid "Unit-Word Relations"
+msgstr "Einheit-Wort Beziehungen"
 
 #: cmsv2/admins/word_admin.py
 msgid "Word Information"
@@ -1147,10 +1151,6 @@ msgstr "Beispielsatz generieren"
 #: cmsv2/models/unit.py
 msgid "Unit-Word Relation"
 msgstr "Einheit-Wort Beziehung"
-
-#: cmsv2/models/unit.py
-msgid "Unit-Word Relations"
-msgstr "Einheit-Wort Beziehungen"
 
 #: cmsv2/models/unit.py
 msgid "Unit"

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from django.contrib import admin
 from django.urls import reverse
+from django.utils.functional import lazy
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
@@ -31,6 +32,8 @@ if TYPE_CHECKING:
     # `_StrOrPromise` only exists in django-stubs, not at runtime.
     from django.utils.functional import _StrOrPromise
 
+_format_html_lazy = lazy(format_html, SafeString)
+
 
 class AlternativeWordInline(admin.TabularInline):
     """
@@ -43,7 +46,7 @@ class AlternativeWordInline(admin.TabularInline):
     extra = 1
     can_delete = False
     verbose_name = _("alternative word")
-    verbose_name_plural = _("So heißt das auch")
+    verbose_name_plural = _format_html_lazy("<h2>{}</h2>", _("Alternative Words"))
     fields = [
         "grammatical_gender",
         "singular_article",
@@ -96,6 +99,7 @@ class UnitInline(admin.TabularInline):
     """
 
     model = UnitWordRelation
+    verbose_name_plural = _format_html_lazy("<h2>{}</h2>", _("Unit-Word Relations"))
     extra = 1
     autocomplete_fields = ["unit"]
     fields = [
@@ -124,7 +128,7 @@ class WordAdmin(BaseAdmin):
 
     fieldsets = (
         (
-            _("Word Information"),
+            _format_html_lazy("<h2>{}</h2>", _("Word Information")),
             {
                 "fields": (
                     "word_type",
@@ -138,11 +142,11 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
-            _("Pronunciation"),
+            _format_html_lazy("<h2>{}</h2>", _("Pronunciation")),
             {"fields": ("pronunciation",)},
         ),
         (
-            _("Audio"),
+            _format_html_lazy("<h2>{}</h2>", _("Audio")),
             {
                 "fields": (
                     "audio",
@@ -153,7 +157,7 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
-            _("Image"),
+            _format_html_lazy("<h2>{}</h2>", _("Image")),
             {
                 "fields": (
                     "image",
@@ -164,7 +168,7 @@ class WordAdmin(BaseAdmin):
             },
         ),
         (
-            _("Example Sentence"),
+            _format_html_lazy("<h2>{}</h2>", _("Example Sentence")),
             {
                 "fields": (
                     "example_sentence",
