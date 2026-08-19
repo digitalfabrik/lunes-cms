@@ -62,6 +62,30 @@ def test_wrong_header_structure_is_rejected_before_any_row_processing(
 
 
 @pytest.mark.django_db()
+def test_non_utf8_file_shows_friendly_encoding_error(
+    admin_client: Client, job: Job
+) -> None:
+    """A CSV file that isn't UTF-8 encoded must show a friendly message
+    telling the user to save it as UTF-8, not the raw Python decoding
+    error."""
+    non_utf8_csv = SimpleUploadedFile(
+        "vocabulary.csv",
+        "Einheit,Vokabel,Artikel\nWerkzeug,Hämmer,der\n".encode("latin-1"),
+        content_type="text/csv",
+    )
+    response = admin_client.post(
+        reverse("cmsv2:import_csv"),
+        {"job": job.pk, "csv_file": non_utf8_csv},
+        follow=True,
+    )
+
+    messages = [str(m) for m in response.context["messages"]]
+    assert any("utf-8" in m.lower() for m in messages)
+    assert not any("codec can't decode" in m.lower() for m in messages)
+    assert not Word.objects.filter(units__jobs=job).exists()
+
+
+@pytest.mark.django_db()
 def test_valid_file_still_imports_successfully(admin_client: Client, job: Job) -> None:
     response = admin_client.post(
         reverse("cmsv2:import_csv"),

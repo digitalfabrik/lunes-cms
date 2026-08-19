@@ -34,7 +34,8 @@ class ImportCSVForm(forms.Form):
     csv_file = forms.FileField(
         label=_("Select CSV file"),
         help_text=_(
-            'The file should contain the columns "Einheit", "Artikel", "Vokabel" '
+            "The file must be UTF-8 encoded and comma-separated. It should "
+            'contain the columns "Einheit", "Artikel", "Vokabel" '
             'and "Beispielsatz", optionally also "Aussprache".'
         ),
     )
@@ -176,6 +177,16 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
             request,
             _(
                 "Import failed. The size of the column or row doesn't fit the table dimensions. Please adjust your table and try again."
+            ),
+        )
+        return render(
+            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
+        )
+    except UnicodeDecodeError:
+        messages.error(
+            request,
+            _(
+                "Import failed. The CSV file must be UTF-8 encoded. Please save it with UTF-8 encoding and try again."
             ),
         )
         return render(
