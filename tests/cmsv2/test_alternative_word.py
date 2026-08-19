@@ -85,6 +85,36 @@ def test_word_admin_page_shows_alternative_words_section(
 
 
 @pytest.mark.django_db
+def test_word_change_page_hides_add_another_row(
+    word: Word, admin_client: Client
+) -> None:
+    """On the change page, the formset is capped at the existing rows plus one
+    empty row, so Django's "Add another" link is not rendered — new rows are
+    added instantly via the "+" button instead."""
+    response = admin_client.get(f"/en/admin/cmsv2/word/{word.pk}/change/")
+    formset = next(
+        inline.formset
+        for inline in response.context["inline_admin_formsets"]
+        if inline.formset.prefix == "alternative_words"
+    )
+    assert formset.max_num == 2
+    assert formset.total_form_count() == 2
+
+
+@pytest.mark.django_db
+def test_word_add_page_keeps_add_another_row(admin_client: Client) -> None:
+    """On the add page, the formset is not capped, so multiple alternative
+    words can be added before the word is saved for the first time."""
+    response = admin_client.get("/en/admin/cmsv2/word/add/")
+    formset = next(
+        inline.formset
+        for inline in response.context["inline_admin_formsets"]
+        if inline.formset.prefix == "alternative_words"
+    )
+    assert formset.max_num > formset.total_form_count()
+
+
+@pytest.mark.django_db
 def test_delete_alternative_word(word: Word, admin_client: Client) -> None:
     """The delete view removes the alternative word."""
     alternative_word = word.alternative_words.get()
