@@ -63,7 +63,17 @@ class ReviewStatus(models.TextChoices):
     """Possible states for reviews"""
 
     PENDING = "PENDING", _("Pending Review")
+    CHANGE_REQUESTED = "CHANGE_REQUESTED", _("Change requested")
     APPROVED = "APPROVED", _("Approved")
+    REJECTED = "REJECTED", _("Rejected")
+    CANNOT_BE_ASSESSED = "CANNOT_BE_ASSESSED", _("Cannot be assessed")
+
+
+class ProgressStatus(models.TextChoices):
+    """Possible states for the progress of a review"""
+
+    IN_REVIEW = "IN_REVIEW", _("In review")
+    COMPLETED = "COMPLETED", _("Completed")
 
 
 class Roles:
@@ -104,14 +114,10 @@ class Permissions:
         "view_unitwordrelation",
     ]
     REVIEW_PERMISSIONS = [
-        "add_imagereview",
-        "change_imagereview",
-        "delete_imagereview",
-        "view_imagereview",
-        "add_reviewassignment",
-        "change_reviewassignment",
-        "delete_reviewassignment",
-        "view_reviewassignment",
+        "add_review",
+        "change_review",
+        "delete_review",
+        "view_review",
     ]
 
 
