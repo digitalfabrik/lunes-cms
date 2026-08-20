@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -12,7 +13,11 @@ from django.db.models.fields.files import ImageFieldFile
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.core.audio import run_ffmpeg, validate_audio_upload
+from lunes_cms.core.audio import (
+    generate_waveform_image,
+    run_ffmpeg,
+    validate_audio_upload,
+)
 
 from ..utils import get_image_tag, make_safe_filename, word_to_string
 from ..validators import (
@@ -306,6 +311,21 @@ class Word(models.Model):
             str or None: The URL of the audio file if it exists, otherwise None.
         """
         return self.audio.url if self.audio else None
+
+    def waveform_image_url(self) -> str | None:
+        """
+        Returns the URL of a static waveform image for this word's audio,
+        generating and caching it in storage next to the audio file on first access.
+        """
+        if not self.audio:
+            return None
+        storage = self.audio.storage
+        waveform_name = str(Path(self.audio.name).with_suffix("")) + "-waveform.png"
+        if not storage.exists(waveform_name):
+            with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
+                generate_waveform_image(self.audio.path, tmp.name)
+                storage.save(waveform_name, File(tmp))
+        return storage.url(waveform_name)
 
     def singular_article_for_audio_generation(self) -> str:
         """Get singular article for audio generation."""
