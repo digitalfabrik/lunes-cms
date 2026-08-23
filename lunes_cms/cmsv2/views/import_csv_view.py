@@ -126,7 +126,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     selected_job = form.cleaned_data["job"]
     try:
         data = Dataset()
-        data.load(csv_file.read().decode("utf-8"), format="csv")
+        data.load(csv_file.read().decode("utf-8-sig"), format="csv")
 
         if _report_dataset_issue(request, data):
             return render(
