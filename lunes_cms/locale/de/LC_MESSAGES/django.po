@@ -1242,11 +1242,13 @@ msgstr "CSV Datei auswählen"
 
 #: cmsv2/views/import_csv_view.py
 msgid ""
-"The file should contain the columns \"Einheit\", \"Artikel\", \"Vokabel\" "
-"and \"Beispielsatz\", optionally also \"Aussprache\"."
+"The file must be UTF-8 encoded and comma-separated. It should contain the "
+"columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
+"optionally also \"Aussprache\"."
 msgstr ""
-"Die Datei sollte die Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und "
-"\"Beispielsatz\" enthalten, optional zusätzlich \"Aussprache\"."
+"Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die Spalten "
+"\"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" enthalten, "
+"optional zusätzlich \"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
@@ -1292,6 +1294,14 @@ msgid ""
 msgstr ""
 "Der Import ist fehlgeschlagen. Die Anzahl der Spalten oder Zeilen passen "
 "nicht zur Tabelle. Bitte passe die Tabelle an und versuche es erneut."
+
+#: cmsv2/views/import_csv_view.py
+msgid ""
+"Import failed. The CSV file must be UTF-8 encoded. Please save it with UTF-8 "
+"encoding and try again."
+msgstr ""
+"Der Import ist fehlgeschlagen. Die CSV-Datei muss UTF-8-kodiert sein. Bitte "
+"speichere sie im Format UTF-8 und versuche es erneut."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
