@@ -157,7 +157,7 @@ class UnitWordRelation(models.Model):
                 <span class="unitword-image-add">+</span>
             </button>
             <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
-                <span class="unitword-image-replace">↻</span>
+                <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
                 <span class="unitword-image-delete">×</span>
@@ -257,7 +257,7 @@ class UnitWordRelation(models.Model):
                 <span class="unitword-image-add">+</span>
             </button>
             <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
-                <span class="unitword-image-replace">↻</span>
+                <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
                 <span class="unitword-image-delete">×</span>
@@ -394,7 +394,7 @@ class Unit(models.Model):
                 <span class="icon-add">+</span>
             </button>
             <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
-                <span class="icon-replace">↻</span>
+                <span class="icon-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
                 <span class="icon-delete">×</span>

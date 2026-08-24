@@ -95,7 +95,7 @@ class Job(models.Model):
                 <span class="icon-add">+</span>
             </button>
             <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
-                <span class="icon-replace">↻</span>
+                <span class="icon-replace"><i class="fas fa-upload"></i></span>
             </button>
             <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
                 <span class="icon-delete">×</span>
