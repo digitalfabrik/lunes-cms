@@ -68,12 +68,12 @@ class Review(models.Model):
     )
 
     @property
-    def word_article(self) -> SingularArticle:
+    def word_article(self) -> int:
         """Returns the article of the word being reviewed."""
         return self.word.singular_article
 
     @property
-    def word_type(self) -> WordType:
+    def word_type(self) -> str:
         """Returns the word_type of the word being reviewed."""
         return self.word.word_type
 
