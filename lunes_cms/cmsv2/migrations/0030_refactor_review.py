@@ -5,6 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     """Migration file for the review model"""
+
     dependencies = [
         ("cmsv2", "0029_backfill_null_check_status"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
