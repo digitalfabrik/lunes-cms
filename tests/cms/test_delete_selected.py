@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 import pytest
@@ -143,7 +144,10 @@ def test_delete_selected_five_training_sets_shows_first_three_and_remainder(
     assert training_sets[4].title not in content
     assert "and 2 more objects will be deleted" in content
     for training_set in training_sets:
-        assert f'name="{ACTION_CHECKBOX_NAME}" value="{training_set.pk}"' in content
+        assert re.search(
+            rf'name="{re.escape(ACTION_CHECKBOX_NAME)}"\s+value="{training_set.pk}"',
+            content,
+        )
 
 
 @pytest.mark.django_db()
