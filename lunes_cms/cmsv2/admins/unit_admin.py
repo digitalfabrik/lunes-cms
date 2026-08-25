@@ -179,7 +179,7 @@ class UnitAdmin(BaseAdmin):
         chosen user. Superusers only. Words already assigned to the target
         user are silently skipped via the (word, reviewer) unique constraint.
         """
-        if not request.user.is_superuser:
+        if not request.user.is_authenticated or not request.user.is_superuser:
             raise PermissionDenied
 
         if "apply" not in request.POST:

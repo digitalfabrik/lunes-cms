@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -102,6 +103,8 @@ class LunesUserAdmin(DjangoUserAdmin):
         change: bool,
     ) -> None:
         if formset.model is Review:
+            if not request.user.is_authenticated:
+                raise PermissionDenied
             instances = formset.save(commit=False)
             for obj in formset.deleted_objects:
                 obj.delete()
