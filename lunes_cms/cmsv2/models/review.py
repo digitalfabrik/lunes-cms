@@ -39,7 +39,7 @@ class Review(models.Model):
         "Word",
         on_delete=models.CASCADE,
         related_name="review_assignments",
-        verbose_name=_("unit"),
+        verbose_name=_("word"),
     )
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -54,8 +54,8 @@ class Review(models.Model):
         related_name="created_review_assignments",
         verbose_name=_("assigned by"),
     )
-    reasons = models.CharField(max_length=20, default="", verbose_name="reasons")
-    comment = models.CharField(max_length=120, default="", verbose_name="comment")
+    reason = models.CharField(max_length=20, default="", verbose_name=_("reason"))
+    comment = models.CharField(max_length=120, default="", verbose_name=_("comment"))
     assigned_at = models.DateTimeField(auto_now_add=True, verbose_name=_("assigned at"))
     completed_at = models.DateTimeField(
         null=True, blank=True, verbose_name=_("completed at")

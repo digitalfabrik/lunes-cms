@@ -198,7 +198,7 @@ class UnitAdmin(BaseAdmin):
 
         user = User.objects.get(pk=request.POST["user"])
         words = Word.objects.filter(units__in=queryset).distinct()
-        existing_word_ids = set(
+        word_ids_assigned_to_user = set(
             Review.objects.filter(reviewer=user, word__in=words).values_list(
                 "word_id", flat=True
             )
@@ -206,7 +206,7 @@ class UnitAdmin(BaseAdmin):
         to_create = [
             Review(word=word, reviewer=user, assigned_by=request.user)
             for word in words
-            if word.pk not in existing_word_ids
+            if word.pk not in word_ids_assigned_to_user
         ]
         Review.objects.bulk_create(to_create, ignore_conflicts=True)
         self.message_user(
@@ -214,7 +214,7 @@ class UnitAdmin(BaseAdmin):
             _("Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned).")
             % {
                 "new": len(to_create),
-                "skipped": len(existing_word_ids),
+                "skipped": len(word_ids_assigned_to_user),
                 "user": user,
             },
         )

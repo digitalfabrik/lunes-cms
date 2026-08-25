@@ -435,7 +435,7 @@ msgstr "Die ID des Objekts, auf das sich dieser Feedback-Eintrag bezieht."
 msgid "refers to"
 msgstr "bezieht sich auf"
 
-#: cms/models/feedback.py cmsv2/models/feedback.py
+#: cms/models/feedback.py cmsv2/models/feedback.py cmsv2/models/review.py
 msgid "comment"
 msgstr "Kommentar"
 
@@ -778,7 +778,7 @@ msgstr "Ausgewählte Einheiten zuweisen"
 #, python-format
 msgid "Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
-"%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
+"%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
 #: cmsv2/admins/unit_admin.py
@@ -1036,6 +1036,10 @@ msgid "assigned by"
 msgstr "Zugewiesen von"
 
 #: cmsv2/models/review.py
+msgid "reason"
+msgstr "Grund"
+
+#: cmsv2/models/review.py
 msgid "assigned at"
 msgstr "Zuwiesen am"
 
@@ -1045,7 +1049,7 @@ msgstr "Erstellt am"
 
 #: cmsv2/models/review.py
 msgid "review status"
-msgstr "Archivstatus"
+msgstr "Prüfstatus"
 
 #: cmsv2/models/review.py
 msgid "Review"
