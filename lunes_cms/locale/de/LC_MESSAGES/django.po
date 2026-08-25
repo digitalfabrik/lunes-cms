@@ -381,8 +381,8 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py cmsv2/models/alternative_word.py cmsv2/models/unit.py
-#: cmsv2/models/word.py
+#: cms/models/document.py cmsv2/models/alternative_word.py
+#: cmsv2/models/review.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "word"
 msgstr "Wort"
 
@@ -1023,10 +1023,6 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py cmsv2/models/unit.py
-msgid "unit"
-msgstr "Einheit"
-
 #: cmsv2/models/review.py
 msgid "reviewer"
 msgstr "Kontrolleur:in"
@@ -1129,6 +1125,10 @@ msgstr "Beispielsatz generieren"
 #: cmsv2/models/unit.py
 msgid "Unit-Word Relation"
 msgstr "Einheit-Wort Beziehung"
+
+#: cmsv2/models/unit.py
+msgid "unit"
+msgstr "Einheit"
 
 #: cmsv2/models/unit.py
 msgid "Unit"
