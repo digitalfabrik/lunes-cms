@@ -12,17 +12,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="reviewassignment",
-            name="assigned_by",
+        migrations.DeleteModel(
+            name="ImageReview",
         ),
-        migrations.RemoveField(
-            model_name="reviewassignment",
-            name="reviewer",
-        ),
-        migrations.RemoveField(
-            model_name="reviewassignment",
-            name="unit",
+        migrations.DeleteModel(
+            name="ReviewAssignment",
         ),
         migrations.CreateModel(
             name="Review",
@@ -104,12 +98,6 @@ class Migration(migrations.Migration):
                 "verbose_name": "Review",
                 "verbose_name_plural": "Review",
             },
-        ),
-        migrations.DeleteModel(
-            name="ImageReview",
-        ),
-        migrations.DeleteModel(
-            name="ReviewAssignment",
         ),
         migrations.AddConstraint(
             model_name="review",
