@@ -1,5 +1,4 @@
 {% extends 'admin/base.html' %}
-
 {% block footer %}
     {% if not is_popup %}
         <footer class="main-footer p-2 {{ jazzmin_ui.footer_classes }}">
@@ -10,7 +9,6 @@
         </footer>
     {% endif %}
 {% endblock %}
-
 {% block extrajs %}
     <script>
         let unread_feedback_count = {{ unread_feedback_count }};

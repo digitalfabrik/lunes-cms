@@ -97,6 +97,7 @@ def _build_context(
     }
 
 
+# pylint: disable=too-many-return-statements
 @staff_member_required
 def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResponse:
     """
