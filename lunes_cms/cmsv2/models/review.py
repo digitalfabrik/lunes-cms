@@ -12,8 +12,6 @@ from .job import Job
 from .static import (
     ProgressStatus,
     ReviewStatus,
-    SingularArticle,
-    WordType,
 )
 
 if TYPE_CHECKING:
