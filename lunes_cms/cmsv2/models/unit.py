@@ -151,15 +151,18 @@ class UnitWordRelation(models.Model):
 
         image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{self.image}")}" target="_blank">{get_image_tag(self.image, width=75)}</a>'
 
+        add_title = _("Add image")
+        upload_title = _("Upload image")
+        delete_title = _("Delete image")
         controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{self.id}">
-            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};" title="{_('Add image')}">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};" title="{add_title}">
                 <span class="unitword-image-add">+</span>
             </button>
-            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Upload image')}">
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{upload_title}">
                 <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Delete image')}">
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{delete_title}">
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
@@ -251,15 +254,18 @@ class UnitWordRelation(models.Model):
         if self.image:
             image_html = f'<a href="{escape(f"{settings.MEDIA_URL}{self.image}")}" target="_blank">{get_image_tag(self.image, width=100)}</a><br>'
 
+        add_title = _("Add image")
+        upload_title = _("Upload image")
+        delete_title = _("Delete image")
         controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{self.id}" style="margin-top: 5px;">
-            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};" title="{_('Add image')}">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};" title="{add_title}">
                 <span class="unitword-image-add">+</span>
             </button>
-            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Upload image')}">
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{upload_title}">
                 <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Delete image')}">
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{delete_title}">
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
@@ -388,15 +394,18 @@ class Unit(models.Model):
         image_html = get_image_tag(self.icon, width=75)
 
         # Add controls for adding, replacing, and deleting the icon
+        add_title = _("Add icon")
+        upload_title = _("Upload icon")
+        delete_title = _("Delete icon")
         controls_html = f"""
         <div class="icon-controls" data-unit-id="{self.id}">
-            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};" title="{_('Add icon')}">
+            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};" title="{add_title}">
                 <span class="icon-add">+</span>
             </button>
-            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Upload icon')}">
+            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{upload_title}">
                 <span class="icon-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Delete icon')}">
+            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{delete_title}">
                 <span class="icon-delete">×</span>
             </button>
             <input type="file" class="icon-file-input" style="display: none;" accept="image/*">

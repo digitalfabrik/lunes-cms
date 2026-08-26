@@ -89,15 +89,18 @@ class Job(models.Model):
         """
         image_html = get_image_tag(self.icon, width=75)
 
+        add_title = _("Add icon")
+        upload_title = _("Upload icon")
+        delete_title = _("Delete icon")
         controls_html = f"""
         <div class="icon-controls" data-job-id="{self.id}">
-            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};" title="{_('Add icon')}">
+            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};" title="{add_title}">
                 <span class="icon-add">+</span>
             </button>
-            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Upload icon')}">
+            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{upload_title}">
                 <span class="icon-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Delete icon')}">
+            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{delete_title}">
                 <span class="icon-delete">×</span>
             </button>
             <input type="file" class="icon-file-input" style="display: none;" accept="image/*">
