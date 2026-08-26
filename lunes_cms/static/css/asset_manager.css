@@ -102,12 +102,11 @@
     color: #28a745;
 }
 
-.replace,
 .image-replace,
 .icon-replace,
 .audio-replace,
 .unitword-image-replace {
-    font-size: 16px;
+    font-size: 14px;
     color: #007bff;
 }
 

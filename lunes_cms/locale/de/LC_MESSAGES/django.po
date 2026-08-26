@@ -918,6 +918,30 @@ msgstr "Bild neu generieren"
 msgid "Image Generation"
 msgstr "Bild-Generierung"
 
+#: cmsv2/admins/word_admin.py
+msgid "Add audio"
+msgstr "Audio hinzufügen"
+
+#: cmsv2/admins/word_admin.py
+msgid "Upload audio"
+msgstr "Audio hochladen"
+
+#: cmsv2/admins/word_admin.py
+msgid "Delete audio"
+msgstr "Audio löschen"
+
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+msgid "Add image"
+msgstr "Bild hinzufügen"
+
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+msgid "Upload image"
+msgstr "Bild hochladen"
+
+#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+msgid "Delete image"
+msgstr "Bild löschen"
+
 #: cmsv2/admins/word_admin.py cmsv2/models/word.py
 msgid "audio check status"
 msgstr "Audio Prüfstatus"
@@ -1010,6 +1034,18 @@ msgstr "Ersteller"
 #: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"
 msgstr "zuletzt geändert"
+
+#: cmsv2/models/job.py cmsv2/models/unit.py
+msgid "Add icon"
+msgstr "Icon hinzufügen"
+
+#: cmsv2/models/job.py cmsv2/models/unit.py
+msgid "Upload icon"
+msgstr "Icon hochladen"
+
+#: cmsv2/models/job.py cmsv2/models/unit.py
+msgid "Delete icon"
+msgstr "Icon löschen"
 
 #: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "Icon"
