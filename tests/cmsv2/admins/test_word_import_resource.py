@@ -5,6 +5,7 @@ Covers the re-import workflow described in issue #775.
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import pytest
@@ -227,6 +228,17 @@ def test_parse_row_strips_whitespace_from_column_names() -> None:
     row = {" Einheit ": "Werkzeug", " Vokabel ": "Hammer", " Artikel ": "der"}
     result = parse_row(row, 1)
     assert isinstance(result, ParsedRow)
+
+
+def test_parse_row_does_not_report_recognised_columns_as_unexpected(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Recognised headers are matched case-insensitively, so no row logs them
+    as unexpected columns."""
+    row = {"einheit": "Werkzeug", "VOKABEL": "Hammer", "Artikel": "der"}
+    with caplog.at_level(logging.INFO):
+        parse_row(row, 1)
+    assert "unexpected columns" not in caplog.text
 
 
 # ---------------------------------------------------------------------------

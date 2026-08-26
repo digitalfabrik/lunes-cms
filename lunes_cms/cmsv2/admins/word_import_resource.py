@@ -252,7 +252,9 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             )
 
         unknown_keys = {
-            k.strip() for k in raw_row.keys() if k and not column_mapping.get(k.strip())
+            key.strip()
+            for key in raw_row.keys()
+            if key and not column_mapping.get(key.strip().lower())
         }
         if unknown_keys:
             logger.info(
