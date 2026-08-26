@@ -7,6 +7,8 @@ processing happens.
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
@@ -128,3 +130,30 @@ def test_success_message_counts_only_data_rows(admin_client: Client, job: Job) -
     assert "1 new unit" in success
     assert "updated" not in success.lower()
     assert Word.objects.filter(units__jobs=job).distinct().count() == 4
+
+
+def _import_tool(admin_client: Client, job: Job, word: str, article: str) -> Any:
+    return admin_client.post(
+        reverse("cmsv2:import_csv"),
+        {
+            "job": job.pk,
+            "csv_file": _upload(
+                f"Einheit,Vokabel,Artikel\nWerkzeug,{word},{article}\n"
+            ),
+        },
+        follow=True,
+    )
+
+
+@pytest.mark.django_db()
+def test_second_import_reports_the_extended_unit(
+    admin_client: Client, job: Job
+) -> None:
+    """The message tells the user that the second CSV extended the unit that
+    was already there rather than adding another one."""
+    _import_tool(admin_client, job, "Hammer", "der")
+
+    response = _import_tool(admin_client, job, "Säge", "die")
+
+    messages = [str(m) for m in response.context["messages"]]
+    assert any("existing unit was extended" in m for m in messages)

@@ -1,12 +1,20 @@
 import logging
-from dataclasses import dataclass
-from typing import Dict, Optional, Tuple, TYPE_CHECKING
+from dataclasses import dataclass, field
+from typing import Dict, Optional, TYPE_CHECKING
 
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
-from ..models import Job, PluralArticle, SingularArticle, Unit, Word, WordType
+from ..models import (
+    Job,
+    PluralArticle,
+    SingularArticle,
+    Unit,
+    UnitWordRelation,
+    Word,
+    WordType,
+)
 
 if TYPE_CHECKING:
     from django.utils.functional import _StrOrPromise
@@ -63,6 +71,10 @@ def _lowered_column_mapping() -> dict[str, str]:
 #: has a usable default and doesn't need to be filled in.
 REQUIRED_FIELDS = ("unit", "word")
 
+#: The row the column headers occupy. The dataset's rows start below it, and
+#: error messages count from the file so they name the row the editor sees.
+HEADER_ROW = 1
+
 
 def validate_header_structure(
     headers: Optional[list[str]],
@@ -116,10 +128,23 @@ class RowResult:
     Return object of a single row.
     """
 
-    units_created: int = 0
     word_created: bool = False
     error: Optional[str] = None
     word_id: Optional[int] = None
+
+
+@dataclass
+class ImportSummary:
+    """
+    Outcome of importing one CSV file: how much content it added, which
+    units it extended rather than created, and the rows it had to skip.
+    """
+
+    words_created: int = 0
+    units_created: int = 0
+    units_reused: int = 0
+    errors: list[str] = field(default_factory=list)
+    imported_word_ids: list[int] = field(default_factory=list)
 
 
 def map_article_to_int(article: str) -> int:
@@ -157,15 +182,6 @@ def map_word_type(word_type: str) -> str:
     return WORD_TYPE_MAP.get(word_type.lower().strip(), "")
 
 
-def create_unit(unit_title: str, job: Job, creator_fields: dict) -> Unit:
-    """
-    Create a new unit - even if one already exists with the same title.
-    """
-    unit = Unit.objects.create(title=unit_title, **creator_fields)
-    unit.jobs.add(job)
-    return unit
-
-
 @dataclass(frozen=True)
 class WordAttributes:
     """The (already converted/validated) word fields a CSV row contributes."""
@@ -175,6 +191,7 @@ class WordAttributes:
     plural: str = ""
     pronunciation: str = ""
     word_type: str = ""
+    example_sentence: str = ""
 
 
 def create_word(
@@ -190,6 +207,7 @@ def create_word(
         plural=attributes.plural,
         pronunciation=attributes.pronunciation,
         word_type=attributes.word_type,
+        example_sentence=attributes.example_sentence,
         **creator_fields,
     )
 
@@ -213,15 +231,6 @@ def _creator_fields_for_user(user: User) -> dict:
     }
 
 
-def update_or_add_example_sentence(word_obj: Word, word_defaults: dict) -> None:
-    """
-    Adds or edits example sentence to word object.
-    """
-    if word_obj.example_sentence != word_defaults["example_sentence"]:
-        word_obj.example_sentence = word_defaults["example_sentence"]
-        word_obj.save(update_fields=["example_sentence"])
-
-
 def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
     """
     Parses a single row and returns either a ParsedRow or a RowResult (error).
@@ -243,7 +252,9 @@ def parse_row(raw_row: dict, row_number: int) -> ParsedRow | RowResult:
             )
 
         unknown_keys = {
-            k.strip() for k in raw_row.keys() if k and not column_mapping.get(k.strip())
+            key.strip()
+            for key in raw_row.keys()
+            if key and not column_mapping.get(key.strip().lower())
         }
         if unknown_keys:
             logger.info(
@@ -313,50 +324,51 @@ def _split_unit_titles(unit_column: str) -> list[str]:
     return [title for title in titles if title]
 
 
-def _resolve_unit(
-    unit_title: str,
-    job: Job,
-    created_units: Dict[str, Unit],
-    creator_fields: dict,
-) -> Tuple[Unit, bool]:
+class UnitResolver:
     """
-    Looks up ``unit_title`` in the ``created_units`` cache, creating it (even
-    if a unit with the same title already exists elsewhere) if this is the
-    first time this import encounters it. Returns the unit and whether it
-    was newly created.
+    Maps the unit titles of an import onto unit objects: a title that the job
+    already has a unit for extends that unit, any other title gets a new one.
+    Keeps track of which titles went which way so the import can report both.
     """
-    unit = created_units.get(unit_title)
-    if unit is None:
-        unit = create_unit(unit_title, job, creator_fields)
-        created_units[unit_title] = unit
-        return unit, True
 
-    if not unit.jobs.filter(pk=job.pk).exists():
-        unit.jobs.add(job)
-    return unit, False
+    def __init__(self, job: Job, creator_fields: dict) -> None:
+        self.job = job
+        self.creator_fields = creator_fields
+        self.units_by_title: Dict[str, Unit] = {
+            unit.title: unit for unit in job.units.order_by("-pk")
+        }
+        self.created_titles: set[str] = set()
+        self.reused_titles: set[str] = set()
+
+    def resolve(self, unit_title: str) -> Unit:
+        """
+        Returns the unit the words of this title belong in, creating it if
+        the job has none.
+        """
+        unit = self.units_by_title.get(unit_title)
+        if unit is None:
+            unit = Unit.objects.create(title=unit_title, **self.creator_fields)
+            unit.jobs.add(self.job)
+            self.units_by_title[unit_title] = unit
+            self.created_titles.add(unit_title)
+        elif unit_title not in self.created_titles:
+            self.reused_titles.add(unit_title)
+        return unit
 
 
 def process_row(
     parsed: ParsedRow,
-    job: Job,
-    created_units: Dict[str, Unit],
+    units: UnitResolver,
     creator_fields: dict,
 ) -> RowResult:
     """
     Processes a single parsed row.
 
     The "unit" column may name more than one unit (see
-    ``_split_unit_titles``); each one is resolved/created and linked to the
-    word individually. Update example sentence. Add word to newly created
-    unit(s).
+    ``_split_unit_titles``); each one is resolved and linked to the word
+    individually.
     """
-    units_created = 0
-    units = []
-    for unit_title in _split_unit_titles(parsed.unit):
-        unit, created = _resolve_unit(unit_title, job, created_units, creator_fields)
-        units.append(unit)
-        if created:
-            units_created += 1
+    row_units = [units.resolve(title) for title in _split_unit_titles(parsed.unit)]
 
     attributes = WordAttributes(
         singular_article=map_article_to_int(parsed.article),
@@ -364,59 +376,49 @@ def process_row(
         plural=parsed.plural,
         pronunciation=parsed.pronunciation,
         word_type=map_word_type(parsed.word_type),
+        example_sentence=parsed.example,
     )
     word = create_word(parsed.word, attributes, creator_fields)
 
-    update_or_add_example_sentence(word, {"example_sentence": parsed.example})
+    # Bypasses ``unit.words.add``, which would first query for links that a
+    # word created a line ago cannot have.
+    UnitWordRelation.objects.bulk_create(
+        UnitWordRelation(unit=unit, word=word) for unit in dict.fromkeys(row_units)
+    )
 
-    for unit in units:
-        unit.words.add(word)
-
-    return RowResult(units_created=units_created, word_created=True, word_id=word.pk)
+    return RowResult(word_created=True, word_id=word.pk)
 
 
-def import_words_from_csv(
-    dataset: Dataset, job: Job, user: User
-) -> Tuple[int, int, list[str], list[int]]:
+def import_words_from_csv(dataset: Dataset, job: Job, user: User) -> ImportSummary:
     """
-    Imports the entire csv dataset to a job.
-    Returns a tuple of words_created_count, units_created_count, error_messages,
-    imported_word_ids
-
-    Important: During the import there is a local cache ``created_units`` because of the following scenario:
-    In the CSV file there are ten words for the unit "tools"
-    There is already a unit called "tools" in the system
-    What we want to happen is: a second unit "tools" is created, distinct from the one that already exists. All words
-    in the CSV file gets imported into that second instance of "tools".
+    Imports the csv dataset into the job. A row that cannot be imported is
+    collected in the summary's errors rather than aborting the rest.
     """
-    total_words_created = 0
-    total_units_created = 0
-    error_messages: list[str] = []
-    imported_word_ids: list[int] = []
-
+    summary = ImportSummary()
     creator_fields = _creator_fields_for_user(user)
-    created_units: Dict[str, Unit] = {}
+    units = UnitResolver(job, creator_fields)
 
-    for row_number, raw_row in enumerate(dataset.dict, start=1):
+    for row_number, raw_row in enumerate(dataset.dict, start=HEADER_ROW + 1):
         parsed_or_error = parse_row(raw_row, row_number)
 
         if isinstance(parsed_or_error, RowResult):
             if parsed_or_error.error:
-                error_messages.append(parsed_or_error.error)
+                summary.errors.append(parsed_or_error.error)
             continue
 
-        result = process_row(parsed_or_error, job, created_units, creator_fields)
+        result = process_row(parsed_or_error, units, creator_fields)
 
         if result.error:
-            error_messages.append(
+            summary.errors.append(
                 _("Row %(n)s: %(msg)s") % {"n": row_number, "msg": result.error}
             )
             continue
 
         if result.word_created:
-            total_words_created += 1
-        total_units_created += result.units_created
+            summary.words_created += 1
         if result.word_id is not None:
-            imported_word_ids.append(result.word_id)
+            summary.imported_word_ids.append(result.word_id)
 
-    return total_words_created, total_units_created, error_messages, imported_word_ids
+    summary.units_created = len(units.created_titles)
+    summary.units_reused = len(units.reused_titles)
+    return summary

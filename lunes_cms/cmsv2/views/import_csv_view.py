@@ -13,6 +13,7 @@ from tablib.exceptions import InvalidDimensions
 
 from ..admins.word_import_resource import (
     import_words_from_csv,
+    ImportSummary,
     validate_header_structure,
 )
 from ..models import Job
@@ -41,21 +42,56 @@ class ImportCSVForm(forms.Form):
     )
 
 
-def _build_success_message(words_created: int, units_created: int) -> str:
+def _build_success_message(summary: ImportSummary) -> str:
     """
     Builds the pluralized success message shown after a completed CSV import.
+    Each sentence is translated whole, so that leaving the reuse one out
+    still reads correctly in every language.
     """
     words_phrase = ngettext(
-        "%(count)s new word", "%(count)s new words", words_created
-    ) % {"count": words_created}
+        "%(count)s new word", "%(count)s new words", summary.words_created
+    ) % {"count": summary.words_created}
     units_phrase = ngettext(
-        "%(count)s new unit", "%(count)s new units", units_created
-    ) % {"count": units_created}
-    return _(
-        "Import successful! %(words)s, %(units)s created. Example "
-        "sentences, audio and images are being generated in the "
-        "background. This may take a few minutes..."
-    ) % {"words": words_phrase, "units": units_phrase}
+        "%(count)s new unit", "%(count)s new units", summary.units_created
+    ) % {"count": summary.units_created}
+    sentences = [
+        _("Import successful! %(words)s, %(units)s created.")
+        % {"words": words_phrase, "units": units_phrase}
+    ]
+
+    if summary.units_reused:
+        sentences.append(
+            ngettext(
+                "%(count)s existing unit was extended.",
+                "%(count)s existing units were extended.",
+                summary.units_reused,
+            )
+            % {"count": summary.units_reused}
+        )
+
+    sentences.append(
+        str(
+            _(
+                "Example sentences, audio and images are being generated in the "
+                "background. This may take a few minutes..."
+            )
+        )
+    )
+    return " ".join(sentences)
+
+
+def _generate_word_assets(word_ids: list[int], job_title: str) -> None:
+    """
+    Generates the missing assets for the imported words, in a thread.
+
+    The order matters — audio can only be made once the sentence exists —
+    and the drains must not run in parallel: each does a full ``Word.save()``,
+    so concurrent ones would write back stale in-memory copies and clobber
+    each other's file fields, re-triggering generation.
+    """
+    drain_pending_sentences(word_ids, job_title=job_title)
+    drain_pending_audio(word_ids)
+    drain_pending_images(word_ids, job_title=job_title)
 
 
 def _report_dataset_issue(request: HttpRequest, data: Dataset) -> bool:
@@ -138,37 +174,24 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
 
         # request.user is `User | AnonymousUser`, but this view is only
         # reachable by authenticated staff users.
-        words_created, units_created, errors, imported_word_ids = import_words_from_csv(
+        summary = import_words_from_csv(
             data, selected_job, request.user  # type: ignore[arg-type]
         )
 
-        if errors:
-            error_summary = " | ".join(errors[:5])
+        if summary.errors:
+            error_summary = " | ".join(summary.errors[:5])
             messages.warning(
                 request,
                 _("Import completed with warnings: %(summary)s")
                 % {"summary": error_summary},
             )
         else:
-            messages.success(
-                request, _build_success_message(words_created, units_created)
-            )
+            messages.success(request, _build_success_message(summary))
 
-        if imported_word_ids:
-            # Run the three drains sequentially in one thread:
-            #   1. sentences  — audio can only be made once the sentence exists
-            #   2. audio
-            #   3. images
-            # They must not run in parallel: each does a full ``Word.save()``,
-            # so concurrent drains would write back stale in-memory copies and
-            # clobber each other's file fields (re-triggering generation).
-            def _generate_word_assets() -> None:
-                drain_pending_sentences(imported_word_ids, job_title=selected_job.name)
-                drain_pending_audio(imported_word_ids)
-                drain_pending_images(imported_word_ids, job_title=selected_job.name)
-
+        if summary.imported_word_ids:
             threading.Thread(
                 target=_generate_word_assets,
+                args=(summary.imported_word_ids, selected_job.name),
                 daemon=True,
             ).start()
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))
