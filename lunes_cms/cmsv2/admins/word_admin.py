@@ -4,6 +4,7 @@ from datetime import date
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.functional import lazy
 from django.utils.html import escape, format_html
@@ -56,6 +57,23 @@ class AlternativeWordInline(admin.TabularInline):
         "action_buttons",
     ]
     readonly_fields = ["action_buttons"]
+
+    def has_view_permission(
+        self, request: HttpRequest, _obj: Word | None = None
+    ) -> bool:
+        return request.user.has_perm("cmsv2.view_word") or self.has_change_permission(
+            request
+        )
+
+    def has_add_permission(
+        self, request: HttpRequest, _obj: Word | None = None
+    ) -> bool:
+        return self.has_change_permission(request)
+
+    def has_change_permission(
+        self, request: HttpRequest, _obj: Word | None = None
+    ) -> bool:
+        return request.user.has_perm("cmsv2.change_word")
 
     def action_buttons(self, obj: AlternativeWord) -> SafeString:
         """

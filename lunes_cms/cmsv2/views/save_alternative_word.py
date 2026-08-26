@@ -7,9 +7,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from ..models import AlternativeWord, Word
+from .decorators import require_word_change_permission
 
 
 @staff_member_required
+@require_word_change_permission
 @csrf_exempt
 @require_POST
 def save_alternative_word(request: HttpRequest) -> JsonResponse:

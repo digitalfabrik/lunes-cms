@@ -70,3 +70,4 @@ class AlternativeWord(models.Model):
 
         verbose_name = _("alternative word")
         verbose_name_plural = _("alternative words")
+        default_permissions = ()
