@@ -99,3 +99,32 @@ def test_valid_file_still_imports_successfully(admin_client: Client, job: Job) -
     messages = [str(m) for m in response.context["messages"]]
     assert any("import successful" in m.lower() for m in messages)
     assert Word.objects.filter(units__jobs=job, word="Hammer").exists()
+
+
+@pytest.mark.django_db()
+def test_success_message_counts_only_data_rows(admin_client: Client, job: Job) -> None:
+    """The success message must report exactly the imported data rows:
+    neither the header row nor the created units may be counted as words,
+    and there is no "updated" count since the import never updates
+    existing records (issues #761 and #907)."""
+    response = admin_client.post(
+        reverse("cmsv2:import_csv"),
+        {
+            "job": job.pk,
+            "csv_file": _upload(
+                "Einheit,Vokabel,Artikel\n"
+                "Werkzeug,Hammer,der\n"
+                "Werkzeug,Säge,die\n"
+                "Werkzeug,Zange,die\n"
+                "Werkzeug,Bohrer,der\n"
+            ),
+        },
+        follow=True,
+    )
+
+    messages = [str(m) for m in response.context["messages"]]
+    success = next(m for m in messages if "import successful" in m.lower())
+    assert "4 new words" in success
+    assert "1 new unit" in success
+    assert "updated" not in success.lower()
+    assert Word.objects.filter(units__jobs=job).distinct().count() == 4
