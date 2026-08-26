@@ -6,11 +6,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.cmsv2.models.review import ReviewAssignment
+from lunes_cms.cmsv2.models.review import Review
 
 
 class LunesUserCreationForm(AdminUserCreationForm):
@@ -41,19 +42,19 @@ class LunesUserChangeForm(UserChangeForm):
         self.fields["email"].required = True
 
 
-class UserReviewAssignmentInline(admin.TabularInline):
+class UserReviewInline(admin.TabularInline):
     """
-    Inline admin for ReviewAssignment on the User change page.
+    Inline admin for Review on the User change page.
     """
 
-    model = ReviewAssignment
+    model = Review
     fk_name = "reviewer"
     extra = 0
-    fields = ["unit", "assigned_by", "assigned_at"]
+    fields = ["word", "assigned_by", "assigned_at"]
     readonly_fields = ["assigned_by", "assigned_at"]
-    autocomplete_fields = ["unit"]
-    verbose_name = _("assigned unit")
-    verbose_name_plural = _("assigned units")
+    autocomplete_fields = ["word"]
+    verbose_name = _("assigned word")
+    verbose_name_plural = _("assigned words")
 
     def has_add_permission(self, request: HttpRequest, obj: User | None = None) -> bool:
         return request.user.is_superuser
@@ -71,8 +72,8 @@ class UserReviewAssignmentInline(admin.TabularInline):
 
 class LunesUserAdmin(DjangoUserAdmin):
     """
-    User admin extended with a ReviewAssignment inline so admins can grant
-    per-unit access to individual users.
+    User admin extended with a Review inline so admins can grant
+    per-word review access to individual users.
     """
 
     add_form = LunesUserCreationForm
@@ -92,7 +93,7 @@ class LunesUserAdmin(DjangoUserAdmin):
             },
         ),
     )
-    inlines = [*DjangoUserAdmin.inlines, UserReviewAssignmentInline]
+    inlines = [*DjangoUserAdmin.inlines, UserReviewInline]
 
     def save_formset(
         self,
@@ -101,7 +102,9 @@ class LunesUserAdmin(DjangoUserAdmin):
         formset: BaseModelFormSet,
         change: bool,
     ) -> None:
-        if formset.model is ReviewAssignment:
+        if formset.model is Review:
+            if not request.user.is_authenticated:
+                raise PermissionDenied
             instances = formset.save(commit=False)
             for obj in formset.deleted_objects:
                 obj.delete()

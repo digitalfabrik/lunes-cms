@@ -4,13 +4,19 @@ from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.db import models
-from django.db.models.fields.files import ImageFieldFile
+from django.db.models.fields.files import FieldFile, ImageFieldFile
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
-from .static import ReviewStatus
+from .job import Job
+from .static import (
+    ProgressStatus,
+    ReviewStatus,
+)
 
 if TYPE_CHECKING:
+    from django.db.models import QuerySet
+
     from .unit import Unit
     from .word import Word
 
@@ -22,17 +28,16 @@ def upload_review_suggestions(_: models.Model, filename: str) -> str:
     return create_resource_path("review_suggestions", filename)
 
 
-class ReviewAssignment(models.Model):
+class Review(models.Model):
     """
-    Assigns a reviewer to review content for a specific unit.
-    A single assignment covers all words within that unit.
+    Model for a single review
     """
 
-    unit = models.ForeignKey(
-        "Unit",
+    word = models.ForeignKey(
+        "Word",
         on_delete=models.CASCADE,
         related_name="review_assignments",
-        verbose_name=_("unit"),
+        verbose_name=_("word"),
     )
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -47,104 +52,70 @@ class ReviewAssignment(models.Model):
         related_name="created_review_assignments",
         verbose_name=_("assigned by"),
     )
+    reason = models.CharField(max_length=20, default="", verbose_name=_("reason"))
+    comment = models.CharField(max_length=120, default="", verbose_name=_("comment"))
     assigned_at = models.DateTimeField(auto_now_add=True, verbose_name=_("assigned at"))
     completed_at = models.DateTimeField(
         null=True, blank=True, verbose_name=_("completed at")
     )
-
-    class Meta:
-        """
-        Meta class for ReviewAssignment model.
-        """
-
-        constraints = [
-            models.UniqueConstraint(
-                fields=["unit", "reviewer"], name="unique_review_assignment"
-            )
-        ]
-        verbose_name = _("Review Assignment")
-        verbose_name_plural = _("Review Assignments")
-
-    def __str__(self) -> str:
-        return f"{self.unit} – {self.reviewer}"
-
-
-class ImageReview(models.Model):
-    """
-    Tracks individual image review decisions.
-    Can be for either a word-level image or a unit-specific image (UnitWordRelation).
-    """
-
-    unit_word_relation = models.ForeignKey(
-        "UnitWordRelation",
-        on_delete=models.CASCADE,
-        related_name="image_reviews",
-        verbose_name=_("unit-word relation"),
-    )
-    is_unit_specific_image = models.BooleanField(
-        default=False,
-        verbose_name=_("unit-specific image"),
-        help_text=_(
-            "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
-        ),
-    )
-    reviewer = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="image_reviews",
-        verbose_name=_("reviewer"),
-    )
-    status = models.CharField(
+    review_status = models.CharField(
         max_length=20,
         choices=ReviewStatus.choices,
         default=ReviewStatus.PENDING,
-        verbose_name=_("status"),
+        verbose_name=_("review status"),
     )
-    comment = models.TextField(blank=True, verbose_name=_("comment"))
-    suggested_image = models.ImageField(
-        upload_to=upload_review_suggestions,
-        blank=True,
-        null=True,
-        verbose_name=_("suggested image"),
-        help_text=_("Alternative image suggested by reviewer"),
-    )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("updated at"))
+
+    @property
+    def word_article(self) -> int:
+        """Returns the article of the word being reviewed."""
+        return self.word.singular_article
+
+    @property
+    def word_type(self) -> str:
+        """Returns the word_type of the word being reviewed."""
+        return self.word.word_type
+
+    @property
+    def units(self) -> "QuerySet[Unit]":
+        """Returns the units the word being reviewed belongs to."""
+        return self.word.units.all()
+
+    @property
+    def jobs(self) -> "QuerySet[Job]":
+        """Returns the jobs of the units the word being reviewed belongs to."""
+        return Job.objects.filter(units__in=self.units).distinct()
+
+    @property
+    def image(self) -> ImageFieldFile:
+        """Returns the image of the word being reviewed"""
+        return self.word.image
+
+    @property
+    def audio(self) -> FieldFile:
+        """Returns the audio of the word being reviewed"""
+        return self.word.audio
+
+    @property
+    def progress_status(self) -> ProgressStatus:
+        """Returns the status of a review"""
+        return (
+            ProgressStatus.IN_REVIEW
+            if not self.completed_at
+            else ProgressStatus.COMPLETED
+        )
 
     class Meta:
         """
-        Meta class for ImageReview model.
+        Meta class for Review model.
         """
 
-        permissions = [
-            ("can_review_images", "Can review and approve images"),
-            ("can_suggest_images", "Can suggest alternative images"),
-        ]
         constraints = [
             models.UniqueConstraint(
-                fields=["unit_word_relation", "reviewer"], name="unique_image_review"
+                fields=["word", "reviewer"], name="unique_review_assignment"
             )
         ]
-        verbose_name = _("Image Review")
-        verbose_name_plural = _("Image Reviews")
-        ordering = ["-created_at"]
+        verbose_name = _("Review")
+        verbose_name_plural = _("Review")
 
     def __str__(self) -> str:
-        return f"{self.unit_word_relation} – {self.reviewer} ({self.status})"
-
-    @property
-    def word(self) -> "Word":
-        """Returns the word being reviewed."""
-        return self.unit_word_relation.word
-
-    @property
-    def unit(self) -> "Unit":
-        """Returns the unit context of the review."""
-        return self.unit_word_relation.unit
-
-    @property
-    def reviewed_image(self) -> ImageFieldFile:
-        """Returns the actual image being reviewed."""
-        if self.is_unit_specific_image:
-            return self.unit_word_relation.image
-        return self.unit_word_relation.word.image
+        return f"{self.word} – {self.reviewer}"

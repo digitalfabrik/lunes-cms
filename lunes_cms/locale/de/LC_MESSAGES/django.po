@@ -381,8 +381,8 @@ msgstr "Übergeordnete Modulgruppe"
 msgid "word type"
 msgstr "Wortart"
 
-#: cms/models/document.py cmsv2/models/alternative_word.py cmsv2/models/unit.py
-#: cmsv2/models/word.py
+#: cms/models/document.py cmsv2/models/alternative_word.py
+#: cmsv2/models/review.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "word"
 msgstr "Wort"
 
@@ -709,7 +709,7 @@ msgid "units"
 msgstr "Einheiten"
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py cmsv2/models/job.py
-#: cmsv2/models/review.py cmsv2/models/unit.py
+#: cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -757,14 +757,6 @@ msgid "Import"
 msgstr "Import"
 
 #: cmsv2/admins/unit_admin.py
-msgid "assigned user"
-msgstr "Zugewiesene Person"
-
-#: cmsv2/admins/unit_admin.py
-msgid "assigned users"
-msgstr "Zugewiesene Personen"
-
-#: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"
 msgstr "Alle ausgewählte Einheiten veröffentlichen"
 
@@ -784,9 +776,9 @@ msgstr "Ausgewählte Einheiten zuweisen"
 
 #: cmsv2/admins/unit_admin.py
 #, python-format
-msgid "Assigned %(new)d unit(s) to %(user)s (%(skipped)d already assigned)."
+msgid "Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
-"%(new)d Einheit(en) an %(user)s zugewiesen (%(skipped)d waren bereits "
+"%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
 #: cmsv2/admins/unit_admin.py
@@ -794,12 +786,12 @@ msgid "jobs"
 msgstr "Berufe"
 
 #: cmsv2/admins/user_admin.py
-msgid "assigned unit"
-msgstr "Zugewiesene Einheit"
+msgid "assigned word"
+msgstr "Zugewiesene Vokabel"
 
 #: cmsv2/admins/user_admin.py
-msgid "assigned units"
-msgstr "Zugewiesene Einheiten"
+msgid "assigned words"
+msgstr "Zugewiesene Vokabeln"
 
 #: cmsv2/admins/word_admin.py
 msgid "Alternative Words"
@@ -1031,10 +1023,6 @@ msgstr "Beruf"
 msgid "Jobs"
 msgstr "Berufe"
 
-#: cmsv2/models/review.py cmsv2/models/unit.py
-msgid "unit"
-msgstr "Einheit"
-
 #: cmsv2/models/review.py
 msgid "reviewer"
 msgstr "Kontrolleur:in"
@@ -1042,6 +1030,10 @@ msgstr "Kontrolleur:in"
 #: cmsv2/models/review.py
 msgid "assigned by"
 msgstr "Zugewiesen von"
+
+#: cmsv2/models/review.py
+msgid "reason"
+msgstr "Grund"
 
 #: cmsv2/models/review.py
 msgid "assigned at"
@@ -1052,50 +1044,12 @@ msgid "completed at"
 msgstr "Erstellt am"
 
 #: cmsv2/models/review.py
-msgid "Review Assignment"
-msgstr "Kontroll Zuweisung"
+msgid "review status"
+msgstr "Prüfstatus"
 
 #: cmsv2/models/review.py
-msgid "Review Assignments"
-msgstr "Kontroll Zuweisungen"
-
-#: cmsv2/models/review.py
-msgid "unit-word relation"
-msgstr "Einheit-Wort Beziehung"
-
-#: cmsv2/models/review.py
-msgid "unit-specific image"
-msgstr "Einheit spezifisches Bild"
-
-#: cmsv2/models/review.py
-msgid "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
-msgstr ""
-"Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, Falsch "
-"wenn ein Bild aus dem Wort kontrolliert wird"
-
-#: cmsv2/models/review.py
-msgid "status"
-msgstr "Status"
-
-#: cmsv2/models/review.py
-msgid "suggested image"
-msgstr "Vorgeschlagenes Bild"
-
-#: cmsv2/models/review.py
-msgid "Alternative image suggested by reviewer"
-msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
-
-#: cmsv2/models/review.py
-msgid "updated at"
-msgstr "Erstellt am"
-
-#: cmsv2/models/review.py
-msgid "Image Review"
-msgstr "Bild Kontrolle"
-
-#: cmsv2/models/review.py
-msgid "Image Reviews"
-msgstr "Bild Kontrollen"
+msgid "Review"
+msgstr "Begutachtung"
 
 #: cmsv2/models/static.py
 msgid "Confirmed"
@@ -1110,8 +1064,28 @@ msgid "Pending Review"
 msgstr "Freigabe ausstehend"
 
 #: cmsv2/models/static.py
+msgid "Change requested"
+msgstr "Änderung vorgeschlagen"
+
+#: cmsv2/models/static.py
 msgid "Approved"
 msgstr "Genehmigt"
+
+#: cmsv2/models/static.py
+msgid "Rejected"
+msgstr "Abgelehnt"
+
+#: cmsv2/models/static.py
+msgid "Cannot be assessed"
+msgstr "Nicht beurteilbar"
+
+#: cmsv2/models/static.py
+msgid "In review"
+msgstr "Liegt zur Begutachtung vor"
+
+#: cmsv2/models/static.py
+msgid "Completed"
+msgstr "abgeschlossen"
 
 #: cmsv2/models/static.py
 msgid "Reviewer"
@@ -1151,6 +1125,10 @@ msgstr "Beispielsatz generieren"
 #: cmsv2/models/unit.py
 msgid "Unit-Word Relation"
 msgstr "Einheit-Wort Beziehung"
+
+#: cmsv2/models/unit.py
+msgid "unit"
+msgstr "Einheit"
 
 #: cmsv2/models/unit.py
 msgid "Unit"
@@ -1345,6 +1323,48 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "assigned unit"
+#~ msgstr "Zugewiesene Einheit"
+
+#~ msgid "assigned units"
+#~ msgstr "Zugewiesene Einheiten"
+
+#~ msgid "Review Assignment"
+#~ msgstr "Kontroll Zuweisung"
+
+#~ msgid "Review Assignments"
+#~ msgstr "Kontroll Zuweisungen"
+
+#~ msgid "unit-word relation"
+#~ msgstr "Einheit-Wort Beziehung"
+
+#~ msgid "unit-specific image"
+#~ msgstr "Einheit spezifisches Bild"
+
+#~ msgid ""
+#~ "True if reviewing UnitWordRelation.image, False if reviewing Word.image"
+#~ msgstr ""
+#~ "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, "
+#~ "Falsch wenn ein Bild aus dem Wort kontrolliert wird"
+
+#~ msgid "status"
+#~ msgstr "Status"
+
+#~ msgid "suggested image"
+#~ msgstr "Vorgeschlagenes Bild"
+
+#~ msgid "Alternative image suggested by reviewer"
+#~ msgstr "Alternatives Bild von der:dem Kontrolleur:in vorgschlagen"
+
+#~ msgid "updated at"
+#~ msgstr "Erstellt am"
+
+#~ msgid "Image Review"
+#~ msgstr "Bild Kontrolle"
+
+#~ msgid "Image Reviews"
+#~ msgstr "Bild Kontrollen"
 
 #~ msgid "Miscellaneous"
 #~ msgstr "Verschiedene"
