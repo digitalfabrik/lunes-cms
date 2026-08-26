@@ -23,7 +23,7 @@ from lunes_cms.cmsv2.admins.word_import_resource import (
     RowResult,
     validate_header_structure,
 )
-from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models import Unit, Word
 from lunes_cms.cmsv2.models.job import Job
 
 # ---------------------------------------------------------------------------
@@ -268,7 +268,7 @@ def test_import_with_german_headers(job: Job, user: User) -> None:
         ["Einheit", "Vokabel", "Artikel"],
         [["Werkzeug", "Hammer", "der"], ["Werkzeug", "Säge", "die"]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     assert _job_words(job).count() == 2
 
@@ -280,7 +280,7 @@ def test_reimport_with_english_headers(job: Job, user: User) -> None:
         ["Units", "Word", "Singular Article", "Plural Article", "Example sentence"],
         [["Werkzeug", "Hammer", "der", "die (Plural)", "Der Hammer ist schwer."]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     word = _job_words(job).get(word="Hammer")
     assert word.plural_article == 1
@@ -298,7 +298,7 @@ def test_imported_word_with_example_sentence_is_not_checked(
         ["Units", "Word", "Singular Article", "Example sentence"],
         [["Werkzeug", "Hammer", "der", "Der Hammer ist schwer."]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     word = _job_words(job).get(word="Hammer")
     assert word.example_sentence == "Der Hammer ist schwer."
@@ -314,7 +314,7 @@ def test_reimport_with_german_headers(job: Job, user: User) -> None:
         ["Einheit", "Vokabel", "Singularartikel", "Pluralartikel", "Beispielsatz"],
         [["Werkzeug", "Hammer", "der", "die (Plural)", "Der Hammer ist schwer."]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     assert _job_words(job).get(word="Hammer").plural_article == 1
 
@@ -326,7 +326,7 @@ def test_import_plural_word(job: Job, user: User) -> None:
         ["Units", "Word", "Singular Article", "Plural", "Plural Article"],
         [["Werkzeug", "Hammer", "der", "Hämmer", "die"]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     word = _job_words(job).get(word="Hammer")
     assert word.plural == "Hämmer"
@@ -363,7 +363,7 @@ def test_extra_export_columns_are_ignored(job: Job, user: User) -> None:
         ["Units", "Word", "Singular Article", "Has audio?", "Creation date"],
         [["Werkzeug", "Hammer", "der", "No", "01.01.2026 10:00"]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     assert _job_words(job).count() == 1
 
@@ -375,7 +375,7 @@ def test_word_type_column_is_imported(job: Job, user: User) -> None:
         ["Units", "Word", "Singular Article", "Word type"],
         [["Werkzeug", "Hammer", "der", "Nomen"]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     assert _job_words(job).get(word="Hammer").word_type == "Nomen"
 
@@ -388,7 +388,7 @@ def test_unrecognised_word_type_defaults_to_empty(job: Job, user: User) -> None:
         ["Units", "Word", "Singular Article", "Word type"],
         [["Werkzeug", "Hammer", "der", "not-a-real-type"]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     assert _job_words(job).get(word="Hammer").word_type == ""
 
@@ -399,9 +399,24 @@ def test_empty_rows_produce_errors(job: Job, user: User) -> None:
         ["Einheit", "Vokabel", "Artikel"],
         [["", "Hammer", "der"], ["Werkzeug", "", "der"]],
     )
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
     assert len(errors) == 2
     assert _job_words(job).count() == 0
+
+
+@pytest.mark.django_db
+def test_error_messages_name_the_row_the_file_shows(job: Job, user: User) -> None:
+    """The headers occupy row 1, so the second data row is row 3 — the number
+    the editor sees next to it in their spreadsheet."""
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["Werkzeug", "Hammer", "der"], ["Werkzeug", "", "die"]],
+    )
+
+    errors = import_words_from_csv(ds, job, user).errors
+
+    assert len(errors) == 1
+    assert "Row 3" in str(errors[0])
 
 
 @pytest.mark.django_db
@@ -495,7 +510,7 @@ def test_import_stores_pronunciation_on_the_word(job: Job, user: User) -> None:
         [["Backwaren", "Baiser", "das", "Bessee"], ["Werkzeug", "Hammer", "der", ""]],
     )
 
-    _, _, errors, _ = import_words_from_csv(ds, job, user)
+    errors = import_words_from_csv(ds, job, user).errors
 
     assert errors == []
     assert _job_words(job).get(word="Baiser").pronunciation == "Bessee"
@@ -516,14 +531,14 @@ def test_pipe_separated_units_are_split_and_both_linked(job: Job, user: User) ->
         ["Einheit", "Vokabel", "Artikel"],
         [["Werkzeuge | Baustelle", "Hammer", "der"]],
     )
-    _, units_created, errors, _ = import_words_from_csv(ds, job, user)
-    assert errors == []
+    summary = import_words_from_csv(ds, job, user)
+    assert summary.errors == []
     word = _job_words(job).get(word="Hammer")
     assert set(word.units.values_list("title", flat=True)) == {
         "Werkzeuge",
         "Baustelle",
     }
-    assert units_created == 2
+    assert summary.units_created == 2
 
 
 @pytest.mark.django_db
@@ -543,9 +558,22 @@ def test_pipe_separated_units_tolerate_missing_spaces(job: Job, user: User) -> N
 
 
 @pytest.mark.django_db
+def test_a_unit_named_twice_in_one_row_is_linked_once(job: Job, user: User) -> None:
+    """The word's units are written directly, so a row repeating a title must
+    not produce two identical (unit, word) rows."""
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["Werkzeuge | Werkzeuge", "Hammer", "der"]],
+    )
+    summary = import_words_from_csv(ds, job, user)
+    assert summary.errors == []
+    assert _job_words(job).get(word="Hammer").units.count() == 1
+
+
+@pytest.mark.django_db
 def test_pipe_separated_units_reuse_the_row_cache(job: Job, user: User) -> None:
     """Two rows naming the same multi-unit combination reuse the same two
-    units (via the ``created_units`` cache) instead of creating duplicates."""
+    units instead of creating duplicates."""
     ds = _make_dataset(
         ["Einheit", "Vokabel", "Artikel"],
         [
@@ -553,11 +581,106 @@ def test_pipe_separated_units_reuse_the_row_cache(job: Job, user: User) -> None:
             ["Werkzeuge | Baustelle", "Säge", "die"],
         ],
     )
-    _, units_created, errors, _ = import_words_from_csv(ds, job, user)
-    assert errors == []
-    assert units_created == 2
+    summary = import_words_from_csv(ds, job, user)
+    assert summary.errors == []
+    assert summary.units_created == 2
     hammer = _job_words(job).get(word="Hammer")
     saege = _job_words(job).get(word="Säge")
     assert set(hammer.units.values_list("pk", flat=True)) == set(
         saege.units.values_list("pk", flat=True)
     )
+
+
+# ---------------------------------------------------------------------------
+# Extending units the job already has
+# ---------------------------------------------------------------------------
+
+
+def _tool_dataset(word: str, article: str, unit: str = "Werkzeug") -> Dataset:
+    return _make_dataset(["Einheit", "Vokabel", "Artikel"], [[unit, word, article]])
+
+
+def _job_units(job: Job, title: str) -> QuerySet[Unit]:
+    return Unit.objects.filter(jobs=job, title=title)
+
+
+@pytest.mark.django_db
+def test_second_import_extends_the_existing_unit(job: Job, user: User) -> None:
+    """A follow-up CSV naming a unit the job already has adds its words to
+    that unit instead of creating a second one with the same title."""
+    import_words_from_csv(_tool_dataset("Hammer", "der"), job, user)
+
+    summary = import_words_from_csv(_tool_dataset("Säge", "die"), job, user)
+
+    assert summary.errors == []
+    assert summary.units_created == 0
+    assert summary.units_reused == 1
+    unit = _job_units(job, "Werkzeug").get()
+    assert set(unit.words.values_list("word", flat=True)) == {"Hammer", "Säge"}
+
+
+@pytest.mark.django_db
+def test_a_same_titled_unit_of_another_job_is_not_reused(job: Job, user: User) -> None:
+    """A unit of the same title belonging to another job is left alone."""
+    other_job = Job.objects.create(name="Other Job")
+    import_words_from_csv(_tool_dataset("Hammer", "der"), other_job, user)
+
+    summary = import_words_from_csv(_tool_dataset("Säge", "die"), job, user)
+
+    assert summary.units_created == 1
+    assert summary.units_reused == 0
+    assert _job_units(other_job, "Werkzeug").get().words.get().word == "Hammer"
+
+
+@pytest.mark.django_db
+def test_pipe_separated_units_mix_existing_and_new(job: Job, user: User) -> None:
+    """One row may name both a unit the job already has and one it doesn't."""
+    import_words_from_csv(_tool_dataset("Hammer", "der"), job, user)
+
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"],
+        [["Werkzeug | Baustelle", "Säge", "die"]],
+    )
+    summary = import_words_from_csv(ds, job, user)
+
+    assert summary.units_created == 1
+    assert summary.units_reused == 1
+    saege = _job_words(job).get(word="Säge")
+    assert set(saege.units.values_list("title", flat=True)) == {
+        "Werkzeug",
+        "Baustelle",
+    }
+    assert _job_units(job, "Werkzeug").count() == 1
+
+
+@pytest.mark.django_db
+def test_the_oldest_of_several_same_titled_units_is_extended(
+    job: Job, user: User
+) -> None:
+    """Imports made before this behaviour existed can leave a job with
+    several same-titled units; every later import converges on the first."""
+    oldest = Unit.objects.create(title="Werkzeug")
+    oldest.jobs.add(job)
+    duplicate = Unit.objects.create(title="Werkzeug")
+    duplicate.jobs.add(job)
+
+    import_words_from_csv(_tool_dataset("Hammer", "der"), job, user)
+
+    assert oldest.words.get().word == "Hammer"
+    assert not duplicate.words.exists()
+
+
+@pytest.mark.django_db
+def test_extending_a_unit_leaves_its_own_attributes_alone(job: Job, user: User) -> None:
+    """Adding words to an existing unit must not re-attribute it to the
+    importing user or link it to its job a second time."""
+    owner = get_user_model().objects.create_superuser(
+        username="owner", email="owner@example.com", password="password"
+    )
+    import_words_from_csv(_tool_dataset("Hammer", "der"), job, owner)
+
+    import_words_from_csv(_tool_dataset("Säge", "die"), job, user)
+
+    unit = _job_units(job, "Werkzeug").get()
+    assert unit.created_by_user == owner
+    assert unit.jobs.count() == 1

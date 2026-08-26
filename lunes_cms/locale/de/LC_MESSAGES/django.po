@@ -1266,13 +1266,23 @@ msgstr[1] "%(count)s neue Einheiten"
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
+msgid "Import successful! %(words)s, %(units)s created."
+msgstr "Import erfolgreich! %(words)s, %(units)s erstellt."
+
+#: cmsv2/views/import_csv_view.py
+#, python-format
+msgid "%(count)s existing unit was extended."
+msgid_plural "%(count)s existing units were extended."
+msgstr[0] "%(count)s bestehende Einheit wurde erweitert."
+msgstr[1] "%(count)s bestehende Einheiten wurden erweitert."
+
+#: cmsv2/views/import_csv_view.py
 msgid ""
-"Import successful! %(words)s, %(units)s created. Example sentences, audio "
-"and images are being generated in the background. This may take a few "
-"minutes..."
+"Example sentences, audio and images are being generated in the background. "
+"This may take a few minutes..."
 msgstr ""
-"Import erfolgreich! %(words)s, %(units)s erstellt. Beispielsätze, Audio und "
-"Bilder werden im Hintergrund generiert. Dies kann einige Minuten dauern..."
+"Beispielsätze, Audio und Bilder werden im Hintergrund generiert. Dies kann "
+"einige Minuten dauern..."
 
 #: cmsv2/views/import_csv_view.py
 msgid "The file contains no entries. Nothing was imported."
