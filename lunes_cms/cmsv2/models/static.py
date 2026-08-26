@@ -84,43 +84,6 @@ class Roles:
     REVIEWER_GROUP = _("Reviewer")
 
 
-class Permissions:
-    """Possible permissions"""
-
-    STAFF_PERMISSIONS = [
-        "add_job",
-        "change_job",
-        "delete_job",
-        "view_job",
-        "add_word",
-        "change_word",
-        "delete_word",
-        "view_word",
-        "add_unit",
-        "change_unit",
-        "delete_unit",
-        "view_unit",
-        "add_image",
-        "change_image",
-        "delete_image",
-        "view_image",
-        "add_feedback",
-        "change_feedback",
-        "delete_feedback",
-        "view_feedback",
-        "add_unitwordrelation",
-        "change_unitwordrelation",
-        "delete_unitwordrelation",
-        "view_unitwordrelation",
-    ]
-    REVIEW_PERMISSIONS = [
-        "add_review",
-        "change_review",
-        "delete_review",
-        "view_review",
-    ]
-
-
 def convert_image_to_webp(image_field: ImageFieldFile) -> bool:
     """
     Converts an ImageField's file to WebP format in-place.
