@@ -594,13 +594,13 @@ class WordAdmin(BaseAdmin):
 
         controls_html = f"""
         <div class="audio-asset-controls" data-word-id="{obj.id}">
-            <button type="button" class="add-audio-btn" style="display: {'none' if obj.audio else 'inline-flex'};">
+            <button type="button" class="add-audio-btn" style="display: {'none' if obj.audio else 'inline-flex'};" title="{_('Add audio')}">
                 <span class="audio-add">+</span>
             </button>
-            <button type="button" class="replace-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};">
+            <button type="button" class="replace-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};" title="{_('Upload audio')}">
                 <span class="audio-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};">
+            <button type="button" class="delete-audio-btn" style="display: {'inline-flex' if obj.audio else 'none'};" title="{_('Delete audio')}">
                 <span class="audio-delete">×</span>
             </button>
             <input type="file" class="audio-file-input" style="display: none;" accept="audio/*">
@@ -675,13 +675,13 @@ class WordAdmin(BaseAdmin):
 
         controls_html = f"""
         <div class="image-controls" data-word-id="{obj.id}">
-            <button type="button" class="add-image-btn" style="display: {'none' if obj.image else 'inline-flex'};">
+            <button type="button" class="add-image-btn" style="display: {'none' if obj.image else 'inline-flex'};" title="{_('Add image')}">
                 <span class="image-add">+</span>
             </button>
-            <button type="button" class="replace-image-btn" style="display: {'inline-flex' if obj.image else 'none'};">
+            <button type="button" class="replace-image-btn" style="display: {'inline-flex' if obj.image else 'none'};" title="{_('Upload image')}">
                 <span class="image-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-image-btn" style="display: {'inline-flex' if obj.image else 'none'};">
+            <button type="button" class="delete-image-btn" style="display: {'inline-flex' if obj.image else 'none'};" title="{_('Delete image')}">
                 <span class="image-delete">×</span>
             </button>
             <input type="file" class="image-file-input" style="display: none;" accept="image/*">
@@ -745,13 +745,13 @@ class WordAdmin(BaseAdmin):
 
         unit_controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{relation.id}">
-            <button type="button" class="add-unitword-image-btn" style="display: {'none' if relation.image else 'inline-flex'};">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if relation.image else 'inline-flex'};" title="{_('Add image')}">
                 <span class="unitword-image-add">+</span>
             </button>
-            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};">
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};" title="{_('Upload image')}">
                 <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};">
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if relation.image else 'none'};" title="{_('Delete image')}">
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">

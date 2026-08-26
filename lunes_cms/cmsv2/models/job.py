@@ -91,13 +91,13 @@ class Job(models.Model):
 
         controls_html = f"""
         <div class="icon-controls" data-job-id="{self.id}">
-            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};">
+            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};" title="{_('Add icon')}">
                 <span class="icon-add">+</span>
             </button>
-            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
+            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Upload icon')}">
                 <span class="icon-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
+            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Delete icon')}">
                 <span class="icon-delete">×</span>
             </button>
             <input type="file" class="icon-file-input" style="display: none;" accept="image/*">

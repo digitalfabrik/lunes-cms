@@ -153,13 +153,13 @@ class UnitWordRelation(models.Model):
 
         controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{self.id}">
-            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};" title="{_('Add image')}">
                 <span class="unitword-image-add">+</span>
             </button>
-            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Upload image')}">
                 <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Delete image')}">
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
@@ -253,13 +253,13 @@ class UnitWordRelation(models.Model):
 
         controls_html = f"""
         <div class="unitword-image-controls" data-unitword-id="{self.id}" style="margin-top: 5px;">
-            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};">
+            <button type="button" class="add-unitword-image-btn" style="display: {'none' if self.image else 'inline-flex'};" title="{_('Add image')}">
                 <span class="unitword-image-add">+</span>
             </button>
-            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
+            <button type="button" class="replace-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Upload image')}">
                 <span class="unitword-image-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};">
+            <button type="button" class="delete-unitword-image-btn" style="display: {'inline-flex' if self.image else 'none'};" title="{_('Delete image')}">
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
@@ -390,13 +390,13 @@ class Unit(models.Model):
         # Add controls for adding, replacing, and deleting the icon
         controls_html = f"""
         <div class="icon-controls" data-unit-id="{self.id}">
-            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};">
+            <button type="button" class="add-icon-btn" style="display: {'none' if self.icon else 'inline-flex'};" title="{_('Add icon')}">
                 <span class="icon-add">+</span>
             </button>
-            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
+            <button type="button" class="replace-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Upload icon')}">
                 <span class="icon-replace"><i class="fas fa-upload"></i></span>
             </button>
-            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};">
+            <button type="button" class="delete-icon-btn" style="display: {'inline-flex' if self.icon else 'none'};" title="{_('Delete icon')}">
                 <span class="icon-delete">×</span>
             </button>
             <input type="file" class="icon-file-input" style="display: none;" accept="image/*">
