@@ -4,6 +4,7 @@ from datetime import date
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.functional import lazy
 from django.utils.html import escape, format_html
@@ -29,7 +30,8 @@ from lunes_cms.cmsv2.utils import (
 from lunes_cms.core import settings
 
 if TYPE_CHECKING:
-    # `_StrOrPromise` only exists in django-stubs, not at runtime.
+    # These only exist in django-stubs, not at runtime.
+    from django.contrib.admin.options import _FieldGroups
     from django.utils.functional import _StrOrPromise
 
 _format_html_lazy = lazy(format_html, SafeString)
@@ -56,6 +58,33 @@ class AlternativeWordInline(admin.TabularInline):
         "action_buttons",
     ]
     readonly_fields = ["action_buttons"]
+
+    def get_fields(self, request: HttpRequest, obj: Word | None = None) -> _FieldGroups:
+        """
+        Hide the action buttons from users who may only view words, because
+        their requests to add, save or delete would be denied anyway.
+        """
+        fields = super().get_fields(request, obj)
+        if not self.has_change_permission(request, obj):
+            return [field for field in fields if field != "action_buttons"]
+        return fields
+
+    def has_view_permission(
+        self, request: HttpRequest, _obj: Word | None = None
+    ) -> bool:
+        return request.user.has_perm("cmsv2.view_word") or self.has_change_permission(
+            request
+        )
+
+    def has_add_permission(
+        self, request: HttpRequest, _obj: Word | None = None
+    ) -> bool:
+        return self.has_change_permission(request)
+
+    def has_change_permission(
+        self, request: HttpRequest, _obj: Word | None = None
+    ) -> bool:
+        return request.user.has_perm("cmsv2.change_word")
 
     def action_buttons(self, obj: AlternativeWord) -> SafeString:
         """

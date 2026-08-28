@@ -1250,6 +1250,10 @@ msgstr "Beispielsatz generieren"
 msgid "Regenerate example sentence"
 msgstr "Beispielsatz neu generieren"
 
+#: cmsv2/views/decorators.py
+msgid "Permission denied"
+msgstr "Keine Berechtigung"
+
 #: cmsv2/views/import_csv_view.py
 msgid "Select CSV file"
 msgstr "CSV Datei auswählen"
