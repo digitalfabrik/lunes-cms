@@ -111,12 +111,18 @@ def test_word_admin_page_shows_alternative_words_to_editor(
 def test_word_admin_page_shows_alternative_words_to_viewer(
     word: Word, viewer_client: Client
 ) -> None:
-    """A staff user who may only view words still sees the alternative words."""
+    """
+    A staff user who may only view words sees the alternative words, but none
+    of the buttons which would add, save or delete them.
+    """
     response = viewer_client.get(f"/en/admin/cmsv2/word/{word.pk}/change/")
     assert response.status_code == 200
     content = response.content.decode()
     assert "<h2>Alternative Words</h2>" in content
     assert "Semmel" in content
+    assert "add-alternative-word-btn" not in content
+    assert "save-alternative-word-btn" not in content
+    assert "delete-alternative-word-btn" not in content
 
 
 @pytest.mark.django_db
