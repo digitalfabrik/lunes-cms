@@ -63,11 +63,12 @@ class AlternativeWordInline(admin.TabularInline):
         self, request: HttpRequest, obj: Word | None = None, **kwargs: Any
     ) -> int | None:
         """
-        Limit the formset to the existing rows plus one empty row on the
-        change page, so Django hides its "Add another" link there. New rows
-        are added instantly via the "+" button instead, which reloads the
-        page with a fresh empty row. On the add page (no ``obj``), the
-        default is kept so multiple rows can be added before the first save.
+        Limit the formset to the existing rows plus the ``extra`` empty rows
+        on the change page, so Django hides its "Add another" link there.
+        New rows are added instantly via the "+" button instead, which
+        reloads the page with a fresh empty row. On the add page (no
+        ``obj``), the default is kept so multiple rows can be added before
+        the first save.
 
         Args:
             request: The current request
@@ -77,7 +78,7 @@ class AlternativeWordInline(admin.TabularInline):
             int or None: The maximum number of forms in the formset
         """
         if obj:
-            return obj.alternative_words.count() + 1
+            return obj.alternative_words.count() + self.extra
         return super().get_max_num(request, obj, **kwargs)
 
     def get_fields(self, request: HttpRequest, obj: Word | None = None) -> _FieldGroups:
