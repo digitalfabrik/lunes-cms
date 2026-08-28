@@ -5,6 +5,7 @@ from functools import wraps
 from typing import Any
 
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext_lazy as _
 
 JsonView = Callable[..., JsonResponse]
 
@@ -21,7 +22,7 @@ def require_word_change_permission(view: JsonView) -> JsonView:
     def wrapped_view(request: HttpRequest, *args: Any, **kwargs: Any) -> JsonResponse:
         if not request.user.has_perm("cmsv2.change_word"):
             return JsonResponse(
-                {"status": "error", "message": "Permission denied"}, status=403
+                {"status": "error", "message": _("Permission denied")}, status=403
             )
         return view(request, *args, **kwargs)
 
