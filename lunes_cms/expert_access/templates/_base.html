@@ -1,0 +1,74 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex, nofollow">
+        <meta name="color-scheme" content="dark">
+        <meta name="theme-color" content="#21212e">
+        <link rel="icon" href="{% static 'images/logo.svg' %}">
+        <title>{% block title %}{% translate "Expert access" %}{% endblock %} | Lunes</title>
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+              rel="stylesheet">
+        <link href="{% static 'css/expert_access.css' %}" rel="stylesheet">
+        <script src="{% static 'js/expert_access.js' %}" defer></script>
+    </head>
+    <body>
+        <header>
+            <img src="{% static 'images/logo.svg' %}" alt="Lunes">
+            <span class="header__title">{% translate "Lunes vocabulary review" %}</span>
+            {% if user.is_superuser %}
+                <a class="header__admin" href="{% url 'admin:index' %}">
+                    {% translate "Admin site" %}
+                </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <div class="toolbar">
+                    {% get_available_languages as AVAILABLE_LANGUAGES %}
+                    <form class="toolbar__languages"
+                          method="post"
+                          action="{% url 'set_language' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        {% for code, name in AVAILABLE_LANGUAGES %}
+                            <button type="submit"
+                                    name="language"
+                                    value="{{ code }}"
+                                    lang="{{ code }}"
+                                    title="{{ name }}"
+                                    class="toolbar__language{% if code == LANGUAGE_CODE %} toolbar__language--active{% endif %}"
+                                    {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>
+                                {{ code|upper }}
+                            </button>
+                        {% endfor %}
+                    </form>
+                    <details class="toolbar__account">
+                        <summary class="toolbar__trigger">
+                            {% include "icons/user.svg" %}
+                            {% firstof user.get_short_name user.get_username %}
+                        </summary>
+                        <div class="toolbar__menu">
+                            <a class="toolbar__item" href="{% url 'expert_access:password_change' %}">
+                                {% translate "Change password" %}
+                            </a>
+                            <form method="post" action="{% url 'expert_access:logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="toolbar__item">
+                                    {% translate "Log out" %}
+                                </button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+            {% endif %}
+        </header>
+        <main id="main">
+        {% block content %}
+        {% endblock %}
+        </main>
+    </body>
+</html>

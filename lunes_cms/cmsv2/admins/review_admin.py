@@ -98,3 +98,22 @@ class ReviewAdmin(BaseAdmin):
         )
 
     styled_reviewer.short_description = _("Reviewer")  # type: ignore[attr-defined]
+
+    def jobs(self, obj: Review) -> str:
+        """Returns the jobs of a reviewed word"""
+        return ", ".join(str(job) for job in obj.unit_word.unit.jobs.all())
+
+    jobs.short_description = _("Jobs")  # type: ignore[attr-defined]
+
+    def creator(self, obj: Review) -> str:
+        """Returns the name of the word's creator"""
+        word = obj.unit_word.word
+        if word.creator_is_admin:
+            return "Admin"
+        if word.created_by_user:
+            return str(word.created_by_user)
+        if word.created_by:
+            return str(word.created_by)
+        return ""
+
+    creator.short_description = _("Creator")  # type: ignore[attr-defined]

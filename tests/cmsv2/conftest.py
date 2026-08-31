@@ -10,7 +10,6 @@ import pytest
 from django.contrib.auth.models import Group, Permission, User
 
 from lunes_cms.cmsv2.models import Area, Word
-
 from tests.cmsv2.helpers import PermissionClient
 
 

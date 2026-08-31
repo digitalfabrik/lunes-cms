@@ -821,7 +821,7 @@ msgstr "Import"
 
 #: cmsv2/admins/review_admin.py
 msgid "Meta information"
-msgstr "Metainformationen"
+msgstr "Meta-Informationen"
 
 #: cmsv2/admins/review_admin.py
 msgid "word and article"
@@ -831,9 +831,18 @@ msgstr "Wort und Artikel"
 msgid "Status"
 msgstr "Status"
 
-#: cmsv2/admins/review_admin.py cmsv2/models/static.py
+#: cmsv2/admins/review_admin.py
 msgid "Reviewer"
 msgstr "Expert:in"
+
+#: cmsv2/admins/review_admin.py cmsv2/models/job.py
+#: cmsv2/templates/admin/csv_form.html
+msgid "Jobs"
+msgstr "Berufe"
+
+#: cmsv2/admins/review_admin.py
+msgid "Creator"
+msgstr "Ersteller:in"
 
 #: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"
@@ -896,11 +905,11 @@ msgstr "Wort Informationen"
 msgid "Pronunciation"
 msgstr "Aussprache"
 
-#: cmsv2/admins/word_admin.py
+#: cmsv2/admins/word_admin.py cmsv2/models/review.py
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+#: cmsv2/admins/word_admin.py cmsv2/models/review.py cmsv2/models/unit.py
 msgid "Image"
 msgstr "Bilder"
 
@@ -1326,20 +1335,15 @@ msgstr "Icon löschen"
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py cmsv2/models/review.py
-#: cmsv2/templates/admin/csv_form.html
-msgid "Jobs"
-msgstr "Berufe"
-
 #: cmsv2/models/review.py
 msgid "reviewer"
-msgstr "Expert:in"
+msgstr "Kontrolleur:in"
 
 #: cmsv2/models/review.py
 msgid "assigned by"
 msgstr "Zugewiesen von"
 
-#: cmsv2/models/review.py
+#: cmsv2/models/review.py expert_access/views/review_view.py
 msgid "reason"
 msgstr "Grund"
 
@@ -1351,13 +1355,21 @@ msgstr "Zuwiesen am"
 msgid "completed at"
 msgstr "Erstellt am"
 
-#: cmsv2/models/review.py
+#: cmsv2/models/review.py expert_access/views/review_view.py
 msgid "review status"
 msgstr "Prüfstatus"
 
 #: cmsv2/models/review.py
+msgid "review priority"
+msgstr "Prüfpriorität"
+
+#: cmsv2/models/review.py core/settings.py
 msgid "Review"
 msgstr "Vokabelprüfung"
+
+#: cmsv2/models/review.py
+msgid "Can review assigned reviews"
+msgstr "Kann zugewiesene Prüfungen bearbeiten"
 
 #: cmsv2/models/static.py
 msgid "Confirmed"
@@ -1383,13 +1395,57 @@ msgstr "Genehmigt"
 msgid "Rejected"
 msgstr "Abgelehnt"
 
-#: cmsv2/models/static.py
+#: cmsv2/models/static.py expert_access/templates/review_view.html
 msgid "Cannot be assessed"
 msgstr "Nicht beurteilbar"
 
 #: cmsv2/models/static.py
+msgid "Content error"
+msgstr "Fachlicher Fehler"
+
+#: cmsv2/models/static.py
+msgid "Missing information"
+msgstr "Fehlende Information"
+
+#: cmsv2/models/static.py
+msgid "Wrong word"
+msgstr "Falsche Vokabel"
+
+#: cmsv2/models/static.py
+msgid "Bad image quality"
+msgstr "Bildqualität mangelhaft"
+
+#: cmsv2/models/static.py
+msgid "Bad audio quality"
+msgstr "Audioqualität mangelhaft"
+
+#: cmsv2/models/static.py
+msgid "Other"
+msgstr "Sonstiges"
+
+#: cmsv2/models/static.py
+msgid "Word is not relevant"
+msgstr "Vokabel nicht relevant"
+
+#: cmsv2/models/static.py
+msgid "Duplicate"
+msgstr "Duplikat vorhanden"
+
+#: cmsv2/models/static.py
+msgid "Outside my area of expertise"
+msgstr "Außerhalb meines Fachbereichs"
+
+#: cmsv2/models/static.py
+msgid "Not enough context"
+msgstr "Zu wenig Kontext"
+
+#: cmsv2/models/static.py
+msgid "The word is too generic"
+msgstr "Vokabel zu generisch"
+
+#: cmsv2/models/static.py
 msgid "In review"
-msgstr "Liegt zur Begutachtung vor"
+msgstr "In Prüfung"
 
 #: cmsv2/models/static.py
 msgid "Completed"
@@ -1485,7 +1541,7 @@ msgid "Assign"
 msgstr "Zuweisen"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-#: cmsv2/templates/admin/csv_form.html
+#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -1805,21 +1861,157 @@ msgstr "Lunes-Verwaltung"
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
+#: expert_access/apps.py
+msgid "expert access"
+msgstr "Zugang für Expert:innen"
+
+#: expert_access/templates/_base.html
+msgid "Expert access"
+msgstr "Zugang für Expert:innen"
+
+#: expert_access/templates/_base.html
+msgid "Lunes vocabulary review"
+msgstr "Lunes-Vokabelprüfung"
+
+#: expert_access/templates/_base.html
+msgid "Admin site"
+msgstr "Admin-Seite"
+
+#: expert_access/templates/_base.html
+#: expert_access/templates/password_change.html
+#: expert_access/templates/password_change_done.html
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: expert_access/templates/_base.html
+msgid "Log out"
+msgstr "Abmelden"
+
+#: expert_access/templates/password_change_done.html
+msgid "Your password was changed."
+msgstr "Dein Passwort wurde geändert."
+
+#: expert_access/templates/password_change_done.html
+msgid "Homepage"
+msgstr "Startseite"
+
+#: expert_access/templates/review_view.html
+msgid "Hello"
+msgstr "Hallo"
+
+#: expert_access/templates/review_view.html
+#, python-format
+msgid "%(counter)s open review"
+msgid_plural "%(counter)s open reviews"
+msgstr[0] "%(counter)s offene Prüfung"
+msgstr[1] "%(counter)s offene Prüfungen"
+
+#: expert_access/templates/review_view.html
+msgid "Word currently under review"
+msgstr "Aktuell zu prüfende Vokabel"
+
+#: expert_access/templates/review_view.html
+msgid "At the moment there is no word type for this word."
+msgstr "Der Vokabel wurde noch keine Wortart zugewiesen."
+
+#: expert_access/templates/review_view.html
+msgid "There is no image for this word yet."
+msgstr "Der Vokabel wurde noch kein Bild zugewiesen."
+
+#: expert_access/templates/review_view.html
+msgid "Play word"
+msgstr "Vokabel abspielen"
+
+#: expert_access/templates/review_view.html
+msgid "There is no audio for this word yet."
+msgstr "Der Vokabel wurde noch kein Audio zugewiesen."
+
+#: expert_access/templates/review_view.html
+msgid "Approve"
+msgstr "Freigeben"
+
+#: expert_access/templates/review_view.html
+msgid "Propose change"
+msgstr "Änderung vorschlagen"
+
+#: expert_access/templates/review_view.html
+msgid "The vocabulary item will be returned to an admin for review"
+msgstr "Die Vokabel wird zur Überarbeitung an eine:n Admin zurückgegeben"
+
+#: expert_access/templates/review_view.html
+msgid "Request change"
+msgstr "Änderung vorschlagen"
+
+#: expert_access/templates/review_view.html
+msgid "Reject vocabulary item"
+msgstr "Vokabel ablehnen"
+
+#: expert_access/templates/review_view.html
+msgid "The vocabulary item will be rejected"
+msgstr "Die Vokabel wird abgelehnt"
+
+#: expert_access/templates/review_view.html
+msgid "Reject"
+msgstr "Ablehnen"
+
+#: expert_access/templates/review_view.html
+msgid "Mark as not assessable"
+msgstr "Als nicht beurteilbar markieren"
+
+#: expert_access/templates/review_view.html
+msgid "The vocabulary item will be marked as not-assessable"
+msgstr "Die Vokabel wird als fachlich nicht beurteilbar zurückgegeben"
+
+#: expert_access/templates/review_view.html
+msgid "Mark"
+msgstr "Markieren"
+
+#: expert_access/templates/review_view.html
+msgid "Show previous vocabulary item"
+msgstr "Vorherige Vokabel anzeigen"
+
+#: expert_access/templates/review_view.html
+msgid "Show next vocabulary item"
+msgstr "Nächste Vokabel anzeigen"
+
+#: expert_access/templates/review_view.html
+msgid "Reason"
+msgstr "Grund"
+
+#: expert_access/templates/review_view.html
+msgid "Comment"
+msgstr "Kommentar"
+
+#: expert_access/templates/review_view.html
+msgid "Currently there are no words to check"
+msgstr "Momentan gibt es keine Vokabeln zur Prüfung"
+
+#: expert_access/views/review_view.py
+msgid "Please select a reason"
+msgstr "Bitte einen Grund auswählen"
+
+#: expert_access/views/review_view.py
+msgid "This reason cannot be given for this decision."
+msgstr "Dieser Grund ist für diese Aktion invalid."
+
+#: expert_access/views/review_view.py
+msgid "Review was skipped"
+msgstr "Prüfung wurde übersprungen"
+
+#: expert_access/views/review_view.py
+msgid "Previous review was selected"
+msgstr "Vorherige Vokabel wurde ausgewählt"
+
+#: expert_access/views/review_view.py
+msgid "Review was saved"
+msgstr "Prüfung wurde gespeichert"
+
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
 
 #~ msgid "Unit or Job"
 #~ msgstr "Einheit oder Job"
-
-#~ msgid ""
-#~ "The file must be UTF-8 encoded and comma-separated. It should contain the "
-#~ "columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
-#~ "optionally also \"Aussprache\"."
-#~ msgstr ""
-#~ "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die "
-#~ "Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" "
-#~ "enthalten, optional zusätzlich \"Aussprache\"."
 
 #, python-format
 #~ msgid ""
@@ -1835,6 +2027,15 @@ msgstr "Hilfe"
 #~ msgstr ""
 #~ "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
 #~ "sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
+
+#~ msgid ""
+#~ "The file must be UTF-8 encoded and comma-separated. It should contain the "
+#~ "columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
+#~ "optionally also \"Aussprache\"."
+#~ msgstr ""
+#~ "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die "
+#~ "Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" "
+#~ "enthalten, optional zusätzlich \"Aussprache\"."
 
 #~ msgid ""
 #~ "Deleting a code also withdraws the access of every client that redeemed "
@@ -1867,6 +2068,9 @@ msgstr "Hilfe"
 #~ msgstr ""
 #~ "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, "
 #~ "Falsch wenn ein Bild aus dem Wort kontrolliert wird"
+
+#~ msgid "status"
+#~ msgstr "Status"
 
 #~ msgid "suggested image"
 #~ msgstr "Vorgeschlagenes Bild"
