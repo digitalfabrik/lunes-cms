@@ -1360,9 +1360,33 @@ msgstr "Lunes-Verwaltung"
 msgid "Welcome to the vocabulary management of Lunes!"
 msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
+#: expert_access/apps.py
+msgid "expert access"
+msgstr ""
+
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#, fuzzy
+#~| msgid "Image Preview"
+#~ msgid "open reviews"
+#~ msgstr "Bild Vorschau"
+
+#, fuzzy
+#~| msgid "This word is assigned to no training set."
+#~ msgid "This word hasn't been assigned to any units yet."
+#~ msgstr "Das word ist zu keinem Modul zugeordnet."
+
+#, fuzzy
+#~| msgid "No definition is provided for this word."
+#~ msgid "There is no image for this word yet."
+#~ msgstr "Für dieses Wort ist keine Definition hinterlegt."
+
+#, fuzzy
+#~| msgid "Approved"
+#~ msgid "Approve"
+#~ msgstr "Genehmigt"
 
 #~ msgid "assigned unit"
 #~ msgstr "Zugewiesene Einheit"
