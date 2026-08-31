@@ -16,7 +16,8 @@ from lunes_cms.cmsv2.models.review import Review
 
 class LunesUserCreationForm(AdminUserCreationForm):
     """
-    User creation form that requires an email address.
+    User creation form that requires an email address and grants staff status
+    by default.
     """
 
     class Meta(AdminUserCreationForm.Meta):
@@ -25,11 +26,12 @@ class LunesUserCreationForm(AdminUserCreationForm):
         """
 
         model = User
-        fields = ("username", "email")
+        fields = ("username", "email", "is_staff")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.fields["email"].required = True
+        self.fields["is_staff"].initial = True
 
 
 class LunesUserChangeForm(UserChangeForm):
@@ -86,6 +88,7 @@ class LunesUserAdmin(DjangoUserAdmin):
                 "fields": (
                     "username",
                     "email",
+                    "is_staff",
                     "usable_password",
                     "password1",
                     "password2",

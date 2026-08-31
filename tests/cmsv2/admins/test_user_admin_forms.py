@@ -1,5 +1,6 @@
 """
-Tests that the admin user forms require an email address.
+Tests that the admin user forms require an email address and grant staff
+status by default.
 """
 
 import pytest
@@ -46,3 +47,32 @@ def test_change_form_requires_email() -> None:
     )
     form = LunesUserChangeForm(instance=user)
     assert form.fields["email"].required
+
+
+def test_staff_status_is_saved() -> None:
+    """A user created with the pre-checked box may use the admin."""
+    form = LunesUserCreationForm(
+        data={
+            "username": "new.editor",
+            "email": "new.editor@lunes.app",
+            "password1": "sup3rSecret!pw",
+            "password2": "sup3rSecret!pw",
+            "is_staff": "on",
+        }
+    )
+    assert form.is_valid(), form.errors
+    assert form.save().is_staff
+
+
+def test_staff_status_can_be_unchecked() -> None:
+    """Unchecking the box still creates a user without admin access."""
+    form = LunesUserCreationForm(
+        data={
+            "username": "api.only",
+            "email": "api.only@lunes.app",
+            "password1": "sup3rSecret!pw",
+            "password2": "sup3rSecret!pw",
+        }
+    )
+    assert form.is_valid(), form.errors
+    assert not form.save().is_staff
