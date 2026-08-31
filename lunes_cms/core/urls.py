@@ -20,14 +20,43 @@ Including another URLconf
 
 """
 
+from typing import Any
+
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from django.contrib.auth.views import redirect_to_login
 from django.templatetags.static import static as get_static_url
-from django.urls import include, path, re_path, reverse_lazy
+from django.urls import include, path, re_path, reverse
 from django.views.generic.base import RedirectView
 
 from .views import android_asset_links, apple_app_site_association
+
+from ..cmsv2.models.static import is_reviewer
+
+
+class MainRedirectView(RedirectView):
+    """
+    Sends users to the entry point matching their role: experts to their review
+    view, everyone else to the admin. Anonymous users are sent to the login
+    screen and back here afterwards.
+    """
+
+    permanent = False
+
+    def get_redirect_url(self, *args: Any, **kwargs: Any) -> str:
+        """
+        :param args: positional arguments captured from the URL
+        :param kwargs: keyword arguments captured from the URL
+
+        :return: the URL to redirect the current user to
+        """
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(self.request.get_full_path()).url
+        if not self.request.user.is_superuser and is_reviewer(self.request.user):
+            return reverse("expert_access:index")
+        return reverse("admin:index")
+
 
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
@@ -42,7 +71,7 @@ urlpatterns = [
         android_asset_links,
         name="android-asset-links",
     ),
-    path("", RedirectView.as_view(url=reverse_lazy("admin:login"))),
+    path("", MainRedirectView.as_view()),
     path(
         "favicon.ico",
         RedirectView.as_view(url=get_static_url("images/logo.svg")),
@@ -52,6 +81,7 @@ urlpatterns = [
     path("", include("lunes_cms.activation.urls")),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
+    path("expert/", include("lunes_cms.expert_access.urls", namespace="expert_access")),
 ]
 
 urlpatterns += i18n_patterns(
