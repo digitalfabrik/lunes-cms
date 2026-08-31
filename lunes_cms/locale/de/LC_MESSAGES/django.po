@@ -786,6 +786,15 @@ msgid "jobs"
 msgstr "Berufe"
 
 #: cmsv2/admins/user_admin.py
+msgid ""
+"Your account is not allowed to use the Lunes administration. Please ask an "
+"administrator to activate staff status for your account."
+msgstr ""
+"Ihr Konto ist nicht für die Lunes-Verwaltung freigeschaltet. Bitte wenden "
+"Sie sich an eine Administratorin oder einen Administrator, um den "
+"Mitarbeiter-Status für Ihr Konto zu aktivieren."
+
+#: cmsv2/admins/user_admin.py
 msgid "assigned word"
 msgstr "Zugewiesene Vokabel"
 

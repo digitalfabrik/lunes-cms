@@ -3,15 +3,45 @@ from __future__ import absolute_import, annotations, unicode_literals
 from typing import Any
 
 from django.contrib import admin
+from django.contrib.admin.forms import AdminAuthenticationForm
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
+from django.contrib.auth.forms import (
+    AdminUserCreationForm,
+    AuthenticationForm,
+    UserChangeForm,
+)
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.models.review import Review
+
+
+class LunesAdminAuthenticationForm(AdminAuthenticationForm):
+    """
+    Admin login form that reports a missing staff status with a message of its
+    own, and wrong credentials with the plain wording that makes no mention of
+    staff accounts.
+    """
+
+    error_messages = {
+        **AdminAuthenticationForm.error_messages,
+        "invalid_login": AuthenticationForm.error_messages["invalid_login"],
+        "no_staff": _(
+            "Your account is not allowed to use the Lunes administration. "
+            "Please ask an administrator to activate staff status for your account."
+        ),
+    }
+
+    def confirm_login_allowed(self, user: User) -> None:
+        """
+        Allow active accounts that hold staff status to log in.
+        """
+        AuthenticationForm.confirm_login_allowed(self, user)
+        if not user.is_staff:
+            raise ValidationError(self.error_messages["no_staff"], code="no_staff")
 
 
 class LunesUserCreationForm(AdminUserCreationForm):
