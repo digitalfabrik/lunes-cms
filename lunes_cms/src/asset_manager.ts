@@ -101,18 +101,10 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.append(assetType, file)
             formData.append("action", action)
 
-            const csrftoken = window.getCookie("csrftoken")
 
             const endpoint = updateEndpoint.replace("${id}", entityId)
 
-            fetch(endpoint, {
-                method: "POST",
-                body: formData,
-                credentials: "same-origin",
-                headers: {
-                    "X-CSRFToken": csrftoken ?? "",
-                },
-            })
+            window.postWithCsrf(endpoint, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {
@@ -137,18 +129,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData()
             formData.append("action", "delete")
 
-            const csrftoken = window.getCookie("csrftoken")
 
             const endpoint = updateEndpoint.replace("${id}", entityId)
 
-            fetch(endpoint, {
-                method: "POST",
-                body: formData,
-                credentials: "same-origin",
-                headers: {
-                    "X-CSRFToken": csrftoken ?? "",
-                },
-            })
+            window.postWithCsrf(endpoint, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {

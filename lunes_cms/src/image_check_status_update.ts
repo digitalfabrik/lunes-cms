@@ -13,19 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener("change", function () {
             const wordId = select.getAttribute("data-word-id")
 
-            const csrftoken = window.getCookie("csrftoken")
 
             const formData = new FormData()
             formData.append("image_check_status", select.value)
 
-            fetch(`/en/admin/cmsv2/words/${wordId}/update-image-check-status/`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRFToken": csrftoken ?? "",
-                },
-                credentials: "same-origin",
-            })
+            window.postWithCsrf(`/en/admin/cmsv2/words/${wordId}/update-image-check-status/`, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {
@@ -50,19 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener("change", function () {
             const unitwordId = select.getAttribute("data-unitword-id")
 
-            const csrftoken = window.getCookie("csrftoken")
 
             const formData = new FormData()
             formData.append("image_check_status", select.value)
 
-            fetch(`/en/admin/cmsv2/unitwords/${unitwordId}/update-image-check-status/`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRFToken": csrftoken ?? "",
-                },
-                credentials: "same-origin",
-            })
+            window.postWithCsrf(`/en/admin/cmsv2/unitwords/${unitwordId}/update-image-check-status/`, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {

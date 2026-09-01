@@ -103,13 +103,7 @@ function _handleGenerate(button: HTMLButtonElement): void {
     _hideDecision(widget)
     _showMessage(widget, gettext("Generating example sentence..."), "")
 
-    fetch(button.dataset.url, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-            "X-CSRFToken": window.getCookie("csrftoken") ?? "",
-        },
-    })
+    window.postWithCsrf(button.dataset.url)
         .then(async (response) => {
             const data = (await response.json()) as {
                 message?: string

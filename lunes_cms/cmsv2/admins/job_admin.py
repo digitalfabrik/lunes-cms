@@ -198,7 +198,7 @@ class JobAdmin(BaseAdmin):
         particularly for asset management functionality.
         """
 
-        js = ["js/cookies.js", "js/job_icon_asset_config.js", "js/asset_manager.js"]
+        js = ["js/csrf.js", "js/job_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Job]:
