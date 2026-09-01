@@ -103,7 +103,8 @@ function _initRegenerateWidget(widget: HTMLElement): void {
         }
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
-        window.postWithCsrf(generateUrl, formData)
+        window
+            .postWithCsrf(generateUrl, formData)
             .then(async (response) => {
                 const data = (await response.json()) as RegenerateResponse
                 if (!response.ok || data.error) {

@@ -96,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const endpoint = updateEndpoint.replace("${id}", entityId)
 
-        window.postWithCsrf(endpoint, formData)
+        window
+            .postWithCsrf(endpoint, formData)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === "success") {
@@ -123,7 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const endpoint = updateEndpoint.replace("${id}", entityId)
 
-        window.postWithCsrf(endpoint, formData)
+        window
+            .postWithCsrf(endpoint, formData)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === "success") {

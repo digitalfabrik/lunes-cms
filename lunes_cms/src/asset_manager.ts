@@ -101,10 +101,10 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.append(assetType, file)
             formData.append("action", action)
 
-
             const endpoint = updateEndpoint.replace("${id}", entityId)
 
-            window.postWithCsrf(endpoint, formData)
+            window
+                .postWithCsrf(endpoint, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {
@@ -129,10 +129,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData()
             formData.append("action", "delete")
 
-
             const endpoint = updateEndpoint.replace("${id}", entityId)
 
-            window.postWithCsrf(endpoint, formData)
+            window
+                .postWithCsrf(endpoint, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {

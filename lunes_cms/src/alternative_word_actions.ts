@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function postAlternativeWord(endpoint: string, formData: FormData, errorMessage: string) {
-
-        window.postWithCsrf(endpoint, formData)
+        window
+            .postWithCsrf(endpoint, formData)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === "success") {

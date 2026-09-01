@@ -103,7 +103,8 @@ function _handleGenerate(button: HTMLButtonElement): void {
     _hideDecision(widget)
     _showMessage(widget, gettext("Generating example sentence..."), "")
 
-    window.postWithCsrf(button.dataset.url)
+    window
+        .postWithCsrf(button.dataset.url)
         .then(async (response) => {
             const data = (await response.json()) as {
                 message?: string

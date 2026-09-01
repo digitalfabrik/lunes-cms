@@ -12,11 +12,14 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener("change", function () {
             const wordId = select.getAttribute("data-word-id")
 
-
             const formData = new FormData()
             formData.append("audio_check_status", select.value)
 
-            window.postWithCsrf(`/en/admin/cmsv2/words/${wordId}/update-audio-check-status/`, formData)
+            window
+                .postWithCsrf(
+                    `/en/admin/cmsv2/words/${wordId}/update-audio-check-status/`,
+                    formData,
+                )
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {

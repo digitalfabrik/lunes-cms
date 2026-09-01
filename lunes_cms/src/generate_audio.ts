@@ -43,7 +43,8 @@ window.initAudioGenerator = function (config: AudioGeneratorConfig): void {
         formData.append(config.textFieldName, config.textValue)
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
-        window.postWithCsrf(config.generateUrl, formData)
+        window
+            .postWithCsrf(config.generateUrl, formData)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
