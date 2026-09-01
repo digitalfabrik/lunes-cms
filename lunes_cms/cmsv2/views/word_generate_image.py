@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -14,7 +14,7 @@ from lunes_cms.cmsv2.utils import is_ajax
 from lunes_cms.core import settings
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def word_store_generated_image_permanently(

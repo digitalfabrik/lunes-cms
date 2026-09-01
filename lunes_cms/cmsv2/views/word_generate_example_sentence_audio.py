@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import uuid
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -17,7 +17,7 @@ from lunes_cms.cmsv2.utils import cache_busted_url, is_ajax, OpenAIConfiguration
 from lunes_cms.core import settings
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def word_generate_example_sentence_audio_via_openai(
@@ -63,7 +63,7 @@ def word_generate_example_sentence_audio_via_openai(
         return JsonResponse({"error": str(e)}, status=500)
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def word_store_generated_example_sentence_audio_permanently(

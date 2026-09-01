@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +10,7 @@ from ..models import AlternativeWord, Word
 from .decorators import require_word_change_permission
 
 
-@staff_member_required
+@login_required
 @require_word_change_permission
 @csrf_exempt
 @require_POST

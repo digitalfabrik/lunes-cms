@@ -108,9 +108,7 @@ def test_assign_to_user_sets_assigned_by_to_acting_admin(
 def test_assign_to_user_denies_non_superuser(
     db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
 ) -> None:
-    non_superuser = get_user_model().objects.create_user(
-        username="staff", is_staff=True
-    )
+    non_superuser = get_user_model().objects.create_user(username="editor")
 
     request = _post_request(request_factory, {"apply": "1"})
     request.user = non_superuser

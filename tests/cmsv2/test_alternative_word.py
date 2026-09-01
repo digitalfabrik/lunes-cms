@@ -55,9 +55,9 @@ def fixture_admin_client(db: None) -> Client:
     return client
 
 
-def _create_staff_client(username: str, word_permissions: list[str]) -> Client:
+def _create_client_with_permissions(username: str, word_permissions: list[str]) -> Client:
     """
-    A client logged in as a staff user whose group grants the given word
+    A client logged in as a user whose group grants the given word
     permissions and nothing else, like the groups of the editors in production.
     """
     group = Group.objects.create(name=f"group-of-{username}")
@@ -66,7 +66,7 @@ def _create_staff_client(username: str, word_permissions: list[str]) -> Client:
             content_type__app_label="cmsv2", codename__in=word_permissions
         )
     )
-    user = User.objects.create_user(username, is_staff=True)
+    user = User.objects.create_user(username)
     user.groups.add(group)
     client = Client()
     client.force_login(user)
@@ -75,14 +75,14 @@ def _create_staff_client(username: str, word_permissions: list[str]) -> Client:
 
 @pytest.fixture(name="editor_client")
 def fixture_editor_client(db: None) -> Client:
-    """A client logged in as a staff user who may change words."""
-    return _create_staff_client("editor", ["view_word", "change_word"])
+    """A client logged in as a user who may change words."""
+    return _create_client_with_permissions("editor", ["view_word", "change_word"])
 
 
 @pytest.fixture(name="viewer_client")
 def fixture_viewer_client(db: None) -> Client:
-    """A client logged in as a staff user who may only view words."""
-    return _create_staff_client("viewer", ["view_word"])
+    """A client logged in as a user who may only view words."""
+    return _create_client_with_permissions("viewer", ["view_word"])
 
 
 @pytest.mark.django_db
@@ -97,7 +97,7 @@ def test_alternative_words_have_no_permissions_of_their_own() -> None:
 def test_word_admin_page_shows_alternative_words_to_editor(
     word: Word, editor_client: Client
 ) -> None:
-    """A staff user who may change words sees the editable alternative words section."""
+    """A user who may change words sees the editable alternative words section."""
     response = editor_client.get(f"/en/admin/cmsv2/word/{word.pk}/change/")
     assert response.status_code == 200
     content = response.content.decode()
@@ -112,7 +112,7 @@ def test_word_admin_page_shows_alternative_words_to_viewer(
     word: Word, viewer_client: Client
 ) -> None:
     """
-    A staff user who may only view words sees the alternative words, but none
+    A user who may only view words sees the alternative words, but none
     of the buttons which would add, save or delete them.
     """
     response = viewer_client.get(f"/en/admin/cmsv2/word/{word.pk}/change/")
@@ -129,7 +129,7 @@ def test_word_admin_page_shows_alternative_words_to_viewer(
 def test_editor_can_save_and_delete_alternative_word(
     word: Word, editor_client: Client
 ) -> None:
-    """A staff user who may change words may save and delete alternative words."""
+    """A user who may change words may save and delete alternative words."""
     save_response = editor_client.post(
         "/en/admin/cmsv2/alternativewords/save/",
         {"word_id": word.pk, "alt_word": "Weck"},
@@ -145,7 +145,7 @@ def test_editor_can_save_and_delete_alternative_word(
 
 @pytest.mark.django_db
 def test_viewer_cannot_save_alternative_word(word: Word, viewer_client: Client) -> None:
-    """The save view rejects a staff user who may not change words."""
+    """The save view rejects a user who may not change words."""
     response = viewer_client.post(
         "/en/admin/cmsv2/alternativewords/save/",
         {"word_id": word.pk, "alt_word": "Weck"},
@@ -158,7 +158,7 @@ def test_viewer_cannot_save_alternative_word(word: Word, viewer_client: Client) 
 def test_viewer_cannot_delete_alternative_word(
     word: Word, viewer_client: Client
 ) -> None:
-    """The delete view rejects a staff user who may not change words."""
+    """The delete view rejects a user who may not change words."""
     alternative_word = word.alternative_words.get()
     response = viewer_client.post(
         f"/en/admin/cmsv2/alternativewords/{alternative_word.pk}/delete/"
@@ -329,7 +329,7 @@ def test_save_alternative_word_missing_word_id(admin_client: Client) -> None:
 
 
 @pytest.mark.django_db
-def test_save_alternative_word_requires_staff(word: Word) -> None:
+def test_save_alternative_word_requires_login(word: Word) -> None:
     """The save view redirects anonymous users to the login page."""
     response = Client().post(
         "/en/admin/cmsv2/alternativewords/save/",
@@ -340,7 +340,7 @@ def test_save_alternative_word_requires_staff(word: Word) -> None:
 
 
 @pytest.mark.django_db
-def test_delete_alternative_word_requires_staff(word: Word) -> None:
+def test_delete_alternative_word_requires_login(word: Word) -> None:
     """The delete view redirects anonymous users to the login page."""
     alternative_word = word.alternative_words.get()
     response = Client().post(

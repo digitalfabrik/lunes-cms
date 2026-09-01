@@ -4,7 +4,7 @@ import base64
 import os
 import uuid
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -31,7 +31,7 @@ def _prompt_from_request(request: HttpRequest) -> str | None:
     )
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def generate_image_via_openai(request: HttpRequest) -> JsonResponse:

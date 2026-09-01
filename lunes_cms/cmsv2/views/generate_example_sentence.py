@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Union
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -44,7 +44,7 @@ def _generate_sentence_response(
     )
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def word_generate_example_sentence_via_openai(
@@ -69,7 +69,7 @@ def word_generate_example_sentence_via_openai(
     return _generate_sentence_response(word_instance.word, job_names)
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def unitword_generate_example_sentence_via_openai(
@@ -110,7 +110,7 @@ def _store_sentence_response(
     )
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def word_store_generated_example_sentence(
@@ -123,7 +123,7 @@ def word_store_generated_example_sentence(
     return _store_sentence_response(word_instance, request.POST.get("example_sentence"))
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def unitword_store_generated_example_sentence(

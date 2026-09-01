@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from ..models import Job
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def update_job_icon(request: HttpRequest, job_id: int) -> JsonResponse:

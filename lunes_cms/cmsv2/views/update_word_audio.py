@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -9,7 +9,7 @@ from ..models import Word
 from ..utils import cache_busted_url
 
 
-@staff_member_required
+@login_required
 @csrf_exempt
 @require_POST
 def update_word_audio(request: HttpRequest, word_id: int) -> JsonResponse:

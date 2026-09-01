@@ -305,7 +305,7 @@ class JobAdmin(BaseAdmin):
             job.name = f"{job.name} ({new_label})"
             job.created_by = request.user.groups.first()
             # request.user is `User | AnonymousUser`, but this action is only
-            # reachable by authenticated staff users.
+            # reachable by authenticated users.
             job.created_by_user = request.user  # type: ignore[assignment]
             job.save()
             job.units.set(units)
