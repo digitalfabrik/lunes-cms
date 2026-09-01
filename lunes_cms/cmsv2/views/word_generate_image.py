@@ -6,16 +6,16 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.utils import is_ajax
 from lunes_cms.core import settings
+from .decorators import require_any_permission_json
 
 
 @login_required
-@csrf_exempt
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def word_store_generated_image_permanently(
     request: HttpRequest, word_id: int

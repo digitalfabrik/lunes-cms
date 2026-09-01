@@ -2,7 +2,7 @@ import threading
 
 from django import forms
 from django.contrib import admin, messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -135,6 +135,7 @@ def _build_context(
 
 # pylint: disable=too-many-return-statements
 @login_required
+@permission_required("cmsv2.add_word", raise_exception=True)
 def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResponse:
     """
     Method for importing vocabularies for a job from csv

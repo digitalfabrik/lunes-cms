@@ -5,8 +5,10 @@ and the alternative-word inline on the word admin page.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import pytest
-from django.contrib.auth.models import Group, Permission, User
+from django.contrib.auth.models import Permission, User
 from django.test.client import Client
 
 from lunes_cms.api.v2.serializers import UnitWordRelationSerializer, WordSerializer
@@ -55,34 +57,16 @@ def fixture_admin_client(db: None) -> Client:
     return client
 
 
-def _create_client_with_permissions(username: str, word_permissions: list[str]) -> Client:
-    """
-    A client logged in as a user whose group grants the given word
-    permissions and nothing else, like the groups of the editors in production.
-    """
-    group = Group.objects.create(name=f"group-of-{username}")
-    group.permissions.set(
-        Permission.objects.filter(
-            content_type__app_label="cmsv2", codename__in=word_permissions
-        )
-    )
-    user = User.objects.create_user(username)
-    user.groups.add(group)
-    client = Client()
-    client.force_login(user)
-    return client
-
-
 @pytest.fixture(name="editor_client")
-def fixture_editor_client(db: None) -> Client:
+def fixture_editor_client(client_with_permissions: Callable[..., Client]) -> Client:
     """A client logged in as a user who may change words."""
-    return _create_client_with_permissions("editor", ["view_word", "change_word"])
+    return client_with_permissions("view_word", "change_word")
 
 
 @pytest.fixture(name="viewer_client")
-def fixture_viewer_client(db: None) -> Client:
+def fixture_viewer_client(client_with_permissions: Callable[..., Client]) -> Client:
     """A client logged in as a user who may only view words."""
-    return _create_client_with_permissions("viewer", ["view_word"])
+    return client_with_permissions("view_word")
 
 
 @pytest.mark.django_db

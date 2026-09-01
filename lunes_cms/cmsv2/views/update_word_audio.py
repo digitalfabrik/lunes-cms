@@ -2,15 +2,15 @@ from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from ..models import Word
 from ..utils import cache_busted_url
+from .decorators import require_any_permission_json
 
 
 @login_required
-@csrf_exempt
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def update_word_audio(request: HttpRequest, word_id: int) -> JsonResponse:
     """

@@ -5,14 +5,15 @@ from typing import Optional, Union
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+
 from openai import OpenAIError
 
 from lunes_cms.cmsv2.models import Job, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.sentence_generation import openai_example_sentence
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
+from .decorators import require_any_permission_json
 
 
 def _generate_sentence_response(
@@ -45,7 +46,7 @@ def _generate_sentence_response(
 
 
 @login_required
-@csrf_exempt
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def word_generate_example_sentence_via_openai(
     _request: HttpRequest, word_id: int
@@ -70,7 +71,7 @@ def word_generate_example_sentence_via_openai(
 
 
 @login_required
-@csrf_exempt
+@require_any_permission_json("cmsv2.change_unitwordrelation")
 @require_POST
 def unitword_generate_example_sentence_via_openai(
     _request: HttpRequest, unitword_id: int
@@ -111,7 +112,7 @@ def _store_sentence_response(
 
 
 @login_required
-@csrf_exempt
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def word_store_generated_example_sentence(
     request: HttpRequest, word_id: int
@@ -124,7 +125,7 @@ def word_store_generated_example_sentence(
 
 
 @login_required
-@csrf_exempt
+@require_any_permission_json("cmsv2.change_unitwordrelation")
 @require_POST
 def unitword_store_generated_example_sentence(
     request: HttpRequest, unitword_id: int
