@@ -104,7 +104,7 @@ templates_path = ["templates"]
 #: Markup to shorten external links (see :doc:`sphinx:usage/extensions/extlinks`)
 extlinks = {
     "github": (f"{github_url}/%s", None),
-    "github-source": (f"{github_url}/blob/develop/%s", None),
+    "github-source": (f"{github_url}/blob/main/%s", None),
     "django-source": (f"{django_github_url}/%s", None),
 }
 #: A string of reStructuredText that will be included at the end of every source file that is read. Used for substitutions.
@@ -182,5 +182,5 @@ def linkcode_resolve(domain: str, info: dict[str, str]) -> str | None:
     if module_str.startswith("django."):
         url = django_github_url
     else:
-        url = f"{github_url}/blob/develop"
+        url = f"{github_url}/blob/main"
     return f"{url}/{module_path}{filename}{line_number_reference}"
