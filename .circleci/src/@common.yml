@@ -14,6 +14,12 @@ parameters:
   run_promotion:
     default: false
     type: boolean
+  run_llm_review:
+    default: false
+    type: boolean
+  llm_review_pr_number:
+    default: ""
+    type: string
 
 executors:
   python:
