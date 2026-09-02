@@ -1,12 +1,9 @@
 executor: python
-environment:
-  LLM_REVIEW_PR_NUMBER: << pipeline.parameters.llm_review_pr_number >>
 steps:
   - checkout
-  - run:
-      name: Install python dependencies
-      # Pinned to the versions pyproject.toml declares; bump them together.
-      command: pip install --user --no-cache-dir "PyJWT[crypto]==2.13.0" "requests==2.34.2"
+  - attach_workspace:
+      at: .
+  - activate-venv
   - run:
       name: Request Deliverino installation access token
       command: |

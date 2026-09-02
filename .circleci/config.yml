@@ -465,14 +465,12 @@ jobs:
                 name: Check TypeScript formatting
             - notify
     llm-pr-review:
-        environment:
-            LLM_REVIEW_PR_NUMBER: << pipeline.parameters.llm_review_pr_number >>
         executor: python
         steps:
             - checkout
-            - run:
-                command: pip install --user --no-cache-dir "PyJWT[crypto]==2.13.0" "requests==2.34.2"
-                name: Install python dependencies
+            - attach_workspace:
+                at: .
+            - activate-venv
             - run:
                 command: |
                     TOKEN=$(./.circleci/scripts/get_access_token.py)
@@ -652,9 +650,6 @@ orbs:
     qlty: qltysh/qlty-orb@0.0.10
     shellcheck: circleci/shellcheck@2.2.4
 parameters:
-    llm_review_pr_number:
-        default: ""
-        type: string
     run_commit:
         default: true
         type: boolean
@@ -666,9 +661,6 @@ parameters:
             - skip
         type: enum
     run_delivery_beta:
-        default: false
-        type: boolean
-    run_llm_review:
         default: false
         type: boolean
     run_promotion:
@@ -711,6 +703,12 @@ workflows:
                 requires:
                     - install
             - build-documentation:
+                requires:
+                    - install
+            - llm-pr-review:
+                context:
+                    - deliverino
+                    - digitalfabrik-llm-api
                 requires:
                     - install
         when:
@@ -796,13 +794,6 @@ workflows:
                     - matches:
                         pattern: ^(release|hotfix)-.*
                         value: << pipeline.git.branch >>
-    llm_review:
-        jobs:
-            - llm-pr-review:
-                context:
-                    - deliverino
-                    - digitalfabrik-llm-api
-        when: << pipeline.parameters.run_llm_review >>
     promotion:
         jobs:
             - publish-release-artifact:
