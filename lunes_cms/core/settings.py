@@ -265,6 +265,17 @@ ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"] + list(
 #: processor to add some variables to the template context.
 INTERNAL_IPS = ["localhost", "127.0.0.1"]
 
+#: Whether the session cookie is only sent over HTTPS, so it cannot be read from a
+#: plain HTTP request that a redirect to HTTPS would answer too late
+#: (see :setting:`django:SESSION_COOKIE_SECURE`). Disabled in debug mode, where the
+#: development server speaks HTTP.
+SESSION_COOKIE_SECURE = not DEBUG
+
+#: Whether the CSRF cookie is only sent over HTTPS
+#: (see :setting:`django:CSRF_COOKIE_SECURE`). Disabled in debug mode, where the
+#: development server speaks HTTP.
+CSRF_COOKIE_SECURE = not DEBUG
+
 #: The secret key for this particular Django installation (see :setting:`django:SECRET_KEY`)
 #:
 #: .. warning::

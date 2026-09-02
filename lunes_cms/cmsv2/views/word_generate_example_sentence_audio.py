@@ -3,22 +3,22 @@ from __future__ import annotations
 import os
 import uuid
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
 from lunes_cms.cmsv2.utils import cache_busted_url, is_ajax, OpenAIConfigurationError
 from lunes_cms.core import settings
+from .decorators import require_any_permission_json
 
 
-@staff_member_required
-@csrf_exempt
+@login_required
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def word_generate_example_sentence_audio_via_openai(
     request: HttpRequest, word_id: int
@@ -63,8 +63,8 @@ def word_generate_example_sentence_audio_via_openai(
         return JsonResponse({"error": str(e)}, status=500)
 
 
-@staff_member_required
-@csrf_exempt
+@login_required
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def word_store_generated_example_sentence_audio_permanently(
     request: HttpRequest, word_id: int
