@@ -512,7 +512,7 @@ jobs:
             - run:
                 command: |
                     NEW_VERSION=$(jq -r .versionName version.json)
-                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}) has been released successfully :tada:"
+                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}) has been promoted successfully to production :tada:"$'\n'"It goes live on lunes-prod with the next highstate – please run it to complete the release."
                     npx --no app-toolbelt v0 notify mattermost \
                       --message "${MESSAGE}" \
                       --channel releases \
@@ -812,4 +812,3 @@ workflows:
                     - matches:
                         pattern: ^(release|hotfix)-.*
                         value: << pipeline.git.branch >>
-
