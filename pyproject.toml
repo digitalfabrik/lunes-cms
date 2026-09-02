@@ -42,7 +42,7 @@ dependencies = [
 	"django-jazzmin==3.0.4",
 	"django-mptt==0.18.0",
 	"django-qr-code==4.2.0",
-	"djangorestframework==3.17.1",
+	"djangorestframework==3.17.2",
 	"drf-spectacular==0.30.0",
 	"ipython==9.15.0",
 	"openai==2.50.0",
