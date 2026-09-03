@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
@@ -15,7 +16,6 @@ from django.utils.translation import gettext_lazy as _
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
-from lunes_cms.cmsv2.models.word import Word
 
 if TYPE_CHECKING:
     from django.utils.functional import _StrOrPromise
@@ -45,6 +45,37 @@ class WordInline(admin.TabularInline):
         "example_sentence_generate",
         "example_sentence_audio_player",
     ]
+
+
+class UnitWordRelationAdmin(admin.ModelAdmin):
+    """
+    Admin for the UnitWordRelation model.
+
+    It only exists to power the autocomplete widget of the review inline on
+    the user admin page, so it is hidden from the admin index.
+    """
+
+    model = UnitWordRelation
+    search_fields = ["word__word", "unit__title"]
+    ordering = ["word__word", "unit__title"]
+    list_select_related = ["word", "unit"]
+
+    def has_module_permission(self, request: HttpRequest) -> bool:
+        """Determines whether this admin should be shown in the sidebar"""
+        return False
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        return False
+
+    def has_change_permission(
+        self, request: HttpRequest, obj: UnitWordRelation | None = None
+    ) -> bool:
+        return False
+
+    def has_delete_permission(
+        self, request: HttpRequest, obj: UnitWordRelation | None = None
+    ) -> bool:
+        return False
 
 
 class MigratedFilter(admin.SimpleListFilter):
@@ -175,9 +206,10 @@ class UnitAdmin(BaseAdmin):
         self, request: HttpRequest, queryset: QuerySet[Unit]
     ) -> HttpResponse | None:
         """
-        Bulk-create Reviews linking every word of each selected unit to a
-        chosen user. Superusers only. Words already assigned to the target
-        user are silently skipped via the (word, reviewer) unique constraint.
+        Bulk-create Reviews linking every unit-word relation of each selected
+        unit to a chosen user. Superusers only. Relations already assigned to
+        the target user are silently skipped via the (unit_word, reviewer)
+        unique constraint.
         """
         if not request.user.is_authenticated or not request.user.is_superuser:
             raise PermissionDenied
@@ -196,17 +228,17 @@ class UnitAdmin(BaseAdmin):
                 },
             )
 
-        user = User.objects.get(pk=request.POST["user"])
-        words = Word.objects.filter(units__in=queryset).distinct()
-        word_ids_assigned_to_user = set(
-            Review.objects.filter(reviewer=user, word__in=words).values_list(
-                "word_id", flat=True
+        user = get_object_or_404(User, pk=request.POST["user"])
+        unit_words = UnitWordRelation.objects.filter(unit__in=queryset)
+        unit_word_ids_assigned_to_user = set(
+            Review.objects.filter(reviewer=user, unit_word__in=unit_words).values_list(
+                "unit_word_id", flat=True
             )
         )
         to_create = [
-            Review(word=word, reviewer=user, assigned_by=request.user)
-            for word in words
-            if word.pk not in word_ids_assigned_to_user
+            Review(unit_word=unit_word, reviewer=user, assigned_by=request.user)
+            for unit_word in unit_words
+            if unit_word.pk not in unit_word_ids_assigned_to_user
         ]
         Review.objects.bulk_create(to_create, ignore_conflicts=True)
         self.message_user(
@@ -214,7 +246,7 @@ class UnitAdmin(BaseAdmin):
             _("Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned).")
             % {
                 "new": len(to_create),
-                "skipped": len(word_ids_assigned_to_user),
+                "skipped": len(unit_word_ids_assigned_to_user),
                 "user": user,
             },
         )

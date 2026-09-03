@@ -192,3 +192,13 @@ def is_reviewer(user: User) -> bool:
     Check if the user is a reviewer.
     """
     return user.groups.filter(name=Roles.ADMIN_GROUP).exists()
+
+
+def is_expert(user: User) -> bool:
+    """
+    Check if the user is an expert.
+
+    :param user: the user to check
+    :return: whether the user belongs to :attr:`Roles.EXPERT_GROUP`
+    """
+    return user.groups.filter(name=Roles.EXPERT_GROUP).exists()
