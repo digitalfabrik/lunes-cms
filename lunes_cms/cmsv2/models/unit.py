@@ -84,6 +84,15 @@ class UnitWordRelation(models.Model):
         ),
     )
 
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the relation, e.g. "Hammer (Tools)".
+
+        Returns:
+            str: The word followed by the unit it belongs to.
+        """
+        return f"{self.word} ({self.unit})"
+
     def image_tag(self) -> SafeString:
         """
         Generate an HTML image tag for the relation's image.
