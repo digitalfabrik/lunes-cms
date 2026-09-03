@@ -54,8 +54,8 @@ Lunes CMS Package
 
        .. Note::1
 
-           If you want to set up a test system with the latest changes from the develop branch instead of the main
-           branch, use TestPyPI (with the normal PyPI repository a fallback for the dependencies)::
+           If you want to set up a test system with the latest beta release instead of the current
+           production one, use TestPyPI (with the normal PyPI repository a fallback for the dependencies)::
 
                pip3 install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple lunes-cms
 
