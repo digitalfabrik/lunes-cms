@@ -50,9 +50,9 @@ class UserReviewInline(admin.TabularInline):
     model = Review
     fk_name = "reviewer"
     extra = 0
-    fields = ["word", "assigned_by", "assigned_at"]
+    fields = ["unit_word", "assigned_by", "assigned_at"]
     readonly_fields = ["assigned_by", "assigned_at"]
-    autocomplete_fields = ["word"]
+    autocomplete_fields = ["unit_word"]
     verbose_name = _("assigned word")
     verbose_name_plural = _("assigned words")
 
