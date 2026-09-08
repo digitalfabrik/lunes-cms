@@ -54,6 +54,8 @@ def unitword_store_generated_image_permanently(
     if not temp_filename:
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
+    # basename() keeps a crafted POST value from pointing outside the temp dir.
+    temp_filename = os.path.basename(temp_filename)
     temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
 
     if not os.path.exists(temp_filepath):
@@ -61,9 +63,13 @@ def unitword_store_generated_image_permanently(
 
     try:
         with open(temp_filepath, "rb") as f:
+            # Keep the temp file's extension: the bytes are OpenAI's own
+            # encode, and a wrong suffix would trigger a re-encode on save
+            # that strips its provenance markings.
+            suffix = os.path.splitext(temp_filename)[1]
             content_file = ContentFile(
                 f.read(),
-                name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}.png',
+                name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}{suffix}',
             )
             # content_file.name is always the literal set above; ContentFile.name
             # is typed Optional[str] only because the base File class allows it.
