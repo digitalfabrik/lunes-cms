@@ -63,6 +63,16 @@ OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
 #: OpenAI model used for text generation (e.g. example sentences)
 OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
 
+####################
+# APP DEEP LINKING #
+####################
+IOS_APP_TEAM_ID = "7272KE28TJ"
+IOS_APP_BUNDLE_ID = "app.lunes"
+ANDROID_APP_PACKAGE_NAME = "app.lunes"
+ANDROID_APP_SHA256_CERT_FINGERPRINTS = [
+    "BE:DE:14:02:A3:ED:63:AE:F4:E8:57:70:35:37:1E:BD:B2:37:5C:0C:62:DB:22:F6:25:46:9B:4F:1D:DB:F1:EB"
+]
+APP_LINK_PATH_PREFIX = "/activation"
 ###################
 # MATOMO TRACKING #
 ###################
