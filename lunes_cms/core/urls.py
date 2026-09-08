@@ -27,8 +27,21 @@ from django.templatetags.static import static as get_static_url
 from django.urls import include, path, re_path, reverse_lazy
 from django.views.generic.base import RedirectView
 
+from .views import android_asset_links, apple_app_site_association
+
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
+    # Deep linking / Universal Links (iOS) and App Links (Android)
+    path(
+        ".well-known/apple-app-site-association",
+        apple_app_site_association,
+        name="apple-app-site-association",
+    ),
+    path(
+        ".well-known/assetlinks.json",
+        android_asset_links,
+        name="android-asset-links",
+    ),
     path("", RedirectView.as_view(url=reverse_lazy("admin:login"))),
     path(
         "favicon.ico",
