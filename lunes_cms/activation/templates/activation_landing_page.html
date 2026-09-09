@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="{% static 'images/logo.svg' %}">
+        <title>Lunes App - Aktivierung</title>
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+              rel="stylesheet">
+        <link href="{% static 'css/activation_landing_page.css' %}"
+              rel="stylesheet">
+    </head>
+    <body>
+        <main class="activation-page">
+            <img class="mb-4 lunes-logo"
+                 src="{% static 'images/logo-lunes.svg' %}"
+                 alt="Lunes Logo"
+                 width="450"
+                 height="122">
+            <h1 class="h3 mb-3 font-weight-normal">Aktivierung nur in der App möglich</h1>
+            <p>
+                Falls Sie die <strong>LUNES</strong> App installiert haben und sich
+                dennoch Ihr Browser geöffnet hat, nutzen Sie bitte diese Schaltfläche
+                zur Aktivierung:
+            </p>
+            <a class="btn btn-lg btn-primary btn-block"
+               href="{{ deeplink_url }}"
+               role="button">In der Lunes App öffnen</a>
+            <p class="mt-4 step-intro">Andernfalls befolgen Sie diese Schritte:</p>
+            <ol class="manual-steps">
+                <li>
+                    Laden Sie sich die App Lunes im App- oder PlayStore auf Ihrem
+                    Smartphone herunter.
+                    <div class="store-badges">
+                        <a href="{{ ios_store_url }}">
+                            <img src="{% static 'images/app-store-badge.svg' %}"
+                                 alt="Download on the App Store">
+                        </a>
+                        <a href="{{ android_store_url }}">
+                            <img src="{% static 'images/google-play-badge.png' %}"
+                                 alt="Jetzt bei Google Play">
+                        </a>
+                    </div>
+                </li>
+                <li>Klicken Sie auf den Button „In der Lunes App öffnen“.</li>
+            </ol>
+            <p class="mt-4 step-intro">
+                Falls die automatische Aktivierung nicht funktioniert, befolgen Sie
+                folgende Schritte:
+            </p>
+            <ol class="manual-steps">
+                <li>
+                    Kopieren Sie diesen Code:
+                    <div class="code-box">
+                        <code id="activation-code">{{ code }}</code>
+                        <button type="button"
+                                class="btn btn-primary copy-button"
+                                data-copy-target="activation-code"
+                                data-copied-label="Kopiert!"
+                                aria-label="Code kopieren">Kopieren</button>
+                    </div>
+                </li>
+                <li>
+                    Öffnen Sie die Lunes App, klicken Sie auf „Individuellen Bereich
+                    hinzufügen“ und fügen Sie den kopierten Code ein.
+                </li>
+            </ol>
+        </main>
+        <script src="{% static 'js/copy_to_clipboard.js' %}"></script>
+    </body>
+</html>
