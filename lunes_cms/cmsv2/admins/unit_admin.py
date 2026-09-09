@@ -64,19 +64,6 @@ class UnitWordRelationAdmin(admin.ModelAdmin):
         """Determines whether this admin should be shown in the sidebar"""
         return False
 
-    def has_add_permission(self, request: HttpRequest) -> bool:
-        return False
-
-    def has_change_permission(
-        self, request: HttpRequest, obj: UnitWordRelation | None = None
-    ) -> bool:
-        return False
-
-    def has_delete_permission(
-        self, request: HttpRequest, obj: UnitWordRelation | None = None
-    ) -> bool:
-        return False
-
 
 class MigratedFilter(admin.SimpleListFilter):
     """
