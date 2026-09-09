@@ -127,6 +127,7 @@ INFLUX_DB = os.environ.get(
 #: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
     # Installed custom apps
+    "lunes_cms.activation",
     "lunes_cms.api",
     "lunes_cms.cms",
     "lunes_cms.cmsv2",
