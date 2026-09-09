@@ -35,8 +35,12 @@ class JobViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Job.objects.none()
 
+        # Jobs of an area are not published yet: how a part organization gets
+        # its own area delivered to its app is not specified, so until then no
+        # client may see them.
         queryset = Job.objects.filter(
             released=True,
             archived=False,
+            area__isnull=True,
         ).annotate(number_units=Count("units", filter=Q(units__released=True)))
         return queryset.order_by("name")

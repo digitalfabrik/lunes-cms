@@ -95,6 +95,22 @@ class UnitWordRelation(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
+    def clean(self) -> None:
+        """
+        Check that the word and the unit of this relation share their area.
+
+        Only relations whose unit and word are both known can be checked; a
+        row that is still being created in an inline has no unit yet, so its
+        formset does the check instead.
+        """
+        super().clean()
+        if self.unit_id and self.word_id:
+            # Imported here because `areas` imports the models package
+            # pylint: disable=import-outside-toplevel
+            from ..areas import validate_relation_area
+
+            validate_relation_area(self.unit, self.word)
+
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
         Override the save method to handle image and example sentence check status.

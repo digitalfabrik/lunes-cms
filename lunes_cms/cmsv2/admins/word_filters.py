@@ -7,6 +7,7 @@ from django.db.models import Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
+from lunes_cms.cmsv2.areas import scope_jobs, scope_units
 from lunes_cms.cmsv2.models import Job, Word
 from lunes_cms.cmsv2.models.unit import Unit
 
@@ -49,9 +50,9 @@ class UnitOrJobDropdownFilter(admin.SimpleListFilter):
         self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
     ) -> Iterable[tuple[str, _StrOrPromise]]:
         options = []
-        for unit in Unit.objects.all():
+        for unit in scope_units(Unit.objects.all(), request.user):
             options.append((f"unit_{unit.pk}", f"Unit: {unit.title}"))
-        for job in Job.objects.all():
+        for job in scope_jobs(Job.objects.all(), request.user):
             options.append((f"job_{job.pk}", f"Job: {job.name}"))
         return options
 

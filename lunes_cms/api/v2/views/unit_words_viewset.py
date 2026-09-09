@@ -42,11 +42,13 @@ class UnitWordViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return UnitWordRelation.objects.none()
 
+        # Content of an area is not published yet, see JobViewSet
         units = Unit.objects.filter(
             pk=self.kwargs["unit_id"],
             released=True,
             jobs__released=True,
             jobs__archived=False,
+            jobs__area__isnull=True,
         ).distinct()
         if len(units) != 1:
             raise PermissionDenied()

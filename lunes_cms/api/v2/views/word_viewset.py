@@ -40,10 +40,12 @@ class WordViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Word.objects.none()
 
+        # Content of an area is not published yet, see JobViewSet
         queryset = Word.objects.filter(
             unit_word_relations__unit__released=True,
             unit_word_relations__unit__jobs__released=True,
             unit_word_relations__unit__jobs__archived=False,
+            unit_word_relations__unit__jobs__area__isnull=True,
             audio_check_status="CONFIRMED",
             image_check_status="CONFIRMED",
         )

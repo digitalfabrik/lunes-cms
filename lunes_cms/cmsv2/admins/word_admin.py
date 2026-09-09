@@ -4,6 +4,8 @@ from datetime import date
 from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
+from django.db.models import QuerySet
+from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.functional import lazy
@@ -18,7 +20,9 @@ from lunes_cms.cmsv2.admins.word_filters import (
     MigratedFilter,
     UnitOrJobDropdownFilter,
 )
+from lunes_cms.cmsv2.areas import area_of_word, scope_words, validate_relation_area
 from lunes_cms.cmsv2.models import AlternativeWord, Word
+from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.utils import (
@@ -141,6 +145,24 @@ class AlternativeWordInline(admin.TabularInline):
     action_buttons.short_description = ""  # type: ignore[attr-defined]
 
 
+class UnitInlineFormSet(BaseInlineFormSet):
+    """
+    Formset that keeps a word inside a single area.
+
+    All units of a word have to belong to the same area, so a word of the main
+    app cannot be added to a unit of an area and vice versa.
+    """
+
+    def clean(self) -> None:
+        super().clean()
+        for form in self.forms:
+            if not form.cleaned_data or form.cleaned_data.get("DELETE"):
+                continue
+            unit = form.cleaned_data.get("unit")
+            if unit:
+                validate_relation_area(unit, self.instance)
+
+
 class UnitInline(admin.TabularInline):
     """
     Inline admin for UnitWordRelation model.
@@ -150,6 +172,7 @@ class UnitInline(admin.TabularInline):
     """
 
     model = UnitWordRelation
+    formset = UnitInlineFormSet
     verbose_name_plural = _format_html_lazy("<h2>{}</h2>", _("Unit-Word Relations"))
     extra = 1
     autocomplete_fields = ["unit"]
@@ -254,6 +277,7 @@ class WordAdmin(BaseAdmin):
         "singular_article_display",
         "list_audio",
         "list_image",
+        "area",
         "creator_group",
         "created_by_user",
         "creation_date_display",
@@ -294,6 +318,24 @@ class WordAdmin(BaseAdmin):
             "js/alternative_word_actions.js",
         ]
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Word]:
+        """Restrict the words to the area of the user"""
+        return scope_words(super().get_queryset(request), request.user)
+
+    def area(self, obj: Word) -> Area | None:
+        """
+        The area of the word, derived from the units it is linked to.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            Area or None: The area of the word, or None for main app content
+        """
+        return area_of_word(obj)
+
+    area.short_description = _("area")  # type: ignore[attr-defined]
 
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,

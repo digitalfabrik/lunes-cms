@@ -2,11 +2,12 @@ from __future__ import absolute_import, annotations, unicode_literals
 
 import io
 from datetime import date
-from typing import Iterable, Iterator, TYPE_CHECKING
+from typing import Any, Iterable, Iterator, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
 from django.db.models import QuerySet
+from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -15,15 +16,44 @@ from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
+from ..areas import administered_areas, scope_jobs, validate_unit_jobs
 from ..models import Job, Unit, Word
 from ..utils import make_safe_filename
+from .area_filters import AreaListFilter
 from .base import BaseAdmin
 from .word_export_resource import WordExportResource
 
 if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
     from django.contrib.admin.views.main import ChangeList
+    from django.db.models import ForeignKey, Model
+    from django.forms import ModelChoiceField, ModelForm
     from django.utils.functional import _StrOrPromise
+
+
+class UnitJobInlineFormSet(BaseInlineFormSet):
+    """
+    Formset that keeps the units of a job inside a single area.
+
+    A unit of a job that belongs to an area must not be assigned to any other
+    job, so adding an already used unit to such a job has to be rejected here —
+    the constraint spans the many-to-many relation and can neither be expressed
+    in the database nor checked in ``Unit.clean()``.
+    """
+
+    def clean(self) -> None:
+        super().clean()
+        job = self.instance
+        for form in self.forms:
+            if not form.cleaned_data or form.cleaned_data.get("DELETE"):
+                continue
+            unit = form.cleaned_data.get("unit")
+            if not unit:
+                continue
+            other_jobs = (
+                list(unit.jobs.exclude(pk=job.pk)) if job.pk else list(unit.jobs.all())
+            )
+            validate_unit_jobs(unit, [job, *other_jobs])
 
 
 class UnitInline(admin.TabularInline):
@@ -34,6 +64,7 @@ class UnitInline(admin.TabularInline):
     """
 
     model = Unit.jobs.through
+    formset = UnitJobInlineFormSet
     extra = 1
     autocomplete_fields = ["unit"]
 
@@ -153,6 +184,7 @@ class JobAdmin(BaseAdmin):
 
     fields = [
         "name",
+        "area",
         "migrated_status",
         "icon",
         "image_tag",
@@ -173,6 +205,7 @@ class JobAdmin(BaseAdmin):
     search_fields = ["name"]
     list_display = [
         "name",
+        "area",
         "migrated_status",
         "released",
         "archived",
@@ -182,8 +215,8 @@ class JobAdmin(BaseAdmin):
         "created_at_date",
     ]
     list_display_links = ["name"]
-    list_filter = [ArchivedFilter, "released", MigratedFilter]
-    list_select_related = ["created_by", "created_by_user"]
+    list_filter = [ArchivedFilter, "released", MigratedFilter, ("area", AreaListFilter)]
+    list_select_related = ["area", "created_by", "created_by_user"]
     actions = ["export_to_csv", "duplicate_jobs", "archive_jobs", "restore_jobs"]
     list_per_page = 25
     ordering = ["name"]
@@ -202,8 +235,57 @@ class JobAdmin(BaseAdmin):
         css = {"all": ["css/asset_manager.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Job]:
-        """Prefetch units to avoid N+1 queries in related_units"""
-        return super().get_queryset(request).prefetch_related("units")
+        """Restrict the jobs to the area of the user and prefetch their units"""
+        return scope_jobs(
+            super().get_queryset(request).prefetch_related("units"), request.user
+        )
+
+    def get_readonly_fields(
+        self, request: HttpRequest, obj: Job | None = None
+    ) -> list[str]:
+        """
+        Only superusers may move a job between areas.
+
+        An area administrator who administers several areas still has to pick
+        one when creating a job, so the field stays editable on the add form —
+        limited to their own areas, see :meth:`formfield_for_foreignkey`.
+        """
+        readonly_fields = list(super().get_readonly_fields(request, obj))
+        if request.user.is_superuser:
+            return readonly_fields
+        if obj is None and len(administered_areas(request.user)) > 1:
+            return readonly_fields
+        return [*readonly_fields, "area"]
+
+    def formfield_for_foreignkey(
+        self,
+        db_field: "ForeignKey[Any, Any]",
+        request: HttpRequest,
+        **kwargs: Any,
+    ) -> "ModelChoiceField[Any] | None":
+        """Offer an area administrator only the areas they administer."""
+        if db_field.name == "area" and not request.user.is_superuser:
+            kwargs["queryset"] = administered_areas(request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: Job,
+        form: "ModelForm[Model]",
+        change: bool,
+    ) -> None:
+        """
+        Put a job an area administrator creates into their area.
+
+        Administrators of a single area never see the field, so it is filled in
+        for them here, the same way ``created_by`` is.
+        """
+        if not change and not request.user.is_superuser and obj.area is None:
+            areas = administered_areas(request.user)
+            if len(areas) == 1:
+                obj.area = areas[0]
+        super().save_model(request, obj, form, change)
 
     def related_units(self, obj: Job) -> str:
         """
@@ -294,8 +376,24 @@ class JobAdmin(BaseAdmin):
 
     @admin.action(description=_("Duplicate selected jobs"))
     def duplicate_jobs(self, request: HttpRequest, queryset: QuerySet[Job]) -> None:
-        """Duplicate the selected jobs, including their related units."""
-        for job in queryset:
+        """
+        Duplicate the selected jobs, including their related units.
+
+        Jobs of an area are skipped: their units must not be shared with a
+        second job, so duplicating them would need a deep copy of every unit
+        and word, which is a separate feature.
+        """
+        skipped = queryset.filter(area__isnull=False).count()
+        if skipped:
+            messages.warning(
+                request,
+                _(
+                    "%(count)d job(s) were skipped, because jobs of an area "
+                    "cannot be duplicated."
+                )
+                % {"count": skipped},
+            )
+        for job in queryset.filter(area__isnull=True):
             units = list(job.units.all())
             job.pk = None
             job.v1_id = None

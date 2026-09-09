@@ -673,6 +673,20 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
+#: cmsv2/admins/area_admin.py cmsv2/models/area.py
+msgid "administrators"
+msgstr "Administratoren"
+
+#: cmsv2/admins/area_admin.py cmsv2/admins/unit_admin.py
+msgid "jobs"
+msgstr "Berufe"
+
+#: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
+#: cmsv2/admins/unit_admin.py cmsv2/models/area.py cmsv2/models/job.py
+#: cmsv2/models/unit.py
+msgid "created at"
+msgstr "Erstellt"
+
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
 #: cmsv2/admins/word_filters.py
 msgid "migration status"
@@ -708,11 +722,6 @@ msgstr "Aktive Berufe"
 msgid "units"
 msgstr "Einheiten"
 
-#: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py cmsv2/models/job.py
-#: cmsv2/models/unit.py
-msgid "created at"
-msgstr "Erstellt"
-
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
 #: cmsv2/admins/word_admin.py
 msgid "migrated"
@@ -725,6 +734,14 @@ msgstr "Alle Vokabeln dieser Berufe als CSV exportieren"
 #: cmsv2/admins/job_admin.py
 msgid "Duplicate selected jobs"
 msgstr "Ausgewählte Berufe duplizieren"
+
+#: cmsv2/admins/job_admin.py
+#, python-format
+msgid ""
+"%(count)d job(s) were skipped, because jobs of an area cannot be duplicated."
+msgstr ""
+"%(count)d Beruf(e) wurden übersprungen, da Berufe eines Bereichs nicht "
+"dupliziert werden können."
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/word_admin.py cmsv2/utils.py
 msgid "New"
@@ -756,6 +773,11 @@ msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 msgid "Import"
 msgstr "Import"
 
+#: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
+#: cmsv2/models/job.py
+msgid "area"
+msgstr "Bereich"
+
 #: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"
 msgstr "Alle ausgewählte Einheiten veröffentlichen"
@@ -780,10 +802,6 @@ msgid "Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned)."
 msgstr ""
 "%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
-
-#: cmsv2/admins/unit_admin.py
-msgid "jobs"
-msgstr "Berufe"
 
 #: cmsv2/admins/user_admin.py
 msgid "assigned word"
@@ -1010,6 +1028,53 @@ msgstr "Zeile %(n)s: %(msg)s"
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
+#: cmsv2/areas.py
+msgid ""
+"A unit of a job that belongs to an area must not be assigned to any other "
+"job."
+msgstr ""
+"Eine Einheit eines Berufs, der zu einem Bereich gehört, darf keinem weiteren "
+"Beruf zugeordnet werden."
+
+#: cmsv2/areas.py
+#, python-format
+msgid ""
+"The word \"%(word)s\" is already used in another area, so this unit cannot "
+"be assigned to these jobs."
+msgstr ""
+"Die Vokabel „%(word)s“ wird bereits in einem anderen Bereich verwendet, "
+"daher kann diese Einheit diesen Berufen nicht zugeordnet werden."
+
+#: cmsv2/areas.py
+#, python-format
+msgid ""
+"The word \"%(word)s\" belongs to another area and cannot be used in this "
+"unit."
+msgstr ""
+"Die Vokabel „%(word)s“ gehört zu einem anderen Bereich und kann in dieser "
+"Einheit nicht verwendet werden."
+
+#: cmsv2/models/area.py
+msgid ""
+"These users manage the content of this area. They only see jobs, units and "
+"words of the areas they administer."
+msgstr ""
+"Diese Benutzer verwalten die Inhalte dieses Bereichs. Sie sehen nur Berufe, "
+"Einheiten und Vokabeln der Bereiche, die sie verwalten."
+
+#: cmsv2/models/area.py cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/models/word.py
+msgid "modified at"
+msgstr "zuletzt geändert"
+
+#: cmsv2/models/area.py
+msgid "Area"
+msgstr "Bereich"
+
+#: cmsv2/models/area.py
+msgid "Areas"
+msgstr "Bereiche"
+
 #: cmsv2/models/job.py
 msgid "archived"
 msgstr "archiviert"
@@ -1027,13 +1092,17 @@ msgstr ""
 msgid "job"
 msgstr "Beruf"
 
+#: cmsv2/models/job.py
+msgid ""
+"Jobs of an area are only visible to the administrators of that area. Jobs "
+"without an area belong to the main app."
+msgstr ""
+"Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
+"sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
+
 #: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "creator"
 msgstr "Ersteller"
-
-#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
-msgid "modified at"
-msgstr "zuletzt geändert"
 
 #: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "Add icon"

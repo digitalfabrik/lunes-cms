@@ -1,24 +1,82 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Iterable, TYPE_CHECKING
+from typing import Any, Iterable, TYPE_CHECKING
 
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
+from django.forms import ModelForm
+from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
+from lunes_cms.cmsv2.admins.area_filters import JobListFilter
 from lunes_cms.cmsv2.admins.base import BaseAdmin
+from lunes_cms.cmsv2.areas import (
+    area_of_unit,
+    scope_jobs,
+    scope_units,
+    validate_relation_area,
+    validate_unit_jobs,
+)
+from lunes_cms.cmsv2.models import Job
+from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.models.word import Word
 
 if TYPE_CHECKING:
+    from django.db.models import ManyToManyField
     from django.utils.functional import _StrOrPromise
+
+
+class UnitAdminForm(ModelForm):
+    """
+    Form for the Unit model that keeps a unit inside a single area.
+    """
+
+    class Meta:
+        """
+        Meta class of the unit form
+        """
+
+        model = Unit
+        fields = "__all__"
+
+    def clean_jobs(self) -> QuerySet[Job]:
+        """
+        Reject job assignments that would mix areas.
+
+        A unit of a job that belongs to an area must not be assigned to any
+        other job, and it must not carry words that are already used elsewhere.
+        """
+        jobs = self.cleaned_data["jobs"]
+        validate_unit_jobs(self.instance, jobs)
+        return jobs
+
+
+class WordInlineFormSet(BaseInlineFormSet):
+    """
+    Formset that keeps the words of a unit inside a single area.
+
+    The words of a unit have to belong to the area of that unit, so a word of
+    the main app cannot be added to a unit of an area and vice versa. New rows
+    have no unit yet while they are validated, which is why the check cannot be
+    left to ``UnitWordRelation.clean()`` alone.
+    """
+
+    def clean(self) -> None:
+        super().clean()
+        for form in self.forms:
+            if not form.cleaned_data or form.cleaned_data.get("DELETE"):
+                continue
+            word = form.cleaned_data.get("word")
+            if word:
+                validate_relation_area(self.instance, word)
 
 
 class WordInline(admin.TabularInline):
@@ -30,6 +88,7 @@ class WordInline(admin.TabularInline):
     """
 
     model = UnitWordRelation
+    formset = WordInlineFormSet
     extra = 1
     autocomplete_fields = ["word"]
     fields = [
@@ -99,6 +158,7 @@ class UnitAdmin(BaseAdmin):
     including their attributes, icons, and relationships with words and jobs.
     """
 
+    form = UnitAdminForm
     fields = [
         "title",
         "migrated_status",
@@ -119,12 +179,13 @@ class UnitAdmin(BaseAdmin):
         "released",
         "list_icon",
         "related_jobs",
+        "area",
         "creator_group",
         "created_by_user",
         "created_at_date",
     ]
     list_display_links = ["title"]
-    list_filter = ["released", MigratedFilter, "jobs"]
+    list_filter = ["released", MigratedFilter, ("jobs", JobListFilter)]
     list_select_related = ["created_by", "created_by_user"]
     list_per_page = 25
     actions = ["bulk_release", "assign_to_user"]
@@ -146,7 +207,37 @@ class UnitAdmin(BaseAdmin):
         css = {"all": ["css/asset_manager.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Unit]:
-        return super().get_queryset(request).prefetch_related("jobs")
+        """Restrict the units to the area of the user and prefetch their jobs"""
+        return scope_units(
+            super().get_queryset(request).prefetch_related("jobs__area"), request.user
+        )
+
+    def formfield_for_manytomany(
+        self,
+        db_field: "ManyToManyField[Any, Any]",
+        request: HttpRequest,
+        **kwargs: Any,
+    ) -> Any:
+        """Offer only the jobs the user may see, so no unit escapes its area."""
+        if db_field.name == "jobs":
+            kwargs["queryset"] = scope_jobs(Job.objects.all(), request.user).order_by(
+                "name"
+            )
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+    def area(self, obj: Unit) -> Area | None:
+        """
+        The area of the unit, derived from its job.
+
+        Args:
+            obj: The unit object
+
+        Returns:
+            Area or None: The area of the unit, or None for main app content
+        """
+        return area_of_unit(obj)
+
+    area.short_description = _("area")  # type: ignore[attr-defined]
 
     @admin.action(description=_("Release all selected units"))
     def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:

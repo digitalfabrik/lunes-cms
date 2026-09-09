@@ -1,8 +1,11 @@
 import threading
+from typing import Any
 
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -16,6 +19,7 @@ from ..admins.word_import_resource import (
     ImportSummary,
     validate_header_structure,
 )
+from ..areas import scope_jobs
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
 from ..services.image_generation import drain_pending_images
@@ -25,13 +29,25 @@ from ..services.sentence_generation import drain_pending_sentences
 class ImportCSVForm(forms.Form):
     """
     Form for importing a CSV file.
+
+    The job choices are restricted to the jobs the importing user may see, so
+    nobody can import vocabulary into the job of another area.
     """
 
     job = forms.ModelChoiceField(
-        queryset=Job.objects.all().order_by("name"),
+        queryset=Job.objects.none(),
         label=_("Job"),
         required=True,
     )
+
+    def __init__(
+        self, *args: Any, user: AbstractBaseUser | AnonymousUser, **kwargs: Any
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["job"].queryset = scope_jobs(  # type: ignore[attr-defined]
+            Job.objects.all(), user
+        ).order_by("name")
+
     csv_file = forms.FileField(
         label=_("Select CSV file"),
         help_text=_(
@@ -139,18 +155,22 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     """
     Method for importing vocabularies for a job from csv
     """
-    job = get_object_or_404(Job, pk=job_id) if job_id else None
+    job = (
+        get_object_or_404(scope_jobs(Job.objects.all(), request.user), pk=job_id)
+        if job_id
+        else None
+    )
 
     if request.method != "POST":
         initial = {"job": job} if job else {}
-        form = ImportCSVForm(initial=initial)
+        form = ImportCSVForm(initial=initial, user=request.user)
         if job:
             form.fields["job"].widget = forms.HiddenInput()
         return render(
             request, "admin/csv_form.html", _build_context(request, form, job, job_id)
         )
 
-    form = ImportCSVForm(request.POST, request.FILES)
+    form = ImportCSVForm(request.POST, request.FILES, user=request.user)
     if job:
         form.fields["job"].widget = forms.HiddenInput()
 
