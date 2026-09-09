@@ -1,0 +1,408 @@
+:root {
+    /* the app is dark only, this also themes the native form controls */
+    color-scheme: dark;
+
+    /* surfaces */
+    --bg: #282838;
+    --surface: #303043;
+    --surface-sunken: #262636;
+    --header-bg: #21212e;
+    --border: #434357;
+    --border-strong: #565669;
+
+    /* text */
+    --text: #e6e8ef;
+    --text-muted: #9aa0b0;
+    --text-faint: #767c8c;
+
+    /* accents */
+    --primary: #8ba6fa;
+    --success-bg: #3f7d20;
+    --success-bg-hover: #478d24;
+    --success-text: #ffffff;
+    --danger: #ff5252;
+
+    --radius: 8px;
+    --radius-lg: 12px;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* ---------------------------- header ---------------------------- */
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 1.25rem;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border);
+}
+
+header img {
+    width: 28px;
+    height: 28px;
+}
+
+header span {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* ---------------------------- layout ---------------------------- */
+
+main {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 3rem;
+}
+
+.greeting {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.subline {
+    margin: 0.15rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.section-title {
+    margin: 1.6rem 0 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.empty {
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+}
+
+/* ----------------------------- card ----------------------------- */
+
+.card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+}
+
+.word {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+}
+
+.word__article {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text-faint);
+}
+
+.word-meta {
+    margin: 0.35rem 0 0;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.word-meta__separator {
+    color: var(--text-faint);
+    margin: 0 0.2rem;
+}
+
+/* ----------------------------- icons ---------------------------- */
+
+/* Placeholder for icons that are not implemented yet: reserves the space and
+   shows a dashed square in the icon's color. */
+.icon {
+    display: inline-block;
+    border: 1px dashed currentColor;
+    border-radius: 2px;
+    opacity: 0.5;
+}
+
+/* ----------------------------- media ---------------------------- */
+
+.media {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+    margin-top: 1.1rem;
+}
+
+.media__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 84px;
+    padding: 1rem;
+    background-color: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.media__tile--empty {
+    color: var(--text-faint);
+    font-style: italic;
+}
+
+.media__icon {
+    width: 22px;
+    height: 22px;
+    color: var(--text-faint);
+    flex: none;
+}
+
+.media__image {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 4px;
+}
+
+.media__audio {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.media__waveform {
+    max-width: 100%;
+    height: 26px;
+    opacity: 0.65;
+}
+
+.media__player {
+    width: 100%;
+    max-width: 100%;
+}
+
+.media__filename {
+    overflow-wrap: anywhere;
+}
+
+/* ---------------------------- comment --------------------------- */
+
+.comment {
+    margin-top: 1.1rem;
+}
+
+.comment__label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background-color: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: inherit;
+    resize: vertical;
+}
+
+textarea:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+.errors {
+    margin: 0.4rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--danger);
+    font-size: 0.85rem;
+}
+
+/* ---------------------------- fields ---------------------------- */
+
+.field + .field {
+    margin-top: 0.9rem;
+}
+
+.field__label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+select {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background-color: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: inherit;
+}
+
+select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+/* ---------------------------- dialog ---------------------------- */
+
+.dialog {
+    width: min(28rem, calc(100vw - 2rem));
+    margin: auto;
+    padding: 1.25rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text);
+}
+
+.dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+.dialog__title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.dialog__hint {
+    margin: 0.25rem 0 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.dialog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.7rem;
+    margin-top: 1.25rem;
+}
+
+/* ---------------------------- buttons --------------------------- */
+
+.actions {
+    margin-top: 1.1rem;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.button__icon {
+    width: 15px;
+    height: 15px;
+    flex: none;
+}
+
+.button--approve {
+    width: 100%;
+    padding: 0.75rem 1.1rem;
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.button--approve:hover {
+    background-color: var(--success-bg-hover);
+}
+
+.button--submit {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    font-weight: 700;
+}
+
+.button--submit:hover {
+    background-color: var(--success-bg-hover);
+}
+
+.button--outline {
+    border-color: var(--border);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.button--outline:hover {
+    border-color: var(--border-strong);
+    background-color: var(--surface-sunken);
+}
+
+.button--reject {
+    color: var(--danger);
+}
+
+.button--next {
+    margin-top: 1.4rem;
+    border-color: var(--border-strong);
+    color: var(--text);
+    font-weight: 700;
+    background-color: var(--surface);
+}
+
+.button--next:hover {
+    background-color: var(--surface-sunken);
+}
+
+.actions__secondary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    margin-top: 0.7rem;
+}
+
+@media (max-width: 640px) {
+    .media,
+    .actions__secondary {
+        grid-template-columns: 1fr;
+    }
+
+    .word {
+        font-size: 1.6rem;
+    }
+}

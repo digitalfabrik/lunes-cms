@@ -69,6 +69,18 @@ class ReviewStatus(models.TextChoices):
     CANNOT_BE_ASSESSED = "CANNOT_BE_ASSESSED", _("Cannot be assessed")
 
 
+class ChangeRequestReason(models.TextChoices):
+    """Possible reasons a reviewer can give when requesting a change.
+
+    Stored in :attr:`~lunes_cms.cmsv2.models.review.Review.reason`. The model
+    field itself is a plain char field, the choices are only enforced by the
+    forms which write it.
+    """
+
+    ERROR = "ERROR", _("Error")
+    OTHER = "OTHER", _("Other")
+
+
 class ProgressStatus(models.TextChoices):
     """Possible states for the progress of a review"""
 
@@ -82,6 +94,7 @@ class Roles:
     DEFAULT_GROUP_NAME = None
     ADMIN_GROUP = "Lunes"
     REVIEWER_GROUP = _("Reviewer")
+    EXPERT_GROUP = _("Expert:innen")
 
 
 def convert_image_to_webp(image_field: ImageFieldFile) -> bool:
@@ -192,3 +205,13 @@ def is_reviewer(user: User) -> bool:
     Check if the user is a reviewer.
     """
     return user.groups.filter(name=Roles.ADMIN_GROUP).exists()
+
+
+def is_expert(user: User) -> bool:
+    """
+    Check if the user is an expert.
+
+    :param user: the user to check
+    :return: whether the user belongs to :attr:`Roles.EXPERT_GROUP`
+    """
+    return user.groups.filter(name=Roles.EXPERT_GROUP).exists()

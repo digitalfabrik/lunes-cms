@@ -1,0 +1,30 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex, nofollow">
+        <meta name="color-scheme" content="dark">
+        <meta name="theme-color" content="#21212e">
+        <link rel="icon" href="{% static 'images/logo.svg' %}">
+        <title>{% block title %}{% translate "Expert access" %}{% endblock %} | Lunes</title>
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+              rel="stylesheet">
+        <link href="{% static 'css/expert_access.css' %}" rel="stylesheet">
+        <script src="{% static 'js/expert_access.js' %}" defer></script>
+    </head>
+    <body>
+        <header>
+            <img src="{% static 'images/logo.svg' %}" alt="Lunes">
+            <span>{% translate "Lunes vocabulary review" %}</span>
+        </header>
+        <main id="main">
+        {% block content %}
+        {% endblock %}
+        </main>
+    </body>
+</html>

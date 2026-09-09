@@ -122,6 +122,7 @@ INSTALLED_APPS = [
     "lunes_cms.cmsv2",
     "lunes_cms.help",
     "lunes_cms.analytics",
+    "lunes_cms.expert_access",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
     # Installed Django apps
