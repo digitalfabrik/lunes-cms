@@ -34,7 +34,7 @@ Basic Concepts
 
     internationalization
     documentation
-    continous-integration
+    continuous-integration
     audio-generation
     image-generation
     analytics
@@ -42,7 +42,7 @@ Basic Concepts
 
 * :doc:`internationalization`: Internationalization (i18n)
 * :doc:`documentation`: Documentation (Sphinx)
-* :doc:`continous-integration`: Continous Integration (Circle CI)
+* :doc:`continuous-integration`: Continuous Integration (Circle CI)
 * :doc:`audio-generation`: OpenAI audio generation for vocabulary
 * :doc:`image-generation`: OpenAI image generation for vocabulary
 * :doc:`analytics`: Analytics

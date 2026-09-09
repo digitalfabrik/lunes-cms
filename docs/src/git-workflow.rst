@@ -37,12 +37,12 @@ In extension to the GitHub flow, we use `rebasing <https://git-scm.com/book/en/v
 
 .. highlight:: bash
 
-You want to merge recent changes of the develop branch into your current feature branch, e.g. because there are conflicts that prevent your branch from being merged::
+You want to merge recent changes of the main branch into your current feature branch, e.g. because there are conflicts that prevent your branch from being merged::
 
-    # fetch upstream changes of origin/develop
+    # fetch upstream changes of origin/main
     git fetch --all
-    # rebase your feature branch onto the current upstream develop branch
-    git rebase origin/develop
+    # rebase your feature branch onto the current upstream main branch
+    git rebase origin/main
     # if the rebase cannot be performed automatically, resolve the conflicts and continue
     git rebase --continue
     # if more conflicts pop up, repeat the previous step until the rebase is finished
@@ -55,10 +55,10 @@ You want to merge recent changes of the develop branch into your current feature
 
 You have many small commits which clutter the git history, or want to combine rearrange commits on your current feature branch::
 
-    # fetch upstream changes of origin/develop
+    # fetch upstream changes of origin/main
     git fetch --all
-    # interactive rebase starting at the commit where your current branch was forked from develop
-    git rebase --interactive $(git merge-base --fork-point origin/develop $(git rev-parse --abbrev-ref HEAD))
+    # interactive rebase starting at the commit where your current branch was forked from main
+    git rebase --interactive $(git merge-base --fork-point origin/main $(git rev-parse --abbrev-ref HEAD))
     # sort and modify your commits as you want
     # exit the editor and save
     # if the rebase cannot be performed automatically, resolve the conflicts and continue
