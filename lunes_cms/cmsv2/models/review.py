@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
@@ -43,7 +44,9 @@ class Review(models.Model):
         verbose_name=_("assigned by"),
     )
     reason = models.CharField(max_length=20, default="", verbose_name=_("reason"))
-    comment = models.CharField(max_length=120, default="", verbose_name=_("comment"))
+    comment = models.CharField(
+        blank=True, max_length=120, default="", verbose_name=_("comment")
+    )
     assigned_at = models.DateTimeField(auto_now_add=True, verbose_name=_("assigned at"))
     completed_at = models.DateTimeField(
         null=True, blank=True, verbose_name=_("completed at")
@@ -63,6 +66,11 @@ class Review(models.Model):
             if not self.completed_at
             else ProgressStatus.COMPLETED
         )
+
+    def save(self, *args, **kwargs) -> None:
+        if self.completed_at is None and self.review_status != ReviewStatus.PENDING:
+            self.completed_at = timezone.now()
+        super().save(*args, **kwargs)
 
     class Meta:
         """

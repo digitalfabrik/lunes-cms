@@ -14,6 +14,8 @@ app_name = "expert_access"
 
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
-    path("", RedirectView.as_view(url=reverse_lazy("expert_access:review")), name="index"),
+    path(
+        "", RedirectView.as_view(url=reverse_lazy("expert_access:review")), name="index"
+    ),
     path("review/", views.review, name="review"),
 ]
