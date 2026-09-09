@@ -1,5 +1,5 @@
 """
-Tests for the Review model (word-level review assignments, #644).
+Tests for the Review model (unit-word-level review assignments, #644).
 """
 
 from __future__ import annotations
@@ -9,27 +9,36 @@ from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.utils import timezone
 
-from lunes_cms.cmsv2.models import Review, Word
+from lunes_cms.cmsv2.models import Review, Unit, UnitWordRelation, Word
+
+
+def _create_unit_word() -> UnitWordRelation:
+    """Create a word inside a unit and return their relation."""
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    unit = Unit.objects.create(title="Unit A")
+    return UnitWordRelation.objects.create(unit=unit, word=word)
 
 
 @pytest.mark.django_db
-def test_same_word_and_reviewer_violates_unique_constraint() -> None:
-    """A word must not be assigned twice to the same reviewer."""
-    word = Word.objects.create(word="Hammer", singular_article=1)
+def test_same_unit_word_and_reviewer_violates_unique_constraint() -> None:
+    """A unit-word relation must not be assigned twice to the same reviewer."""
+    unit_word = _create_unit_word()
     reviewer = get_user_model().objects.create_user(username="reviewer")
-    Review.objects.create(word=word, reviewer=reviewer)
+    Review.objects.create(unit_word=unit_word, reviewer=reviewer)
 
     with pytest.raises(IntegrityError):
-        Review.objects.create(word=word, reviewer=reviewer)
+        Review.objects.create(unit_word=unit_word, reviewer=reviewer)
 
 
 @pytest.mark.django_db
 def test_deleting_assigning_user_keeps_review_but_clears_assigned_by() -> None:
     """assigned_by uses SET_NULL, so the Review must survive the assigner's deletion."""
-    word = Word.objects.create(word="Hammer", singular_article=1)
+    unit_word = _create_unit_word()
     reviewer = get_user_model().objects.create_user(username="reviewer")
     admin_user = get_user_model().objects.create_user(username="admin")
-    review = Review.objects.create(word=word, reviewer=reviewer, assigned_by=admin_user)
+    review = Review.objects.create(
+        unit_word=unit_word, reviewer=reviewer, assigned_by=admin_user
+    )
 
     admin_user.delete()
     review.refresh_from_db()
@@ -40,9 +49,9 @@ def test_deleting_assigning_user_keeps_review_but_clears_assigned_by() -> None:
 @pytest.mark.django_db
 def test_deleting_reviewer_deletes_review() -> None:
     """reviewer uses CASCADE, so the Review must be removed with the reviewer."""
-    word = Word.objects.create(word="Hammer", singular_article=1)
+    unit_word = _create_unit_word()
     reviewer = get_user_model().objects.create_user(username="reviewer")
-    review = Review.objects.create(word=word, reviewer=reviewer)
+    review = Review.objects.create(unit_word=unit_word, reviewer=reviewer)
 
     reviewer.delete()
 
@@ -51,9 +60,9 @@ def test_deleting_reviewer_deletes_review() -> None:
 
 @pytest.mark.django_db
 def test_progress_status_reflects_completed_at() -> None:
-    word = Word.objects.create(word="Hammer", singular_article=1)
+    unit_word = _create_unit_word()
     reviewer = get_user_model().objects.create_user(username="reviewer")
-    review = Review.objects.create(word=word, reviewer=reviewer)
+    review = Review.objects.create(unit_word=unit_word, reviewer=reviewer)
 
     assert review.progress_status == "IN_REVIEW"
 
