@@ -29,7 +29,11 @@
         SSLCertificateChainFile /etc/letsencrypt/live/example.com/chain.pem
         SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
 
-        ProxyPass /.well-known/ !
+        # Only exclude the ACME challenge path from the proxy (served as a
+        # plain file by certbot's webroot plugin); everything else under
+        # /.well-known/ - e.g. apple-app-site-association and
+        # assetlinks.json for app deep linking - is served by Django.
+        ProxyPass /.well-known/acme-challenge/ !
         ProxyPass /static/ !
         ProxyPass /media/ !
         ProxyPass "/"  "http://localhost:8080/"
