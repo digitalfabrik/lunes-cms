@@ -1,4 +1,5 @@
 from .alternative_word import AlternativeWord
+from .area import Area
 from .feedback import Feedback
 from .job import Job
 from .review import Review

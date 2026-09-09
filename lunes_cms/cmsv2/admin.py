@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.http import HttpRequest
 
 from .admins import (
+    AreaAdmin,
     FeedbackAdmin,
     JobAdmin,
     LunesUserAdmin,
@@ -18,7 +19,7 @@ from .admins import (
     UnitWordRelationAdmin,
     WordAdmin,
 )
-from .models import Feedback, Job, Unit, UnitWordRelation, Word
+from .models import Area, Feedback, Job, Unit, UnitWordRelation, Word
 
 
 # pylint: disable=unused-argument
@@ -36,6 +37,7 @@ def has_permission(self: admin.AdminSite, request: HttpRequest) -> bool:
 
 admin.AdminSite.has_permission = has_permission  # type: ignore[method-assign]
 
+admin.site.register(Area, AreaAdmin)
 admin.site.register(Job, JobAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(UnitWordRelation, UnitWordRelationAdmin)

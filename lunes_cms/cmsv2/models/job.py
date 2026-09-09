@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import get_image_tag
+from .area import Area
 from .static import convert_umlaute_images
 
 
@@ -34,6 +35,18 @@ class Job(models.Model):
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
+    area = models.ForeignKey(
+        Area,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="jobs",
+        verbose_name=_("area"),
+        help_text=_(
+            "Jobs of an area are only visible to the administrators of that "
+            "area. Jobs without an area belong to the main app."
+        ),
+    )
     created_by = models.ForeignKey(
         Group,
         on_delete=models.SET_NULL,

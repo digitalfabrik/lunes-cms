@@ -15,6 +15,7 @@ from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
+
 from .decorators import require_any_permission_json
 
 

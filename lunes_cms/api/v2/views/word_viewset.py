@@ -46,7 +46,7 @@ class WordViewSet(viewsets.ModelViewSet):
             unit_word_relations__unit__jobs__archived=False,
             audio_check_status="CONFIRMED",
             image_check_status="CONFIRMED",
-        )
+        ).exclude(units__jobs__area__isnull=False)
         return (
             queryset.prefetch_related("alternative_words").distinct().order_by("word")
         )

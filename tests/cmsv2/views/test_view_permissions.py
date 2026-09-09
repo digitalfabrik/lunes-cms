@@ -7,8 +7,8 @@ from __future__ import annotations
 from collections.abc import Callable
 
 import pytest
-from django.test.client import Client
 from django.contrib.auth.models import User
+from django.test.client import Client
 from django.urls import reverse
 
 from lunes_cms.cmsv2 import urls as cmsv2_urls

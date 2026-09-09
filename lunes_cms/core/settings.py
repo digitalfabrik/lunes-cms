@@ -631,6 +631,7 @@ JAZZMIN_SETTINGS = {
         "cms.GroupAPIKey": "fas fa-key",
         "cms.Feedback": "fas fa-comment",
         "cms.Sponsor": "fas fa-star",
+        "cmsv2.Area": "fa-solid fa-object-group",
         "cmsv2.Job": "fas fa-briefcase",
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",

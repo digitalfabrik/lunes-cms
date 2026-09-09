@@ -51,16 +51,20 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
-        if not job.released or job.archived:
+        if not job.released or job.archived or job.area_id:
             raise PermissionDenied()
 
-        unit_word_relations = UnitWordRelation.objects.filter(
-            unit__released=True,
-            unit__jobs=job,
-            word__audio_check_status="CONFIRMED",
-        ).filter(
-            Q(image_check_status="CONFIRMED")
-            | Q(image="", word__image_check_status="CONFIRMED")
+        unit_word_relations = (
+            UnitWordRelation.objects.filter(
+                unit__released=True,
+                unit__jobs=job,
+                word__audio_check_status="CONFIRMED",
+            )
+            .exclude(unit__jobs__area__isnull=False)
+            .filter(
+                Q(image_check_status="CONFIRMED")
+                | Q(image="", word__image_check_status="CONFIRMED")
+            )
         )
         queryset = (
             Word.objects.filter(

@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.utils import is_ajax
 from lunes_cms.core import settings
+
 from .decorators import require_any_permission_json
 
 

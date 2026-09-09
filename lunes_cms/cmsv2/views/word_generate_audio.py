@@ -14,6 +14,7 @@ from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.services.audio_generation import openai_word_audio_bytes
 from lunes_cms.cmsv2.utils import cache_busted_url, is_ajax, OpenAIConfigurationError
 from lunes_cms.core import settings
+
 from .decorators import require_any_permission_json
 
 
