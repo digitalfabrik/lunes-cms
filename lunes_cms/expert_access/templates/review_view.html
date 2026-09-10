@@ -83,7 +83,7 @@
                 </button>
                 <div class="actions__secondary">
                     <button type="button"
-                            class="button button--outline"
+                            class="button button--outline button--change"
                             data-review-status="CHANGE_REQUESTED"
                             data-label="{% translate "Propose change" %}"
                             data-subtitle="{% translate "The vocabulary item will be returned to an admin for review" %}"
@@ -133,18 +133,18 @@
                 <p class="dialog__hint" id="dialog-hint"></p>
                 <div class="field">
                     <label class="field__label" for="{{ form.reason.id_for_label }}">
-                        {% translate "Reason" %}
+                        {% translate "Reason" %} <span class="field__required" aria-hidden="true">*</span>
                     </label>
                     {{ form.reason }}
                 </div>
                 <div class="field">
                     <label class="field__label" for="{{ form.comment.id_for_label }}">
-                        {% translate "Comment" %}
+                        {% translate "Comment" %} <span class="field__required" aria-hidden="true">*</span>
                     </label>
                     {{ form.comment }}
                 </div>
                 <div class="dialog__actions">
-                    <button type="button" data-dialog-close class="button button--outline">
+                    <button type="button" data-dialog-close class="button button--cancel">
                         {% translate "Cancel" %}
                     </button>
                     <button type="submit" class="button button--submit">

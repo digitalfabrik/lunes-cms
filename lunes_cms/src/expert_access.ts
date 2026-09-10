@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
         subtitleElement.textContent = subtitle
         submitLabelElement.textContent = submitText
 
+        // lets the stylesheet colour the dialog for this decision
+        dialog.dataset.status = status
+
         dialog.showModal()
     }
 

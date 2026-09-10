@@ -3,28 +3,34 @@
     color-scheme: dark;
 
     /* surfaces */
-    --bg: #282838;
-    --surface: #303043;
-    --surface-sunken: #262636;
-    --header-bg: #21212e;
-    --border: #434357;
-    --border-strong: #565669;
+    --bg: #343A41;
+    --surface: #3F464F;
+    --surface-sunken: #2B3038;
+    --header-bg: #2B3038;
+    --border: #FFFFFF17;
     --border-secondary: #8F9BAA;
 
     /* text */
     --text: #EEF0F3;
-    --text-muted: #9aa0b0;
-    --text-faint: #767c8c;
+    --text-muted: #939FAE;
+    --text-faint: #6B7C8F;
 
     /* accents */
-    --primary: #8ba6fa;
-    --success-bg: #3f7d20;
-    --success-bg-hover: #478d24;
+    --brand: #445FFF;
+    --primary: #7F9BFF;
+    --success-bg: #397022;
+    --success-bg-hover: #418026;
     --success-text: #ffffff;
-    --danger: #ff5252;
+    --danger: #FF7372;
+    /* the dialogs colour their hint and submit button per decision */
+    --hint-info: #7B95F6;
+    --hint-danger: #DC3545;
+    --decision-change: #3730A3;
+    --decision-reject: #B91C1C;
+    --decision-cannot: #1E3A5E;
 
-    --radius: 8px;
-    --radius-lg: 12px;
+    --radius: 6px;
+    --radius-lg: 8px;
 }
 
 body {
@@ -32,7 +38,7 @@ body {
     background-color: var(--bg);
     color: var(--text);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
+    font-size: 0.875rem;
     line-height: 1.5;
 }
 
@@ -41,22 +47,22 @@ body {
 header {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    padding: 0.65rem 1.25rem;
+    gap: 0.55rem;
+    padding: 0.625rem 1rem;
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--border);
 }
 
 header img {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
 }
 
 header span {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 0.9375rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--brand);
 }
 
 /* ---------------------------- layout ---------------------------- */
@@ -64,24 +70,24 @@ header span {
 main {
     max-width: 48rem;
     margin: 0 auto;
-    padding: 2.5rem 1.25rem 3rem;
+    padding: 0.875rem 1.25rem 3rem;
 }
 
 .greeting {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
 }
 
 .subline {
-    margin: 0.15rem 0 0;
+    margin: 0;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
 }
 
 .section-title {
-    margin: 1.6rem 0 0.6rem;
-    font-size: 0.95rem;
+    margin: 0.5rem 0 0.4rem;
+    font-size: 0.9375rem;
     font-weight: 700;
 }
 
@@ -96,31 +102,31 @@ main {
     background-color: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1.25rem;
+    padding: 1rem;
 }
 
 .word {
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
-    gap: 0.55rem;
+    gap: 0.625rem;
     margin: 0;
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: -0.01em;
 }
 
 .word__article {
-    font-size: 1.15rem;
+    font-size: 1.125rem;
     font-weight: 400;
     color: var(--text-faint);
 }
 
 .word-meta {
-    margin: 0.35rem 0 0;
+    margin: 0;
     color: var(--primary);
-    font-size: 0.9rem;
+    font-size: 0.8125rem;
 }
 
 .word-meta__separator {
@@ -144,8 +150,8 @@ main {
 .media {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.9rem;
-    margin-top: 1.1rem;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
 }
 
 .media__tile {
@@ -153,14 +159,13 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    min-height: 84px;
+    gap: 0.45rem;
+    min-height: 70px;
     padding: 1rem;
     background-color: var(--surface-sunken);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     text-align: center;
 }
 
@@ -170,9 +175,9 @@ main {
 }
 
 .media__icon {
-    width: 22px;
-    height: 22px;
-    color: var(--text-faint);
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
     flex: none;
 }
 
@@ -215,7 +220,7 @@ main {
     display: block;
     margin-bottom: 0.35rem;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
 }
 
 textarea {
@@ -239,20 +244,25 @@ textarea:focus-visible {
     margin: 0.4rem 0 0;
     padding-left: 1.1rem;
     color: var(--danger);
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
 }
 
 /* ---------------------------- fields ---------------------------- */
 
 .field + .field {
-    margin-top: 0.9rem;
+    margin-top: 1rem;
 }
 
 .field__label {
     display: block;
-    margin-bottom: 0.35rem;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.field__required {
+    color: var(--danger);
 }
 
 select {
@@ -266,6 +276,10 @@ select {
     font: inherit;
 }
 
+select:invalid {
+    color: var(--text-muted);
+}
+
 select:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 1px;
@@ -274,52 +288,74 @@ select:focus-visible {
 /* ---------------------------- dialog ---------------------------- */
 
 .dialog {
-    width: min(28rem, calc(100vw - 2rem));
+    --decision: var(--decision-change);
+    --hint: var(--hint-info);
+
+    width: min(30rem, calc(100vw - 2rem));
     margin: auto;
-    padding: 1.25rem;
+    padding: 1.5rem;
     background-color: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     color: var(--text);
 }
 
+.dialog[data-status="REJECTED"] {
+    --decision: var(--decision-reject);
+    --hint: var(--hint-danger);
+}
+
+.dialog[data-status="CANNOT_BE_ASSESSED"] {
+    --decision: var(--decision-cannot);
+}
+
 .dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.65);
 }
 
 .dialog__title {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 700;
+    line-height: 1.3;
 }
 
 .dialog__hint {
-    margin: 0.25rem 0 1rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    margin: 0.25rem 0 1.375rem;
+    color: var(--hint);
+    font-size: 0.875rem;
+}
+
+.dialog textarea {
+    min-height: 100px;
+}
+
+.dialog textarea::placeholder {
+    color: var(--text-faint);
 }
 
 .dialog__actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: flex-end;
-    gap: 0.7rem;
-    margin-top: 1.25rem;
+    gap: 0.5rem;
+    margin-top: 1.875rem;
 }
 
 /* ---------------------------- buttons --------------------------- */
 
 .actions {
-    margin-top: 1.1rem;
+    margin-top: 0.4rem;
 }
 
 .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.1rem;
-    border-radius: 6px;
+    gap: 0.6rem;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius);
     border: 1px solid transparent;
     background: transparent;
     color: var(--text);
@@ -335,14 +371,15 @@ select:focus-visible {
 }
 
 .button__icon {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     flex: none;
 }
 
 .button--approve {
     width: 100%;
-    padding: 0.75rem 1.1rem;
+    margin-top: 0.75rem;
+    padding: 0.55rem 1.1rem;
     background-color: var(--success-bg);
     color: var(--success-text);
     font-size: 1.05rem;
@@ -354,53 +391,64 @@ select:focus-visible {
 }
 
 .button--submit {
-    background-color: var(--success-bg);
-    color: var(--success-text);
+    padding: 0.5rem 1rem;
+    background-color: var(--decision);
+    color: #ffffff;
+    font-size: 0.875rem;
     font-weight: 700;
 }
 
-.button--submit:hover {
-    background-color: var(--success-bg-hover);
+form:has(:invalid) .button--submit {
+    background-color: color-mix(in srgb, var(--decision) 33%, transparent);
+}
+
+.button--cancel {
+    color: var(--text-muted);
+    font-weight: 500;
 }
 
 .button--outline {
     border-color: var(--border);
     color: var(--text-muted);
+    font-size: 0.85rem;
     font-weight: 500;
+    gap: 0.45rem;
 }
 
 .button--outline:hover {
-    border-color: var(--border-strong);
     background-color: var(--surface-sunken);
+}
+
+.button--outline .button__icon {
+    width: 12px;
+    height: 12px;
+}
+
+.button--change {
+    color: var(--primary);
 }
 
 .button--reject {
     color: var(--danger);
 }
 
-.button--next {
-    margin-top: 1.4rem;
-    border-color: var(--border-strong);
-    color: var(--text);
-    font-weight: 700;
-    background-color: var(--surface);
-}
-
-.button--next:hover {
-    background-color: var(--surface-sunken);
-}
-
 .button--skip {
-    color: var(--text);
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
     border-color: var(--border-secondary);
-    margin: 1.4rem 0;
+    border-radius: var(--radius-lg);
+    color: var(--text);
+}
+
+.button--skip:hover {
+    background-color: var(--surface);
 }
 
 .actions__secondary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.7rem;
-    margin-top: 0.7rem;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 @media (max-width: 640px) {
@@ -410,6 +458,6 @@ select:focus-visible {
     }
 
     .word {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
 }
