@@ -1,18 +1,16 @@
 from __future__ import annotations
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from ..models import AlternativeWord, Word
-from .decorators import require_word_change_permission
+from .decorators import require_any_permission_json
 
 
-@staff_member_required
-@require_word_change_permission
-@csrf_exempt
+@login_required
+@require_any_permission_json("cmsv2.change_word")
 @require_POST
 def save_alternative_word(request: HttpRequest) -> JsonResponse:
     """

@@ -280,7 +280,7 @@ class WordAdmin(BaseAdmin):
         """
 
         js = [
-            "js/cookies.js",
+            "js/csrf.js",
             "js/word_image_asset_config.js",
             "js/unitword_image_asset_config.js",
             "js/asset_manager.js",

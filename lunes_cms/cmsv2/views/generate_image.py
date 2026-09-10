@@ -4,14 +4,14 @@ import base64
 import os
 import uuid
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.services.image_generation import build_image_prompt
 from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
+from .decorators import require_any_permission_json
 
 
 def _prompt_from_request(request: HttpRequest) -> str | None:
@@ -31,8 +31,8 @@ def _prompt_from_request(request: HttpRequest) -> str | None:
     )
 
 
-@staff_member_required
-@csrf_exempt
+@login_required
+@require_any_permission_json("cmsv2.change_word", "cmsv2.change_unitwordrelation")
 @require_POST
 def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
     """

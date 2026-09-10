@@ -2,7 +2,7 @@ import threading
 
 from django import forms
 from django.contrib import admin, messages
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -134,7 +134,8 @@ def _build_context(
 
 
 # pylint: disable=too-many-return-statements
-@staff_member_required
+@login_required
+@permission_required("cmsv2.add_word", raise_exception=True)
 def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResponse:
     """
     Method for importing vocabularies for a job from csv
@@ -173,7 +174,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
             )
 
         # request.user is `User | AnonymousUser`, but this view is only
-        # reachable by authenticated staff users.
+        # reachable by authenticated users.
         summary = import_words_from_csv(
             data, selected_job, request.user  # type: ignore[arg-type]
         )

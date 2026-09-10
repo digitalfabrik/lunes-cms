@@ -3,18 +3,18 @@ from __future__ import annotations
 import os
 
 from django.contrib import admin
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.core import settings
 
 
-@staff_member_required
+@login_required
+@permission_required("cmsv2.change_unitwordrelation", raise_exception=True)
 def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpResponse:
     """
     Dedicated view for generating image for a specific Unit<>Word relation.
@@ -37,8 +37,8 @@ def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpRespo
     return render(request, "admin/unitword_generate_image.html", context)
 
 
-@staff_member_required
-@csrf_exempt
+@login_required
+@permission_required("cmsv2.change_unitwordrelation", raise_exception=True)
 @require_POST
 def unitword_store_generated_image_permanently(
     request: HttpRequest, unitword_id: int

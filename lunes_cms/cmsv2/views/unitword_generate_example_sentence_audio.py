@@ -4,21 +4,22 @@ import os
 import uuid
 
 from django.contrib import admin
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
+from .decorators import require_any_permission_json
 
 
-@staff_member_required
+@login_required
+@permission_required("cmsv2.change_unitwordrelation", raise_exception=True)
 def unitword_generate_example_sentence_audio(
     request: HttpRequest, unitword_id: int
 ) -> HttpResponse:
@@ -43,8 +44,8 @@ def unitword_generate_example_sentence_audio(
     )
 
 
-@staff_member_required
-@csrf_exempt
+@login_required
+@require_any_permission_json("cmsv2.change_unitwordrelation")
 @require_POST
 def unitword_generate_example_sentence_audio_via_openai(
     request: HttpRequest, unitword_id: int
@@ -93,8 +94,8 @@ def unitword_generate_example_sentence_audio_via_openai(
         return JsonResponse({"error": str(e)}, status=500)
 
 
-@staff_member_required
-@csrf_exempt
+@login_required
+@permission_required("cmsv2.change_unitwordrelation", raise_exception=True)
 @require_POST
 def unitword_store_generated_example_sentence_audio_permanently(
     request: HttpRequest, unitword_id: int
