@@ -1,4 +1,22 @@
-document.addEventListener("DOMContentLoaded", function () {
+const initAudioPlayer = (): void => {
+    const button = document.querySelector<HTMLButtonElement>("button.media__play")
+    const audio = document.querySelector<HTMLAudioElement>("audio.media__player")
+    if (!button || !audio) {
+        return
+    }
+
+    button.addEventListener("click", function () {
+        audio.currentTime = 0
+        void audio.play()
+    })
+
+    // dims the button for as long as the recording is running
+    audio.addEventListener("play", () => button.classList.add("media__play--playing"))
+    audio.addEventListener("ended", () => button.classList.remove("media__play--playing"))
+    audio.addEventListener("pause", () => button.classList.remove("media__play--playing"))
+}
+
+const initFeedbackDialog = (): void => {
     const dialog = document.querySelector<HTMLDialogElement>("dialog#expert-review-feedback")
     if (!dialog) {
         return
@@ -37,4 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
     dialog.querySelectorAll<HTMLElement>("[data-dialog-close]").forEach(function (button) {
         button.addEventListener("click", () => dialog.close())
     })
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    initAudioPlayer()
+    initFeedbackDialog()
 })

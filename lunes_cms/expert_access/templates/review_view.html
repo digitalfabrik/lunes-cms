@@ -48,8 +48,7 @@
                                      src="{{ image.url }}"
                                      alt="{{ current_review.unit_word.word.word }}">
                             {% else %}
-                                {# TODO: replace with the image icon #}
-                                <span class="icon media__icon" aria-hidden="true"></span>
+                                {% include "icons/image.svg" %}
                                 <span>{% translate "There is no image for this word yet." %}</span>
                             {% endif %}
                         </div>
@@ -58,18 +57,20 @@
                         <div class="media__tile{% if not audio %} media__tile--empty{% endif %}">
                             {% if audio %}
                                 <div class="media__audio">
-                                    {# TODO: replace with the play icon #}
-                                    <span class="icon media__icon" aria-hidden="true"></span>
-                                    <img class="media__waveform"
-                                         src="TODO"
-                                         alt="">
+                                    <button type="button"
+                                            class="media__play"
+                                            aria-controls="review-audio"
+                                            aria-label="{% translate "Play pronunciation" %}">
+                                        {% include "icons/play.svg" %}
+                                    </button>
+                                    {% include "icons/waveform.svg" %}
                                 </div>
-                                <audio controls
+                                <audio id="review-audio"
                                        class="media__player"
+                                       preload="none"
                                        src="{{ audio.url }}"></audio>
                             {% else %}
-                                {# TODO: replace with the play icon #}
-                                <span class="icon media__icon" aria-hidden="true"></span>
+                                {% include "icons/play.svg" %}
                                 <span>{% translate "There is no audio for this word yet." %}</span>
                             {% endif %}
                         </div>
@@ -77,8 +78,7 @@
                 </div>
 
                 <button type="submit" name="review_status" value="APPROVED" class="button button--approve">
-                    {# TODO: replace with the check icon #}
-                    <span class="icon button__icon" aria-hidden="true"></span>
+                    {% include "icons/tick.svg" %}
                     {% translate "Approve" %}
                 </button>
                 <div class="actions__secondary">
@@ -89,8 +89,7 @@
                             data-subtitle="{% translate "The vocabulary item will be returned to an admin for review" %}"
                             data-submit="{% translate "Propose change" %}"
                     >
-                        {# TODO: replace with the change icon #}
-                        <span class="icon button__icon" aria-hidden="true"></span>
+                        {% include "icons/repeat.svg" %}
                         {% translate "Request change" %}
                     </button>
                     <button type="button"
@@ -99,8 +98,7 @@
                             data-label="{% translate "Reject vocabulary item" %}"
                             data-subtitle="{% translate "The vocabulary item will be rejected" %}"
                             data-submit="{% translate "Reject" %}">
-                        {# TODO: replace with the reject icon #}
-                        <span class="icon button__icon" aria-hidden="true"></span>
+                        {% include "icons/cancel.svg" %}
                         {% translate "Reject" %}
                     </button>
                     <button type="button"
@@ -109,8 +107,7 @@
                             data-label="{% translate "Mark as not assessable" %}"
                             data-subtitle="{% translate "The vocabulary item will be marked as not-assessable" %}"
                             data-submit="{% translate "Mark" %}">
-                        {# TODO: replace with the info icon #}
-                        <span class="icon button__icon" aria-hidden="true"></span>
+                        {% include "icons/info.svg" %}
                         {% translate "Cannot be assessed" %}
                     </button>
                 </div>
