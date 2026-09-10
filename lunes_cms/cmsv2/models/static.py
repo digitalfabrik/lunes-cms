@@ -93,7 +93,7 @@ class Roles:
     DEFAULT_GROUP_NAME = None
     ADMIN_GROUP = "Lunes"
     REVIEWER_GROUP = _("Reviewer")
-    EXPERT_GROUP = _("Expert:innen")
+    EXPERT_GROUP = "Expert:innen"
 
 
 def convert_image_to_webp(image_field: ImageFieldFile) -> bool:
