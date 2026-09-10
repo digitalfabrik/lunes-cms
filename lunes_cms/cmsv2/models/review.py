@@ -57,6 +57,8 @@ class Review(models.Model):
         default=ReviewStatus.PENDING,
         verbose_name=_("review status"),
     )
+    # Marks the priority of this review in the reviewer view. Lowest priority first
+    review_priority = models.IntegerField(default=0, verbose_name=_("review priority"))
 
     @property
     def progress_status(self) -> ProgressStatus:

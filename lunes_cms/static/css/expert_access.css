@@ -9,9 +9,10 @@
     --header-bg: #21212e;
     --border: #434357;
     --border-strong: #565669;
+    --border-secondary: #8F9BAA;
 
     /* text */
-    --text: #e6e8ef;
+    --text: #EEF0F3;
     --text-muted: #9aa0b0;
     --text-faint: #767c8c;
 
@@ -387,6 +388,12 @@ select:focus-visible {
 
 .button--next:hover {
     background-color: var(--surface-sunken);
+}
+
+.button--skip {
+    color: var(--text);
+    border-color: var(--border-secondary);
+    margin: 1.4rem 0;
 }
 
 .actions__secondary {

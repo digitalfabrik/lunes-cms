@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django import forms
+from django.db.models import F
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
@@ -90,14 +91,19 @@ def review(request: HttpRequest) -> HttpResponse:
     form = None
     if request.method == "POST":
         instance = get_object_or_404(Review, id=request.POST.get("review_id"))
-        form = ReviewForm(request.POST, instance=instance)
-        if form.is_valid():
-            form.save()
-            form = None
+        if request.POST.get("skip"):
+            Review.objects.filter(pk=instance.pk).update(
+                review_priority=F("review_priority") + 1
+            )
+        else:
+            form = ReviewForm(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+                form = None
 
     reviews = Review.objects.filter(
         reviewer=request.user, review_status=ReviewStatus.PENDING
-    ).order_by("assigned_at")
+    ).order_by("review_priority", "assigned_at")
     current_review = reviews.first()
     num_reviews = reviews.count()
 

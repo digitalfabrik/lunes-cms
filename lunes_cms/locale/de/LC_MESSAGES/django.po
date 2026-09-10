@@ -1084,6 +1084,10 @@ msgid "review status"
 msgstr "Prüfstatus"
 
 #: cmsv2/models/review.py
+msgid "review priority"
+msgstr "Review-Priorität"
+
+#: cmsv2/models/review.py
 msgid "Review"
 msgstr "Begutachtung"
 
@@ -1464,6 +1468,10 @@ msgstr "Die Vokabel wird als fachlich nicht beurteilbar zurückgegeben"
 #: expert_access/templates/review_view.html
 msgid "Mark"
 msgstr "Markieren"
+
+#: expert_access/templates/review_view.html
+msgid "Show next vocabulary item"
+msgstr "Nächste Vokabel anzeigen"
 
 #: expert_access/templates/review_view.html
 msgid "Reason"
