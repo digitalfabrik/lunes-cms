@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import base64
 import os
 import uuid
 
@@ -9,8 +8,12 @@ from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from lunes_cms.cmsv2.services.image_generation import build_image_prompt
-from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
+from lunes_cms.cmsv2.services.image_generation import (
+    build_image_prompt,
+    generated_image_extension,
+    openai_image_bytes,
+)
+from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
 
 
@@ -45,24 +48,14 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"error": "No word_text provided."}, status=400)
 
     try:
-        client = get_openai_client()
-
-        # quality is an env-configured str (LUNES_CMS_OPENAI_IMAGE_QUALITY), which the
-        # SDK's overloads can't statically narrow to their Literal[...] type.
-        response = client.images.generate(
-            model=settings.OPENAI_IMAGE_MODEL,
-            prompt=prompt,
-            size="1024x1024",
-            quality=settings.OPENAI_IMAGE_QUALITY,  # type: ignore[call-overload]
-            n=1,
-        )
-
-        b64_image = response.data[0].b64_json
-        image_data = base64.b64decode(b64_image)
+        image_data = openai_image_bytes(prompt)
 
         os.makedirs(settings.TEMP_IMAGE_DIR, exist_ok=True)
 
-        temp_filename = f"temp_image_{uuid.uuid4().hex}.png"
+        # The extension has to match the bytes all the way to the ImageField:
+        # a WebP stored as .png would be re-encoded on save and lose OpenAI's
+        # provenance markings.
+        temp_filename = f"temp_image_{uuid.uuid4().hex}{generated_image_extension()}"
         temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
 
         with open(temp_filepath, "wb") as f:

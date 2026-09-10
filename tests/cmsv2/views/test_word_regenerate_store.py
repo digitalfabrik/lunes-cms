@@ -45,6 +45,12 @@ def _png_bytes() -> bytes:
     return buf.getvalue()
 
 
+def _webp_bytes() -> bytes:
+    buf = io.BytesIO()
+    Image.new("RGB", (4, 4), "red").save(buf, format="WEBP")
+    return buf.getvalue()
+
+
 def test_is_ajax_detects_xhr_header() -> None:
     factory = RequestFactory()
     assert is_ajax(factory.post("/", HTTP_X_REQUESTED_WITH="XMLHttpRequest"))
@@ -72,6 +78,30 @@ def test_store_image_ajax_returns_json_and_saves(
     assert word.image
     # The temporary file is consumed once stored permanently.
     assert not (temp_image_dir / temp_name).exists()
+
+
+def test_store_image_keeps_webp_extension(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
+    """
+    OpenAI now encodes generated images as WebP; storing them under any other
+    extension would make Word.save() re-encode them and strip the provenance
+    markings (EU AI Act, issue #936).
+    """
+    temp_image_dir, _ = media_dirs
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    temp_name = "temp_image_keepme.webp"
+    (temp_image_dir / temp_name).write_bytes(_webp_bytes())
+
+    url = reverse("cmsv2:word_store_generated_image_permanently", args=[word.pk])
+    response = admin_client.post(
+        url, {"temp_filename": temp_name}, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+    )
+
+    assert response.status_code == 200
+    word.refresh_from_db()
+    assert word.image.name is not None
+    assert word.image.name.endswith(".webp")
 
 
 def test_store_image_ajax_missing_temp_returns_400(

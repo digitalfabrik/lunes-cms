@@ -4,6 +4,7 @@ Tests for the background image generation worker.
 
 from __future__ import annotations
 
+import base64
 import threading
 from collections.abc import Generator
 from pathlib import Path
@@ -109,7 +110,9 @@ def test_drain_stores_image_under_standard_path(fast_worker: None) -> None:
     # consistent with every other image in the system — never word-derived.
     assert word.image.name is not None
     assert word.image.name.startswith("images/")
-    assert word.image.name.endswith(".png")
+    # The extension is OpenAI's output format, so Word.save() has nothing to
+    # convert and the bytes stay the ones OpenAI signed.
+    assert word.image.name.endswith(".webp")
     assert "Säge" not in word.image.name
 
 
@@ -241,6 +244,53 @@ def test_build_image_prompt_bans_text_by_default() -> None:
     prompt = image_generation.build_image_prompt("Rechnung")
 
     assert "keinerlei Text" in prompt
+
+
+def test_build_image_prompt_always_requests_the_ai_label() -> None:
+    """EU AI Act Art. 50 (issue #936): every generated image carries the label."""
+    for prompt in (
+        image_generation.build_image_prompt("Hammer"),
+        image_generation.build_image_prompt("Rechnung", allow_text_in_image=True),
+    ):
+        assert "AI GENERATED" in prompt
+        assert prompt.endswith(image_generation.AI_LABEL_PROMPT)
+
+
+def test_build_image_prompt_exempts_the_label_from_the_text_ban() -> None:
+    """The ban and the label instruction would otherwise contradict each other."""
+    prompt = image_generation.build_image_prompt("Rechnung")
+
+    assert prompt.index("Kennzeichnung") < prompt.index("keinerlei Text")
+
+
+def test_openai_image_bytes_requests_webp_from_openai(
+    settings: Settings,
+) -> None:
+    """
+    Asking OpenAI for the final format means we never re-encode, so its C2PA
+    manifest and watermark survive into the stored file.
+    """
+    settings.OPENAI_IMAGE_OUTPUT_FORMAT = "webp"
+    settings.OPENAI_IMAGE_OUTPUT_COMPRESSION = 85
+    client = mock.MagicMock()
+    client.images.generate.return_value.data = [
+        mock.MagicMock(b64_json=base64.b64encode(b"webp-bytes").decode())
+    ]
+
+    with mock.patch.object(image_generation, "get_openai_client", return_value=client):
+        assert image_generation.openai_image_bytes("prompt") == b"webp-bytes"
+
+    kwargs = client.images.generate.call_args.kwargs
+    assert kwargs["output_format"] == "webp"
+    assert kwargs["output_compression"] == 85
+
+
+def test_generated_image_extension_follows_the_output_format(
+    settings: Settings,
+) -> None:
+    settings.OPENAI_IMAGE_OUTPUT_FORMAT = "webp"
+
+    assert image_generation.generated_image_extension() == ".webp"
 
 
 def test_build_image_prompt_allows_text_when_requested() -> None:
