@@ -70,14 +70,13 @@ class ReviewStatus(models.TextChoices):
 
 
 class ChangeRequestReason(models.TextChoices):
-    """Possible reasons a reviewer can give when requesting a change.
+    """Possible reasons a reviewer can give when requesting a change for a word."""
 
-    Stored in :attr:`~lunes_cms.cmsv2.models.review.Review.reason`. The model
-    field itself is a plain char field, the choices are only enforced by the
-    forms which write it.
-    """
-
-    ERROR = "ERROR", _("Error")
+    CONTENT_ERROR = "CONTENT_ERROR", _("Content error")
+    MISSING_INFORMATION = "MISSING_INFORMATION", _("Missing information")
+    WRONG_WORD = "WRONG_WORD", _("Wrong word")
+    BAD_IMAGE_QUALITY = "BAD_IMAGE_QUALITY", _("Bad image quality")
+    BAD_AUDIO_QUALITY = "BAD_AUDIO_QUALITY", _("Bad audio quality")
     OTHER = "OTHER", _("Other")
 
 

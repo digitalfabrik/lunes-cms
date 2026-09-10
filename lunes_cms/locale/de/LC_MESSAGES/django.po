@@ -1116,8 +1116,24 @@ msgid "Cannot be assessed"
 msgstr "Nicht beurteilbar"
 
 #: cmsv2/models/static.py
-msgid "Error"
-msgstr "Fehler"
+msgid "Content error"
+msgstr "Fachlicher Fehler"
+
+#: cmsv2/models/static.py
+msgid "Missing information"
+msgstr "Fehlende Information"
+
+#: cmsv2/models/static.py
+msgid "Wrong word"
+msgstr "Falscher Begriff"
+
+#: cmsv2/models/static.py
+msgid "Bad image quality"
+msgstr "Bildqualität mangelhaft"
+
+#: cmsv2/models/static.py
+msgid "Bad audio quality"
+msgstr "Audioqualität mangelhaft"
 
 #: cmsv2/models/static.py
 msgid "Other"
@@ -1468,6 +1484,9 @@ msgstr "Bitte einen Grund auswählen"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
 
 #, fuzzy
 #~| msgid "Image Preview"
