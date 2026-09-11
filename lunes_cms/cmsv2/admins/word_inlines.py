@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 _format_html_lazy = lazy(format_html, SafeString)
 
+
 class AlternativeWordInline(admin.TabularInline):
     """
     Inline admin for the AlternativeWord model.
@@ -120,6 +121,7 @@ class AlternativeWordInline(admin.TabularInline):
         )
 
     action_buttons.short_description = ""  # type: ignore[attr-defined]
+
 
 class UnitInline(admin.TabularInline):
     """
