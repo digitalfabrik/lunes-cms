@@ -830,10 +830,6 @@ msgstr "Audio hochladen"
 msgid "Delete audio"
 msgstr "Audio löschen"
 
-#: cmsv2/admins/word_admin.py cmsv2/admins/word_admin_list_renderers.py
-msgid "more"
-msgstr "mehr"
-
 #: cmsv2/admins/word_admin.py cmsv2/models/unit.py
 msgid "Add image"
 msgstr "Bild hinzufügen"
@@ -1373,6 +1369,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "more"
+#~ msgstr "mehr"
 
 #~ msgid "So heißt das auch"
 #~ msgstr "So heißt das auch"
