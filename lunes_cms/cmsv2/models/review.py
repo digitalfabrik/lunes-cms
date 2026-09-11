@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -69,7 +71,13 @@ class Review(models.Model):
             else ProgressStatus.COMPLETED
         )
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Saves the Review and sets the completed_at value
+        :param args: Further arguments
+        :param kwargs: Further keyword arguments
+        :return:
+        """
         if self.completed_at is None and self.review_status != ReviewStatus.PENDING:
             self.completed_at = timezone.now()
         super().save(*args, **kwargs)

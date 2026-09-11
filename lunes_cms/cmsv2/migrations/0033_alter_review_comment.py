@@ -4,6 +4,9 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    This migration allows the comment to be blank, so that it is not required in the form
+    """
 
     dependencies = [
         ("cmsv2", "0032_review_unit_word"),

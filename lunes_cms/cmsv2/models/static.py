@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from typing import Any
 
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import AnonymousUser, Group, User
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
 from django.db.models.signals import post_save
@@ -206,11 +206,13 @@ def is_reviewer(user: User) -> bool:
     return user.groups.filter(name=Roles.ADMIN_GROUP).exists()
 
 
-def is_expert(user: User) -> bool:
+def is_expert(user: User | AnonymousUser) -> bool:
     """
     Check if the user is an expert.
 
     :param user: the user to check
     :return: whether the user belongs to :attr:`Roles.EXPERT_GROUP`
     """
-    return user.groups.filter(name=Roles.EXPERT_GROUP).exists()
+    return (
+        isinstance(user, User) and user.groups.filter(name=Roles.EXPERT_GROUP).exists()
+    )

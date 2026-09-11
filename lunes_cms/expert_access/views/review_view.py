@@ -4,7 +4,7 @@ from typing import cast
 
 from django import forms
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render

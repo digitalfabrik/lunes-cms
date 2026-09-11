@@ -1249,9 +1249,7 @@ msgid "Assign"
 msgstr "Zuweisen"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-#: cmsv2/templates/admin/csv_form.html
-#: expert_access/templates/password_change.html
-#: expert_access/templates/review_view.html
+#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -1417,8 +1415,8 @@ msgid "Your password was changed."
 msgstr "Ihr Passwort wurde geändert."
 
 #: expert_access/templates/password_change_done.html
-msgid "Back to the reviews"
-msgstr "Zurück zu den Reviews"
+msgid "Startseite"
+msgstr "Startseite"
 
 #: expert_access/templates/review_view.html
 msgid "Hello"
@@ -1429,9 +1427,7 @@ msgstr "Hallo"
 #| msgid "%(counter)s open review"
 #| msgid_plural "%(counter)s open reviews"
 msgid "%(counter)s open review"
-msgid_plural ""
-"%(counter)s open\n"
-"            reviews"
+msgid_plural "%(counter)s open reviews"
 msgstr[0] "%(count)s offenes Review"
 msgstr[1] "%(count)s offene Reviews"
 
@@ -1518,6 +1514,9 @@ msgstr "Bitte einen Grund auswählen"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Back to the reviews"
+#~ msgstr "Zurück zu den Reviews"
 
 #~ msgid "Error"
 #~ msgstr "Fehler"
