@@ -1,11 +1,8 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from django.contrib import admin
-from django.http import HttpRequest
-from django.urls import reverse
 from django.utils.functional import lazy
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe, SafeString
@@ -24,14 +21,11 @@ from lunes_cms.cmsv2.admins.word_filters import (
 )
 from lunes_cms.cmsv2.admins.word_inlines import AlternativeWordInline, UnitInline
 from lunes_cms.cmsv2.models import Word
-from lunes_cms.cmsv2.models import AlternativeWord, Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.utils import (
     cache_busted_url,
-    example_sentence_generate_html,
     get_image_tag,
-    is_not_blank,
 )
 from lunes_cms.core import settings
 
