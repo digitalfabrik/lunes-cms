@@ -205,9 +205,31 @@ main {
 }
 
 .media__waveform {
+    position: relative;
+    display: flex;
+    min-width: 0;
+}
+
+.media__waveform svg {
+    display: block;
     max-width: 100%;
-    height: 26px;
     opacity: 0.65;
+}
+
+.media__waveform-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    clip-path: inset(0 calc(100% - var(--audio-progress, 0%)) 0 0);
+}
+
+.media__waveform-fill svg {
+    opacity: 1;
+}
+
+.media__waveform-fill path {
+    fill: var(--primary);
 }
 
 .media__player {

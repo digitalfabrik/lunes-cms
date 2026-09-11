@@ -1409,7 +1409,9 @@ msgstr "Hallo"
 #| msgid "%(counter)s open review"
 #| msgid_plural "%(counter)s open reviews"
 msgid "%(counter)s open review"
-msgid_plural "%(counter)s open reviews"
+msgid_plural ""
+"%(counter)s open\n"
+"            reviews"
 msgstr[0] "%(count)s offenes Review"
 msgstr[1] "%(count)s offene Reviews"
 
@@ -1424,6 +1426,10 @@ msgstr "Dem Wort wurde noch keine Wortart zugewiesen."
 #: expert_access/templates/review_view.html
 msgid "There is no image for this word yet."
 msgstr "Dem Wort wurde noch kein Bild zugewiesen."
+
+#: expert_access/templates/review_view.html
+msgid "Play word"
+msgstr "Wort abspielen"
 
 #: expert_access/templates/review_view.html
 msgid "There is no audio for this word yet."

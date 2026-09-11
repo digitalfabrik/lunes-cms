@@ -60,10 +60,16 @@
                                     <button type="button"
                                             class="media__play"
                                             aria-controls="review-audio"
-                                            aria-label="{% translate "Play pronunciation" %}">
+                                            aria-label="{% translate "Play word" %}">
                                         {% include "icons/play.svg" %}
                                     </button>
-                                    {% include "icons/waveform.svg" %}
+                                    {# The second waveform is the progress fill, clipped by expert_access.ts #}
+                                    <div class="media__waveform">
+                                        {% include "icons/waveform.svg" %}
+                                        <span class="media__waveform-fill" aria-hidden="true">
+                                            {% include "icons/waveform.svg" %}
+                                        </span>
+                                    </div>
                                 </div>
                                 <audio id="review-audio"
                                        class="media__player"

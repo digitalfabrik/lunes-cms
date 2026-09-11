@@ -1,8 +1,33 @@
 const initAudioPlayer = (): void => {
     const button = document.querySelector<HTMLButtonElement>("button.media__play")
     const audio = document.querySelector<HTMLAudioElement>("audio.media__player")
-    if (!button || !audio) {
+    const waveform = document.querySelector<HTMLElement>(".media__waveform")
+    if (!button || !audio || !waveform) {
         return
+
+    }
+    let frame = 0
+
+    // fills the waveform up to the position the recording is currently at
+    const renderProgress = (): void => {
+        let progress = 0
+        if (audio.ended) {
+            // the last frame can stop just short of the duration
+            progress = 100
+        } else if (Number.isFinite(audio.duration) && audio.duration > 0) {
+            progress = (audio.currentTime / audio.duration) * 100
+        }
+        waveform.style.setProperty("--audio-progress", `${progress}%`)
+    }
+
+    const trackProgress = (): void => {
+        renderProgress()
+        frame = requestAnimationFrame(trackProgress)
+    }
+
+    const stopTracking = (): void => {
+        cancelAnimationFrame(frame)
+        renderProgress()
     }
 
     button.addEventListener("click", function () {
@@ -11,9 +36,18 @@ const initAudioPlayer = (): void => {
     })
 
     // dims the button for as long as the recording is running
-    audio.addEventListener("play", () => button.classList.add("media__play--playing"))
-    audio.addEventListener("ended", () => button.classList.remove("media__play--playing"))
-    audio.addEventListener("pause", () => button.classList.remove("media__play--playing"))
+    audio.addEventListener("play", function () {
+        button.classList.add("media__play--playing")
+        trackProgress()
+    })
+    audio.addEventListener("pause", function () {
+        button.classList.remove("media__play--playing")
+        stopTracking()
+    })
+    audio.addEventListener("ended", function () {
+        button.classList.remove("media__play--playing")
+        stopTracking()
+    })
 }
 
 const initFeedbackDialog = (): void => {
