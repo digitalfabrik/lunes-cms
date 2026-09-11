@@ -58,11 +58,106 @@ header img {
     height: 26px;
 }
 
-header span {
+.header__title {
     margin: 0;
     font-size: 0.9375rem;
     font-weight: 700;
     color: var(--brand);
+}
+
+/* --------------------------- toolbar ---------------------------- */
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+}
+
+.toolbar__languages {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.toolbar__language {
+    padding: 0.15rem 0.45rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.toolbar__language:hover {
+    color: var(--text);
+}
+
+.toolbar__language--active {
+    border-color: var(--border);
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+.toolbar__account {
+    position: relative;
+}
+
+.toolbar__trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    /* hide the default disclosure triangle */
+    list-style: none;
+}
+
+.toolbar__trigger::-webkit-details-marker {
+    display: none;
+}
+
+.toolbar__trigger:hover,
+.toolbar__account[open] .toolbar__trigger {
+    color: var(--text);
+}
+
+.toolbar__menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 10;
+    min-width: 12rem;
+    padding: 0.25rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.toolbar__item {
+    display: block;
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8125rem;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.toolbar__item:hover {
+    background-color: var(--surface-sunken);
+    color: var(--text);
 }
 
 /* ---------------------------- layout ---------------------------- */
@@ -94,6 +189,42 @@ main {
 .empty {
     margin-top: 1.5rem;
     color: var(--text-muted);
+}
+
+/* -------------------------- account pages ----------------------- */
+
+.page-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.account {
+    max-width: 28rem;
+}
+
+.account__message {
+    margin: 0;
+}
+
+.account__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.field__help {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.field__help ul {
+    margin: 0;
+    padding-left: 1.1rem;
 }
 
 /* ----------------------------- card ----------------------------- */
@@ -296,6 +427,7 @@ textarea:focus-visible {
     color: var(--danger);
 }
 
+input[type="password"],
 select {
     display: block;
     width: 100%;
@@ -311,6 +443,7 @@ select:invalid {
     color: var(--text-muted);
 }
 
+input[type="password"]:focus-visible,
 select:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 1px;
@@ -417,14 +550,18 @@ select:focus-visible {
 
 .button--submit {
     padding: 0.5rem 1rem;
-    background-color: var(--decision);
+    background-color: var(--decision, var(--decision-change));
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 700;
 }
 
 form:has(:invalid) .button--submit {
-    background-color: color-mix(in srgb, var(--decision) 33%, transparent);
+    background-color: color-mix(
+        in srgb,
+        var(--decision, var(--decision-change)) 33%,
+        transparent
+    );
 }
 
 .button--cancel {
@@ -477,6 +614,10 @@ form:has(:invalid) .button--submit {
 }
 
 @media (max-width: 640px) {
+    header {
+        flex-wrap: wrap;
+    }
+
     .media,
     .actions__secondary {
         grid-template-columns: 1fr;

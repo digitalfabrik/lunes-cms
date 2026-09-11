@@ -9,8 +9,11 @@
         {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}.
     </p>
     <p class="subline">
-        {% blocktranslate count counter=num_reviews %}{{ counter }} open review{% plural %}{{ counter }} open
-            reviews{% endblocktranslate %}
+        {% blocktranslate trimmed count counter=num_reviews %}
+            {{ counter }} open review
+        {% plural %}
+            {{ counter }} open reviews
+        {% endblocktranslate %}
     </p>
     {% if form.non_field_errors or form.review_status.errors %}
         <ul class="errors">

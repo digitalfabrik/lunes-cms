@@ -1249,7 +1249,9 @@ msgid "Assign"
 msgstr "Zuweisen"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
+#: cmsv2/templates/admin/csv_form.html
+#: expert_access/templates/password_change.html
+#: expert_access/templates/review_view.html
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -1400,6 +1402,24 @@ msgstr "Expertenzugang"
 msgid "Lunes vocabulary review"
 msgstr "Lunes Vokabelreview"
 
+#: expert_access/templates/_base.html
+#: expert_access/templates/password_change.html
+#: expert_access/templates/password_change_done.html
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: expert_access/templates/_base.html
+msgid "Log out"
+msgstr "Abmelden"
+
+#: expert_access/templates/password_change_done.html
+msgid "Your password was changed."
+msgstr "Ihr Passwort wurde geändert."
+
+#: expert_access/templates/password_change_done.html
+msgid "Back to the reviews"
+msgstr "Zurück zu den Reviews"
+
 #: expert_access/templates/review_view.html
 msgid "Hello"
 msgstr "Hallo"
@@ -1501,11 +1521,6 @@ msgstr "Hilfe"
 
 #~ msgid "Error"
 #~ msgstr "Fehler"
-
-#, fuzzy
-#~| msgid "Image Preview"
-#~ msgid "open reviews"
-#~ msgstr "Bild Vorschau"
 
 #, fuzzy
 #~| msgid "This word is assigned to no training set."

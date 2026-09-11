@@ -25,6 +25,7 @@ from typing import Any
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from django.contrib.auth.views import redirect_to_login
 from django.templatetags.static import static as get_static_url
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import RedirectView
@@ -35,7 +36,8 @@ from ..cmsv2.models.static import is_expert
 class MainRedirectView(RedirectView):
     """
     Sends users to the entry point matching their role: experts to their review
-    view, everyone else to the admin (which handles the login redirect itself).
+    view, everyone else to the admin. Anonymous users are sent to the login
+    screen and back here afterwards.
     """
 
     permanent = False
@@ -47,7 +49,9 @@ class MainRedirectView(RedirectView):
 
         :return: the URL to redirect the current user to
         """
-        if self.request.user.is_authenticated and is_expert(self.request.user):
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(self.request.get_full_path()).url
+        if is_expert(self.request.user):
             return reverse("expert_access:index")
         return reverse("admin:index")
 

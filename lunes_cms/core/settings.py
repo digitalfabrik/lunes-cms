@@ -208,8 +208,7 @@ WSGI_APPLICATION = "lunes_cms.core.wsgi.application"
 LOGIN_URL = "/admin/login/"
 
 #: The URL or named URL pattern where requests are redirected after login when the
-#: LoginView doesn't get a next GET parameter. (see :setting:`django:LOGIN_REDIRECT_URL`).
-LOGIN_REDIRECT_URL = "/admin/"
+LOGIN_REDIRECT_URL = "/"
 
 
 ############

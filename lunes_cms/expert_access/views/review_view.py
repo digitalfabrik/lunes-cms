@@ -1,13 +1,21 @@
 from __future__ import annotations
 
+from typing import cast
+
 from django import forms
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import AnonymousUser, User
 from django.db.models import F
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.models import Review
-from lunes_cms.cmsv2.models.static import ChangeRequestReason, ReviewStatus
+from lunes_cms.cmsv2.models.static import (
+    ChangeRequestReason,
+    is_expert,
+    ReviewStatus,
+)
 
 #: The review states an expert can submit. :attr:`ReviewStatus.PENDING` is the
 #: initial state of a review and can therefore not be chosen.
@@ -80,6 +88,8 @@ class ReviewForm(forms.ModelForm):
         return cleaned_data
 
 
+@login_required
+@user_passes_test(lambda user: user.is_superuser or is_expert(user))
 def review(request: HttpRequest) -> HttpResponse:
     """The expert review view
 
@@ -88,6 +98,7 @@ def review(request: HttpRequest) -> HttpResponse:
     :return: rendered response
     :rtype: HttpResponse
     """
+    user = cast(User, request.user)
     form = None
     if request.method == "POST":
         instance = get_object_or_404(Review, id=request.POST.get("review_id"))
@@ -102,7 +113,7 @@ def review(request: HttpRequest) -> HttpResponse:
                 form = None
 
     reviews = Review.objects.filter(
-        reviewer=request.user, review_status=ReviewStatus.PENDING
+        reviewer=user, review_status=ReviewStatus.PENDING
     ).order_by("review_priority", "assigned_at")
     current_review = reviews.first()
     num_reviews = reviews.count()
@@ -111,7 +122,7 @@ def review(request: HttpRequest) -> HttpResponse:
         request,
         "review_view.html",
         {
-            "user": request.user,
+            "user": user,
             "num_reviews": num_reviews,
             "current_review": current_review,
             "form": form or ReviewForm(instance=current_review),

@@ -20,7 +20,46 @@
     <body>
         <header>
             <img src="{% static 'images/logo.svg' %}" alt="Lunes">
-            <span>{% translate "Lunes vocabulary review" %}</span>
+            <span class="header__title">{% translate "Lunes vocabulary review" %}</span>
+            {% if user.is_authenticated %}
+                <div class="toolbar">
+                    {% get_available_languages as AVAILABLE_LANGUAGES %}
+                    <form class="toolbar__languages"
+                          method="post"
+                          action="{% url 'set_language' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        {% for code, name in AVAILABLE_LANGUAGES %}
+                            <button type="submit"
+                                    name="language"
+                                    value="{{ code }}"
+                                    lang="{{ code }}"
+                                    title="{{ name }}"
+                                    class="toolbar__language{% if code == LANGUAGE_CODE %} toolbar__language--active{% endif %}"
+                                    {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>
+                                {{ code|upper }}
+                            </button>
+                        {% endfor %}
+                    </form>
+                    <details class="toolbar__account">
+                        <summary class="toolbar__trigger">
+                            {% include "icons/user.svg" %}
+                            {% firstof user.get_short_name user.get_username %}
+                        </summary>
+                        <div class="toolbar__menu">
+                            <a class="toolbar__item" href="{% url 'expert_access:password_change' %}">
+                                {% translate "Change password" %}
+                            </a>
+                            <form method="post" action="{% url 'expert_access:logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="toolbar__item">
+                                    {% translate "Log out" %}
+                                </button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+            {% endif %}
         </header>
         <main id="main">
         {% block content %}
