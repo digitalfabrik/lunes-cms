@@ -9,7 +9,6 @@ from ..models import Word
 
 
 @staff_member_required
-@csrf_exempt
 @require_POST
 def update_word_example_sentence_check_status(
     request: HttpRequest, word_id: int
