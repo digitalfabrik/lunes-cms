@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.models import Review
@@ -106,11 +106,11 @@ def review(request: HttpRequest) -> HttpResponse:
             Review.objects.filter(pk=instance.pk).update(
                 review_priority=F("review_priority") + 1
             )
-        else:
-            form = ReviewForm(request.POST, instance=instance)
-            if form.is_valid():
-                form.save()
-                form = None
+            return redirect("expert_access:review")
+        form = ReviewForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect("expert_access:review")
 
     reviews = Review.objects.filter(
         reviewer=user, review_status=ReviewStatus.PENDING
