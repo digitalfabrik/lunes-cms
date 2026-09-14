@@ -135,7 +135,7 @@ def _build_context(
 
 # pylint: disable=too-many-return-statements
 @login_required
-@permission_required("cmsv2.add_word", raise_exception=True)
+@permission_required(("cmsv2.add_word", "cmsv2.add_unit"), raise_exception=True)
 def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResponse:
     """
     Method for importing vocabularies for a job from csv
