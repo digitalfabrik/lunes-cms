@@ -4,6 +4,7 @@ declare function gettext(text: string): string
 
 interface Window {
     getCookie: (name: string) => string | null
+    postWithCsrf: (url: string, body?: FormData) => Promise<Response>
     assetManagerConfigs?: AssetManagerConfig[]
     audioAssetManagerConfig?: AudioAssetManagerConfig
     initAudioGenerator: (config: AudioGeneratorConfig) => void

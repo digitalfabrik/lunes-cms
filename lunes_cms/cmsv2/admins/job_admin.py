@@ -198,7 +198,7 @@ class JobAdmin(BaseAdmin):
         particularly for asset management functionality.
         """
 
-        js = ["js/cookies.js", "js/job_icon_asset_config.js", "js/asset_manager.js"]
+        js = ["js/csrf.js", "js/job_icon_asset_config.js", "js/asset_manager.js"]
         css = {"all": ["css/asset_manager.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Job]:
@@ -305,7 +305,7 @@ class JobAdmin(BaseAdmin):
             job.name = f"{job.name} ({new_label})"
             job.created_by = request.user.groups.first()
             # request.user is `User | AnonymousUser`, but this action is only
-            # reachable by authenticated staff users.
+            # reachable by authenticated users.
             job.created_by_user = request.user  # type: ignore[assignment]
             job.save()
             job.units.set(units)

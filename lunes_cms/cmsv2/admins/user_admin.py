@@ -78,6 +78,18 @@ class LunesUserAdmin(DjangoUserAdmin):
 
     add_form = LunesUserCreationForm
     form = LunesUserChangeForm
+    fieldsets = tuple(
+        (
+            name,
+            {
+                **options,
+                "fields": tuple(f for f in options["fields"] if f != "is_staff"),
+            },
+        )
+        for name, options in DjangoUserAdmin.fieldsets or ()
+    )
+    list_display = ("username", "email", "first_name", "last_name")
+    list_filter = ("is_superuser", "is_active", "groups")
     add_fieldsets = (
         (
             None,
