@@ -10,7 +10,7 @@ from django.db.models import Model
 from django.template.loader import render_to_string
 from django.test.client import Client
 from django.urls import reverse
-from pytest_django.fixtures import SettingsWrapper
+from pytest_django import Settings
 
 from lunes_cms.cms.models import Discipline, Document, TrainingSet
 
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(name="admin_client")
-def admin_client_fixture(settings: SettingsWrapper) -> Client:
+def admin_client_fixture(settings: Settings) -> Client:
     """
     Create an authenticated admin client.
 

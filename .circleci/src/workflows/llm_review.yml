@@ -1,0 +1,6 @@
+when: << pipeline.parameters.run_llm_review >>
+jobs:
+  - llm-pr-review:
+      context:
+        - deliverino
+        - digitalfabrik-llm-api

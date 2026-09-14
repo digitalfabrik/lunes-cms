@@ -47,13 +47,8 @@ window.initImageGenerator = function (config: ImageGeneratorConfig): void {
         formData.append("allow_text_in_image", allowTextElement.checked ? "true" : "false")
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
-        fetch(config.generateUrl, {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRFToken": window.getCookie("csrftoken") ?? "",
-            },
-        })
+        window
+            .postWithCsrf(config.generateUrl, formData)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)

@@ -25,16 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function postAlternativeWord(endpoint: string, formData: FormData, errorMessage: string) {
-        const csrftoken = window.getCookie("csrftoken")
-
-        fetch(endpoint, {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRFToken": csrftoken ?? "",
-            },
-            credentials: "same-origin",
-        })
+        window
+            .postWithCsrf(endpoint, formData)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === "success") {

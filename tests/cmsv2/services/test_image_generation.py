@@ -12,7 +12,7 @@ from unittest import mock
 
 import pytest
 from django.core.files.base import ContentFile
-from pytest_django.fixtures import SettingsWrapper
+from pytest_django import Settings
 
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models import word as word_module
@@ -35,7 +35,7 @@ def _bypass_webp_conversion() -> Generator[None, None, None]:
 
 @pytest.fixture
 def fast_worker(
-    transactional_db: None, settings: SettingsWrapper, tmp_path: Path
+    transactional_db: None, settings: Settings, tmp_path: Path
 ) -> Generator[None, None, None]:
     """
     Strip the throttle so tests don't sleep, start from an empty Word table,

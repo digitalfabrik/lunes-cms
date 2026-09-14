@@ -50,9 +50,9 @@ class UserReviewInline(admin.TabularInline):
     model = Review
     fk_name = "reviewer"
     extra = 0
-    fields = ["word", "assigned_by", "assigned_at"]
+    fields = ["unit_word", "assigned_by", "assigned_at"]
     readonly_fields = ["assigned_by", "assigned_at"]
-    autocomplete_fields = ["word"]
+    autocomplete_fields = ["unit_word"]
     verbose_name = _("assigned word")
     verbose_name_plural = _("assigned words")
 
@@ -78,6 +78,18 @@ class LunesUserAdmin(DjangoUserAdmin):
 
     add_form = LunesUserCreationForm
     form = LunesUserChangeForm
+    fieldsets = tuple(
+        (
+            name,
+            {
+                **options,
+                "fields": tuple(f for f in options["fields"] if f != "is_staff"),
+            },
+        )
+        for name, options in DjangoUserAdmin.fieldsets or ()
+    )
+    list_display = ("username", "email", "first_name", "last_name")
+    list_filter = ("is_superuser", "is_active", "groups")
     add_fieldsets = (
         (
             None,

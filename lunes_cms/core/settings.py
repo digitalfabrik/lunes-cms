@@ -63,6 +63,17 @@ OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
 #: OpenAI model used for text generation (e.g. example sentences)
 OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
 
+####################
+# APP DEEP LINKING #
+####################
+IOS_APP_TEAM_ID = "7272KE28TJ"
+IOS_APP_BUNDLE_ID = "app.lunes"
+ANDROID_APP_PACKAGE_NAME = "app.lunes"
+ANDROID_APP_SHA256_CERT_FINGERPRINTS = [
+    "BE:DE:14:02:A3:ED:63:AE:F4:E8:57:70:35:37:1E:BD:B2:37:5C:0C:62:DB:22:F6:25:46:9B:4F:1D:DB:F1:EB"
+]
+APP_LINK_PATH_PREFIX = "/activation"
+
 ###################
 # MATOMO TRACKING #
 ###################
@@ -117,6 +128,7 @@ INFLUX_DB = os.environ.get(
 #: Enabled applications (see :setting:`django:INSTALLED_APPS`)
 INSTALLED_APPS = [
     # Installed custom apps
+    "lunes_cms.activation",
     "lunes_cms.api",
     "lunes_cms.cms",
     "lunes_cms.cmsv2",
@@ -264,6 +276,17 @@ ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"] + list(
 #: A list of IP addresses, as strings, that allow the :func:`~django.template.context_processors.debug` context
 #: processor to add some variables to the template context.
 INTERNAL_IPS = ["localhost", "127.0.0.1"]
+
+#: Whether the session cookie is only sent over HTTPS, so it cannot be read from a
+#: plain HTTP request that a redirect to HTTPS would answer too late
+#: (see :setting:`django:SESSION_COOKIE_SECURE`). Disabled in debug mode, where the
+#: development server speaks HTTP.
+SESSION_COOKIE_SECURE = not DEBUG
+
+#: Whether the CSRF cookie is only sent over HTTPS
+#: (see :setting:`django:CSRF_COOKIE_SECURE`). Disabled in debug mode, where the
+#: development server speaks HTTP.
+CSRF_COOKIE_SECURE = not DEBUG
 
 #: The secret key for this particular Django installation (see :setting:`django:SECRET_KEY`)
 #:

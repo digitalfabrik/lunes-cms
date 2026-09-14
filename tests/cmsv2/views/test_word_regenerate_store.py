@@ -16,7 +16,7 @@ from django.contrib import admin
 from django.test import Client, RequestFactory
 from django.urls import reverse
 from PIL import Image
-from pytest_django.fixtures import SettingsWrapper
+from pytest_django import Settings
 
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
 from lunes_cms.cmsv2.models import Word
@@ -26,7 +26,7 @@ from lunes_cms.core import settings as core_settings
 
 @pytest.fixture
 def media_dirs(
-    settings: SettingsWrapper, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> tuple[Path, Path]:
     """Isolate stored files and the temp directories the store views read from."""
     settings.MEDIA_ROOT = str(tmp_path)

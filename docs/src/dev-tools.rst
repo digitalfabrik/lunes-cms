@@ -53,6 +53,14 @@ Import test data into the database :github-source:`tools/load_test_data.sh`::
 
     ./tools/load_test_data.sh
 
+Reset the local SQLite database (deleting it, re-running migrations and re-importing
+the test data) with :github-source:`tools/reset_db.sh`::
+
+    ./tools/reset_db.sh
+
+Use this if your local database ends up in an inconsistent state, e.g. after switching
+between branches whose migrations diverge (``OperationalError: no such column: ...``).
+
 Debug Toolbar
 =============
 
