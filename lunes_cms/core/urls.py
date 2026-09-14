@@ -49,6 +49,7 @@ urlpatterns = [
     ),
     path("api/", include("lunes_cms.api.urls", namespace="api")),
     path("", include("lunes_cms.help.urls")),
+    path("", include("lunes_cms.activation.urls")),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
 ]

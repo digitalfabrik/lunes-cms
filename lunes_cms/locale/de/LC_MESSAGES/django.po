@@ -17,6 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: activation/apps.py
+msgid "activation"
+msgstr "Aktivierung"
+
 #: analytics/apps.py
 msgid "Analytics"
 msgstr "Analytik"
