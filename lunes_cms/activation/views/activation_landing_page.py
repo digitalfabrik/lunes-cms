@@ -24,7 +24,7 @@ def activation_landing_page(request: HttpRequest, code: str) -> HttpResponse:
     :return: The rendered landing page
     """
     context = {
-        "deeplink_url": f"lunes:lunes.app/activation/{code}",
+        "deeplink_url": f"lunes:lunes.app{settings.APP_LINK_PATH_PREFIX}/{code}",
         "code": code,
         "android_store_url": (
             "https://play.google.com/store/apps/details"
