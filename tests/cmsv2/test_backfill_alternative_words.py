@@ -95,10 +95,10 @@ def test_words_created_in_v2_are_left_alone() -> None:
     assert not word.alternative_words.exists()
 
 
-def test_words_with_existing_alternative_words_are_skipped() -> None:
+def test_existing_alternative_words_are_kept_alongside_the_restored_ones() -> None:
     """
-    Alternative words entered by hand since the v2 rollout are neither
-    duplicated nor shadowed by the ones coming from v1.
+    An alternative word entered by hand since the v2 rollout survives, and the
+    synonyms it does not cover still come back from v1.
     """
     document = v1_document()
     v1_alternative_word(document)
@@ -107,7 +107,44 @@ def test_words_with_existing_alternative_words_are_skipped() -> None:
 
     backfill()
 
-    assert list(word.alternative_words.values_list("alt_word", flat=True)) == ["Weck"]
+    assert sorted(word.alternative_words.values_list("alt_word", flat=True)) == [
+        "Semmel",
+        "Weck",
+    ]
+
+
+def test_an_alternative_word_entered_by_hand_is_not_duplicated() -> None:
+    """
+    A synonym an editor re-typed since the v2 rollout is left as it is, even
+    when case and spacing differ from the v1 spelling.
+    """
+    document = v1_document()
+    v1_alternative_word(document, alt_word="Semmel")
+    word = v2_word(document)
+    AlternativeWord.objects.create(word=word, alt_word=" semmel ", singular_article=2)
+
+    backfill()
+
+    assert list(word.alternative_words.values_list("alt_word", flat=True)) == [
+        " semmel "
+    ]
+
+
+def test_every_word_sharing_a_v1_id_is_restored() -> None:
+    """
+    ``v1_id`` carries no unique constraint, so a v1 document may map to more
+    than one word - none of them may be dropped silently.
+    """
+    document = v1_document()
+    v1_alternative_word(document)
+    words = [v2_word(document), v2_word(document)]
+
+    backfill()
+
+    for word in words:
+        assert list(word.alternative_words.values_list("alt_word", flat=True)) == [
+            "Semmel"
+        ]
 
 
 def test_running_the_backfill_twice_restores_each_word_once() -> None:

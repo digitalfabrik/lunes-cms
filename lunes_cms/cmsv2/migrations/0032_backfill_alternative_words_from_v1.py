@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 
 from django.db import migrations
 
@@ -14,6 +15,20 @@ ALTERNATIVE_WORD_FIELDS = (
 )
 
 
+def normalized(alt_word):
+    """
+    The form an alternative word is compared in, so that a synonym an editor
+    re-typed with a different case or spacing still counts as the same one.
+
+    :param alt_word: The alternative word to normalize
+    :type alt_word: str
+
+    :return: The normalized alternative word
+    :rtype: str
+    """
+    return " ".join(alt_word.split()).casefold()
+
+
 # pylint: disable=unused-argument
 def backfill_alternative_words(apps, schema_editor):
     """
@@ -22,8 +37,9 @@ def backfill_alternative_words(apps, schema_editor):
     stayed behind in the cms app and disappeared from the CMS. Copy them over
     so they show up as "So heißt das auch" again.
 
-    Words that already have alternative words are skipped, so anything entered
-    by hand since 0027 is neither duplicated nor shadowed.
+    Alternative words are matched one by one, so a synonym an editor already
+    re-entered by hand since 0027 is neither duplicated nor shadowed, while
+    the remaining synonyms of that same word still come back.
 
     :param apps: The configuration of installed applications
     :type apps: ~django.apps.registry.Apps
@@ -35,14 +51,19 @@ def backfill_alternative_words(apps, schema_editor):
     AlternativeWord = apps.get_model("cmsv2", "AlternativeWord")
     V1AlternativeWord = apps.get_model("cms", "AlternativeWord")
 
-    words_by_v1_id = dict(
-        Word.objects.filter(v1_id__isnull=False)
-        .exclude(alternative_words__isnull=False)
-        .values_list("v1_id", "id")
-    )
+    # ``v1_id`` is not unique, so a v1 document may map to more than one word.
+    words_by_v1_id = defaultdict(list)
+    for v1_id, word_id in Word.objects.filter(v1_id__isnull=False).values_list(
+        "v1_id", "id"
+    ):
+        words_by_v1_id[v1_id].append(word_id)
     if not words_by_v1_id:
         logger.info("No words migrated from v1 need their alternative words back.")
         return
+
+    alternatives_by_word = defaultdict(set)
+    for word_id, alt_word in AlternativeWord.objects.values_list("word_id", "alt_word"):
+        alternatives_by_word[word_id].add(normalized(alt_word))
 
     # Reading the v1 table in one pass and matching in memory keeps the query
     # free of an ``IN`` list holding every migrated word.
@@ -50,9 +71,17 @@ def backfill_alternative_words(apps, schema_editor):
     for row in V1AlternativeWord.objects.values(
         "document_id", *ALTERNATIVE_WORD_FIELDS
     ).iterator():
-        word_id = words_by_v1_id.get(row.pop("document_id"))
-        if word_id is not None:
-            restored.append(AlternativeWord(word_id=word_id, **row))
+        alt_word = normalized(row["alt_word"])
+        for word_id in words_by_v1_id.get(row["document_id"], ()):
+            if alt_word in alternatives_by_word[word_id]:
+                continue
+            alternatives_by_word[word_id].add(alt_word)
+            restored.append(
+                AlternativeWord(
+                    word_id=word_id,
+                    **{field: row[field] for field in ALTERNATIVE_WORD_FIELDS},
+                )
+            )
 
     AlternativeWord.objects.bulk_create(restored, batch_size=500)
     # This runs unattended on deploy, so without a count a restore that found
