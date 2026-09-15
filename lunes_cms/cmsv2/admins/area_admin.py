@@ -7,7 +7,23 @@ from django.db.models import Count, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from ..models import Area
+from ..models import Area, AreaCode
+
+
+class AreaCodeInline(admin.TabularInline):
+    """
+    Inline admin for the codes of an area.
+
+    The codes are edited together with their area, because they only make sense
+    as part of it and are managed by the same people.
+    """
+
+    model = AreaCode
+    extra = 1
+    fields = ["code", "created_at"]
+    readonly_fields = ["created_at"]
+    verbose_name = _("code")
+    verbose_name_plural = _("codes")
 
 
 class AreaAdmin(admin.ModelAdmin):
@@ -20,18 +36,26 @@ class AreaAdmin(admin.ModelAdmin):
 
     fields = ["name", "admins"]
     filter_horizontal = ["admins"]
+    inlines = [AreaCodeInline]
     search_fields = ["name"]
     ordering = ["name"]
-    list_display = ["name", "administrators", "number_jobs", "created_at_date"]
+    list_display = [
+        "name",
+        "administrators",
+        "number_jobs",
+        "number_codes",
+        "created_at_date",
+    ]
     list_display_links = ["name"]
     list_per_page = 25
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Area]:
-        """Annotate the job count and prefetch the administrators."""
+        """Annotate the job and code counts and prefetch the administrators."""
         return (
             super()
             .get_queryset(request)
-            .annotate(job_count=Count("jobs"))
+            .annotate(job_count=Count("jobs", distinct=True))
+            .annotate(code_count=Count("codes", distinct=True))
             .prefetch_related("admins")
         )
 
@@ -83,6 +107,20 @@ class AreaAdmin(admin.ModelAdmin):
         return obj.job_count  # type: ignore[attr-defined]
 
     number_jobs.short_description = _("jobs")  # type: ignore[attr-defined]
+
+    def number_codes(self, obj: Area) -> int:
+        """
+        Get the number of codes that belong to this area.
+
+        Args:
+            obj: The area object
+
+        Returns:
+            int: The number of codes of the area
+        """
+        return obj.code_count  # type: ignore[attr-defined]
+
+    number_codes.short_description = _("codes")  # type: ignore[attr-defined]
 
     def created_at_date(self, obj: Area) -> date:
         """

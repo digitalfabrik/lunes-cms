@@ -25,7 +25,8 @@ from lunes_cms.cmsv2.areas import (
     validate_relation_area,
     validate_unit_jobs,
 )
-from lunes_cms.cmsv2.models import Area, Job, Unit, Word
+from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
+from lunes_cms.cmsv2.models.area_code import generate_default_code
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -341,3 +342,56 @@ def test_validate_relation_area_rejects_foreign_word_while_the_unit_is_created(
 
     with pytest.raises(ValidationError):
         validate_relation_area(new_unit, word)
+
+
+@pytest.mark.django_db
+def test_an_area_can_have_several_codes(area: Area) -> None:
+    """Codes belong to one area, and an area may hand out several of them."""
+    first = AreaCode.objects.create(area=area, code="KOLPING1")
+    second = AreaCode.objects.create(area=area, code="KOLPING2")
+
+    assert set(area.codes.all()) == {first, second}
+    assert str(first) == "KOLPING1"
+
+
+@pytest.mark.django_db
+def test_a_generated_code_is_valid(area: Area) -> None:
+    """A code that was not typed in by hand passes its own validation."""
+    code = AreaCode(area=area)
+
+    code.full_clean()
+
+    assert len(code.code) >= 8
+    assert code.code.isalnum() and code.code.upper() == code.code
+    assert generate_default_code() != generate_default_code()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "invalid_code",
+    ["SHORT12", "kolping1", "KOLPING-1", "KOLPING 1", "KOLPING_1"],
+)
+def test_invalid_codes_are_rejected(area: Area, invalid_code: str) -> None:
+    """A code is at least 8 digits and upper case letters, nothing else."""
+    with pytest.raises(ValidationError):
+        AreaCode(area=area, code=invalid_code).full_clean()
+
+
+@pytest.mark.django_db
+def test_a_code_belongs_to_a_single_area(area: Area) -> None:
+    """The same code must not be handed out by two areas."""
+    other_area = Area.objects.create(name="Other")
+    AreaCode.objects.create(area=area, code="KOLPING1")
+
+    with pytest.raises(ValidationError):
+        AreaCode(area=other_area, code="KOLPING1").full_clean()
+
+
+@pytest.mark.django_db
+def test_codes_are_deleted_with_their_area(area: Area) -> None:
+    """A code without its area is meaningless, so it goes with it."""
+    AreaCode.objects.create(area=area, code="KOLPING1")
+
+    area.delete()
+
+    assert AreaCode.objects.count() == 0

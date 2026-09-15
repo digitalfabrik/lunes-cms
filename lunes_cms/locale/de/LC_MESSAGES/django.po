@@ -481,7 +481,7 @@ msgstr "Token"
 msgid "10-50 characters, only digits and upper case letters allowed."
 msgstr "10-50 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
 
-#: cms/models/group_api_key.py
+#: cms/models/group_api_key.py cmsv2/models/area_code.py
 msgid "Only digits and upper case letters allowed"
 msgstr "Nur Ziffern und Großbuchstaben erlaubt"
 
@@ -677,6 +677,14 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
+#: cmsv2/admins/area_admin.py cmsv2/models/area_code.py
+msgid "code"
+msgstr "Code"
+
+#: cmsv2/admins/area_admin.py
+msgid "codes"
+msgstr "Codes"
+
 #: cmsv2/admins/area_admin.py cmsv2/models/area.py
 msgid "administrators"
 msgstr "Administratoren"
@@ -686,8 +694,8 @@ msgid "jobs"
 msgstr "Berufe"
 
 #: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
-#: cmsv2/admins/unit_admin.py cmsv2/models/area.py cmsv2/models/job.py
-#: cmsv2/models/unit.py
+#: cmsv2/admins/unit_admin.py cmsv2/models/area.py cmsv2/models/area_code.py
+#: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -778,7 +786,7 @@ msgid "Import"
 msgstr "Import"
 
 #: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
-#: cmsv2/models/job.py
+#: cmsv2/models/area_code.py cmsv2/models/job.py
 msgid "area"
 msgstr "Bereich"
 
@@ -1087,8 +1095,8 @@ msgstr ""
 "Diese Benutzer verwalten die Inhalte dieses Bereichs. Sie sehen nur Berufe, "
 "Einheiten und Vokabeln der Bereiche, die sie verwalten."
 
-#: cmsv2/models/area.py cmsv2/models/job.py cmsv2/models/unit.py
-#: cmsv2/models/word.py
+#: cmsv2/models/area.py cmsv2/models/area_code.py cmsv2/models/job.py
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"
 msgstr "zuletzt geändert"
 
@@ -1099,6 +1107,18 @@ msgstr "Bereich"
 #: cmsv2/models/area.py
 msgid "Areas"
 msgstr "Bereiche"
+
+#: cmsv2/models/area_code.py
+msgid "At least 8 characters, only digits and upper case letters allowed."
+msgstr "Mindestens 8 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
+
+#: cmsv2/models/area_code.py
+msgid "Area code"
+msgstr "Bereichscode"
+
+#: cmsv2/models/area_code.py
+msgid "Area codes"
+msgstr "Bereichscodes"
 
 #: cmsv2/models/job.py
 msgid "archived"

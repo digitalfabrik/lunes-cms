@@ -19,7 +19,7 @@ from lunes_cms.cmsv2.admins.area_admin import AreaAdmin
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
 from lunes_cms.cmsv2.admins.unit_admin import UnitAdmin, UnitAdminForm
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
-from lunes_cms.cmsv2.models import Area, Job, Unit, Word
+from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -192,6 +192,36 @@ def test_unit_admin_form_rejects_mixing_areas(area: Area) -> None:
 
     assert not form.is_valid()
     assert "jobs" in form.errors
+
+
+def test_codes_are_managed_on_the_area_page(area: Area, client: Client) -> None:
+    """
+    The codes of an area are added, changed and removed on its change page,
+    and an invalid code is refused there.
+    """
+    superuser = get_user_model().objects.create_superuser(
+        username="root-codes", email="root@example.com", password="secret"
+    )
+    client.force_login(superuser)
+    url = f"/en/admin/cmsv2/area/{area.pk}/change/"
+    form_data = {
+        "name": area.name,
+        "admins": [],
+        "codes-TOTAL_FORMS": "1",
+        "codes-INITIAL_FORMS": "0",
+        "codes-MIN_NUM_FORMS": "0",
+        "codes-MAX_NUM_FORMS": "1000",
+        "codes-0-id": "",
+        "codes-0-area": str(area.pk),
+    }
+
+    rejected = client.post(url, {**form_data, "codes-0-code": "short"})
+    assert rejected.status_code == 200
+    assert not AreaCode.objects.exists()
+
+    accepted = client.post(url, {**form_data, "codes-0-code": "KOLPING1"})
+    assert accepted.status_code == 302
+    assert list(area.codes.values_list("code", flat=True)) == ["KOLPING1"]
 
 
 def test_admin_change_lists_render_with_the_area_column(
