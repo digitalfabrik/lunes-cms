@@ -403,6 +403,15 @@ fieldset.module {
     vertical-align: middle;
 }
 
+.app-cmsv2 #codes-group .table tbody td,
+.app-cmsv2 #codes-group .table tbody th {
+    vertical-align: middle;
+}
+
+.app-cmsv2 #codes-group .table tbody td p {
+    margin-bottom: 0;
+}
+
 .app-cmsv2 .table-striped tbody th a {
     color: #0F1419;
     font-weight: normal;
