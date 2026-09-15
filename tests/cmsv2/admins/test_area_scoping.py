@@ -5,6 +5,7 @@ assign an area, and the guards on the job actions.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import pytest
@@ -350,3 +351,77 @@ def test_area_admin_is_restricted_to_superusers(
     assert area_admin.has_delete_permission(plain_request) is False
     assert area_admin.has_module_permission(superuser_request) is True
     assert area_admin.has_change_permission(superuser_request) is True
+
+
+def _rendered_codes(response: Any) -> list[str]:
+    """The codes the rendered code inline of the given response shows."""
+    return re.findall(
+        r'name="codes-\d+-code"[^>]*value="([^"]*)"', response.content.decode()
+    )
+
+
+def test_the_code_of_a_saved_area_stays_the_same_on_every_visit(
+    area: Area, client: Client
+) -> None:
+    """
+    The empty row of the code inline must not suggest a new random code on the
+    page of an existing area: the suggestion would look like the stored code
+    had changed with every reload.
+    """
+    superuser = get_user_model().objects.create_superuser(
+        username="root-stable", email="root@example.com", password="secret"
+    )
+    client.force_login(superuser)
+    AreaCode.objects.create(area=area, code="KOLPING1")
+    url = f"/en/admin/cmsv2/area/{area.pk}/change/"
+
+    assert _rendered_codes(client.get(url)) == ["KOLPING1"]
+    assert _rendered_codes(client.get(url)) == ["KOLPING1"]
+
+
+@pytest.mark.django_db
+def test_a_new_area_is_saved_with_the_suggested_code(client: Client) -> None:
+    """
+    The add page of an area suggests a code, and saving the page without
+    touching it stores exactly that code.
+    """
+    superuser = get_user_model().objects.create_superuser(
+        username="root-suggest", email="root@example.com", password="secret"
+    )
+    client.force_login(superuser)
+    suggested = _rendered_codes(client.get("/en/admin/cmsv2/area/add/"))
+    assert len(suggested) == 1
+
+    response = client.post(
+        "/en/admin/cmsv2/area/add/",
+        {
+            "name": "Suggested",
+            "admins": [],
+            "codes-TOTAL_FORMS": "1",
+            "codes-INITIAL_FORMS": "0",
+            "codes-MIN_NUM_FORMS": "0",
+            "codes-MAX_NUM_FORMS": "1000",
+            "codes-0-id": "",
+            "codes-0-code": suggested[0],
+        },
+    )
+
+    assert response.status_code == 302
+    saved_area = Area.objects.get(name="Suggested")
+    assert list(saved_area.codes.values_list("code", flat=True)) == [suggested[0]]
+
+
+def test_the_code_count_of_the_area_list_counts_the_stored_codes(
+    area: Area, client: Client
+) -> None:
+    """The codes column of the area list shows how many codes are stored."""
+    superuser = get_user_model().objects.create_superuser(
+        username="root-count", email="root@example.com", password="secret"
+    )
+    client.force_login(superuser)
+    AreaCode.objects.create(area=area, code="KOLPING1")
+    AreaCode.objects.create(area=area, code="KOLPING2")
+
+    response = client.get("/en/admin/cmsv2/area/")
+
+    assert b'<td class="field-number_codes">2</td>' in response.content
