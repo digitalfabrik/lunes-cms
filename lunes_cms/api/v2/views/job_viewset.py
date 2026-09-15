@@ -7,14 +7,19 @@ from rest_framework import viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from ....cmsv2.areas import published_jobs
 from ....cmsv2.models import Job
 from ..matomo_tracking import matomo_tracking
 from ..serializers import JobSerializer
+from .area_scoped_mixin import AreaScopedMixin
 
 
-class JobViewSet(viewsets.ModelViewSet):
+class JobViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     """
     Retrieve the list of all jobs, or a single job by id
+
+    Without an area access token these are the jobs of the main app, with one
+    they are the jobs of that area.
     """
 
     serializer_class = JobSerializer
@@ -35,9 +40,7 @@ class JobViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Job.objects.none()
 
-        queryset = Job.objects.filter(
-            released=True,
-            archived=False,
-            area__isnull=True,
+        queryset = published_jobs(
+            Job.objects.filter(released=True, archived=False), self.area
         ).annotate(number_units=Count("units", filter=Q(units__released=True)))
         return queryset.order_by("name")

@@ -275,3 +275,76 @@ def validate_relation_area(unit: "Unit", word: "Word") -> None:
             )
             % {"word": word}
         )
+
+
+def published_jobs(queryset: "QuerySet[Job]", area: Area | None) -> "QuerySet[Job]":
+    """
+    Restrict a job queryset to what the API publishes for the given area.
+
+    A client without an access token gets the jobs of the main app, which are
+    the ones without an area, a client with a token gets the jobs of its area
+    and nothing else. Whether a job is released or archived is not decided
+    here, the views keep that filter themselves.
+
+    :param queryset: The job queryset to restrict
+    :param area: The area of the client, or ``None`` for the main app
+    :return: The restricted queryset
+    """
+    if area is None:
+        return queryset.filter(area__isnull=True)
+    return queryset.filter(area=area)
+
+
+def published_units(queryset: "QuerySet[Unit]", area: Area | None) -> "QuerySet[Unit]":
+    """
+    Restrict a unit queryset to what the API publishes for the given area.
+
+    The area of a unit is the area of its job, see :func:`published_jobs`.
+
+    Both branches reject a unit that has *any* job outside the area asked for,
+    rather than accepting one that has a job inside it. A unit of a job of an
+    area must not be assigned to any other job at all, so a unit that is, is
+    broken data — but :func:`validate_unit_jobs` only runs in the admin, and a
+    CSV import, a data migration or a shell session can write what the admin
+    would refuse. The API is where such a mistake would turn into a leak, so
+    it is rejected once more here.
+
+    The two rejections are also what makes the filter safe across joins: each
+    ``filter()`` on the jobs of a unit opens a join of its own, so the job that
+    satisfies the ``released`` condition of the caller need not be the job that
+    satisfies the area condition here. Excluding the foreign jobs outright does
+    not care which join matched.
+
+    :param queryset: The unit queryset to restrict
+    :param area: The area of the client, or ``None`` for the main app
+    :return: The restricted queryset
+    """
+    if area is None:
+        return queryset.exclude(jobs__area__isnull=False).distinct()
+    return (
+        queryset.filter(jobs__area=area)
+        .exclude(jobs__area__isnull=True)
+        .exclude(jobs__area__in=Area.objects.exclude(pk=area.pk))
+        .distinct()
+    )
+
+
+def published_words(queryset: "QuerySet[Word]", area: Area | None) -> "QuerySet[Word]":
+    """
+    Restrict a word queryset to what the API publishes for the given area.
+
+    The area of a word is the area of the units it is linked to, see
+    :func:`published_units` for why both branches exclude rather than filter.
+
+    :param queryset: The word queryset to restrict
+    :param area: The area of the client, or ``None`` for the main app
+    :return: The restricted queryset
+    """
+    if area is None:
+        return queryset.exclude(units__jobs__area__isnull=False).distinct()
+    return (
+        queryset.filter(units__jobs__area=area)
+        .exclude(units__jobs__area__isnull=True)
+        .exclude(units__jobs__area__in=Area.objects.exclude(pk=area.pk))
+        .distinct()
+    )

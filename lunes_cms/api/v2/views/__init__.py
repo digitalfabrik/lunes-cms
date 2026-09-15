@@ -1,3 +1,5 @@
+from .area_registration_view import AreaRegistrationView
+from .area_scoped_mixin import AreaScopedMixin
 from .feedback_viewset import CreateFeedbackViewSet
 from .job_units_viewset import JobUnitsViewSet
 from .job_viewset import JobViewSet

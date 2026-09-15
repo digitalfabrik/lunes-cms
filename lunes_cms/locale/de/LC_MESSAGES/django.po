@@ -65,9 +65,17 @@ msgstr ""
 msgid "{} with id {} does not exist."
 msgstr "{} mit der ID {} existiert nicht."
 
+#: api/v2/authentication.py
+msgid "This access token is not valid."
+msgstr "Dieses Zugangstoken ist nicht gültig."
+
 #: api/v2/serializers/feedback_serializer.py
 msgid "The content type must be either 'job', 'unit' or 'word'."
 msgstr "Der Inhaltstyp muss entweder 'job', 'unit' oder 'word' sein."
+
+#: api/v2/views/area_registration_view.py
+msgid "This code is not valid."
+msgstr "Dieser Code ist nicht gültig."
 
 #: cms/admin.py cms/admins/document_admin.py cms/admins/training_set_admin.py
 #: cms/forms.py cms/list_filter.py cms/models/discipline.py
@@ -473,7 +481,7 @@ msgstr "Feedback-Einträge"
 msgid "group"
 msgstr "Gruppe"
 
-#: cms/models/group_api_key.py
+#: cms/models/group_api_key.py cmsv2/models/area_access_token.py
 msgid "token"
 msgstr "Token"
 
@@ -485,7 +493,7 @@ msgstr "10-50 Zeichen, nur Ziffern und Großbuchstaben erlaubt."
 msgid "Only digits and upper case letters allowed"
 msgstr "Nur Ziffern und Großbuchstaben erlaubt"
 
-#: cms/models/group_api_key.py
+#: cms/models/group_api_key.py cmsv2/models/area_access_token.py
 msgid "revoked"
 msgstr "widerrufen"
 
@@ -677,13 +685,22 @@ msgstr "Datei zu groß! Max. 5 MB"
 msgid "Only use one file extension!"
 msgstr "Nur maximal ein Dateityp erlaubt!"
 
-#: cmsv2/admins/area_admin.py cmsv2/models/area_code.py
+#: cmsv2/admins/area_admin.py cmsv2/models/area_access_token.py
+#: cmsv2/models/area_code.py
 msgid "code"
 msgstr "Code"
 
 #: cmsv2/admins/area_admin.py
 msgid "codes"
 msgstr "Codes"
+
+#: cmsv2/admins/area_admin.py
+msgid "access token"
+msgstr "Zugangstoken"
+
+#: cmsv2/admins/area_admin.py
+msgid "access tokens"
+msgstr "Zugangstoken"
 
 #: cmsv2/admins/area_admin.py cmsv2/models/area.py
 msgid "administrators"
@@ -693,8 +710,13 @@ msgstr "Administratoren"
 msgid "jobs"
 msgstr "Berufe"
 
+#: cmsv2/admins/area_admin.py
+msgid "clients"
+msgstr "Clients"
+
 #: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
-#: cmsv2/admins/unit_admin.py cmsv2/models/area.py cmsv2/models/area_code.py
+#: cmsv2/admins/unit_admin.py cmsv2/models/area.py
+#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
 #: cmsv2/models/job.py cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
@@ -786,7 +808,8 @@ msgid "Import"
 msgstr "Import"
 
 #: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
-#: cmsv2/models/area_code.py cmsv2/models/job.py
+#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
+#: cmsv2/models/job.py
 msgid "area"
 msgstr "Bereich"
 
@@ -1107,6 +1130,52 @@ msgstr "Bereich"
 #: cmsv2/models/area.py
 msgid "Areas"
 msgstr "Bereiche"
+
+#: cmsv2/models/area_access_token.py
+msgid ""
+"The code that was redeemed for this token. Deleting that code also withdraws "
+"this token."
+msgstr ""
+"Der Code, der für dieses Token eingelöst wurde. Wird dieser Code gelöscht, "
+"wird auch dieses Token widerrufen."
+
+#: cmsv2/models/area_access_token.py
+msgid "token hash"
+msgstr "Token-Hash"
+
+#: cmsv2/models/area_access_token.py
+msgid ""
+"The first characters of the token. The token itself is only known to the "
+"client it was handed to."
+msgstr ""
+"Die ersten Zeichen des Tokens. Das Token selbst kennt nur der Client, dem es "
+"ausgehändigt wurde."
+
+#: cmsv2/models/area_access_token.py
+msgid "installation"
+msgstr "Installation"
+
+#: cmsv2/models/area_access_token.py
+msgid "A revoked token cannot be used anymore."
+msgstr "Ein widerrufenes Token kann nicht mehr verwendet werden."
+
+#: cmsv2/models/area_access_token.py
+msgid "last used at"
+msgstr "Zuletzt verwendet"
+
+#: cmsv2/models/area_access_token.py
+msgid "Only updated once a day, so it can be off by up to one day."
+msgstr ""
+"Wird nur einmal täglich aktualisiert und kann daher um bis zu einen Tag "
+"abweichen."
+
+#: cmsv2/models/area_access_token.py
+msgid "Area access token"
+msgstr "Bereichs-Zugangstoken"
+
+#: cmsv2/models/area_access_token.py
+msgid "Area access tokens"
+msgstr "Bereichs-Zugangstoken"
 
 #: cmsv2/models/area_code.py
 msgid "At least 8 characters, only digits and upper case letters allowed."
@@ -1477,6 +1546,14 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid ""
+#~ "Deleting a code also withdraws the access of every client that redeemed "
+#~ "it. The other codes of this area are not affected."
+#~ msgstr ""
+#~ "Wird ein Code gelöscht, verliert auch jeder Client, der ihn eingelöst "
+#~ "hat, seinen Zugang. Die übrigen Codes dieses Bereichs sind davon nicht "
+#~ "betroffen."
 
 #~ msgid "assigned unit"
 #~ msgstr "Zugewiesene Einheit"

@@ -214,6 +214,10 @@ def test_codes_are_managed_on_the_area_page(area: Area, client: Client) -> None:
         "codes-MAX_NUM_FORMS": "1000",
         "codes-0-id": "",
         "codes-0-area": str(area.pk),
+        "access_tokens-TOTAL_FORMS": "0",
+        "access_tokens-INITIAL_FORMS": "0",
+        "access_tokens-MIN_NUM_FORMS": "0",
+        "access_tokens-MAX_NUM_FORMS": "0",
     }
 
     rejected = client.post(url, {**form_data, "codes-0-code": "short"})
@@ -403,6 +407,10 @@ def test_a_new_area_is_saved_with_the_suggested_code(client: Client) -> None:
             "codes-MAX_NUM_FORMS": "1000",
             "codes-0-id": "",
             "codes-0-code": suggested[0],
+            "access_tokens-TOTAL_FORMS": "0",
+            "access_tokens-INITIAL_FORMS": "0",
+            "access_tokens-MIN_NUM_FORMS": "0",
+            "access_tokens-MAX_NUM_FORMS": "0",
         },
     )
 

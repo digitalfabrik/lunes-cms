@@ -26,6 +26,11 @@ router.register(r"words", views.WordViewSet, "words")
 #: The url patterns of this module (see :doc:`django:topics/http/urls`)
 urlpatterns = [
     path("", include(router.urls)),
+    path(
+        "areas/register/",
+        views.AreaRegistrationView.as_view(),
+        name="area-register",
+    ),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("analytics/", include("lunes_cms.analytics.api.urls", namespace="analytics")),
     path(

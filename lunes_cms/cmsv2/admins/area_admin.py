@@ -4,11 +4,11 @@ from datetime import date
 from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
-from django.db.models import Count, QuerySet
+from django.db.models import Count, Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from ..models import Area, AreaCode
+from ..models import Area, AreaAccessToken, AreaCode
 
 if TYPE_CHECKING:
     from django.forms import BaseInlineFormSet
@@ -53,6 +53,43 @@ class AreaCodeInline(admin.TabularInline):
         return formset
 
 
+class AreaAccessTokenInline(admin.TabularInline):
+    """
+    Inline admin for the access tokens that were handed out for an area.
+
+    Tokens are only ever created by the API when a client redeems a code, so
+    the only thing to do here is to look at them and to revoke them.
+    """
+
+    model = AreaAccessToken
+    extra = 0
+    # Tokens are only ever created by the API, and the Jazzmin inline template
+    # renders its "add another" row regardless of ``has_add_permission``, so
+    # the row is taken away by the formset itself.
+    max_num = 0
+    can_delete = False
+    fields = [
+        "token_prefix",
+        "code",
+        "installation_id",
+        "created_at",
+        "last_used_at",
+        "revoked",
+    ]
+    readonly_fields = [
+        "token_prefix",
+        "code",
+        "installation_id",
+        "created_at",
+        "last_used_at",
+    ]
+    verbose_name = _("access token")
+    verbose_name_plural = _("access tokens")
+
+    def has_add_permission(self, request: HttpRequest, obj: Area | None = None) -> bool:
+        return False
+
+
 class AreaAdmin(admin.ModelAdmin):
     """
     Admin interface for the Area model.
@@ -63,7 +100,7 @@ class AreaAdmin(admin.ModelAdmin):
 
     fields = ["name", "admins"]
     filter_horizontal = ["admins"]
-    inlines = [AreaCodeInline]
+    inlines = [AreaCodeInline, AreaAccessTokenInline]
     search_fields = ["name"]
     ordering = ["name"]
     list_display = [
@@ -71,6 +108,7 @@ class AreaAdmin(admin.ModelAdmin):
         "administrators",
         "number_jobs",
         "number_codes",
+        "number_tokens",
         "created_at_date",
     ]
     list_display_links = ["name"]
@@ -83,6 +121,13 @@ class AreaAdmin(admin.ModelAdmin):
             .get_queryset(request)
             .annotate(job_count=Count("jobs", distinct=True))
             .annotate(code_count=Count("codes", distinct=True))
+            .annotate(
+                token_count=Count(
+                    "access_tokens",
+                    filter=Q(access_tokens__revoked=False),
+                    distinct=True,
+                )
+            )
             .prefetch_related("admins")
         )
 
@@ -148,6 +193,20 @@ class AreaAdmin(admin.ModelAdmin):
         return obj.code_count  # type: ignore[attr-defined]
 
     number_codes.short_description = _("codes")  # type: ignore[attr-defined]
+
+    def number_tokens(self, obj: Area) -> int:
+        """
+        Get the number of clients that currently have access to this area.
+
+        Args:
+            obj: The area object
+
+        Returns:
+            int: The number of access tokens of the area that are not revoked
+        """
+        return obj.token_count  # type: ignore[attr-defined]
+
+    number_tokens.short_description = _("clients")  # type: ignore[attr-defined]
 
     def created_at_date(self, obj: Area) -> date:
         """

@@ -1,37 +1,23 @@
 """
-API tests ensuring the content of an area is not published via the v2 API.
+API tests ensuring the content of an area is not published to a client that
+does not send the access token of that area.
 
-How a part organization receives its own area is not specified yet, so until
-then no client may see area content.
+These are the tests of the main app: a client that knows nothing about areas
+sees exactly what it saw before areas existed. What a client with a token sees
+is tested in :mod:`tests.api.test_area_token_api`.
 """
 
 import pytest
 from django.test.client import Client
 
-from lunes_cms.cmsv2.models import Area, Job, Unit, Word
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.models import Area, Job
 
-JOBS_ENDPOINT = "/api/v2/jobs/"
-UNITS_ENDPOINT = "/api/v2/units/"
-WORDS_ENDPOINT = "/api/v2/words/"
-
-
-def _released_unit_with_word(job, title, word_text):
-    """Create a released unit of the job with one fully confirmed word."""
-    unit = Unit.objects.create(title=title, released=True)
-    unit.jobs.add(job)
-    word = Word.objects.create(word=word_text, singular_article=1)
-    relation = UnitWordRelation.objects.create(unit=unit, word=word)
-    # ``save()`` resets the check status of an asset that is not there, so the
-    # confirmations have to be written past it.
-    Word.objects.filter(pk=word.pk).update(
-        audio_check_status="CONFIRMED", image_check_status="CONFIRMED"
-    )
-    UnitWordRelation.objects.filter(pk=relation.pk).update(
-        image_check_status="CONFIRMED"
-    )
-    word.refresh_from_db()
-    return unit, word
+from .area_content import (
+    JOBS_ENDPOINT,
+    released_unit_with_word,
+    UNITS_ENDPOINT,
+    WORDS_ENDPOINT,
+)
 
 
 @pytest.mark.django_db()
@@ -67,7 +53,7 @@ def test_words_of_an_area_unit_denied():
     """The words of a unit that belongs to an area are not accessible."""
     area = Area.objects.create(name="Kolping")
     area_job = Job.objects.create(name="Area job", released=True, area=area)
-    unit, _word = _released_unit_with_word(area_job, "Area unit", "Bereichswort")
+    unit, _word = released_unit_with_word(area_job, "Area unit", "Bereichswort")
 
     response = Client().get(f"{UNITS_ENDPOINT}{unit.pk}/words/")
 
@@ -84,7 +70,7 @@ def test_unit_shared_with_an_area_job_is_not_published():
     area = Area.objects.create(name="Kolping")
     area_job = Job.objects.create(name="Area job", released=True, area=area)
     main_job = Job.objects.create(name="Main job", released=True)
-    unit, word = _released_unit_with_word(main_job, "Shared unit", "Bereichswort")
+    unit, word = released_unit_with_word(main_job, "Shared unit", "Bereichswort")
     unit.jobs.add(area_job)
 
     unit_words = Client().get(f"{UNITS_ENDPOINT}{unit.pk}/words/")
@@ -104,10 +90,10 @@ def test_word_list_excludes_words_of_an_area():
     area = Area.objects.create(name="Kolping")
     area_job = Job.objects.create(name="Area job", released=True, area=area)
     main_job = Job.objects.create(name="Main job", released=True)
-    _area_unit, area_word = _released_unit_with_word(
+    _area_unit, area_word = released_unit_with_word(
         area_job, "Area unit", "Bereichswort"
     )
-    _main_unit, main_word = _released_unit_with_word(main_job, "Main unit", "Hauptwort")
+    _main_unit, main_word = released_unit_with_word(main_job, "Main unit", "Hauptwort")
 
     response = Client().get(WORDS_ENDPOINT)
 

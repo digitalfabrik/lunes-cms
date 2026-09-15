@@ -8,15 +8,20 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from ....cmsv2.areas import published_units
 from ....cmsv2.models import Unit
 from ....cmsv2.models.unit import UnitWordRelation
 from ..matomo_tracking import matomo_tracking
 from ..serializers import UnitWordRelationSerializer
+from .area_scoped_mixin import AreaScopedMixin
 
 
-class UnitWordViewSet(viewsets.ModelViewSet):
+class UnitWordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     """
     Retrieve the list of all words that belong to a given unit
+
+    The unit has to belong to the area of the access token of the request, or
+    to the main app if the request carries no token.
     """
 
     serializer_class = UnitWordRelationSerializer
@@ -42,15 +47,14 @@ class UnitWordViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return UnitWordRelation.objects.none()
 
-        units = (
+        units = published_units(
             Unit.objects.filter(
                 pk=self.kwargs["unit_id"],
                 released=True,
                 jobs__released=True,
                 jobs__archived=False,
-            )
-            .exclude(jobs__area__isnull=False)
-            .distinct()
+            ),
+            self.area,
         )
         if len(units) != 1:
             raise PermissionDenied()

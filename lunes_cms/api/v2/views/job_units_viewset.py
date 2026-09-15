@@ -8,14 +8,19 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from ....cmsv2.areas import published_units
 from ....cmsv2.models import Job, Unit
 from ..matomo_tracking import matomo_tracking
 from ..serializers import UnitSerializer
+from .area_scoped_mixin import AreaScopedMixin
 
 
-class JobUnitsViewSet(viewsets.ModelViewSet):
+class JobUnitsViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     """
     Retrieve the list of all units that belong to a job
+
+    The job has to belong to the area of the access token of the request, or to
+    the main app if the request carries no token.
     """
 
     serializer_class = UnitSerializer
@@ -46,26 +51,26 @@ class JobUnitsViewSet(viewsets.ModelViewSet):
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
-        if not job.released or job.archived or job.area_id:
+        area = self.area
+        if not job.released or job.archived or job.area_id != getattr(area, "pk", None):
             raise PermissionDenied()
 
-        queryset = (
-            Unit.objects.filter(jobs__pk=job.pk, released=True)
-            .exclude(jobs__area__isnull=False)
-            .annotate(
-                number_words=Count(
-                    "unit_word_relations",
-                    filter=Q(
-                        unit_word_relations__word__audio_check_status="CONFIRMED",
-                    )
-                    & (
-                        Q(
-                            unit_word_relations__image="",
-                            unit_word_relations__word__image_check_status="CONFIRMED",
-                        )
-                        | Q(unit_word_relations__image_check_status="CONFIRMED")
-                    ),
+        units = published_units(
+            Unit.objects.filter(jobs__pk=job.pk, released=True), area
+        )
+        queryset = Unit.objects.filter(pk__in=units).annotate(
+            number_words=Count(
+                "unit_word_relations",
+                filter=Q(
+                    unit_word_relations__word__audio_check_status="CONFIRMED",
                 )
+                & (
+                    Q(
+                        unit_word_relations__image="",
+                        unit_word_relations__word__image_check_status="CONFIRMED",
+                    )
+                    | Q(unit_word_relations__image_check_status="CONFIRMED")
+                ),
             )
         )
         return queryset.order_by("title")
