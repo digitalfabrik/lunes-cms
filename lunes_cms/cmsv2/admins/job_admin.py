@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
     from django.contrib.admin.views.main import ChangeList
     from django.db.models import ForeignKey, Model
-    from django.forms import ModelChoiceField, ModelForm
+    from django.forms import ModelChoiceField
     from django.utils.functional import _StrOrPromise
 
 

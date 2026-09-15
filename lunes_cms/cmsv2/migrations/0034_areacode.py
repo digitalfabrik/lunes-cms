@@ -2,8 +2,9 @@
 
 import django.core.validators
 import django.db.models.deletion
-import lunes_cms.cmsv2.models.area_code
 from django.db import migrations, models
+
+import lunes_cms.cmsv2.models.area_code
 
 
 class Migration(migrations.Migration):
