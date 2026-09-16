@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +11,9 @@ from .static import (
     ProgressStatus,
     ReviewStatus,
 )
+
+if TYPE_CHECKING:
+    from .models import Unit
 
 
 def upload_review_suggestions(_: models.Model, filename: str) -> str:
@@ -63,6 +68,16 @@ class Review(models.Model):
             if not self.completed_at
             else ProgressStatus.COMPLETED
         )
+
+    @property
+    def word_type(self) -> Unit:
+        """Returns the word type of a reviewed word"""
+        return self.unit_word.word.word_type
+
+    @property
+    def unit(self) -> Unit:
+        """Returns the unit of a reviewed word"""
+        return self.unit_word.unit
 
     class Meta:
         """
