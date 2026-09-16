@@ -153,6 +153,7 @@ msgid "Word"
 msgstr "Vokabel"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/models/review.py
 msgid "Word type"
 msgstr "Wortart"
 
@@ -818,6 +819,22 @@ msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 msgid "Import"
 msgstr "Import"
 
+#: cmsv2/admins/review_admin.py
+msgid "Meta information"
+msgstr "Metainformationen"
+
+#: cmsv2/admins/review_admin.py
+msgid "word and article"
+msgstr "Wort und Artikel"
+
+#: cmsv2/admins/review_admin.py
+msgid "Status"
+msgstr "Status"
+
+#: cmsv2/admins/review_admin.py cmsv2/models/static.py
+msgid "Reviewer"
+msgstr "Expert:in"
+
 #: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"
 msgstr "Alle ausgewählte Einheiten veröffentlichen"
@@ -1026,7 +1043,7 @@ msgstr "Hat Bild"
 msgid "Job"
 msgstr "Beruf"
 
-#: cmsv2/admins/word_filters.py cmsv2/models/unit.py
+#: cmsv2/admins/word_filters.py cmsv2/models/review.py cmsv2/models/unit.py
 msgid "Unit"
 msgstr "Einheit"
 
@@ -1309,13 +1326,14 @@ msgstr "Icon löschen"
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py cmsv2/templates/admin/csv_form.html
+#: cmsv2/models/job.py cmsv2/models/review.py
+#: cmsv2/templates/admin/csv_form.html
 msgid "Jobs"
 msgstr "Berufe"
 
 #: cmsv2/models/review.py
 msgid "reviewer"
-msgstr "Kontrolleur:in"
+msgstr "Expert:in"
 
 #: cmsv2/models/review.py
 msgid "assigned by"
@@ -1339,7 +1357,7 @@ msgstr "Prüfstatus"
 
 #: cmsv2/models/review.py
 msgid "Review"
-msgstr "Begutachtung"
+msgstr "Vokabelprüfung"
 
 #: cmsv2/models/static.py
 msgid "Confirmed"
@@ -1376,10 +1394,6 @@ msgstr "Liegt zur Begutachtung vor"
 #: cmsv2/models/static.py
 msgid "Completed"
 msgstr "abgeschlossen"
-
-#: cmsv2/models/static.py
-msgid "Reviewer"
-msgstr "Expert:in"
 
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio"
@@ -1853,9 +1867,6 @@ msgstr "Hilfe"
 #~ msgstr ""
 #~ "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, "
 #~ "Falsch wenn ein Bild aus dem Wort kontrolliert wird"
-
-#~ msgid "status"
-#~ msgstr "Status"
 
 #~ msgid "suggested image"
 #~ msgstr "Vorgeschlagenes Bild"
