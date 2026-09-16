@@ -807,6 +807,10 @@ msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 msgid "Import"
 msgstr "Import"
 
+#: cmsv2/admins/review_admin.py
+msgid "word and article"
+msgstr "Wort und Artikel"
+
 #: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
 #: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
 #: cmsv2/models/job.py
