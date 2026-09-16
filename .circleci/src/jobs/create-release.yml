@@ -18,8 +18,6 @@ steps:
           --repo "${CIRCLE_PROJECT_REPONAME}" \
           ${HOTFIX_FLAG})
         echo "export RELEASE_ID=$(echo ${RELEASE} | jq .id)" >> ${BASH_ENV}
-        RELEASE_NOTES_QUOTED=$(printf '%q' "$(echo ${RELEASE} | jq -r .releaseNotes)")
-        echo "export RELEASE_NOTES=${RELEASE_NOTES_QUOTED}" >> ${BASH_ENV}
   - run:
       name: Upload package to GitHub release
       command: |
@@ -40,13 +38,7 @@ steps:
           --private-key "${DELIVERINO_PRIVATE_KEY}" \
           --owner "${CIRCLE_PROJECT_USERNAME}" \
           --repo "${CIRCLE_PROJECT_REPONAME}"
-  - run:
-      name: Notify mattermost about pre-release
-      command: |
-        MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:"$'\n'"${RELEASE_NOTES}"$'\n'"https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
-        npx --no app-toolbelt v0 notify mattermost \
-          --message "${MESSAGE}" \
-          --channel releases \
-          --allow-all-branches
   - notify:
+      success_message: '[Development] Lunes CMS ${NEW_VERSION} beta has been released successfully! :tada:\n[Release notes](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION})'
+      channel: releases
       allow_all_branches: true

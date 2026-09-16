@@ -16,13 +16,9 @@ steps:
           --owner "${CIRCLE_PROJECT_USERNAME}" \
           --repo "${CIRCLE_PROJECT_REPONAME}"
   - run:
-      name: Notify mattermost about production release
-      command: |
-        NEW_VERSION=$(jq -r .versionName version.json)
-        MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}) has been promoted successfully to production :tada:"$'\n'"It goes live on lunes-prod with the next highstate – please run it to complete the release."
-        npx --no app-toolbelt v0 notify mattermost \
-          --message "${MESSAGE}" \
-          --channel releases \
-          --allow-all-branches
+      name: Read version
+      command: echo "export NEW_VERSION=$(jq -r .versionName version.json)" >> ${BASH_ENV}
   - notify:
+      success_message: '[Production] Lunes CMS ${NEW_VERSION} has been promoted successfully to production! :tada:\nIt goes live on lunes-prod with the next highstate – please run it to complete the release.'
+      channel: releases
       allow_all_branches: true
