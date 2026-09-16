@@ -4,7 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.models import Review
-from lunes_cms.cmsv2.models.static import get_color_by_review_status
+from lunes_cms.cmsv2.models.static import (
+    get_color_by_review_status,
+    get_initials_of_user,
+)
 
 
 class ReviewAdmin(BaseAdmin):
@@ -21,6 +24,7 @@ class ReviewAdmin(BaseAdmin):
         "unit",
         "review_status",
         "reviewer",
+        "styled_reviewer",
     ]
     list_filter = ["review_status", "reviewer"]
     search_fields = ["unit_word__word__word"]
@@ -34,7 +38,7 @@ class ReviewAdmin(BaseAdmin):
         "word_type",
         "unit",
         "styled_review_status",
-        "reviewer",
+        "styled_reviewer",
     ]
 
     def word_and_article(self, obj: Review) -> SafeString:
@@ -51,4 +55,14 @@ class ReviewAdmin(BaseAdmin):
             "<span class='badge rounded-pill {}'>{}</span>",
             color,
             obj.get_review_status_display(),
+        )
+
+    def styled_reviewer(self, obj: Review) -> SafeString:
+        """returns the styled reviewer"""
+        reviewer = obj.reviewer
+        initials = get_initials_of_user(reviewer)
+        return format_html(
+            "<span class='badge py-2 mr-2 rounded-pill text-bg-primary'>{}</span> {}",
+            initials,
+            obj.reviewer,
         )
