@@ -29,6 +29,8 @@ nav:
     - Gruppe anlegen: add_group.md
     - Gruppe bearbeiten: edit_group.md
     - Gruppe löschen: delete_group.md
+  - Bereiche:
+    - Bereich anlegen: add_area.md
   - Jobs:
     - Job hinzufügen: add_job.md
     - Job bearbeiten: edit_job.md

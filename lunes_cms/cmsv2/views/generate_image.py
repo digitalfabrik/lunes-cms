@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from lunes_cms.cmsv2.services.image_generation import build_image_prompt
 from lunes_cms.cmsv2.utils import get_openai_client, OpenAIConfigurationError
 from lunes_cms.core import settings
+
 from .decorators import require_any_permission_json
 
 

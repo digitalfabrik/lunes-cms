@@ -2,7 +2,7 @@ name: LLM PR review
 
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review, synchronize]
+    types: [opened, reopened, ready_for_review]
 
 permissions: {}
 

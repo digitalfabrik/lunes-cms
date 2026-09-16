@@ -1,6 +1,8 @@
 UNRELEASED
 ----------
 
+* [ [#1009](https://github.com/digitalfabrik/lunes-cms/issues/1009) ] 1009: Serve the content of an area via the API
+
 
 2026.6.1
 --------

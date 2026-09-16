@@ -1,4 +1,7 @@
 from .alternative_word import AlternativeWord
+from .area import Area
+from .area_access_token import AreaAccessToken
+from .area_code import AreaCode
 from .feedback import Feedback
 from .job import Job
 from .review import Review
