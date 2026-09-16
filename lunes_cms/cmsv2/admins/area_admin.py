@@ -1,7 +1,6 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
 from django.db.models import Count, Q, QuerySet
@@ -10,16 +9,14 @@ from django.utils.translation import gettext_lazy as _
 
 from ..models import Area, AreaAccessToken, AreaCode
 
-if TYPE_CHECKING:
-    from django.forms import BaseInlineFormSet
-
 
 class AreaCodeInline(admin.TabularInline):
     """
     Inline admin for the codes of an area.
 
     The codes are edited together with their area, because they only make sense
-    as part of it and are managed by the same people.
+    as part of it and are managed by the same people. A code is always typed in
+    by the person who hands it out, so the empty row carries no suggestion.
     """
 
     model = AreaCode
@@ -28,29 +25,6 @@ class AreaCodeInline(admin.TabularInline):
     readonly_fields = ["created_at"]
     verbose_name = _("code")
     verbose_name_plural = _("codes")
-
-    def get_formset(
-        self, request: HttpRequest, obj: Area | None = None, **kwargs: Any
-    ) -> type[BaseInlineFormSet]:
-        """
-        Get the formset of the codes, with a suggestion for a new area only.
-
-        The default of the code field is a fresh random string, so an empty row
-        carries a different suggestion on every request. On the page of an area
-        that already has codes that looks as if the stored codes had changed,
-        which is why the empty row is left blank there.
-
-        Args:
-            request: The current request
-            obj: The area that is being changed, or None when it is added
-
-        Returns:
-            type[BaseInlineFormSet]: The formset class for the codes
-        """
-        formset = super().get_formset(request, obj, **kwargs)
-        if obj is not None:
-            formset.form.base_fields["code"].initial = None
-        return formset
 
 
 class AreaAccessTokenInline(admin.TabularInline):

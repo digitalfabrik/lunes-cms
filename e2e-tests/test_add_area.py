@@ -85,8 +85,7 @@ def test_add_area(
             "der Zugang zu den Inhalten des Bereichs freigeschaltet wird. Ein "
             "Code besteht aus mindestens 8 Zeichen und darf nur Ziffern und "
             "Großbuchstaben enthalten — andernfalls meldet das Formular einen "
-            "Fehler. Ein Vorschlag ist bereits eingetragen, Sie können ihn aber "
-            "auch überschreiben."
+            "Fehler. Das Feld ist leer, Sie tragen den Code selbst ein."
         ),
     ):
         code_input = page.locator("[name=codes-0-code]")

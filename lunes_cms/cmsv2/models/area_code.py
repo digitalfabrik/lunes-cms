@@ -1,30 +1,10 @@
 from __future__ import annotations
 
-from string import ascii_uppercase, digits
-
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
-from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
 from .area import Area
-
-#: The characters a code is made of. The letter "O" is left out, because it is
-#: easily confused with the digit zero when a code is read out or typed off.
-CODE_CHARS = digits + ascii_uppercase.replace("O", "")
-
-#: The length of a generated code. The minimum length of a code is 8, generated
-#: ones are longer to leave room for guessing.
-GENERATED_CODE_LENGTH = 12
-
-
-def generate_default_code() -> str:
-    """
-    Generate a random code of upper case letters and digits.
-
-    :return: A code that can be handed out
-    """
-    return get_random_string(length=GENERATED_CODE_LENGTH, allowed_chars=CODE_CHARS)
 
 
 class AreaCode(models.Model):
@@ -45,7 +25,6 @@ class AreaCode(models.Model):
     code = models.CharField(
         max_length=50,
         unique=True,
-        default=generate_default_code,
         verbose_name=_("code"),
         help_text=_(
             "At least 8 characters, only digits and upper case letters allowed."

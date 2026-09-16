@@ -4,8 +4,6 @@ import django.core.validators
 import django.db.models.deletion
 from django.db import migrations, models
 
-import lunes_cms.cmsv2.models.area_code
-
 
 class Migration(migrations.Migration):
     """
@@ -32,7 +30,6 @@ class Migration(migrations.Migration):
                 (
                     "code",
                     models.CharField(
-                        default=lunes_cms.cmsv2.models.area_code.generate_default_code,
                         help_text="At least 8 characters, only digits and upper case letters allowed.",
                         max_length=50,
                         unique=True,
