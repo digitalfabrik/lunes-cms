@@ -296,8 +296,6 @@ jobs:
                       --repo "${CIRCLE_PROJECT_REPONAME}" \
                       ${HOTFIX_FLAG})
                     echo "export RELEASE_ID=$(echo ${RELEASE} | jq .id)" >> ${BASH_ENV}
-                    RELEASE_NOTES_QUOTED=$(printf '%q' "$(echo ${RELEASE} | jq -r .releaseNotes)")
-                    echo "export RELEASE_NOTES=${RELEASE_NOTES_QUOTED}" >> ${BASH_ENV}
                 name: Create GitHub pre-release
             - run:
                 command: |
@@ -319,16 +317,10 @@ jobs:
                       --owner "${CIRCLE_PROJECT_USERNAME}" \
                       --repo "${CIRCLE_PROJECT_REPONAME}"
                 name: Generate SBOM
-            - run:
-                command: |
-                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/digitalfabrik/lunes-cms/releases/tag/${NEW_VERSION}) beta has been released successfully :tada:"$'\n'"${RELEASE_NOTES}"$'\n'"https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}"
-                    npx --no app-toolbelt v0 notify mattermost \
-                      --message "${MESSAGE}" \
-                      --channel releases \
-                      --allow-all-branches
-                name: Notify mattermost about pre-release
             - notify:
                 allow_all_branches: true
+                channel: releases
+                success_message: '[Development] Lunes CMS ${NEW_VERSION} beta has been released successfully! :tada:\n[Release notes](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION})'
     deploy-user-manual:
         executor: python
         steps:
@@ -512,16 +504,12 @@ jobs:
                       --repo "${CIRCLE_PROJECT_REPONAME}"
                 name: Promote pre-release to latest
             - run:
-                command: |
-                    NEW_VERSION=$(jq -r .versionName version.json)
-                    MESSAGE="##### Lunes CMS version [${NEW_VERSION}](https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/${NEW_VERSION}) has been promoted successfully to production :tada:"$'\n'"It goes live on lunes-prod with the next highstate – please run it to complete the release."
-                    npx --no app-toolbelt v0 notify mattermost \
-                      --message "${MESSAGE}" \
-                      --channel releases \
-                      --allow-all-branches
-                name: Notify mattermost about production release
+                command: echo "export NEW_VERSION=$(jq -r .versionName version.json)" >> ${BASH_ENV}
+                name: Read version
             - notify:
                 allow_all_branches: true
+                channel: releases
+                success_message: '[Production] Lunes CMS ${NEW_VERSION} has been promoted successfully to production! :tada:\nIt goes live on lunes-prod with the next highstate – please run it to complete the release.'
     publish-package:
         executor: python
         steps:
