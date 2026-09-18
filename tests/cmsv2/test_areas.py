@@ -393,3 +393,42 @@ def test_codes_are_deleted_with_their_area(area: Area) -> None:
     area.delete()
 
     assert AreaCode.objects.count() == 0
+
+
+#
+# Branding (#988): a logo and the two hex colors that decorate an area's
+# content in the app.
+#
+
+
+@pytest.mark.django_db
+def test_branding_fields_are_optional(area: Area) -> None:
+    """An area without any branding set is valid."""
+    area.full_clean()
+
+    assert area.logo.name == ""
+    assert area.primary_color == ""
+    assert area.secondary_color == ""
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("valid_color", ["#990000", "#FFFFFF", "#000000", "#a1b2c3"])
+def test_valid_hex_colors_are_accepted(area: Area, valid_color: str) -> None:
+    """A 6-digit hex color, upper or lower case, passes validation."""
+    area.primary_color = valid_color
+    area.secondary_color = valid_color
+
+    area.full_clean()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "invalid_color",
+    ["990000", "#99000", "#9900000", "#gggggg", "red", "#99 000"],
+)
+def test_invalid_hex_colors_are_rejected(area: Area, invalid_color: str) -> None:
+    """Anything that is not exactly '#' followed by 6 hex digits is rejected."""
+    area.primary_color = invalid_color
+
+    with pytest.raises(ValidationError):
+        area.full_clean()

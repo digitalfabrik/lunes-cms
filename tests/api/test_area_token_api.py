@@ -3,12 +3,15 @@ API tests for redeeming the code of an area and for the content a client sees
 once it sends the access token it received.
 """
 
+import io
 from types import SimpleNamespace
 
 import pytest
 from django.contrib.auth.models import Group
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test.client import Client
+from PIL import Image
 from rest_framework.throttling import SimpleRateThrottle
 
 from lunes_cms.cms.models import GroupAPIKey
@@ -104,8 +107,46 @@ def test_registration_returns_a_token_and_the_area(area):
     assert response.status_code == 201
     body = response.json()
     assert body["token"]
-    assert body["area"] == {"id": area.area.pk, "name": "Kolping"}
+    assert body["area"] == {
+        "id": area.area.pk,
+        "name": "Kolping",
+        "logo": None,
+        "primary_color": "",
+        "secondary_color": "",
+    }
     assert AreaAccessToken.objects.count() == 1
+
+
+@pytest.mark.django_db()
+def test_registration_returns_the_branding_of_the_area(area):
+    """The branding set on an area is served alongside it on registration."""
+    area.area.primary_color = "#990000"
+    area.area.secondary_color = "#FFFFFF"
+    area.area.save()
+
+    response = register()
+
+    assert response.status_code == 201
+    body = response.json()["area"]
+    assert body["primary_color"] == "#990000"
+    assert body["secondary_color"] == "#FFFFFF"
+
+
+@pytest.mark.django_db()
+def test_registration_returns_the_logo_as_an_absolute_url(area, settings, tmp_path):
+    """The logo is served as an absolute URL, not a bare storage path."""
+    settings.MEDIA_ROOT = tmp_path
+    buf = io.BytesIO()
+    Image.new("RGB", (4, 4), "red").save(buf, format="PNG")
+    area.area.logo = SimpleUploadedFile("logo.png", buf.getvalue(), "image/png")
+    area.area.save()
+
+    response = register()
+
+    assert response.status_code == 201
+    logo_url = response.json()["area"]["logo"]
+    assert logo_url.startswith("http")
+    assert logo_url.endswith(".png")
 
 
 @pytest.mark.django_db()
