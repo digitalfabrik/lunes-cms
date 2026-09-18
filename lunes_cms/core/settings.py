@@ -578,6 +578,7 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
     "DEFAULT_THROTTLE_RATES": {
         "area_registration": "60/hour",
+        "area_info": "60/hour",
         "installation": "100/min",
         "gdpr": "10/hour",
         "user": "1000/day",

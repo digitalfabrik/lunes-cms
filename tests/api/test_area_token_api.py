@@ -18,6 +18,7 @@ from lunes_cms.cms.models import GroupAPIKey
 from lunes_cms.cmsv2.models import Area, AreaAccessToken, AreaCode, Job
 
 from .area_content import (
+    INFO_ENDPOINT,
     JOBS_ENDPOINT,
     REGISTER_ENDPOINT,
     released_unit_with_word,
@@ -67,6 +68,21 @@ def register(code="KOLPING12345", **payload):
     """
     return Client().post(
         REGISTER_ENDPOINT,
+        data={"code": code, **payload},
+        content_type="application/json",
+    )
+
+
+def info(code="KOLPING12345", **payload):
+    """
+    Look up the area of a code and return the response.
+
+    :param code: The code to look up
+    :param payload: Further fields to send
+    :return: The response of the info endpoint
+    """
+    return Client().post(
+        INFO_ENDPOINT,
         data={"code": code, **payload},
         content_type="application/json",
     )
@@ -229,6 +245,67 @@ def test_registration_is_throttled(area, monkeypatch):
 
     assert register().status_code == 201
     assert register().status_code == 429
+
+
+#
+# Info (#988 follow-up): looking up the area of a code without redeeming it
+#
+
+
+@pytest.mark.django_db()
+def test_info_returns_the_area_without_a_token(area):
+    """A valid code returns the area, but no token and no registered client."""
+    response = info()
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body == {
+        "area": {
+            "id": area.area.pk,
+            "name": "Kolping",
+            "logo": None,
+            "primary_color": "",
+            "secondary_color": "",
+        }
+    }
+    assert "token" not in body
+    assert AreaAccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db()
+def test_info_normalizes_the_code(area):
+    """A code that was typed off a printout is normalized before it is looked up."""
+    response = info(code="  kolping12345 ")
+
+    assert response.status_code == 200
+    assert response.json()["area"]["name"] == "Kolping"
+
+
+@pytest.mark.django_db()
+def test_info_rejects_an_unknown_code(area):
+    """An unknown code is answered with the same recognizable error as registration."""
+    response = info(code="NOSUCHCODE12")
+
+    assert response.status_code == 400
+    assert response.json()["error"] == "invalid_area_code"
+
+
+@pytest.mark.django_db()
+def test_info_rejects_a_missing_code(area):
+    """A request without a code is a bad request, not a server error."""
+    response = Client().post(INFO_ENDPOINT, data={}, content_type="application/json")
+
+    assert response.status_code == 400
+    assert response.json()["code"] == ["This field is required."]
+
+
+@pytest.mark.django_db()
+def test_info_is_throttled(area, monkeypatch):
+    """Codes cannot be guessed by trying them out in a loop, same as registration."""
+    monkeypatch.setitem(SimpleRateThrottle.THROTTLE_RATES, "area_info", "1/hour")
+
+    assert info().status_code == 200
+    assert info().status_code == 429
 
 
 #

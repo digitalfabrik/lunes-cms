@@ -31,6 +31,11 @@ urlpatterns = [
         views.AreaRegistrationView.as_view(),
         name="area-register",
     ),
+    path(
+        "areas/info/",
+        views.AreaInfoView.as_view(),
+        name="area-info",
+    ),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("analytics/", include("lunes_cms.analytics.api.urls", namespace="analytics")),
     path(

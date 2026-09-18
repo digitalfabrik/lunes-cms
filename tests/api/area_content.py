@@ -9,6 +9,7 @@ JOBS_ENDPOINT = "/api/v2/jobs/"
 UNITS_ENDPOINT = "/api/v2/units/"
 WORDS_ENDPOINT = "/api/v2/words/"
 REGISTER_ENDPOINT = "/api/v2/areas/register/"
+INFO_ENDPOINT = "/api/v2/areas/info/"
 
 
 def released_unit_with_word(job, title, word_text):

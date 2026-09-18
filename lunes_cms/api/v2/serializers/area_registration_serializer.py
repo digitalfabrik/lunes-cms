@@ -20,18 +20,15 @@ class AreaSerializer(serializers.ModelSerializer):
 
 
 # pylint: disable=abstract-method
-class AreaRegistrationSerializer(serializers.Serializer):
+class AreaCodeSerializer(serializers.Serializer):
     """
-    Serializer for redeeming the code of an area.
+    Serializer base for a request that carries the code of an area.
 
-    Redeeming a code creates an access token, not the code itself, so this
-    serializer validates the request and leaves the writing to the view.
+    Shared by everything that looks a code up, whether or not it goes on to
+    register a client with it.
     """
 
     code = serializers.CharField(max_length=50, write_only=True)
-    installation_id = serializers.CharField(
-        max_length=255, required=False, allow_blank=True, write_only=True
-    )
 
     def validate_code(self, value: str) -> str:
         """
@@ -49,6 +46,20 @@ class AreaRegistrationSerializer(serializers.Serializer):
 
 
 # pylint: disable=abstract-method
+class AreaRegistrationSerializer(AreaCodeSerializer):
+    """
+    Serializer for redeeming the code of an area.
+
+    Redeeming a code creates an access token, not the code itself, so this
+    serializer validates the request and leaves the writing to the view.
+    """
+
+    installation_id = serializers.CharField(
+        max_length=255, required=False, allow_blank=True, write_only=True
+    )
+
+
+# pylint: disable=abstract-method
 class AreaRegistrationResponseSerializer(serializers.Serializer):
     """
     Serializer for the answer to a successful registration.
@@ -58,4 +69,17 @@ class AreaRegistrationResponseSerializer(serializers.Serializer):
     """
 
     token = serializers.CharField(read_only=True)
+    area = AreaSerializer(read_only=True)
+
+
+# pylint: disable=abstract-method
+class AreaInfoResponseSerializer(serializers.Serializer):
+    """
+    Serializer for the answer to an area info lookup.
+
+    No token is issued and no client is registered here: this only tells a
+    caller which area a code belongs to, e.g. to show its branding before the
+    code is actually redeemed.
+    """
+
     area = AreaSerializer(read_only=True)
