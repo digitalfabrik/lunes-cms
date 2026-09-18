@@ -254,7 +254,7 @@ class UnitAdmin(BaseAdmin):
         that immediately denies them.
         """
         actions = super().get_actions(request)
-        if not request.user.is_superuser:
+        if not request.user.is_authenticated or not request.user.is_superuser:
             actions.pop("bulk_release", None)
             actions.pop("assign_to_user", None)
         return actions
