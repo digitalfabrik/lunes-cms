@@ -26,7 +26,6 @@ from lunes_cms.cmsv2.areas import (
     validate_unit_jobs,
 )
 from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
-from lunes_cms.cmsv2.models.area_code import generate_default_code
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -355,15 +354,14 @@ def test_an_area_can_have_several_codes(area: Area) -> None:
 
 
 @pytest.mark.django_db
-def test_a_generated_code_is_valid(area: Area) -> None:
-    """A code that was not typed in by hand passes its own validation."""
+def test_a_code_is_not_generated(area: Area) -> None:
+    """A code is always typed in, so a new one starts out empty."""
     code = AreaCode(area=area)
 
-    code.full_clean()
+    assert code.code == ""
 
-    assert len(code.code) >= 8
-    assert code.code.isalnum() and code.code.upper() == code.code
-    assert generate_default_code() != generate_default_code()
+    with pytest.raises(ValidationError):
+        code.full_clean()
 
 
 @pytest.mark.django_db

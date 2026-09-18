@@ -368,9 +368,8 @@ def test_the_code_of_a_saved_area_stays_the_same_on_every_visit(
     area: Area, client: Client
 ) -> None:
     """
-    The empty row of the code inline must not suggest a new random code on the
-    page of an existing area: the suggestion would look like the stored code
-    had changed with every reload.
+    The code inline of an existing area shows the stored codes and nothing
+    else, so a reload never looks as if a code had changed.
     """
     superuser = get_user_model().objects.create_superuser(
         username="root-stable", email="root@example.com", password="secret"
@@ -384,29 +383,29 @@ def test_the_code_of_a_saved_area_stays_the_same_on_every_visit(
 
 
 @pytest.mark.django_db
-def test_a_new_area_is_saved_with_the_suggested_code(client: Client) -> None:
+def test_a_new_area_is_saved_with_the_typed_code(client: Client) -> None:
     """
-    The add page of an area suggests a code, and saving the page without
-    touching it stores exactly that code.
+    The add page of an area suggests no code, and the code that is typed into
+    the empty row is the one that is stored.
     """
     superuser = get_user_model().objects.create_superuser(
-        username="root-suggest", email="root@example.com", password="secret"
+        username="root-typed", email="root@example.com", password="secret"
     )
     client.force_login(superuser)
-    suggested = _rendered_codes(client.get("/en/admin/cmsv2/area/add/"))
-    assert len(suggested) == 1
+
+    assert _rendered_codes(client.get("/en/admin/cmsv2/area/add/")) == []
 
     response = client.post(
         "/en/admin/cmsv2/area/add/",
         {
-            "name": "Suggested",
+            "name": "Typed",
             "admins": [],
             "codes-TOTAL_FORMS": "1",
             "codes-INITIAL_FORMS": "0",
             "codes-MIN_NUM_FORMS": "0",
             "codes-MAX_NUM_FORMS": "1000",
             "codes-0-id": "",
-            "codes-0-code": suggested[0],
+            "codes-0-code": "TESTKURS2026",
             "access_tokens-TOTAL_FORMS": "0",
             "access_tokens-INITIAL_FORMS": "0",
             "access_tokens-MIN_NUM_FORMS": "0",
@@ -415,8 +414,8 @@ def test_a_new_area_is_saved_with_the_suggested_code(client: Client) -> None:
     )
 
     assert response.status_code == 302
-    saved_area = Area.objects.get(name="Suggested")
-    assert list(saved_area.codes.values_list("code", flat=True)) == [suggested[0]]
+    saved_area = Area.objects.get(name="Typed")
+    assert list(saved_area.codes.values_list("code", flat=True)) == ["TESTKURS2026"]
 
 
 def test_the_code_count_of_the_area_list_counts_the_stored_codes(
