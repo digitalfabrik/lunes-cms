@@ -128,3 +128,92 @@ def test_assign_to_user_denies_anonymous_user(
 
     with pytest.raises(PermissionDenied):
         unit_admin.assign_to_user(request, Unit.objects.none())
+
+
+#
+# ``bulk_release`` and the dropdown of bulk actions (#1023 follow-up): both
+# "Release all selected units" and "Assign selected units to user" act across
+# areas and are meant for superusers only, not just in their own body but
+# already hidden from the action dropdown for anybody else.
+#
+
+
+def test_bulk_release_denies_a_non_superuser(
+    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
+) -> None:
+    unit = Unit.objects.create(title="Unit A", released=False)
+    editor = get_user_model().objects.create_user(username="editor")
+
+    request = _post_request(request_factory, {})
+    request.user = editor
+
+    with pytest.raises(PermissionDenied):
+        unit_admin.bulk_release(request, Unit.objects.filter(pk=unit.pk))
+
+    unit.refresh_from_db()
+    assert unit.released is False
+
+
+def test_bulk_release_allows_a_superuser(
+    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
+) -> None:
+    unit = Unit.objects.create(title="Unit A", released=False)
+    admin_user = get_user_model().objects.create_superuser(
+        username="admin", password="password"
+    )
+
+    request = _post_request(request_factory, {})
+    request.user = admin_user
+
+    unit_admin.bulk_release(request, Unit.objects.filter(pk=unit.pk))
+
+    unit.refresh_from_db()
+    assert unit.released is True
+
+
+def test_bulk_release_skips_already_released_units(
+    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
+) -> None:
+    released = Unit.objects.create(title="Unit A", released=True)
+    draft = Unit.objects.create(title="Unit B", released=False)
+    admin_user = get_user_model().objects.create_superuser(
+        username="admin", password="password"
+    )
+
+    request = _post_request(request_factory, {})
+    request.user = admin_user
+
+    unit_admin.bulk_release(
+        request, Unit.objects.filter(pk__in=[released.pk, draft.pk])
+    )
+
+    draft.refresh_from_db()
+    assert draft.released is True
+
+
+def test_bulk_actions_are_hidden_from_a_non_superuser(
+    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
+) -> None:
+    editor = get_user_model().objects.create_user(username="editor")
+    request = request_factory.get("/")
+    request.user = editor
+
+    actions = unit_admin.get_actions(request)
+
+    assert "bulk_release" not in actions
+    assert "assign_to_user" not in actions
+
+
+def test_bulk_actions_are_offered_to_a_superuser(
+    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
+) -> None:
+    admin_user = get_user_model().objects.create_superuser(
+        username="admin", password="password"
+    )
+    request = request_factory.get("/")
+    request.user = admin_user
+
+    actions = unit_admin.get_actions(request)
+
+    assert "bulk_release" in actions
+    assert "assign_to_user" in actions

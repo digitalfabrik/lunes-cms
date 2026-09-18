@@ -30,6 +30,7 @@ from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 
 if TYPE_CHECKING:
+    from django.contrib.admin.options import ActionLocation
     from django.db.models import ManyToManyField
     from django.utils.functional import _StrOrPromise
 
@@ -241,6 +242,23 @@ class UnitAdmin(BaseAdmin):
             super().get_queryset(request).prefetch_related("jobs__area"), request.user
         )
 
+    def get_actions(  # pylint: disable=unused-argument
+        self, request: HttpRequest, action_location: "ActionLocation | None" = None
+    ) -> dict[str, Any]:
+        """
+        Only offer the bulk actions to superusers.
+
+        Both ``bulk_release`` and ``assign_to_user`` act across areas and are
+        restricted to superusers in their own body already; hiding them here
+        as well keeps a non-superuser from seeing an action in the dropdown
+        that immediately denies them.
+        """
+        actions = super().get_actions(request)
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            actions.pop("bulk_release", None)
+            actions.pop("assign_to_user", None)
+        return actions
+
     def formfield_for_manytomany(
         self,
         db_field: "ManyToManyField[Any, Any]",
@@ -271,9 +289,10 @@ class UnitAdmin(BaseAdmin):
     @admin.action(description=_("Release all selected units"))
     def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:
         """
-        Bulk action to release selected units in one go
+        Bulk action to release selected units in one go. Superusers only, see
+        :meth:`get_actions`.
         """
-        if not request.user.has_perm("change_unit"):
+        if not request.user.is_authenticated or not request.user.is_superuser:
             raise PermissionDenied
 
         units_skipped = queryset.filter(released=True).count()
