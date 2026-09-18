@@ -16,7 +16,7 @@ class AreaSerializer(serializers.ModelSerializer):
         """
 
         model = Area
-        fields = ("id", "name")
+        fields = ("id", "name", "logo", "primary_color", "secondary_color")
 
 
 # pylint: disable=abstract-method
