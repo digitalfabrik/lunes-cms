@@ -72,7 +72,8 @@ class AreaAdmin(admin.ModelAdmin):
     area decides who may see and change the content below it.
     """
 
-    fields = ["name", "admins"]
+    fields = ["name", "logo", "logo_tag", "primary_color", "secondary_color", "admins"]
+    readonly_fields = ["logo_tag"]
     filter_horizontal = ["admins"]
     inlines = [AreaCodeInline, AreaAccessTokenInline]
     search_fields = ["name"]

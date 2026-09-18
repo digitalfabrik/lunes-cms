@@ -208,7 +208,7 @@ msgid "The selected feedback entries were successfully marked as unread."
 msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als ungelesen markiert."
 
-#: cms/admins/sponsor_admin.py cms/models/sponsor.py
+#: cms/admins/sponsor_admin.py cms/models/sponsor.py cmsv2/models/area.py
 msgid "logo"
 msgstr "Logo"
 
@@ -1111,6 +1111,22 @@ msgstr ""
 "Einheit nicht verwendet werden."
 
 #: cmsv2/models/area.py
+msgid "Shown on landing page."
+msgstr "Angezeigt auf der Landingsseite."
+
+#: cmsv2/models/area.py
+msgid "primary color"
+msgstr "Primärfarbe"
+
+#: cmsv2/models/area.py
+msgid "A hex color e.g. #000000 for black."
+msgstr "Ein Hex-Farbcode, z. B. #000000 für Schwarz."
+
+#: cmsv2/models/area.py
+msgid "secondary color"
+msgstr "Sekundärfarbe"
+
+#: cmsv2/models/area.py
 msgid ""
 "These users manage the content of this area. They only see jobs, units and "
 "words of the areas they administer."
@@ -1432,6 +1448,10 @@ msgstr "Beispielsatz generieren"
 #: cmsv2/utils.py
 msgid "Regenerate example sentence"
 msgstr "Beispielsatz neu generieren"
+
+#: cmsv2/validators.py
+msgid "Enter a valid hex color, e.g. #000000."
+msgstr "Bitte einen gültigen Hex-Farbcode eingeben, z. B. #000000."
 
 #: cmsv2/views/decorators.py
 msgid "Permission denied"
