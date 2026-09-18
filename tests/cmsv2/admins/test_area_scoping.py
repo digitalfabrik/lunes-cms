@@ -357,6 +357,19 @@ def test_area_admin_is_restricted_to_superusers(
     assert area_admin.has_change_permission(superuser_request) is True
 
 
+def test_additional_information_url_field_is_full_width(
+    db: None, request_factory: RequestFactory
+) -> None:
+    """The link is long, so its field must not shrink to the default size."""
+    area_admin = AreaAdmin(Area, admin.site)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+
+    form_class = area_admin.get_form(superuser_request)
+
+    widget = form_class.base_fields["additional_information_url"].widget
+    assert "width: 100%" in widget.attrs.get("style", "")
+
+
 def _rendered_codes(response: Any) -> list[str]:
     """The codes the rendered code inline of the given response shows."""
     return re.findall(

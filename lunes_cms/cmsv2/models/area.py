@@ -40,6 +40,14 @@ class Area(models.Model):
         verbose_name=_("secondary color"),
         help_text=_("A hex color e.g. #000000 for black."),
     )
+    additional_information = models.TextField(
+        blank=True,
+        verbose_name=_("additional information"),
+    )
+    additional_information_url = models.URLField(
+        blank=True,
+        verbose_name=_("additional information URL"),
+    )
     admins = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,

@@ -9,7 +9,7 @@ import lunes_cms.cmsv2.validators
 class Migration(migrations.Migration):
     """
     Migration file to add the branding fields (logo, primary and secondary
-    color) to the Area model.
+    color, additional information) to the Area model.
     """
 
     dependencies = [
@@ -47,6 +47,18 @@ class Migration(migrations.Migration):
                 max_length=7,
                 validators=[lunes_cms.cmsv2.validators.validate_hex_color],
                 verbose_name="secondary color",
+            ),
+        ),
+        migrations.AddField(
+            model_name="area",
+            name="additional_information",
+            field=models.TextField(blank=True, verbose_name="additional information"),
+        ),
+        migrations.AddField(
+            model_name="area",
+            name="additional_information_url",
+            field=models.URLField(
+                blank=True, verbose_name="additional information URL"
             ),
         ),
     ]

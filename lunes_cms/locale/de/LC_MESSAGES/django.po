@@ -1127,6 +1127,14 @@ msgid "secondary color"
 msgstr "Sekundärfarbe"
 
 #: cmsv2/models/area.py
+msgid "additional information"
+msgstr "Zusätzliche Informationen"
+
+#: cmsv2/models/area.py
+msgid "additional information URL"
+msgstr "URL für zusätzliche Informationen"
+
+#: cmsv2/models/area.py
 msgid ""
 "These users manage the content of this area. They only see jobs, units and "
 "words of the areas they administer."

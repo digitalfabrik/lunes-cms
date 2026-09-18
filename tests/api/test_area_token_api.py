@@ -129,6 +129,8 @@ def test_registration_returns_a_token_and_the_area(area):
         "logo": None,
         "primary_color": "",
         "secondary_color": "",
+        "additional_information": "",
+        "additional_information_url": "",
     }
     assert AreaAccessToken.objects.count() == 1
 
@@ -138,6 +140,8 @@ def test_registration_returns_the_branding_of_the_area(area):
     """The branding set on an area is served alongside it on registration."""
     area.area.primary_color = "#990000"
     area.area.secondary_color = "#FFFFFF"
+    area.area.additional_information = "Free text about this area."
+    area.area.additional_information_url = "https://example.com/info"
     area.area.save()
 
     response = register()
@@ -145,6 +149,8 @@ def test_registration_returns_the_branding_of_the_area(area):
     assert response.status_code == 201
     body = response.json()["area"]
     assert body["primary_color"] == "#990000"
+    assert body["additional_information"] == "Free text about this area."
+    assert body["additional_information_url"] == "https://example.com/info"
     assert body["secondary_color"] == "#FFFFFF"
 
 
@@ -266,10 +272,27 @@ def test_info_returns_the_area_without_a_token(area):
             "logo": None,
             "primary_color": "",
             "secondary_color": "",
+            "additional_information": "",
+            "additional_information_url": "",
         }
     }
     assert "token" not in body
     assert AreaAccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db()
+def test_info_returns_the_additional_information_of_the_area(area):
+    """Additional information set on an area is served alongside it via info."""
+    area.area.additional_information = "Free text about this area."
+    area.area.additional_information_url = "https://example.com/info"
+    area.area.save()
+
+    response = info()
+
+    assert response.status_code == 200
+    body = response.json()["area"]
+    assert body["additional_information"] == "Free text about this area."
+    assert body["additional_information_url"] == "https://example.com/info"
 
 
 @pytest.mark.django_db()

@@ -1,9 +1,10 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
+from typing import Any
 
 from django.contrib import admin
-from django.db.models import Count, Q, QuerySet
+from django.db.models import Count, Field, Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
@@ -72,7 +73,16 @@ class AreaAdmin(admin.ModelAdmin):
     area decides who may see and change the content below it.
     """
 
-    fields = ["name", "logo", "logo_tag", "primary_color", "secondary_color", "admins"]
+    fields = [
+        "name",
+        "logo",
+        "logo_tag",
+        "primary_color",
+        "secondary_color",
+        "additional_information",
+        "additional_information_url",
+        "admins",
+    ]
     readonly_fields = ["logo_tag"]
     filter_horizontal = ["admins"]
     inlines = [AreaCodeInline, AreaAccessTokenInline]
@@ -88,6 +98,15 @@ class AreaAdmin(admin.ModelAdmin):
     ]
     list_display_links = ["name"]
     list_per_page = 25
+
+    def formfield_for_dbfield(
+        self, db_field: "Field[Any, Any]", request: HttpRequest, **kwargs: Any
+    ) -> Any:
+        """Stretch the URL field to the full width so a long link is readable at a glance."""
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if db_field.name == "additional_information_url" and formfield is not None:
+            formfield.widget.attrs["style"] = "width: 100%"
+        return formfield
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Area]:
         """Annotate the job and code counts and prefetch the administrators."""

@@ -409,6 +409,29 @@ def test_branding_fields_are_optional(area: Area) -> None:
     assert area.logo.name == ""
     assert area.primary_color == ""
     assert area.secondary_color == ""
+    assert area.additional_information == ""
+    assert area.additional_information_url == ""
+
+
+@pytest.mark.django_db
+def test_a_valid_additional_information_url_is_accepted(area: Area) -> None:
+    """A proper URL passes validation."""
+    area.additional_information = "Free text about this area."
+    area.additional_information_url = "https://example.com/info"
+
+    area.full_clean()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("invalid_url", ["not-a-link", "example.com"])
+def test_an_invalid_additional_information_url_is_rejected(
+    area: Area, invalid_url: str
+) -> None:
+    """Anything that is not a valid, absolute URL is rejected."""
+    area.additional_information_url = invalid_url
+
+    with pytest.raises(ValidationError):
+        area.full_clean()
 
 
 @pytest.mark.django_db
