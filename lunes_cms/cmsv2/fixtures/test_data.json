@@ -44998,10 +44998,7 @@
       "name": "Expert:innen",
       "icon": "",
       "permissions": [
-        ["add_review", "cmsv2", "review"],
-        ["change_review", "cmsv2", "review"],
-        ["delete_review", "cmsv2", "review"],
-        ["view_review", "cmsv2", "review"]
+        ["can_review", "cmsv2", "review"]
       ]
     }
   }, {
