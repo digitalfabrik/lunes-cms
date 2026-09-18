@@ -16,7 +16,7 @@ TRANSLATION_FILE="locale/de/LC_MESSAGES/django.po"
 
 # Re-generating translation file
 echo "Scanning Python and HTML source code and extracting translatable strings from it..." | print_info
-lunes-cms-cli makemessages -l de --add-location file
+lunes-cms-cli makemessagesv2 -l de --add-location file
 # Remove python-brace-format flags added by xgettext, as they vary between gettext versions and cause CI diffs
 tmp=$(mktemp) && grep -v '^#, python-brace-format$' "$TRANSLATION_FILE" > "$tmp" && mv "$tmp" "$TRANSLATION_FILE"
 
