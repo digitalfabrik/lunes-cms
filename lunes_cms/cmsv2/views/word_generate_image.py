@@ -4,15 +4,17 @@ import os
 
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from lunes_cms.cmsv2.areas import visible_words
 from lunes_cms.cmsv2.models import Word
-from lunes_cms.cmsv2.utils import is_ajax
+from lunes_cms.cmsv2.utils import is_ajax, safe_temp_path
 from lunes_cms.core import settings
 
-from .decorators import require_any_permission_json
+from .decorators import json_not_found, require_any_permission_json
 
 
 @login_required
@@ -28,7 +30,12 @@ def word_store_generated_image_permanently(
     JSON response; otherwise it redirects back to the edit view.
     """
 
-    word_instance = get_object_or_404(Word, pk=word_id)
+    try:
+        word_instance = visible_words(request.user).get(pk=word_id)
+    except Word.DoesNotExist:
+        if is_ajax(request):
+            return json_not_found(_("Word not found"))
+        raise Http404 from None
     temp_filename = request.POST.get("temp_filename")
 
     def failure(message: str, status: int = 400) -> HttpResponse:
@@ -39,11 +46,8 @@ def word_store_generated_image_permanently(
     if not temp_filename:
         return failure("No temporary image file provided.")
 
-    # basename() keeps a crafted POST value from pointing outside the temp dir.
-    temp_filename = os.path.basename(temp_filename)
-    temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
-
-    if not os.path.exists(temp_filepath):
+    temp_filepath = safe_temp_path(settings.TEMP_IMAGE_DIR, temp_filename)
+    if not temp_filepath:
         return failure("Temporary image file no longer exists.")
 
     try:
@@ -51,7 +55,7 @@ def word_store_generated_image_permanently(
             # Keep the temp file's extension: the bytes are OpenAI's own
             # encode, and a wrong suffix would trigger a re-encode on save
             # that strips its provenance markings.
-            suffix = os.path.splitext(temp_filename)[1]
+            suffix = os.path.splitext(temp_filepath)[1]
             content_file = ContentFile(
                 f.read(), name=f'{word_instance.word.replace(" ", "_")}{suffix}'
             )
@@ -67,7 +71,7 @@ def word_store_generated_image_permanently(
             return JsonResponse(
                 {
                     "status": "success",
-                    "message": "Image saved successfully.",
+                    "message": _("Image saved successfully."),
                     "image_url": (
                         word_instance.image.url if word_instance.image else None
                     ),

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 import os
 import uuid
 
@@ -9,14 +11,18 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from lunes_cms.cmsv2.areas import visible_unit_word_relations
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
-from lunes_cms.cmsv2.utils import OpenAIConfigurationError
+from lunes_cms.cmsv2.utils import OpenAIConfigurationError, safe_temp_path
 from lunes_cms.core import settings
 
-from .decorators import require_any_permission_json
+from .decorators import json_not_found, require_any_permission_json
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -28,7 +34,10 @@ def unitword_generate_example_sentence_audio(
     Dedicated view for generating audio for a unit-word relation's example sentence.
     """
 
-    unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    unitword_instance = get_object_or_404(
+        visible_unit_word_relations(request.user),
+        pk=unitword_id,
+    )
 
     context = admin.site.each_context(request)
     context.update(
@@ -56,13 +65,18 @@ def unitword_generate_example_sentence_audio_via_openai(
     Returns the URL/path to the temporary file.
     """
 
+    try:
+        unitword_instance = visible_unit_word_relations(request.user).get(
+            pk=unitword_id
+        )
+    except UnitWordRelation.DoesNotExist:
+        return json_not_found(_("Unit-Word relation not found"))
+
     example_sentence_text = request.POST.get("example_sentence_text")
     if not example_sentence_text:
-        return JsonResponse({"error": "No example_sentence_text provided."}, status=400)
-
-    unitword_instance = get_object_or_404(
-        UnitWordRelation.objects.select_related("word"), pk=unitword_id
-    )
+        return JsonResponse(
+            {"error": _("No example_sentence_text provided.")}, status=400
+        )
 
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
@@ -81,7 +95,7 @@ def unitword_generate_example_sentence_audio_via_openai(
 
         return JsonResponse(
             {
-                "message": "Audio generated and saved temporarily!",
+                "message": _("Audio generated and saved temporarily!"),
                 "temp_audio_url": temp_audio_url,
                 "temp_audio_filename": temp_filename,
             }
@@ -106,7 +120,10 @@ def unitword_store_generated_example_sentence_audio_permanently(
     and redirects back to the appropriate admin view.
     """
 
-    unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    unitword_instance = get_object_or_404(
+        visible_unit_word_relations(request.user),
+        pk=unitword_id,
+    )
     temp_filename = request.POST.get("temp_audio_filename")
 
     # Determine redirect URL based on referer
@@ -119,9 +136,8 @@ def unitword_store_generated_example_sentence_audio_permanently(
     if not temp_filename:
         return redirect(redirect_url)
 
-    temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)
-
-    if not os.path.exists(temp_filepath):
+    temp_filepath = safe_temp_path(settings.TEMP_AUDIO_DIR, temp_filename)
+    if not temp_filepath:
         return redirect(redirect_url)
 
     try:
@@ -145,5 +161,5 @@ def unitword_store_generated_example_sentence_audio_permanently(
         return redirect(redirect_url)
 
     except (ValueError, FileNotFoundError, OSError) as e:
-        print(f"Error storing generated example sentence audio: {e}")
+        logger.error("Storing generated example sentence audio failed: %s", e)
         return redirect(redirect_url)

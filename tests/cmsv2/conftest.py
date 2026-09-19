@@ -8,9 +8,10 @@ from unittest import mock
 
 import pytest
 from django.contrib.auth.models import Group, Permission, User
-from django.test import Client
 
 from lunes_cms.cmsv2.models import Word
+
+from tests.cmsv2.helpers import PermissionClient
 
 
 @pytest.fixture(autouse=True)
@@ -24,14 +25,14 @@ def bypass_audio_conversion() -> Generator[None, None, None]:
 
 
 @pytest.fixture
-def client_with_permissions(db: None) -> Callable[..., Client]:
+def client_with_permissions(db: None) -> Callable[..., PermissionClient]:
     """
     Build a client logged in as a user whose group grants exactly the given
     cmsv2 permissions, like the groups of the editors in production.
     """
     counter = count(1)
 
-    def create(*codenames: str) -> Client:
+    def create(*codenames: str) -> PermissionClient:
         name = f"editor-{next(counter)}"
         group = Group.objects.create(name=f"group-of-{name}")
         group.permissions.set(
@@ -41,8 +42,6 @@ def client_with_permissions(db: None) -> Callable[..., Client]:
         )
         user = User.objects.create_user(f"user-of-{name}")
         user.groups.add(group)
-        client = Client()
-        client.force_login(user)
-        return client
+        return PermissionClient(user)
 
     return create

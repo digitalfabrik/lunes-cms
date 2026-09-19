@@ -16,27 +16,10 @@ from django.contrib import admin
 from django.test import Client, RequestFactory
 from django.urls import reverse
 from PIL import Image
-from pytest_django import Settings
 
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.utils import is_ajax
-from lunes_cms.core import settings as core_settings
-
-
-@pytest.fixture
-def media_dirs(
-    settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> tuple[Path, Path]:
-    """Isolate stored files and the temp directories the store views read from."""
-    settings.MEDIA_ROOT = str(tmp_path)
-    temp_image_dir = tmp_path / "temp_image"
-    temp_audio_dir = tmp_path / "temp_audio"
-    temp_image_dir.mkdir()
-    temp_audio_dir.mkdir()
-    monkeypatch.setattr(core_settings, "TEMP_IMAGE_DIR", str(temp_image_dir))
-    monkeypatch.setattr(core_settings, "TEMP_AUDIO_DIR", str(temp_audio_dir))
-    return temp_image_dir, temp_audio_dir
 
 
 def _png_bytes() -> bytes:
@@ -192,3 +175,35 @@ def test_admin_methods_prompt_to_save_for_unsaved_word(db: None) -> None:
 
     assert "inline-regenerate" not in str(word_admin.audio_generate(unsaved))
     assert "inline-regenerate" not in str(word_admin.image_generate(unsaved))
+
+
+@pytest.mark.parametrize(
+    "url_name",
+    [
+        "word_store_generated_audio_permanently",
+        "word_store_generated_example_sentence_audio_permanently",
+    ],
+)
+def test_store_audio_ignores_a_traversing_temp_filename(
+    admin_client: Client,
+    db: None,
+    media_dirs: tuple[Path, Path],
+    tmp_path: Path,
+    url_name: str,
+) -> None:
+    """
+    The temp filename comes from the request, so a crafted value must not be
+    able to reach a file outside the temp directory.
+    """
+    outside = tmp_path / "outside.mp3"
+    outside.write_bytes(b"not yours")
+    word = Word.objects.create(word="Hammer", singular_article=1)
+
+    response = admin_client.post(
+        reverse(f"cmsv2:{url_name}", args=[word.pk]),
+        {"temp_audio_filename": f"../{outside.name}"},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    assert response.status_code == 400
+    assert outside.exists()

@@ -5,8 +5,8 @@ from typing import Any, TYPE_CHECKING
 from django.contrib import admin
 from django.http import HttpRequest
 
-from ..areas import administered_areas, scope_jobs
-from ..models import Area, Job
+from ..areas import administered_areas, visible_jobs
+from ..models import Area
 
 if TYPE_CHECKING:
     from django.db.models import Field
@@ -44,5 +44,5 @@ class JobListFilter(admin.RelatedFieldListFilter):
         request: HttpRequest,
         model_admin: admin.ModelAdmin[Any],
     ) -> list[tuple[str, "str | _StrPromise"]]:
-        jobs = scope_jobs(Job.objects.all(), request.user).order_by("name")
+        jobs = visible_jobs(request.user).order_by("name")
         return [(str(job.pk), str(job)) for job in jobs]
