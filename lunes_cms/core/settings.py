@@ -60,6 +60,12 @@ OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2
 #: OpenAI image quality tier (low/medium/high)
 OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
 
+#: Compression level (0-100) OpenAI applies to the generated WebP. 85 matches
+#: the quality our own former WebP re-encode used.
+OPENAI_IMAGE_OUTPUT_COMPRESSION = int(
+    os.environ.get("LUNES_CMS_OPENAI_IMAGE_OUTPUT_COMPRESSION", "85")
+)
+
 #: OpenAI model used for text generation (e.g. example sentences)
 OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
 
@@ -287,6 +293,8 @@ SESSION_COOKIE_SECURE = not DEBUG
 #: (see :setting:`django:CSRF_COOKIE_SECURE`). Disabled in debug mode, where the
 #: development server speaks HTTP.
 CSRF_COOKIE_SECURE = not DEBUG
+
+FORMS_URLFIELD_ASSUME_HTTPS = True
 
 #: The secret key for this particular Django installation (see :setting:`django:SECRET_KEY`)
 #:
@@ -571,6 +579,8 @@ REST_FRAMEWORK = {
     "DEFAULT_API_URL": "http://localhost:8080/api/",
     "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
     "DEFAULT_THROTTLE_RATES": {
+        "area_registration": "60/hour",
+        "area_info": "60/hour",
         "installation": "100/min",
         "gdpr": "10/hour",
         "user": "1000/day",
@@ -631,6 +641,7 @@ JAZZMIN_SETTINGS = {
         "cms.GroupAPIKey": "fas fa-key",
         "cms.Feedback": "fas fa-comment",
         "cms.Sponsor": "fas fa-star",
+        "cmsv2.Area": "fa-solid fa-object-group",
         "cmsv2.Job": "fas fa-briefcase",
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",

@@ -3,6 +3,13 @@ This module contains the model serializers, see :doc:`django:topics/serializatio
 """
 
 from .alternative_word_serializer import AlternativeWordSerializer
+from .area_registration_serializer import (
+    AreaCodeSerializer,
+    AreaInfoResponseSerializer,
+    AreaRegistrationResponseSerializer,
+    AreaRegistrationSerializer,
+    AreaSerializer,
+)
 from .feedback_serializer import FeedbackSerializer
 from .job_serializer import JobSerializer
 from .sponsor_serializer import SponsorSerializer

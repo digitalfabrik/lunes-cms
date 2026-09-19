@@ -33,6 +33,9 @@ source .venv/bin/activate
 # Run all tests in sequence, regenerate screenshots only for changed tests (default)
 pytest e2e-tests/ -m e2e
 
+# Against a dev server on another port, e.g. while another one occupies 8080
+LUNES_CMS_E2E_BASE_URL=http://localhost:8081 pytest e2e-tests/ -m e2e
+
 # Run all tests in sequence, regenerate screenshots
 pytest e2e-tests/ -m e2e --generate=all
 

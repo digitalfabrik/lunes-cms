@@ -7,14 +7,19 @@ from rest_framework import viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from ....cmsv2.areas import published_words
 from ....cmsv2.models import Word
 from ..matomo_tracking import matomo_tracking
 from ..serializers import WordSerializer
+from .area_scoped_mixin import AreaScopedMixin
 
 
-class WordViewSet(viewsets.ModelViewSet):
+class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     """
     Retrieve the list of all words with their default images, or a single word by id
+
+    Without an area access token these are the words of the main app, with one
+    they are the words of that area.
     """
 
     serializer_class = WordSerializer
@@ -40,12 +45,15 @@ class WordViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Word.objects.none()
 
-        queryset = Word.objects.filter(
-            unit_word_relations__unit__released=True,
-            unit_word_relations__unit__jobs__released=True,
-            unit_word_relations__unit__jobs__archived=False,
-            audio_check_status="CONFIRMED",
-            image_check_status="CONFIRMED",
+        queryset = published_words(
+            Word.objects.filter(
+                unit_word_relations__unit__released=True,
+                unit_word_relations__unit__jobs__released=True,
+                unit_word_relations__unit__jobs__archived=False,
+                audio_check_status="CONFIRMED",
+                image_check_status="CONFIRMED",
+            ),
+            self.area,
         )
         return (
             queryset.prefetch_related("alternative_words").distinct().order_by("word")

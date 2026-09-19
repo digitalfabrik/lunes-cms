@@ -8,13 +8,15 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from ....cmsv2.models import Job, Word
+from ....cmsv2.areas import published_units
+from ....cmsv2.models import Job, Unit, Word
 from ....cmsv2.models.unit import UnitWordRelation
 from ..matomo_tracking import matomo_tracking
 from ..serializers import WordSerializer
+from .area_scoped_mixin import AreaScopedMixin
 
 
-class JobWordsViewSet(viewsets.ModelViewSet):
+class JobWordsViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     """
     Retrieve the list of all words of a job.
     A word is returned if it's public in at least one unit that belongs to the job.
@@ -51,12 +53,14 @@ class JobWordsViewSet(viewsets.ModelViewSet):
         except Job.DoesNotExist as e:
             raise PermissionDenied() from e
 
-        if not job.released or job.archived:
+        area = self.area
+        if not job.released or job.archived or job.area_id != getattr(area, "pk", None):
             raise PermissionDenied()
 
         unit_word_relations = UnitWordRelation.objects.filter(
             unit__released=True,
             unit__jobs=job,
+            unit__in=published_units(Unit.objects.all(), area),
             word__audio_check_status="CONFIRMED",
         ).filter(
             Q(image_check_status="CONFIRMED")

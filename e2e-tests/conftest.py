@@ -28,7 +28,9 @@ from urllib.parse import quote
 import pytest
 from playwright.sync_api import Browser, expect, Page
 
-BASE_URL = "http://localhost:8080"
+#: The dev server the suite runs against. Overridable so the suite can be run
+#: while another dev server occupies the default port.
+BASE_URL = os.environ.get("LUNES_CMS_E2E_BASE_URL", "http://localhost:8080")
 DOCS_DIR = Path(__file__).parent.parent / "user_docs"
 EMAIL_OUTBOX_DIR = Path(
     os.environ.get("LUNES_CMS_EMAIL_FILE_PATH", "/tmp/django-email-outbox")

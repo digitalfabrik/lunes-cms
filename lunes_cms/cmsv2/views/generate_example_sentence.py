@@ -6,13 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-
 from openai import OpenAIError
 
 from lunes_cms.cmsv2.models import Job, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.sentence_generation import openai_example_sentence
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
+
 from .decorators import require_any_permission_json
 
 

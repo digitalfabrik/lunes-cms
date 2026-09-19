@@ -33,8 +33,13 @@ class OptionalSlashRouter(routers.DefaultRouter):
 def get_key(request: Request, keyword: str = "Api-Key") -> str | None:
     """Retrieve API Key from Authorization header of http request.
     Optionally, a custom keyword can be specified. The function
-    espects the key to be delivered as follows:
-    {"Authorization": "<keyword> <api-key>}
+    expects the key to be delivered as follows:
+    {"Authorization": "<keyword> <api-key>"}
+
+    The header is split at the first space and the part in front of it has to
+    be the keyword, compared without case. A header that uses another keyword
+    is treated as if no key was sent at all, rather than as a key that happens
+    to have a prefix.
 
     :param request: get request
     :type request: HttpRequest
@@ -46,11 +51,10 @@ def get_key(request: Request, keyword: str = "Api-Key") -> str | None:
     authorization = request.META.get("HTTP_AUTHORIZATION")
     if not authorization:
         return None
-    try:
-        _, key = authorization.split(f"{keyword} ")
-    except ValueError:
-        key = None
-    return key
+    prefix, _separator, key = authorization.strip().partition(" ")
+    if prefix.lower() != keyword.lower():
+        return None
+    return key.strip() or None
 
 
 def get_filtered_discipline_queryset(

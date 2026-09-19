@@ -104,6 +104,22 @@ class UnitWordRelation(models.Model):
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
 
+    def clean(self) -> None:
+        """
+        Check that the word and the unit of this relation share their area.
+
+        Only relations whose unit and word are both known can be checked; a
+        row that is still being created in an inline has no unit yet, so its
+        formset does the check instead.
+        """
+        super().clean()
+        if self.unit_id and self.word_id:
+            # Imported here because `areas` imports the models package
+            # pylint: disable=import-outside-toplevel
+            from ..areas import validate_relation_area
+
+            validate_relation_area(self.unit, self.word)
+
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
         Override the save method to handle image and example sentence check status.
@@ -365,6 +381,11 @@ class Unit(models.Model):
     words: "models.ManyToManyField[Word, UnitWordRelation]" = models.ManyToManyField(
         Word, through="UnitWordRelation", related_name="units", verbose_name=_("word")
     )
+    #: The jobs this unit is about to be assigned to. The admin form puts them
+    #: here while the unit is validated, because the area of a unit is derived
+    #: from its jobs and those are only written after the inlines are checked
+    #: (see :func:`lunes_cms.cmsv2.areas.pending_area_of_unit`).
+    pending_jobs: "list[Job] | None" = None
     created_by = models.ForeignKey(
         Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_("group")
     )
