@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import File
 from django.utils.translation import gettext_lazy as _
 
-#: A hex color of the form ``#RRGGBB``, e.g. ``#990000``.
 HEX_COLOR_PATTERN = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
