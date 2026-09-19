@@ -3,18 +3,22 @@ API tests for redeeming the code of an area and for the content a client sees
 once it sends the access token it received.
 """
 
+import io
 from types import SimpleNamespace
 
 import pytest
 from django.contrib.auth.models import Group
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test.client import Client
+from PIL import Image
 from rest_framework.throttling import SimpleRateThrottle
 
 from lunes_cms.cms.models import GroupAPIKey
 from lunes_cms.cmsv2.models import Area, AreaAccessToken, AreaCode, Job
 
 from .area_content import (
+    INFO_ENDPOINT,
     JOBS_ENDPOINT,
     REGISTER_ENDPOINT,
     released_unit_with_word,
@@ -69,6 +73,21 @@ def register(code="KOLPING12345", **payload):
     )
 
 
+def info(code="KOLPING12345", **payload):
+    """
+    Look up the area of a code and return the response.
+
+    :param code: The code to look up
+    :param payload: Further fields to send
+    :return: The response of the info endpoint
+    """
+    return Client().post(
+        INFO_ENDPOINT,
+        data={"code": code, **payload},
+        content_type="application/json",
+    )
+
+
 def token_client(token):
     """
     A client that sends the given access token with every request.
@@ -104,8 +123,52 @@ def test_registration_returns_a_token_and_the_area(area):
     assert response.status_code == 201
     body = response.json()
     assert body["token"]
-    assert body["area"] == {"id": area.area.pk, "name": "Kolping"}
+    assert body["area"] == {
+        "id": area.area.pk,
+        "name": "Kolping",
+        "logo": None,
+        "primary_color": "",
+        "secondary_color": "",
+        "additional_information": "",
+        "additional_information_url": "",
+    }
     assert AreaAccessToken.objects.count() == 1
+
+
+@pytest.mark.django_db()
+def test_registration_returns_the_branding_of_the_area(area):
+    """The branding set on an area is served alongside it on registration."""
+    area.area.primary_color = "#990000"
+    area.area.secondary_color = "#FFFFFF"
+    area.area.additional_information = "Free text about this area."
+    area.area.additional_information_url = "https://example.com/info"
+    area.area.save()
+
+    response = register()
+
+    assert response.status_code == 201
+    body = response.json()["area"]
+    assert body["primary_color"] == "#990000"
+    assert body["additional_information"] == "Free text about this area."
+    assert body["additional_information_url"] == "https://example.com/info"
+    assert body["secondary_color"] == "#FFFFFF"
+
+
+@pytest.mark.django_db()
+def test_registration_returns_the_logo_as_an_absolute_url(area, settings, tmp_path):
+    """The logo is served as an absolute URL, not a bare storage path."""
+    settings.MEDIA_ROOT = tmp_path
+    buf = io.BytesIO()
+    Image.new("RGB", (4, 4), "red").save(buf, format="PNG")
+    area.area.logo = SimpleUploadedFile("logo.png", buf.getvalue(), "image/png")
+    area.area.save()
+
+    response = register()
+
+    assert response.status_code == 201
+    logo_url = response.json()["area"]["logo"]
+    assert logo_url.startswith("http")
+    assert logo_url.endswith(".png")
 
 
 @pytest.mark.django_db()
@@ -188,6 +251,84 @@ def test_registration_is_throttled(area, monkeypatch):
 
     assert register().status_code == 201
     assert register().status_code == 429
+
+
+#
+# Info (#988 follow-up): looking up the area of a code without redeeming it
+#
+
+
+@pytest.mark.django_db()
+def test_info_returns_the_area_without_a_token(area):
+    """A valid code returns the area, but no token and no registered client."""
+    response = info()
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body == {
+        "area": {
+            "id": area.area.pk,
+            "name": "Kolping",
+            "logo": None,
+            "primary_color": "",
+            "secondary_color": "",
+            "additional_information": "",
+            "additional_information_url": "",
+        }
+    }
+    assert "token" not in body
+    assert AreaAccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db()
+def test_info_returns_the_additional_information_of_the_area(area):
+    """Additional information set on an area is served alongside it via info."""
+    area.area.additional_information = "Free text about this area."
+    area.area.additional_information_url = "https://example.com/info"
+    area.area.save()
+
+    response = info()
+
+    assert response.status_code == 200
+    body = response.json()["area"]
+    assert body["additional_information"] == "Free text about this area."
+    assert body["additional_information_url"] == "https://example.com/info"
+
+
+@pytest.mark.django_db()
+def test_info_normalizes_the_code(area):
+    """A code that was typed off a printout is normalized before it is looked up."""
+    response = info(code="  kolping12345 ")
+
+    assert response.status_code == 200
+    assert response.json()["area"]["name"] == "Kolping"
+
+
+@pytest.mark.django_db()
+def test_info_rejects_an_unknown_code(area):
+    """An unknown code is answered with the same recognizable error as registration."""
+    response = info(code="NOSUCHCODE12")
+
+    assert response.status_code == 400
+    assert response.json()["error"] == "invalid_area_code"
+
+
+@pytest.mark.django_db()
+def test_info_rejects_a_missing_code(area):
+    """A request without a code is a bad request, not a server error."""
+    response = Client().post(INFO_ENDPOINT, data={}, content_type="application/json")
+
+    assert response.status_code == 400
+    assert response.json()["code"] == ["This field is required."]
+
+
+@pytest.mark.django_db()
+def test_info_is_throttled(area, monkeypatch):
+    """Codes cannot be guessed by trying them out in a loop, same as registration."""
+    monkeypatch.setitem(SimpleRateThrottle.THROTTLE_RATES, "area_info", "1/hour")
+
+    assert info().status_code == 200
+    assert info().status_code == 429
 
 
 #

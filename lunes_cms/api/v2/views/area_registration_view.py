@@ -111,7 +111,8 @@ class AreaRegistrationView(APIView):
         )
         return Response(
             AreaRegistrationResponseSerializer(
-                {"token": token, "area": code.area}
+                {"token": token, "area": code.area},
+                context={"request": request},
             ).data,
             status=status.HTTP_201_CREATED,
         )

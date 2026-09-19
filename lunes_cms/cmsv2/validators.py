@@ -1,10 +1,29 @@
 from __future__ import annotations
 
 import os
+import re
 
 from django.core.exceptions import ValidationError
 from django.core.files.base import File
 from django.utils.translation import gettext_lazy as _
+
+HEX_COLOR_PATTERN = re.compile(r"^#[0-9A-Fa-f]{6}$")
+
+
+def validate_hex_color(value: str) -> None:
+    """
+    Validate that the given string is a hex color of the form ``#RRGGBB``.
+
+    Args:
+        value: The string to validate
+
+    Raises:
+        ValidationError: If the value is not a valid hex color
+    """
+    if not HEX_COLOR_PATTERN.match(value):
+        raise ValidationError(
+            _("Enter a valid hex color, e.g. #000000."), code="invalid_hex_color"
+        )
 
 
 def validate_file_extension(value: File) -> None:

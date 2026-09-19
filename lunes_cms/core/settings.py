@@ -294,6 +294,8 @@ SESSION_COOKIE_SECURE = not DEBUG
 #: development server speaks HTTP.
 CSRF_COOKIE_SECURE = not DEBUG
 
+FORMS_URLFIELD_ASSUME_HTTPS = True
+
 #: The secret key for this particular Django installation (see :setting:`django:SECRET_KEY`)
 #:
 #: .. warning::
@@ -578,6 +580,7 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "lunes_cms.api.exception_handler.custom_exception_handler",
     "DEFAULT_THROTTLE_RATES": {
         "area_registration": "60/hour",
+        "area_info": "60/hour",
         "installation": "100/min",
         "gdpr": "10/hour",
         "user": "1000/day",

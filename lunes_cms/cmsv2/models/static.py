@@ -165,6 +165,19 @@ def upload_sponsor_logos(_: models.Model, filename: str) -> str:
     return create_resource_path("sponsors", filename)
 
 
+def upload_area_logos(_: models.Model, filename: str) -> str:
+    """
+    Upload path for area logos
+
+    :param filename: name of the file
+    :type filename: str
+
+    :return: file path for area logos
+    :rtype: str
+    """
+    return create_resource_path("areas", filename)
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(instance: User, created: bool, **_kwargs: Any) -> bool:
     """

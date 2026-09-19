@@ -4,6 +4,8 @@ This module contains the model serializers, see :doc:`django:topics/serializatio
 
 from .alternative_word_serializer import AlternativeWordSerializer
 from .area_registration_serializer import (
+    AreaCodeSerializer,
+    AreaInfoResponseSerializer,
     AreaRegistrationResponseSerializer,
     AreaRegistrationSerializer,
     AreaSerializer,

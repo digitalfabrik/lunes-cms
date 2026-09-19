@@ -1,3 +1,4 @@
+from .area_info_view import AreaInfoView
 from .area_registration_view import AreaRegistrationView
 from .area_scoped_mixin import AreaScopedMixin
 from .feedback_viewset import CreateFeedbackViewSet
