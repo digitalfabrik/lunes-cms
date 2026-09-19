@@ -100,7 +100,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("cms", "0015_add_grammatical_gender_fields"),
-        ("cmsv2", "0032_review_unit_word"),
+        ("cmsv2", "0036_area_branding"),
     ]
 
     operations = [
