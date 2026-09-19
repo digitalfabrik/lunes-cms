@@ -7,10 +7,10 @@ and a word to the area of the units it is linked to. This module is the single
 place that knows how that derivation works, so admins, views and the API can
 share it.
 
-This module exposes three helper families: ``scope_*(queryset, user)``
-narrows a queryset the caller already holds, ``visible_*(user)`` narrows the
-whole table the same way, and ``published_*(queryset, area)`` narrows to what
-the API serves for an area token.
+This module exposes three helper families: ``scope_*(queryset, user)`` narrows a
+queryset the caller already holds, ``visible_*(user)`` narrows the whole table
+the same way, and ``published_*(queryset, area)`` narrows to what the API serves
+for an area token.
 """
 
 from __future__ import annotations
@@ -21,21 +21,27 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from .models.alternative_word import AlternativeWord
 from .models.area import Area
-from .models.job import Job
-from .models.unit import Unit, UnitWordRelation
-from .models.word import Word
 
 if TYPE_CHECKING:
     from django.contrib.auth.base_user import AbstractBaseUser
     from django.contrib.auth.models import AnonymousUser
     from django.db.models import QuerySet
 
+    # Imported for the annotations only: importing the models package for real
+    # would run into the import of this module in ``UnitWordRelation.clean()``.
+    from .models import (
+        AlternativeWord,
+        Job,
+        Unit,
+        UnitWordRelation,
+        Word,
+    )
+
     User = AbstractBaseUser | AnonymousUser
 
 
-def administered_areas(user: "User") -> QuerySet[Area]:
+def administered_areas(user: "User") -> "QuerySet[Area]":
     """
     The areas the given user administers.
 
@@ -57,7 +63,7 @@ def is_area_admin(user: "User") -> bool:
     return administered_areas(user).exists()
 
 
-def scope_jobs(queryset: QuerySet[Job], user: "User") -> QuerySet[Job]:
+def scope_jobs(queryset: "QuerySet[Job]", user: "User") -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the given user may see.
 
@@ -77,7 +83,7 @@ def scope_jobs(queryset: QuerySet[Job], user: "User") -> QuerySet[Job]:
     return queryset.filter(area__isnull=True)
 
 
-def scope_units(queryset: QuerySet[Unit], user: "User") -> QuerySet[Unit]:
+def scope_units(queryset: "QuerySet[Unit]", user: "User") -> "QuerySet[Unit]":
     """
     Restrict a unit queryset to what the given user may see.
 
@@ -96,7 +102,7 @@ def scope_units(queryset: QuerySet[Unit], user: "User") -> QuerySet[Unit]:
     return queryset.exclude(jobs__area__isnull=False).distinct()
 
 
-def scope_words(queryset: QuerySet[Word], user: "User") -> QuerySet[Word]:
+def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
     """
     Restrict a word queryset to what the given user may see.
 
@@ -122,8 +128,8 @@ def scope_words(queryset: QuerySet[Word], user: "User") -> QuerySet[Word]:
 
 
 def scope_unit_word_relations(
-    queryset: QuerySet[UnitWordRelation], user: "User"
-) -> QuerySet[UnitWordRelation]:
+    queryset: "QuerySet[UnitWordRelation]", user: "User"
+) -> "QuerySet[UnitWordRelation]":
     """
     Restrict a unit-word relation queryset to what the given user may see.
 
@@ -136,12 +142,15 @@ def scope_unit_word_relations(
     """
     if getattr(user, "is_superuser", False):
         return queryset
+    # pylint: disable=import-outside-toplevel
+    from .models import Unit
+
     return queryset.filter(unit__in=scope_units(Unit.objects.all(), user))
 
 
 def scope_alternative_words(
-    queryset: QuerySet[AlternativeWord], user: "User"
-) -> QuerySet[AlternativeWord]:
+    queryset: "QuerySet[AlternativeWord]", user: "User"
+) -> "QuerySet[AlternativeWord]":
     """
     Restrict an alternative word queryset to what the given user may see.
 
@@ -154,20 +163,26 @@ def scope_alternative_words(
     """
     if getattr(user, "is_superuser", False):
         return queryset
+    # pylint: disable=import-outside-toplevel
+    from .models import Word
+
     return queryset.filter(word__in=scope_words(Word.objects.all(), user))
 
 
-def visible_jobs(user: "User") -> QuerySet[Job]:
+def visible_jobs(user: "User") -> "QuerySet[Job]":
     """
     The jobs the given user may work with, see :func:`scope_jobs` for the rules.
 
     :param user: The user the jobs are restricted to
     :return: The restricted queryset
     """
+    # pylint: disable=import-outside-toplevel
+    from .models import Job
+
     return scope_jobs(Job.objects.all(), user)
 
 
-def visible_units(user: "User") -> QuerySet[Unit]:
+def visible_units(user: "User") -> "QuerySet[Unit]":
     """
     The units the given user may work with, see :func:`scope_units` for the
     rules.
@@ -175,10 +190,13 @@ def visible_units(user: "User") -> QuerySet[Unit]:
     :param user: The user the units are restricted to
     :return: The restricted queryset
     """
+    # pylint: disable=import-outside-toplevel
+    from .models import Unit
+
     return scope_units(Unit.objects.all(), user)
 
 
-def visible_words(user: "User") -> QuerySet[Word]:
+def visible_words(user: "User") -> "QuerySet[Word]":
     """
     The words the given user may work with, see :func:`scope_words` for the
     rules.
@@ -186,10 +204,13 @@ def visible_words(user: "User") -> QuerySet[Word]:
     :param user: The user the words are restricted to
     :return: The restricted queryset
     """
+    # pylint: disable=import-outside-toplevel
+    from .models import Word
+
     return scope_words(Word.objects.all(), user)
 
 
-def visible_unit_word_relations(user: "User") -> QuerySet[UnitWordRelation]:
+def visible_unit_word_relations(user: "User") -> "QuerySet[UnitWordRelation]":
     """
     The unit-word relations the given user may work with.
 
@@ -199,12 +220,15 @@ def visible_unit_word_relations(user: "User") -> QuerySet[UnitWordRelation]:
     :param user: The user the relations are restricted to
     :return: The restricted queryset
     """
+    # pylint: disable=import-outside-toplevel
+    from .models import UnitWordRelation
+
     return scope_unit_word_relations(
         UnitWordRelation.objects.select_related("word", "unit"), user
     )
 
 
-def visible_alternative_words(user: "User") -> QuerySet[AlternativeWord]:
+def visible_alternative_words(user: "User") -> "QuerySet[AlternativeWord]":
     """
     The alternative words the given user may work with, see
     :func:`scope_alternative_words` for the rules.
@@ -212,10 +236,13 @@ def visible_alternative_words(user: "User") -> QuerySet[AlternativeWord]:
     :param user: The user the alternative words are restricted to
     :return: The restricted queryset
     """
+    # pylint: disable=import-outside-toplevel
+    from .models import AlternativeWord
+
     return scope_alternative_words(AlternativeWord.objects.all(), user)
 
 
-def area_of_unit(unit: Unit) -> Area | None:
+def area_of_unit(unit: "Unit") -> Area | None:
     """
     The area a unit belongs to, derived from its job.
 
@@ -228,7 +255,7 @@ def area_of_unit(unit: Unit) -> Area | None:
     return job.area if job else None
 
 
-def pending_area_of_unit(unit: Unit) -> Area | None:
+def pending_area_of_unit(unit: "Unit") -> Area | None:
     """
     The area a unit is about to belong to.
 
@@ -248,7 +275,7 @@ def pending_area_of_unit(unit: Unit) -> Area | None:
     return next(iter(areas), None)
 
 
-def area_of_word(word: Word) -> Area | None:
+def area_of_word(word: "Word") -> Area | None:
     """
     The area a word belongs to, derived from the units it is linked to.
 
@@ -261,7 +288,7 @@ def area_of_word(word: Word) -> Area | None:
     return area_of_unit(unit) if unit else None
 
 
-def _other_areas_of_word(word: Word, unit: Unit) -> set[Area | None]:
+def _other_areas_of_word(word: "Word", unit: "Unit") -> set[Area | None]:
     """
     The areas of all units of a word, except the given unit.
 
@@ -277,7 +304,7 @@ def _other_areas_of_word(word: Word, unit: Unit) -> set[Area | None]:
     return {area_of_unit(other_unit) for other_unit in other_units}
 
 
-def validate_unit_jobs(unit: Unit, jobs: Iterable[Job]) -> None:
+def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
     """
     Check that the given jobs may be assigned to the given unit.
 
@@ -313,7 +340,7 @@ def validate_unit_jobs(unit: Unit, jobs: Iterable[Job]) -> None:
             )
 
 
-def validate_job_area(job: Job, area: Area | None) -> None:
+def validate_job_area(job: "Job", area: Area | None) -> None:
     """
     Check that a job may be moved into the given area.
 
@@ -354,7 +381,7 @@ def validate_job_area(job: Job, area: Area | None) -> None:
                 )
 
 
-def validate_relation_area(unit: Unit, word: Word) -> None:
+def validate_relation_area(unit: "Unit", word: "Word") -> None:
     """
     Check that a word may be linked to a unit.
 
@@ -376,7 +403,7 @@ def validate_relation_area(unit: Unit, word: Word) -> None:
         )
 
 
-def published_jobs(queryset: QuerySet[Job], area: Area | None) -> QuerySet[Job]:
+def published_jobs(queryset: "QuerySet[Job]", area: Area | None) -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the API publishes for the given area.
 
@@ -394,7 +421,7 @@ def published_jobs(queryset: QuerySet[Job], area: Area | None) -> QuerySet[Job]:
     return queryset.filter(area=area)
 
 
-def published_units(queryset: QuerySet[Unit], area: Area | None) -> QuerySet[Unit]:
+def published_units(queryset: "QuerySet[Unit]", area: Area | None) -> "QuerySet[Unit]":
     """
     Restrict a unit queryset to what the API publishes for the given area.
 
@@ -428,7 +455,7 @@ def published_units(queryset: QuerySet[Unit], area: Area | None) -> QuerySet[Uni
     )
 
 
-def published_words(queryset: QuerySet[Word], area: Area | None) -> QuerySet[Word]:
+def published_words(queryset: "QuerySet[Word]", area: Area | None) -> "QuerySet[Word]":
     """
     Restrict a word queryset to what the API publishes for the given area.
 
