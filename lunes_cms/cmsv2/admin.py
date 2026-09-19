@@ -15,11 +15,12 @@ from .admins import (
     FeedbackAdmin,
     JobAdmin,
     LunesUserAdmin,
+    ReviewAdmin,
     UnitAdmin,
     UnitWordRelationAdmin,
     WordAdmin,
 )
-from .models import Area, Feedback, Job, Unit, UnitWordRelation, Word
+from .models import Area, Feedback, Job, Review, Unit, UnitWordRelation, Word
 
 
 # pylint: disable=unused-argument
@@ -42,6 +43,7 @@ admin.site.register(Job, JobAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(UnitWordRelation, UnitWordRelationAdmin)
 admin.site.register(Word, WordAdmin)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.unregister(User)
 admin.site.register(User, LunesUserAdmin)
