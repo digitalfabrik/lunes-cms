@@ -12,11 +12,13 @@ import pytest
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import HttpRequest
 from django.test import Client, RequestFactory
 
 from lunes_cms.cmsv2.admins.area_admin import AreaAdmin, AreaCodeInline
+from lunes_cms.cmsv2.admins.feedback_admin import FeedbackAdmin
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
 from lunes_cms.cmsv2.admins.unit_admin import (
     UnitAdmin,
@@ -24,7 +26,7 @@ from lunes_cms.cmsv2.admins.unit_admin import (
     UnitWordRelationAdmin,
 )
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
-from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
+from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -111,6 +113,58 @@ def test_content_admin_querysets_are_scoped_to_the_area(
     )
     assert area_relation in relations
     assert main_relation not in relations
+
+
+def test_feedback_admin_queryset_requires_area_and_creator_group(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """
+    Feedback is only visible if the viewer both administers the job's area
+    AND belongs to the group that created the job, combining the legacy
+    creator-group scoping with the newer area scoping.
+    """
+    content_managers = Group.objects.get_or_create(name="Content managers")[0]
+    other_group = Group.objects.get_or_create(name="Other group")[0]
+
+    own_group_area_job = Job.objects.create(
+        name="Own group, area job", area=area, created_by=content_managers
+    )
+    other_group_area_job = Job.objects.create(
+        name="Other group, area job", area=area, created_by=other_group
+    )
+    own_group_main_job = Job.objects.create(
+        name="Own group, main job", created_by=content_managers
+    )
+
+    job_type = ContentType.objects.get_for_model(Job)
+    own_group_area_feedback = Feedback.objects.create(
+        content_type=job_type, object_id=own_group_area_job.pk, comment="a"
+    )
+    Feedback.objects.create(
+        content_type=job_type, object_id=other_group_area_job.pk, comment="b"
+    )
+    Feedback.objects.create(
+        content_type=job_type, object_id=own_group_main_job.pk, comment="c"
+    )
+
+    # `_user()` puts every user into "Content managers", so this admin
+    # matches the group of `own_group_area_job` and `own_group_main_job`.
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+
+    visible = set(
+        FeedbackAdmin(Feedback, admin.site).get_queryset(
+            _get_request(request_factory, admin_user)
+        )
+    )
+
+    assert visible == {own_group_area_feedback}
+    plain_visible = set(
+        FeedbackAdmin(Feedback, admin.site).get_queryset(
+            _get_request(request_factory, _user("plain"))
+        )
+    )
+    assert plain_visible == set()
 
 
 def test_save_model_assigns_the_area_of_the_creator(
