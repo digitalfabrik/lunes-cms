@@ -19,8 +19,9 @@ from lunes_cms.cmsv2.admins.area_filters import JobListFilter
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.areas import (
     area_of_unit,
-    scope_jobs,
+    scope_unit_word_relations,
     scope_units,
+    visible_jobs,
     validate_relation_area,
     validate_unit_jobs,
 )
@@ -125,11 +126,7 @@ class UnitWordRelationAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[UnitWordRelation]:
         """Restrict the relations to the units the user may see"""
-        return (
-            super()
-            .get_queryset(request)
-            .filter(unit__in=scope_units(Unit.objects.all(), request.user))
-        )
+        return scope_unit_word_relations(super().get_queryset(request), request.user)
 
     def has_module_permission(self, request: HttpRequest) -> bool:
         """Determines whether this admin should be shown in the sidebar"""
@@ -267,9 +264,7 @@ class UnitAdmin(BaseAdmin):
     ) -> Any:
         """Offer only the jobs the user may see, so no unit escapes its area."""
         if db_field.name == "jobs":
-            kwargs["queryset"] = scope_jobs(Job.objects.all(), request.user).order_by(
-                "name"
-            )
+            kwargs["queryset"] = visible_jobs(request.user).order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def area(self, obj: Unit) -> Area | None:

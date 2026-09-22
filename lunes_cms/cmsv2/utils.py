@@ -44,6 +44,34 @@ def create_resource_path(parent_dir: str, filename: str) -> str:
     return os.path.join(parent_dir, str(uuid.uuid1()) + pathlib.Path(filename).suffix)
 
 
+def safe_temp_path(directory: str, filename: str) -> Optional[str]:
+    """
+    Resolve a client supplied temporary filename inside the given directory.
+
+    The filename is reduced to its basename, and the names that would still
+    escape or name the directory itself are rejected, so the result is always a
+    regular file directly inside ``directory``.
+
+    Args:
+        directory (str): The temporary directory the file has to live in
+        filename (str): The filename as it came in with the request
+
+    Returns:
+        Optional[str]: The path of the file inside ``directory``, or None if the
+            name does not resolve to a file there
+    """
+    safe_name = os.path.basename(filename)
+    rejected = safe_name in ("", os.curdir, os.pardir)
+    if rejected or safe_name != filename:
+        logger.warning(
+            "Refused a temporary filename outside %s: %r", directory, filename
+        )
+    if rejected:
+        return None
+    path = os.path.join(directory, safe_name)
+    return path if os.path.isfile(path) else None
+
+
 def get_random_key(length: int = 10, excluded_chars: Optional[list[str]] = None) -> str:
     """
     Generate a random string key of specified length.

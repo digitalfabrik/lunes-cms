@@ -6,6 +6,11 @@ other area membership is derived from it: a unit belongs to the area of its job
 and a word to the area of the units it is linked to. This module is the single
 place that knows how that derivation works, so admins, views and the API can
 share it.
+
+This module exposes three helper families: ``scope_*(queryset, user)`` narrows a
+queryset the caller already holds, ``visible_*(user)`` narrows the whole table
+the same way, and ``published_*(queryset, area)`` narrows to what the API serves
+for an area token.
 """
 
 from __future__ import annotations
@@ -25,7 +30,13 @@ if TYPE_CHECKING:
 
     # Imported for the annotations only: importing the models package for real
     # would run into the import of this module in ``UnitWordRelation.clean()``.
-    from .models import Job, Unit, Word
+    from .models import (
+        AlternativeWord,
+        Job,
+        Unit,
+        UnitWordRelation,
+        Word,
+    )
 
     User = AbstractBaseUser | AnonymousUser
 
@@ -114,6 +125,117 @@ def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
             | Q(units__isnull=True, created_by_user__pk=user.pk)
         ).distinct()
     return queryset.exclude(units__jobs__area__isnull=False).distinct()
+
+
+def scope_unit_word_relations(
+    queryset: "QuerySet[UnitWordRelation]", user: "User"
+) -> "QuerySet[UnitWordRelation]":
+    """
+    Restrict a unit-word relation queryset to what the given user may see.
+
+    The area of a relation is the area of its unit, see :func:`scope_units` for
+    the rules.
+
+    :param queryset: The relation queryset to restrict
+    :param user: The user the queryset is restricted to
+    :return: The restricted queryset
+    """
+    if getattr(user, "is_superuser", False):
+        return queryset
+    # pylint: disable=import-outside-toplevel
+    from .models import Unit
+
+    return queryset.filter(unit__in=scope_units(Unit.objects.all(), user))
+
+
+def scope_alternative_words(
+    queryset: "QuerySet[AlternativeWord]", user: "User"
+) -> "QuerySet[AlternativeWord]":
+    """
+    Restrict an alternative word queryset to what the given user may see.
+
+    An alternative word belongs to the area of the word it spells out, see
+    :func:`scope_words` for the rules.
+
+    :param queryset: The alternative word queryset to restrict
+    :param user: The user the queryset is restricted to
+    :return: The restricted queryset
+    """
+    if getattr(user, "is_superuser", False):
+        return queryset
+    # pylint: disable=import-outside-toplevel
+    from .models import Word
+
+    return queryset.filter(word__in=scope_words(Word.objects.all(), user))
+
+
+def visible_jobs(user: "User") -> "QuerySet[Job]":
+    """
+    The jobs the given user may work with, see :func:`scope_jobs` for the rules.
+
+    :param user: The user the jobs are restricted to
+    :return: The restricted queryset
+    """
+    # pylint: disable=import-outside-toplevel
+    from .models import Job
+
+    return scope_jobs(Job.objects.all(), user)
+
+
+def visible_units(user: "User") -> "QuerySet[Unit]":
+    """
+    The units the given user may work with, see :func:`scope_units` for the
+    rules.
+
+    :param user: The user the units are restricted to
+    :return: The restricted queryset
+    """
+    # pylint: disable=import-outside-toplevel
+    from .models import Unit
+
+    return scope_units(Unit.objects.all(), user)
+
+
+def visible_words(user: "User") -> "QuerySet[Word]":
+    """
+    The words the given user may work with, see :func:`scope_words` for the
+    rules.
+
+    :param user: The user the words are restricted to
+    :return: The restricted queryset
+    """
+    # pylint: disable=import-outside-toplevel
+    from .models import Word
+
+    return scope_words(Word.objects.all(), user)
+
+
+def visible_unit_word_relations(user: "User") -> "QuerySet[UnitWordRelation]":
+    """
+    The unit-word relations the given user may work with, see
+    :func:`scope_unit_word_relations` for the rules.
+
+    :param user: The user the relations are restricted to
+    :return: The restricted queryset
+    """
+    # pylint: disable=import-outside-toplevel
+    from .models import UnitWordRelation
+
+    return scope_unit_word_relations(UnitWordRelation.objects.all(), user)
+
+
+def visible_alternative_words(user: "User") -> "QuerySet[AlternativeWord]":
+    """
+    The alternative words the given user may work with, see
+    :func:`scope_alternative_words` for the rules.
+
+    :param user: The user the alternative words are restricted to
+    :return: The restricted queryset
+    """
+    # pylint: disable=import-outside-toplevel
+    from .models import AlternativeWord
+
+    return scope_alternative_words(AlternativeWord.objects.all(), user)
 
 
 def area_of_unit(unit: "Unit") -> Area | None:

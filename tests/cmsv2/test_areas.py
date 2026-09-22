@@ -18,14 +18,16 @@ from lunes_cms.cmsv2.areas import (
     area_of_word,
     is_area_admin,
     pending_area_of_unit,
+    scope_alternative_words,
     scope_jobs,
+    scope_unit_word_relations,
     scope_units,
     scope_words,
     validate_job_area,
     validate_relation_area,
     validate_unit_jobs,
 )
-from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
+from lunes_cms.cmsv2.models import AlternativeWord, Area, AreaCode, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -149,6 +151,107 @@ def test_scope_words_keeps_own_unlinked_word_visible_to_area_admin(
     visible = set(scope_words(Word.objects.all(), admin_user))
     assert own_word in visible
     assert foreign_word not in visible
+
+
+@pytest.mark.django_db
+def test_scope_unit_word_relations_per_user_kind(area: Area) -> None:
+    """A relation inherits the area of its unit."""
+    area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
+    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    area_relation = UnitWordRelation.objects.create(
+        unit=area_unit, word=_word("Bereichswort")
+    )
+    main_relation = UnitWordRelation.objects.create(
+        unit=main_unit, word=_word("Hauptwort")
+    )
+
+    superuser = _user("root", is_superuser=True)
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+    plain_user = _user("plain")
+
+    # Only the area content is asserted exactly, the database may hold
+    # fixture content of the main app as well.
+    assert {area_relation, main_relation} <= set(
+        scope_unit_word_relations(UnitWordRelation.objects.all(), superuser)
+    )
+    assert set(
+        scope_unit_word_relations(UnitWordRelation.objects.all(), admin_user)
+    ) == {area_relation}
+    plain_relations = set(
+        scope_unit_word_relations(UnitWordRelation.objects.all(), plain_user)
+    )
+    assert main_relation in plain_relations
+    assert area_relation not in plain_relations
+
+
+@pytest.mark.django_db
+def test_scope_alternative_words_per_user_kind(area: Area) -> None:
+    """An alternative word inherits the area of the word it spells out."""
+    area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
+    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    area_word = _word("Bereichswort")
+    main_word = _word("Hauptwort")
+    UnitWordRelation.objects.create(unit=area_unit, word=area_word)
+    UnitWordRelation.objects.create(unit=main_unit, word=main_word)
+    area_alternative = AlternativeWord.objects.create(
+        word=area_word, alt_word="Bereichsvariante"
+    )
+    main_alternative = AlternativeWord.objects.create(
+        word=main_word, alt_word="Hauptvariante"
+    )
+
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+    plain_user = _user("plain")
+
+    assert set(scope_alternative_words(AlternativeWord.objects.all(), admin_user)) == {
+        area_alternative
+    }
+    plain_alternatives = set(
+        scope_alternative_words(AlternativeWord.objects.all(), plain_user)
+    )
+    assert main_alternative in plain_alternatives
+    assert area_alternative not in plain_alternatives
+
+
+@pytest.mark.django_db
+def test_scope_alternative_words_follows_the_creator_exception(area: Area) -> None:
+    """
+    The creator exception of :func:`scope_words` carries over: an alternative
+    word on a still unlinked word stays visible to the area administrator who
+    created that word.
+    """
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+    own = AlternativeWord.objects.create(
+        word=_word("Frisch", created_by_user=admin_user), alt_word="Frischling"
+    )
+    foreign = AlternativeWord.objects.create(
+        word=_word("Fremd", created_by_user=_user("someone")), alt_word="Fremdling"
+    )
+
+    visible = set(scope_alternative_words(AlternativeWord.objects.all(), admin_user))
+    assert own in visible
+    assert foreign not in visible
+
+
+@pytest.mark.django_db
+def test_scope_words_get_survives_a_word_in_several_units(area: Area) -> None:
+    """
+    The scoped querysets join over the units of a word, so a word used in
+    several units of the same area matches more than once. ``.distinct()`` is
+    what keeps the single-object lookup of the admin views working.
+    """
+    job = Job.objects.create(name="A", area=area)
+    word = _word("Mehrfach")
+    for title in ("Erste", "Zweite"):
+        UnitWordRelation.objects.create(unit=_unit_with_job(title, job), word=word)
+
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+
+    assert scope_words(Word.objects.all(), admin_user).get(id=word.pk) == word
 
 
 @pytest.mark.django_db

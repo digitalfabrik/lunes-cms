@@ -18,7 +18,11 @@ from django.test import Client, RequestFactory
 
 from lunes_cms.cmsv2.admins.area_admin import AreaAdmin
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
-from lunes_cms.cmsv2.admins.unit_admin import UnitAdmin, UnitAdminForm
+from lunes_cms.cmsv2.admins.unit_admin import (
+    UnitAdmin,
+    UnitAdminForm,
+    UnitWordRelationAdmin,
+)
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
 from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
@@ -79,10 +83,10 @@ def test_job_admin_queryset_is_scoped_to_the_area(
     assert area_job not in plain_visible
 
 
-def test_unit_and_word_admin_querysets_are_scoped_to_the_area(
+def test_content_admin_querysets_are_scoped_to_the_area(
     area: Area, request_factory: RequestFactory
 ) -> None:
-    """The same scoping applies to units and words."""
+    """The same scoping applies to units, words and their relations."""
     area_unit = Unit.objects.create(title="Area unit")
     area_unit.jobs.add(Job.objects.create(name="Area job", area=area))
     main_unit = Unit.objects.create(title="Main unit")
@@ -91,8 +95,8 @@ def test_unit_and_word_admin_querysets_are_scoped_to_the_area(
     # fixture content of the main app as well.
     area_word = Word.objects.create(word="Bereichswort", singular_article=1)
     main_word = Word.objects.create(word="Hauptwort", singular_article=1)
-    UnitWordRelation.objects.create(unit=area_unit, word=area_word)
-    UnitWordRelation.objects.create(unit=main_unit, word=main_word)
+    area_relation = UnitWordRelation.objects.create(unit=area_unit, word=area_word)
+    main_relation = UnitWordRelation.objects.create(unit=main_unit, word=main_word)
 
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
@@ -100,6 +104,11 @@ def test_unit_and_word_admin_querysets_are_scoped_to_the_area(
 
     assert set(UnitAdmin(Unit, admin.site).get_queryset(request)) == {area_unit}
     assert set(WordAdmin(Word, admin.site).get_queryset(request)) == {area_word}
+    relations = set(
+        UnitWordRelationAdmin(UnitWordRelation, admin.site).get_queryset(request)
+    )
+    assert area_relation in relations
+    assert main_relation not in relations
 
 
 def test_save_model_assigns_the_area_of_the_creator(

@@ -1465,6 +1465,56 @@ msgstr "Bitte einen gültigen Hex-Farbcode eingeben, z. B. #000000."
 msgid "Permission denied"
 msgstr "Keine Berechtigung"
 
+#: cmsv2/views/delete_alternative_word.py cmsv2/views/save_alternative_word.py
+msgid "Alternative word not found"
+msgstr "Alternatives Wort nicht gefunden"
+
+#: cmsv2/views/delete_alternative_word.py
+msgid "Alternative word deleted successfully"
+msgstr "Alternatives Wort gelöscht"
+
+#: cmsv2/views/generate_example_sentence.py
+msgid "No job found. Assign the word to a unit that belongs to a job first."
+msgstr "Kein Beruf gefunden. Ordne das Wort zuerst einer Lerneinheit zu, die zu einem Beruf gehört."
+
+#: cmsv2/views/generate_example_sentence.py
+msgid "Example sentence generated!"
+msgstr "Beispielsatz erzeugt!"
+
+#: cmsv2/views/generate_example_sentence.py
+#: cmsv2/views/save_alternative_word.py cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_audio_check_status.py
+#: cmsv2/views/update_word_image.py
+#: cmsv2/views/update_word_image_check_status.py
+#: cmsv2/views/word_generate_audio.py
+#: cmsv2/views/word_generate_example_sentence_audio.py
+#: cmsv2/views/word_generate_image.py
+msgid "Word not found"
+msgstr "Wort nicht gefunden"
+
+#: cmsv2/views/generate_example_sentence.py
+#: cmsv2/views/unitword_generate_example_sentence_audio.py
+#: cmsv2/views/update_unitword_image.py
+#: cmsv2/views/update_unitword_image_check_status.py
+msgid "Unit-Word relation not found"
+msgstr "Wort-Zuordnung zur Lerneinheit nicht gefunden"
+
+#: cmsv2/views/generate_example_sentence.py
+msgid "No example sentence provided."
+msgstr "Kein Beispielsatz übergeben."
+
+#: cmsv2/views/generate_example_sentence.py
+msgid "Example sentence saved."
+msgstr "Beispielsatz gespeichert."
+
+#: cmsv2/views/generate_image.py
+msgid "No word_text provided."
+msgstr "Kein Worttext übergeben."
+
+#: cmsv2/views/generate_image.py
+msgid "Image generated!"
+msgstr "Bild erzeugt!"
+
 #: cmsv2/views/import_csv_view.py
 msgid "Select CSV file"
 msgstr "CSV Datei auswählen"
@@ -1546,6 +1596,129 @@ msgstr ""
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
+
+#: cmsv2/views/save_alternative_word.py
+msgid "No word id provided"
+msgstr "Keine Wort-ID übergeben"
+
+#: cmsv2/views/save_alternative_word.py
+msgid "No alternative word provided"
+msgstr "Kein alternatives Wort übergeben"
+
+#: cmsv2/views/save_alternative_word.py
+msgid "Invalid field value provided"
+msgstr "Ungültiger Feldwert übergeben"
+
+#: cmsv2/views/save_alternative_word.py
+msgid "Alternative word saved successfully"
+msgstr "Alternatives Wort gespeichert"
+
+#: cmsv2/views/unitword_generate_example_sentence_audio.py
+#: cmsv2/views/word_generate_example_sentence_audio.py
+msgid "No example_sentence_text provided."
+msgstr "Kein Beispielsatztext übergeben."
+
+#: cmsv2/views/unitword_generate_example_sentence_audio.py
+#: cmsv2/views/word_generate_audio.py
+#: cmsv2/views/word_generate_example_sentence_audio.py
+msgid "Audio generated and saved temporarily!"
+msgstr "Audiodatei erzeugt und zwischengespeichert!"
+
+#: cmsv2/views/update_job_icon.py
+msgid "Job not found"
+msgstr "Beruf nicht gefunden"
+
+#: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
+msgid "No icon provided"
+msgstr "Kein Symbol übergeben"
+
+#: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
+msgid "Icon added successfully"
+msgstr "Symbol hinzugefügt"
+
+#: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
+msgid "Icon deleted successfully"
+msgstr "Symbol gelöscht"
+
+#: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
+msgid "No icon to delete"
+msgstr "Kein Symbol zum Löschen vorhanden"
+
+#: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
+#: cmsv2/views/update_unitword_image.py cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_image.py
+msgid "Invalid action"
+msgstr "Ungültige Aktion"
+
+#: cmsv2/views/update_unit_icon.py
+msgid "Unit not found"
+msgstr "Lerneinheit nicht gefunden"
+
+#: cmsv2/views/update_unitword_image.py cmsv2/views/update_word_image.py
+msgid "No image provided"
+msgstr "Kein Bild übergeben"
+
+#: cmsv2/views/update_unitword_image.py cmsv2/views/update_word_image.py
+msgid "Image added successfully"
+msgstr "Bild hinzugefügt"
+
+#: cmsv2/views/update_unitword_image.py cmsv2/views/update_word_image.py
+msgid "Image deleted successfully"
+msgstr "Bild gelöscht"
+
+#: cmsv2/views/update_unitword_image.py cmsv2/views/update_word_image.py
+msgid "No image to delete"
+msgstr "Kein Bild zum Löschen vorhanden"
+
+#: cmsv2/views/update_unitword_image_check_status.py
+#: cmsv2/views/update_word_image_check_status.py
+msgid "No image check status provided"
+msgstr "Kein Prüfstatus für das Bild übergeben"
+
+#: cmsv2/views/update_unitword_image_check_status.py
+msgid "Unit-Word image check status updated successfully"
+msgstr "Prüfstatus des Bildes in der Lerneinheit aktualisiert"
+
+#: cmsv2/views/update_word_audio.py
+msgid "No audio file provided"
+msgstr "Keine Audiodatei übergeben"
+
+#: cmsv2/views/update_word_audio.py
+msgid "Audio added successfully"
+msgstr "Audiodatei hinzugefügt"
+
+#: cmsv2/views/update_word_audio.py
+msgid "Audio deleted successfully"
+msgstr "Audiodatei gelöscht"
+
+#: cmsv2/views/update_word_audio.py
+msgid "No audio file to delete"
+msgstr "Keine Audiodatei zum Löschen vorhanden"
+
+#: cmsv2/views/update_word_audio_check_status.py
+msgid "No audio check status provided"
+msgstr "Kein Prüfstatus für die Audiodatei übergeben"
+
+#: cmsv2/views/update_word_audio_check_status.py
+msgid "Audio check status updated successfully"
+msgstr "Prüfstatus der Audiodatei aktualisiert"
+
+#: cmsv2/views/update_word_image_check_status.py
+msgid "Image check status updated successfully"
+msgstr "Prüfstatus des Bildes aktualisiert"
+
+#: cmsv2/views/word_generate_audio.py
+msgid "Word has no text to speak."
+msgstr "Das Wort hat keinen Text zum Vorlesen."
+
+#: cmsv2/views/word_generate_audio.py
+#: cmsv2/views/word_generate_example_sentence_audio.py
+msgid "Audio saved successfully."
+msgstr "Audiodatei gespeichert."
+
+#: cmsv2/views/word_generate_image.py
+msgid "Image saved successfully."
+msgstr "Bild gespeichert."
 
 #: core/audio.py
 msgid "Invalid audio file"

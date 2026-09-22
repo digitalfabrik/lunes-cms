@@ -106,7 +106,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
         window
             .postWithCsrf(generateUrl, formData)
             .then(async (response) => {
-                const data = (await response.json()) as RegenerateResponse
+                const data = (await window.readJsonBody(response)) as RegenerateResponse
                 if (!response.ok || data.error) {
                     throw new Error(data.error ?? `HTTP error! status: ${response.status}`)
                 }
@@ -157,7 +157,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
             },
         })
             .then(async (response) => {
-                const data = (await response.json()) as { status?: string; message?: string }
+                const data = await window.readJsonBody(response)
                 if (!response.ok || data.status !== "success") {
                     throw new Error(data.message ?? `HTTP error! status: ${response.status}`)
                 }

@@ -4,16 +4,17 @@ from typing import Optional, Union
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
-from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext_lazy as _
 from openai import OpenAIError
 
+from lunes_cms.cmsv2.areas import visible_unit_word_relations, visible_words
 from lunes_cms.cmsv2.models import Job, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.sentence_generation import openai_example_sentence
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
-from .decorators import require_any_permission_json
+from .decorators import json_not_found, require_any_permission_json
 
 
 def _generate_sentence_response(
@@ -25,7 +26,9 @@ def _generate_sentence_response(
     if not job_names:
         return JsonResponse(
             {
-                "error": "No job found. Assign the word to a unit that belongs to a job first."
+                "error": _(
+                    "No job found. Assign the word to a unit that belongs to a job first."
+                )
             },
             status=400,
         )
@@ -39,7 +42,7 @@ def _generate_sentence_response(
 
     return JsonResponse(
         {
-            "message": "Example sentence generated!",
+            "message": _("Example sentence generated!"),
             "example_sentence": sentence,
         }
     )
@@ -49,7 +52,7 @@ def _generate_sentence_response(
 @require_any_permission_json("cmsv2.change_word")
 @require_POST
 def word_generate_example_sentence_via_openai(
-    _request: HttpRequest, word_id: int
+    request: HttpRequest, word_id: int
 ) -> JsonResponse:
     """
     AJAX endpoint to generate an example sentence for a Word via OpenAI.
@@ -57,7 +60,10 @@ def word_generate_example_sentence_via_openai(
     The professional context is derived from the jobs of all units the word
     is assigned to.
     """
-    word_instance = get_object_or_404(Word, pk=word_id)
+    try:
+        word_instance = visible_words(request.user).get(pk=word_id)
+    except Word.DoesNotExist:
+        return json_not_found(_("Word not found"))
     # A word can belong to several jobs (via the units it is assigned to);
     # all of them are joined into the prompt so the generated sentence covers
     # every relevant professional context.
@@ -74,13 +80,20 @@ def word_generate_example_sentence_via_openai(
 @require_any_permission_json("cmsv2.change_unitwordrelation")
 @require_POST
 def unitword_generate_example_sentence_via_openai(
-    _request: HttpRequest, unitword_id: int
+    request: HttpRequest, unitword_id: int
 ) -> JsonResponse:
     """
     AJAX endpoint to generate an example sentence for a UnitWordRelation via
     OpenAI, scoped to the relation's unit and its jobs.
     """
-    relation = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    try:
+        relation = (
+            visible_unit_word_relations(request.user)
+            .select_related("word", "unit")
+            .get(pk=unitword_id)
+        )
+    except UnitWordRelation.DoesNotExist:
+        return json_not_found(_("Unit-Word relation not found"))
     job_names = list(relation.unit.jobs.order_by("name").values_list("name", flat=True))
     return _generate_sentence_response(
         relation.word.word, job_names, relation.unit.title
@@ -97,7 +110,7 @@ def _store_sentence_response(
     """
     if sentence is None:
         return JsonResponse(
-            {"status": "error", "message": "No example sentence provided."},
+            {"status": "error", "message": _("No example sentence provided.")},
             status=400,
         )
     instance.example_sentence = sentence
@@ -105,7 +118,7 @@ def _store_sentence_response(
     return JsonResponse(
         {
             "status": "success",
-            "message": "Example sentence saved.",
+            "message": _("Example sentence saved."),
             "example_sentence": instance.example_sentence,
         }
     )
@@ -120,7 +133,10 @@ def word_store_generated_example_sentence(
     """
     AJAX endpoint to persist a kept example sentence on a Word.
     """
-    word_instance = get_object_or_404(Word, pk=word_id)
+    try:
+        word_instance = visible_words(request.user).get(pk=word_id)
+    except Word.DoesNotExist:
+        return json_not_found(_("Word not found"))
     return _store_sentence_response(word_instance, request.POST.get("example_sentence"))
 
 
@@ -133,5 +149,8 @@ def unitword_store_generated_example_sentence(
     """
     AJAX endpoint to persist a kept example sentence on a UnitWordRelation.
     """
-    relation = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    try:
+        relation = visible_unit_word_relations(request.user).get(pk=unitword_id)
+    except UnitWordRelation.DoesNotExist:
+        return json_not_found(_("Unit-Word relation not found"))
     return _store_sentence_response(relation, request.POST.get("example_sentence"))

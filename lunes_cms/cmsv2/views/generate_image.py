@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import logging
+
 import os
 import uuid
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.services.image_generation import (
@@ -16,6 +19,8 @@ from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
 
 from .decorators import require_any_permission_json
+
+logger = logging.getLogger(__name__)
 
 
 def _prompt_from_request(request: HttpRequest) -> str | None:
@@ -46,7 +51,7 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
 
     prompt = _prompt_from_request(request)
     if prompt is None:
-        return JsonResponse({"error": "No word_text provided."}, status=400)
+        return JsonResponse({"error": _("No word_text provided.")}, status=400)
 
     try:
         image_data = openai_image_bytes(prompt)
@@ -66,7 +71,7 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
 
         return JsonResponse(
             {
-                "message": "Image generated!",
+                "message": _("Image generated!"),
                 "temp_image_url": temp_image_url,
                 "temp_image_filename": temp_filename,
             }
@@ -75,6 +80,5 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
     except OpenAIConfigurationError as e:
         return JsonResponse({"error": str(e)}, status=503)
     except (ValueError, ConnectionError, TimeoutError) as e:
-        print("Exception!")
-        print(e)
+        logger.error("Generating an image failed: %s", e)
         return JsonResponse({"error": str(e)}, status=500)

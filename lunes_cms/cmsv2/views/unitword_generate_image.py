@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 import os
 
 from django.contrib import admin
@@ -9,8 +11,11 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.areas import visible_unit_word_relations
+from lunes_cms.cmsv2.utils import safe_temp_path
 from lunes_cms.core import settings
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -20,7 +25,10 @@ def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpRespo
     Dedicated view for generating image for a specific Unit<>Word relation.
     """
 
-    unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    unitword_instance = get_object_or_404(
+        visible_unit_word_relations(request.user).select_related("word", "unit"),
+        pk=unitword_id,
+    )
     # We only want the job name as a hint to the AI when the unit is in exactly one job.
     # Fetching 2 (LIMIT 2) is enough to tell "exactly one" from "more than one".
     jobs = list(unitword_instance.unit.jobs.all()[:2])
@@ -48,17 +56,17 @@ def unitword_store_generated_image_permanently(
     and redirects back to the edit view.
     """
 
-    unitword_instance = get_object_or_404(UnitWordRelation, pk=unitword_id)
+    unitword_instance = get_object_or_404(
+        visible_unit_word_relations(request.user).select_related("word", "unit"),
+        pk=unitword_id,
+    )
     temp_filename = request.POST.get("temp_filename")
 
     if not temp_filename:
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
-    # basename() keeps a crafted POST value from pointing outside the temp dir.
-    temp_filename = os.path.basename(temp_filename)
-    temp_filepath = os.path.join(settings.TEMP_IMAGE_DIR, temp_filename)
-
-    if not os.path.exists(temp_filepath):
+    temp_filepath = safe_temp_path(settings.TEMP_IMAGE_DIR, temp_filename)
+    if not temp_filepath:
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
     try:
@@ -66,7 +74,7 @@ def unitword_store_generated_image_permanently(
             # Keep the temp file's extension: the bytes are OpenAI's own
             # encode, and a wrong suffix would trigger a re-encode on save
             # that strips its provenance markings.
-            suffix = os.path.splitext(temp_filename)[1]
+            suffix = os.path.splitext(temp_filepath)[1]
             content_file = ContentFile(
                 f.read(),
                 name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}{suffix}',
@@ -81,5 +89,5 @@ def unitword_store_generated_image_permanently(
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
     except (ValueError, FileNotFoundError, OSError) as e:
-        print(f"Error storing generated image: {e}")
+        logger.error("Storing a generated image failed: %s", e)
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
