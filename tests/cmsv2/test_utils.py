@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import datetime
 import logging
+import os
 from pathlib import Path
 from unittest import mock
 
@@ -68,7 +69,15 @@ def test_safe_temp_path_returns_none_for_a_missing_file(tmp_path: Path) -> None:
 
 @pytest.mark.parametrize(
     "crafted",
-    ["../outside.mp3", "../../etc/passwd", "/etc/passwd", "sub/../../outside.mp3"],
+    [
+        "../outside.mp3",
+        "../../etc/passwd",
+        "/etc/passwd",
+        "sub/../../outside.mp3",
+        os.pardir,
+        os.curdir,
+        "",
+    ],
 )
 def test_safe_temp_path_never_resolves_outside_the_directory(
     tmp_path: Path, crafted: str, caplog: pytest.LogCaptureFixture
@@ -85,3 +94,10 @@ def test_safe_temp_path_never_resolves_outside_the_directory(
     assert resolved is None, f"{crafted!r} resolved to {resolved!r}"
     assert outside.read_bytes() == b"not yours"
     assert len(caplog.records) == 1
+
+
+def test_safe_temp_path_refuses_a_directory(tmp_path: Path) -> None:
+    """Only a regular file resolves, so the path can never name a directory."""
+    (tmp_path / "a_directory").mkdir()
+
+    assert safe_temp_path(str(tmp_path), "a_directory") is None
