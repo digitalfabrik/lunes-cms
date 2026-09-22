@@ -26,7 +26,7 @@ def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpRespo
     """
 
     unitword_instance = get_object_or_404(
-        visible_unit_word_relations(request.user),
+        visible_unit_word_relations(request.user).select_related("word", "unit"),
         pk=unitword_id,
     )
     # We only want the job name as a hint to the AI when the unit is in exactly one job.
@@ -57,7 +57,7 @@ def unitword_store_generated_image_permanently(
     """
 
     unitword_instance = get_object_or_404(
-        visible_unit_word_relations(request.user),
+        visible_unit_word_relations(request.user).select_related("word", "unit"),
         pk=unitword_id,
     )
     temp_filename = request.POST.get("temp_filename")

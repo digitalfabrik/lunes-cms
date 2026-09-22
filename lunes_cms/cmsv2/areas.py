@@ -212,9 +212,7 @@ def visible_words(user: "User") -> "QuerySet[Word]":
 
 def visible_unit_word_relations(user: "User") -> "QuerySet[UnitWordRelation]":
     """
-    The unit-word relations the given user may work with.
-
-    The word and the unit of a relation are selected along with it, see
+    The unit-word relations the given user may work with, see
     :func:`scope_unit_word_relations` for the rules.
 
     :param user: The user the relations are restricted to
@@ -223,9 +221,7 @@ def visible_unit_word_relations(user: "User") -> "QuerySet[UnitWordRelation]":
     # pylint: disable=import-outside-toplevel
     from .models import UnitWordRelation
 
-    return scope_unit_word_relations(
-        UnitWordRelation.objects.select_related("word", "unit"), user
-    )
+    return scope_unit_word_relations(UnitWordRelation.objects.all(), user)
 
 
 def visible_alternative_words(user: "User") -> "QuerySet[AlternativeWord]":

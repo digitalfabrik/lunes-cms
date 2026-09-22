@@ -35,7 +35,7 @@ def unitword_generate_example_sentence_audio(
     """
 
     unitword_instance = get_object_or_404(
-        visible_unit_word_relations(request.user),
+        visible_unit_word_relations(request.user).select_related("word", "unit"),
         pk=unitword_id,
     )
 
@@ -66,8 +66,10 @@ def unitword_generate_example_sentence_audio_via_openai(
     """
 
     try:
-        unitword_instance = visible_unit_word_relations(request.user).get(
-            pk=unitword_id
+        unitword_instance = (
+            visible_unit_word_relations(request.user)
+            .select_related("word", "unit")
+            .get(pk=unitword_id)
         )
     except UnitWordRelation.DoesNotExist:
         return json_not_found(_("Unit-Word relation not found"))
@@ -121,7 +123,7 @@ def unitword_store_generated_example_sentence_audio_permanently(
     """
 
     unitword_instance = get_object_or_404(
-        visible_unit_word_relations(request.user),
+        visible_unit_word_relations(request.user).select_related("word", "unit"),
         pk=unitword_id,
     )
     temp_filename = request.POST.get("temp_audio_filename")

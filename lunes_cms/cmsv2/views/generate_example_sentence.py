@@ -87,7 +87,11 @@ def unitword_generate_example_sentence_via_openai(
     OpenAI, scoped to the relation's unit and its jobs.
     """
     try:
-        relation = visible_unit_word_relations(request.user).get(pk=unitword_id)
+        relation = (
+            visible_unit_word_relations(request.user)
+            .select_related("word", "unit")
+            .get(pk=unitword_id)
+        )
     except UnitWordRelation.DoesNotExist:
         return json_not_found(_("Unit-Word relation not found"))
     job_names = list(relation.unit.jobs.order_by("name").values_list("name", flat=True))
