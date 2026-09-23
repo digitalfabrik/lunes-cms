@@ -3,6 +3,7 @@
     "model": "cmsv2.job",
     "pk": 15,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Bäcker/-in",
       "icon": "images/backer-in.png",
@@ -17,6 +18,7 @@
     "model": "cmsv2.job",
     "pk": 16,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Elektroniker/-in",
       "icon": "images/elektroniker-in.png",
@@ -31,6 +33,7 @@
     "model": "cmsv2.job",
     "pk": 20,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Kfz-Mechatroniker/-in",
       "icon": "images/kfz-mechatroniker-in.png",
@@ -47,6 +50,7 @@
     "model": "cmsv2.job",
     "pk": 28,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Anlagenmechaniker/-in für Sanitär-, Heizungs- und Klimatechnik",
       "icon": "images/anlagenmechaniker-in-fur-sanitar-heizungs-und-klimatechnik.png",
@@ -61,6 +65,7 @@
     "model": "cmsv2.job",
     "pk": 40,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Fachkraft für Gastgewerbe",
       "icon": "images/fachkraft-fur-gastgewerbe.png",
@@ -75,6 +80,7 @@
     "model": "cmsv2.job",
     "pk": 42,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Restaurantfachmann/-frau",
       "icon": "images/restaurantfachmann-frau.png",
@@ -89,6 +95,7 @@
     "model": "cmsv2.job",
     "pk": 43,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Hauswirtschafter/-in",
       "icon": "images/hauswirtschafter-in.png",
@@ -103,6 +110,7 @@
     "model": "cmsv2.job",
     "pk": 47,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Berufskraftfahrer/-in",
       "icon": "images/berufskraftfahrer-in.png",
@@ -119,6 +127,7 @@
     "model": "cmsv2.job",
     "pk": 50,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Industriemechaniker/-in",
       "icon": "images/industriemechaniker-in.png",
@@ -133,6 +142,7 @@
     "model": "cmsv2.job",
     "pk": 51,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Karosserie- und Fahrzeug-baumechaniker/-in",
       "icon": "images/karosserie-und-fahrzeug-baumechaniker-in.png",
@@ -149,6 +159,7 @@
     "model": "cmsv2.job",
     "pk": 52,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Maschinen- und Anlagenführer/-in",
       "icon": "images/maschinen-und-anlagenfuhrer-in.png",
@@ -163,6 +174,7 @@
     "model": "cmsv2.job",
     "pk": 54,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Zerspanungsmechaniker/-in",
       "icon": "images/zerspanungsmechaniker-in.png",
@@ -177,6 +189,7 @@
     "model": "cmsv2.job",
     "pk": 70,
     "fields": {
+      "area": 1,
       "released": false,
       "name": "Staudengärtner/-in",
       "icon": "",
@@ -191,6 +204,7 @@
     "model": "cmsv2.job",
     "pk": 125,
     "fields": {
+      "area": 1,
       "released": true,
       "name": "Informationselektroniker/-in",
       "icon": "images/informationselektroniker-in.png",
@@ -205,6 +219,7 @@
     "model": "cmsv2.job",
     "pk": 130,
     "fields": {
+      "area": 1,
       "released": false,
       "name": "Pferdewirt/-in",
       "icon": "images/pferdewirt-in.png",
@@ -219,6 +234,7 @@
     "model": "cmsv2.job",
     "pk": 131,
     "fields": {
+      "area": 1,
       "released": false,
       "name": "Konditor/-in",
       "icon": "images/konditor-in.png",
@@ -45031,6 +45047,77 @@
         ["delete_unitwordrelation", "cmsv2", "unitwordrelation"],
         ["view_unitwordrelation", "cmsv2", "unitwordrelation"]
       ]
+    }
+  },
+  {
+    "model": "cmsv2.area",
+    "pk": 9001,
+    "fields": {
+      "name": "Partner Musterstadt",
+      "admins": [["patrizia.partnermanagerin"]],
+      "created_at": "2026-09-21T00:00:00.000Z",
+      "modified_at": "2026-09-21T00:00:00.000Z"
+    }
+  },
+  {
+    "model": "cmsv2.job",
+    "pk": 9001,
+    "fields": {
+      "released": true,
+      "name": "Bäcker/-in (Partner Musterstadt)",
+      "area": 9001,
+      "created_by": null,
+      "creator_is_admin": true,
+      "created_at": "2026-09-21T00:00:00.000Z",
+      "modified_at": "2026-09-21T00:00:00.000Z"
+    }
+  },
+  {
+    "model": "cmsv2.unit",
+    "pk": 9001,
+    "fields": {
+      "released": true,
+      "title": "Backzutaten",
+      "description": "Vokabeln zu Backzutaten",
+      "jobs": [9001],
+      "created_by": null,
+      "creator_is_admin": true,
+      "created_at": "2026-09-21T00:00:00.000Z",
+      "modified_at": "2026-09-21T00:00:00.000Z"
+    }
+  },
+  {
+    "model": "cmsv2.word",
+    "pk": 9001,
+    "fields": {
+      "word_type": "Nomen",
+      "word": "Mehl",
+      "grammatical_gender": null,
+      "singular_article": 1,
+      "plural": "",
+      "plural_article": null,
+      "audio_check_status": null,
+      "example_sentence_check_status": null,
+      "example_sentence_audio_regenerated": false,
+      "creation_date": "2026-09-21T00:00:00.000Z",
+      "modified_at": "2026-09-21T00:00:00.000Z",
+      "created_by": null,
+      "creator_is_admin": true,
+      "image_check_status": null
+    }
+  },
+  {
+    "model": "cmsv2.unitwordrelation",
+    "pk": 9001,
+    "fields": {
+      "unit": 9001,
+      "word": 9001,
+      "image": "",
+      "image_check_status": null,
+      "example_sentence": "",
+      "example_sentence_audio": null,
+      "example_sentence_check_status": null,
+      "example_sentence_audio_regenerated": false
     }
   }
 ]
