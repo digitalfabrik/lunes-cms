@@ -16,15 +16,13 @@ from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from ...cmsv2.models import AreaAccessToken
+from ...cmsv2.models import Area, AreaAccessToken
 from ..utils import get_key
 
 if TYPE_CHECKING:
     from typing import Any
 
     from rest_framework.request import Request
-
-    from ...cmsv2.models import Area
 
 #: The keyword the token is sent with in the ``Authorization`` header, see
 #: :func:`~lunes_cms.api.utils.get_key`. It is the same keyword the v1 API uses
@@ -81,14 +79,18 @@ class AreaTokenAuthentication(BaseAuthentication):
         return self.keyword
 
 
-def request_area(request: "Request") -> "Area | None":
+def request_area(request: "Request") -> "Area":
     """
     The area a request is made for.
 
     :param request: The request in question
-    :return: The area of the access token, or ``None`` for the main app
+    :return: The area of the access token, or the main app area for a
+        request without one
     """
-    return getattr(request.auth, "area", None)
+    area = getattr(request.auth, "area", None)
+    if area is not None:
+        return area
+    return Area.objects.get(is_main_app=True)
 
 
 class AreaTokenScheme(OpenApiAuthenticationExtension):

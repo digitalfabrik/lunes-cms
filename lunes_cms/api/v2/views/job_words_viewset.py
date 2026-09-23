@@ -54,7 +54,8 @@ class JobWordsViewSet(AreaScopedMixin, viewsets.ModelViewSet):
             raise PermissionDenied() from e
 
         area = self.area
-        if not job.released or job.archived or job.area_id != getattr(area, "pk", None):
+        assert area is not None
+        if job.area_id != area.pk or not job.released or job.archived:
             raise PermissionDenied()
 
         unit_word_relations = UnitWordRelation.objects.filter(
