@@ -27,6 +27,12 @@ class AreaCodeInline(admin.TabularInline):
     verbose_name = _("code")
     verbose_name_plural = _("codes")
 
+    def has_add_permission(self, request: HttpRequest, obj: Area | None = None) -> bool:
+        """
+        The main app is free to use without a code, so it must not get one.
+        """
+        return obj is None or not obj.is_main_app
+
 
 class AreaAccessTokenInline(admin.TabularInline):
     """
@@ -144,6 +150,13 @@ class AreaAdmin(admin.ModelAdmin):
     def has_delete_permission(
         self, request: HttpRequest, obj: Area | None = None
     ) -> bool:
+        """
+        The main app area must always exist, since :mod:`..areas` relies on it
+        to decide who may see and change the content that belongs to no area,
+        so it may not be deleted even by a superuser.
+        """
+        if obj is not None and obj.is_main_app:
+            return False
         return request.user.is_superuser
 
     def administrators(self, obj: Area) -> str:
@@ -162,7 +175,8 @@ class AreaAdmin(admin.ModelAdmin):
 
     def number_jobs(self, obj: Area) -> int:
         """
-        Get the number of jobs that belong to this area.
+        Get the number of jobs that belong to this area, the main app area
+        included — it owns its jobs by foreign key like any other area.
 
         Args:
             obj: The area object

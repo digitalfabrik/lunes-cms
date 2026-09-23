@@ -1142,6 +1142,14 @@ msgstr ""
 "Diese Benutzer verwalten die Inhalte dieses Bereichs. Sie sehen nur Berufe, "
 "Einheiten und Vokabeln der Bereiche, die sie verwalten."
 
+#: cmsv2/models/area.py
+msgid "main app"
+msgstr "Haupt-App"
+
+#: cmsv2/models/area.py
+msgid "Marks the one area for the main app catalog"
+msgstr "Kennzeichnet den einen Bereich für die Haupt-App"
+
 #: cmsv2/models/area.py cmsv2/models/area_code.py cmsv2/models/job.py
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"
@@ -1747,6 +1755,22 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "areas"
+#~ msgstr "Bereiche"
+
+#~ msgid "administered areas"
+#~ msgstr "Verwaltete Bereiche"
+
+#~ msgid ""
+#~ "The areas this user administers. They only see the jobs, units and words "
+#~ "of the areas they administer."
+#~ msgstr ""
+#~ "Die Bereiche, die diese Person verwaltet. Sie sieht nur die Berufe, "
+#~ "Einheiten und Vokabeln der Bereiche, die sie verwaltet."
+
+#~ msgid "Permissions"
+#~ msgstr "Berechtigungen"
 
 #~ msgid ""
 #~ "Deleting a code also withdraws the access of every client that redeemed "

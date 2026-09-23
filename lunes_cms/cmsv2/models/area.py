@@ -58,6 +58,11 @@ class Area(models.Model):
             "units and words of the areas they administer."
         ),
     )
+    is_main_app = models.BooleanField(
+        default=False,
+        verbose_name=_("main app"),
+        help_text=_("Marks the one area for the main app catalog"),
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
@@ -83,3 +88,10 @@ class Area(models.Model):
         verbose_name = _("Area")
         verbose_name_plural = _("Areas")
         ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["is_main_app"],
+                condition=models.Q(is_main_app=True),
+                name="unique_main_app_area",
+            ),
+        ]
