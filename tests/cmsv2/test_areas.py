@@ -50,6 +50,15 @@ def area(db: None) -> Area:
     return Area.objects.create(name="Kolping")
 
 
+@pytest.fixture
+def main_app_area(db: None) -> Area:
+    """
+    The main app area, seeded by migration 0038 into every database, this
+    test one included — so it is fetched here rather than created again.
+    """
+    return Area.objects.get(is_main_app=True)
+
+
 @pytest.mark.django_db
 def test_administered_areas_and_is_area_admin(area: Area) -> None:
     """An area administrator is recognized by the areas they are listed in."""
@@ -65,24 +74,41 @@ def test_administered_areas_and_is_area_admin(area: Area) -> None:
 
 
 @pytest.mark.django_db
-def test_scope_jobs_per_user_kind(area: Area) -> None:
+def test_administered_areas_includes_the_main_app_area(main_app_area: Area) -> None:
     """
-    Superusers see every job, area administrators only the jobs of their area
-    and everybody else only the jobs of the main app.
+    The main app area is an ordinary area like any other from here on, so an
+    administrator of it is recognized by ``administered_areas`` the same way.
+    """
+    admin_user = _user("main-app-admin")
+    main_app_area.admins.add(admin_user)
+
+    assert list(administered_areas(admin_user)) == [main_app_area]
+    assert is_area_admin(admin_user) is True
+
+
+@pytest.mark.django_db
+def test_scope_jobs_per_user_kind(area: Area, main_app_area: Area) -> None:
+    """
+    Superusers see every job, area administrators only the jobs of their area,
+    administrators of the main app the jobs without an area, and a user who
+    administers nothing at all sees nothing (#1016).
     """
     area_job = Job.objects.create(name="Area job", area=area)
-    main_job = Job.objects.create(name="Main job")
+    main_job = Job.objects.create(name="Main job", area=main_app_area)
 
     superuser = _user("root", is_superuser=True)
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
+    main_app_admin = _user("main-app-admin")
+    main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
     assert {area_job, main_job} <= set(scope_jobs(Job.objects.all(), superuser))
     assert set(scope_jobs(Job.objects.all(), admin_user)) == {area_job}
-    plain_jobs = set(scope_jobs(Job.objects.all(), plain_user))
-    assert main_job in plain_jobs
-    assert area_job not in plain_jobs
+    main_app_jobs = set(scope_jobs(Job.objects.all(), main_app_admin))
+    assert main_job in main_app_jobs
+    assert area_job not in main_app_jobs
+    assert set(scope_jobs(Job.objects.all(), plain_user)) == set()
 
 
 @pytest.mark.django_db
@@ -99,27 +125,40 @@ def test_scope_jobs_hides_other_areas(area: Area) -> None:
 
 
 @pytest.mark.django_db
-def test_scope_units_per_user_kind(area: Area) -> None:
-    """Units inherit the area of their job, units without a job are main app."""
+def test_scope_units_per_user_kind(area: Area, main_app_area: Area) -> None:
+    """
+    Units inherit the area of their job, units without a job are main app
+    content, visible only to the main app's administrators.
+    """
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="M", area=main_app_area)
+    )
     jobless_unit = Unit.objects.create(title="Jobless unit")
 
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
+    main_app_admin = _user("main-app-admin")
+    main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
     assert set(scope_units(Unit.objects.all(), admin_user)) == {area_unit}
-    plain_units = set(scope_units(Unit.objects.all(), plain_user))
-    assert {main_unit, jobless_unit} <= plain_units
-    assert area_unit not in plain_units
+    main_app_units = set(scope_units(Unit.objects.all(), main_app_admin))
+    assert main_unit in main_app_units
+    assert area_unit not in main_app_units
+    # A unit with no job at all is not derivably part of any area, so it is
+    # only visible to whoever created it, see test_scope_units_keeps_own_...
+    assert jobless_unit not in main_app_units
+    assert set(scope_units(Unit.objects.all(), plain_user)) == set()
 
 
 @pytest.mark.django_db
-def test_scope_words_per_user_kind(area: Area) -> None:
+def test_scope_words_per_user_kind(area: Area, main_app_area: Area) -> None:
     """Words inherit the area of the units they are linked to."""
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="M", area=main_app_area)
+    )
     area_word = _word("Bereichswort")
     main_word = _word("Hauptwort")
     UnitWordRelation.objects.create(unit=area_unit, word=area_word)
@@ -127,12 +166,33 @@ def test_scope_words_per_user_kind(area: Area) -> None:
 
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
+    main_app_admin = _user("main-app-admin")
+    main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
     assert set(scope_words(Word.objects.all(), admin_user)) == {area_word}
-    plain_words = set(scope_words(Word.objects.all(), plain_user))
-    assert main_word in plain_words
-    assert area_word not in plain_words
+    main_app_words = set(scope_words(Word.objects.all(), main_app_admin))
+    assert main_word in main_app_words
+    assert area_word not in main_app_words
+    assert set(scope_words(Word.objects.all(), plain_user)) == set()
+
+
+@pytest.mark.django_db
+def test_scope_jobs_units_words_hide_everything_from_a_user_without_any_area(
+    area: Area, main_app_area: Area
+) -> None:
+    """
+    A user assigned to no area at all — neither a part organization's nor the
+    main app's — must see nothing, so forgetting to assign one never silently
+    grants the whole catalog (#1016).
+    """
+    Job.objects.create(name="Area job", area=area)
+    Job.objects.create(name="Main job", area=main_app_area)
+    plain_user = _user("plain")
+
+    assert not scope_jobs(Job.objects.all(), plain_user).exists()
+    assert not scope_units(Unit.objects.all(), plain_user).exists()
+    assert not scope_words(Word.objects.all(), plain_user).exists()
 
 
 @pytest.mark.django_db
@@ -151,6 +211,24 @@ def test_scope_words_keeps_own_unlinked_word_visible_to_area_admin(
     visible = set(scope_words(Word.objects.all(), admin_user))
     assert own_word in visible
     assert foreign_word not in visible
+
+
+@pytest.mark.django_db
+def test_scope_units_keeps_own_jobless_unit_visible_to_area_admin(
+    area: Area,
+) -> None:
+    """
+    A unit that is not linked to a job yet has no derivable area, so it stays
+    visible to the area administrator who created it.
+    """
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+    own_unit = Unit.objects.create(title="Frisch", created_by_user=admin_user)
+    foreign_unit = Unit.objects.create(title="Fremd", created_by_user=_user("someone"))
+
+    visible = set(scope_units(Unit.objects.all(), admin_user))
+    assert own_unit in visible
+    assert foreign_unit not in visible
 
 
 @pytest.mark.django_db
@@ -268,10 +346,12 @@ def test_area_of_unit_and_word(area: Area) -> None:
 
 
 @pytest.mark.django_db
-def test_validate_unit_jobs_rejects_second_job_for_area_unit(area: Area) -> None:
+def test_validate_unit_jobs_rejects_second_job_for_area_unit(
+    area: Area, main_app_area: Area
+) -> None:
     """A unit of an area job must not be assigned to any other job."""
     area_job = Job.objects.create(name="Area job", area=area)
-    main_job = Job.objects.create(name="Main job")
+    main_job = Job.objects.create(name="Main job", area=main_app_area)
     unit = _unit_with_job("Unit", area_job)
 
     with pytest.raises(ValidationError):
@@ -279,23 +359,29 @@ def test_validate_unit_jobs_rejects_second_job_for_area_unit(area: Area) -> None
 
 
 @pytest.mark.django_db
-def test_validate_unit_jobs_allows_several_jobs_without_area() -> None:
+def test_validate_unit_jobs_allows_several_jobs_without_area(
+    main_app_area: Area,
+) -> None:
     """Units of the main app keep their free sharing between jobs."""
-    first = Job.objects.create(name="First")
-    second = Job.objects.create(name="Second")
+    first = Job.objects.create(name="First", area=main_app_area)
+    second = Job.objects.create(name="Second", area=main_app_area)
     unit = _unit_with_job("Unit", first)
 
     validate_unit_jobs(unit, [first, second])
 
 
 @pytest.mark.django_db
-def test_validate_unit_jobs_rejects_word_used_in_another_area(area: Area) -> None:
+def test_validate_unit_jobs_rejects_word_used_in_another_area(
+    area: Area, main_app_area: Area
+) -> None:
     """
     Moving a unit into an area must not drag along a word that is already used
     in the main app.
     """
     area_job = Job.objects.create(name="Area job", area=area)
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="Main job"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="Main job", area=main_app_area)
+    )
     shared_unit = Unit.objects.create(title="Shared unit")
     word = _word("Hammer")
     UnitWordRelation.objects.create(unit=main_unit, word=word)
@@ -306,10 +392,14 @@ def test_validate_unit_jobs_rejects_word_used_in_another_area(area: Area) -> Non
 
 
 @pytest.mark.django_db
-def test_validate_relation_area_rejects_word_of_the_main_app(area: Area) -> None:
+def test_validate_relation_area_rejects_word_of_the_main_app(
+    area: Area, main_app_area: Area
+) -> None:
     """A word of the main app cannot be added to a unit of an area."""
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="M", area=main_app_area)
+    )
     word = _word("Hammer")
     UnitWordRelation.objects.create(unit=main_unit, word=word)
 
@@ -345,10 +435,12 @@ def test_validate_relation_area_allows_word_of_the_same_area(area: Area) -> None
 
 
 @pytest.mark.django_db
-def test_relation_clean_rejects_mixed_areas(area: Area) -> None:
+def test_relation_clean_rejects_mixed_areas(area: Area, main_app_area: Area) -> None:
     """``UnitWordRelation.clean()`` refuses to link a word across areas."""
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="M", area=main_app_area)
+    )
     word = _word("Hammer")
     UnitWordRelation.objects.create(unit=main_unit, word=word)
 
@@ -357,10 +449,12 @@ def test_relation_clean_rejects_mixed_areas(area: Area) -> None:
 
 
 @pytest.mark.django_db
-def test_validate_job_area_rejects_a_job_with_a_shared_unit(area: Area) -> None:
+def test_validate_job_area_rejects_a_job_with_a_shared_unit(
+    area: Area, main_app_area: Area
+) -> None:
     """A job whose units are shared with other jobs cannot enter an area."""
-    job = Job.objects.create(name="Job")
-    other_job = Job.objects.create(name="Other job")
+    job = Job.objects.create(name="Job", area=main_app_area)
+    other_job = Job.objects.create(name="Other job", area=main_app_area)
     unit = _unit_with_job("Shared unit", job)
     unit.jobs.add(other_job)
 
@@ -370,12 +464,14 @@ def test_validate_job_area_rejects_a_job_with_a_shared_unit(area: Area) -> None:
 
 @pytest.mark.django_db
 def test_validate_job_area_rejects_a_job_whose_word_is_used_elsewhere(
-    area: Area,
+    area: Area, main_app_area: Area
 ) -> None:
     """A job whose words are used outside of it cannot enter an area."""
-    job = Job.objects.create(name="Job")
+    job = Job.objects.create(name="Job", area=main_app_area)
     unit = _unit_with_job("Unit", job)
-    elsewhere = _unit_with_job("Elsewhere", Job.objects.create(name="Other job"))
+    elsewhere = _unit_with_job(
+        "Elsewhere", Job.objects.create(name="Other job", area=main_app_area)
+    )
     word = _word("Hammer")
     UnitWordRelation.objects.create(unit=unit, word=word)
     UnitWordRelation.objects.create(unit=elsewhere, word=word)
@@ -385,14 +481,17 @@ def test_validate_job_area_rejects_a_job_whose_word_is_used_elsewhere(
 
 
 @pytest.mark.django_db
-def test_validate_job_area_allows_a_job_that_owns_its_content(area: Area) -> None:
+def test_validate_job_area_allows_a_job_that_owns_its_content(
+    area: Area, main_app_area: Area
+) -> None:
     """A job whose units and words belong to it alone may enter an area."""
-    job = Job.objects.create(name="Job")
+    job = Job.objects.create(name="Job", area=main_app_area)
     unit = _unit_with_job("Unit", job)
     UnitWordRelation.objects.create(unit=unit, word=_word("Hammer"))
 
     validate_job_area(job, area)
     validate_job_area(job, None)
+    validate_job_area(job, main_app_area)
 
 
 @pytest.mark.django_db
@@ -431,11 +530,13 @@ def test_validate_relation_area_allows_own_word_while_the_unit_is_created(
 
 @pytest.mark.django_db
 def test_validate_relation_area_rejects_foreign_word_while_the_unit_is_created(
-    area: Area,
+    area: Area, main_app_area: Area
 ) -> None:
     """The same path still rejects a word of the main app."""
     area_job = Job.objects.create(name="Area job", area=area)
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="Main job"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="Main job", area=main_app_area)
+    )
     word = _word("Hammer")
     UnitWordRelation.objects.create(unit=main_unit, word=word)
 
@@ -444,6 +545,16 @@ def test_validate_relation_area_rejects_foreign_word_while_the_unit_is_created(
 
     with pytest.raises(ValidationError):
         validate_relation_area(new_unit, word)
+
+
+@pytest.mark.django_db
+def test_only_one_area_can_be_the_main_app(main_app_area: Area) -> None:
+    """A second area cannot also be marked as the main app."""
+    from django.db import IntegrityError, transaction
+
+    with pytest.raises(IntegrityError):
+        with transaction.atomic():
+            Area.objects.create(name="Second main app", is_main_app=True)
 
 
 @pytest.mark.django_db

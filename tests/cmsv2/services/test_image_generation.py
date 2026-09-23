@@ -15,7 +15,7 @@ import pytest
 from django.core.files.base import ContentFile
 from pytest_django import Settings
 
-from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models import Area, Word
 from lunes_cms.cmsv2.models import word as word_module
 from lunes_cms.cmsv2.services import image_generation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
@@ -45,10 +45,13 @@ def fast_worker(
     The worker scans the *whole* Word table. The session-scoped ``test_data``
     fixture plus ``transaction=True`` (no rollback between tests) can leave rows
     around, so wipe them first to keep these tests isolated. A per-test
-    ``MEDIA_ROOT`` keeps generated files isolated across runs.
+    ``MEDIA_ROOT`` keeps generated files isolated across runs. ``transaction=True``
+    also flushes tables Django only ever seeds through a migration, so the main
+    app area a new ``Job`` defaults to is restored here too (#1016).
     """
     settings.MEDIA_ROOT = str(tmp_path)
     Word.objects.all().delete()
+    Area.objects.get_or_create(is_main_app=True, defaults={"name": "Lunes"})
     with mock.patch.object(image_generation, "time") as mocked_time:
         mocked_time.sleep = lambda _seconds: None
         yield
