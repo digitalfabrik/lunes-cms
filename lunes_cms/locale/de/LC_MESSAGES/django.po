@@ -839,12 +839,32 @@ msgstr ""
 "zugewiesen)."
 
 #: cmsv2/admins/user_admin.py
+msgid "areas"
+msgstr "Bereiche"
+
+#: cmsv2/admins/user_admin.py
+msgid "administered areas"
+msgstr "Verwaltete Bereiche"
+
+#: cmsv2/admins/user_admin.py
+msgid ""
+"The areas this user administers. They only see the jobs, units and words of "
+"the areas they administer."
+msgstr ""
+"Die Bereiche, die diese Person verwaltet. Sie sieht nur die Berufe, "
+"Einheiten und Vokabeln der Bereiche, die sie verwaltet."
+
+#: cmsv2/admins/user_admin.py
 msgid "assigned word"
 msgstr "Zugewiesene Vokabel"
 
 #: cmsv2/admins/user_admin.py
 msgid "assigned words"
 msgstr "Zugewiesene Vokabeln"
+
+#: cmsv2/admins/user_admin.py
+msgid "Permissions"
+msgstr "Berechtigungen"
 
 #: cmsv2/admins/word_admin.py
 msgid "Alternative Words"
@@ -1142,6 +1162,14 @@ msgstr ""
 "Diese Benutzer verwalten die Inhalte dieses Bereichs. Sie sehen nur Berufe, "
 "Einheiten und Vokabeln der Bereiche, die sie verwalten."
 
+#: cmsv2/models/area.py
+msgid "main app"
+msgstr "Haupt-App"
+
+#: cmsv2/models/area.py
+msgid "Marks the one area for the main app catalog"
+msgstr "Kennzeichnet den einen Bereich für die Haupt-App"
+
 #: cmsv2/models/area.py cmsv2/models/area_code.py cmsv2/models/job.py
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"
@@ -1232,11 +1260,11 @@ msgstr "Beruf"
 
 #: cmsv2/models/job.py
 msgid ""
-"Jobs of an area are only visible to the administrators of that area. Jobs "
-"without an area belong to the main app."
+"Jobs of an area are only visible to the administrators of that area. Jobs of "
+"the main app catalog belong to the 'Lunes' area."
 msgstr ""
 "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
-"sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
+"sichtbar. Berufe des Hauptapp-Katalogs gehören zum Bereich 'Lunes'."
 
 #: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "creator"
@@ -1475,7 +1503,9 @@ msgstr "Alternatives Wort gelöscht"
 
 #: cmsv2/views/generate_example_sentence.py
 msgid "No job found. Assign the word to a unit that belongs to a job first."
-msgstr "Kein Beruf gefunden. Ordne das Wort zuerst einer Lerneinheit zu, die zu einem Beruf gehört."
+msgstr ""
+"Kein Beruf gefunden. Ordne das Wort zuerst einer Lerneinheit zu, die zu "
+"einem Beruf gehört."
 
 #: cmsv2/views/generate_example_sentence.py
 msgid "Example sentence generated!"
@@ -1747,6 +1777,13 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid ""
+#~ "Jobs of an area are only visible to the administrators of that area. Jobs "
+#~ "without an area belong to the main app."
+#~ msgstr ""
+#~ "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
+#~ "sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
 
 #~ msgid ""
 #~ "Deleting a code also withdraws the access of every client that redeemed "

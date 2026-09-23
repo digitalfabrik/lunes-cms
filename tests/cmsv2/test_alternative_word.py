@@ -12,15 +12,22 @@ from django.contrib.auth.models import Permission, User
 from django.test.client import Client
 
 from lunes_cms.api.v2.serializers import UnitWordRelationSerializer, WordSerializer
-from lunes_cms.cmsv2.models import AlternativeWord, Unit, Word
+from lunes_cms.cmsv2.models import AlternativeWord, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
 @pytest.fixture(name="word")
 def fixture_word(db: None) -> Word:
-    """A word with one alternative word."""
+    """
+    A word with one alternative word, linked to a unit of a main app job —
+    ``client_with_permissions`` makes its users administrators of the main
+    app area, so this is what makes the word visible to them (#1016).
+    """
     word = Word.objects.create(word="Brötchen", singular_article=3)
     AlternativeWord.objects.create(word=word, alt_word="Semmel", singular_article=2)
+    unit = Unit.objects.create(title="Backwaren")
+    unit.jobs.add(Job.objects.create(name="Bäcker/-in"))
+    UnitWordRelation.objects.create(unit=unit, word=word)
     return word
 
 

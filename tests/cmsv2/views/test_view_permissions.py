@@ -24,7 +24,6 @@ from lunes_cms.cmsv2.views import (
     word_generate_audio,
     word_generate_example_sentence_audio,
 )
-
 from tests.cmsv2.helpers import PermissionClient
 
 unitword_sentence_audio = import_module(
@@ -62,7 +61,16 @@ def _endpoint_urls(
 
 @pytest.fixture(name="word")
 def fixture_word() -> Word:
-    return Word.objects.create(word="Brötchen", singular_article=3)
+    """
+    A word linked to a unit of a main app job — ``client_with_permissions``
+    makes its users administrators of the main app area, so this is what
+    makes the word visible to them (#1016).
+    """
+    word = Word.objects.create(word="Brötchen", singular_article=3)
+    unit = Unit.objects.create(title="Backwaren")
+    unit.jobs.add(Job.objects.create(name="Bäcker/-in"))
+    UnitWordRelation.objects.create(unit=unit, word=word)
+    return word
 
 
 @pytest.fixture(name="unitword")
@@ -220,12 +228,15 @@ class AreaContent:
 
 def _area_content(name: str, area: Area | None) -> AreaContent:
     """
-    Build a tree of content belonging to the given area.
+    Build a tree of content belonging to the given area, or the main app area
+    for ``None`` — every job has to belong to one now (#1016).
 
     The word is linked to the unit and created by somebody else, so its area is
     derived from the unit rather than from the creator exception.
     """
-    job = Job.objects.create(name=f"{name} job", area=area)
+    job = Job.objects.create(
+        name=f"{name} job", area=area or Area.objects.get(is_main_app=True)
+    )
     unit = Unit.objects.create(title=f"{name} unit")
     unit.jobs.add(job)
     word = Word.objects.create(
@@ -329,6 +340,10 @@ def test_every_object_endpoint_is_area_scoped(
 
     client = sweep_client
     if probe_area_name:
+        # sweep_client is a main app admin by default (client_with_permissions
+        # needs that to see or change anything at all, #1016), which would
+        # undermine probing as an admin of only one other area.
+        Area.objects.get(is_main_app=True).admins.remove(client.user)
         Area.objects.create(name=probe_area_name).admins.add(client.user)
 
     reachable = [

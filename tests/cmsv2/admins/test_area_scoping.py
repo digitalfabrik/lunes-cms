@@ -16,7 +16,7 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import HttpRequest
 from django.test import Client, RequestFactory
 
-from lunes_cms.cmsv2.admins.area_admin import AreaAdmin
+from lunes_cms.cmsv2.admins.area_admin import AreaAdmin, AreaCodeInline
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
 from lunes_cms.cmsv2.admins.unit_admin import (
     UnitAdmin,
@@ -67,9 +67,12 @@ def _post_request(request_factory: RequestFactory, user: User) -> HttpRequest:
 def test_job_admin_queryset_is_scoped_to_the_area(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
-    """An area administrator only sees the jobs of their own area."""
+    """
+    An area administrator only sees the jobs of their own area, and a user
+    who administers no area at all sees nothing (#1016).
+    """
     area_job = Job.objects.create(name="Area job", area=area)
-    main_job = Job.objects.create(name="Main job")
+    Job.objects.create(name="Main job")
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
 
@@ -79,8 +82,7 @@ def test_job_admin_queryset_is_scoped_to_the_area(
     plain_visible = set(
         job_admin.get_queryset(_get_request(request_factory, _user("plain")))
     )
-    assert main_job in plain_visible
-    assert area_job not in plain_visible
+    assert plain_visible == set()
 
 
 def test_content_admin_querysets_are_scoped_to_the_area(
@@ -139,7 +141,7 @@ def test_save_model_leaves_jobs_of_other_users_without_an_area(
     )
 
     job.refresh_from_db()
-    assert job.area is None
+    assert job.area == Area.objects.get(is_main_app=True)
 
 
 def test_area_field_is_read_only_for_area_admins(
@@ -364,6 +366,58 @@ def test_area_admin_is_restricted_to_superusers(
     assert area_admin.has_delete_permission(plain_request) is False
     assert area_admin.has_module_permission(superuser_request) is True
     assert area_admin.has_change_permission(superuser_request) is True
+
+
+def test_main_app_area_cannot_be_deleted_even_by_a_superuser(
+    db: None, request_factory: RequestFactory
+) -> None:
+    """
+    Deleting the main app area would break area scoping for everybody who
+    relies on it, so it is protected even from a superuser (#1016).
+    """
+    area_admin = AreaAdmin(Area, admin.site)
+    main_app_area = Area.objects.get(is_main_app=True)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+
+    assert area_admin.has_delete_permission(superuser_request, main_app_area) is False
+
+
+def test_a_regular_area_can_still_be_deleted_by_a_superuser(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """The delete protection is specific to the main app area."""
+    area_admin = AreaAdmin(Area, admin.site)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+
+    assert area_admin.has_delete_permission(superuser_request, area) is True
+
+
+def test_main_app_area_cannot_be_given_a_code(db: None) -> None:
+    """The main app is free to use without a code, so it must not get one."""
+    inline = AreaCodeInline(Area, admin.site)
+    main_app_area = Area.objects.get(is_main_app=True)
+    regular_area = Area.objects.create(name="Kolping")
+
+    assert inline.has_add_permission(HttpRequest(), main_app_area) is False
+    assert inline.has_add_permission(HttpRequest(), regular_area) is True
+    assert inline.has_add_permission(HttpRequest(), None) is True
+
+
+def test_the_job_count_of_the_main_app_area_counts_its_jobs(
+    db: None, request_factory: RequestFactory
+) -> None:
+    """
+    The main app area owns its jobs by foreign key like any other area, so
+    its job count comes from the same ``job_count`` annotation the other
+    rows use (#1016).
+    """
+    main_app_area = Area.objects.get(is_main_app=True)
+    Job.objects.create(name="Main job", area=main_app_area)
+    area_admin = AreaAdmin(Area, admin.site)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+    main_app_area = area_admin.get_queryset(superuser_request).get(is_main_app=True)
+
+    assert area_admin.number_jobs(main_app_area) == 1
 
 
 def test_additional_information_url_field_is_full_width(

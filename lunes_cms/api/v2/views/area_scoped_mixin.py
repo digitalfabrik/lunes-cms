@@ -25,7 +25,9 @@ class AreaScopedMixin:
         """
         The area this request is made for.
 
-        :return: The area of the access token, or ``None`` for the main app
+        :return: The area of the access token, the main app area for a
+            request without one, or ``None`` during schema generation, when
+            there is no real request to resolve at all
         """
         request = getattr(self, "request", None)
         if request is None or getattr(self, "swagger_fake_view", False):
