@@ -153,6 +153,7 @@ msgid "Word"
 msgstr "Vokabel"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/models/review.py
 msgid "Word type"
 msgstr "Wortart"
 
@@ -807,6 +808,22 @@ msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 msgid "Import"
 msgstr "Import"
 
+#: cmsv2/admins/review_admin.py
+msgid "Meta information"
+msgstr "Metainformationen"
+
+#: cmsv2/admins/review_admin.py
+msgid "word and article"
+msgstr "Wort und Artikel"
+
+#: cmsv2/admins/review_admin.py
+msgid "Status"
+msgstr "Status"
+
+#: cmsv2/admins/review_admin.py cmsv2/models/static.py
+msgid "Reviewer"
+msgstr "Expert:in"
+
 #: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
 #: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
 #: cmsv2/models/job.py
@@ -1290,7 +1307,8 @@ msgstr "Icon"
 msgid "Job"
 msgstr "Beruf"
 
-#: cmsv2/models/job.py cmsv2/templates/admin/csv_form.html
+#: cmsv2/models/job.py cmsv2/models/review.py
+#: cmsv2/templates/admin/csv_form.html
 msgid "Jobs"
 msgstr "Berufe"
 
@@ -1317,6 +1335,10 @@ msgstr "Erstellt am"
 #: cmsv2/models/review.py
 msgid "review status"
 msgstr "Prüfstatus"
+
+#: cmsv2/models/review.py cmsv2/models/unit.py
+msgid "Unit"
+msgstr "Einheit"
 
 #: cmsv2/models/review.py
 msgid "Review"
@@ -1358,10 +1380,6 @@ msgstr "Liegt zur Begutachtung vor"
 msgid "Completed"
 msgstr "abgeschlossen"
 
-#: cmsv2/models/static.py
-msgid "Reviewer"
-msgstr "Expert:in"
-
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio"
 msgstr "Beispielsatz Audio"
@@ -1399,10 +1417,6 @@ msgstr "Einheit-Wort Beziehung"
 
 #: cmsv2/models/unit.py
 msgid "unit"
-msgstr "Einheit"
-
-#: cmsv2/models/unit.py
-msgid "Unit"
 msgstr "Einheit"
 
 #: cmsv2/models/word.py
@@ -1816,9 +1830,6 @@ msgstr "Hilfe"
 #~ msgstr ""
 #~ "Wahr, wenn ein Bild aus der Einheit-Wort-Relation kontrolliert wird, "
 #~ "Falsch wenn ein Bild aus dem Wort kontrolliert wird"
-
-#~ msgid "status"
-#~ msgstr "Status"
 
 #~ msgid "suggested image"
 #~ msgstr "Vorgeschlagenes Bild"

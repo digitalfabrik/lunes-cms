@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
+from django.db.models.fields.files import FieldFile, ImageFieldFile
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
@@ -9,6 +12,9 @@ from .static import (
     ProgressStatus,
     ReviewStatus,
 )
+
+if TYPE_CHECKING:
+    from .models import Job, Unit
 
 
 def upload_review_suggestions(_: models.Model, filename: str) -> str:
@@ -63,6 +69,49 @@ class Review(models.Model):
             if not self.completed_at
             else ProgressStatus.COMPLETED
         )
+
+    @property
+    def word_type(self) -> Unit:
+        """Returns the word type of a reviewed word"""
+        return self.unit_word.word.word_type
+
+    word_type.fget.short_description = _("Word type")  # type: ignore[attr-defined]
+
+    @property
+    def unit(self) -> Unit:
+        """Returns the unit of a reviewed word"""
+        return self.unit_word.unit
+
+    unit.fget.short_description = _("Unit")  # type: ignore[attr-defined]
+
+    @property
+    def jobs(self) -> Job:
+        """Returns the jobs of a reviewed word"""
+        return ", ".join(str(job) for job in self.unit_word.unit.jobs.all())
+
+    jobs.fget.short_description = _("Jobs")  # type: ignore[attr-defined]
+
+    @property
+    def image(self) -> ImageFieldFile:
+        """Returns the image of the word being reviewed"""
+        return self.unit_word.word.image
+
+    @property
+    def audio(self) -> FieldFile:
+        """Returns the audio of the word being reviewed"""
+        return self.unit_word.word.audio
+
+    @property
+    def creator(self) -> str:
+        """Returns the name of the word's creator"""
+        word = self.unit_word.word
+        if word.creator_is_admin:
+            return "Admin"
+        if word.created_by_user:
+            return str(word.created_by_user)
+        if word.created_by:
+            return str(word.created_by)
+        return ""
 
     class Meta:
         """
