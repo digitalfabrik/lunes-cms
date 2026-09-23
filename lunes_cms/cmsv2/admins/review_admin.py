@@ -18,13 +18,32 @@ class ReviewAdmin(BaseAdmin):
     including their status, assignment and feedback.
     """
 
-    fields = [
-        "word_and_article",
-        "word_type",
-        "unit",
-        "review_status",
-        "reviewer",
-        "styled_reviewer",
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": [
+                    "word_and_article",
+                    "word_type",
+                    "unit",
+                    "review_status",
+                    "jobs",
+                    "image",
+                    "audio",
+                ],
+            },
+        ),
+        (
+            _("Meta information"),
+            {
+                "fields": [
+                    "assigned_by",
+                    "assigned_at",
+                    "reviewer",
+                    "creator",
+                ],
+            },
+        ),
     ]
     list_filter = ["review_status", "reviewer"]
     search_fields = ["unit_word__word__word"]
@@ -32,6 +51,14 @@ class ReviewAdmin(BaseAdmin):
         "word_and_article",
         "word_type",
         "unit",
+        "jobs",
+        "image",
+        "audio",
+        "creator",
+        "reviewer",
+        "assigned_by",
+        "assigned_at",
+        "completed_at",
     ]
     list_display = [
         "word_and_article",
@@ -57,6 +84,8 @@ class ReviewAdmin(BaseAdmin):
             obj.get_review_status_display(),
         )
 
+    styled_review_status.short_description = _("Status")  # type: ignore[attr-defined]
+
     def styled_reviewer(self, obj: Review) -> SafeString:
         """returns the styled reviewer"""
         reviewer = obj.reviewer
@@ -66,3 +95,5 @@ class ReviewAdmin(BaseAdmin):
             initials,
             obj.reviewer,
         )
+
+    styled_reviewer.short_description = _("Reviewer")  # type: ignore[attr-defined]
