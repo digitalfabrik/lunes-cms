@@ -226,6 +226,54 @@ def test_area_field_is_read_only_for_area_admins(
     )
 
 
+def test_area_is_preselected_on_the_add_form_for_a_single_area_admin(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    The area field is read-only for a single-area administrator, so its
+    displayed value has to come from somewhere other than the field's own
+    ``initial`` — a fresh, unsaved job otherwise defaults to the main app
+    area, not the administrator's own one (#1016).
+    """
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    request = _get_request(request_factory, single_area_admin)
+
+    form = job_admin.get_form(request, None)()
+
+    assert form.instance.area == area
+
+
+def test_area_is_not_preselected_for_a_multi_area_admin_or_on_change(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    The preselection is specific to the single-area, read-only case: a
+    multi-area administrator still picks from their own areas via the
+    editable widget (see :meth:`formfield_for_foreignkey`), and an existing
+    job keeps its own area regardless of who is editing it.
+    """
+    second_area = Area.objects.create(name="Second area")
+    multi_area_admin = _user("multi")
+    area.admins.add(multi_area_admin)
+    second_area.admins.add(multi_area_admin)
+    add_request = _get_request(request_factory, multi_area_admin)
+
+    add_form = job_admin.get_form(add_request, None)()
+    # The instance itself is untouched by get_form for a multi-area admin —
+    # the widget's own preselection is asserted in
+    # test_area_is_preselected_and_required_for_area_admins.
+    assert add_form["area"].value() in (area.pk, second_area.pk)
+
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    job = Job.objects.create(name="Existing job", area=second_area)
+    change_request = _get_request(request_factory, single_area_admin)
+
+    change_form = job_admin.get_form(change_request, job)(instance=job)
+    assert change_form.instance.area == second_area
+
+
 def test_duplicate_jobs_skips_jobs_of_an_area(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:

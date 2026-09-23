@@ -291,6 +291,39 @@ class JobAdmin(BaseAdmin):
             return readonly_fields
         return [*readonly_fields, "area"]
 
+    def get_form(
+        self,
+        request: HttpRequest,
+        obj: Job | None = None,
+        change: bool = False,
+        **kwargs: Any,
+    ) -> type["ModelForm[Any]"]:
+        """
+        Preselect the area of a single-area administrator on the add form.
+
+        The field is read-only for them (see :meth:`get_readonly_fields`) and
+        so displays the instance's own ``area``, which for a brand new job is
+        the model's default (the main app area) rather than the
+        administrator's own — unlike ``formfield_for_foreignkey``'s
+        ``initial``, which is never consulted for a read-only field.
+        """
+        form = super().get_form(request, obj, change, **kwargs)
+        if obj is not None or request.user.is_superuser:
+            return form
+        areas = administered_areas(request.user)
+        own_area = areas.first() if len(areas) <= 1 else None
+        if own_area is None:
+            return form
+
+        class PreselectedAreaForm(form):  # type: ignore[misc,valid-type]
+            """``form``, with a fresh instance already pointed at the area."""
+
+            def __init__(self, *args: Any, **inner_kwargs: Any) -> None:
+                super().__init__(*args, **inner_kwargs)
+                self.instance.area = own_area
+
+        return PreselectedAreaForm
+
     def formfield_for_foreignkey(
         self,
         db_field: "ForeignKey[Any, Any]",
