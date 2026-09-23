@@ -34,7 +34,7 @@ class FeedbackAreaListFilter(admin.SimpleListFilter):
         self, request: HttpRequest, model_admin: admin.ModelAdmin[Any]
     ) -> list[tuple[str, "str | _StrPromise"]]:
         areas = (
-            Area.objects.filter(is_main_app=False)
+            Area.objects.all()
             if request.user.is_superuser
             else administered_areas(request.user)
         )
