@@ -6,6 +6,7 @@ from typing import Any, Iterable, Iterator, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
@@ -32,7 +33,7 @@ from .word_export_resource import WordExportResource
 if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
     from django.contrib.admin.views.main import ChangeList
-    from django.db.models import ForeignKey, Model
+    from django.db.models import Field, ForeignKey, Model
     from django.forms import ModelChoiceField
     from django.utils.functional import _StrOrPromise
 
@@ -291,6 +292,39 @@ class JobAdmin(BaseAdmin):
             return readonly_fields
         return [*readonly_fields, "area"]
 
+    def get_form(
+        self,
+        request: HttpRequest,
+        obj: Job | None = None,
+        change: bool = False,
+        **kwargs: Any,
+    ) -> type["ModelForm[Any]"]:
+        """
+        Preselect the area of a single-area administrator on the add form.
+
+        The field is read-only for them (see :meth:`get_readonly_fields`) and
+        so displays the instance's own ``area``, which for a brand new job is
+        the model's default (the main app area) rather than the
+        administrator's own — unlike ``formfield_for_foreignkey``'s
+        ``initial``, which is never consulted for a read-only field.
+        """
+        form = super().get_form(request, obj, change, **kwargs)
+        if obj is not None or request.user.is_superuser:
+            return form
+        areas = administered_areas(request.user)
+        own_area = areas.first() if len(areas) <= 1 else None
+        if own_area is None:
+            return form
+
+        class PreselectedAreaForm(form):  # type: ignore[misc,valid-type]
+            """``form``, with a fresh instance already pointed at the area."""
+
+            def __init__(self, *args: Any, **inner_kwargs: Any) -> None:
+                super().__init__(*args, **inner_kwargs)
+                self.instance.area = own_area
+
+        return PreselectedAreaForm
+
     def formfield_for_foreignkey(
         self,
         db_field: "ForeignKey[Any, Any]",
@@ -313,6 +347,29 @@ class JobAdmin(BaseAdmin):
                 kwargs["initial"] = areas.first()
                 kwargs["empty_label"] = None
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_dbfield(
+        self, db_field: "Field[Any, Any]", request: HttpRequest, **kwargs: Any
+    ) -> Any:
+        """
+        Switch off the add/change/delete/view-related icons of the area field.
+
+        ``formfield_for_foreignkey`` builds the plain field; the base
+        implementation of this method is what wraps it with those icons
+        afterwards, so it is only here, once that wrapping has happened,
+        that they can be turned back off. Managing an entire area from a
+        job's edit form is a shortcut nobody needs here, and a confusing (in
+        the delete case, dangerous) one to leave lying around; the area
+        change and list pages are one click away regardless.
+        """
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+        widget = getattr(formfield, "widget", None)
+        if db_field.name == "area" and isinstance(widget, RelatedFieldWidgetWrapper):
+            widget.can_add_related = False
+            widget.can_change_related = False
+            widget.can_delete_related = False
+            widget.can_view_related = False
+        return formfield
 
     def save_model(
         self,

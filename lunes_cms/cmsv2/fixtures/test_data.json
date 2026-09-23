@@ -8,7 +8,7 @@
       "name": "Bäcker/-in",
       "icon": "images/backer-in.png",
       "v1_id": 15,
-      "created_by": null,
+      "created_by": ["Lunes Vokabelverwaltung (v2)"],
       "creator_is_admin": true,
       "created_at": "2022-04-16T11:20:36.269Z",
       "modified_at": "2022-04-16T11:20:36.269Z"
@@ -44978,7 +44978,23 @@
       "groups": [["Lunes Partnermanagement (v2)"]],
       "user_permissions": []
     }
-  }, 
+  }, {
+    "model": "auth.user",
+    "fields": {
+      "password": "pbkdf2_sha256$260000$tX360jOwBEnw2Ia8XAn0au$aLj/XCWIIqNKbv1UayRjYQA/CUo0AsFto5HuGUZBHPs=",
+      "last_login": "2026-06-28T23:17:49.927Z",
+      "is_superuser": false,
+      "username": "musterstadt.vokabelverwalterin",
+      "first_name": "Musterstadt",
+      "last_name": "Vokabelverwalterin",
+      "email": "musterstadt.vokabelverwalterin@lunes.app",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-06-28T23:02:40Z",
+      "groups": [["Lunes Vokabelverwaltung (v2)"]],
+      "user_permissions": []
+    }
+  },
   {
     "model": "auth.group",
     "fields": {
@@ -45051,10 +45067,26 @@
   },
   {
     "model": "cmsv2.area",
+    "pk": 1,
+    "fields": {
+      "name": "Lunes",
+      "is_main_app": true,
+      "admins": [
+        ["vanessa.vokabelverwalterin"],
+        ["elisa.expertin"],
+        ["patrizia.partnermanagerin"],
+        ["max.mustermann"]
+      ],
+      "created_at": "2026-09-21T00:00:00.000Z",
+      "modified_at": "2026-09-21T00:00:00.000Z"
+    }
+  },
+  {
+    "model": "cmsv2.area",
     "pk": 9001,
     "fields": {
       "name": "Partner Musterstadt",
-      "admins": [["patrizia.partnermanagerin"]],
+      "admins": [["musterstadt.vokabelverwalterin"]],
       "created_at": "2026-09-21T00:00:00.000Z",
       "modified_at": "2026-09-21T00:00:00.000Z"
     }
@@ -45066,7 +45098,7 @@
       "released": true,
       "name": "Bäcker/-in (Partner Musterstadt)",
       "area": 9001,
-      "created_by": null,
+      "created_by": ["Lunes Vokabelverwaltung (v2)"],
       "creator_is_admin": true,
       "created_at": "2026-09-21T00:00:00.000Z",
       "modified_at": "2026-09-21T00:00:00.000Z"
@@ -45118,6 +45150,28 @@
       "example_sentence_audio": null,
       "example_sentence_check_status": null,
       "example_sentence_audio_regenerated": false
+    }
+  },
+  {
+    "model": "cmsv2.feedback",
+    "pk": 9001,
+    "fields": {
+      "content_type": ["cmsv2", "job"],
+      "object_id": 9001,
+      "comment": "Das Icon für den Beruf Bäcker/-in fehlt noch.",
+      "read_by": null,
+      "created_date": "2026-09-21T00:00:00.000Z"
+    }
+  },
+  {
+    "model": "cmsv2.feedback",
+    "pk": 9002,
+    "fields": {
+      "content_type": ["cmsv2", "job"],
+      "object_id": 15,
+      "comment": "Die Übersetzung des Berufsnamens ist nicht korrekt.",
+      "read_by": null,
+      "created_date": "2026-09-21T00:00:00.000Z"
     }
   }
 ]

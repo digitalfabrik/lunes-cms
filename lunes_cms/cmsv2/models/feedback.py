@@ -58,9 +58,15 @@ class Feedback(models.Model):
         """
         Include a link to the edit form of the content object in list display
 
-        :return: Link to the edit form of the content object
+        :return: Link to the edit form of the content object, or a notice
+            that it is no longer available if the job, unit or word it
+            refers to has since been deleted — ``content_object`` is a
+            generic foreign key, not a real one, so deleting it leaves this
+            feedback entry behind with nothing to link to
         :rtype: str
         """
+        if self.content_object is None:
+            return mark_safe(escape(str(_("No longer available"))))
         # Get link to the admin form if the content object
         admin_edit_link = reverse(
             f"admin:cmsv2_{self.content_type.model}_change", args=[self.object_id]

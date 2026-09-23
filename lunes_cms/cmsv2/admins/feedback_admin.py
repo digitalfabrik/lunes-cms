@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, Callable, ClassVar
+from typing import Any, Callable, cast, ClassVar
 
 from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from ..feedback_filter import filter_feedback_by_creator
-from ..models import Feedback
+from ..areas import area_of_unit, area_of_word
+from ..feedback_filter import filter_feedback_by_creator_and_area
+from ..models import Area, Feedback, Job, Unit, Word
+from .feedback_area_filter import FeedbackAreaListFilter
 
 
 class FeedbackAdmin(admin.ModelAdmin):
@@ -22,6 +24,7 @@ class FeedbackAdmin(admin.ModelAdmin):
         "comment",
         "content_object_link",
         "content_type",
+        "area",
         "created_date",
         "read_by",
     ]
@@ -33,9 +36,33 @@ class FeedbackAdmin(admin.ModelAdmin):
         "read_by",
     ]
     search_fields = ["comment"]
-    list_filter = ["content_type", "read_by"]
+    list_filter = ["content_type", FeedbackAreaListFilter, "read_by"]
     sortable_by = ["content_type", "created_date", "read_by"]
     actions = ["mark_as_read", "mark_as_unread"]
+
+    def area(self, obj: Feedback) -> str:
+        """
+        The area of the job, unit or word the feedback refers to, for display
+        in the list view. Empty for a unit or word not yet linked to any job.
+        For an entry whose job, unit or word has since been deleted —
+        ``content_object`` is a generic foreign key, not a real one, so
+        deleting it does not delete or protect this feedback entry — this
+        says so instead of leaving the column blank.
+        """
+        content_object = obj.content_object
+        if content_object is None:
+            return str(_("No longer available"))
+        model_name = obj.content_type.model
+        area: Area | None
+        if model_name == "job":
+            area = cast(Job, content_object).area
+        elif model_name == "unit":
+            area = area_of_unit(cast(Unit, content_object))
+        else:
+            area = area_of_word(cast(Word, content_object))
+        return str(area) if area else ""
+
+    area.short_description = _("area")  # type: ignore[attr-defined]
 
     def has_add_permission(
         self, request: HttpRequest, _obj: Feedback | None = None
@@ -91,9 +118,7 @@ class FeedbackAdmin(admin.ModelAdmin):
         feedback_entries = super().get_queryset(request)
 
         if not request.user.is_superuser:
-            # request.user is `User | AnonymousUser`; AnonymousUser has no groups,
-            # so filtering by it is a safe no-op — preserved as original behavior.
-            return filter_feedback_by_creator(feedback_entries, request.user)  # type: ignore[arg-type]
+            return filter_feedback_by_creator_and_area(feedback_entries, request.user)  # type: ignore[arg-type]
 
         return feedback_entries
 

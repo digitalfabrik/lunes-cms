@@ -721,6 +721,17 @@ msgstr "Clients"
 msgid "created at"
 msgstr "Erstellt"
 
+#: cmsv2/admins/feedback_admin.py cmsv2/models/feedback.py
+msgid "No longer available"
+msgstr "Nicht mehr verfügbar"
+
+#: cmsv2/admins/feedback_admin.py cmsv2/admins/feedback_area_filter.py
+#: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
+#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
+#: cmsv2/models/job.py
+msgid "area"
+msgstr "Bereich"
+
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
 #: cmsv2/admins/word_filters.py
 msgid "migration status"
@@ -806,12 +817,6 @@ msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 #: cmsv2/admins/job_admin.py
 msgid "Import"
 msgstr "Import"
-
-#: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
-#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
-#: cmsv2/models/job.py
-msgid "area"
-msgstr "Bereich"
 
 #: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"

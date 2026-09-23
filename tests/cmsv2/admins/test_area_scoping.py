@@ -12,11 +12,13 @@ import pytest
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import HttpRequest
 from django.test import Client, RequestFactory
 
 from lunes_cms.cmsv2.admins.area_admin import AreaAdmin, AreaCodeInline
+from lunes_cms.cmsv2.admins.feedback_admin import FeedbackAdmin
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
 from lunes_cms.cmsv2.admins.unit_admin import (
     UnitAdmin,
@@ -24,7 +26,7 @@ from lunes_cms.cmsv2.admins.unit_admin import (
     UnitWordRelationAdmin,
 )
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
-from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
+from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -113,6 +115,81 @@ def test_content_admin_querysets_are_scoped_to_the_area(
     assert main_relation not in relations
 
 
+def test_feedback_admin_queryset_requires_area_and_creator_group(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """
+    Feedback is only visible if the viewer both administers the job's area
+    AND belongs to the group that created the job, combining the legacy
+    creator-group scoping with the newer area scoping.
+    """
+    content_managers = Group.objects.get_or_create(name="Content managers")[0]
+    other_group = Group.objects.get_or_create(name="Other group")[0]
+
+    own_group_area_job = Job.objects.create(
+        name="Own group, area job", area=area, created_by=content_managers
+    )
+    other_group_area_job = Job.objects.create(
+        name="Other group, area job", area=area, created_by=other_group
+    )
+    own_group_main_job = Job.objects.create(
+        name="Own group, main job", created_by=content_managers
+    )
+
+    job_type = ContentType.objects.get_for_model(Job)
+    own_group_area_feedback = Feedback.objects.create(
+        content_type=job_type, object_id=own_group_area_job.pk, comment="a"
+    )
+    Feedback.objects.create(
+        content_type=job_type, object_id=other_group_area_job.pk, comment="b"
+    )
+    Feedback.objects.create(
+        content_type=job_type, object_id=own_group_main_job.pk, comment="c"
+    )
+
+    # `_user()` puts every user into "Content managers", so this admin
+    # matches the group of `own_group_area_job` and `own_group_main_job`.
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+
+    visible = set(
+        FeedbackAdmin(Feedback, admin.site).get_queryset(
+            _get_request(request_factory, admin_user)
+        )
+    )
+
+    assert visible == {own_group_area_feedback}
+    plain_visible = set(
+        FeedbackAdmin(Feedback, admin.site).get_queryset(
+            _get_request(request_factory, _user("plain"))
+        )
+    )
+    assert plain_visible == set()
+
+
+def test_feedback_display_methods_survive_a_deleted_content_object(
+    db: None,
+) -> None:
+    """
+    ``content_object`` is a generic foreign key, not a real one, so deleting
+    the job, unit or word a feedback entry refers to neither deletes nor
+    protects the entry — it just leaves ``content_object`` resolving to
+    ``None``. The list display methods must say so instead of crashing the
+    whole changelist for every entry or leaving the column blank.
+    """
+    job = Job.objects.create(name="Vanishing job")
+    job_type = ContentType.objects.get_for_model(Job)
+    feedback = Feedback.objects.create(
+        content_type=job_type, object_id=job.pk, comment="x"
+    )
+    job.delete()
+    feedback.refresh_from_db()
+
+    assert feedback.content_object is None
+    assert FeedbackAdmin(Feedback, admin.site).area(feedback) == "No longer available"
+    assert str(feedback.content_object_link()) == "No longer available"
+
+
 def test_save_model_assigns_the_area_of_the_creator(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
@@ -170,6 +247,54 @@ def test_area_field_is_read_only_for_area_admins(
     assert "area" not in job_admin.get_readonly_fields(
         _get_request(request_factory, superuser)
     )
+
+
+def test_area_is_preselected_on_the_add_form_for_a_single_area_admin(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    The area field is read-only for a single-area administrator, so its
+    displayed value has to come from somewhere other than the field's own
+    ``initial`` — a fresh, unsaved job otherwise defaults to the main app
+    area, not the administrator's own one (#1016).
+    """
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    request = _get_request(request_factory, single_area_admin)
+
+    form = job_admin.get_form(request, None)()
+
+    assert form.instance.area == area
+
+
+def test_area_is_not_preselected_for_a_multi_area_admin_or_on_change(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    The preselection is specific to the single-area, read-only case: a
+    multi-area administrator still picks from their own areas via the
+    editable widget (see :meth:`formfield_for_foreignkey`), and an existing
+    job keeps its own area regardless of who is editing it.
+    """
+    second_area = Area.objects.create(name="Second area")
+    multi_area_admin = _user("multi")
+    area.admins.add(multi_area_admin)
+    second_area.admins.add(multi_area_admin)
+    add_request = _get_request(request_factory, multi_area_admin)
+
+    add_form = job_admin.get_form(add_request, None)()
+    # The instance itself is untouched by get_form for a multi-area admin —
+    # the widget's own preselection is asserted in
+    # test_area_is_preselected_and_required_for_area_admins.
+    assert add_form["area"].value() in (area.pk, second_area.pk)
+
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    job = Job.objects.create(name="Existing job", area=second_area)
+    change_request = _get_request(request_factory, single_area_admin)
+
+    change_form = job_admin.get_form(change_request, job)(instance=job)
+    assert change_form.instance.area == second_area
 
 
 def test_duplicate_jobs_skips_jobs_of_an_area(
@@ -311,6 +436,29 @@ def test_area_is_preselected_and_required_for_area_admins(
     assert field.required is True
     assert field.initial in (area, second_area)
     assert list(field.queryset) == [area, second_area]
+
+
+def test_area_field_offers_no_related_object_shortcuts(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    A job's area field must not offer to add, change, view or delete an area
+    from its own edit form: a superuser holds all four permissions on
+    ``Area``, so Django would otherwise wrap the field with those icons by
+    default — a confusing (in the delete case, dangerous) shortcut nobody
+    needs here, and one whose "Löschen" icon title also broke the e2e suite
+    by giving the page a second element matching that name. The area's own
+    change and list pages are one click away regardless.
+    """
+    superuser = _user("root", is_superuser=True)
+    field = job_admin.formfield_for_dbfield(
+        Job._meta.get_field("area"), _get_request(request_factory, superuser)
+    )
+
+    assert field.widget.can_add_related is False
+    assert field.widget.can_change_related is False
+    assert field.widget.can_delete_related is False
+    assert field.widget.can_view_related is False
 
 
 def test_area_admin_can_add_a_unit_with_a_word_of_the_own_area(
