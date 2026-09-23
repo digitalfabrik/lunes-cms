@@ -3,14 +3,14 @@
  "dataLicense": "CC0-1.0",
  "SPDXID": "SPDXRef-DOCUMENT",
  "name": "lunes-cms",
- "documentNamespace": "https://anchore.com/syft/dir/lunes-cms-2dceb60b-81af-4846-842f-738a957f8038",
+ "documentNamespace": "https://anchore.com/syft/dir/lunes-cms-fea600f8-3282-456d-83e0-435deddd0eca",
  "creationInfo": {
   "licenseListVersion": "3.28",
   "creators": [
    "Organization: Anchore, Inc",
-   "Tool: syft-1.51.1"
+   "Tool: syft-1.52.0"
   ],
-  "created": "2026-09-16T06:25:23Z"
+  "created": "2026-09-23T15:26:52Z"
  },
  "packages": [
   {
@@ -20519,12 +20519,12 @@
   },
   {
    "name": "lunes-cms",
-   "SPDXID": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
-   "versionInfo": "2026.8.1.dev106+g93619b146",
+   "SPDXID": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
+   "versionInfo": "2026.9.1.dev42+g11877e12f",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/METADATA, /.venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/RECORD, /.venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/direct_url.json, /.venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/top_level.txt",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/METADATA, /.venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/RECORD, /.venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/direct_url.json, /.venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/top_level.txt",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "Apache-2.0",
    "copyrightText": "NOASSERTION",
@@ -20532,167 +20532,167 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:python-lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:python-lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:python_lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:python_lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:lunes-cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:lunes-cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:lunes_cms:2026.8.1.dev106\\+g93619b146:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:lunes_cms:2026.9.1.dev42\\+g11877e12f:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/lunes-cms@2026.8.1.dev106%2Bg93619b146"
+     "referenceLocator": "pkg:pypi/lunes-cms@2026.9.1.dev42%2Bg11877e12f"
     }
    ]
   },
@@ -28653,7 +28653,7 @@
   },
   {
    "name": "psycopg2",
-   "SPDXID": "SPDXRef-Package-python-psycopg2-03ebf4bfcb61c120",
+   "SPDXID": "SPDXRef-Package-python-psycopg2-c48a6a5af971c83d",
    "versionInfo": "2.9.12",
    "supplier": "Person: Federico Di Gregorio (fog@initd.org)",
    "originator": "Person: Federico Di Gregorio (fog@initd.org)",
@@ -50597,7 +50597,7 @@
   {
    "name": "lunes-cms",
    "SPDXID": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "versionInfo": "2026.9.0",
+   "versionInfo": "2026.9.1",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -55877,19 +55877,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...METADATA-85b807960d98aba9",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...METADATA-f0a93399c1bc8bca",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "1ed61075442b527efe38fad385e491830b808eda"
+     "checksumValue": "55611e4643df8c20d1b0fbe67f5ccfacbdb84c7d"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "3f3f17f546b6770146c080a702da834ce2e9910a4192f863497ae414219e763c"
+     "checksumValue": "1da59f94142edb53a8fb6dc08b506166ad326e6d5bae679ee70f9ec4a67e789f"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -55899,19 +55899,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...RECORD-b636c76e891b4b8e",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...RECORD-caf3552d3e7f5b23",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "c870c28700e760eb4d5e46f7d0527f5c5e33fca7"
+     "checksumValue": "c7cc695c10f3b3ad015201e58c28616b990e22c6"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "5b068e9c0da10bfe35cbd42f377251ff17e92ce788dcab80d9de4c1435af9b0f"
+     "checksumValue": "9f1ae71908163803e06f0e935f830e6e9a26fbda00825617c733443d9dfa6b60"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -55921,8 +55921,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/direct_url.json",
-   "SPDXID": "SPDXRef-File-...direct-url.json-1b84bedd3d89dc26",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/direct_url.json",
+   "SPDXID": "SPDXRef-File-...direct-url.json-f3cd02cfeedee11d",
    "fileTypes": [
     "APPLICATION"
    ],
@@ -55943,8 +55943,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.8.1.dev106+g93619b146.dist-info/top_level.txt",
-   "SPDXID": "SPDXRef-File-...top-level.txt-b0382b0266860984",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.9.1.dev42+g11877e12f.dist-info/top_level.txt",
+   "SPDXID": "SPDXRef-File-...top-level.txt-6ea791e3d2bd8658",
    "fileTypes": [
     "TEXT"
    ],
@@ -61036,11 +61036,11 @@
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "b320cceeb4df32e0753894dfc5b8a7d20c98323c"
+     "checksumValue": "026f907885f986faaf633bfc1cb1882f8fe56d68"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "9d4ddb883db8a9d1a3d65d83217fdf58fba024240cab0e8f624a4eb3915d8f38"
+     "checksumValue": "ea8bd78c884eef9af0c66dbffbfbf5f18b5f5d16ac6690e6f495d53aa182bf90"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -64811,11 +64811,6 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-03ebf4bfcb61c120",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-secretstorage-0593661c782b921b",
    "relatedSpdxElement": "SPDXRef-Package-python-keyring-f9bc8b8c2011deb0",
    "relationshipType": "DEPENDENCY_OF"
@@ -64902,7 +64897,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-bumpver-0b62f033483990c7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -64942,12 +64937,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-last-updated-by-git-0f665042942d2485",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pylint-runner-1017d6f340d26319",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -64987,7 +64982,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-mptt-149f944063398f49",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65192,7 +65187,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65802,7 +65797,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-openai-419423e4c87f411e",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65867,7 +65862,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-requests-455be117670001e0",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65927,7 +65922,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-wheel-48f3a454bfcd36c7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65947,12 +65942,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-django-49c38b8e1a86f101",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-debug-toolbar-4a5012e4efc3728e",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65967,7 +65962,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66047,7 +66042,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66087,7 +66082,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66352,7 +66347,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66362,7 +66357,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66402,7 +66397,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-isort-7829498b7b2970f3",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66442,7 +66437,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-7a42007bba06651f",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66782,7 +66777,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-shellcheck-py-8aea03b12a798333",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66817,7 +66812,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-rtd-theme-8c075cbccbb658cb",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66852,7 +66847,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pyjwt-8d7e0f8083e2e267",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66977,7 +66972,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-djangorestframework-954a58e7d39d8454",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67122,7 +67117,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67247,7 +67242,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67302,7 +67297,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pylint-django-b5011ff09bd7676d",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67423,6 +67418,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-devhelp-c2d282eaf598e305",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinx-840f623c0b5e544d",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-c48a6a5af971c83d",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67572,7 +67572,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67787,7 +67787,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67932,7 +67932,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-qr-code-e3acac1cf9d1a634",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67997,7 +67997,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-build-e648ec04a1183a67",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68057,7 +68057,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-icdiff-ec0140b74afe8f37",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68102,7 +68102,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-twine-eef9f56ce5cfbc29",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68192,7 +68192,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-ipython-f56fb4cc77831f01",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68292,7 +68292,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-stubs-f942ebc41a325488",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68337,7 +68337,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-jazzmin-fc8c0c3d513aed51",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68385,24 +68385,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-pytokens-032c35a09c3394b1",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-03ebf4bfcb61c120",
-   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.12.dist-info-METADATA-5d1a07b170a07860",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-03ebf4bfcb61c120",
-   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.12.dist-info-RECORD-6c73e6257d85dd75",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-03ebf4bfcb61c120",
-   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-9bb89adb8d20b5e3",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -69655,6 +69637,30 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
+   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-6ea791e3d2bd8658",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
+   "relatedSpdxElement": "SPDXRef-File-...RECORD-caf3552d3e7f5b23",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
+   "relatedSpdxElement": "SPDXRef-File-...METADATA-f0a93399c1bc8bca",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
+   "relatedSpdxElement": "SPDXRef-File-...direct-url.json-f3cd02cfeedee11d",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-id-5d6fcdc4f77531a0",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
@@ -69699,30 +69705,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-nodeenv-60d7660a217884a1",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
-   "relatedSpdxElement": "SPDXRef-File-...direct-url.json-1b84bedd3d89dc26",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
-   "relatedSpdxElement": "SPDXRef-File-...METADATA-85b807960d98aba9",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
-   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-b0382b0266860984",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
-   "relatedSpdxElement": "SPDXRef-File-...RECORD-b636c76e891b4b8e",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -70935,6 +70917,24 @@
   {
    "spdxElementId": "SPDXRef-Package-github-action-actions-setup-node-c43209868599aabc",
    "relatedSpdxElement": "SPDXRef-File-....github-workflows-test.yml-bec6dd40312e8320",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-c48a6a5af971c83d",
+   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.12.dist-info-METADATA-5d1a07b170a07860",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-c48a6a5af971c83d",
+   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.12.dist-info-RECORD-6c73e6257d85dd75",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-c48a6a5af971c83d",
+   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-9bb89adb8d20b5e3",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -72676,7 +72676,7 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-61973c2f7c80f0f3",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-5b67b4d25a99a791",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72961,7 +72961,7 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-psycopg2-03ebf4bfcb61c120",
+   "relatedSpdxElement": "SPDXRef-Package-python-psycopg2-c48a6a5af971c83d",
    "relationshipType": "CONTAINS"
   },
   {
