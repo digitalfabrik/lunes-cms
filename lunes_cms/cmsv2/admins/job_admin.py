@@ -301,7 +301,9 @@ class JobAdmin(BaseAdmin):
         Offer an area administrator only the areas they administer.
 
         The area is preselected and cannot be emptied, so a job created by an
-        area administrator never ends up as main app content by accident.
+        area administrator never ends up in the wrong area by accident. A
+        user who administers several areas, including possibly the main app,
+        still has to pick one.
         """
         if db_field.name == "area" and not request.user.is_superuser:
             areas = administered_areas(request.user)
@@ -320,13 +322,21 @@ class JobAdmin(BaseAdmin):
         change: bool,
     ) -> None:
         """
-        Put a job an area administrator creates into their area.
+        Put a job a single-area administrator creates into their area.
 
-        Administrators of a single area never see the field, so it is filled in
-        for them here, the same way ``created_by`` is.
+        Administrators of a single area never see the field — it is
+        read-only for them, see :meth:`get_readonly_fields` — so their area
+        never reaches the form. It is filled in here instead, the same way
+        ``created_by`` is. A brand new job already defaults to the main app
+        area (see :func:`~lunes_cms.cmsv2.models.job.default_area_id`), so
+        this only has an effect when the administrator's own area differs
+        from that default.
         """
-        if not change and not request.user.is_superuser and obj.area is None:
-            obj.area = administered_areas(request.user).first()
+        if not change and not request.user.is_superuser:
+            areas = administered_areas(request.user)
+            own_area = areas.first()
+            if len(areas) <= 1 and own_area is not None:
+                obj.area = own_area
         super().save_model(request, obj, form, change)
 
     def related_units(self, obj: Job) -> str:
@@ -421,11 +431,13 @@ class JobAdmin(BaseAdmin):
         """
         Duplicate the selected jobs, including their related units.
 
-        Jobs of an area are skipped: their units must not be shared with a
-        second job, so duplicating them would need a deep copy of every unit
-        and word, which is a separate feature.
+        Jobs of a partner area are skipped: their units must not be shared
+        with a second job, so duplicating them would need a deep copy of
+        every unit and word, which is a separate feature. Jobs of the main
+        app area are shared freely between jobs already, so they may be
+        duplicated.
         """
-        skipped = queryset.filter(area__isnull=False).count()
+        skipped = queryset.exclude(area__is_main_app=True).count()
         if skipped:
             messages.warning(
                 request,
@@ -435,7 +447,7 @@ class JobAdmin(BaseAdmin):
                 )
                 % {"count": skipped},
             )
-        for job in queryset.filter(area__isnull=True):
+        for job in queryset.filter(area__is_main_app=True):
             units = list(job.units.all())
             job.pk = None
             job.v1_id = None

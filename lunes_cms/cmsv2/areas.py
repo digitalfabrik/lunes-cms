@@ -3,9 +3,11 @@ Area scoping and the invariants that keep the content of an area separate.
 
 The area of a job is stored on :class:`~lunes_cms.cmsv2.models.job.Job`, every
 other area membership is derived from it: a unit belongs to the area of its job
-and a word to the area of the units it is linked to. This module is the single
-place that knows how that derivation works, so admins, views and the API can
-share it.
+and a word to the area of the units it is linked to. Every job always belongs
+to an area — the main app catalog is not the absence of an area but the one
+area with ``is_main_app=True`` — so no code here needs a separate "no area"
+case, see #1016. This module is the single place that knows how the
+derivation works, so admins, views and the API can share it.
 
 This module exposes three helper families: ``scope_*(queryset, user)`` narrows a
 queryset the caller already holds, ``visible_*(user)`` narrows the whole table
@@ -18,7 +20,6 @@ from __future__ import annotations
 from typing import Iterable, TYPE_CHECKING
 
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from .models.area import Area
@@ -43,7 +44,8 @@ if TYPE_CHECKING:
 
 def administered_areas(user: "User") -> "QuerySet[Area]":
     """
-    The areas the given user administers.
+    The areas the given user administers, the main app area included — it is
+    an ordinary area like any other from here on, see #1016.
 
     :param user: The user in question
     :return: The queryset of areas the user administers
@@ -55,10 +57,10 @@ def administered_areas(user: "User") -> "QuerySet[Area]":
 
 def is_area_admin(user: "User") -> bool:
     """
-    Whether the given user administers at least one area.
+    Whether the given user administers at least one area of a part organization.
 
     :param user: The user in question
-    :return: Whether the user is the administrator of any area
+    :return: Whether the user is the administrator of any such area
     """
     return administered_areas(user).exists()
 
@@ -67,9 +69,10 @@ def scope_jobs(queryset: "QuerySet[Job]", user: "User") -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the given user may see.
 
-    Superusers see everything, administrators of an area see the jobs of the
-    areas they administer, and everybody else sees only the jobs of the main
-    app, which are the ones without an area.
+    Superusers see everything, administrators of an area (the main app area
+    included) see the jobs of the areas they administer, and everybody else
+    sees nothing at all — a user who forgot to be assigned anywhere must not
+    silently fall back to seeing the main app catalog, see #1016.
 
     :param queryset: The job queryset to restrict
     :param user: The user the queryset is restricted to
@@ -77,10 +80,7 @@ def scope_jobs(queryset: "QuerySet[Job]", user: "User") -> "QuerySet[Job]":
     """
     if getattr(user, "is_superuser", False):
         return queryset
-    areas = administered_areas(user)
-    if areas.exists():
-        return queryset.filter(area__in=areas)
-    return queryset.filter(area__isnull=True)
+    return queryset.filter(area__in=administered_areas(user))
 
 
 def scope_units(queryset: "QuerySet[Unit]", user: "User") -> "QuerySet[Unit]":
@@ -88,7 +88,9 @@ def scope_units(queryset: "QuerySet[Unit]", user: "User") -> "QuerySet[Unit]":
     Restrict a unit queryset to what the given user may see.
 
     The area of a unit is the area of its job, see :func:`scope_jobs` for the
-    rules. Units without any job at all count as main app content.
+    rules. A unit that is not linked to any job yet has no derivable area, so
+    it stays visible only to the area administrator who created it — the
+    same rule :func:`scope_words` applies to an unlinked word.
 
     :param queryset: The unit queryset to restrict
     :param user: The user the queryset is restricted to
@@ -96,10 +98,13 @@ def scope_units(queryset: "QuerySet[Unit]", user: "User") -> "QuerySet[Unit]":
     """
     if getattr(user, "is_superuser", False):
         return queryset
+    if not user.is_authenticated:
+        return queryset.none()
     areas = administered_areas(user)
+    scoped = queryset.filter(jobs__area__in=areas)
     if areas.exists():
-        return queryset.filter(jobs__area__in=areas).distinct()
-    return queryset.exclude(jobs__area__isnull=False).distinct()
+        scoped |= queryset.filter(jobs__isnull=True, created_by_user__pk=user.pk)
+    return scoped.distinct()
 
 
 def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
@@ -107,10 +112,9 @@ def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
     Restrict a word queryset to what the given user may see.
 
     The area of a word is the area of the units it is linked to. A word that is
-    not linked to any unit yet has no derivable area, so it stays visible to
-    the main app and, additionally, to the area administrator who created it —
-    otherwise a word created in the add popup of a unit that was then abandoned
-    would be lost to its creator.
+    not linked to any unit yet has no derivable area, so it stays visible only
+    to the area administrator who created it — otherwise a word created in the
+    add popup of a unit that was then abandoned would be lost to its creator.
 
     :param queryset: The word queryset to restrict
     :param user: The user the queryset is restricted to
@@ -118,13 +122,13 @@ def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
     """
     if getattr(user, "is_superuser", False):
         return queryset
+    if not user.is_authenticated:
+        return queryset.none()
     areas = administered_areas(user)
+    scoped = queryset.filter(units__jobs__area__in=areas)
     if areas.exists():
-        return queryset.filter(
-            Q(units__jobs__area__in=areas)
-            | Q(units__isnull=True, created_by_user__pk=user.pk)
-        ).distinct()
-    return queryset.exclude(units__jobs__area__isnull=False).distinct()
+        scoped |= queryset.filter(units__isnull=True, created_by_user__pk=user.pk)
+    return scoped.distinct()
 
 
 def scope_unit_word_relations(
@@ -243,17 +247,34 @@ def area_of_unit(unit: "Unit") -> Area | None:
     The area a unit belongs to, derived from its job.
 
     :param unit: The unit in question
-    :return: The area of the unit, or ``None`` for main app content
+    :return: The area of the unit, or ``None`` if it belongs to no job yet
     """
     if not unit.pk:
         return None
-    job = unit.jobs.filter(area__isnull=False).select_related("area").first()
+    job = unit.jobs.select_related("area").first()
     return job.area if job else None
+
+
+def _exclusive_area(area: Area | None) -> Area | None:
+    """
+    The area content is tied to *exclusively*, for the invariants below.
+
+    The main app catalog is shared freely between its own many jobs, units
+    and words — unlike a partner area, it owns nothing exclusively — so it
+    counts the same as "no area" here, the same as it did before every job
+    was required to have one, see #1016.
+
+    :param area: The area in question
+    :return: ``area`` itself, or ``None`` for the main app area or no area
+    """
+    if area is None or area.is_main_app:
+        return None
+    return area
 
 
 def pending_area_of_unit(unit: "Unit") -> Area | None:
     """
-    The area a unit is about to belong to.
+    The exclusive area a unit is about to belong to.
 
     While a unit is being added or its jobs are being changed, the jobs of the
     unit are not written yet, so the area cannot be read from the database.
@@ -262,12 +283,13 @@ def pending_area_of_unit(unit: "Unit") -> Area | None:
     stored ones.
 
     :param unit: The unit in question
-    :return: The area the unit will belong to, or ``None`` for main app content
+    :return: The exclusive area the unit will belong to, or ``None`` (see
+        :func:`_exclusive_area`)
     """
     jobs = getattr(unit, "pending_jobs", None)
     if jobs is None:
-        return area_of_unit(unit)
-    areas = {job.area for job in jobs if job.area_id}
+        return _exclusive_area(area_of_unit(unit))
+    areas = {_exclusive_area(job.area) for job in jobs if job.area_id} - {None}
     return next(iter(areas), None)
 
 
@@ -276,28 +298,28 @@ def area_of_word(word: "Word") -> Area | None:
     The area a word belongs to, derived from the units it is linked to.
 
     :param word: The word in question
-    :return: The area of the word, or ``None`` for main app content
+    :return: The area of the word, or ``None`` if it belongs to no unit yet
     """
     if not word.pk:
         return None
-    unit = word.units.filter(jobs__area__isnull=False).first()
+    unit = word.units.filter(jobs__isnull=False).first()
     return area_of_unit(unit) if unit else None
 
 
 def _other_areas_of_word(word: "Word", unit: "Unit") -> set[Area | None]:
     """
-    The areas of all units of a word, except the given unit.
+    The exclusive areas of all units of a word, except the given unit.
 
     :param word: The word whose units are inspected
     :param unit: The unit to leave out
-    :return: The set of areas, where ``None`` stands for main app content
+    :return: The set of exclusive areas (see :func:`_exclusive_area`)
     """
     if not word.pk:
         return set()
     other_units = word.units.all()
     if unit.pk:
         other_units = other_units.exclude(pk=unit.pk)
-    return {area_of_unit(other_unit) for other_unit in other_units}
+    return {_exclusive_area(area_of_unit(other_unit)) for other_unit in other_units}
 
 
 def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
@@ -314,7 +336,7 @@ def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
                                                      mix areas
     """
     jobs = list(jobs)
-    areas = {job.area for job in jobs if job.area_id}
+    areas = {_exclusive_area(job.area) for job in jobs if job.area_id} - {None}
     if areas and len(jobs) > 1:
         raise ValidationError(
             _(
@@ -340,16 +362,18 @@ def validate_job_area(job: "Job", area: Area | None) -> None:
     """
     Check that a job may be moved into the given area.
 
-    Everything below a job of an area belongs to that area alone, so a job
-    whose units are shared with other jobs, or whose words are used outside of
-    those units, cannot be moved into an area. Untangling that content is a
-    manual decision and is left to the content managers.
+    Everything below a job of a partner area belongs to that area alone, so a
+    job whose units are shared with other jobs, or whose words are used
+    outside of those units, cannot be moved into one. Untangling that content
+    is a manual decision and is left to the content managers. Moving a job
+    into the main app area is exempt: it is shared freely between its own
+    jobs, so nothing needs to be untangled first.
 
     :param job: The job that is about to be saved
     :param area: The area the job is about to be moved into
     :raises ~django.core.exceptions.ValidationError: If the job shares content
     """
-    if area is None or not job.pk:
+    if area is None or area.is_main_app or not job.pk:
         return
     for unit in job.units.prefetch_related("jobs", "words"):
         other_jobs = [other for other in unit.jobs.all() if other.pk != job.pk]
@@ -381,8 +405,8 @@ def validate_relation_area(unit: "Unit", word: "Word") -> None:
     """
     Check that a word may be linked to a unit.
 
-    All units of a word have to belong to the same area, so a word of the main
-    app cannot be added to a unit of an area and vice versa.
+    All units of a word have to belong to the same area, so a word of one
+    area cannot be added to a unit of another and vice versa.
 
     :param unit: The unit the word is about to be linked to
     :param word: The word that is about to be linked
@@ -399,74 +423,70 @@ def validate_relation_area(unit: "Unit", word: "Word") -> None:
         )
 
 
-def published_jobs(queryset: "QuerySet[Job]", area: Area | None) -> "QuerySet[Job]":
+def published_jobs(queryset: "QuerySet[Job]", area: Area) -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the API publishes for the given area.
 
-    A client without an access token gets the jobs of the main app, which are
-    the ones without an area, a client with a token gets the jobs of its area
-    and nothing else. Whether a job is released or archived is not decided
-    here, the views keep that filter themselves.
+    A client without an access token gets the jobs of the main app area, a
+    client with a token gets the jobs of its own area and nothing else.
+    Whether a job is released or archived is not decided here, the views
+    keep that filter themselves.
 
     :param queryset: The job queryset to restrict
-    :param area: The area of the client, or ``None`` for the main app
+    :param area: The area of the client — the main app area for a client
+        without an access token
     :return: The restricted queryset
     """
-    if area is None:
-        return queryset.filter(area__isnull=True)
     return queryset.filter(area=area)
 
 
-def published_units(queryset: "QuerySet[Unit]", area: Area | None) -> "QuerySet[Unit]":
+def published_units(queryset: "QuerySet[Unit]", area: Area) -> "QuerySet[Unit]":
     """
     Restrict a unit queryset to what the API publishes for the given area.
 
     The area of a unit is the area of its job, see :func:`published_jobs`.
 
-    Both branches reject a unit that has *any* job outside the area asked for,
-    rather than accepting one that has a job inside it. A unit of a job of an
+    A unit that has *any* job outside the area asked for is rejected, rather
+    than accepted because it has a job inside it too. A unit of a job of an
     area must not be assigned to any other job at all, so a unit that is, is
     broken data — but :func:`validate_unit_jobs` only runs in the admin, and a
     CSV import, a data migration or a shell session can write what the admin
     would refuse. The API is where such a mistake would turn into a leak, so
     it is rejected once more here.
 
-    The two rejections are also what makes the filter safe across joins: each
-    ``filter()`` on the jobs of a unit opens a join of its own, so the job that
-    satisfies the ``released`` condition of the caller need not be the job that
-    satisfies the area condition here. Excluding the foreign jobs outright does
-    not care which join matched.
+    The exclude, rather than a second filter, is also what makes this safe
+    across joins: a ``filter()`` on the jobs of a unit and the ``exclude()``
+    below each open a join of their own, so the job that satisfies the
+    caller's own filter (e.g. ``released``) need not be the job that
+    satisfies the area condition here. Excluding the foreign jobs outright
+    does not care which join matched.
 
     :param queryset: The unit queryset to restrict
-    :param area: The area of the client, or ``None`` for the main app
+    :param area: The area of the client — the main app area for a client
+        without an access token
     :return: The restricted queryset
     """
-    if area is None:
-        return queryset.exclude(jobs__area__isnull=False).distinct()
     return (
         queryset.filter(jobs__area=area)
-        .exclude(jobs__area__isnull=True)
         .exclude(jobs__area__in=Area.objects.exclude(pk=area.pk))
         .distinct()
     )
 
 
-def published_words(queryset: "QuerySet[Word]", area: Area | None) -> "QuerySet[Word]":
+def published_words(queryset: "QuerySet[Word]", area: Area) -> "QuerySet[Word]":
     """
     Restrict a word queryset to what the API publishes for the given area.
 
     The area of a word is the area of the units it is linked to, see
-    :func:`published_units` for why both branches exclude rather than filter.
+    :func:`published_units` for why an exclude is used rather than a filter.
 
     :param queryset: The word queryset to restrict
-    :param area: The area of the client, or ``None`` for the main app
+    :param area: The area of the client — the main app area for a client
+        without an access token
     :return: The restricted queryset
     """
-    if area is None:
-        return queryset.exclude(units__jobs__area__isnull=False).distinct()
     return (
         queryset.filter(units__jobs__area=area)
-        .exclude(units__jobs__area__isnull=True)
         .exclude(units__jobs__area__in=Area.objects.exclude(pk=area.pk))
         .distinct()
     )
