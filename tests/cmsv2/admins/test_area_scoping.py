@@ -415,6 +415,29 @@ def test_area_is_preselected_and_required_for_area_admins(
     assert list(field.queryset) == [area, second_area]
 
 
+def test_area_field_offers_no_related_object_shortcuts(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    A job's area field must not offer to add, change, view or delete an area
+    from its own edit form: a superuser holds all four permissions on
+    ``Area``, so Django would otherwise wrap the field with those icons by
+    default — a confusing (in the delete case, dangerous) shortcut nobody
+    needs here, and one whose "Löschen" icon title also broke the e2e suite
+    by giving the page a second element matching that name. The area's own
+    change and list pages are one click away regardless.
+    """
+    superuser = _user("root", is_superuser=True)
+    field = job_admin.formfield_for_dbfield(
+        Job._meta.get_field("area"), _get_request(request_factory, superuser)
+    )
+
+    assert field.widget.can_add_related is False
+    assert field.widget.can_change_related is False
+    assert field.widget.can_delete_related is False
+    assert field.widget.can_view_related is False
+
+
 def test_area_admin_can_add_a_unit_with_a_word_of_the_own_area(
     area: Area, client: Client
 ) -> None:
