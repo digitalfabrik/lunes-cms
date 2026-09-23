@@ -232,10 +232,17 @@ def test_scope_units_keeps_own_jobless_unit_visible_to_area_admin(
 
 
 @pytest.mark.django_db
-def test_scope_unit_word_relations_per_user_kind(area: Area) -> None:
-    """A relation inherits the area of its unit."""
+def test_scope_unit_word_relations_per_user_kind(
+    area: Area, main_app_area: Area
+) -> None:
+    """
+    A relation inherits the area of its unit, and a user who administers no
+    area at all sees nothing (#1016).
+    """
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="M", area=main_app_area)
+    )
     area_relation = UnitWordRelation.objects.create(
         unit=area_unit, word=_word("Bereichswort")
     )
@@ -246,6 +253,8 @@ def test_scope_unit_word_relations_per_user_kind(area: Area) -> None:
     superuser = _user("root", is_superuser=True)
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
+    main_app_admin = _user("main-app-admin")
+    main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
     # Only the area content is asserted exactly, the database may hold
@@ -256,18 +265,27 @@ def test_scope_unit_word_relations_per_user_kind(area: Area) -> None:
     assert set(
         scope_unit_word_relations(UnitWordRelation.objects.all(), admin_user)
     ) == {area_relation}
-    plain_relations = set(
-        scope_unit_word_relations(UnitWordRelation.objects.all(), plain_user)
+    main_app_relations = set(
+        scope_unit_word_relations(UnitWordRelation.objects.all(), main_app_admin)
     )
-    assert main_relation in plain_relations
-    assert area_relation not in plain_relations
+    assert main_relation in main_app_relations
+    assert area_relation not in main_app_relations
+    assert (
+        set(scope_unit_word_relations(UnitWordRelation.objects.all(), plain_user))
+        == set()
+    )
 
 
 @pytest.mark.django_db
-def test_scope_alternative_words_per_user_kind(area: Area) -> None:
-    """An alternative word inherits the area of the word it spells out."""
+def test_scope_alternative_words_per_user_kind(area: Area, main_app_area: Area) -> None:
+    """
+    An alternative word inherits the area of the word it spells out, and a
+    user who administers no area at all sees nothing (#1016).
+    """
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
-    main_unit = _unit_with_job("Main unit", Job.objects.create(name="M"))
+    main_unit = _unit_with_job(
+        "Main unit", Job.objects.create(name="M", area=main_app_area)
+    )
     area_word = _word("Bereichswort")
     main_word = _word("Hauptwort")
     UnitWordRelation.objects.create(unit=area_unit, word=area_word)
@@ -281,16 +299,21 @@ def test_scope_alternative_words_per_user_kind(area: Area) -> None:
 
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
+    main_app_admin = _user("main-app-admin")
+    main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
     assert set(scope_alternative_words(AlternativeWord.objects.all(), admin_user)) == {
         area_alternative
     }
-    plain_alternatives = set(
-        scope_alternative_words(AlternativeWord.objects.all(), plain_user)
+    main_app_alternatives = set(
+        scope_alternative_words(AlternativeWord.objects.all(), main_app_admin)
     )
-    assert main_alternative in plain_alternatives
-    assert area_alternative not in plain_alternatives
+    assert main_alternative in main_app_alternatives
+    assert area_alternative not in main_app_alternatives
+    assert (
+        set(scope_alternative_words(AlternativeWord.objects.all(), plain_user)) == set()
+    )
 
 
 @pytest.mark.django_db

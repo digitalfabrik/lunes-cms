@@ -1260,11 +1260,11 @@ msgstr "Beruf"
 
 #: cmsv2/models/job.py
 msgid ""
-"Jobs of an area are only visible to the administrators of that area. Jobs "
-"without an area belong to the main app."
+"Jobs of an area are only visible to the administrators of that area. Jobs of "
+"the main app catalog belong to the 'Lunes' area."
 msgstr ""
 "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
-"sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
+"sichtbar. Berufe des Hauptapp-Katalogs gehören zum Bereich 'Lunes'."
 
 #: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "creator"
@@ -1503,7 +1503,9 @@ msgstr "Alternatives Wort gelöscht"
 
 #: cmsv2/views/generate_example_sentence.py
 msgid "No job found. Assign the word to a unit that belongs to a job first."
-msgstr "Kein Beruf gefunden. Ordne das Wort zuerst einer Lerneinheit zu, die zu einem Beruf gehört."
+msgstr ""
+"Kein Beruf gefunden. Ordne das Wort zuerst einer Lerneinheit zu, die zu "
+"einem Beruf gehört."
 
 #: cmsv2/views/generate_example_sentence.py
 msgid "Example sentence generated!"
@@ -1775,6 +1777,13 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid ""
+#~ "Jobs of an area are only visible to the administrators of that area. Jobs "
+#~ "without an area belong to the main app."
+#~ msgstr ""
+#~ "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
+#~ "sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
 
 #~ msgid ""
 #~ "Deleting a code also withdraws the access of every client that redeemed "
