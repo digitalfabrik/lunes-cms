@@ -167,6 +167,29 @@ def test_feedback_admin_queryset_requires_area_and_creator_group(
     assert plain_visible == set()
 
 
+def test_feedback_display_methods_survive_a_deleted_content_object(
+    db: None,
+) -> None:
+    """
+    ``content_object`` is a generic foreign key, not a real one, so deleting
+    the job, unit or word a feedback entry refers to neither deletes nor
+    protects the entry — it just leaves ``content_object`` resolving to
+    ``None``. The list display methods must say so instead of crashing the
+    whole changelist for every entry or leaving the column blank.
+    """
+    job = Job.objects.create(name="Vanishing job")
+    job_type = ContentType.objects.get_for_model(Job)
+    feedback = Feedback.objects.create(
+        content_type=job_type, object_id=job.pk, comment="x"
+    )
+    job.delete()
+    feedback.refresh_from_db()
+
+    assert feedback.content_object is None
+    assert FeedbackAdmin(Feedback, admin.site).area(feedback) == "No longer available"
+    assert str(feedback.content_object_link()) == "No longer available"
+
+
 def test_save_model_assigns_the_area_of_the_creator(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:

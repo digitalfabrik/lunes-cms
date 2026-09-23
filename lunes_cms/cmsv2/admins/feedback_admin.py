@@ -43,16 +43,23 @@ class FeedbackAdmin(admin.ModelAdmin):
     def area(self, obj: Feedback) -> str:
         """
         The area of the job, unit or word the feedback refers to, for display
-        in the list view. Empty for content of the main app.
+        in the list view. Empty for a unit or word not yet linked to any job.
+        For an entry whose job, unit or word has since been deleted —
+        ``content_object`` is a generic foreign key, not a real one, so
+        deleting it does not delete or protect this feedback entry — this
+        says so instead of leaving the column blank.
         """
+        content_object = obj.content_object
+        if content_object is None:
+            return str(_("No longer available"))
         model_name = obj.content_type.model
         area: Area | None
         if model_name == "job":
-            area = cast(Job, obj.content_object).area
+            area = cast(Job, content_object).area
         elif model_name == "unit":
-            area = area_of_unit(cast(Unit, obj.content_object))
+            area = area_of_unit(cast(Unit, content_object))
         else:
-            area = area_of_word(cast(Word, obj.content_object))
+            area = area_of_word(cast(Word, content_object))
         return str(area) if area else ""
 
     area.short_description = _("area")  # type: ignore[attr-defined]

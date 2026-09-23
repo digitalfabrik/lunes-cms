@@ -721,6 +721,10 @@ msgstr "Clients"
 msgid "created at"
 msgstr "Erstellt"
 
+#: cmsv2/admins/feedback_admin.py cmsv2/models/feedback.py
+msgid "No longer available"
+msgstr "Nicht mehr verfügbar"
+
 #: cmsv2/admins/feedback_admin.py cmsv2/admins/feedback_area_filter.py
 #: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
 #: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
