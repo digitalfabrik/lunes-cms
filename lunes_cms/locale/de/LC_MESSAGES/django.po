@@ -1089,6 +1089,19 @@ msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
 
 #: cmsv2/areas.py
+#, python-format
+msgid ""
+"The word \"%(word)s\" already belongs to area \"%(existing_area)s\" and "
+"cannot also be used in area \"%(new_area)s\"."
+msgstr ""
+"Die Vokabel „%(word)s“ gehört bereits zu Bereich „%(existing_area)s“ und "
+"kann nicht auch in Bereich „%(new_area)s“ verwendet werden."
+
+#: cmsv2/areas.py
+msgid "no area"
+msgstr "kein Bereich"
+
+#: cmsv2/areas.py
 msgid ""
 "A unit of a job that belongs to an area must not be assigned to any other "
 "job."
@@ -1125,15 +1138,6 @@ msgstr ""
 "Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet. Alle "
 "Vokabeln eines Bereichs gehören allein zu diesem Bereich, daher kann dieser "
 "Beruf nicht in einen Bereich verschoben werden."
-
-#: cmsv2/areas.py
-#, python-format
-msgid ""
-"The word \"%(word)s\" belongs to another area and cannot be used in this "
-"unit."
-msgstr ""
-"Die Vokabel „%(word)s“ gehört zu einem anderen Bereich und kann in dieser "
-"Einheit nicht verwendet werden."
 
 #: cmsv2/models/area.py
 msgid "Shown on landing page."
@@ -1782,6 +1786,14 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#, python-format
+#~ msgid ""
+#~ "The word \"%(word)s\" belongs to another area and cannot be used in this "
+#~ "unit."
+#~ msgstr ""
+#~ "Die Vokabel „%(word)s“ gehört zu einem anderen Bereich und kann in dieser "
+#~ "Einheit nicht verwendet werden."
 
 #~ msgid ""
 #~ "Jobs of an area are only visible to the administrators of that area. Jobs "
