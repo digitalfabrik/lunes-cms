@@ -14,6 +14,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.storage.fallback import FallbackStorage
+from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.http import HttpRequest
 from django.test import Client, RequestFactory
 
@@ -25,7 +26,8 @@ from lunes_cms.cmsv2.admins.unit_admin import (
     UnitAdminForm,
     UnitWordRelationAdmin,
 )
-from lunes_cms.cmsv2.admins.word_admin import WordAdmin
+from lunes_cms.cmsv2.admins.word_admin import UnitInlineFormSet, WordAdmin
+from lunes_cms.cmsv2.areas import area_of_unit, area_of_word
 from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
@@ -656,3 +658,143 @@ def test_the_code_count_of_the_area_list_counts_the_stored_codes(
     response = client.get("/en/admin/cmsv2/area/")
 
     assert b'<td class="field-number_codes">2</td>' in response.content
+
+
+def _unit_inline_formset(word: Word, units: list[Unit]) -> BaseInlineFormSet:
+    """Build the same inline formset class the word admin page uses (#1007)."""
+    formset_class = inlineformset_factory(
+        Word, UnitWordRelation, formset=UnitInlineFormSet, fields=["unit"], extra=0
+    )
+    data = {
+        "unit_word_relations-TOTAL_FORMS": str(len(units)),
+        "unit_word_relations-INITIAL_FORMS": "0",
+        "unit_word_relations-MIN_NUM_FORMS": "0",
+        "unit_word_relations-MAX_NUM_FORMS": "1000",
+    }
+    for index, unit in enumerate(units):
+        data[f"unit_word_relations-{index}-id"] = ""
+        data[f"unit_word_relations-{index}-word"] = str(word.pk) if word.pk else ""
+        data[f"unit_word_relations-{index}-unit"] = str(unit.pk)
+    return formset_class(data=data, instance=word, prefix="unit_word_relations")
+
+
+def test_unit_inline_formset_rejects_mixing_areas_in_one_save(area: Area) -> None:
+    """
+    Adding two units of different areas to one word in a single formset save
+    must be rejected, with a single, specific error attached to the second
+    (conflicting) unit's own row rather than a generic error for the whole
+    formset — each row alone would otherwise pass, since neither unit is an
+    "already-saved" unit of the word yet while both are being validated (#1007).
+    """
+    other_area = Area.objects.create(name="Other area")
+    area_unit = Unit.objects.create(title="Area unit")
+    area_unit.jobs.add(Job.objects.create(name="Area job", area=area))
+    other_area_unit = Unit.objects.create(title="Other area unit")
+    other_area_unit.jobs.add(Job.objects.create(name="Other area job", area=other_area))
+    word = Word.objects.create(word="Mixedword", singular_article=1)
+
+    formset = _unit_inline_formset(word, [area_unit, other_area_unit])
+
+    assert not formset.is_valid()
+    assert not formset.non_form_errors()
+    assert formset.errors == [
+        {},
+        {
+            "unit": [
+                f'The word "{word}" already belongs to area "{area}" and cannot '
+                f'also be used in area "{other_area}".'
+            ]
+        },
+    ]
+
+
+def test_unit_inline_formset_accepts_units_of_the_same_area(area: Area) -> None:
+    """Adding two units of the *same* area to one word in a single save works."""
+    unit_one = Unit.objects.create(title="Unit one")
+    unit_one.jobs.add(Job.objects.create(name="Job one", area=area))
+    unit_two = Unit.objects.create(title="Unit two")
+    unit_two.jobs.add(Job.objects.create(name="Job two", area=area))
+    word = Word.objects.create(word="Sameareaword", singular_article=1)
+
+    formset = _unit_inline_formset(word, [unit_one, unit_two])
+
+    assert formset.is_valid(), formset.errors + [formset.non_form_errors()]
+
+
+def test_unit_inline_formset_flags_only_the_new_row_against_saved_units(
+    area: Area,
+) -> None:
+    """
+    Adding one new conflicting unit to a word that already has saved units of
+    another area must raise a single error, attached to the new row, not one
+    per already-saved row (#1007).
+    """
+    other_area = Area.objects.create(name="Other area")
+    saved_unit_one = Unit.objects.create(title="Saved unit one")
+    saved_unit_one.jobs.add(Job.objects.create(name="Job one", area=area))
+    saved_unit_two = Unit.objects.create(title="Saved unit two")
+    saved_unit_two.jobs.add(Job.objects.create(name="Job two", area=area))
+    new_unit = Unit.objects.create(title="New unit")
+    new_unit.jobs.add(Job.objects.create(name="Job three", area=other_area))
+    word = Word.objects.create(word="Establishedword", singular_article=1)
+    UnitWordRelation.objects.create(unit=saved_unit_one, word=word)
+    UnitWordRelation.objects.create(unit=saved_unit_two, word=word)
+
+    formset_class = inlineformset_factory(
+        Word, UnitWordRelation, formset=UnitInlineFormSet, fields=["unit"], extra=0
+    )
+    data = {
+        "unit_word_relations-TOTAL_FORMS": "3",
+        "unit_word_relations-INITIAL_FORMS": "2",
+        "unit_word_relations-MIN_NUM_FORMS": "0",
+        "unit_word_relations-MAX_NUM_FORMS": "1000",
+        "unit_word_relations-0-id": str(
+            word.unit_word_relations.get(unit=saved_unit_one).pk
+        ),
+        "unit_word_relations-0-word": str(word.pk),
+        "unit_word_relations-0-unit": str(saved_unit_one.pk),
+        "unit_word_relations-1-id": str(
+            word.unit_word_relations.get(unit=saved_unit_two).pk
+        ),
+        "unit_word_relations-1-word": str(word.pk),
+        "unit_word_relations-1-unit": str(saved_unit_two.pk),
+        "unit_word_relations-2-id": "",
+        "unit_word_relations-2-word": str(word.pk),
+        "unit_word_relations-2-unit": str(new_unit.pk),
+    }
+    formset = formset_class(data=data, instance=word, prefix="unit_word_relations")
+
+    assert not formset.is_valid()
+    assert not formset.non_form_errors()
+    assert formset.errors == [
+        {},
+        {},
+        {
+            "__all__": [
+                f'The word "{word}" already belongs to area "{area}" and cannot '
+                f'also be used in area "{other_area}".'
+            ]
+        },
+    ]
+
+
+def test_area_of_unit_and_word_use_the_prefetch_cache(
+    area: Area, django_assert_num_queries: Any
+) -> None:
+    """
+    ``area_of_unit``/``area_of_word`` must read from a warmed prefetch cache
+    instead of issuing a fresh query, or the admin changelist's "area" column
+    would cost one query per row (#1007).
+    """
+    unit = Unit.objects.create(title="Prefetched unit")
+    unit.jobs.add(Job.objects.create(name="Prefetched job", area=area))
+    word = Word.objects.create(word="Prefetchedword", singular_article=1)
+    UnitWordRelation.objects.create(unit=unit, word=word)
+
+    prefetched_unit = Unit.objects.prefetch_related("jobs__area").get(pk=unit.pk)
+    with django_assert_num_queries(0):
+        assert area_of_unit(prefetched_unit) == area
+
+    prefetched_word = Word.objects.prefetch_related("units__jobs__area").get(pk=word.pk)
+    with django_assert_num_queries(0):
+        assert area_of_word(prefetched_word) == area
