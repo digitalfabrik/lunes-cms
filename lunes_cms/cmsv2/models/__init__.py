@@ -1,3 +1,4 @@
+from .ai_generation import AIGeneration
 from .alternative_word import AlternativeWord
 from .area import Area
 from .area_access_token import AreaAccessToken

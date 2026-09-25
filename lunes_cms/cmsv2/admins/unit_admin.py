@@ -21,9 +21,9 @@ from lunes_cms.cmsv2.areas import (
     area_of_unit,
     scope_unit_word_relations,
     scope_units,
-    visible_jobs,
     validate_relation_area,
     validate_unit_jobs,
+    visible_jobs,
 )
 from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.area import Area

@@ -56,7 +56,7 @@ def test_word_widget_passes_pronunciation(admin_client: Client, word: Word) -> N
         response = admin_client.post(url, {"example_sentence_text": SENTENCE})
 
     assert response.status_code == 200
-    generate.assert_called_once_with(SENTENCE, word)
+    generate.assert_called_once_with(SENTENCE, word, mock.ANY)
 
 
 def test_unitword_page_passes_pronunciation_of_its_word(
@@ -75,7 +75,7 @@ def test_unitword_page_passes_pronunciation_of_its_word(
         )
 
     assert response.status_code == 200
-    generate.assert_called_once_with("Das Baiser ist fertig.", relation.word)
+    generate.assert_called_once_with("Das Baiser ist fertig.", relation.word, mock.ANY)
 
 
 def test_word_audio_uses_the_stored_variant_not_the_posted_text(
@@ -90,7 +90,7 @@ def test_word_audio_uses_the_stored_variant_not_the_posted_text(
         response = admin_client.post(url, {"word_text": "das Baiser"})
 
     assert response.status_code == 200
-    generate.assert_called_once_with("das Bessee")
+    generate.assert_called_once_with("das Bessee", mock.ANY)
 
 
 def test_word_widget_rejects_unknown_word(admin_client: Client, db: None) -> None:
@@ -114,6 +114,6 @@ def test_regenerate_command_passes_pronunciation(word: Word) -> None:
     ) as generate:
         call_command("regenerate_example_sentence_audio", limit=1)
 
-    assert generate.call_args.args == (SENTENCE, word)
+    assert generate.call_args.args == (SENTENCE, word, [])
     word.refresh_from_db()
     assert word.example_sentence_audio.read() == b"new"
