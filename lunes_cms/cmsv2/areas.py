@@ -52,6 +52,18 @@ def administered_areas(user: "User") -> "QuerySet[Area]":
     return Area.objects.filter(admins__pk=user.pk)
 
 
+def accessible_areas(user: "User") -> "QuerySet[Area]":
+    """
+    :param user: The user in question
+    :return: The queryset of areas that the user may access
+    """
+    if not user.is_authenticated:
+        return Area.objects.none()
+    if getattr(user, "is_superuser", False):
+        return Area.objects.all()
+    return administered_areas(user)
+
+
 def is_area_admin(user: "User") -> bool:
     """
     Whether the given user administers at least one area of a part organization.

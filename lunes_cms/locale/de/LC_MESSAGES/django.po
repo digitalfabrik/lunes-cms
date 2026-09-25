@@ -180,6 +180,7 @@ msgid "No"
 msgstr "Nein"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/models/static.py
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
@@ -724,9 +725,9 @@ msgid "clients"
 msgstr "Clients"
 
 #: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
-#: cmsv2/admins/unit_admin.py cmsv2/models/area.py
-#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
-#: cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/admins/unit_admin.py cmsv2/models/ai_generation.py
+#: cmsv2/models/area.py cmsv2/models/area_access_token.py
+#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -739,9 +740,10 @@ msgid "No longer available"
 msgstr "Nicht mehr verfügbar"
 
 #: cmsv2/admins/feedback_admin.py cmsv2/admins/feedback_area_filter.py
-#: cmsv2/admins/word_admin.py cmsv2/models/area.py
-#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
-#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
+#: cmsv2/admins/word_admin.py cmsv2/models/ai_generation.py
+#: cmsv2/models/area.py cmsv2/models/area_access_token.py
+#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/models/word.py
 msgid "area"
 msgstr "Bereich"
 
@@ -921,7 +923,8 @@ msgstr "Aussprache"
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py cmsv2/models/review.py cmsv2/models/unit.py
+#: cmsv2/admins/word_admin.py cmsv2/models/review.py cmsv2/models/static.py
+#: cmsv2/models/unit.py
 msgid "Image"
 msgstr "Bilder"
 
@@ -1196,6 +1199,26 @@ msgid ""
 msgstr ""
 "Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet, daher "
 "kann dieser Beruf nicht in den Bereich „%(area)s“ verschoben werden."
+
+#: cmsv2/models/ai_generation.py
+msgid ""
+"The area of the content that was generated, can be empty if the area is "
+"deleted."
+msgstr ""
+"Der Bereich des generierten Inhalts, kann leer sein, wenn der Bereich "
+"gelöscht wurde."
+
+#: cmsv2/models/ai_generation.py
+msgid "generation event"
+msgstr "Generierungsereignis"
+
+#: cmsv2/models/ai_generation.py
+msgid "AI generation"
+msgstr "KI-Generierung"
+
+#: cmsv2/models/ai_generation.py
+msgid "AI generations"
+msgstr "KI-Generierungen"
 
 #: cmsv2/models/area.py
 msgid "Shown on landing page."
@@ -1498,6 +1521,14 @@ msgstr "In Prüfung"
 msgid "Completed"
 msgstr "abgeschlossen"
 
+#: cmsv2/models/static.py
+msgid "Word audio"
+msgstr "Vokabel-Audio"
+
+#: cmsv2/models/static.py
+msgid "Example sentence audio"
+msgstr "Beispielsatz-Audio"
+
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "image source"
 msgstr "Bildquelle"
@@ -1733,6 +1764,14 @@ msgstr "Kein Beispielsatz übergeben."
 #: cmsv2/views/generate_example_sentence.py
 msgid "Example sentence saved."
 msgstr "Beispielsatz gespeichert."
+
+#: cmsv2/views/generate_image.py
+msgid "No area_id provided."
+msgstr "Keine area_id übergeben."
+
+#: cmsv2/views/generate_image.py
+msgid "Area not found"
+msgstr "Bereich nicht gefunden"
 
 #: cmsv2/views/generate_image.py
 msgid "No word_text provided."

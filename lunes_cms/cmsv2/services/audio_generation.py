@@ -34,7 +34,8 @@ from openai import RateLimitError
 
 from lunes_cms.core.audio import normalize_loudness
 
-from ..models import Word
+from ..models import AIGeneration, Area, Word
+from ..models.static import AIGenerationEvent
 from ..utils import get_openai_client, make_safe_filename, OpenAIConfigurationError
 
 logger = logging.getLogger(__name__)
@@ -82,7 +83,7 @@ def apply_pronunciation(text: str, word: str, pronunciation: str) -> tuple[str, 
     return text, (f'Pronounce "{word}" and its inflected forms as "{pronunciation}".')
 
 
-def openai_word_audio_bytes(text: str) -> bytes:
+def openai_word_audio_bytes(text: str, area: Area) -> bytes:
     """
     Generate mp3 bytes for a single word/term via OpenAI TTS.
 
@@ -90,6 +91,8 @@ def openai_word_audio_bytes(text: str) -> bytes:
     the language and may read German words with the wrong accent; the German
     pronunciation instruction prevents that. Requires an instruction-capable
     model (e.g. gpt-4o-mini-tts).
+
+    The generation is recorded for ``area``, the area of the word.
     """
     client = get_openai_client()
     response = client.audio.speech.create(
@@ -98,16 +101,19 @@ def openai_word_audio_bytes(text: str) -> bytes:
         input=text,
         instructions=GERMAN_PRONUNCIATION_INSTRUCTION,
     )
+    AIGeneration.record(AIGenerationEvent.WORD_AUDIO, area)
     audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
     return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
 
-def openai_sentence_audio_bytes(sentence: str, word: Word) -> bytes:
+def openai_sentence_audio_bytes(sentence: str, word: Word, area: Area) -> bytes:
     """
     Generate mp3 bytes for an example sentence via OpenAI TTS.
 
     Pins pronunciation to German (shared with single-word audio) and adds an
     intonation hint from the sentence ending so questions sound like questions.
+
+    The generation is recorded for ``area``, the area of the content the sentence belongs to.
     """
     if sentence.strip().endswith("?"):
         intonation = "Read it as a question with rising intonation."
@@ -130,6 +136,7 @@ def openai_sentence_audio_bytes(sentence: str, word: Word) -> bytes:
         input=spoken_sentence,
         instructions=instruction,
     )
+    AIGeneration.record(AIGenerationEvent.EXAMPLE_SENTENCE_AUDIO, area)
     audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
     return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
@@ -143,7 +150,7 @@ def _generate_for_word(word: Word) -> None:
     between them, holding no lock.
     """
     if not word.audio:
-        data = openai_word_audio_bytes(word.text_for_audio_generation())
+        data = openai_word_audio_bytes(word.text_for_audio_generation(), word.area)
         word.audio.save(
             f"{make_safe_filename(word.word)}.mp3",
             ContentFile(data),
@@ -151,7 +158,7 @@ def _generate_for_word(word: Word) -> None:
         logger.info("Generated word audio for word_id=%s (%s)", word.pk, word.word)
 
     if word.example_sentence and not word.example_sentence_audio:
-        data = openai_sentence_audio_bytes(word.example_sentence, word)
+        data = openai_sentence_audio_bytes(word.example_sentence, word, word.area)
         word.example_sentence_audio_regenerated = True
         word.example_sentence_audio.save(
             f"{make_safe_filename(word.word)}_example_sentence.mp3",
@@ -174,7 +181,7 @@ def _pending_filter(word_ids: list[int] | None = None) -> Q:
 
 
 def drain_pending_audio(
-    word_ids: list[int] | None = None, throttle_seconds: float = 1.0
+    word_ids: list[int] | None, throttle_seconds: float = 1.0
 ) -> None:
     """
     Process Words that need audio, one at a time, until none remain.
