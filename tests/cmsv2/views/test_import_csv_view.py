@@ -7,14 +7,34 @@ processing happens.
 
 from __future__ import annotations
 
+from collections.abc import Generator
+from importlib import import_module
 from typing import Any
+from unittest import mock
 
 import pytest
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
 
-from lunes_cms.cmsv2.models import Job, Word
+from lunes_cms.cmsv2.models import Area, Job, Word
+
+# Imported via ``import_module`` so the patch targets the module, whatever
+# ``lunes_cms.cmsv2.views`` re-exports under the same name.
+import_csv_view = import_module("lunes_cms.cmsv2.views.import_csv_view")
+
+
+@pytest.fixture(autouse=True)
+def _no_asset_generation() -> Generator[mock.Mock, None, None]:
+    """
+    A successful import starts a thread that generates the assets of the new
+    words. With its own database connection it would run into the lock the
+    transaction of the test holds, so it is stubbed out here.
+    """
+    with mock.patch.object(import_csv_view, "_generate_word_assets") as generate:
+        yield generate
 
 
 def _upload(content: str) -> SimpleUploadedFile:
@@ -157,3 +177,26 @@ def test_second_import_reports_the_extended_unit(
 
     messages = [str(m) for m in response.context["messages"]]
     assert any("existing unit was extended" in m for m in messages)
+
+
+@pytest.mark.django_db()
+def test_asset_generation_is_recorded_for_the_areas_of_the_importing_user(
+    client: Client,
+) -> None:
+    areas = [Area.objects.create(name="Kolping"), Area.objects.create(name="Caritas")]
+    job = Job.objects.create(name="Tischler", area=areas[0])
+    user = get_user_model().objects.create_user(username="kolping", is_staff=True)
+    user.user_permissions.add(
+        *Permission.objects.filter(codename__in=["add_word", "add_unit"])
+    )
+    # Words imported by non-superusers are credited to the group of the user.
+    user.groups.add(Group.objects.create(name="Kolping"))
+    for area in areas:
+        area.admins.add(user)
+    client.force_login(user)
+
+    with mock.patch.object(import_csv_view.threading, "Thread") as thread:
+        _import_tool(client, job, "Hammer", "der")
+
+    _word_ids, _job_title, thread_areas = thread.call_args.kwargs["args"]
+    assert set(thread_areas) == set(areas)
