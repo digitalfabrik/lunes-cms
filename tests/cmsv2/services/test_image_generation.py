@@ -136,7 +136,9 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(word: Word, job_title: str | None = None) -> bytes:
+    def maybe_fail(
+        word: Word, _areas: list[Area], job_title: str | None = None
+    ) -> bytes:
         if word.word == "Schraubenzieher":
             raise ValueError("simulated openai 5xx")
         return b"ok-png"
@@ -266,6 +268,7 @@ def test_build_image_prompt_exempts_the_label_from_the_text_ban() -> None:
     assert prompt.index("Kennzeichnung") < prompt.index("keinerlei Text")
 
 
+@pytest.mark.django_db
 def test_openai_image_bytes_requests_webp_from_openai(
     settings: Settings,
 ) -> None:
@@ -280,7 +283,7 @@ def test_openai_image_bytes_requests_webp_from_openai(
     ]
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):
-        assert image_generation.openai_image_bytes("prompt") == b"webp-bytes"
+        assert image_generation.openai_image_bytes("prompt", []) == b"webp-bytes"
 
     kwargs = client.images.generate.call_args.kwargs
     assert kwargs["output_format"] == "webp"
@@ -320,4 +323,4 @@ def test_drain_passes_job_title_to_image_generation(fast_worker: None) -> None:
         thread.join(timeout=10)
         assert not thread.is_alive()
 
-    image_call.assert_called_once_with(mock.ANY, job_title="Tischler/in")
+    image_call.assert_called_once_with(mock.ANY, (), job_title="Tischler/in")

@@ -179,6 +179,7 @@ msgid "No"
 msgstr "Nein"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
+#: cmsv2/models/static.py
 msgid "Example sentence"
 msgstr "Beispielsatz"
 
@@ -715,9 +716,9 @@ msgid "clients"
 msgstr "Clients"
 
 #: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
-#: cmsv2/admins/unit_admin.py cmsv2/models/area.py
-#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
-#: cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/admins/unit_admin.py cmsv2/models/ai_generation.py
+#: cmsv2/models/area.py cmsv2/models/area_access_token.py
+#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -843,7 +844,7 @@ msgstr ""
 "%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
-#: cmsv2/admins/user_admin.py
+#: cmsv2/admins/user_admin.py cmsv2/models/ai_generation.py
 msgid "areas"
 msgstr "Bereiche"
 
@@ -903,7 +904,7 @@ msgstr "Aussprache"
 msgid "Audio"
 msgstr "Audio"
 
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
+#: cmsv2/admins/word_admin.py cmsv2/models/static.py cmsv2/models/unit.py
 msgid "Image"
 msgstr "Bilder"
 
@@ -1135,6 +1136,26 @@ msgstr ""
 "Die Vokabel „%(word)s“ gehört zu einem anderen Bereich und kann in dieser "
 "Einheit nicht verwendet werden."
 
+#: cmsv2/models/ai_generation.py
+msgid ""
+"The areas administered by the user who requested the generation, can be "
+"empty."
+msgstr ""
+"Die Bereiche, die die Person verwaltet, die die Generierung angefordert hat, "
+"kann leer sein"
+
+#: cmsv2/models/ai_generation.py
+msgid "generation event"
+msgstr "Art der Generierung"
+
+#: cmsv2/models/ai_generation.py
+msgid "AI generation"
+msgstr "KI-Generierung"
+
+#: cmsv2/models/ai_generation.py
+msgid "AI generations"
+msgstr "KI-Generierungen"
+
 #: cmsv2/models/area.py
 msgid "Shown on landing page."
 msgstr "Angezeigt auf der Landingsseite."
@@ -1362,6 +1383,14 @@ msgstr "Liegt zur Begutachtung vor"
 #: cmsv2/models/static.py
 msgid "Completed"
 msgstr "abgeschlossen"
+
+#: cmsv2/models/static.py
+msgid "Word audio"
+msgstr "Vokabel-Audio"
+
+#: cmsv2/models/static.py
+msgid "Example sentence audio"
+msgstr "Beispielsatz-Audio"
 
 #: cmsv2/models/static.py
 msgid "Reviewer"
