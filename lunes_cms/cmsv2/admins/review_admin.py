@@ -56,6 +56,7 @@ class ReviewAdmin(BaseAdmin):
         "audio",
         "creator",
         "reviewer",
+        "review_status",
         "assigned_by",
         "assigned_at",
         "completed_at",
