@@ -1353,7 +1353,7 @@ msgstr "Einheit"
 
 #: cmsv2/models/review.py
 msgid "Review"
-msgstr "Begutachtung"
+msgstr "Vokabelprüfung"
 
 #: cmsv2/models/static.py
 msgid "Confirmed"
