@@ -17,6 +17,7 @@ from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.admins.word_filters import (
     HasCompleteExampleSentenceFilter,
     HasImageFilter,
+    ImageSourceFilter,
     MigratedFilter,
     UnitOrJobDropdownFilter,
 )
@@ -236,6 +237,7 @@ class WordAdmin(BaseAdmin):
                 "fields": (
                     "image",
                     "image_check_status",
+                    "image_source",
                     "image_generate",
                     "image_tag",
                 )
@@ -264,6 +266,7 @@ class WordAdmin(BaseAdmin):
         "created_by",
         "created_by_user",
         "image_generate",
+        "image_source",
         "image_tag",
         "migrated_status",
     )
@@ -287,6 +290,7 @@ class WordAdmin(BaseAdmin):
         "audio_check_status",
         "image_check_status",
         HasImageFilter,
+        ImageSourceFilter,
         UnitOrJobDropdownFilter,
         HasCompleteExampleSentenceFilter,
         MigratedFilter,

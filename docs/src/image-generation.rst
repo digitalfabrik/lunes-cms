@@ -36,6 +36,42 @@ OpenAI's WebP under a ``.png`` name would trigger a re-encode and strip the
 markings. Anything that resizes or re-compresses a generated image has the
 same effect.
 
+Image source
+============
+
+``Word`` and ``UnitWordRelation`` record where their image came from in
+``image_source``: *uploaded*, *AI-generated with label*, *AI-generated without
+label* (stored before the label existed), *regenerated with AI label*, or
+*unknown*. The code paths that store a generated image pass the source to
+``save()``; every other new image counts as an upload, and removing the image
+resets the source to *unknown*. The "Image source" filter in the word admin
+matches a word by its own image or by any of its unit images.
+
+Images stored before the field existed start as *unknown*. Their source is
+judged from the file: a C2PA manifest means a labeled generated image (see
+above), a plain 1024x1024 image means a generated image from before the label,
+anything else an upload.
+
+Regenerating unlabeled images
+-----------------------------
+
+``regenerate_unlabeled_images`` records the source of every *unknown* image,
+then regenerates the *AI-generated without label* images stored on or after
+``--since`` (default 2026-08-02). The storage time comes from the version 1
+UUID in the file name, which the WebP conversion keeps. Uploads are never
+touched.
+
+.. code-block:: bash
+
+   lunes-cms-cli regenerate_unlabeled_images --dry-run
+   lunes-cms-cli regenerate_unlabeled_images [--since YYYY-MM-DD] [--limit N] [--delay SECONDS]
+
+The prompt is the default one for the word (plus unit and job, like in the
+admin): editor hints and the "allow text" setting of the original generation
+were never stored. A regenerated image keeps its check status, so it is marked
+*regenerated with AI label* instead — filter the words by that source to review
+them. The replaced file is deleted.
+
 Background worker
 =================
 
