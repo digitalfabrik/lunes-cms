@@ -15,6 +15,7 @@ from ..models import (
     Word,
     WordType,
 )
+from ..notifications import notify_words_added
 
 if TYPE_CHECKING:
     from django.utils.functional import _StrOrPromise
@@ -131,6 +132,7 @@ class RowResult:
     word_created: bool = False
     error: Optional[str] = None
     word_id: Optional[int] = None
+    unit_words: list[UnitWordRelation] = field(default_factory=list)
 
 
 @dataclass
@@ -382,11 +384,11 @@ def process_row(
 
     # Bypasses ``unit.words.add``, which would first query for links that a
     # word created a line ago cannot have.
-    UnitWordRelation.objects.bulk_create(
+    unit_words = UnitWordRelation.objects.bulk_create(
         UnitWordRelation(unit=unit, word=word) for unit in dict.fromkeys(row_units)
     )
 
-    return RowResult(word_created=True, word_id=word.pk)
+    return RowResult(word_created=True, word_id=word.pk, unit_words=unit_words)
 
 
 def import_words_from_csv(dataset: Dataset, job: Job, user: User) -> ImportSummary:
@@ -397,6 +399,7 @@ def import_words_from_csv(dataset: Dataset, job: Job, user: User) -> ImportSumma
     summary = ImportSummary()
     creator_fields = _creator_fields_for_user(user)
     units = UnitResolver(job, creator_fields)
+    unit_words: list[UnitWordRelation] = []
 
     for row_number, raw_row in enumerate(dataset.dict, start=HEADER_ROW + 1):
         parsed_or_error = parse_row(raw_row, row_number)
@@ -418,6 +421,9 @@ def import_words_from_csv(dataset: Dataset, job: Job, user: User) -> ImportSumma
             summary.words_created += 1
         if result.word_id is not None:
             summary.imported_word_ids.append(result.word_id)
+        unit_words.extend(result.unit_words)
+
+    notify_words_added(unit_words, added_by=user)
 
     summary.units_created = len(units.created_titles)
     summary.units_reused = len(units.reused_titles)

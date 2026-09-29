@@ -29,6 +29,7 @@ from lunes_cms.cmsv2.models import Job
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
+from lunes_cms.cmsv2.notifications import notify_units_assigned, notify_words_added
 
 if TYPE_CHECKING:
     from django.contrib.admin.options import ActionLocation
@@ -267,6 +268,18 @@ class UnitAdmin(BaseAdmin):
             kwargs["queryset"] = visible_jobs(request.user).order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
+    def save_formset(
+        self,
+        request: HttpRequest,
+        form: ModelForm[Any],
+        formset: BaseInlineFormSet,
+        change: bool,
+    ) -> None:
+        """Tell the experts of the unit about the words added to it"""
+        super().save_formset(request, form, formset, change)
+        if formset.model is UnitWordRelation:
+            notify_words_added(formset.new_objects, added_by=request.user)
+
     def area(self, obj: Unit) -> Area | None:
         """
         The area of the unit, derived from its job.
@@ -332,7 +345,9 @@ class UnitAdmin(BaseAdmin):
             )
 
         user = get_object_or_404(User, pk=request.POST["user"])
-        unit_words = UnitWordRelation.objects.filter(unit__in=queryset)
+        unit_words = UnitWordRelation.objects.filter(unit__in=queryset).select_related(
+            "unit"
+        )
         unit_word_ids_assigned_to_user = set(
             Review.objects.filter(reviewer=user, unit_word__in=unit_words).values_list(
                 "unit_word_id", flat=True
@@ -344,6 +359,11 @@ class UnitAdmin(BaseAdmin):
             if unit_word.pk not in unit_word_ids_assigned_to_user
         ]
         Review.objects.bulk_create(to_create, ignore_conflicts=True)
+        notify_units_assigned(
+            user,
+            (review.unit_word.unit for review in to_create),
+            assigned_by=request.user,
+        )
         self.message_user(
             request,
             _("Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned).")
