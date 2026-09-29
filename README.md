@@ -4,29 +4,30 @@
 [![PyPi](https://img.shields.io/pypi/v/lunes-cms.svg)](https://pypi.org/project/lunes-cms/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Pylint](https://img.shields.io/badge/pylint-10.00-brightgreen)](https://www.pylint.org/)
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
 
 # Lunes CMS
 [![Logo](.github/logo.png) Lunes - Vocabulary for your profession.](https://www.lunes.app)
 
-This is a Django 3 based content management system for the vocabulary trainer app Lunes, a project powered by [Tür an Tür – Digitalfabrik gGmbH](https://tuerantuer.de/digitalfabrik/).
+This is a Django 5 based content management system for the vocabulary trainer app Lunes, a project powered by [Tür an Tür – Digitalfabrik gGmbH](https://tuerantuer.de/digitalfabrik/).
 The main goal is to develop an application which facilitates migrants to acquire technical and subject-specific vocabulary.
-For more information please see our [wiki page](https://wiki.tuerantuer.org/ehrenamt).
+Outside contributions to our project are always welcome. For more information on that topic please read our [wiki page](https://wiki.tuerantuer.org/ehrenamt).
 
 ## TL;DR
 
 ### Prerequisites
 
-Following packages are required before installing the project (install them with your package manager):
+The following packages are required before installing the project (install them with your package manager):
 
 * `python3.11` or higher
 * `python3-pip`
 * `python3-venv`
 * [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to install the pinned/locked python dependencies
-* `libpq-dev` to compile psycopg2
+* `libpq-dev`, `python3-dev` and `build-essential` to compile psycopg2
+* `netcat-openbsd` used by the dev scripts to detect when the server is up
 * `gettext` and `pcregrep` to use the translation features
 * `ffmpeg` for audio processing
-* `node` and `npm` to build the TypeScript frontend
+* `nodejs` and `npm` to build the TypeScript frontend
 
 E.g. on Debian-based distributions, use:
 
@@ -45,7 +46,7 @@ cd lunes-cms
 ### IntelliJ with Python virtual environment
 
 Some IntelliJ versions do not activate Python virtual environment automatically.
-In this case can use IntelliJ together with the [direnv plugin](https://plugins.jetbrains.com/plugin/15285-direnv-integration) and the provided `.envrc`.
+In this case you can use IntelliJ together with the [direnv plugin](https://plugins.jetbrains.com/plugin/15285-direnv-integration) and the provided `.envrc`.
 It automatically activates the Python virtual environment (`.venv`) when opening the project.
 * Note: The direnv binary has to be installed on your system.
 
