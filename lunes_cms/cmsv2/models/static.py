@@ -59,6 +59,43 @@ class CheckStatus(models.TextChoices):
     NOT_CHECKED = "NOT_CHECKED", _("Not Checked")
 
 
+class ImageSource(models.TextChoices):
+    """
+    Where an image came from, and whether it carries the AI-disclosure label
+    (EU AI Act Art. 50, issue #936)
+    """
+
+    UNKNOWN = "UNKNOWN", _("Unknown")
+    UPLOADED = "UPLOADED", _("Uploaded")
+    AI_UNLABELED = "AI_UNLABELED", _("AI-generated without label")
+    AI_LABELED = "AI_LABELED", _("AI-generated with label")
+    AI_RELABELED = "AI_RELABELED", _("Regenerated with AI label")
+
+
+def resolve_image_source(
+    current: str, has_image: bool, image_updated: bool, explicit: str | None
+) -> str:
+    """
+    Decide the ``image_source`` a Word or UnitWordRelation is saved with.
+
+    Code that stores a generated image passes its source explicitly. Any other
+    change of the image is an upload, and a removed image has no source.
+
+    :param current: The source currently set on the instance
+    :param has_image: Whether the instance has an image after this save
+    :param image_updated: Whether the image changed with this save
+    :param explicit: The source the caller passed to ``save()``, if any
+    :return: The source to store
+    """
+    if not has_image:
+        return ImageSource.UNKNOWN
+    if explicit is not None:
+        return explicit
+    if image_updated:
+        return ImageSource.UPLOADED
+    return current
+
+
 class ReviewStatus(models.TextChoices):
     """Possible states for reviews"""
 

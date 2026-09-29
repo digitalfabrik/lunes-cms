@@ -1042,6 +1042,10 @@ msgid "Has Image"
 msgstr "Hat Bild"
 
 #: cmsv2/admins/word_filters.py
+msgid "Image source"
+msgstr "Bildquelle"
+
+#: cmsv2/admins/word_filters.py
 msgid "Unit or Job"
 msgstr "Einheit oder Job"
 
@@ -1336,6 +1340,26 @@ msgid "Not Checked"
 msgstr "Nicht geprüft"
 
 #: cmsv2/models/static.py
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: cmsv2/models/static.py
+msgid "Uploaded"
+msgstr "Hochgeladen"
+
+#: cmsv2/models/static.py
+msgid "AI-generated without label"
+msgstr "KI-generiert ohne Kennzeichnung"
+
+#: cmsv2/models/static.py
+msgid "AI-generated with label"
+msgstr "KI-generiert mit Kennzeichnung"
+
+#: cmsv2/models/static.py
+msgid "Regenerated with AI label"
+msgstr "Mit KI-Kennzeichnung neu generiert"
+
+#: cmsv2/models/static.py
 msgid "Pending Review"
 msgstr "Freigabe ausstehend"
 
@@ -1366,6 +1390,10 @@ msgstr "abgeschlossen"
 #: cmsv2/models/static.py
 msgid "Reviewer"
 msgstr "Expert:in"
+
+#: cmsv2/models/unit.py cmsv2/models/word.py
+msgid "image source"
+msgstr "Bildquelle"
 
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio"

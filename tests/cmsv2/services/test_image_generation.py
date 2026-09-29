@@ -17,6 +17,7 @@ from pytest_django import Settings
 
 from lunes_cms.cmsv2.models import Area, Word
 from lunes_cms.cmsv2.models import word as word_module
+from lunes_cms.cmsv2.models.static import ImageSource
 from lunes_cms.cmsv2.services import image_generation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
@@ -96,6 +97,7 @@ def test_drain_generates_image_for_word_missing_image(fast_worker: None) -> None
     word.refresh_from_db()
     assert word.image
     assert word.image.read() == b"fake-png"
+    assert word.image_source == ImageSource.AI_LABELED
     assert image_call.call_count == 1
 
 

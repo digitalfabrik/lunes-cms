@@ -25,6 +25,7 @@ from django.db.models import Q
 from openai import RateLimitError
 
 from ..models import Word
+from ..models.static import ImageSource
 from ..utils import get_openai_client, OpenAIConfigurationError
 
 logger = logging.getLogger(__name__)
@@ -168,7 +169,10 @@ def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
     """
     if not word.image:
         data = openai_word_image_bytes(word, job_title=job_title)
-        word.image.save(f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data))
+        word.image.save(
+            f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
+        )
+        word.save(image_source=ImageSource.AI_LABELED)
         logger.info("Generated image for word_id=%s (%s)", word.pk, word.word)
 
 

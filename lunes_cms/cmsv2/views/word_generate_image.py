@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.areas import visible_words
 from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models.static import ImageSource
 from lunes_cms.cmsv2.utils import is_ajax, safe_temp_path
 from lunes_cms.core import settings
 
@@ -62,8 +63,8 @@ def word_store_generated_image_permanently(
             # content_file.name is always the literal set above; ContentFile.name
             # is typed Optional[str] only because the base File class allows it.
             assert content_file.name is not None
-            word_instance.image.save(content_file.name, content_file)
-        word_instance.save()
+            word_instance.image.save(content_file.name, content_file, save=False)
+        word_instance.save(image_source=ImageSource.AI_LABELED)
 
         os.remove(temp_filepath)
 
