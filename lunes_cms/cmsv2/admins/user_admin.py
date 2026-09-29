@@ -16,6 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from lunes_cms.cmsv2.admins.permission_labels import PermissionLabelMixin
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.review import Review
+from lunes_cms.cmsv2.notifications import notify_units_assigned
 
 
 class LunesUserCreationForm(AdminUserCreationForm):
@@ -186,5 +187,10 @@ class LunesUserAdmin(PermissionLabelMixin, DjangoUserAdmin):
                     instance.assigned_by = request.user
                 instance.save()
             formset.save_m2m()
+            notify_units_assigned(
+                form.instance,
+                (review.unit_word.unit for review in formset.new_objects),
+                assigned_by=request.user,
+            )
         else:
             super().save_formset(request, form, formset, change)

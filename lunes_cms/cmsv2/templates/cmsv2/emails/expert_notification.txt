@@ -1,0 +1,10 @@
+{% load i18n %}{% autoescape off %}{% blocktrans with name=expert.get_full_name|default:expert.username %}Hello {{ name }},{% endblocktrans %}
+
+{{ intro }}
+{% for item in items %}
+- {{ item }}{% endfor %}
+
+{% trans "You can review them here:" %} {{ review_url }}
+
+{% trans "Thank you for your support!" %}
+{% trans "Your Lunes team" %}{% endautoescape %}

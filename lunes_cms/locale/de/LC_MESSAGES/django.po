@@ -1540,6 +1540,32 @@ msgstr "Audio Checked Identifier"
 msgid "Words"
 msgstr "Vokabel"
 
+#: cmsv2/notifications.py
+msgid "New units to review"
+msgstr "Neue Einheiten zur Prüfung"
+
+#: cmsv2/notifications.py
+msgid "The following units were assigned to you for review:"
+msgstr "Die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"
+
+#: cmsv2/notifications.py
+msgid "New words to review"
+msgstr "Neue Wörter zur Prüfung"
+
+#: cmsv2/notifications.py
+msgid "The following words were added to units you review:"
+msgstr "Die folgenden Wörter wurden zu Einheiten hinzugefügt, die Sie prüfen:"
+
+#: cmsv2/notifications.py
+msgid "New image to review"
+msgstr "Neues Bild zur Prüfung"
+
+#: cmsv2/notifications.py
+msgid "A new image was added to a word of a unit you review:"
+msgstr ""
+"Zu einem Wort einer Einheit, die Sie prüfen, wurde ein neues Bild "
+"hinzugefügt:"
+
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign to user"
 msgstr "An nutzende Person zuweisen"
@@ -1589,6 +1615,23 @@ msgstr "Import starten"
 #: cmsv2/templates/admin/generate_audio_base.html
 msgid "Generate Audio"
 msgstr "Audio generieren"
+
+#: cmsv2/templates/cmsv2/emails/expert_notification.txt
+#, python-format
+msgid "Hello %(name)s,"
+msgstr "Hallo %(name)s,"
+
+#: cmsv2/templates/cmsv2/emails/expert_notification.txt
+msgid "You can review them here:"
+msgstr "Hier können Sie sie prüfen:"
+
+#: cmsv2/templates/cmsv2/emails/expert_notification.txt
+msgid "Thank you for your support!"
+msgstr "Vielen Dank für Ihre Unterstützung!"
+
+#: cmsv2/templates/cmsv2/emails/expert_notification.txt
+msgid "Your Lunes team"
+msgstr "Ihr Lunes-Team"
 
 #: cmsv2/utils.py
 msgid "Generate example sentence"

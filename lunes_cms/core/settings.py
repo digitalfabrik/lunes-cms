@@ -426,6 +426,10 @@ SERVER_EMAIL = os.environ.get("LUNES_CMS_SERVER_EMAIL", "keineantwort@lunes.app"
 #: (see :setting:`django:DEFAULT_FROM_EMAIL`)
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
+#: The public base URL of this CMS instance, used for absolute links in emails
+#: (e.g. the links to new content in the notifications for experts)
+BASE_URL = os.environ.get("LUNES_CMS_BASE_URL", "http://localhost:8080").rstrip("/")
+
 #: The host to use for sending email (see :setting:`django:EMAIL_HOST`)
 EMAIL_HOST = os.environ.get("LUNES_CMS_EMAIL_HOST", "localhost")
 

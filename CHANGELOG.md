@@ -2,6 +2,7 @@ UNRELEASED
 ----------
 
 * [ [#1009](https://github.com/digitalfabrik/lunes-cms/issues/1009) ] 1009: Serve the content of an area via the API
+* [ [#650](https://github.com/digitalfabrik/lunes-cms/issues/650) ] 650: Notify experts about new content to review
 
 
 2026.6.1
