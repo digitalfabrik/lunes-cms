@@ -1,10 +1,11 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 from django.db.models import QuerySet
 from django.forms import ModelForm
+from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import escape, format_html
@@ -31,6 +32,7 @@ from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.static import CheckStatus
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.notifications import notify_words_added
 from lunes_cms.cmsv2.utils import (
     cache_busted_url,
     example_sentence_generate_html,
@@ -207,8 +209,40 @@ class WordAdmin(AreaContentAdmin):
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Word]:
-        """Restrict the words to the area of the user"""
-        return scope_words(super().get_queryset(request), request.user)
+        """
+        Restrict the words to the area of the user and prefetch the units
+        and jobs the "area" column derives from (#1007).
+        """
+        return scope_words(
+            super().get_queryset(request).prefetch_related("units__jobs__area"),
+            request.user,
+        )
+
+    def save_formset(
+        self,
+        request: HttpRequest,
+        form: ModelForm[Any],
+        formset: BaseInlineFormSet,
+        change: bool,
+    ) -> None:
+        """Tell the experts of the units about this word being added to them"""
+        super().save_formset(request, form, formset, change)
+        if formset.model is UnitWordRelation:
+            notify_words_added(formset.new_objects, added_by=request.user)
+
+    def area(self, obj: Word) -> Area | None:
+        """
+        The area of the word, derived from the units it is linked to.
+
+        Args:
+            obj: The word object
+
+        Returns:
+            Area or None: The area of the word, or None for main app content
+        """
+        return obj.area
+
+    area.short_description = _("area")  # type: ignore[attr-defined]
 
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,

@@ -189,6 +189,21 @@ class UnitWordRelation(models.Model):
         if image_updated and convert_image_to_webp(self.image):
             super().save(update_fields=["image"])
 
+        # A new relation is announced as a new word instead, a removed image
+        # leaves nothing to review, and a partial save such as the WebP
+        # conversion of an existing image is no new content either.
+        if (
+            previous_relation
+            and image_updated
+            and self.image
+            and "update_fields" not in kwargs
+        ):
+            # Imported here because `notifications` imports the models package
+            # pylint: disable=import-outside-toplevel
+            from ..notifications import notify_image_added
+
+            notify_image_added(self)
+
     def list_image(self) -> SafeString:
         """
         Generate HTML for displaying the relation's image with controls in the admin list view.
