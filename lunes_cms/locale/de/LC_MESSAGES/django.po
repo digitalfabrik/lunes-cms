@@ -1560,7 +1560,7 @@ msgid ""
 "columns \"Vokabel\", \"Wortart\", \"Singularartikel\", \"Plural\", "
 "\"Pluralartikel\", \"Audio\", \"Beispielsatz\", \"Erstellt am\", "
 "\"Einheit\", optionally also \"Aussprache\"."
-msgstr "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die Spalten \"Vokabel\", \"Wortart\", \"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Audio\", \"Beispielsatz\", \"Erstellt am\", \"Einheit\" optional zusätzlich \"Aussprache\"."
+msgstr "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die Spalten \"Vokabel\", \"Wortart\", \"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Audio\", \"Beispielsatz\", \"Erstellt am\", \"Einheit\", optional zusätzlich \"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
