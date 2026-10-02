@@ -28,16 +28,11 @@ if TYPE_CHECKING:
     from django.contrib.auth.base_user import AbstractBaseUser
     from django.contrib.auth.models import AnonymousUser
     from django.db.models import QuerySet
+    from django.utils.functional import _StrOrPromise
 
     # Imported for the annotations only: importing the models package for real
     # would run into the import of this module in ``UnitWordRelation.clean()``.
-    from .models import (
-        AlternativeWord,
-        Job,
-        Unit,
-        UnitWordRelation,
-        Word,
-    )
+    from .models import AlternativeWord, Job, Unit, UnitWordRelation, Word
 
     User = AbstractBaseUser | AnonymousUser
 
@@ -246,12 +241,19 @@ def area_of_unit(unit: "Unit") -> Area | None:
     """
     The area a unit belongs to, derived from its job.
 
+    Deliberately reads ``unit.jobs.all()`` rather than chaining a further
+    ``.select_related()``/``.filter()``/``.first()`` onto it: any such call
+    on a related manager issues a fresh query and ignores a ``prefetch_related``
+    cache the caller may have warmed (e.g. ``jobs__area`` on a changelist
+    queryset, see :meth:`~lunes_cms.cmsv2.admins.unit_admin.UnitAdmin.get_queryset`),
+    which is what made this the query cost fixed in #1007.
+
     :param unit: The unit in question
     :return: The area of the unit, or ``None`` if it belongs to no job yet
     """
     if not unit.pk:
         return None
-    job = unit.jobs.select_related("area").first()
+    job = next(iter(unit.jobs.all()), None)
     return job.area if job else None
 
 
@@ -297,13 +299,37 @@ def area_of_word(word: "Word") -> Area | None:
     """
     The area a word belongs to, derived from the units it is linked to.
 
+    Reads ``word.units.all()`` and filters in Python rather than chaining
+    ``.filter(jobs__isnull=False)`` onto it, for the same prefetch-cache
+    reason as :func:`area_of_unit`, which this also relies on to resolve
+    each candidate unit's own area without a query of its own.
+
     :param word: The word in question
     :return: The area of the word, or ``None`` if it belongs to no unit yet
     """
     if not word.pk:
         return None
-    unit = word.units.filter(jobs__isnull=False).first()
-    return area_of_unit(unit) if unit else None
+    for unit in word.units.all():
+        area = area_of_unit(unit)
+        if area is not None:
+            return area
+    return None
+
+
+def _other_units_of_word(word: "Word", unit: "Unit") -> list["Unit"]:
+    """
+    All units of a word, except the given unit.
+
+    Filters ``unit.pk`` out in Python rather than with ``.exclude()``, for
+    the same prefetch-cache reason as :func:`area_of_unit`.
+
+    :param word: The word whose units are inspected
+    :param unit: The unit to leave out
+    :return: The other units
+    """
+    if not word.pk:
+        return []
+    return [other for other in word.units.all() if not unit.pk or other.pk != unit.pk]
 
 
 def _other_areas_of_word(word: "Word", unit: "Unit") -> set[Area | None]:
@@ -314,12 +340,51 @@ def _other_areas_of_word(word: "Word", unit: "Unit") -> set[Area | None]:
     :param unit: The unit to leave out
     :return: The set of exclusive areas (see :func:`_exclusive_area`)
     """
-    if not word.pk:
-        return set()
-    other_units = word.units.all()
-    if unit.pk:
-        other_units = other_units.exclude(pk=unit.pk)
-    return {_exclusive_area(area_of_unit(other_unit)) for other_unit in other_units}
+    return {
+        _exclusive_area(area_of_unit(other_unit))
+        for other_unit in _other_units_of_word(word, unit)
+    }
+
+
+def _display_area_of_unit(unit: "Unit") -> Area | None:
+    """
+    A concrete area to name in an error message for the given unit.
+
+    Prefers the job(s) the unit is about to be assigned (see
+    :func:`pending_area_of_unit`) over what is already saved, so a message
+    raised while a unit is still being created names the area it is about to
+    join rather than reporting it as unassigned.
+
+    :param unit: The unit in question
+    :return: The area, or ``None`` if the unit has (pending or saved) no job
+    """
+    jobs = getattr(unit, "pending_jobs", None)
+    if jobs:
+        job = next((job for job in jobs if job.area_id), None)
+        if job:
+            return job.area
+    return area_of_unit(unit)
+
+
+def area_conflict_message(
+    word: "Word", existing_area: Area | None, new_area: Area | None
+) -> "_StrOrPromise":
+    """
+    The message shown when a word cannot be linked to a unit of another area.
+
+    :param word: The word that cannot be linked
+    :param existing_area: The area the word already belongs to
+    :param new_area: The area the conflicting unit belongs to
+    :return: The translated message
+    """
+    return _(
+        'The word "%(word)s" already belongs to area "%(existing_area)s" and '
+        'cannot also be used in area "%(new_area)s".'
+    ) % {
+        "word": word,
+        "existing_area": existing_area or _("no area"),
+        "new_area": new_area or _("no area"),
+    }
 
 
 def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
@@ -347,7 +412,10 @@ def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
     target_area = next(iter(areas), None)
     if not unit.pk:
         return
-    for word in unit.words.all():
+    # Prefetched so that _other_areas_of_word's word.units.all() and the
+    # area_of_unit() call on each of those units read from cache instead of
+    # running a query per word (and per unit of that word), see #1007.
+    for word in unit.words.prefetch_related("units__jobs"):
         if any(area != target_area for area in _other_areas_of_word(word, unit)):
             raise ValidationError(
                 _(
@@ -375,7 +443,9 @@ def validate_job_area(job: "Job", area: Area | None) -> None:
     """
     if area is None or area.is_main_app or not job.pk:
         return
-    for unit in job.units.prefetch_related("jobs", "words"):
+    # words__units__jobs is prefetched so the "used elsewhere" check below
+    # reads from cache instead of running a query per word.
+    for unit in job.units.prefetch_related("jobs", "words__units__jobs"):
         other_jobs = [other for other in unit.jobs.all() if other.pk != job.pk]
         if other_jobs:
             raise ValidationError(
@@ -390,7 +460,10 @@ def validate_job_area(job: "Job", area: Area | None) -> None:
                 }
             )
         for word in unit.words.all():
-            if word.units.exclude(jobs=job).exists():
+            used_elsewhere = any(
+                job not in w_unit.jobs.all() for w_unit in word.units.all()
+            )
+            if used_elsewhere:
                 raise ValidationError(
                     _(
                         'The word "%(word)s" is also used outside of this job. '
@@ -413,14 +486,46 @@ def validate_relation_area(unit: "Unit", word: "Word") -> None:
     :raises ~django.core.exceptions.ValidationError: If the link would mix areas
     """
     target_area = pending_area_of_unit(unit)
-    if any(area != target_area for area in _other_areas_of_word(word, unit)):
-        raise ValidationError(
-            _(
-                'The word "%(word)s" belongs to another area and cannot be used '
-                "in this unit."
+    for other_unit in _other_units_of_word(word, unit):
+        if _exclusive_area(area_of_unit(other_unit)) != target_area:
+            raise ValidationError(
+                area_conflict_message(
+                    word, area_of_unit(other_unit), _display_area_of_unit(unit)
+                )
             )
-            % {"word": word}
-        )
+
+
+def find_area_conflict(
+    units: "Iterable[Unit]",
+) -> "tuple[Unit, Unit] | None":
+    """
+    The first two of the given units, in order, that do not share an area.
+
+    A word's units are usually added one at a time, each checked against the
+    word's already-saved relations by :func:`validate_relation_area` — but a
+    formset (e.g. the word's own change page) can add several new units to a
+    word in a single save, and those new rows are never one another's
+    "already-saved relations" while they are all still being validated. Two
+    of them can so end up belonging to different areas without either row's
+    own validation ever seeing the conflict. This is the formset-level check
+    that catches that combination instead: the caller attaches the resulting
+    error to the second unit's own form, so it shows next to the row that
+    introduced the conflict rather than as one generic error per row.
+
+    :param units: The units about to be linked to the same word, in the
+        order they appear in the formset
+    :return: ``(already_added, newly_added)``, the first conflicting pair, or
+        ``None`` if they all share an area
+    """
+    reference = None
+    for unit in units:
+        if reference is None:
+            reference = unit
+        elif _exclusive_area(area_of_unit(unit)) != _exclusive_area(
+            area_of_unit(reference)
+        ):
+            return reference, unit
+    return None
 
 
 def published_jobs(queryset: "QuerySet[Job]", area: Area) -> "QuerySet[Job]":

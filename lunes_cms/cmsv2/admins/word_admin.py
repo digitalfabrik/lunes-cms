@@ -20,7 +20,13 @@ from lunes_cms.cmsv2.admins.word_filters import (
     MigratedFilter,
     UnitOrJobDropdownFilter,
 )
-from lunes_cms.cmsv2.areas import area_of_word, scope_words, validate_relation_area
+from lunes_cms.cmsv2.areas import (
+    area_conflict_message,
+    area_of_unit,
+    area_of_word,
+    find_area_conflict,
+    scope_words,
+)
 from lunes_cms.cmsv2.models import AlternativeWord, Word
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.static import CheckStatus
@@ -149,18 +155,34 @@ class UnitInlineFormSet(BaseInlineFormSet):
     """
     Formset that keeps a word inside a single area.
 
-    All units of a word have to belong to the same area, so a word of the main
-    app cannot be added to a unit of an area and vice versa.
+    An already-saved row is checked against the word's other saved units by
+    ``UnitWordRelation.clean()``. Two *new* rows are never each other's
+    "already-saved" unit while validated, so this compares them too.
     """
 
     def clean(self) -> None:
         super().clean()
-        for form in self.forms:
-            if not form.cleaned_data or form.cleaned_data.get("DELETE"):
-                continue
-            unit = form.cleaned_data.get("unit")
-            if unit:
-                validate_relation_area(unit, self.instance)
+        new_rows = [
+            (form, form.cleaned_data["unit"])
+            for form in self.forms
+            if form.cleaned_data
+            and not form.cleaned_data.get("DELETE")
+            and not form.instance.pk
+            and form.cleaned_data.get("unit")
+        ]
+        conflict = find_area_conflict([unit for _form, unit in new_rows])
+        if conflict is None:
+            return
+        existing_unit, new_unit = conflict
+        conflicting_form = next(
+            form for form, unit in new_rows if unit.pk == new_unit.pk
+        )
+        conflicting_form.add_error(
+            "unit",
+            area_conflict_message(
+                self.instance, area_of_unit(existing_unit), area_of_unit(new_unit)
+            ),
+        )
 
 
 class UnitInline(admin.TabularInline):
@@ -320,8 +342,14 @@ class WordAdmin(BaseAdmin):
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Word]:
-        """Restrict the words to the area of the user"""
-        return scope_words(super().get_queryset(request), request.user)
+        """
+        Restrict the words to the area of the user and prefetch the units
+        and jobs the "area" column derives from (#1007).
+        """
+        return scope_words(
+            super().get_queryset(request).prefetch_related("units__jobs__area"),
+            request.user,
+        )
 
     def area(self, obj: Word) -> Area | None:
         """
