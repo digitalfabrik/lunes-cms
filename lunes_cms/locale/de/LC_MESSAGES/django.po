@@ -1041,9 +1041,14 @@ msgstr "Einheit"
 msgid "Has Image"
 msgstr "Hat Bild"
 
-#: cmsv2/admins/word_filters.py
-msgid "Unit or Job"
-msgstr "Einheit oder Job"
+#: cmsv2/admins/word_filters.py cmsv2/models/job.py
+#: cmsv2/views/import_csv_view.py
+msgid "Job"
+msgstr "Beruf"
+
+#: cmsv2/admins/word_filters.py cmsv2/models/unit.py
+msgid "Unit"
+msgstr "Einheit"
 
 #: cmsv2/admins/word_filters.py
 msgid "Has Complete Example Sentence"
@@ -1291,10 +1296,6 @@ msgstr "Icon löschen"
 msgid "Icon"
 msgstr "Icon"
 
-#: cmsv2/models/job.py cmsv2/views/import_csv_view.py
-msgid "Job"
-msgstr "Beruf"
-
 #: cmsv2/models/job.py cmsv2/templates/admin/csv_form.html
 msgid "Jobs"
 msgstr "Berufe"
@@ -1404,10 +1405,6 @@ msgstr "Einheit-Wort Beziehung"
 
 #: cmsv2/models/unit.py
 msgid "unit"
-msgstr "Einheit"
-
-#: cmsv2/models/unit.py
-msgid "Unit"
 msgstr "Einheit"
 
 #: cmsv2/models/word.py
@@ -1782,6 +1779,9 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "Unit or Job"
+#~ msgstr "Einheit oder Job"
 
 #~ msgid ""
 #~ "Jobs of an area are only visible to the administrators of that area. Jobs "
