@@ -645,6 +645,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Job": "fas fa-briefcase",
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",
+        "cmsv2.Review": "fas fa-user-check",
         "cmsv2.Feedback": "fas fa-comment",
     },
     "site_version": _cms_version,
