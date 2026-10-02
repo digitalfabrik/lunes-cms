@@ -51,9 +51,8 @@ class ImportCSVForm(forms.Form):
     csv_file = forms.FileField(
         label=_("Select CSV file"),
         help_text=_(
-            "The file must be UTF-8 encoded and comma-separated. It should "
-            'contain the columns "Einheit", "Artikel", "Vokabel" '
-            'and "Beispielsatz", optionally also "Aussprache".'
+            "The file must be UTF-8 encoded and comma-separated. It must "
+            'contain the columns "Vokabel" and "Einheit", optionally also "Wortart", "Singularartikel", "Plural", "Pluralartikel", "Beispielsatz" and "Aussprache".'
         ),
     )
 
