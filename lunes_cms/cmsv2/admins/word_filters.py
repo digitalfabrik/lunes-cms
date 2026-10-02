@@ -39,37 +39,63 @@ class HasImageFilter(admin.SimpleListFilter):
         return queryset
 
 
-class UnitOrJobDropdownFilter(admin.SimpleListFilter):
-    """Filter for displaying units or jobs in the admin interface."""
+class JobDropdownFilter(admin.SimpleListFilter):
+    """Filter for displaying the words of a job in the admin interface."""
 
-    title = _("Unit or Job")
-    parameter_name = "unit_or_job_choice"
+    title = _("Job")
+    parameter_name = "job"
 
     def lookups(
         self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
     ) -> Iterable[tuple[str, _StrOrPromise]]:
-        options = []
-        for unit in visible_units(request.user):
-            options.append((f"unit_{unit.pk}", f"Unit: {unit.title}"))
-        for job in visible_jobs(request.user):
-            options.append((f"job_{job.pk}", f"Job: {job.name}"))
-        return options
+        return [(str(job.pk), job.name) for job in visible_jobs(request.user)]
 
     def queryset(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> QuerySet[Word] | None:
-        value = self.value()
-        if not value:
-            return queryset
+        if value := self.value():
+            return queryset.filter(units__jobs__id=value).distinct()
+        return queryset
 
-        if value.startswith("unit_"):
-            unit_id = value.split("_", 1)[1]
-            return queryset.filter(units__id=unit_id).distinct()
 
-        if value.startswith("job_"):
-            job_id = value.split("_", 1)[1]
-            return queryset.filter(units__jobs__id=job_id).distinct()
+class UnitDropdownFilter(admin.SimpleListFilter):
+    """
+    Filter for displaying the words of a unit in the admin interface.
 
+    If a job is selected in :class:`JobDropdownFilter`, only the units of this
+    job are offered.
+    """
+
+    title = _("Unit")
+    parameter_name = "unit"
+
+    def __init__(
+        self,
+        request: HttpRequest,
+        params: dict[str, list[str]],
+        model: type[Word],
+        model_admin: admin.ModelAdmin[Word],
+    ) -> None:
+        super().__init__(request, params, model, model_admin)
+        # Ignore a selected unit that does not belong to the selected job,
+        # e.g. because the job was changed after the unit had been selected.
+        if self.value() not in {key for key, _title in self.lookup_choices}:
+            self.used_parameters.pop(self.parameter_name, None)
+
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
+        units = visible_units(request.user)
+        job_id = request.GET.get(JobDropdownFilter.parameter_name)
+        if job_id and job_id.isdigit():
+            units = units.filter(jobs__id=job_id).distinct()
+        return [(str(unit.pk), unit.title) for unit in units]
+
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
+        if value := self.value():
+            return queryset.filter(units__id=value).distinct()
         return queryset
 
 
