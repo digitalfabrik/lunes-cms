@@ -53,8 +53,8 @@ class JobDropdownFilter(admin.SimpleListFilter):
     def queryset(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> QuerySet[Word] | None:
-        if self.value():
-            return queryset.filter(units__jobs__id=self.value()).distinct()
+        if value := self.value():
+            return queryset.filter(units__jobs__id=value).distinct()
         return queryset
 
 
@@ -94,8 +94,8 @@ class UnitDropdownFilter(admin.SimpleListFilter):
     def queryset(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> QuerySet[Word] | None:
-        if self.value():
-            return queryset.filter(units__id=self.value()).distinct()
+        if value := self.value():
+            return queryset.filter(units__id=value).distinct()
         return queryset
 
 

@@ -4,13 +4,22 @@ Tests for the list filters of the word admin.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
-from django.contrib.admin.views.main import ChangeList
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.test import Client
 
 from lunes_cms.cmsv2.models import Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
+
+if TYPE_CHECKING:
+    from django.contrib.admin.views.main import ChangeList
+
+    # Client.get() returns this test-only response subclass (adds .context
+    # and .wsgi_request), which only exists in django-stubs.
+    from django.test.client import _MonkeyPatchedWSGIResponse
 
 URL = "/en/admin/cmsv2/word/"
 
@@ -47,10 +56,16 @@ def catalog(db: None) -> dict[str, Job | Unit | Word]:
     }
 
 
-def _filter_choices(changelist: ChangeList, parameter_name: str) -> list[str]:
-    for list_filter in changelist.get_filters(changelist.request)[0]:
-        if getattr(list_filter, "parameter_name", None) == parameter_name:
-            return [title for _key, title in list_filter.lookup_choices]
+def _filter_choices(
+    response: _MonkeyPatchedWSGIResponse, parameter_name: str
+) -> list[str]:
+    changelist: ChangeList = response.context["cl"]
+    for list_filter in changelist.get_filters(response.wsgi_request)[0]:
+        if (
+            isinstance(list_filter, admin.SimpleListFilter)
+            and list_filter.parameter_name == parameter_name
+        ):
+            return [str(title) for _key, title in list_filter.lookup_choices]
     raise AssertionError(f"No filter with parameter {parameter_name}")
 
 
@@ -61,20 +76,18 @@ def _words(changelist: ChangeList) -> set[str]:
 def test_unit_filter_offers_all_units_without_a_job(
     superuser_client: Client, catalog: dict[str, Job | Unit | Word]
 ) -> None:
-    changelist = superuser_client.get(URL).context["cl"]
-    assert set(_filter_choices(changelist, "unit")) == {"Care", "Bread"}
-    assert set(_filter_choices(changelist, "job")) == {"Nurse", "Baker"}
-    assert _words(changelist) == {"Verband", "Teig"}
+    response = superuser_client.get(URL)
+    assert set(_filter_choices(response, "unit")) == {"Care", "Bread"}
+    assert set(_filter_choices(response, "job")) == {"Nurse", "Baker"}
+    assert _words(response.context["cl"]) == {"Verband", "Teig"}
 
 
 def test_unit_filter_offers_only_the_units_of_the_selected_job(
     superuser_client: Client, catalog: dict[str, Job | Unit | Word]
 ) -> None:
-    changelist = superuser_client.get(
-        URL, {"job": catalog["nurse"].pk}
-    ).context["cl"]
-    assert _filter_choices(changelist, "unit") == ["Care"]
-    assert _words(changelist) == {"Verband"}
+    response = superuser_client.get(URL, {"job": catalog["nurse"].pk})
+    assert _filter_choices(response, "unit") == ["Care"]
+    assert _words(response.context["cl"]) == {"Verband"}
 
 
 def test_unit_filter_filters_the_words_of_the_selected_unit(
