@@ -52,8 +52,7 @@ class ImportCSVForm(forms.Form):
         label=_("Select CSV file"),
         help_text=_(
             "The file must be UTF-8 encoded and comma-separated. It should "
-            'contain the columns "Einheit", "Artikel", "Vokabel" '
-            'and "Beispielsatz", optionally also "Aussprache".'
+            'contain the columns "Vokabel", "Wortart", "Singularartikel", "Plural", "Pluralartikel", "Audio", "Beispielsatz", "Erstellt am", "Einheit", optionally also "Aussprache".'
         ),
     )
 

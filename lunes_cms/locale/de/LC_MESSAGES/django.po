@@ -1557,12 +1557,10 @@ msgstr "CSV Datei auswählen"
 #: cmsv2/views/import_csv_view.py
 msgid ""
 "The file must be UTF-8 encoded and comma-separated. It should contain the "
-"columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
-"optionally also \"Aussprache\"."
-msgstr ""
-"Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die Spalten "
-"\"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" enthalten, "
-"optional zusätzlich \"Aussprache\"."
+"columns \"Vokabel\", \"Wortart\", \"Singularartikel\", \"Plural\", "
+"\"Pluralartikel\", \"Audio\", \"Beispielsatz\", \"Erstellt am\", "
+"\"Einheit\", optionally also \"Aussprache\"."
+msgstr "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die Spalten \"Vokabel\", \"Wortart\", \"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Audio\", \"Beispielsatz\", \"Erstellt am\", \"Einheit\", optional zusätzlich \"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
@@ -1782,6 +1780,15 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid ""
+#~ "The file must be UTF-8 encoded and comma-separated. It should contain the "
+#~ "columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
+#~ "optionally also \"Aussprache\"."
+#~ msgstr ""
+#~ "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die "
+#~ "Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" "
+#~ "enthalten, optional zusätzlich \"Aussprache\"."
 
 #~ msgid ""
 #~ "Jobs of an area are only visible to the administrators of that area. Jobs "
