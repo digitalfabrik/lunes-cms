@@ -871,6 +871,61 @@ msgstr "Zugewiesene Vokabeln"
 msgid "Permissions"
 msgstr "Berechtigungen"
 
+#: cmsv2/admins/user_admin.py
+msgid ""
+"The account was created, but the email with the link to set the password "
+"could not be sent to {email}."
+msgstr ""
+"Der Account wurde angelegt, aber die E-Mail mit dem Link zum Setzen des "
+"Passworts konnte nicht an {email} gesendet werden."
+
+#: cmsv2/admins/user_admin.py
+msgid "Resend invitation email"
+msgstr "Einladung erneut senden"
+
+#: cmsv2/admins/user_admin.py
+#, python-format
+msgid "%(count)d invitation email(s) have been sent."
+msgstr "%(count)d Einladung(en) wurde(n) gesendet."
+
+#: cmsv2/admins/user_admin.py
+#, python-format
+msgid "%(count)d invitation email(s) could not be sent."
+msgstr "%(count)d Einladung(en) konnte(n) nicht gesendet werden."
+
+#: cmsv2/admins/user_admin.py
+#, python-format
+msgid ""
+"%(count)d user(s) were skipped because they already set a password or have "
+"no email address."
+msgstr ""
+"%(count)d Benutzer wurde(n) übersprungen, weil sie bereits ein Passwort "
+"gesetzt oder keine E-Mail-Adresse haben."
+
+#: cmsv2/admins/user_admin.py
+msgid "Your Lunes CMS account has been created"
+msgstr "Ihr Account im Lunes CMS wurde angelegt"
+
+#: cmsv2/admins/user_admin.py
+msgid ""
+"Hello {username},\n"
+"\n"
+"an account has been created for you in the Lunes CMS.\n"
+"Please set your password using the following link:\n"
+"\n"
+"{url}\n"
+"\n"
+"Your username is: {username}"
+msgstr ""
+"Hallo {username},\n"
+"\n"
+"für Sie wurde ein Account im Lunes CMS angelegt.\n"
+"Bitte setzen Sie Ihr Passwort über den folgenden Link:\n"
+"\n"
+"{url}\n"
+"\n"
+"Ihr Benutzername lautet: {username}"
+
 #: cmsv2/admins/word_admin.py
 msgid "Alternative Words"
 msgstr "So heißt das auch"
@@ -1481,6 +1536,30 @@ msgstr "Import starten"
 #: cmsv2/templates/admin/generate_audio_base.html
 msgid "Generate Audio"
 msgstr "Audio generieren"
+
+#: cmsv2/templates/registration/password_reset_confirm.html
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Bitte geben Sie Ihr neues Passwort zweimal ein, damit wir überprüfen können, "
+"ob es richtig eingetippt wurde."
+
+#: cmsv2/templates/registration/password_reset_confirm.html
+msgid "Username"
+msgstr "Benutzername"
+
+#: cmsv2/templates/registration/password_reset_confirm.html
+msgid "Change my password"
+msgstr "Mein Passwort ändern"
+
+#: cmsv2/templates/registration/password_reset_confirm.html
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Der Link zum Zurücksetzen Ihres Passworts ist ungültig, wahrscheinlich weil "
+"er schon einmal benutzt wurde. Bitte setzen Sie Ihr Passwort erneut zurück."
 
 #: cmsv2/utils.py
 msgid "Generate example sentence"
