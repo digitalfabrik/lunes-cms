@@ -18,8 +18,9 @@ from lunes_cms.cmsv2.admins.word_filters import (
     HasCompleteExampleSentenceFilter,
     HasImageFilter,
     ImageSourceFilter,
+    JobDropdownFilter,
     MigratedFilter,
-    UnitOrJobDropdownFilter,
+    UnitDropdownFilter,
 )
 from lunes_cms.cmsv2.areas import area_of_word, scope_words, validate_relation_area
 from lunes_cms.cmsv2.models import AlternativeWord, Word
@@ -291,7 +292,8 @@ class WordAdmin(BaseAdmin):
         "image_check_status",
         HasImageFilter,
         ImageSourceFilter,
-        UnitOrJobDropdownFilter,
+        JobDropdownFilter,
+        UnitDropdownFilter,
         HasCompleteExampleSentenceFilter,
         MigratedFilter,
         "created_by",

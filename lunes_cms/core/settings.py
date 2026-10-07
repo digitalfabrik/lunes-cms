@@ -344,7 +344,7 @@ LANGUAGES = [
 
 #: A string representing the time zone for this installation
 #: (see :setting:`django:TIME_ZONE` and :doc:`django:topics/i18n/index`)
-TIME_ZONE = "UTC"
+TIME_ZONE = os.environ.get("LUNES_CMS_TIME_ZONE", "Europe/Berlin")
 
 #: A boolean that specifies whether Django’s translation system should be enabled
 #: (see :setting:`django:USE_I18N` and :doc:`django:topics/i18n/index`)
