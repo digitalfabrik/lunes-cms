@@ -1553,13 +1553,15 @@ msgstr "CSV Datei auswählen"
 
 #: cmsv2/views/import_csv_view.py
 msgid ""
-"The file must be UTF-8 encoded and comma-separated. It should contain the "
-"columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
-"optionally also \"Aussprache\"."
+"The file must be UTF-8 encoded and comma-separated. It must contain the "
+"columns \"Vokabel\" and \"Einheit\", optionally also \"Wortart\", "
+"\"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Beispielsatz\" and "
+"\"Aussprache\"."
 msgstr ""
-"Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die Spalten "
-"\"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" enthalten, "
-"optional zusätzlich \"Aussprache\"."
+"Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie muss die Spalten "
+"\"Vokabel\" und \"Einheit\" enthalten, optional zusätzlich \"Wortart\", "
+"\"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Beispielsatz\" und "
+"\"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
@@ -1782,6 +1784,15 @@ msgstr "Hilfe"
 
 #~ msgid "Unit or Job"
 #~ msgstr "Einheit oder Job"
+
+#~ msgid ""
+#~ "The file must be UTF-8 encoded and comma-separated. It should contain the "
+#~ "columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
+#~ "optionally also \"Aussprache\"."
+#~ msgstr ""
+#~ "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die "
+#~ "Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" "
+#~ "enthalten, optional zusätzlich \"Aussprache\"."
 
 #~ msgid ""
 #~ "Jobs of an area are only visible to the administrators of that area. Jobs "
