@@ -4,7 +4,7 @@
 # Run nightly at 02:15 UTC. The aggregator is idempotent (each consumed event
 # is stamped with ``aggregated_at``), so the cadence can be tightened or
 # loosened without risk of double-counting; daily is the natural granularity
-# because ``SessionAggregate`` is keyed by UTC day.
+# because the InfluxDB summaries are keyed by UTC day.
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

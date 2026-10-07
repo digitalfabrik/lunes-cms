@@ -14,8 +14,6 @@ echo "Importing test data..." | print_info
 lunes-cms-cli loaddata "${PACKAGE_DIR}/cms/fixtures/test_data.json"
 # Load cmsv2 test data (jobs, units, words)
 lunes-cms-cli loaddata "${PACKAGE_DIR}/cmsv2/fixtures/test_data.json"
-# Load analytics test data (session aggregates)
-lunes-cms-cli loaddata "${PACKAGE_DIR}/analytics/fixtures/test_data.json"
 # The fixture jobs, units and words have no area, i.e. they belong to the
 # main app. Area scoping (#1016) hides them from everybody but an
 # administrator of the main app area, so the vocabulary manager fixture user
