@@ -15,6 +15,12 @@ def _white_webp(path: Path, size: tuple[int, int] = (1024, 1024)) -> None:
     Image.new("RGB", size, "white").save(path, format="WEBP")
 
 
+def _pixel(image: Image.Image, position: tuple[int, int]) -> tuple[int, ...]:
+    pixel = image.getpixel(position)
+    assert isinstance(pixel, tuple)
+    return pixel
+
+
 def _mark(source: Path) -> Path:
     target = source.with_name("marked.webp")
     mark_image(str(source), str(target))
@@ -30,9 +36,9 @@ def test_pastes_the_label_into_the_bottom_right_corner(tmp_path: Path) -> None:
     with Image.open(target) as image:
         assert image.size == (1024, 1024)
         rgb = image.convert("RGB")
-    assert rgb.getpixel((10, 10)) == (255, 255, 255)
-    assert sum(rgb.getpixel((800, 974))) < 100
-    assert rgb.getpixel((512, 512)) == (255, 255, 255)
+    assert _pixel(rgb, (10, 10)) == (255, 255, 255)
+    assert sum(_pixel(rgb, (800, 974))) < 100
+    assert _pixel(rgb, (512, 512)) == (255, 255, 255)
 
 
 def test_embeds_the_digital_source_type_and_leaves_the_source_alone(
@@ -83,7 +89,7 @@ def test_keeps_the_transparency_of_an_image_with_alpha(tmp_path: Path) -> None:
 
     with Image.open(_mark(source)) as image:
         assert image.mode == "RGBA"
-        assert image.convert("RGBA").getpixel((10, 10))[3] == 0
+        assert _pixel(image.convert("RGBA"), (10, 10))[3] == 0
 
 
 def test_gives_the_target_the_permissions_of_the_source(tmp_path: Path) -> None:
