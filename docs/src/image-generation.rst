@@ -17,13 +17,18 @@ AI disclosure label and provenance
 ==================================
 
 The EU AI Act (Art. 50) requires generated images to be marked as such, so every
-prompt ends with an instruction to render the European Commission's
-"AI GENERATED" label — a black pill with white uppercase text — into the bottom
-right corner of the picture. The default ban on text inside the image
-(issue #918) exempts that label explicitly.
+image is requested from OpenAI's image *edit* endpoint with the European
+Commission's "AI GENERATED" icon (``cmsv2/assets/ai_generated_label.png``) as
+the reference image. Every prompt ends with the instruction to place that icon
+unchanged in the bottom-right corner, about a fifth of the image width wide. The
+default ban on text inside the image (issue #918) exempts the label explicitly.
+
+The model still redraws the icon, so it is close to the original but not
+pixel-exact, and an editor checks it like any other part of the image.
+``input_fidelity`` is not passed, because ``gpt-image-2`` does not accept it.
 
 Generated images are requested from OpenAI **in the format we serve**
-(``webp`` by default) rather than converted afterwards. The stored file is then
+(``webp``) rather than converted afterwards. The stored file is then
 byte-for-byte OpenAI's own output, which keeps the provenance markings it
 embeds — a C2PA manifest is bound to the exact bytes and does not survive any
 re-encode. ``convert_image_to_webp()`` in ``Word.save()`` short-circuits on

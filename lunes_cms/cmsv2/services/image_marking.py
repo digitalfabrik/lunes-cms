@@ -14,16 +14,7 @@ from pathlib import Path
 
 from PIL import Image
 
-LABEL_PATH = (
-    Path(__file__).resolve().parent.parent / "assets" / "ai_generated_label.png"
-)
-
-#: Width of the label relative to the width of the image.
-LABEL_WIDTH_RATIO = 0.2
-
-#: Distance of the label from the bottom and right edge, relative to the width
-#: of the image.
-LABEL_MARGIN_RATIO = 0.03
+from .ai_label import LABEL_MARGIN_RATIO, LABEL_PATH, LABEL_WIDTH_RATIO
 
 WEBP_QUALITY = 95
 

@@ -19,6 +19,7 @@ from lunes_cms.cmsv2.models import Area, Word
 from lunes_cms.cmsv2.models import word as word_module
 from lunes_cms.cmsv2.models.static import ImageSource
 from lunes_cms.cmsv2.services import image_generation
+from lunes_cms.cmsv2.services.ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
@@ -227,6 +228,14 @@ def test_drain_is_single_flight(fast_worker: None) -> None:
         image_generation._drain_lock.release()  # pylint: disable=protected-access
 
 
+def _fake_openai_client() -> mock.MagicMock:
+    client = mock.MagicMock()
+    client.images.edit.return_value.data = [
+        mock.MagicMock(b64_json=base64.b64encode(b"webp-bytes").decode())
+    ]
+    return client
+
+
 def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     bare = image_generation.build_image_prompt("Hammer")
     # Quotes around the the word make it more likely to have the word printed in the image
@@ -261,6 +270,12 @@ def test_build_image_prompt_always_requests_the_ai_label() -> None:
         assert prompt.endswith(image_generation.AI_LABEL_PROMPT)
 
 
+def test_the_label_prompt_names_the_label_width() -> None:
+    assert (
+        f"{round(LABEL_WIDTH_RATIO * 100)} Prozent" in image_generation.AI_LABEL_PROMPT
+    )
+
+
 def test_build_image_prompt_exempts_the_label_from_the_text_ban() -> None:
     """The ban and the label instruction would otherwise contradict each other."""
     prompt = image_generation.build_image_prompt("Rechnung")
@@ -276,17 +291,27 @@ def test_openai_image_bytes_requests_webp_from_openai(
     manifest and watermark survive into the stored file.
     """
     settings.OPENAI_IMAGE_OUTPUT_COMPRESSION = 85
-    client = mock.MagicMock()
-    client.images.generate.return_value.data = [
-        mock.MagicMock(b64_json=base64.b64encode(b"webp-bytes").decode())
-    ]
+    client = _fake_openai_client()
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):
         assert image_generation.openai_image_bytes("prompt") == b"webp-bytes"
 
-    kwargs = client.images.generate.call_args.kwargs
+    kwargs = client.images.edit.call_args.kwargs
     assert kwargs["output_format"] == "webp"
     assert kwargs["output_compression"] == 85
+
+
+def test_openai_image_bytes_passes_the_label_as_reference_image() -> None:
+    client = _fake_openai_client()
+
+    with mock.patch.object(image_generation, "get_openai_client", return_value=client):
+        image_generation.openai_image_bytes("prompt")
+
+    filename, content, content_type = client.images.edit.call_args.kwargs["image"]
+    assert filename == LABEL_PATH.name
+    assert content == LABEL_PATH.read_bytes()
+    assert content_type == "image/png"
+    assert "input_fidelity" not in client.images.edit.call_args.kwargs
 
 
 def test_generated_image_extension_matches_the_generated_format() -> None:
