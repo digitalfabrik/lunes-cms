@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-
 import os
 import uuid
 
@@ -10,6 +9,7 @@ from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from lunes_cms.cmsv2.areas import administered_areas
 from lunes_cms.cmsv2.services.image_generation import (
     build_image_prompt,
     GENERATED_IMAGE_EXTENSION,
@@ -54,7 +54,7 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"error": _("No word_text provided.")}, status=400)
 
     try:
-        image_data = openai_image_bytes(prompt)
+        image_data = openai_image_bytes(prompt, administered_areas(request.user))
 
         os.makedirs(settings.TEMP_IMAGE_DIR, exist_ok=True)
 

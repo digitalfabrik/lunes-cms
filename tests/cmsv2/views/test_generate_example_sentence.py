@@ -43,7 +43,7 @@ def test_word_endpoint_returns_generated_sentence(
 
     assert response.status_code == 200
     assert response.json()["example_sentence"] == "Der Hammer liegt auf der Werkbank."
-    generate.assert_called_once_with("Hammer", "Tischler", None)
+    generate.assert_called_once_with("Hammer", "Tischler", None, areas=mock.ANY)
 
 
 def test_word_endpoint_joins_multiple_jobs(
@@ -64,7 +64,7 @@ def test_word_endpoint_joins_multiple_jobs(
         response = admin_client.post(url)
 
     assert response.status_code == 200
-    generate.assert_called_once_with("Hammer", "Maler, Tischler", None)
+    generate.assert_called_once_with("Hammer", "Maler, Tischler", None, areas=mock.ANY)
 
 
 def test_word_endpoint_requires_job(admin_client: Client, db: None) -> None:
@@ -97,7 +97,7 @@ def test_unitword_endpoint_passes_unit_title(
         response = admin_client.post(url)
 
     assert response.status_code == 200
-    generate.assert_called_once_with("Hammer", "Tischler", "Werkzeuge")
+    generate.assert_called_once_with("Hammer", "Tischler", "Werkzeuge", areas=mock.ANY)
 
 
 def test_endpoint_reports_missing_openai_configuration(
