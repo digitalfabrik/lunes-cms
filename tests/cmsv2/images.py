@@ -1,5 +1,5 @@
 """
-Image files that look like the ones the CMS stores, for provenance tests.
+Image files that look like the ones the CMS stores, for provenance and marking tests.
 """
 
 from __future__ import annotations

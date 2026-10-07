@@ -69,7 +69,7 @@ class ImageSource(models.TextChoices):
     UPLOADED = "UPLOADED", _("Uploaded")
     AI_UNLABELED = "AI_UNLABELED", _("AI-generated without label")
     AI_LABELED = "AI_LABELED", _("AI-generated with label")
-    AI_RELABELED = "AI_RELABELED", _("Regenerated with AI label")
+    AI_MARKED = "AI_MARKED", _("AI-generated, labeled afterwards")
 
 
 def resolve_image_source(

@@ -41,36 +41,53 @@ Image source
 
 ``Word`` and ``UnitWordRelation`` record where their image came from in
 ``image_source``: *uploaded*, *AI-generated with label*, *AI-generated without
-label* (stored before the label existed), *regenerated with AI label*, or
-*unknown*. The code paths that store a generated image pass the source to
-``save()``; every other new image counts as an upload, and removing the image
-resets the source to *unknown*. The "Image source" filter in the word admin
-matches a word by its own image or by any of its unit images.
+label* (stored before the label existed), *AI-generated, labeled
+afterwards* (``AI_MARKED``), or *unknown*. The code paths that store a
+generated image pass the source to ``save()``; every other new image counts as
+an upload, and removing the image resets the source to *unknown*. The "Image
+source" filter in the word admin matches a word by its own image or by any of
+its unit images.
 
 Images stored before the field existed start as *unknown*. Their source is
 judged from the file: a C2PA manifest means a labeled generated image (see
 above), a plain 1024x1024 image means a generated image from before the label,
 anything else an upload.
 
-Regenerating unlabeled images
------------------------------
+Marking unlabeled images
+------------------------
 
-``regenerate_unlabeled_images`` records the source of every *unknown* image,
-then regenerates the *AI-generated without label* images stored on or after
-``--since`` (default 2026-08-02). The storage time comes from the version 1
-UUID in the file name, which the WebP conversion keeps. Uploads are never
-touched.
+``mark_unlabeled_images`` records the source of every *unknown* image, then
+marks the *AI-generated without label* images stored on or after ``--since``
+(default 2025-06-23, the day image generation was added) without generating
+them again. The storage time comes from the version 1 UUID in the file name,
+which the WebP conversion keeps. Uploads are never touched.
 
 .. code-block:: bash
 
-   lunes-cms-cli regenerate_unlabeled_images --dry-run
-   lunes-cms-cli regenerate_unlabeled_images [--since YYYY-MM-DD] [--limit N] [--delay SECONDS]
+   lunes-cms-cli mark_unlabeled_images --dry-run
+   lunes-cms-cli mark_unlabeled_images [--since YYYY-MM-DD] [--limit N]
 
-The prompt is the default one for the word (plus unit and job, like in the
-admin): editor hints and the "allow text" setting of the original generation
-were never stored. A regenerated image keeps its check status, so it is marked
-*regenerated with AI label* instead — filter the words by that source to review
-them. The replaced file is deleted.
+Marking an image means adding the label and the marking to it:
+
+* the "AI GENERATED" label (the Commission's official icon,
+  ``cmsv2/assets/ai_generated_label.png``) is pasted into the bottom-right
+  corner, 20 % of the image width wide, and
+* an XMP packet is embedded with the IPTC ``DigitalSourceType``
+  ``trainedAlgorithmicMedia``, the value OpenAI's own C2PA manifest asserts.
+
+The file is re-encoded as WebP (quality 95) and stored under a new name, the old
+name with ``-marked`` added before the extension: apps cache images by URL, so
+a new URL makes them fetch the marked image. The old file is deleted once no
+word or unit-word relation uses it, and the permissions of the old file carry
+over. OpenAI's C2PA manifest is not restored, so the XMP packet is the only
+machine-readable marking of these images. The check status stays as it is, and
+the image is marked *labeled afterwards*, so the "Image source" filter in the
+word admin lists the marked images.
+
+An image that fails is logged and left as it was, and the run continues. Running
+the command again picks up only the images that are still unlabeled, and an
+image that already carries the XMP packet is never marked a second time, but it
+is still recorded as *labeled afterwards*.
 
 Background worker
 =================

@@ -44,9 +44,7 @@ class ImageSourceFilter(admin.SimpleListFilter):
     """
     Filter for displaying words by where their image came from.
 
-    A word matches if its own image or one of its unit images has that source,
-    so this also lists the unit images the regeneration of unlabeled AI images
-    replaced.
+    A word matches if its own image or one of its unit images has that source.
     """
 
     title = _("Image source")

@@ -1356,8 +1356,8 @@ msgid "AI-generated with label"
 msgstr "KI-generiert mit Kennzeichnung"
 
 #: cmsv2/models/static.py
-msgid "Regenerated with AI label"
-msgstr "Mit KI-Kennzeichnung neu generiert"
+msgid "AI-generated, labeled afterwards"
+msgstr "KI-generiert, nachträglich gekennzeichnet"
 
 #: cmsv2/models/static.py
 msgid "Pending Review"
