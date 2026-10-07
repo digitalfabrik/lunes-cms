@@ -1252,6 +1252,15 @@ msgid "Area codes"
 msgstr "Bereichscodes"
 
 #: cmsv2/models/job.py
+msgid "expert reviewed"
+msgstr "fachlich geprüft"
+
+#: cmsv2/models/job.py
+msgid "Whether external experts have approved the content of this job."
+msgstr ""
+"Gibt an, ob externe Expert:innen den Inhalt dieses Berufs freigegeben haben."
+
+#: cmsv2/models/job.py
 msgid "archived"
 msgstr "archiviert"
 

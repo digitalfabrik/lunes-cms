@@ -32,10 +32,17 @@ class Job(models.Model):
     Model representing a job category.
 
     This model stores information about job categories, including their name, icon,
-    and release status. Jobs can have multiple units associated with them.
+    release status and whether external experts have reviewed their content. Every
+    job counts as internally reviewed, so only the expert review is stored. Jobs can
+    have multiple units associated with them.
     """
 
     released = models.BooleanField(default=False, verbose_name=_("released"))
+    expert_reviewed = models.BooleanField(
+        default=False,
+        verbose_name=_("expert reviewed"),
+        help_text=_("Whether external experts have approved the content of this job."),
+    )
     archived = models.BooleanField(
         default=False,
         verbose_name=_("archived"),
