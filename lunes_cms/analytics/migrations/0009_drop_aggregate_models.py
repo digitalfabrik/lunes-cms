@@ -4,6 +4,9 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """
+    Drop the obsolete aggregate tables; daily summaries are pushed to InfluxDB.
+    """
 
     dependencies = [
         ("analytics", "0008_keep_raw_events_drop_buckets"),
