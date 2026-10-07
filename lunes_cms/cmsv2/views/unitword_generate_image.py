@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.areas import visible_unit_word_relations
-from lunes_cms.cmsv2.utils import safe_temp_path
+from lunes_cms.cmsv2.utils import replace_file, safe_temp_path
 from lunes_cms.core import settings
 
 logger = logging.getLogger(__name__)
@@ -79,10 +79,7 @@ def unitword_store_generated_image_permanently(
                 f.read(),
                 name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}{suffix}',
             )
-            # content_file.name is always the literal set above; ContentFile.name
-            # is typed Optional[str] only because the base File class allows it.
-            assert content_file.name is not None
-            unitword_instance.image.save(content_file.name, content_file)
+            replace_file(unitword_instance.image, content_file)
 
         os.remove(temp_filepath)
 

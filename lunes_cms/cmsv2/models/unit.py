@@ -140,15 +140,13 @@ class UnitWordRelation(models.Model):
             and previous_relation.example_sentence != self.example_sentence
         )
         if example_sentence_changed:
-            # `example_sentence_changed` is only true when `previous_relation`
-            # is truthy (see the "and" chain above), so this is never None here.
             assert previous_relation is not None
-            if previous_relation.example_sentence_audio:
-                # Delete the old audio file from storage
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
+            if not self.example_sentence.strip() and (
+                previous_relation.example_sentence_audio
+            ):
                 previous_relation.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
-            # Reset example sentence check status when example sentence changes
-            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
         if image_updated:
             self.image_check_status = CheckStatus.NOT_CHECKED

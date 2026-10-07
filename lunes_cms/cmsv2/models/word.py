@@ -267,10 +267,12 @@ class Word(models.Model):
         )
         if example_sentence_changed:
             assert previous_word is not None
-            if previous_word.example_sentence_audio:
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
+            if not self.example_sentence.strip() and (
+                previous_word.example_sentence_audio
+            ):
                 previous_word.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
-            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
         if not self.example_sentence or not self.example_sentence.strip():
             self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
