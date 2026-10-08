@@ -111,7 +111,7 @@ def _generate_word_assets(
     generation is recorded for.
     """
     drain_pending_sentences(word_ids, job_title=job_title, areas=areas)
-    drain_pending_audio(word_ids, areas=areas)
+    drain_pending_audio(word_ids, areas)
     drain_pending_images(word_ids, job_title=job_title, areas=areas)
 
 

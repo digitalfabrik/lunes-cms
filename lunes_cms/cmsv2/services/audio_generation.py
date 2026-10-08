@@ -186,9 +186,7 @@ def _pending_filter(word_ids: list[int] | None = None) -> Q:
 
 
 def drain_pending_audio(
-    word_ids: list[int] | None = None,
-    throttle_seconds: float = 1.0,
-    areas: Iterable[Area] = (),
+    word_ids: list[int] | None, areas: Iterable[Area], throttle_seconds: float = 1.0
 ) -> None:
     """
     Process Words that need audio, one at a time, until none remain.
