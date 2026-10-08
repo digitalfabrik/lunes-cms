@@ -241,19 +241,24 @@ def area_of_unit(unit: "Unit") -> Area | None:
     """
     The area a unit belongs to, derived from its job.
 
-    Deliberately reads ``unit.jobs.all()`` rather than chaining a further
-    ``.select_related()``/``.filter()``/``.first()`` onto it: any such call
-    on a related manager issues a fresh query and ignores a ``prefetch_related``
-    cache the caller may have warmed (e.g. ``jobs__area`` on a changelist
-    queryset, see :meth:`~lunes_cms.cmsv2.admins.unit_admin.UnitAdmin.get_queryset`),
-    which is what made this the query cost fixed in #1007.
+    If the caller warmed a ``prefetch_related`` cache for ``jobs`` (e.g.
+    ``jobs__area`` on a changelist queryset, see
+    :meth:`~lunes_cms.cmsv2.admins.unit_admin.UnitAdmin.get_queryset`), this
+    reads ``unit.jobs.all()`` from it: chaining ``.select_related()``/
+    ``.first()`` onto a related manager would ignore that cache and issue a
+    fresh query per unit, which is the query cost fixed in #1007. Without
+    such a cache, a single query joining the area is cheaper than loading
+    all jobs and then the area separately.
 
     :param unit: The unit in question
     :return: The area of the unit, or ``None`` if it belongs to no job yet
     """
     if not unit.pk:
         return None
-    job = next(iter(unit.jobs.all()), None)
+    if "jobs" in getattr(unit, "_prefetched_objects_cache", {}):
+        job = next(iter(unit.jobs.all()), None)
+    else:
+        job = unit.jobs.select_related("area").first()
     return job.area if job else None
 
 
@@ -413,9 +418,10 @@ def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
     if not unit.pk:
         return
     # Prefetched so that _other_areas_of_word's word.units.all() and the
-    # area_of_unit() call on each of those units read from cache instead of
-    # running a query per word (and per unit of that word), see #1007.
-    for word in unit.words.prefetch_related("units__jobs"):
+    # area_of_unit() call on each of those units (including the job's area)
+    # read from cache instead of running a query per word (and per unit of
+    # that word), see #1007.
+    for word in unit.words.prefetch_related("units__jobs__area"):
         if any(area != target_area for area in _other_areas_of_word(word, unit)):
             raise ValidationError(
                 _(
