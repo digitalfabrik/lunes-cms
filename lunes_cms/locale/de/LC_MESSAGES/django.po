@@ -1142,7 +1142,7 @@ msgid ""
 "empty."
 msgstr ""
 "Die Bereiche, die die Person verwaltet, die die Generierung angefordert hat, "
-"kann leer sein"
+"können leer sein"
 
 #: cmsv2/models/ai_generation.py
 msgid "generation event"
