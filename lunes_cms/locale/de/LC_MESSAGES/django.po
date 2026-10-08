@@ -335,7 +335,7 @@ msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py cmsv2/admins/word_admin.py
+#: cms/models/alternative_word.py cmsv2/admins/word_inlines.py
 #: cmsv2/models/alternative_word.py
 msgid "alternative word"
 msgstr "Alternatives Wort"
@@ -872,26 +872,6 @@ msgid "Permissions"
 msgstr "Berechtigungen"
 
 #: cmsv2/admins/word_admin.py
-msgid "Alternative Words"
-msgstr "So heißt das auch"
-
-#: cmsv2/admins/word_admin.py
-msgid "Add alternative word"
-msgstr "Alternatives Wort hinzufügen"
-
-#: cmsv2/admins/word_admin.py
-msgid "Save alternative word"
-msgstr "Alternatives Wort speichern"
-
-#: cmsv2/admins/word_admin.py
-msgid "Delete alternative word"
-msgstr "Alternatives Wort löschen"
-
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
-msgid "Unit-Word Relations"
-msgstr "Einheit-Wort Beziehungen"
-
-#: cmsv2/admins/word_admin.py
 msgid "Word Information"
 msgstr "Wort Informationen"
 
@@ -1087,6 +1067,26 @@ msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 #, python-format
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Alternative Words"
+msgstr "So heißt das auch"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Add alternative word"
+msgstr "Alternatives Wort hinzufügen"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Save alternative word"
+msgstr "Alternatives Wort speichern"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Delete alternative word"
+msgstr "Alternatives Wort löschen"
+
+#: cmsv2/admins/word_inlines.py cmsv2/models/unit.py
+msgid "Unit-Word Relations"
+msgstr "Einheit-Wort Beziehungen"
 
 #: cmsv2/apps.py cmsv2/templates/admin/generate_audio_base.html
 #: cmsv2/templates/admin/generate_image_base.html
