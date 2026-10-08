@@ -26,7 +26,8 @@ from lunes_cms.cmsv2.admins.unit_admin import (
     UnitAdminForm,
     UnitWordRelationAdmin,
 )
-from lunes_cms.cmsv2.admins.word_admin import UnitInlineFormSet, WordAdmin
+from lunes_cms.cmsv2.admins.word_admin import WordAdmin
+from lunes_cms.cmsv2.admins.word_inlines import UnitInlineFormSet
 from lunes_cms.cmsv2.areas import area_of_unit, area_of_word
 from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
@@ -798,3 +799,8 @@ def test_area_of_unit_and_word_use_the_prefetch_cache(
     prefetched_word = Word.objects.prefetch_related("units__jobs__area").get(pk=word.pk)
     with django_assert_num_queries(0):
         assert area_of_word(prefetched_word) == area
+
+    # Without a warmed cache, a single query joining the area suffices.
+    plain_unit = Unit.objects.get(pk=unit.pk)
+    with django_assert_num_queries(1):
+        assert area_of_unit(plain_unit) == area
