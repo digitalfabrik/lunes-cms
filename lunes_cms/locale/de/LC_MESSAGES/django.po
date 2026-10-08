@@ -335,7 +335,7 @@ msgstr "Veröffentlichten Modulen in veröffentlichten Modulgruppen zugewiesen"
 msgid "Assigned to unreleased modules"
 msgstr "Unveröffentlichten Modulen zugewiesen"
 
-#: cms/models/alternative_word.py cmsv2/admins/word_admin.py
+#: cms/models/alternative_word.py cmsv2/admins/word_inlines.py
 #: cmsv2/models/alternative_word.py
 msgid "alternative word"
 msgstr "Alternatives Wort"
@@ -872,26 +872,6 @@ msgid "Permissions"
 msgstr "Berechtigungen"
 
 #: cmsv2/admins/word_admin.py
-msgid "Alternative Words"
-msgstr "So heißt das auch"
-
-#: cmsv2/admins/word_admin.py
-msgid "Add alternative word"
-msgstr "Alternatives Wort hinzufügen"
-
-#: cmsv2/admins/word_admin.py
-msgid "Save alternative word"
-msgstr "Alternatives Wort speichern"
-
-#: cmsv2/admins/word_admin.py
-msgid "Delete alternative word"
-msgstr "Alternatives Wort löschen"
-
-#: cmsv2/admins/word_admin.py cmsv2/models/unit.py
-msgid "Unit-Word Relations"
-msgstr "Einheit-Wort Beziehungen"
-
-#: cmsv2/admins/word_admin.py
 msgid "Word Information"
 msgstr "Wort Informationen"
 
@@ -1088,10 +1068,43 @@ msgstr "Zeile %(n)s: Unerwarteter Fehler - %(e)s"
 msgid "Row %(n)s: %(msg)s"
 msgstr "Zeile %(n)s: %(msg)s"
 
+#: cmsv2/admins/word_inlines.py
+msgid "Alternative Words"
+msgstr "So heißt das auch"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Add alternative word"
+msgstr "Alternatives Wort hinzufügen"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Save alternative word"
+msgstr "Alternatives Wort speichern"
+
+#: cmsv2/admins/word_inlines.py
+msgid "Delete alternative word"
+msgstr "Alternatives Wort löschen"
+
+#: cmsv2/admins/word_inlines.py cmsv2/models/unit.py
+msgid "Unit-Word Relations"
+msgstr "Einheit-Wort Beziehungen"
+
 #: cmsv2/apps.py cmsv2/templates/admin/generate_audio_base.html
 #: cmsv2/templates/admin/generate_image_base.html
 msgid "Vocabulary Management v2"
 msgstr "Vokabelverwaltung v2"
+
+#: cmsv2/areas.py
+#, python-format
+msgid ""
+"The word \"%(word)s\" already belongs to area \"%(existing_area)s\" and "
+"cannot also be used in area \"%(new_area)s\"."
+msgstr ""
+"Die Vokabel „%(word)s“ gehört bereits zu Bereich „%(existing_area)s“ und "
+"kann nicht auch in Bereich „%(new_area)s“ verwendet werden."
+
+#: cmsv2/areas.py
+msgid "no area"
+msgstr "kein Bereich"
 
 #: cmsv2/areas.py
 msgid ""
@@ -1130,15 +1143,6 @@ msgstr ""
 "Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet. Alle "
 "Vokabeln eines Bereichs gehören allein zu diesem Bereich, daher kann dieser "
 "Beruf nicht in einen Bereich verschoben werden."
-
-#: cmsv2/areas.py
-#, python-format
-msgid ""
-"The word \"%(word)s\" belongs to another area and cannot be used in this "
-"unit."
-msgstr ""
-"Die Vokabel „%(word)s“ gehört zu einem anderen Bereich und kann in dieser "
-"Einheit nicht verwendet werden."
 
 #: cmsv2/models/area.py
 msgid "Shown on landing page."
@@ -1793,6 +1797,14 @@ msgstr "Hilfe"
 #~ "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die "
 #~ "Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" "
 #~ "enthalten, optional zusätzlich \"Aussprache\"."
+
+#, python-format
+#~ msgid ""
+#~ "The word \"%(word)s\" belongs to another area and cannot be used in this "
+#~ "unit."
+#~ msgstr ""
+#~ "Die Vokabel „%(word)s“ gehört zu einem anderen Bereich und kann in dieser "
+#~ "Einheit nicht verwendet werden."
 
 #~ msgid ""
 #~ "Jobs of an area are only visible to the administrators of that area. Jobs "
