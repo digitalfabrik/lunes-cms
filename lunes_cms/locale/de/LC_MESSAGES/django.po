@@ -1192,6 +1192,8 @@ msgid ""
 "The areas administered by the user who requested the generation, can be "
 "empty."
 msgstr ""
+"Die Bereiche, die die Person verwaltet, die die Generierung angefordert hat, "
+"können leer sein"
 
 #: cmsv2/models/ai_generation.py
 msgid "generation event"
