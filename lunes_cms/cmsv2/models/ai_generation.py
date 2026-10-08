@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Iterable
 
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 
 from .area import Area
@@ -34,6 +34,7 @@ class AIGeneration(models.Model):
         return f"{self.get_generation_event_display()} ({self.created_at})"
 
     @classmethod
+    @transaction.atomic
     def record(cls, event: AIGenerationEvent, areas: Iterable[Area]) -> AIGeneration:
         """
         Record a successful AI generation.
