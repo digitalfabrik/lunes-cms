@@ -18,6 +18,7 @@ from lunes_cms.cmsv2.utils import (
     cache_busted_url,
     is_ajax,
     OpenAIConfigurationError,
+    replace_file,
     safe_temp_path,
 )
 from lunes_cms.core import settings
@@ -109,10 +110,7 @@ def word_store_generated_audio_permanently(
             content_file = ContentFile(
                 f.read(), name=f'{word_instance.word.replace(" ", "_")}.mp3'
             )
-            # content_file.name is always the literal set above; ContentFile.name
-            # is typed Optional[str] only because the base File class allows it.
-            assert content_file.name is not None
-            word_instance.audio.save(content_file.name, content_file)
+            replace_file(word_instance.audio, content_file)
         word_instance.save()
 
         os.remove(temp_filepath)
