@@ -26,4 +26,4 @@ class JobSerializer(serializers.ModelSerializer):
         """
 
         model = Job
-        fields = ("id", "name", "icon", "number_units", "migrated")
+        fields = ("id", "name", "icon", "number_units", "migrated", "expert_reviewed")
