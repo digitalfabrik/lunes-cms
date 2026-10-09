@@ -205,3 +205,30 @@ def is_reviewer(user: User) -> bool:
     Check if the user is a reviewer.
     """
     return user.groups.filter(name=Roles.ADMIN_GROUP).exists()
+
+
+def get_color_by_review_status(review_status: str) -> str:
+    """
+    Get css class name for review status
+    """
+    if review_status == ReviewStatus.CHANGE_REQUESTED:
+        return "bg-warning"
+    if review_status == ReviewStatus.APPROVED:
+        return "bg-success"
+    if review_status == ReviewStatus.REJECTED:
+        return "bg-danger"
+    if review_status == ReviewStatus.CANNOT_BE_ASSESSED:
+        return "bg-secondary"
+    return "bg-primary"
+
+
+def get_initials_of_user(user: User) -> str:
+    """
+    Get the initials of a user
+    """
+    full_name_split = user.get_full_name().split()
+    if not full_name_split:
+        return user.username[:1]
+    first_initial = full_name_split[0][0]
+    last_initial = full_name_split[-1][0] if len(full_name_split) > 1 else ""
+    return first_initial[0] + last_initial
