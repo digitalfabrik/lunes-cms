@@ -233,14 +233,14 @@ def replace_file(field_file: FieldFile, content: ContentFile) -> None:
     Saves ``content`` to ``field_file`` and removes the file it replaced.
 
     The new file is saved first, so the old one is still in place if saving
-    fails.
+    fails. The old file is kept if the new one ended up under the same name.
     """
     # ContentFile.name is typed Optional[str] only because the base File class
     # allows it; callers always construct it with a name.
     assert content.name is not None
     old_name = field_file.name
     field_file.save(content.name, content)
-    if old_name:
+    if old_name and old_name != field_file.name:
         field_file.storage.delete(old_name)
 
 
