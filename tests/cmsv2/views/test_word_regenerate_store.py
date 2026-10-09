@@ -9,7 +9,6 @@ otherwise fall back to the legacy redirect behaviour.
 from __future__ import annotations
 
 import io
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -212,23 +211,6 @@ def test_store_audio_ignores_a_traversing_temp_filename(
     assert outside.exists()
 
 
-def _mp3_bytes(tmp_path: Path, frequency: int) -> bytes:
-    target = tmp_path / f"tone_{frequency}.mp3"
-    subprocess.run(
-        [
-            "ffmpeg",
-            "-f",
-            "lavfi",
-            "-i",
-            f"sine=frequency={frequency}:duration=0.2",
-            str(target),
-        ],
-        check=True,
-        capture_output=True,
-    )
-    return target.read_bytes()
-
-
 def _store_word_audio(admin_client: Client, word: Word, temp_name: str) -> None:
     response = admin_client.post(
         reverse("cmsv2:word_store_generated_audio_permanently", args=[word.pk]),
@@ -243,12 +225,11 @@ def test_store_audio_replaces_the_previous_file_for_the_same_word(
     admin_client: Client,
     db: None,
     media_dirs: tuple[Path, Path],
-    tmp_path: Path,
 ) -> None:
     _, temp_audio_dir = media_dirs
     word = Word.objects.create(word="Hammer", singular_article=1)
-    word.audio.save("Hammer.mp3", ContentFile(_mp3_bytes(tmp_path, 440)), save=True)
-    (temp_audio_dir / "temp.mp3").write_bytes(_mp3_bytes(tmp_path, 880))
+    word.audio.save("Hammer.mp3", ContentFile(b"old"), save=True)
+    (temp_audio_dir / "temp.mp3").write_bytes(b"new")
 
     _store_word_audio(admin_client, word, "temp.mp3")
 
@@ -262,16 +243,15 @@ def test_store_audio_removes_the_old_file_when_the_word_was_renamed(
     admin_client: Client,
     db: None,
     media_dirs: tuple[Path, Path],
-    tmp_path: Path,
 ) -> None:
     _, temp_audio_dir = media_dirs
     word = Word.objects.create(word="Alt", singular_article=1)
-    word.audio.save("Alt.mp3", ContentFile(_mp3_bytes(tmp_path, 440)), save=True)
+    word.audio.save("Alt.mp3", ContentFile(b"old"), save=True)
     old_name = word.audio.name
     assert old_name
     word.word = "Neu"
     word.save()
-    (temp_audio_dir / "temp.mp3").write_bytes(_mp3_bytes(tmp_path, 880))
+    (temp_audio_dir / "temp.mp3").write_bytes(b"new")
 
     _store_word_audio(admin_client, word, "temp.mp3")
 
