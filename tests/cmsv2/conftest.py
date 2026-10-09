@@ -4,10 +4,12 @@ Shared fixtures for the cmsv2 tests.
 
 from collections.abc import Callable, Generator
 from itertools import count
+from pathlib import Path
 from unittest import mock
 
 import pytest
 from django.contrib.auth.models import Group, Permission, User
+from pytest_django import Settings
 
 from lunes_cms.cmsv2.models import Area, Word
 
@@ -50,3 +52,9 @@ def client_with_permissions(db: None) -> Callable[..., PermissionClient]:
         return PermissionClient(user)
 
     return create
+
+
+@pytest.fixture
+def media_root(settings: Settings, tmp_path: Path) -> Path:
+    settings.MEDIA_ROOT = str(tmp_path)
+    return tmp_path

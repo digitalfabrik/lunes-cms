@@ -25,7 +25,9 @@ from django.db.models import Q
 from openai import RateLimitError
 
 from ..models import Word
+from ..models.static import ImageSource
 from ..utils import get_openai_client, OpenAIConfigurationError
+from .ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
 
 logger = logging.getLogger(__name__)
 
@@ -45,41 +47,18 @@ GENERATED_IMAGE_FORMAT = "webp"
 #: markings.
 GENERATED_IMAGE_EXTENSION = f".{GENERATED_IMAGE_FORMAT}"
 
-#: Instruction that makes the model render the AI-disclosure label into the
-#: picture itself (EU AI Act Art. 50, issue #936).
-#:
-#: The proportions below are measured off the European Commission's official
-#: "AI GENERATED" icon (``AI LABELS_3x2_AI GENERATED_black.png`` from
-#: https://digital-strategy.ec.europa.eu/en/policies/eu-icons-labelling-ai-generated-content):
-#: pill 2259x433 px (5.22:1), semicircular ends, cap height 0.48 of the pill
-#: height, side padding 0.43, word space between "AI" and "GENERATED" 0.78 of
-#: the cap height, stems 49 px in "AI" against 34 px in "GENERATED", and
-#: letters in "GENERATED" tracked out by ~0.21 of the cap height.
-#:
-#: Letting the model draw the label is what keeps OpenAI's provenance markings:
-#: compositing the Commission's SVG on top afterwards would mean re-encoding
-#: the file, which destroys the C2PA manifest bound to the original bytes.
-#: The trade-off is that diffusion models approximate text and geometry, so the
-#: label lands close to the template but never pixel-exact, and an editor has
-#: to check it like any other part of the image.
+#: Instruction for the AI-disclosure label. The official icon travels with the
+#: request as a reference image (see ``openai_image_bytes``).
 AI_LABEL_PROMPT = (
-    " In der unteren rechten Ecke des Bildes, mit deutlichem Abstand zum Rand,"
-    " ist die EU-Kennzeichnung für KI-generierte Inhalte eingeblendet: eine"
-    " durchgehend schwarze Pille, deren linkes und rechtes Ende exakt"
-    " halbkreisförmig ist (Radius genau die halbe Pillenhöhe),"
-    " Seitenverhältnis etwa 5,2:1. Darin steht einzeilig und vertikal"
-    ' zentriert der weiße Text "AI GENERATED" in serifenlosen, geometrischen'
-    " Großbuchstaben mit gleichmäßiger Strichstärke. Die Buchstabenhöhe"
-    " beträgt nur etwa die Hälfte der Pillenhöhe, sodass über und unter dem"
-    " Text jeweils etwa ein Viertel der Pillenhöhe schwarz frei bleibt; links"
-    " und rechts bleiben jeweils etwa 40 Prozent der Pillenhöhe frei."
-    ' Beide Wörter haben genau dieselbe Buchstabenhöhe; "AI" ist lediglich'
-    ' fetter gesetzt als "GENERATED", etwa mit der 1,5-fachen Strichstärke.'
-    ' Zwischen "AI" und "GENERATED" steht ein Wortabstand von etwa 40 Prozent'
-    ' der Buchstabenhöhe, und die Buchstaben in "GENERATED" sind leicht'
-    " gesperrt. Die Kennzeichnung ist"
-    " etwa ein Zehntel der Bildbreite breit, exakt so geschrieben, scharf,"
-    " vollständig sichtbar und verdeckt das zentrale Motiv nicht."
+    " Das beigefügte Referenzbild ist die EU-Kennzeichnung für KI-generierte"
+    ' Inhalte (eine schwarze Pille mit dem weißen Text "AI GENERATED"). Es ist'
+    " nicht das Motiv. Blende diese Kennzeichnung in der unteren rechten Ecke"
+    " des Bildes ein, mit deutlichem Abstand zum Rand und etwa"
+    f" {round(LABEL_WIDTH_RATIO * 100)} Prozent der Bildbreite breit. Übernimm"
+    " sie exakt unverändert aus dem Referenzbild:"
+    " gleiche Form, gleiche Proportionen, gleiche Schrift, gleiche Farben und"
+    " gleicher Text. Sie ist scharf, vollständig sichtbar und verdeckt das"
+    " zentrale Motiv nicht."
 )
 
 
@@ -127,7 +106,8 @@ def build_image_prompt(
 
 def openai_image_bytes(prompt: str) -> bytes:
     """
-    Call the OpenAI image API once and return the raw bytes of the result.
+    Call the OpenAI image edit API once, with the AI-disclosure label as the
+    reference image, and return the raw bytes of the result.
 
     ``output_format`` is WebP, the format the CMS serves, so the file we store
     is byte-for-byte OpenAI's own output. Nothing re-encodes it afterwards, and
@@ -135,10 +115,12 @@ def openai_image_bytes(prompt: str) -> bytes:
     intact — a re-encode would strip them.
     """
     client = get_openai_client()
+    ai_label = (LABEL_PATH.name, LABEL_PATH.read_bytes(), "image/png")
     # quality and output_format are env-configured str (LUNES_CMS_OPENAI_IMAGE_*),
     # which the SDK's overloads can't statically narrow to their Literal[...] type.
-    response = client.images.generate(
+    response = client.images.edit(
         model=settings.OPENAI_IMAGE_MODEL,
+        image=ai_label,
         prompt=prompt,
         size="1024x1024",
         quality=settings.OPENAI_IMAGE_QUALITY,  # type: ignore[call-overload]
@@ -168,7 +150,10 @@ def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
     """
     if not word.image:
         data = openai_word_image_bytes(word, job_title=job_title)
-        word.image.save(f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data))
+        word.image.save(
+            f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
+        )
+        word.save(image_source=ImageSource.AI_LABELED)
         logger.info("Generated image for word_id=%s (%s)", word.pk, word.word)
 
 

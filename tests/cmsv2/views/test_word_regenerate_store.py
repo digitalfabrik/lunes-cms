@@ -19,6 +19,7 @@ from PIL import Image
 
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
 from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models.static import ImageSource
 from lunes_cms.cmsv2.utils import is_ajax
 
 
@@ -85,6 +86,7 @@ def test_store_image_keeps_webp_extension(
     word.refresh_from_db()
     assert word.image.name is not None
     assert word.image.name.endswith(".webp")
+    assert word.image_source == ImageSource.AI_LABELED
 
 
 def test_store_image_ajax_missing_temp_returns_400(
