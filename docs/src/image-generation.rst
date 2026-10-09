@@ -66,7 +66,7 @@ Configure via environment variables:
      - –
      - OpenAI API key (required to enable image generation)
    * - ``LUNES_CMS_OPENAI_IMAGE_MODEL``
-     - ``gpt-image-2``
+     - ``gpt-image-2.5-flare``
      - Model used for word image generation
    * - ``LUNES_CMS_OPENAI_IMAGE_QUALITY``
      - ``low``

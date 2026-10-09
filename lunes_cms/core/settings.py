@@ -55,7 +55,9 @@ OPENAI_TTS_LOUDNESS_LUFS = float(
     os.environ.get("LUNES_CMS_OPENAI_TTS_LOUDNESS_LUFS", "-16.0")
 )
 #: OpenAI model used for word image generation
-OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2")
+OPENAI_IMAGE_MODEL = os.environ.get(
+    "LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2.5-flare"
+)
 
 #: OpenAI image quality tier (low/medium/high)
 OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
