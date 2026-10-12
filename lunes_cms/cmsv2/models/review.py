@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from typing import Any, TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
+from django.db.models.fields.files import FieldFile, ImageFieldFile
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from ..utils import create_resource_path
@@ -9,6 +13,9 @@ from .static import (
     ProgressStatus,
     ReviewStatus,
 )
+
+if TYPE_CHECKING:
+    from . import Unit
 
 
 def upload_review_suggestions(_: models.Model, filename: str) -> str:
@@ -43,7 +50,9 @@ class Review(models.Model):
         verbose_name=_("assigned by"),
     )
     reason = models.CharField(max_length=20, default="", verbose_name=_("reason"))
-    comment = models.CharField(max_length=120, default="", verbose_name=_("comment"))
+    comment = models.CharField(
+        blank=True, max_length=120, default="", verbose_name=_("comment")
+    )
     assigned_at = models.DateTimeField(auto_now_add=True, verbose_name=_("assigned at"))
     completed_at = models.DateTimeField(
         null=True, blank=True, verbose_name=_("completed at")
@@ -54,6 +63,8 @@ class Review(models.Model):
         default=ReviewStatus.PENDING,
         verbose_name=_("review status"),
     )
+    # Marks the priority of this review in the reviewer view. Lowest priority first
+    review_priority = models.IntegerField(default=0, verbose_name=_("review priority"))
 
     @property
     def progress_status(self) -> ProgressStatus:
@@ -63,6 +74,48 @@ class Review(models.Model):
             if not self.completed_at
             else ProgressStatus.COMPLETED
         )
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Saves the Review and sets the completed_at value
+        :param args: Further arguments
+        :param kwargs: Further keyword arguments
+        :return:
+        """
+        if self.completed_at is None and self.review_status != ReviewStatus.PENDING:
+            self.completed_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f"{self.unit_word} – {self.reviewer}"
+
+    @property
+    def word_type(self) -> str:
+        """Returns the word type of a reviewed word"""
+        return self.unit_word.word.word_type
+
+    word_type.fget.short_description = _("Word type")  # type: ignore[attr-defined]
+
+    @property
+    def unit(self) -> Unit:
+        """Returns the unit of a reviewed word"""
+        return self.unit_word.unit
+
+    unit.fget.short_description = _("Unit")  # type: ignore[attr-defined]
+
+    @property
+    def image(self) -> ImageFieldFile:
+        """Returns the image of the word being reviewed"""
+        return self.unit_word.word.image
+
+    image.fget.short_description = _("Image")  # type: ignore[attr-defined]
+
+    @property
+    def audio(self) -> FieldFile:
+        """Returns the audio of the word being reviewed"""
+        return self.unit_word.word.audio
+
+    audio.fget.short_description = _("Audio")  # type: ignore[attr-defined]
 
     class Meta:
         """
@@ -76,6 +129,4 @@ class Review(models.Model):
         ]
         verbose_name = _("Review")
         verbose_name_plural = _("Review")
-
-    def __str__(self) -> str:
-        return f"{self.unit_word} – {self.reviewer}"
+        permissions = [("can_review", _("Can review assigned reviews"))]

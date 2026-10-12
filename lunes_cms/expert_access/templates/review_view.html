@@ -1,0 +1,177 @@
+{% extends "./_base.html" %}
+
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+    <p class="greeting">
+        {% translate "Hello" %},
+        {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}.
+    </p>
+    <p class="subline">
+        {% blocktranslate trimmed count counter=num_reviews %}
+            {{ counter }} open review
+        {% plural %}
+            {{ counter }} open reviews
+        {% endblocktranslate %}
+    </p>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="message message--{{ message.level_tag }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if form.errors %}
+        <ul class="errors">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>{% endfor %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>{% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if num_reviews > 0 %}
+        <h2 class="section-title">{% translate "Word currently under review" %}:</h2>
+        <form method="post" action="" class="actions">
+            {% csrf_token %}
+            <input hidden name="review_id" value="{{ current_review.pk }}">
+            <div class="card">
+                <h1 class="word">
+                    <span>{{ current_review.unit_word.word.word }}</span>
+                    <span class="word__article">{{ current_review.unit_word.word.singular_article_as_text }}</span>
+                </h1>
+                <p class="word-meta">
+                    {% if current_review.unit_word.word.word_type %}
+                        {{ current_review.unit_word.word.get_word_type_display }}
+                    {% else %}
+                        <em>{% translate "At the moment there is no word type for this word." %}</em>
+                    {% endif %}
+                    <span class="word-meta__separator">&middot;</span>
+                    {{ current_review.unit_word.unit }}
+                </p>
+
+                <div class="media">
+                    {% with image=current_review.unit_word.image|default:current_review.unit_word.word.image %}
+                        <div class="media__tile{% if not image %} media__tile--empty{% endif %}">
+                            {% if image %}
+                                <img class="media__image"
+                                     src="{{ image.url }}"
+                                     alt="{{ current_review.unit_word.word.word }}">
+                            {% else %}
+                                {% include "icons/image.svg" %}
+                                <span>{% translate "There is no image for this word yet." %}</span>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+                    {% with audio=current_review.unit_word.word.audio %}
+                        <div class="media__tile{% if not audio %} media__tile--empty{% endif %}">
+                            {% if audio %}
+                                <div class="media__audio">
+                                    <button type="button"
+                                            class="media__play"
+                                            aria-controls="review-audio"
+                                            aria-label="{% translate "Play word" %}">
+                                        {% include "icons/play.svg" %}
+                                    </button>
+                                    {# The second waveform is the progress fill, clipped by expert_access.ts #}
+                                    <div class="media__waveform">
+                                        {% include "icons/waveform.svg" %}
+                                        <span class="media__waveform-fill" aria-hidden="true">
+                                            {% include "icons/waveform.svg" %}
+                                        </span>
+                                    </div>
+                                </div>
+                                <audio id="review-audio"
+                                       class="media__player"
+                                       preload="none"
+                                       src="{{ audio.url }}"></audio>
+                            {% else %}
+                                {% include "icons/play.svg" %}
+                                <span>{% translate "There is no audio for this word yet." %}</span>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+                </div>
+
+                <button type="submit" name="review_status" value="APPROVED" class="button button--approve">
+                    {% include "icons/tick.svg" %}
+                    {% translate "Approve" %}
+                </button>
+                <div class="actions__secondary">
+                    <button type="button"
+                            class="button button--outline button--change"
+                            data-review-status="CHANGE_REQUESTED"
+                            data-label="{% translate "Propose change" %}"
+                            data-subtitle="{% translate "The vocabulary item will be returned to an admin for review" %}"
+                            data-submit="{% translate "Propose change" %}"
+                    >
+                        {% include "icons/repeat.svg" %}
+                        {% translate "Request change" %}
+                    </button>
+                    <button type="button"
+                            class="button button--outline button--reject"
+                            data-review-status="REJECTED"
+                            data-label="{% translate "Reject vocabulary item" %}"
+                            data-subtitle="{% translate "The vocabulary item will be rejected" %}"
+                            data-submit="{% translate "Reject" %}">
+                        {% include "icons/cancel.svg" %}
+                        {% translate "Reject" %}
+                    </button>
+                    <button type="button"
+                            class="button button--outline"
+                            data-review-status="CANNOT_BE_ASSESSED"
+                            data-label="{% translate "Mark as not assessable" %}"
+                            data-subtitle="{% translate "The vocabulary item will be marked as not-assessable" %}"
+                            data-submit="{% translate "Mark" %}">
+                        {% include "icons/info.svg" %}
+                        {% translate "Cannot be assessed" %}
+                    </button>
+                </div>
+            </div>
+
+            <button class="button button--skip" name="previous" value="previous">
+                {% translate "Show previous vocabulary item" %}
+            </button>
+            <button class="button button--skip" name="skip" value="skip">
+                {% translate "Show next vocabulary item" %}
+            </button>
+        </form>
+
+        {# The feedback dialog is programmatically controlled via expert_access.ts, #}
+        {# which fills in all the dynamic values (like review_status) #}
+        <dialog id="expert-review-feedback" class="dialog"
+                aria-labelledby="dialog-title">
+            <form method="post" action="">
+                {% csrf_token %}
+                <input hidden name="review_id" value="{{ current_review.pk }}">
+                <input type="hidden" name="review_status" value="">
+                <h2 class="dialog__title" id="dialog-title"></h2>
+                <p class="dialog__hint" id="dialog-hint"></p>
+                <div class="field">
+                    <label class="field__label" for="{{ form.reason.id_for_label }}">
+                        {% translate "Reason" %} <span class="field__required" aria-hidden="true">*</span>
+                    </label>
+                    {{ form.reason }}
+                </div>
+                <div class="field">
+                    <label class="field__label" for="{{ form.comment.id_for_label }}">
+                        {% translate "Comment" %} <span class="field__required" aria-hidden="true">*</span>
+                    </label>
+                    {{ form.comment }}
+                </div>
+                <div class="dialog__actions">
+                    <button type="button" data-dialog-close class="button button--cancel">
+                        {% translate "Cancel" %}
+                    </button>
+                    <button type="submit" class="button button--submit">
+                        <span id="dialog__submit-label"></span>
+                    </button>
+                </div>
+            </form>
+        </dialog>
+    {% else %}
+        <p class="empty">{% translate "Currently there are no words to check" %}</p>
+    {% endif %}
+{% endblock %}

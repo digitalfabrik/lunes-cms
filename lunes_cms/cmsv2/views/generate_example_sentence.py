@@ -4,8 +4,8 @@ from typing import Optional, Union
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
-from django.views.decorators.http import require_POST
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 from openai import OpenAIError
 
 from lunes_cms.cmsv2.areas import visible_unit_word_relations, visible_words

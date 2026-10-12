@@ -226,6 +226,7 @@ class JobAdmin(BaseAdmin):
         "created_by",
         "created_by_user",
         "released",
+        "expert_reviewed",
         "archived",
         "import_csv_link",
     ]
@@ -243,6 +244,7 @@ class JobAdmin(BaseAdmin):
         "area",
         "migrated_status",
         "released",
+        "expert_reviewed",
         "archived",
         "list_icon",
         "created_by",
@@ -250,7 +252,13 @@ class JobAdmin(BaseAdmin):
         "created_at_date",
     ]
     list_display_links = ["name"]
-    list_filter = [ArchivedFilter, "released", MigratedFilter, ("area", AreaListFilter)]
+    list_filter = [
+        ArchivedFilter,
+        "released",
+        "expert_reviewed",
+        MigratedFilter,
+        ("area", AreaListFilter),
+    ]
     list_select_related = ["area", "created_by", "created_by_user"]
     actions = ["export_to_csv", "duplicate_jobs", "archive_jobs", "restore_jobs"]
     list_per_page = 25
@@ -509,6 +517,7 @@ class JobAdmin(BaseAdmin):
             job.pk = None
             job.v1_id = None
             job.released = False
+            job.expert_reviewed = False
             job.archived = False
             new_label = _("New")
             job.name = f"{job.name} ({new_label})"

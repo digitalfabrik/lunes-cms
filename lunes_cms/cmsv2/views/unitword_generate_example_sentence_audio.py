@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-
 import os
 import uuid
 
@@ -17,7 +16,11 @@ from django.views.decorators.http import require_POST
 from lunes_cms.cmsv2.areas import visible_unit_word_relations
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
-from lunes_cms.cmsv2.utils import OpenAIConfigurationError, safe_temp_path
+from lunes_cms.cmsv2.utils import (
+    OpenAIConfigurationError,
+    replace_file,
+    safe_temp_path,
+)
 from lunes_cms.core import settings
 
 from .decorators import json_not_found, require_any_permission_json
@@ -149,12 +152,7 @@ def unitword_store_generated_example_sentence_audio_permanently(
             content_file = ContentFile(
                 f.read(), name=f"{word_text}_{unit_text}_example_sentence.mp3"
             )
-            # content_file.name is always the literal set above; ContentFile.name
-            # is typed Optional[str] only because the base File class allows it.
-            assert content_file.name is not None
-            unitword_instance.example_sentence_audio.save(
-                content_file.name, content_file
-            )
+            replace_file(unitword_instance.example_sentence_audio, content_file)
         unitword_instance.example_sentence_audio_regenerated = True
         unitword_instance.save()
 

@@ -55,7 +55,9 @@ OPENAI_TTS_LOUDNESS_LUFS = float(
     os.environ.get("LUNES_CMS_OPENAI_TTS_LOUDNESS_LUFS", "-16.0")
 )
 #: OpenAI model used for word image generation
-OPENAI_IMAGE_MODEL = os.environ.get("LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2")
+OPENAI_IMAGE_MODEL = os.environ.get(
+    "LUNES_CMS_OPENAI_IMAGE_MODEL", "gpt-image-2.5-flare"
+)
 
 #: OpenAI image quality tier (low/medium/high)
 OPENAI_IMAGE_QUALITY = os.environ.get("LUNES_CMS_OPENAI_IMAGE_QUALITY", "low")
@@ -140,6 +142,7 @@ INSTALLED_APPS = [
     "lunes_cms.cmsv2",
     "lunes_cms.help",
     "lunes_cms.analytics",
+    "lunes_cms.expert_access",
     # Django jazzmin needs to be installed before Django admin
     "jazzmin",
     # Installed Django apps
@@ -225,8 +228,7 @@ WSGI_APPLICATION = "lunes_cms.core.wsgi.application"
 LOGIN_URL = "/admin/login/"
 
 #: The URL or named URL pattern where requests are redirected after login when the
-#: LoginView doesn't get a next GET parameter. (see :setting:`django:LOGIN_REDIRECT_URL`).
-LOGIN_REDIRECT_URL = "/admin/"
+LOGIN_REDIRECT_URL = "/"
 
 
 ############
@@ -645,12 +647,20 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Job": "fas fa-briefcase",
         "cmsv2.Unit": "fas fa-book",
         "cmsv2.Word": "fab fa-amilia",
+        "cmsv2.Review": "fas fa-user-check",
         "cmsv2.Feedback": "fas fa-comment",
     },
     "site_version": _cms_version,
     # Render the Analytics app section directly below Dashboard. Jazzmin's
     # sidebar lists apps in this order; anything not mentioned trails after.
     "order_with_respect_to": ["cmsv2", "analytics", "auth", "cms"],
+    "topmenu_links": [
+        {
+            "name": _("Review"),
+            "url": "expert_access:review",
+            "permissions": ["cmsv2.can_review"],
+        }
+    ],
 }
 
 #: UI tweaks for Django Jazzmin

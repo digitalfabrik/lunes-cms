@@ -1,13 +1,10 @@
 from __future__ import annotations
 
 import os
-from typing import Any
 
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import AnonymousUser, User
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
@@ -106,19 +103,40 @@ class ReviewStatus(models.TextChoices):
     CANNOT_BE_ASSESSED = "CANNOT_BE_ASSESSED", _("Cannot be assessed")
 
 
+class ChangeRequestReason(models.TextChoices):
+    """Possible reasons a reviewer can give when requesting a change for a word."""
+
+    CONTENT_ERROR = "CONTENT_ERROR", _("Content error")
+    MISSING_INFORMATION = "MISSING_INFORMATION", _("Missing information")
+    WRONG_WORD = "WRONG_WORD", _("Wrong word")
+    BAD_IMAGE_QUALITY = "BAD_IMAGE_QUALITY", _("Bad image quality")
+    BAD_AUDIO_QUALITY = "BAD_AUDIO_QUALITY", _("Bad audio quality")
+    OTHER = "OTHER", _("Other")
+
+
+class RejectionReason(models.TextChoices):
+    """Possible reasons a reviewer can give when rejecting a word."""
+
+    CONTENT_ERROR = "CONTENT_ERROR", _("Content error")
+    NOT_RELEVANT = "NOT_RELEVANT", _("Word is not relevant")
+    DUPLICATE = "DUPLICATE", _("Duplicate")
+    OTHER = "OTHER", _("Other")
+
+
+class CannotBeAssessedReason(models.TextChoices):
+    """Possible reasons a reviewer can give when a word cannot be assessed."""
+
+    OUTSIDE_EXPERTISE = "OUTSIDE_EXPERTISE", _("Outside my area of expertise")
+    MISSING_CONTEXT = "MISSING_CONTEXT", _("Not enough context")
+    WORD_TOO_GENERIC = "WORD_TOO_GENERIC", _("The word is too generic")
+    OTHER = "OTHER", _("Other")
+
+
 class ProgressStatus(models.TextChoices):
     """Possible states for the progress of a review"""
 
     IN_REVIEW = "IN_REVIEW", _("In review")
     COMPLETED = "COMPLETED", _("Completed")
-
-
-class Roles:
-    """Possible user roles"""
-
-    DEFAULT_GROUP_NAME = None
-    ADMIN_GROUP = "Lunes"
-    REVIEWER_GROUP = _("Reviewer")
 
 
 def convert_image_to_webp(image_field: ImageFieldFile) -> bool:
@@ -215,30 +233,38 @@ def upload_area_logos(_: models.Model, filename: str) -> str:
     return create_resource_path("areas", filename)
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(instance: User, created: bool, **_kwargs: Any) -> bool:
-    """
-    Automatically adds a group when creating a new user
-    if group name given in Roles.DEFAULT_GROUP_NAME
-
-    :param instance: user that eventually will be added to a new group
-    :type instance: django.contrib.auth.models
-    :param created: checks if User is creator
-    :type created: bool
-
-    :return: False if User is not creator and not part of Roles.DEFAULT_GROUP_NAME
-    :rtype: bool
-    """
-    if Roles.DEFAULT_GROUP_NAME:
-        default_group = Group.objects.filter(name=Roles.DEFAULT_GROUP_NAME)
-        if not created or not default_group:
-            return False
-        instance.groups.add(Group.objects.get(name=Roles.DEFAULT_GROUP_NAME))
-    return True
-
-
-def is_reviewer(user: User) -> bool:
+def is_reviewer(user: User | AnonymousUser) -> bool:
     """
     Check if the user is a reviewer.
+
+    :param user: the user to check
+    :return: whether the user has the review permission
     """
-    return user.groups.filter(name=Roles.ADMIN_GROUP).exists()
+    return user.has_perm("cmsv2.can_review")
+
+
+def get_color_by_review_status(review_status: str) -> str:
+    """
+    Get css class name for review status
+    """
+    if review_status == ReviewStatus.CHANGE_REQUESTED:
+        return "bg-warning"
+    if review_status == ReviewStatus.APPROVED:
+        return "bg-success"
+    if review_status == ReviewStatus.REJECTED:
+        return "bg-danger"
+    if review_status == ReviewStatus.CANNOT_BE_ASSESSED:
+        return "bg-secondary"
+    return "bg-primary"
+
+
+def get_initials_of_user(user: User) -> str:
+    """
+    Get the initials of a user
+    """
+    full_name_split = user.get_full_name().split()
+    if not full_name_split:
+        return user.username[:1]
+    first_initial = full_name_split[0][0]
+    last_initial = full_name_split[-1][0] if len(full_name_split) > 1 else ""
+    return first_initial[0] + last_initial

@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0038_create_main_app_area_and_make_required"),
+        ("cmsv2", "0040_add_reviewer_view"),
     ]
 
     operations = [
