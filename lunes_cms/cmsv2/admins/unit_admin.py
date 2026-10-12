@@ -5,7 +5,7 @@ from typing import Any, Iterable, TYPE_CHECKING
 
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
@@ -18,21 +18,21 @@ from django.utils.translation import gettext_lazy as _
 from lunes_cms.cmsv2.admins.area_filters import JobListFilter
 from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.areas import (
-    area_of_unit,
+    move_unit_to_area,
     scope_unit_word_relations,
     scope_units,
     validate_relation_area,
+    validate_unit_area,
     validate_unit_jobs,
     visible_jobs,
 )
-from lunes_cms.cmsv2.models import Job
-from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 
 if TYPE_CHECKING:
     from django.contrib.admin.options import ActionLocation
     from django.db.models import ManyToManyField
+    from django.forms import BaseFormSet
     from django.utils.functional import _StrOrPromise
 
 
@@ -49,19 +49,31 @@ class UnitAdminForm(ModelForm):
         model = Unit
         fields = "__all__"
 
-    def clean_jobs(self) -> QuerySet[Job]:
+    def clean(self) -> dict[str, Any]:
         """
-        Reject job assignments that would mix areas.
+        Reject job assignments and area changes that would mix areas.
 
-        A unit of a job that belongs to an area must not be assigned to any
-        other job, and it must not carry words that are already used elsewhere.
+        A unit can only be assigned to jobs of its own area, and a unit whose
+        words are used in other units as well cannot be moved into another
+        area. The area field is read-only for some users (see
+        :class:`~lunes_cms.cmsv2.admins.unit_admin.UnitAdmin`), in which case
+        the unit keeps its current area.
         """
-        jobs = self.cleaned_data["jobs"]
-        validate_unit_jobs(self.instance, jobs)
-        # The word inline is validated after this form, but before the jobs are
-        # written, so it can only learn the area of the unit from here.
-        self.instance.pending_jobs = list(jobs)
-        return jobs
+        super().clean()
+        cleaned_data = self.cleaned_data
+        area = cleaned_data.get("area", self.instance.area)
+        if "area" in self.changed_data:
+            try:
+                validate_unit_area(self.instance, area)
+            except ValidationError as error:
+                self.add_error("area", error)
+        jobs = cleaned_data.get("jobs")
+        if jobs is not None:
+            try:
+                validate_unit_jobs(jobs, area)
+            except ValidationError as error:
+                self.add_error("jobs", error)
+        return cleaned_data
 
 
 class WordInlineFormSet(BaseInlineFormSet):
@@ -69,13 +81,16 @@ class WordInlineFormSet(BaseInlineFormSet):
     Formset that keeps the words of a unit inside a single area.
 
     The words of a unit have to belong to the area of that unit, so a word of
-    the main app cannot be added to a unit of an area and vice versa. New rows
-    have no unit yet while they are validated, which is why the check cannot be
-    left to ``UnitWordRelation.clean()`` alone.
+    the main app cannot be added to a unit of an area and vice versa. While a
+    unit is being added, its rows have no unit yet, so the check cannot be
+    left to ``UnitWordRelation.clean()``, which takes over once the unit is
+    saved.
     """
 
     def clean(self) -> None:
         super().clean()
+        if self.instance.pk:
+            return
         for form in self.forms:
             if not form.cleaned_data or form.cleaned_data.get("DELETE"):
                 continue
@@ -188,6 +203,7 @@ class UnitAdmin(BaseAdmin):
     form = UnitAdminForm
     fields = [
         "title",
+        "area",
         "migrated_status",
         "description",
         "icon",
@@ -213,7 +229,7 @@ class UnitAdmin(BaseAdmin):
     ]
     list_display_links = ["title"]
     list_filter = ["released", MigratedFilter, ("jobs", JobListFilter)]
-    list_select_related = ["created_by", "created_by_user"]
+    list_select_related = ["area", "created_by", "created_by_user"]
     list_per_page = 25
     actions = ["bulk_release", "assign_to_user"]
 
@@ -236,7 +252,7 @@ class UnitAdmin(BaseAdmin):
     def get_queryset(self, request: HttpRequest) -> QuerySet[Unit]:
         """Restrict the units to the area of the user and prefetch their jobs"""
         return scope_units(
-            super().get_queryset(request).prefetch_related("jobs__area"), request.user
+            super().get_queryset(request).prefetch_related("jobs"), request.user
         )
 
     def get_actions(  # pylint: disable=unused-argument
@@ -267,19 +283,20 @@ class UnitAdmin(BaseAdmin):
             kwargs["queryset"] = visible_jobs(request.user).order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
-    def area(self, obj: Unit) -> Area | None:
+    def save_related(
+        self,
+        request: HttpRequest,
+        form: "ModelForm[Unit]",
+        formsets: "list[BaseFormSet[Any]]",
+        change: bool,
+    ) -> None:
         """
-        The area of the unit, derived from its job.
-
-        Args:
-            obj: The unit object
-
-        Returns:
-            Area or None: The area of the unit, or None for main app content
+        Move the words of a unit along when the unit was moved into another
+        area, see :func:`~lunes_cms.cmsv2.areas.move_unit_to_area`.
         """
-        return area_of_unit(obj)
-
-    area.short_description = _("area")  # type: ignore[attr-defined]
+        super().save_related(request, form, formsets, change)
+        if change and "area" in form.changed_data:
+            move_unit_to_area(form.instance)
 
     @admin.action(description=_("Release all selected units"))
     def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:

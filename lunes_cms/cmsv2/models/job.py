@@ -15,12 +15,12 @@ from .static import convert_umlaute_images
 
 def default_area_id() -> int:
     """
-    The primary key of the main app area, the default for a job that is
-    created without specifying one.
+    The primary key of the main app area, the default for a job, unit or word
+    that is created without specifying one.
 
-    Code that is not about area scoping itself — a management command, a CSV
-    import, a script — should not have to think about areas at all, so a job
-    it creates lands in the shared main app catalog unless told otherwise.
+    Code that is not about area scoping itself — a management command, a
+    script — should not have to think about areas at all, so content it
+    creates lands in the shared main app catalog unless told otherwise.
 
     :return: The primary key of the one area with ``is_main_app=True``
     """

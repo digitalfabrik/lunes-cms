@@ -3,6 +3,7 @@ from __future__ import absolute_import, annotations, unicode_literals
 from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
 from django.utils.functional import lazy
@@ -10,11 +11,7 @@ from django.utils.html import format_html
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.cmsv2.areas import (
-    area_conflict_message,
-    area_of_unit,
-    find_area_conflict,
-)
+from lunes_cms.cmsv2.areas import validate_relation_area
 from lunes_cms.cmsv2.models import AlternativeWord, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
@@ -133,34 +130,25 @@ class UnitInlineFormSet(BaseInlineFormSet):
     """
     Formset that keeps a word inside a single area.
 
-    An already-saved row is checked against the word's other saved units by
-    ``UnitWordRelation.clean()``. Two *new* rows are never each other's
-    "already-saved" unit while validated, so this compares them too.
+    The units of a word have to belong to the area of that word. While a word
+    is being added, its rows have no word yet, so the check cannot be left to
+    ``UnitWordRelation.clean()``, which takes over once the word is saved.
     """
 
     def clean(self) -> None:
         super().clean()
-        new_rows = [
-            (form, form.cleaned_data["unit"])
-            for form in self.forms
-            if form.cleaned_data
-            and not form.cleaned_data.get("DELETE")
-            and not form.instance.pk
-            and form.cleaned_data.get("unit")
-        ]
-        conflict = find_area_conflict([unit for _form, unit in new_rows])
-        if conflict is None:
+        if self.instance.pk:
             return
-        existing_unit, new_unit = conflict
-        conflicting_form = next(
-            form for form, unit in new_rows if unit.pk == new_unit.pk
-        )
-        conflicting_form.add_error(
-            "unit",
-            area_conflict_message(
-                self.instance, area_of_unit(existing_unit), area_of_unit(new_unit)
-            ),
-        )
+        for form in self.forms:
+            if not form.cleaned_data or form.cleaned_data.get("DELETE"):
+                continue
+            unit = form.cleaned_data.get("unit")
+            if not unit:
+                continue
+            try:
+                validate_relation_area(unit, self.instance)
+            except ValidationError as error:
+                form.add_error("unit", error)
 
 
 class UnitInline(admin.TabularInline):

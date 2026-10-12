@@ -20,6 +20,7 @@ from tablib import Dataset
 
 from ..areas import (
     administered_areas,
+    move_job_to_area,
     scope_jobs,
     validate_job_area,
     validate_unit_jobs,
@@ -34,7 +35,7 @@ if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
     from django.contrib.admin.views.main import ChangeList
     from django.db.models import Field, ForeignKey, Model
-    from django.forms import ModelChoiceField
+    from django.forms import BaseFormSet, ModelChoiceField
     from django.utils.functional import _StrOrPromise
 
 
@@ -53,11 +54,12 @@ class JobAdminForm(ModelForm):
 
     def clean_area(self) -> Area | None:
         """
-        Reject moving a job into an area while it shares content.
+        Reject moving a job into another area while it shares content.
 
-        A job whose units belong to other jobs as well, or whose words are used
-        outside of it, would drag main app content into the area. Untangling
-        that is a content decision, so the save is refused instead.
+        The units and words of a job move along with it, so a job whose units
+        belong to other jobs as well, or whose words are used outside of it,
+        would drag that content into the area. Untangling that is a content
+        decision, so the save is refused instead.
         """
         area = self.cleaned_data["area"]
         if area != self.instance.area:
@@ -69,10 +71,14 @@ class UnitJobInlineFormSet(BaseInlineFormSet):
     """
     Formset that keeps the units of a job inside a single area.
 
-    A unit of a job that belongs to an area must not be assigned to any other
-    job, so adding an already used unit to such a job has to be rejected here —
-    the constraint spans the many-to-many relation and can neither be expressed
-    in the database nor checked in ``Unit.clean()``.
+    A unit can only be assigned to jobs of its own area, and a unit of a job
+    that belongs to a partner area must not be assigned to any other job, so
+    adding such a unit has to be rejected here — the constraint spans the
+    many-to-many relation and can neither be expressed in the database nor
+    checked in ``Unit.clean()``. Rows that were saved already and still link
+    the same unit are not checked again: when the job is moved into another
+    area, its units are moved along (see
+    :func:`~lunes_cms.cmsv2.areas.move_job_to_area`).
     """
 
     def clean(self) -> None:
@@ -84,10 +90,12 @@ class UnitJobInlineFormSet(BaseInlineFormSet):
             unit = form.cleaned_data.get("unit")
             if not unit:
                 continue
+            if form.instance.pk and "unit" not in form.changed_data:
+                continue
             other_jobs = (
                 list(unit.jobs.exclude(pk=job.pk)) if job.pk else list(unit.jobs.all())
             )
-            validate_unit_jobs(unit, [job, *other_jobs])
+            validate_unit_jobs([job, *other_jobs], unit.area)
 
 
 class UnitInline(admin.TabularInline):
@@ -403,6 +411,21 @@ class JobAdmin(BaseAdmin):
             if len(areas) <= 1 and own_area is not None:
                 obj.area = own_area
         super().save_model(request, obj, form, change)
+
+    def save_related(
+        self,
+        request: HttpRequest,
+        form: "ModelForm[Job]",
+        formsets: "list[BaseFormSet[Any]]",
+        change: bool,
+    ) -> None:
+        """
+        Move the units and words of a job along when the job was moved into
+        another area, see :func:`~lunes_cms.cmsv2.areas.move_job_to_area`.
+        """
+        super().save_related(request, form, formsets, change)
+        if change and "area" in form.changed_data:
+            move_job_to_area(form.instance)
 
     def related_units(self, obj: Job) -> str:
         """

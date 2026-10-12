@@ -20,6 +20,8 @@ from ..validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
+from .area import Area
+from .job import default_area_id
 from .static import (
     CheckStatus,
     convert_image_to_webp,
@@ -170,6 +172,18 @@ class Word(models.Model):
         verbose_name=_("image source"),
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
+    area = models.ForeignKey(
+        Area,
+        on_delete=models.PROTECT,
+        null=True,
+        default=default_area_id,
+        related_name="words",
+        verbose_name=_("area"),
+        help_text=_(
+            "Words of an area are only visible to the administrators of that "
+            "area. A word can only be used in units of its own area."
+        ),
+    )
 
     def clean(self) -> None:
         """Validate changed audio with ffmpeg before saving to prevent storing invalid audio."""

@@ -18,7 +18,8 @@ from ..validators import (
     validate_file_size,
     validate_multiple_extensions,
 )
-from .job import Job
+from .area import Area
+from .job import default_area_id, Job
 from .static import (
     CheckStatus,
     convert_image_to_webp,
@@ -119,15 +120,27 @@ class UnitWordRelation(models.Model):
 
         Only relations whose unit and word are both known can be checked; a
         row that is still being created in an inline has no unit yet, so its
-        formset does the check instead.
+        formset does the check instead. A relation that is saved already and
+        links the same unit and word as before is not checked again: when
+        its unit is moved into another area, its word is moved along (see
+        :func:`~lunes_cms.cmsv2.areas.move_unit_to_area`), so the word may
+        still belong to the old area while the unit is validated.
         """
         super().clean()
-        if self.unit_id and self.word_id:
-            # Imported here because `areas` imports the models package
-            # pylint: disable=import-outside-toplevel
-            from ..areas import validate_relation_area
+        if not self.unit_id or not self.word_id:
+            return
+        if (
+            self.pk is not None
+            and UnitWordRelation.objects.filter(
+                pk=self.pk, unit_id=self.unit_id, word_id=self.word_id
+            ).exists()
+        ):
+            return
+        # Imported here because `areas` imports the models package
+        # pylint: disable=import-outside-toplevel
+        from ..areas import validate_relation_area
 
-            validate_relation_area(self.unit, self.word)
+        validate_relation_area(self.unit, self.word)
 
     def save(self, *args: Any, image_source: str | None = None, **kwargs: Any) -> None:
         """
@@ -390,15 +403,22 @@ class Unit(models.Model):
         upload_to=convert_umlaute_images, blank=True, verbose_name=_("icon")
     )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
+    area = models.ForeignKey(
+        Area,
+        on_delete=models.PROTECT,
+        null=True,
+        default=default_area_id,
+        related_name="units",
+        verbose_name=_("area"),
+        help_text=_(
+            "Units of an area are only visible to the administrators of that "
+            "area. A unit can only be assigned to jobs of its own area."
+        ),
+    )
     jobs = models.ManyToManyField(Job, related_name="units", verbose_name=_("job"))
     words: "models.ManyToManyField[Word, UnitWordRelation]" = models.ManyToManyField(
         Word, through="UnitWordRelation", related_name="units", verbose_name=_("word")
     )
-    #: The jobs this unit is about to be assigned to. The admin form puts them
-    #: here while the unit is validated, because the area of a unit is derived
-    #: from its jobs and those are only written after the inlines are checked
-    #: (see :func:`lunes_cms.cmsv2.areas.pending_area_of_unit`).
-    pending_jobs: "list[Job] | None" = None
     created_by = models.ForeignKey(
         Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_("group")
     )

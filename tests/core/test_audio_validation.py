@@ -67,11 +67,11 @@ class TestDocumentClean:
 
 class TestWordClean:
     def test_passes_when_no_audio(self) -> None:
-        word = Word(word="Hammer", singular_article=1)
+        word = Word(word="Hammer", singular_article=1, area=None)
         word.clean()
 
     def test_calls_validation_for_new_upload(self) -> None:
-        word = Word(word="Hammer", singular_article=1)
+        word = Word(word="Hammer", singular_article=1, area=None)
         word.audio = ContentFile(b"fake-mp3", name="test.mp3")
 
         with mock.patch(
@@ -82,7 +82,7 @@ class TestWordClean:
         mock_validate.assert_called_once()
 
     def test_raises_for_invalid_audio(self) -> None:
-        word = Word(word="Hammer", singular_article=1)
+        word = Word(word="Hammer", singular_article=1, area=None)
         word.audio = ContentFile(b"not-audio", name="test.mp3")
 
         with mock.patch(

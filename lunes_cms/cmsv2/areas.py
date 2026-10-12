@@ -1,13 +1,15 @@
 """
 Area scoping and the invariants that keep the content of an area separate.
 
-The area of a job is stored on :class:`~lunes_cms.cmsv2.models.job.Job`, every
-other area membership is derived from it: a unit belongs to the area of its job
-and a word to the area of the units it is linked to. Every job always belongs
-to an area — the main app catalog is not the absence of an area but the one
-area with ``is_main_app=True`` — so no code here needs a separate "no area"
-case, see #1016. This module is the single place that knows how the
-derivation works, so admins, views and the API can share it.
+Jobs, units and words each store their area in a foreign key of their own, so
+content belongs to an area from the moment it is created, whether or not it is
+linked to anything yet, see #1061. The main app catalog is not the absence of
+an area but the one area with ``is_main_app=True``, see #1016. Only units and
+words that could not be assigned an area automatically have none, and those
+are left to the superusers to assign. The relations have to stay inside an
+area: a unit can only be assigned to jobs of its own area and a word can only
+be used in units of its own area. This module is the single place that knows
+these rules, so admins, views and the API can share them.
 
 This module exposes three helper families: ``scope_*(queryset, user)`` narrows a
 queryset the caller already holds, ``visible_*(user)`` narrows the whole table
@@ -82,10 +84,8 @@ def scope_units(queryset: "QuerySet[Unit]", user: "User") -> "QuerySet[Unit]":
     """
     Restrict a unit queryset to what the given user may see.
 
-    The area of a unit is the area of its job, see :func:`scope_jobs` for the
-    rules. A unit that is not linked to any job yet has no derivable area, so
-    it stays visible only to the area administrator who created it — the
-    same rule :func:`scope_words` applies to an unlinked word.
+    The same rules as :func:`scope_jobs` apply. A unit without an area is only
+    visible to superusers, who have to assign it to one.
 
     :param queryset: The unit queryset to restrict
     :param user: The user the queryset is restricted to
@@ -93,23 +93,15 @@ def scope_units(queryset: "QuerySet[Unit]", user: "User") -> "QuerySet[Unit]":
     """
     if getattr(user, "is_superuser", False):
         return queryset
-    if not user.is_authenticated:
-        return queryset.none()
-    areas = administered_areas(user)
-    scoped = queryset.filter(jobs__area__in=areas)
-    if areas.exists():
-        scoped |= queryset.filter(jobs__isnull=True, created_by_user__pk=user.pk)
-    return scoped.distinct()
+    return queryset.filter(area__in=administered_areas(user))
 
 
 def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
     """
     Restrict a word queryset to what the given user may see.
 
-    The area of a word is the area of the units it is linked to. A word that is
-    not linked to any unit yet has no derivable area, so it stays visible only
-    to the area administrator who created it — otherwise a word created in the
-    add popup of a unit that was then abandoned would be lost to its creator.
+    The same rules as :func:`scope_jobs` apply. A word without an area is only
+    visible to superusers, who have to assign it to one.
 
     :param queryset: The word queryset to restrict
     :param user: The user the queryset is restricted to
@@ -117,13 +109,7 @@ def scope_words(queryset: "QuerySet[Word]", user: "User") -> "QuerySet[Word]":
     """
     if getattr(user, "is_superuser", False):
         return queryset
-    if not user.is_authenticated:
-        return queryset.none()
-    areas = administered_areas(user)
-    scoped = queryset.filter(units__jobs__area__in=areas)
-    if areas.exists():
-        scoped |= queryset.filter(units__isnull=True, created_by_user__pk=user.pk)
-    return scoped.distinct()
+    return queryset.filter(area__in=administered_areas(user))
 
 
 def scope_unit_word_relations(
@@ -141,10 +127,7 @@ def scope_unit_word_relations(
     """
     if getattr(user, "is_superuser", False):
         return queryset
-    # pylint: disable=import-outside-toplevel
-    from .models import Unit
-
-    return queryset.filter(unit__in=scope_units(Unit.objects.all(), user))
+    return queryset.filter(unit__area__in=administered_areas(user))
 
 
 def scope_alternative_words(
@@ -162,10 +145,7 @@ def scope_alternative_words(
     """
     if getattr(user, "is_superuser", False):
         return queryset
-    # pylint: disable=import-outside-toplevel
-    from .models import Word
-
-    return queryset.filter(word__in=scope_words(Word.objects.all(), user))
+    return queryset.filter(word__area__in=administered_areas(user))
 
 
 def visible_jobs(user: "User") -> "QuerySet[Job]":
@@ -237,140 +217,6 @@ def visible_alternative_words(user: "User") -> "QuerySet[AlternativeWord]":
     return scope_alternative_words(AlternativeWord.objects.all(), user)
 
 
-def area_of_unit(unit: "Unit") -> Area | None:
-    """
-    The area a unit belongs to, derived from its job.
-
-    If the caller warmed a ``prefetch_related`` cache for ``jobs`` (e.g.
-    ``jobs__area`` on a changelist queryset, see
-    :meth:`~lunes_cms.cmsv2.admins.unit_admin.UnitAdmin.get_queryset`), this
-    reads ``unit.jobs.all()`` from it: chaining ``.select_related()``/
-    ``.first()`` onto a related manager would ignore that cache and issue a
-    fresh query per unit, which is the query cost fixed in #1007. Without
-    such a cache, a single query joining the area is cheaper than loading
-    all jobs and then the area separately.
-
-    :param unit: The unit in question
-    :return: The area of the unit, or ``None`` if it belongs to no job yet
-    """
-    if not unit.pk:
-        return None
-    if "jobs" in getattr(unit, "_prefetched_objects_cache", {}):
-        job = next(iter(unit.jobs.all()), None)
-    else:
-        job = unit.jobs.select_related("area").first()
-    return job.area if job else None
-
-
-def _exclusive_area(area: Area | None) -> Area | None:
-    """
-    The area content is tied to *exclusively*, for the invariants below.
-
-    The main app catalog is shared freely between its own many jobs, units
-    and words — unlike a partner area, it owns nothing exclusively — so it
-    counts the same as "no area" here, the same as it did before every job
-    was required to have one, see #1016.
-
-    :param area: The area in question
-    :return: ``area`` itself, or ``None`` for the main app area or no area
-    """
-    if area is None or area.is_main_app:
-        return None
-    return area
-
-
-def pending_area_of_unit(unit: "Unit") -> Area | None:
-    """
-    The exclusive area a unit is about to belong to.
-
-    While a unit is being added or its jobs are being changed, the jobs of the
-    unit are not written yet, so the area cannot be read from the database.
-    :class:`~lunes_cms.cmsv2.admins.unit_admin.UnitAdminForm` puts the jobs it
-    has validated on the instance, and this function prefers them over the
-    stored ones.
-
-    :param unit: The unit in question
-    :return: The exclusive area the unit will belong to, or ``None`` (see
-        :func:`_exclusive_area`)
-    """
-    jobs = getattr(unit, "pending_jobs", None)
-    if jobs is None:
-        return _exclusive_area(area_of_unit(unit))
-    areas = {_exclusive_area(job.area) for job in jobs if job.area_id} - {None}
-    return next(iter(areas), None)
-
-
-def area_of_word(word: "Word") -> Area | None:
-    """
-    The area a word belongs to, derived from the units it is linked to.
-
-    Reads ``word.units.all()`` and filters in Python rather than chaining
-    ``.filter(jobs__isnull=False)`` onto it, for the same prefetch-cache
-    reason as :func:`area_of_unit`, which this also relies on to resolve
-    each candidate unit's own area without a query of its own.
-
-    :param word: The word in question
-    :return: The area of the word, or ``None`` if it belongs to no unit yet
-    """
-    if not word.pk:
-        return None
-    for unit in word.units.all():
-        area = area_of_unit(unit)
-        if area is not None:
-            return area
-    return None
-
-
-def _other_units_of_word(word: "Word", unit: "Unit") -> list["Unit"]:
-    """
-    All units of a word, except the given unit.
-
-    Filters ``unit.pk`` out in Python rather than with ``.exclude()``, for
-    the same prefetch-cache reason as :func:`area_of_unit`.
-
-    :param word: The word whose units are inspected
-    :param unit: The unit to leave out
-    :return: The other units
-    """
-    if not word.pk:
-        return []
-    return [other for other in word.units.all() if not unit.pk or other.pk != unit.pk]
-
-
-def _other_areas_of_word(word: "Word", unit: "Unit") -> set[Area | None]:
-    """
-    The exclusive areas of all units of a word, except the given unit.
-
-    :param word: The word whose units are inspected
-    :param unit: The unit to leave out
-    :return: The set of exclusive areas (see :func:`_exclusive_area`)
-    """
-    return {
-        _exclusive_area(area_of_unit(other_unit))
-        for other_unit in _other_units_of_word(word, unit)
-    }
-
-
-def _display_area_of_unit(unit: "Unit") -> Area | None:
-    """
-    A concrete area to name in an error message for the given unit.
-
-    Prefers the job(s) the unit is about to be assigned (see
-    :func:`pending_area_of_unit`) over what is already saved, so a message
-    raised while a unit is still being created names the area it is about to
-    join rather than reporting it as unassigned.
-
-    :param unit: The unit in question
-    :return: The area, or ``None`` if the unit has (pending or saved) no job
-    """
-    jobs = getattr(unit, "pending_jobs", None)
-    if jobs:
-        job = next((job for job in jobs if job.area_id), None)
-        if job:
-            return job.area
-    return area_of_unit(unit)
-
-
 def area_conflict_message(
     word: "Word", existing_area: Area | None, new_area: Area | None
 ) -> "_StrOrPromise":
@@ -392,43 +238,92 @@ def area_conflict_message(
     }
 
 
-def validate_unit_jobs(unit: "Unit", jobs: "Iterable[Job]") -> None:
+def validate_unit_jobs(jobs: "Iterable[Job]", area: Area | None) -> None:
     """
-    Check that the given jobs may be assigned to the given unit.
+    Check that the given jobs may be assigned to a unit of the given area.
 
-    A unit of a job that belongs to an area must not be assigned to any other
-    job, and moving a unit into an area must not drag along words that are
-    already used in another area.
+    A unit can only be assigned to jobs of its own area. A unit of a partner
+    area must not be assigned to more than one job at all, only the units of
+    the main app catalog are shared between its jobs.
 
-    :param unit: The unit that is about to be saved
     :param jobs: The jobs the unit is about to be assigned to
+    :param area: The area the unit is about to belong to
     :raises ~django.core.exceptions.ValidationError: If the assignment would
                                                      mix areas
     """
     jobs = list(jobs)
-    areas = {_exclusive_area(job.area) for job in jobs if job.area_id} - {None}
-    if areas and len(jobs) > 1:
+    for job in jobs:
+        if job.area_id != (area.pk if area else None):
+            raise ValidationError(
+                _(
+                    'The job "%(job)s" belongs to area "%(job_area)s", but this '
+                    'unit belongs to area "%(unit_area)s".'
+                )
+                % {
+                    "job": job,
+                    "job_area": job.area,
+                    "unit_area": area or _("no area"),
+                }
+            )
+    if area is not None and not area.is_main_app and len(jobs) > 1:
         raise ValidationError(
             _(
                 "A unit of a job that belongs to an area must not be assigned "
                 "to any other job."
             )
         )
-    target_area = next(iter(areas), None)
+
+
+def validate_unit_area(unit: "Unit", area: Area | None) -> None:
+    """
+    Check that a unit may be moved into the given area.
+
+    The words of a unit move along with it (see :func:`move_unit_to_area`),
+    so a unit whose words are used in other units as well cannot be moved.
+    Untangling that content is a manual decision and is left to the content
+    managers. Whether the jobs of the unit fit the new area is checked by
+    :func:`validate_unit_jobs`.
+
+    :param unit: The unit that is about to be saved
+    :param area: The area the unit is about to be moved into
+    :raises ~django.core.exceptions.ValidationError: If the unit shares words
+    """
     if not unit.pk:
         return
-    # Prefetched so that _other_areas_of_word's word.units.all() and the
-    # area_of_unit() call on each of those units (including the job's area)
-    # read from cache instead of running a query per word (and per unit of
-    # that word), see #1007.
-    for word in unit.words.prefetch_related("units__jobs__area"):
-        if any(area != target_area for area in _other_areas_of_word(word, unit)):
+    for word in unit.words.prefetch_related("units"):
+        if any(other.pk != unit.pk for other in word.units.all()):
             raise ValidationError(
                 _(
-                    'The word "%(word)s" is already used in another area, so this '
-                    "unit cannot be assigned to these jobs."
+                    'The word "%(word)s" is also used in other units, so this '
+                    'unit cannot be moved into area "%(area)s".'
                 )
-                % {"word": word}
+                % {"word": word, "area": area or _("no area")}
+            )
+
+
+def validate_word_area(word: "Word", area: Area | None) -> None:
+    """
+    Check that a word may be moved into the given area.
+
+    A word can only be used in units of its own area, so a word that is
+    already used in units cannot be moved on its own — its units have to be
+    moved instead, which takes the word along (see :func:`move_unit_to_area`).
+
+    :param word: The word that is about to be saved
+    :param area: The area the word is about to be moved into
+    :raises ~django.core.exceptions.ValidationError: If the word is used in a
+                                                     unit of another area
+    """
+    if not word.pk:
+        return
+    for unit in word.units.select_related("area"):
+        if unit.area_id != (area.pk if area else None):
+            raise ValidationError(
+                _(
+                    'The word is used in the unit "%(unit)s" of area '
+                    '"%(unit_area)s" and therefore has to belong to that area.'
+                )
+                % {"unit": unit, "unit_area": unit.area or _("no area")}
             )
 
 
@@ -436,18 +331,17 @@ def validate_job_area(job: "Job", area: Area | None) -> None:
     """
     Check that a job may be moved into the given area.
 
-    Everything below a job of a partner area belongs to that area alone, so a
-    job whose units are shared with other jobs, or whose words are used
-    outside of those units, cannot be moved into one. Untangling that content
-    is a manual decision and is left to the content managers. Moving a job
-    into the main app area is exempt: it is shared freely between its own
-    jobs, so nothing needs to be untangled first.
+    The units and words of a job move along with it (see
+    :func:`move_job_to_area`), so a job whose units are shared with other
+    jobs, or whose words are used outside of those units, cannot be moved.
+    Untangling that content is a manual decision and is left to the content
+    managers.
 
     :param job: The job that is about to be saved
     :param area: The area the job is about to be moved into
     :raises ~django.core.exceptions.ValidationError: If the job shares content
     """
-    if area is None or area.is_main_app or not job.pk:
+    if area is None or not job.pk:
         return
     # words__units__jobs is prefetched so the "used elsewhere" check below
     # reads from cache instead of running a query per word.
@@ -456,13 +350,13 @@ def validate_job_area(job: "Job", area: Area | None) -> None:
         if other_jobs:
             raise ValidationError(
                 _(
-                    'The unit "%(unit)s" is also assigned to %(jobs)s. A unit of '
-                    "a job that belongs to an area must not be assigned to any "
-                    "other job, so this job cannot be moved into an area."
+                    'The unit "%(unit)s" is also assigned to %(jobs)s, so this '
+                    'job cannot be moved into area "%(area)s".'
                 )
                 % {
                     "unit": unit,
                     "jobs": ", ".join(str(other) for other in other_jobs),
+                    "area": area,
                 }
             )
         for word in unit.words.all():
@@ -472,11 +366,10 @@ def validate_job_area(job: "Job", area: Area | None) -> None:
             if used_elsewhere:
                 raise ValidationError(
                     _(
-                        'The word "%(word)s" is also used outside of this job. '
-                        "All words of an area belong to that area alone, so "
-                        "this job cannot be moved into an area."
+                        'The word "%(word)s" is also used outside of this job, '
+                        'so this job cannot be moved into area "%(area)s".'
                     )
-                    % {"word": word}
+                    % {"word": word, "area": area}
                 )
 
 
@@ -484,54 +377,45 @@ def validate_relation_area(unit: "Unit", word: "Word") -> None:
     """
     Check that a word may be linked to a unit.
 
-    All units of a word have to belong to the same area, so a word of one
-    area cannot be added to a unit of another and vice versa.
+    A word can only be used in units of its own area.
 
     :param unit: The unit the word is about to be linked to
     :param word: The word that is about to be linked
     :raises ~django.core.exceptions.ValidationError: If the link would mix areas
     """
-    target_area = pending_area_of_unit(unit)
-    for other_unit in _other_units_of_word(word, unit):
-        if _exclusive_area(area_of_unit(other_unit)) != target_area:
-            raise ValidationError(
-                area_conflict_message(
-                    word, area_of_unit(other_unit), _display_area_of_unit(unit)
-                )
-            )
+    if unit.area_id != word.area_id:
+        raise ValidationError(area_conflict_message(word, word.area, unit.area))
 
 
-def find_area_conflict(
-    units: "Iterable[Unit]",
-) -> "tuple[Unit, Unit] | None":
+def move_unit_to_area(unit: "Unit") -> None:
     """
-    The first two of the given units, in order, that do not share an area.
+    Move the words of a unit into the area the unit was moved into.
 
-    A word's units are usually added one at a time, each checked against the
-    word's already-saved relations by :func:`validate_relation_area` — but a
-    formset (e.g. the word's own change page) can add several new units to a
-    word in a single save, and those new rows are never one another's
-    "already-saved relations" while they are all still being validated. Two
-    of them can so end up belonging to different areas without either row's
-    own validation ever seeing the conflict. This is the formset-level check
-    that catches that combination instead: the caller attaches the resulting
-    error to the second unit's own form, so it shows next to the row that
-    introduced the conflict rather than as one generic error per row.
+    Call :func:`validate_unit_area` before moving the unit, so no word that
+    is also used in other units is moved along.
 
-    :param units: The units about to be linked to the same word, in the
-        order they appear in the formset
-    :return: ``(already_added, newly_added)``, the first conflicting pair, or
-        ``None`` if they all share an area
+    :param unit: The unit whose area was changed
     """
-    reference = None
-    for unit in units:
-        if reference is None:
-            reference = unit
-        elif _exclusive_area(area_of_unit(unit)) != _exclusive_area(
-            area_of_unit(reference)
-        ):
-            return reference, unit
-    return None
+    # pylint: disable=import-outside-toplevel
+    from .models import Word
+
+    Word.objects.filter(units=unit).exclude(area=unit.area).update(area=unit.area)
+
+
+def move_job_to_area(job: "Job") -> None:
+    """
+    Move the units and words of a job into the area the job was moved into.
+
+    Call :func:`validate_job_area` before moving the job, so no unit or word
+    that is also used outside of the job is moved along.
+
+    :param job: The job whose area was changed
+    """
+    # pylint: disable=import-outside-toplevel
+    from .models import Unit, Word
+
+    Unit.objects.filter(jobs=job).exclude(area=job.area).update(area=job.area)
+    Word.objects.filter(units__jobs=job).exclude(area=job.area).update(area=job.area)
 
 
 def published_jobs(queryset: "QuerySet[Job]", area: Area) -> "QuerySet[Job]":
