@@ -12,6 +12,7 @@ from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.area_content_admin import AreaContentAdmin
+from lunes_cms.cmsv2.admins.area_filters import AreaListFilter
 from lunes_cms.cmsv2.admins.word_filters import (
     HasCompleteExampleSentenceFilter,
     HasImageFilter,
@@ -171,6 +172,7 @@ class WordAdmin(AreaContentAdmin):
         "image_check_status",
         HasImageFilter,
         ImageSourceFilter,
+        ("area", AreaListFilter),
         JobDropdownFilter,
         UnitDropdownFilter,
         HasCompleteExampleSentenceFilter,

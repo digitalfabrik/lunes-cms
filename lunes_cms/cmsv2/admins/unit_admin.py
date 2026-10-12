@@ -16,7 +16,7 @@ from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.area_content_admin import AreaContentAdmin
-from lunes_cms.cmsv2.admins.area_filters import JobListFilter
+from lunes_cms.cmsv2.admins.area_filters import AreaListFilter, JobListFilter
 from lunes_cms.cmsv2.areas import (
     move_unit_to_area,
     scope_unit_word_relations,
@@ -228,7 +228,12 @@ class UnitAdmin(AreaContentAdmin):
         "created_at_date",
     ]
     list_display_links = ["title"]
-    list_filter = ["released", MigratedFilter, ("jobs", JobListFilter)]
+    list_filter = [
+        "released",
+        MigratedFilter,
+        ("area", AreaListFilter),
+        ("jobs", JobListFilter),
+    ]
     list_select_related = ["area", "created_by", "created_by_user"]
     list_per_page = 25
     actions = ["bulk_release", "assign_to_user"]

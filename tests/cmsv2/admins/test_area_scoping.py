@@ -20,6 +20,7 @@ from django.http import HttpRequest
 from django.test import Client, RequestFactory
 
 from lunes_cms.cmsv2.admins.area_admin import AreaAdmin, AreaCodeInline
+from lunes_cms.cmsv2.admins.area_filters import AreaListFilter
 from lunes_cms.cmsv2.admins.feedback_admin import FeedbackAdmin
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
 from lunes_cms.cmsv2.admins.unit_admin import (
@@ -635,6 +636,58 @@ def test_admin_change_lists_render_with_the_area_column(
         "/en/admin/cmsv2/word/",
     ):
         assert client.get(url).status_code == 200, url
+
+
+def test_superusers_can_filter_for_content_without_an_area(
+    area: Area, client: Client
+) -> None:
+    """
+    Units and words that could not be assigned an area automatically can be
+    found through the area filter, so a superuser can assign them one (#1061).
+    """
+    superuser = get_user_model().objects.create_superuser(
+        username="root-filter", email="root@example.com", password="secret"
+    )
+    client.force_login(superuser)
+    Unit.objects.create(title="Assigned unit", area=area)
+    unassigned_unit = Unit.objects.create(title="Unassigned unit", area=None)
+    Word.objects.create(word="Assignedword", singular_article=1, area=area)
+    unassigned_word = Word.objects.create(
+        word="Unassignedword", singular_article=1, area=None
+    )
+
+    for url, unassigned in (
+        ("/en/admin/cmsv2/unit/", unassigned_unit),
+        ("/en/admin/cmsv2/word/", unassigned_word),
+    ):
+        response = client.get(url, {"area__isnull": "True"})
+
+        assert response.status_code == 200, url
+        assert b"no area" in response.content, url
+        shown = {obj.pk for obj in response.context["cl"].result_list}
+        assert shown == {unassigned.pk}, url
+
+
+def test_area_filter_offers_no_empty_choice_to_area_admins(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """
+    Content without an area is visible to superusers only, so nobody else is
+    offered to filter for it.
+    """
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+    superuser = _user("root", is_superuser=True)
+    unit_admin = UnitAdmin(Unit, admin.site)
+
+    def area_filter(user: User) -> AreaListFilter:
+        request = _get_request(request_factory, user)
+        return AreaListFilter(
+            Unit._meta.get_field("area"), request, {}, Unit, unit_admin, "area"
+        )
+
+    assert area_filter(admin_user).include_empty_choice is False
+    assert area_filter(superuser).include_empty_choice is True
 
 
 def test_job_form_refuses_an_area_for_a_job_with_shared_units(area: Area) -> None:

@@ -722,6 +722,10 @@ msgstr "Clients"
 msgid "created at"
 msgstr "Erstellt"
 
+#: cmsv2/admins/area_filters.py cmsv2/areas.py
+msgid "no area"
+msgstr "kein Bereich"
+
 #: cmsv2/admins/feedback_admin.py cmsv2/models/feedback.py
 msgid "No longer available"
 msgstr "Nicht mehr verfügbar"
@@ -1131,10 +1135,6 @@ msgid ""
 msgstr ""
 "Die Vokabel „%(word)s“ gehört bereits zu Bereich „%(existing_area)s“ und "
 "kann nicht auch in Bereich „%(new_area)s“ verwendet werden."
-
-#: cmsv2/areas.py
-msgid "no area"
-msgstr "kein Bereich"
 
 #: cmsv2/areas.py
 #, python-format
