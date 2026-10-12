@@ -228,7 +228,9 @@ def make_safe_filename(unsafe: str) -> str:
     return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)
 
 
-def replace_file(field_file: FieldFile, content: ContentFile) -> None:
+def replace_file(
+    field_file: FieldFile, content: ContentFile, save: bool = True
+) -> None:
     """
     Saves ``content`` to ``field_file`` and removes the file it replaced.
 
@@ -239,7 +241,7 @@ def replace_file(field_file: FieldFile, content: ContentFile) -> None:
     # allows it; callers always construct it with a name.
     assert content.name is not None
     old_name = field_file.name
-    field_file.save(content.name, content)
+    field_file.save(content.name, content, save=save)
     if old_name and old_name != field_file.name:
         field_file.storage.delete(old_name)
 

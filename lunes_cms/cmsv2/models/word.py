@@ -26,7 +26,9 @@ from .static import (
     convert_umlaute_audio,
     convert_umlaute_images,
     GrammaticalGenders,
+    ImageSource,
     PluralArticle,
+    resolve_image_source,
     SingularArticle,
     WordType,
 )
@@ -160,6 +162,13 @@ class Word(models.Model):
         verbose_name=_("image check status"),
         default=CheckStatus.NOT_CHECKED,
     )
+    image_source = models.CharField(
+        max_length=20,
+        choices=ImageSource.choices,
+        default=ImageSource.UNKNOWN,
+        editable=False,
+        verbose_name=_("image source"),
+    )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
 
     def clean(self) -> None:
@@ -207,14 +216,20 @@ class Word(models.Model):
 
         os.remove(new_path)
 
-    def save(self, *args: Any, **kwargs: Any) -> None:
+    def save(self, *args: Any, image_source: str | None = None, **kwargs: Any) -> None:
         """
         Overrides the default save method to handle audio conversion and
         update check statuses for audio and image files.
+
+        Code that stores a generated image passes ``image_source``; any other
+        new image is recorded as an upload.
         """
         previous_word = Word.objects.get(pk=self.pk) if self.pk else None
         audio_updated = self._audio_changed(previous_word)
         image_updated = self._image_changed(previous_word)
+        self.image_source = resolve_image_source(
+            self.image_source, bool(self.image), image_updated, image_source
+        )
 
         if self._pronunciation_changed(previous_word):
             self._flag_stale_audio_for_review()

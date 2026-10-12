@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.areas import visible_jobs, visible_units
 from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models.static import ImageSource
 
 if TYPE_CHECKING:
     # `_StrOrPromise` only exists in django-stubs, not at runtime.
@@ -37,6 +38,36 @@ class HasImageFilter(admin.SimpleListFilter):
         if self.value() == "no":
             return queryset.filter(image="")
         return queryset
+
+
+class ImageSourceFilter(admin.SimpleListFilter):
+    """
+    Filter for displaying words by where their image came from.
+
+    A word matches if its own image or one of its unit images has that source.
+    """
+
+    title = _("Image source")
+    parameter_name = "image_source"
+
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
+        return [
+            (source.value, source.label)
+            for source in ImageSource
+            if source != ImageSource.UNKNOWN
+        ]
+
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
+        if not self.value():
+            return queryset
+        return queryset.filter(
+            Q(image_source=self.value())
+            | Q(unit_word_relations__image_source=self.value())
+        ).distinct()
 
 
 class JobDropdownFilter(admin.SimpleListFilter):
