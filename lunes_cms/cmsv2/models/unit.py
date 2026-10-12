@@ -24,6 +24,8 @@ from .static import (
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
+    ImageSource,
+    resolve_image_source,
 )
 from .word import Word
 
@@ -56,6 +58,13 @@ class UnitWordRelation(models.Model):
         null=True,
         verbose_name=_("image check status"),
         default=CheckStatus.NOT_CHECKED,
+    )
+    image_source = models.CharField(
+        max_length=20,
+        choices=ImageSource.choices,
+        default=ImageSource.UNKNOWN,
+        editable=False,
+        verbose_name=_("image source"),
     )
     example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
     example_sentence_audio = models.FileField(
@@ -120,12 +129,14 @@ class UnitWordRelation(models.Model):
 
             validate_relation_area(self.unit, self.word)
 
-    def save(self, *args: Any, **kwargs: Any) -> None:
+    def save(self, *args: Any, image_source: str | None = None, **kwargs: Any) -> None:
         """
         Override the save method to handle image and example sentence check status.
 
         This method ensures that when an image or example sentence is
         updated or removed, its check status is (re)set to "NOT_CHECKED".
+        Code that stores a generated image passes ``image_source``; any other
+        new image is recorded as an upload.
         """
         previous_relation = (
             UnitWordRelation.objects.get(pk=self.pk) if self.pk else None
@@ -140,21 +151,23 @@ class UnitWordRelation(models.Model):
             and previous_relation.example_sentence != self.example_sentence
         )
         if example_sentence_changed:
-            # `example_sentence_changed` is only true when `previous_relation`
-            # is truthy (see the "and" chain above), so this is never None here.
             assert previous_relation is not None
-            if previous_relation.example_sentence_audio:
-                # Delete the old audio file from storage
+            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
+            if not self.example_sentence.strip() and (
+                previous_relation.example_sentence_audio
+            ):
                 previous_relation.example_sentence_audio.delete(save=False)
                 self.example_sentence_audio = None
-            # Reset example sentence check status when example sentence changes
-            self.example_sentence_check_status = CheckStatus.NOT_CHECKED
 
         if image_updated:
             self.image_check_status = CheckStatus.NOT_CHECKED
 
         if not self.image:
             self.image_check_status = CheckStatus.NOT_CHECKED
+
+        self.image_source = resolve_image_source(
+            self.image_source, bool(self.image), bool(image_updated), image_source
+        )
 
         if not self.example_sentence or not self.example_sentence.strip():
             self.example_sentence_check_status = CheckStatus.NOT_CHECKED

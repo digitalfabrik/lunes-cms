@@ -167,7 +167,7 @@ def test_word_store_persists_kept_sentence(
     assert word.example_sentence == "Der Hammer liegt auf der Werkbank."
 
 
-def test_word_store_resets_check_status_and_audio(
+def test_word_store_resets_check_status_and_keeps_audio(
     admin_client: Client, word_with_job: WordWithJob
 ) -> None:
     from django.core.files.base import ContentFile
@@ -177,6 +177,8 @@ def test_word_store_resets_check_status_and_audio(
     word.example_sentence_check_status = "CONFIRMED"
     word.example_sentence_audio.save("old.mp3", ContentFile(b"audio"), save=False)
     word.save()
+    audio_name = word.example_sentence_audio.name
+    assert audio_name
 
     url = reverse("cmsv2:word_store_generated_example_sentence", args=[word.pk])
     admin_client.post(
@@ -187,9 +189,9 @@ def test_word_store_resets_check_status_and_audio(
 
     word.refresh_from_db()
     assert word.example_sentence == "Neuer Satz."
-    # Changing the sentence resets the check status and drops the stale audio.
     assert word.example_sentence_check_status == "NOT_CHECKED"
-    assert not word.example_sentence_audio
+    assert word.example_sentence_audio.name == audio_name
+    assert word.example_sentence_audio.storage.exists(audio_name)
 
 
 def test_word_store_requires_sentence(

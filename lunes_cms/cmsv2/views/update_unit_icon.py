@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from ..areas import visible_units
 from ..models import Unit
 from .decorators import require_any_permission_json
 
@@ -23,10 +25,10 @@ def update_unit_icon(request: HttpRequest, unit_id: int) -> JsonResponse:
         JsonResponse: A response indicating success or failure
     """
     try:
-        unit = Unit.objects.get(id=unit_id)
+        unit = visible_units(request.user).get(id=unit_id)
     except Unit.DoesNotExist:
         return JsonResponse(
-            {"status": "error", "message": "Unit not found"}, status=404
+            {"status": "error", "message": _("Unit not found")}, status=404
         )
 
     action = request.POST.get("action")
@@ -34,7 +36,7 @@ def update_unit_icon(request: HttpRequest, unit_id: int) -> JsonResponse:
     if action in ("add", "replace"):
         if "icon" not in request.FILES:
             return JsonResponse(
-                {"status": "error", "message": "No icon provided"}, status=400
+                {"status": "error", "message": _("No icon provided")}, status=400
             )
 
         unit.icon = request.FILES["icon"]
@@ -43,7 +45,7 @@ def update_unit_icon(request: HttpRequest, unit_id: int) -> JsonResponse:
         return JsonResponse(
             {
                 "status": "success",
-                "message": "Icon added successfully",
+                "message": _("Icon added successfully"),
                 "icon_url": unit.icon.url if unit.icon else None,
             }
         )
@@ -55,11 +57,11 @@ def update_unit_icon(request: HttpRequest, unit_id: int) -> JsonResponse:
             unit.save()
 
             return JsonResponse(
-                {"status": "success", "message": "Icon deleted successfully"}
+                {"status": "success", "message": _("Icon deleted successfully")}
             )
 
         return JsonResponse(
-            {"status": "error", "message": "No icon to delete"}, status=400
+            {"status": "error", "message": _("No icon to delete")}, status=400
         )
 
-    return JsonResponse({"status": "error", "message": "Invalid action"}, status=400)
+    return JsonResponse({"status": "error", "message": _("Invalid action")}, status=400)

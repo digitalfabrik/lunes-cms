@@ -11,7 +11,7 @@ from django.http import HttpRequest
 from ..cms.feedback_filter import filter_feedback_by_creator
 from ..cms.models import Feedback
 from ..cmsv2.feedback_filter import (
-    filter_feedback_by_creator as filter_feedbackv2_by_creator,
+    filter_feedback_by_creator_and_area as filter_feedbackv2_by_creator_and_area,
 )
 from ..cmsv2.models import Feedback as FeedbackV2
 
@@ -49,9 +49,7 @@ def feedbackv2_processor(request: HttpRequest) -> dict[str, Any]:
     unread_feedback_entries = FeedbackV2.objects.filter(read_by=None)
 
     if not request.user.is_superuser:
-        # request.user is `User | AnonymousUser`; AnonymousUser has no groups,
-        # so filtering by it is a safe no-op — preserved as original behavior.
-        unread_feedback_entries = filter_feedbackv2_by_creator(
+        unread_feedback_entries = filter_feedbackv2_by_creator_and_area(
             unread_feedback_entries, request.user  # type: ignore[arg-type]
         )
 

@@ -7,9 +7,9 @@ from django.db.models import Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.cmsv2.areas import scope_jobs, scope_units
-from lunes_cms.cmsv2.models import Job, Word
-from lunes_cms.cmsv2.models.unit import Unit
+from lunes_cms.cmsv2.areas import visible_jobs, visible_units
+from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models.static import ImageSource
 
 if TYPE_CHECKING:
     # `_StrOrPromise` only exists in django-stubs, not at runtime.
@@ -40,37 +40,93 @@ class HasImageFilter(admin.SimpleListFilter):
         return queryset
 
 
-class UnitOrJobDropdownFilter(admin.SimpleListFilter):
-    """Filter for displaying units or jobs in the admin interface."""
+class ImageSourceFilter(admin.SimpleListFilter):
+    """
+    Filter for displaying words by where their image came from.
 
-    title = _("Unit or Job")
-    parameter_name = "unit_or_job_choice"
+    A word matches if its own image or one of its unit images has that source.
+    """
+
+    title = _("Image source")
+    parameter_name = "image_source"
 
     def lookups(
         self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
     ) -> Iterable[tuple[str, _StrOrPromise]]:
-        options = []
-        for unit in scope_units(Unit.objects.all(), request.user):
-            options.append((f"unit_{unit.pk}", f"Unit: {unit.title}"))
-        for job in scope_jobs(Job.objects.all(), request.user):
-            options.append((f"job_{job.pk}", f"Job: {job.name}"))
-        return options
+        return [
+            (source.value, source.label)
+            for source in ImageSource
+            if source != ImageSource.UNKNOWN
+        ]
 
     def queryset(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> QuerySet[Word] | None:
-        value = self.value()
-        if not value:
+        if not self.value():
             return queryset
+        return queryset.filter(
+            Q(image_source=self.value())
+            | Q(unit_word_relations__image_source=self.value())
+        ).distinct()
 
-        if value.startswith("unit_"):
-            unit_id = value.split("_", 1)[1]
-            return queryset.filter(units__id=unit_id).distinct()
 
-        if value.startswith("job_"):
-            job_id = value.split("_", 1)[1]
-            return queryset.filter(units__jobs__id=job_id).distinct()
+class JobDropdownFilter(admin.SimpleListFilter):
+    """Filter for displaying the words of a job in the admin interface."""
 
+    title = _("Job")
+    parameter_name = "job"
+
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
+        return [(str(job.pk), job.name) for job in visible_jobs(request.user)]
+
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
+        if value := self.value():
+            return queryset.filter(units__jobs__id=value).distinct()
+        return queryset
+
+
+class UnitDropdownFilter(admin.SimpleListFilter):
+    """
+    Filter for displaying the words of a unit in the admin interface.
+
+    If a job is selected in :class:`JobDropdownFilter`, only the units of this
+    job are offered.
+    """
+
+    title = _("Unit")
+    parameter_name = "unit"
+
+    def __init__(
+        self,
+        request: HttpRequest,
+        params: dict[str, list[str]],
+        model: type[Word],
+        model_admin: admin.ModelAdmin[Word],
+    ) -> None:
+        super().__init__(request, params, model, model_admin)
+        # Ignore a selected unit that does not belong to the selected job,
+        # e.g. because the job was changed after the unit had been selected.
+        if self.value() not in {key for key, _title in self.lookup_choices}:
+            self.used_parameters.pop(self.parameter_name, None)
+
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
+    ) -> Iterable[tuple[str, _StrOrPromise]]:
+        units = visible_units(request.user)
+        job_id = request.GET.get(JobDropdownFilter.parameter_name)
+        if job_id and job_id.isdigit():
+            units = units.filter(jobs__id=job_id).distinct()
+        return [(str(unit.pk), unit.title) for unit in units]
+
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> QuerySet[Word] | None:
+        if value := self.value():
+            return queryset.filter(units__id=value).distinct()
         return queryset
 
 

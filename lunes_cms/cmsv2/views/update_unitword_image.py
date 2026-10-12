@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from ..areas import visible_unit_word_relations
 from ..models.unit import UnitWordRelation
 from .decorators import require_any_permission_json
 
@@ -23,10 +25,11 @@ def update_unitword_image(request: HttpRequest, unitword_id: int) -> JsonRespons
         JsonResponse: A response indicating success or failure
     """
     try:
-        unitword = UnitWordRelation.objects.get(id=unitword_id)
+        unitword = visible_unit_word_relations(request.user).get(id=unitword_id)
     except UnitWordRelation.DoesNotExist:
         return JsonResponse(
-            {"status": "error", "message": "Unit-Word relation not found"}, status=404
+            {"status": "error", "message": _("Unit-Word relation not found")},
+            status=404,
         )
 
     action = request.POST.get("action")
@@ -34,7 +37,7 @@ def update_unitword_image(request: HttpRequest, unitword_id: int) -> JsonRespons
     if action in ("add", "replace"):
         if "image" not in request.FILES:
             return JsonResponse(
-                {"status": "error", "message": "No image provided"}, status=400
+                {"status": "error", "message": _("No image provided")}, status=400
             )
 
         unitword.image = request.FILES["image"]
@@ -43,7 +46,7 @@ def update_unitword_image(request: HttpRequest, unitword_id: int) -> JsonRespons
         return JsonResponse(
             {
                 "status": "success",
-                "message": "Image added successfully",
+                "message": _("Image added successfully"),
                 "image_url": unitword.image.url if unitword.image else None,
             }
         )
@@ -55,11 +58,11 @@ def update_unitword_image(request: HttpRequest, unitword_id: int) -> JsonRespons
             unitword.save()
 
             return JsonResponse(
-                {"status": "success", "message": "Image deleted successfully"}
+                {"status": "success", "message": _("Image deleted successfully")}
             )
 
         return JsonResponse(
-            {"status": "error", "message": "No image to delete"}, status=400
+            {"status": "error", "message": _("No image to delete")}, status=400
         )
 
-    return JsonResponse({"status": "error", "message": "Invalid action"}, status=400)
+    return JsonResponse({"status": "error", "message": _("Invalid action")}, status=400)

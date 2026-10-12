@@ -19,7 +19,7 @@ from ..admins.word_import_resource import (
     ImportSummary,
     validate_header_structure,
 )
-from ..areas import scope_jobs
+from ..areas import visible_jobs
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
 from ..services.image_generation import drain_pending_images
@@ -44,16 +44,15 @@ class ImportCSVForm(forms.Form):
         self, *args: Any, user: AbstractBaseUser | AnonymousUser, **kwargs: Any
     ) -> None:
         super().__init__(*args, **kwargs)
-        self.fields["job"].queryset = scope_jobs(  # type: ignore[attr-defined]
-            Job.objects.all(), user
+        self.fields["job"].queryset = visible_jobs(  # type: ignore[attr-defined]
+            user
         ).order_by("name")
 
     csv_file = forms.FileField(
         label=_("Select CSV file"),
         help_text=_(
-            "The file must be UTF-8 encoded and comma-separated. It should "
-            'contain the columns "Einheit", "Artikel", "Vokabel" '
-            'and "Beispielsatz", optionally also "Aussprache".'
+            "The file must be UTF-8 encoded and comma-separated. It must "
+            'contain the columns "Vokabel" and "Einheit", optionally also "Wortart", "Singularartikel", "Plural", "Pluralartikel", "Beispielsatz" and "Aussprache".'
         ),
     )
 
@@ -156,11 +155,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     """
     Method for importing vocabularies for a job from csv
     """
-    job = (
-        get_object_or_404(scope_jobs(Job.objects.all(), request.user), pk=job_id)
-        if job_id
-        else None
-    )
+    job = get_object_or_404(visible_jobs(request.user), pk=job_id) if job_id else None
 
     if request.method != "POST":
         initial = {"job": job} if job else {}

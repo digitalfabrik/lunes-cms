@@ -13,7 +13,7 @@ import pytest
 from django.conf import settings
 from django.core.files.base import ContentFile
 
-from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models import Area, Word
 from lunes_cms.cmsv2.services import audio_generation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
@@ -25,9 +25,12 @@ def fast_worker(transactional_db: None) -> Generator[None, None, None]:
 
     The worker scans the *whole* Word table. The session-scoped ``test_data``
     fixture plus ``transaction=True`` (no rollback between tests) can leave rows
-    around, so wipe them first to keep these tests isolated.
+    around, so wipe them first to keep these tests isolated. ``transaction=True``
+    also flushes tables Django only ever seeds through a migration, so the main
+    app area a new ``Job`` defaults to is restored here too (#1016).
     """
     Word.objects.all().delete()
+    Area.objects.get_or_create(is_main_app=True, defaults={"name": "Lunes"})
     with mock.patch.object(audio_generation, "time") as mocked_time:
         mocked_time.sleep = lambda _seconds: None
         yield

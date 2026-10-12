@@ -24,3 +24,11 @@ window.postWithCsrf = function (url: string, body?: FormData): Promise<Response>
         credentials: "same-origin",
     })
 }
+
+window.readJsonBody = async function (response: Response): Promise<JsonBody> {
+    try {
+        return (await response.json()) as JsonBody
+    } catch {
+        return {}
+    }
+}

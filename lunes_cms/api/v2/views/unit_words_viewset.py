@@ -47,6 +47,8 @@ class UnitWordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return UnitWordRelation.objects.none()
 
+        area = self.area
+        assert area is not None
         units = published_units(
             Unit.objects.filter(
                 pk=self.kwargs["unit_id"],
@@ -54,7 +56,7 @@ class UnitWordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
                 jobs__released=True,
                 jobs__archived=False,
             ),
-            self.area,
+            area,
         )
         if len(units) != 1:
             raise PermissionDenied()

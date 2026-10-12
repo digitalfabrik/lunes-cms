@@ -51,27 +51,36 @@ thead th:nth-child(1) {
 
 /* Comment column */
 thead th:nth-child(2) {
-  width: 25%;
+  width: 22%;
 }
 
 /* Related object column */
 thead th:nth-child(3) {
-  width: 19%;
+  width: 16%;
 }
 
 /* Related object type column */
 thead th:nth-child(4) {
-  width: 15%;
+  width: 12%;
+}
+
+/* Area column */
+thead th:nth-child(5) {
+  width: 13%;
 }
 
 /* Submission date column */
-thead th:nth-child(5) {
-  width: 19%;
+thead th:nth-child(6) {
+  width: 17%;
 }
 
 /* Read by column */
-thead th:nth-child(6) {
-  width: 19%;
+thead th:nth-child(7) {
+  width: 17%;
+}
+
+thead th .text {
+  white-space: nowrap;
 }
 
 /* Truncate long comments and content object links */

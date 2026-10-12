@@ -40,7 +40,9 @@ class JobViewSet(AreaScopedMixin, viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Job.objects.none()
 
+        area = self.area
+        assert area is not None
         queryset = published_jobs(
-            Job.objects.filter(released=True, archived=False), self.area
+            Job.objects.filter(released=True, archived=False), area
         ).annotate(number_units=Count("units", filter=Q(units__released=True)))
         return queryset.order_by("name")

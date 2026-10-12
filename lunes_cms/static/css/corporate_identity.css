@@ -107,6 +107,10 @@
     border-color: #5b616a;
 }
 
+.dataTables_info {
+    margin-top: 8px;
+}
+
 /*menu and navbar*/
 .app-sidebar,
 .main-sidebar,

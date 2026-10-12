@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from ..areas import visible_jobs
 from ..models import Job
 from .decorators import require_any_permission_json
 
@@ -23,16 +25,18 @@ def update_job_icon(request: HttpRequest, job_id: int) -> JsonResponse:
         JsonResponse: A response indicating success or failure
     """
     try:
-        job = Job.objects.get(id=job_id)
+        job = visible_jobs(request.user).get(id=job_id)
     except Job.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Job not found"}, status=404)
+        return JsonResponse(
+            {"status": "error", "message": _("Job not found")}, status=404
+        )
 
     action = request.POST.get("action")
 
     if action in ("add", "replace"):
         if "icon" not in request.FILES:
             return JsonResponse(
-                {"status": "error", "message": "No icon provided"}, status=400
+                {"status": "error", "message": _("No icon provided")}, status=400
             )
 
         job.icon = request.FILES["icon"]
@@ -41,7 +45,7 @@ def update_job_icon(request: HttpRequest, job_id: int) -> JsonResponse:
         return JsonResponse(
             {
                 "status": "success",
-                "message": "Icon added successfully",
+                "message": _("Icon added successfully"),
                 "icon_url": job.icon.url if job.icon else None,
             }
         )
@@ -53,11 +57,11 @@ def update_job_icon(request: HttpRequest, job_id: int) -> JsonResponse:
             job.save()
 
             return JsonResponse(
-                {"status": "success", "message": "Icon deleted successfully"}
+                {"status": "success", "message": _("Icon deleted successfully")}
             )
 
         return JsonResponse(
-            {"status": "error", "message": "No icon to delete"}, status=400
+            {"status": "error", "message": _("No icon to delete")}, status=400
         )
 
-    return JsonResponse({"status": "error", "message": "Invalid action"}, status=400)
+    return JsonResponse({"status": "error", "message": _("Invalid action")}, status=400)

@@ -65,11 +65,11 @@ def test_restore_jobs_action_clears_archived(
     assert job.archived is False
 
 
-def test_duplicate_jobs_action_resets_archived(
+def test_duplicate_jobs_action_resets_status_flags(
     db: None, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
-    """Duplicating an archived job produces an active (non-archived) copy."""
-    job = Job.objects.create(name="Dachdecker/-in", archived=True)
+    """Duplicating a job produces an active, unreviewed copy."""
+    job = Job.objects.create(name="Dachdecker/-in", archived=True, expert_reviewed=True)
 
     request = _post_request(request_factory)
     request.user = get_user_model().objects.create_user(username="editor")
@@ -80,6 +80,7 @@ def test_duplicate_jobs_action_resets_archived(
     duplicate = Job.objects.exclude(pk__in=existing_pks).get()
     assert duplicate.archived is False
     assert duplicate.released is False
+    assert duplicate.expert_reviewed is False
 
 
 def _apply_filter(

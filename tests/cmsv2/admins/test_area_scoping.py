@@ -12,15 +12,24 @@ import pytest
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.storage.fallback import FallbackStorage
+from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.http import HttpRequest
 from django.test import Client, RequestFactory
 
-from lunes_cms.cmsv2.admins.area_admin import AreaAdmin
+from lunes_cms.cmsv2.admins.area_admin import AreaAdmin, AreaCodeInline
+from lunes_cms.cmsv2.admins.feedback_admin import FeedbackAdmin
 from lunes_cms.cmsv2.admins.job_admin import JobAdmin, JobAdminForm
-from lunes_cms.cmsv2.admins.unit_admin import UnitAdmin, UnitAdminForm
+from lunes_cms.cmsv2.admins.unit_admin import (
+    UnitAdmin,
+    UnitAdminForm,
+    UnitWordRelationAdmin,
+)
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
-from lunes_cms.cmsv2.models import Area, AreaCode, Job, Unit, Word
+from lunes_cms.cmsv2.admins.word_inlines import UnitInlineFormSet
+from lunes_cms.cmsv2.areas import area_of_unit, area_of_word
+from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -63,9 +72,12 @@ def _post_request(request_factory: RequestFactory, user: User) -> HttpRequest:
 def test_job_admin_queryset_is_scoped_to_the_area(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
-    """An area administrator only sees the jobs of their own area."""
+    """
+    An area administrator only sees the jobs of their own area, and a user
+    who administers no area at all sees nothing (#1016).
+    """
     area_job = Job.objects.create(name="Area job", area=area)
-    main_job = Job.objects.create(name="Main job")
+    Job.objects.create(name="Main job")
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
 
@@ -75,14 +87,13 @@ def test_job_admin_queryset_is_scoped_to_the_area(
     plain_visible = set(
         job_admin.get_queryset(_get_request(request_factory, _user("plain")))
     )
-    assert main_job in plain_visible
-    assert area_job not in plain_visible
+    assert plain_visible == set()
 
 
-def test_unit_and_word_admin_querysets_are_scoped_to_the_area(
+def test_content_admin_querysets_are_scoped_to_the_area(
     area: Area, request_factory: RequestFactory
 ) -> None:
-    """The same scoping applies to units and words."""
+    """The same scoping applies to units, words and their relations."""
     area_unit = Unit.objects.create(title="Area unit")
     area_unit.jobs.add(Job.objects.create(name="Area job", area=area))
     main_unit = Unit.objects.create(title="Main unit")
@@ -91,8 +102,8 @@ def test_unit_and_word_admin_querysets_are_scoped_to_the_area(
     # fixture content of the main app as well.
     area_word = Word.objects.create(word="Bereichswort", singular_article=1)
     main_word = Word.objects.create(word="Hauptwort", singular_article=1)
-    UnitWordRelation.objects.create(unit=area_unit, word=area_word)
-    UnitWordRelation.objects.create(unit=main_unit, word=main_word)
+    area_relation = UnitWordRelation.objects.create(unit=area_unit, word=area_word)
+    main_relation = UnitWordRelation.objects.create(unit=main_unit, word=main_word)
 
     admin_user = _user("area-admin")
     area.admins.add(admin_user)
@@ -100,6 +111,86 @@ def test_unit_and_word_admin_querysets_are_scoped_to_the_area(
 
     assert set(UnitAdmin(Unit, admin.site).get_queryset(request)) == {area_unit}
     assert set(WordAdmin(Word, admin.site).get_queryset(request)) == {area_word}
+    relations = set(
+        UnitWordRelationAdmin(UnitWordRelation, admin.site).get_queryset(request)
+    )
+    assert area_relation in relations
+    assert main_relation not in relations
+
+
+def test_feedback_admin_queryset_requires_area_and_creator_group(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """
+    Feedback is only visible if the viewer both administers the job's area
+    AND belongs to the group that created the job, combining the legacy
+    creator-group scoping with the newer area scoping.
+    """
+    content_managers = Group.objects.get_or_create(name="Content managers")[0]
+    other_group = Group.objects.get_or_create(name="Other group")[0]
+
+    own_group_area_job = Job.objects.create(
+        name="Own group, area job", area=area, created_by=content_managers
+    )
+    other_group_area_job = Job.objects.create(
+        name="Other group, area job", area=area, created_by=other_group
+    )
+    own_group_main_job = Job.objects.create(
+        name="Own group, main job", created_by=content_managers
+    )
+
+    job_type = ContentType.objects.get_for_model(Job)
+    own_group_area_feedback = Feedback.objects.create(
+        content_type=job_type, object_id=own_group_area_job.pk, comment="a"
+    )
+    Feedback.objects.create(
+        content_type=job_type, object_id=other_group_area_job.pk, comment="b"
+    )
+    Feedback.objects.create(
+        content_type=job_type, object_id=own_group_main_job.pk, comment="c"
+    )
+
+    # `_user()` puts every user into "Content managers", so this admin
+    # matches the group of `own_group_area_job` and `own_group_main_job`.
+    admin_user = _user("area-admin")
+    area.admins.add(admin_user)
+
+    visible = set(
+        FeedbackAdmin(Feedback, admin.site).get_queryset(
+            _get_request(request_factory, admin_user)
+        )
+    )
+
+    assert visible == {own_group_area_feedback}
+    plain_visible = set(
+        FeedbackAdmin(Feedback, admin.site).get_queryset(
+            _get_request(request_factory, _user("plain"))
+        )
+    )
+    assert plain_visible == set()
+
+
+def test_feedback_display_methods_survive_a_deleted_content_object(
+    db: None,
+) -> None:
+    """
+    ``content_object`` is a generic foreign key, not a real one, so deleting
+    the job, unit or word a feedback entry refers to neither deletes nor
+    protects the entry — it just leaves ``content_object`` resolving to
+    ``None``. The list display methods must say so instead of crashing the
+    whole changelist for every entry or leaving the column blank.
+    """
+    job = Job.objects.create(name="Vanishing job")
+    job_type = ContentType.objects.get_for_model(Job)
+    feedback = Feedback.objects.create(
+        content_type=job_type, object_id=job.pk, comment="x"
+    )
+    job.delete()
+    feedback.refresh_from_db()
+
+    assert feedback.content_object is None
+    assert FeedbackAdmin(Feedback, admin.site).area(feedback) == "No longer available"
+    assert str(feedback.content_object_link()) == "No longer available"
 
 
 def test_save_model_assigns_the_area_of_the_creator(
@@ -130,7 +221,7 @@ def test_save_model_leaves_jobs_of_other_users_without_an_area(
     )
 
     job.refresh_from_db()
-    assert job.area is None
+    assert job.area == Area.objects.get(is_main_app=True)
 
 
 def test_area_field_is_read_only_for_area_admins(
@@ -159,6 +250,54 @@ def test_area_field_is_read_only_for_area_admins(
     assert "area" not in job_admin.get_readonly_fields(
         _get_request(request_factory, superuser)
     )
+
+
+def test_area_is_preselected_on_the_add_form_for_a_single_area_admin(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    The area field is read-only for a single-area administrator, so its
+    displayed value has to come from somewhere other than the field's own
+    ``initial`` — a fresh, unsaved job otherwise defaults to the main app
+    area, not the administrator's own one (#1016).
+    """
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    request = _get_request(request_factory, single_area_admin)
+
+    form = job_admin.get_form(request, None)()
+
+    assert form.instance.area == area
+
+
+def test_area_is_not_preselected_for_a_multi_area_admin_or_on_change(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    The preselection is specific to the single-area, read-only case: a
+    multi-area administrator still picks from their own areas via the
+    editable widget (see :meth:`formfield_for_foreignkey`), and an existing
+    job keeps its own area regardless of who is editing it.
+    """
+    second_area = Area.objects.create(name="Second area")
+    multi_area_admin = _user("multi")
+    area.admins.add(multi_area_admin)
+    second_area.admins.add(multi_area_admin)
+    add_request = _get_request(request_factory, multi_area_admin)
+
+    add_form = job_admin.get_form(add_request, None)()
+    # The instance itself is untouched by get_form for a multi-area admin —
+    # the widget's own preselection is asserted in
+    # test_area_is_preselected_and_required_for_area_admins.
+    assert add_form["area"].value() in (area.pk, second_area.pk)
+
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    job = Job.objects.create(name="Existing job", area=second_area)
+    change_request = _get_request(request_factory, single_area_admin)
+
+    change_form = job_admin.get_form(change_request, job)(instance=job)
+    assert change_form.instance.area == second_area
 
 
 def test_duplicate_jobs_skips_jobs_of_an_area(
@@ -302,6 +441,29 @@ def test_area_is_preselected_and_required_for_area_admins(
     assert list(field.queryset) == [area, second_area]
 
 
+def test_area_field_offers_no_related_object_shortcuts(
+    area: Area, job_admin: JobAdmin, request_factory: RequestFactory
+) -> None:
+    """
+    A job's area field must not offer to add, change, view or delete an area
+    from its own edit form: a superuser holds all four permissions on
+    ``Area``, so Django would otherwise wrap the field with those icons by
+    default — a confusing (in the delete case, dangerous) shortcut nobody
+    needs here, and one whose "Löschen" icon title also broke the e2e suite
+    by giving the page a second element matching that name. The area's own
+    change and list pages are one click away regardless.
+    """
+    superuser = _user("root", is_superuser=True)
+    field = job_admin.formfield_for_dbfield(
+        Job._meta.get_field("area"), _get_request(request_factory, superuser)
+    )
+
+    assert field.widget.can_add_related is False
+    assert field.widget.can_change_related is False
+    assert field.widget.can_delete_related is False
+    assert field.widget.can_view_related is False
+
+
 def test_area_admin_can_add_a_unit_with_a_word_of_the_own_area(
     area: Area, client: Client
 ) -> None:
@@ -355,6 +517,58 @@ def test_area_admin_is_restricted_to_superusers(
     assert area_admin.has_delete_permission(plain_request) is False
     assert area_admin.has_module_permission(superuser_request) is True
     assert area_admin.has_change_permission(superuser_request) is True
+
+
+def test_main_app_area_cannot_be_deleted_even_by_a_superuser(
+    db: None, request_factory: RequestFactory
+) -> None:
+    """
+    Deleting the main app area would break area scoping for everybody who
+    relies on it, so it is protected even from a superuser (#1016).
+    """
+    area_admin = AreaAdmin(Area, admin.site)
+    main_app_area = Area.objects.get(is_main_app=True)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+
+    assert area_admin.has_delete_permission(superuser_request, main_app_area) is False
+
+
+def test_a_regular_area_can_still_be_deleted_by_a_superuser(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """The delete protection is specific to the main app area."""
+    area_admin = AreaAdmin(Area, admin.site)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+
+    assert area_admin.has_delete_permission(superuser_request, area) is True
+
+
+def test_main_app_area_cannot_be_given_a_code(db: None) -> None:
+    """The main app is free to use without a code, so it must not get one."""
+    inline = AreaCodeInline(Area, admin.site)
+    main_app_area = Area.objects.get(is_main_app=True)
+    regular_area = Area.objects.create(name="Kolping")
+
+    assert inline.has_add_permission(HttpRequest(), main_app_area) is False
+    assert inline.has_add_permission(HttpRequest(), regular_area) is True
+    assert inline.has_add_permission(HttpRequest(), None) is True
+
+
+def test_the_job_count_of_the_main_app_area_counts_its_jobs(
+    db: None, request_factory: RequestFactory
+) -> None:
+    """
+    The main app area owns its jobs by foreign key like any other area, so
+    its job count comes from the same ``job_count`` annotation the other
+    rows use (#1016).
+    """
+    main_app_area = Area.objects.get(is_main_app=True)
+    Job.objects.create(name="Main job", area=main_app_area)
+    area_admin = AreaAdmin(Area, admin.site)
+    superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
+    main_app_area = area_admin.get_queryset(superuser_request).get(is_main_app=True)
+
+    assert area_admin.number_jobs(main_app_area) == 1
 
 
 def test_additional_information_url_field_is_full_width(
@@ -445,3 +659,148 @@ def test_the_code_count_of_the_area_list_counts_the_stored_codes(
     response = client.get("/en/admin/cmsv2/area/")
 
     assert b'<td class="field-number_codes">2</td>' in response.content
+
+
+def _unit_inline_formset(word: Word, units: list[Unit]) -> BaseInlineFormSet:
+    """Build the same inline formset class the word admin page uses (#1007)."""
+    formset_class = inlineformset_factory(
+        Word, UnitWordRelation, formset=UnitInlineFormSet, fields=["unit"], extra=0
+    )
+    data = {
+        "unit_word_relations-TOTAL_FORMS": str(len(units)),
+        "unit_word_relations-INITIAL_FORMS": "0",
+        "unit_word_relations-MIN_NUM_FORMS": "0",
+        "unit_word_relations-MAX_NUM_FORMS": "1000",
+    }
+    for index, unit in enumerate(units):
+        data[f"unit_word_relations-{index}-id"] = ""
+        data[f"unit_word_relations-{index}-word"] = str(word.pk) if word.pk else ""
+        data[f"unit_word_relations-{index}-unit"] = str(unit.pk)
+    return formset_class(data=data, instance=word, prefix="unit_word_relations")
+
+
+def test_unit_inline_formset_rejects_mixing_areas_in_one_save(area: Area) -> None:
+    """
+    Adding two units of different areas to one word in a single formset save
+    must be rejected, with a single, specific error attached to the second
+    (conflicting) unit's own row rather than a generic error for the whole
+    formset — each row alone would otherwise pass, since neither unit is an
+    "already-saved" unit of the word yet while both are being validated (#1007).
+    """
+    other_area = Area.objects.create(name="Other area")
+    area_unit = Unit.objects.create(title="Area unit")
+    area_unit.jobs.add(Job.objects.create(name="Area job", area=area))
+    other_area_unit = Unit.objects.create(title="Other area unit")
+    other_area_unit.jobs.add(Job.objects.create(name="Other area job", area=other_area))
+    word = Word.objects.create(word="Mixedword", singular_article=1)
+
+    formset = _unit_inline_formset(word, [area_unit, other_area_unit])
+
+    assert not formset.is_valid()
+    assert not formset.non_form_errors()
+    assert formset.errors == [
+        {},
+        {
+            "unit": [
+                f'The word "{word}" already belongs to area "{area}" and cannot '
+                f'also be used in area "{other_area}".'
+            ]
+        },
+    ]
+
+
+def test_unit_inline_formset_accepts_units_of_the_same_area(area: Area) -> None:
+    """Adding two units of the *same* area to one word in a single save works."""
+    unit_one = Unit.objects.create(title="Unit one")
+    unit_one.jobs.add(Job.objects.create(name="Job one", area=area))
+    unit_two = Unit.objects.create(title="Unit two")
+    unit_two.jobs.add(Job.objects.create(name="Job two", area=area))
+    word = Word.objects.create(word="Sameareaword", singular_article=1)
+
+    formset = _unit_inline_formset(word, [unit_one, unit_two])
+
+    assert formset.is_valid(), formset.errors + [formset.non_form_errors()]
+
+
+def test_unit_inline_formset_flags_only_the_new_row_against_saved_units(
+    area: Area,
+) -> None:
+    """
+    Adding one new conflicting unit to a word that already has saved units of
+    another area must raise a single error, attached to the new row, not one
+    per already-saved row (#1007).
+    """
+    other_area = Area.objects.create(name="Other area")
+    saved_unit_one = Unit.objects.create(title="Saved unit one")
+    saved_unit_one.jobs.add(Job.objects.create(name="Job one", area=area))
+    saved_unit_two = Unit.objects.create(title="Saved unit two")
+    saved_unit_two.jobs.add(Job.objects.create(name="Job two", area=area))
+    new_unit = Unit.objects.create(title="New unit")
+    new_unit.jobs.add(Job.objects.create(name="Job three", area=other_area))
+    word = Word.objects.create(word="Establishedword", singular_article=1)
+    UnitWordRelation.objects.create(unit=saved_unit_one, word=word)
+    UnitWordRelation.objects.create(unit=saved_unit_two, word=word)
+
+    formset_class = inlineformset_factory(
+        Word, UnitWordRelation, formset=UnitInlineFormSet, fields=["unit"], extra=0
+    )
+    data = {
+        "unit_word_relations-TOTAL_FORMS": "3",
+        "unit_word_relations-INITIAL_FORMS": "2",
+        "unit_word_relations-MIN_NUM_FORMS": "0",
+        "unit_word_relations-MAX_NUM_FORMS": "1000",
+        "unit_word_relations-0-id": str(
+            word.unit_word_relations.get(unit=saved_unit_one).pk
+        ),
+        "unit_word_relations-0-word": str(word.pk),
+        "unit_word_relations-0-unit": str(saved_unit_one.pk),
+        "unit_word_relations-1-id": str(
+            word.unit_word_relations.get(unit=saved_unit_two).pk
+        ),
+        "unit_word_relations-1-word": str(word.pk),
+        "unit_word_relations-1-unit": str(saved_unit_two.pk),
+        "unit_word_relations-2-id": "",
+        "unit_word_relations-2-word": str(word.pk),
+        "unit_word_relations-2-unit": str(new_unit.pk),
+    }
+    formset = formset_class(data=data, instance=word, prefix="unit_word_relations")
+
+    assert not formset.is_valid()
+    assert not formset.non_form_errors()
+    assert formset.errors == [
+        {},
+        {},
+        {
+            "__all__": [
+                f'The word "{word}" already belongs to area "{area}" and cannot '
+                f'also be used in area "{other_area}".'
+            ]
+        },
+    ]
+
+
+def test_area_of_unit_and_word_use_the_prefetch_cache(
+    area: Area, django_assert_num_queries: Any
+) -> None:
+    """
+    ``area_of_unit``/``area_of_word`` must read from a warmed prefetch cache
+    instead of issuing a fresh query, or the admin changelist's "area" column
+    would cost one query per row (#1007).
+    """
+    unit = Unit.objects.create(title="Prefetched unit")
+    unit.jobs.add(Job.objects.create(name="Prefetched job", area=area))
+    word = Word.objects.create(word="Prefetchedword", singular_article=1)
+    UnitWordRelation.objects.create(unit=unit, word=word)
+
+    prefetched_unit = Unit.objects.prefetch_related("jobs__area").get(pk=unit.pk)
+    with django_assert_num_queries(0):
+        assert area_of_unit(prefetched_unit) == area
+
+    prefetched_word = Word.objects.prefetch_related("units__jobs__area").get(pk=word.pk)
+    with django_assert_num_queries(0):
+        assert area_of_word(prefetched_word) == area
+
+    # Without a warmed cache, a single query joining the area suffices.
+    plain_unit = Unit.objects.get(pk=unit.pk)
+    with django_assert_num_queries(1):
+        assert area_of_unit(plain_unit) == area

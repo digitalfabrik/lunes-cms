@@ -45,6 +45,8 @@ class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Word.objects.none()
 
+        area = self.area
+        assert area is not None
         queryset = published_words(
             Word.objects.filter(
                 unit_word_relations__unit__released=True,
@@ -53,7 +55,7 @@ class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
                 audio_check_status="CONFIRMED",
                 image_check_status="CONFIRMED",
             ),
-            self.area,
+            area,
         )
         return (
             queryset.prefetch_related("alternative_words").distinct().order_by("word")

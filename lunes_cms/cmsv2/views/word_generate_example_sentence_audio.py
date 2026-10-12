@@ -6,16 +6,24 @@ import uuid
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from lunes_cms.cmsv2.areas import visible_words
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
-from lunes_cms.cmsv2.utils import cache_busted_url, is_ajax, OpenAIConfigurationError
+from lunes_cms.cmsv2.utils import (
+    cache_busted_url,
+    is_ajax,
+    OpenAIConfigurationError,
+    replace_file,
+    safe_temp_path,
+)
 from lunes_cms.core import settings
 
-from .decorators import require_any_permission_json
+from .decorators import json_not_found, require_any_permission_json
 
 
 @login_required
@@ -29,11 +37,16 @@ def word_generate_example_sentence_audio_via_openai(
     Returns the URL/path to the temporary file.
     """
 
+    try:
+        word = visible_words(request.user).get(pk=word_id)
+    except Word.DoesNotExist:
+        return json_not_found(_("Word not found"))
+
     example_sentence_text = request.POST.get("example_sentence_text")
     if not example_sentence_text:
-        return JsonResponse({"error": "No example_sentence_text provided."}, status=400)
-
-    word = get_object_or_404(Word, pk=word_id)
+        return JsonResponse(
+            {"error": _("No example_sentence_text provided.")}, status=400
+        )
 
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
@@ -50,7 +63,7 @@ def word_generate_example_sentence_audio_via_openai(
 
         return JsonResponse(
             {
-                "message": "Audio generated and saved temporarily!",
+                "message": _("Audio generated and saved temporarily!"),
                 "temp_audio_url": temp_audio_url,
                 "temp_audio_filename": temp_filename,
             }
@@ -77,7 +90,12 @@ def word_store_generated_example_sentence_audio_permanently(
     JSON response; otherwise it redirects back to the edit view.
     """
 
-    word_instance = get_object_or_404(Word, pk=word_id)
+    try:
+        word_instance = visible_words(request.user).get(pk=word_id)
+    except Word.DoesNotExist:
+        if is_ajax(request):
+            return json_not_found(_("Word not found"))
+        raise Http404 from None
     temp_filename = request.POST.get("temp_audio_filename")
 
     def failure(message: str, status: int = 400) -> HttpResponse:
@@ -88,9 +106,8 @@ def word_store_generated_example_sentence_audio_permanently(
     if not temp_filename:
         return failure("No temporary audio file provided.")
 
-    temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)
-
-    if not os.path.exists(temp_filepath):
+    temp_filepath = safe_temp_path(settings.TEMP_AUDIO_DIR, temp_filename)
+    if not temp_filepath:
         return failure("Temporary audio file no longer exists.")
 
     try:
@@ -99,10 +116,7 @@ def word_store_generated_example_sentence_audio_permanently(
                 f.read(),
                 name=f'{word_instance.word.replace(" ", "_")}_example_sentence.mp3',
             )
-            # content_file.name is always the literal set above; ContentFile.name
-            # is typed Optional[str] only because the base File class allows it.
-            assert content_file.name is not None
-            word_instance.example_sentence_audio.save(content_file.name, content_file)
+            replace_file(word_instance.example_sentence_audio, content_file)
         word_instance.example_sentence_audio_regenerated = True
         word_instance.save()
 
@@ -112,7 +126,7 @@ def word_store_generated_example_sentence_audio_permanently(
             return JsonResponse(
                 {
                     "status": "success",
-                    "message": "Audio saved successfully.",
+                    "message": _("Audio saved successfully."),
                     "audio_url": cache_busted_url(word_instance.example_sentence_audio),
                 }
             )

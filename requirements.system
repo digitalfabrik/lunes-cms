@@ -1,8 +1,11 @@
 python3-pip
 python3-venv
+python3-dev
+build-essential
 libpq-dev
 ffmpeg
 gettext
 pcregrep
+netcat-openbsd
 nodejs
 npm

@@ -10,6 +10,7 @@ import warnings
 from html import escape
 from typing import Any, Iterable, Optional, TYPE_CHECKING
 
+from django.core.files.base import ContentFile
 from django.db.models.fields.files import FieldFile, ImageFieldFile
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
@@ -42,6 +43,34 @@ def create_resource_path(parent_dir: str, filename: str) -> str:
         str: A unique path combining the parent directory and a UUID-based filename
     """
     return os.path.join(parent_dir, str(uuid.uuid1()) + pathlib.Path(filename).suffix)
+
+
+def safe_temp_path(directory: str, filename: str) -> Optional[str]:
+    """
+    Resolve a client supplied temporary filename inside the given directory.
+
+    The filename is reduced to its basename, and the names that would still
+    escape or name the directory itself are rejected, so the result is always a
+    regular file directly inside ``directory``.
+
+    Args:
+        directory (str): The temporary directory the file has to live in
+        filename (str): The filename as it came in with the request
+
+    Returns:
+        Optional[str]: The path of the file inside ``directory``, or None if the
+            name does not resolve to a file there
+    """
+    safe_name = os.path.basename(filename)
+    rejected = safe_name in ("", os.curdir, os.pardir)
+    if rejected or safe_name != filename:
+        logger.warning(
+            "Refused a temporary filename outside %s: %r", directory, filename
+        )
+    if rejected:
+        return None
+    path = os.path.join(directory, safe_name)
+    return path if os.path.isfile(path) else None
 
 
 def get_random_key(length: int = 10, excluded_chars: Optional[list[str]] = None) -> str:
@@ -197,6 +226,24 @@ def make_safe_filename(unsafe: str) -> str:
     Method to create a safe filename with regex.
     """
     return re.sub(r"[^a-zA-Z0-9.äöüÄÖÜ]+", "_", unsafe)
+
+
+def replace_file(
+    field_file: FieldFile, content: ContentFile, save: bool = True
+) -> None:
+    """
+    Saves ``content`` to ``field_file`` and removes the file it replaced.
+
+    The new file is saved first, so the old one is still in place if saving
+    fails. The old file is kept if the new one ended up under the same name.
+    """
+    # ContentFile.name is typed Optional[str] only because the base File class
+    # allows it; callers always construct it with a name.
+    assert content.name is not None
+    old_name = field_file.name
+    field_file.save(content.name, content, save=save)
+    if old_name and old_name != field_file.name:
+        field_file.storage.delete(old_name)
 
 
 def is_ajax(request: HttpRequest) -> bool:

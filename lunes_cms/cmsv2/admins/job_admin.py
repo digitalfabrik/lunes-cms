@@ -6,6 +6,7 @@ from typing import Any, Iterable, Iterator, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
@@ -32,7 +33,7 @@ from .word_export_resource import WordExportResource
 if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
     from django.contrib.admin.views.main import ChangeList
-    from django.db.models import ForeignKey, Model
+    from django.db.models import Field, ForeignKey, Model
     from django.forms import ModelChoiceField
     from django.utils.functional import _StrOrPromise
 
@@ -225,6 +226,7 @@ class JobAdmin(BaseAdmin):
         "created_by",
         "created_by_user",
         "released",
+        "expert_reviewed",
         "archived",
         "import_csv_link",
     ]
@@ -242,6 +244,7 @@ class JobAdmin(BaseAdmin):
         "area",
         "migrated_status",
         "released",
+        "expert_reviewed",
         "archived",
         "list_icon",
         "created_by",
@@ -249,7 +252,13 @@ class JobAdmin(BaseAdmin):
         "created_at_date",
     ]
     list_display_links = ["name"]
-    list_filter = [ArchivedFilter, "released", MigratedFilter, ("area", AreaListFilter)]
+    list_filter = [
+        ArchivedFilter,
+        "released",
+        "expert_reviewed",
+        MigratedFilter,
+        ("area", AreaListFilter),
+    ]
     list_select_related = ["area", "created_by", "created_by_user"]
     actions = ["export_to_csv", "duplicate_jobs", "archive_jobs", "restore_jobs"]
     list_per_page = 25
@@ -291,6 +300,39 @@ class JobAdmin(BaseAdmin):
             return readonly_fields
         return [*readonly_fields, "area"]
 
+    def get_form(
+        self,
+        request: HttpRequest,
+        obj: Job | None = None,
+        change: bool = False,
+        **kwargs: Any,
+    ) -> type["ModelForm[Any]"]:
+        """
+        Preselect the area of a single-area administrator on the add form.
+
+        The field is read-only for them (see :meth:`get_readonly_fields`) and
+        so displays the instance's own ``area``, which for a brand new job is
+        the model's default (the main app area) rather than the
+        administrator's own — unlike ``formfield_for_foreignkey``'s
+        ``initial``, which is never consulted for a read-only field.
+        """
+        form = super().get_form(request, obj, change, **kwargs)
+        if obj is not None or request.user.is_superuser:
+            return form
+        areas = administered_areas(request.user)
+        own_area = areas.first() if len(areas) <= 1 else None
+        if own_area is None:
+            return form
+
+        class PreselectedAreaForm(form):  # type: ignore[misc,valid-type]
+            """``form``, with a fresh instance already pointed at the area."""
+
+            def __init__(self, *args: Any, **inner_kwargs: Any) -> None:
+                super().__init__(*args, **inner_kwargs)
+                self.instance.area = own_area
+
+        return PreselectedAreaForm
+
     def formfield_for_foreignkey(
         self,
         db_field: "ForeignKey[Any, Any]",
@@ -301,7 +343,9 @@ class JobAdmin(BaseAdmin):
         Offer an area administrator only the areas they administer.
 
         The area is preselected and cannot be emptied, so a job created by an
-        area administrator never ends up as main app content by accident.
+        area administrator never ends up in the wrong area by accident. A
+        user who administers several areas, including possibly the main app,
+        still has to pick one.
         """
         if db_field.name == "area" and not request.user.is_superuser:
             areas = administered_areas(request.user)
@@ -312,6 +356,29 @@ class JobAdmin(BaseAdmin):
                 kwargs["empty_label"] = None
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def formfield_for_dbfield(
+        self, db_field: "Field[Any, Any]", request: HttpRequest, **kwargs: Any
+    ) -> Any:
+        """
+        Switch off the add/change/delete/view-related icons of the area field.
+
+        ``formfield_for_foreignkey`` builds the plain field; the base
+        implementation of this method is what wraps it with those icons
+        afterwards, so it is only here, once that wrapping has happened,
+        that they can be turned back off. Managing an entire area from a
+        job's edit form is a shortcut nobody needs here, and a confusing (in
+        the delete case, dangerous) one to leave lying around; the area
+        change and list pages are one click away regardless.
+        """
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+        widget = getattr(formfield, "widget", None)
+        if db_field.name == "area" and isinstance(widget, RelatedFieldWidgetWrapper):
+            widget.can_add_related = False
+            widget.can_change_related = False
+            widget.can_delete_related = False
+            widget.can_view_related = False
+        return formfield
+
     def save_model(
         self,
         request: HttpRequest,
@@ -320,13 +387,21 @@ class JobAdmin(BaseAdmin):
         change: bool,
     ) -> None:
         """
-        Put a job an area administrator creates into their area.
+        Put a job a single-area administrator creates into their area.
 
-        Administrators of a single area never see the field, so it is filled in
-        for them here, the same way ``created_by`` is.
+        Administrators of a single area never see the field — it is
+        read-only for them, see :meth:`get_readonly_fields` — so their area
+        never reaches the form. It is filled in here instead, the same way
+        ``created_by`` is. A brand new job already defaults to the main app
+        area (see :func:`~lunes_cms.cmsv2.models.job.default_area_id`), so
+        this only has an effect when the administrator's own area differs
+        from that default.
         """
-        if not change and not request.user.is_superuser and obj.area is None:
-            obj.area = administered_areas(request.user).first()
+        if not change and not request.user.is_superuser:
+            areas = administered_areas(request.user)
+            own_area = areas.first()
+            if len(areas) <= 1 and own_area is not None:
+                obj.area = own_area
         super().save_model(request, obj, form, change)
 
     def related_units(self, obj: Job) -> str:
@@ -421,11 +496,13 @@ class JobAdmin(BaseAdmin):
         """
         Duplicate the selected jobs, including their related units.
 
-        Jobs of an area are skipped: their units must not be shared with a
-        second job, so duplicating them would need a deep copy of every unit
-        and word, which is a separate feature.
+        Jobs of a partner area are skipped: their units must not be shared
+        with a second job, so duplicating them would need a deep copy of
+        every unit and word, which is a separate feature. Jobs of the main
+        app area are shared freely between jobs already, so they may be
+        duplicated.
         """
-        skipped = queryset.filter(area__isnull=False).count()
+        skipped = queryset.exclude(area__is_main_app=True).count()
         if skipped:
             messages.warning(
                 request,
@@ -435,11 +512,12 @@ class JobAdmin(BaseAdmin):
                 )
                 % {"count": skipped},
             )
-        for job in queryset.filter(area__isnull=True):
+        for job in queryset.filter(area__is_main_app=True):
             units = list(job.units.all())
             job.pk = None
             job.v1_id = None
             job.released = False
+            job.expert_reviewed = False
             job.archived = False
             new_label = _("New")
             job.name = f"{job.name} ({new_label})"

@@ -13,15 +13,36 @@ from .area import Area
 from .static import convert_umlaute_images
 
 
+def default_area_id() -> int:
+    """
+    The primary key of the main app area, the default for a job that is
+    created without specifying one.
+
+    Code that is not about area scoping itself — a management command, a CSV
+    import, a script — should not have to think about areas at all, so a job
+    it creates lands in the shared main app catalog unless told otherwise.
+
+    :return: The primary key of the one area with ``is_main_app=True``
+    """
+    return Area.objects.get(is_main_app=True).pk
+
+
 class Job(models.Model):
     """
     Model representing a job category.
 
     This model stores information about job categories, including their name, icon,
-    and release status. Jobs can have multiple units associated with them.
+    release status and whether external experts have reviewed their content. Every
+    job counts as internally reviewed, so only the expert review is stored. Jobs can
+    have multiple units associated with them.
     """
 
     released = models.BooleanField(default=False, verbose_name=_("released"))
+    expert_reviewed = models.BooleanField(
+        default=False,
+        verbose_name=_("expert reviewed"),
+        help_text=_("Whether external experts have approved the content of this job."),
+    )
     archived = models.BooleanField(
         default=False,
         verbose_name=_("archived"),
@@ -38,13 +59,12 @@ class Job(models.Model):
     area = models.ForeignKey(
         Area,
         on_delete=models.PROTECT,
-        null=True,
-        blank=True,
+        default=default_area_id,
         related_name="jobs",
         verbose_name=_("area"),
         help_text=_(
             "Jobs of an area are only visible to the administrators of that "
-            "area. Jobs without an area belong to the main app."
+            "area. Jobs of the main app catalog belong to the 'Lunes' area."
         ),
     )
     created_by = models.ForeignKey(

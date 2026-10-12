@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from ..areas import visible_words
 from ..models import Word
 from ..utils import cache_busted_url
 from .decorators import require_any_permission_json
@@ -24,10 +26,10 @@ def update_word_audio(request: HttpRequest, word_id: int) -> JsonResponse:
         JsonResponse: A response indicating success or failure
     """
     try:
-        word = Word.objects.get(id=word_id)
+        word = visible_words(request.user).get(id=word_id)
     except Word.DoesNotExist:
         return JsonResponse(
-            {"status": "error", "message": "Word not found"}, status=404
+            {"status": "error", "message": _("Word not found")}, status=404
         )
 
     action = request.POST.get("action")
@@ -35,7 +37,7 @@ def update_word_audio(request: HttpRequest, word_id: int) -> JsonResponse:
     if action in ("add", "replace"):
         if "audio" not in request.FILES:
             return JsonResponse(
-                {"status": "error", "message": "No audio file provided"}, status=400
+                {"status": "error", "message": _("No audio file provided")}, status=400
             )
 
         word.audio = request.FILES["audio"]
@@ -44,7 +46,7 @@ def update_word_audio(request: HttpRequest, word_id: int) -> JsonResponse:
         return JsonResponse(
             {
                 "status": "success",
-                "message": "Audio added successfully",
+                "message": _("Audio added successfully"),
                 "audio_url": cache_busted_url(word.audio) if word.audio else None,
             }
         )
@@ -56,11 +58,11 @@ def update_word_audio(request: HttpRequest, word_id: int) -> JsonResponse:
             word.save()
 
             return JsonResponse(
-                {"status": "success", "message": "Audio deleted successfully"}
+                {"status": "success", "message": _("Audio deleted successfully")}
             )
 
         return JsonResponse(
-            {"status": "error", "message": "No audio file to delete"}, status=400
+            {"status": "error", "message": _("No audio file to delete")}, status=400
         )
 
-    return JsonResponse({"status": "error", "message": "Invalid action"}, status=400)
+    return JsonResponse({"status": "error", "message": _("Invalid action")}, status=400)

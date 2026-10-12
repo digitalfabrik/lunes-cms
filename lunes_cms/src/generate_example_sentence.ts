@@ -106,13 +106,15 @@ function _handleGenerate(button: HTMLButtonElement): void {
     window
         .postWithCsrf(button.dataset.url)
         .then(async (response) => {
-            const data = (await response.json()) as {
+            const data = (await window.readJsonBody(response)) as {
                 message?: string
                 example_sentence?: string
                 error?: string
             }
             if (!response.ok || data.error || !data.example_sentence) {
-                throw new Error(data.error ?? `HTTP error! status: ${response.status}`)
+                throw new Error(
+                    data.error ?? data.message ?? `HTTP error! status: ${response.status}`,
+                )
             }
             return data
         })
@@ -183,7 +185,7 @@ function _handleKeep(button: HTMLButtonElement): void {
         },
     })
         .then(async (response) => {
-            const data = (await response.json()) as { status?: string; message?: string }
+            const data = await window.readJsonBody(response)
             if (!response.ok || data.status !== "success") {
                 throw new Error(data.message ?? `HTTP error! status: ${response.status}`)
             }
