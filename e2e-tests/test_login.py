@@ -27,7 +27,7 @@ def test_login(page: Page, document: DocPage, base_url: str) -> None:
         screenshot=False,
     ):
         page.goto(f"{base_url}")
-        expect(page).to_have_url(f"{base_url}/de/admin/login/")
+        expect(page).to_have_url(f"{base_url}/de/admin/login/?next=/")
 
     with document.step(
         "Anmeldedaten eingeben",
