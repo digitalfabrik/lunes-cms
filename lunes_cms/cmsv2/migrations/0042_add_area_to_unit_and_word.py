@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0040_add_reviewer_view"),
+        ("cmsv2", "0041_unitwordrelation_image_source_word_image_source"),
     ]
 
     operations = [
