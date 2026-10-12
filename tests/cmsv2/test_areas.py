@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 
 from lunes_cms.cmsv2.areas import (
     administered_areas,
+    default_area,
     is_area_admin,
     move_job_to_area,
     move_unit_to_area,
@@ -85,6 +86,32 @@ def test_administered_areas_includes_the_main_app_area(main_app_area: Area) -> N
 
     assert list(administered_areas(admin_user)) == [main_app_area]
     assert is_area_admin(admin_user) is True
+
+
+@pytest.mark.django_db
+def test_default_area_per_user_kind(area: Area, main_app_area: Area) -> None:
+    """
+    New content of an administrator of a single area goes into that area,
+    everybody else creates main app content — unless they administer several
+    areas without the main app, then it is the first of their own (#1061).
+    """
+    other_area = Area.objects.create(name="Other")
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    multi_area_admin = _user("multi")
+    area.admins.add(multi_area_admin)
+    main_app_area.admins.add(multi_area_admin)
+    partner_only_admin = _user("partner-only")
+    area.admins.add(partner_only_admin)
+    other_area.admins.add(partner_only_admin)
+    superuser = _user("root", is_superuser=True)
+    area.admins.add(superuser)
+
+    assert default_area(single_area_admin) == area
+    assert default_area(multi_area_admin) == main_app_area
+    assert default_area(partner_only_admin) == area
+    assert default_area(superuser) == main_app_area
+    assert default_area(_user("plain")) == main_app_area
 
 
 @pytest.mark.django_db

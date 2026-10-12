@@ -15,8 +15,8 @@ from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
+from lunes_cms.cmsv2.admins.area_content_admin import AreaContentAdmin
 from lunes_cms.cmsv2.admins.area_filters import JobListFilter
-from lunes_cms.cmsv2.admins.base import BaseAdmin
 from lunes_cms.cmsv2.areas import (
     move_unit_to_area,
     scope_unit_word_relations,
@@ -192,7 +192,7 @@ class MigratedFilter(admin.SimpleListFilter):
         return queryset
 
 
-class UnitAdmin(BaseAdmin):
+class UnitAdmin(AreaContentAdmin):
     """
     Admin interface for the Unit model.
 

@@ -11,7 +11,7 @@ from typing import Any
 import pytest
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.exceptions import ValidationError
@@ -29,6 +29,7 @@ from lunes_cms.cmsv2.admins.unit_admin import (
 )
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin, WordAdminForm
 from lunes_cms.cmsv2.admins.word_inlines import UnitInlineFormSet
+from lunes_cms.cmsv2.areas import administered_areas
 from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
@@ -224,6 +225,125 @@ def test_save_model_leaves_jobs_of_other_users_without_an_area(
     assert job.area == Area.objects.get(is_main_app=True)
 
 
+CONTENT_ADMINS = [
+    pytest.param(JobAdmin, Job, id="job"),
+    pytest.param(UnitAdmin, Unit, id="unit"),
+    pytest.param(WordAdmin, Word, id="word"),
+]
+
+
+@pytest.mark.parametrize(("admin_class", "model"), CONTENT_ADMINS)
+def test_content_admins_restrict_the_area_field_the_same_way(
+    area: Area, request_factory: RequestFactory, admin_class: Any, model: Any
+) -> None:
+    """
+    Jobs, units and words share the rules for their area field: only
+    superusers move content between areas, an administrator of several areas
+    picks one of their own areas on the add form (#1061).
+    """
+    model_admin = admin_class(model, admin.site)
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    multi_area_admin = _user("multi")
+    area.admins.add(multi_area_admin)
+    Area.objects.create(name="Second").admins.add(multi_area_admin)
+    superuser = _user("root", is_superuser=True)
+
+    assert "area" in model_admin.get_readonly_fields(
+        _get_request(request_factory, single_area_admin)
+    )
+    multi_request = _get_request(request_factory, multi_area_admin)
+    assert "area" not in model_admin.get_readonly_fields(multi_request)
+    field = model_admin.formfield_for_dbfield(
+        model._meta.get_field("area"), multi_request
+    )
+    assert list(field.queryset) == list(administered_areas(multi_area_admin))
+    assert field.widget.can_add_related is False
+    assert "area" not in model_admin.get_readonly_fields(
+        _get_request(request_factory, superuser)
+    )
+
+
+@pytest.mark.parametrize(("admin_class", "model"), CONTENT_ADMINS)
+def test_content_admins_preselect_the_default_area_of_the_user(
+    area: Area, request_factory: RequestFactory, admin_class: Any, model: Any
+) -> None:
+    """
+    New content is put into the only area of a single-area administrator,
+    and into the main app for superusers and administrators of several areas
+    that include the main app (#1061).
+    """
+    model_admin = admin_class(model, admin.site)
+    main_app_area = Area.objects.get(is_main_app=True)
+    single_area_admin = _user("single")
+    area.admins.add(single_area_admin)
+    multi_area_admin = _user("multi")
+    area.admins.add(multi_area_admin)
+    main_app_area.admins.add(multi_area_admin)
+    superuser = _user("root", is_superuser=True)
+
+    def preselected(user: User) -> Area:
+        request = _get_request(request_factory, user)
+        return model_admin.get_form(request, None)().instance.area
+
+    assert preselected(single_area_admin) == area
+    assert preselected(multi_area_admin) == main_app_area
+    assert preselected(superuser) == main_app_area
+
+
+def test_unit_and_word_of_a_single_area_admin_land_in_their_area(
+    area: Area, client: Client
+) -> None:
+    """
+    Adding a word and a unit through the admin puts them into the area of a
+    single-area administrator, even though they never see the area field.
+    """
+    admin_user = _user("single", is_staff=True)
+    admin_user.user_permissions.add(
+        *Permission.objects.filter(
+            content_type__app_label="cmsv2",
+            codename__in=["add_word", "view_word", "add_unit", "view_unit"],
+        )
+    )
+    area.admins.add(admin_user)
+    area_job = Job.objects.create(name="Area job", area=area)
+    client.force_login(admin_user)
+
+    word_response = client.post(
+        "/en/admin/cmsv2/word/add/",
+        {
+            "word": "Bereichshammer",
+            "singular_article": 1,
+            "word_type": "Nomen",
+            "grammatical_gender": "",
+            "audio_check_status": "NOT_CHECKED",
+            "image_check_status": "NOT_CHECKED",
+            "example_sentence_check_status": "NOT_CHECKED",
+            "alternative_words-TOTAL_FORMS": "0",
+            "alternative_words-INITIAL_FORMS": "0",
+            "unit_word_relations-TOTAL_FORMS": "0",
+            "unit_word_relations-INITIAL_FORMS": "0",
+        },
+    )
+    unit_response = client.post(
+        "/en/admin/cmsv2/unit/add/",
+        {
+            "title": "Bereichswerkzeug",
+            "description": "",
+            "jobs": [area_job.pk],
+            "unit_word_relations-TOTAL_FORMS": "0",
+            "unit_word_relations-INITIAL_FORMS": "0",
+        },
+    )
+
+    assert word_response.status_code == 302, word_response.context[
+        "adminform"
+    ].form.errors
+    assert unit_response.status_code == 302, unit_response.context["errors"]
+    assert Word.objects.get(word="Bereichshammer").area == area
+    assert Unit.objects.get(title="Bereichswerkzeug").area == area
+
+
 def test_area_field_is_read_only_for_area_admins(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
@@ -286,10 +406,9 @@ def test_area_is_not_preselected_for_a_multi_area_admin_or_on_change(
     add_request = _get_request(request_factory, multi_area_admin)
 
     add_form = job_admin.get_form(add_request, None)()
-    # The instance itself is untouched by get_form for a multi-area admin —
-    # the widget's own preselection is asserted in
-    # test_area_is_preselected_and_required_for_area_admins.
-    assert add_form["area"].value() in (area.pk, second_area.pk)
+    # Neither area is the main app, so the first of their own areas is
+    # preselected, see test_default_area_per_user_kind.
+    assert add_form["area"].value() == area.pk
 
     single_area_admin = _user("single")
     area.admins.add(single_area_admin)
@@ -548,8 +667,8 @@ def test_area_is_preselected_and_required_for_area_admins(
     area: Area, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
     """
-    An area administrator cannot leave the area of a new job empty, so no job
-    of theirs ends up as main app content.
+    An area administrator cannot leave the area of a new job empty and can
+    only pick one of their own areas.
     """
     second_area = Area.objects.create(name="Second area")
     user = _user("multi")
@@ -562,7 +681,6 @@ def test_area_is_preselected_and_required_for_area_admins(
 
     assert field is not None and field.queryset is not None
     assert field.required is True
-    assert field.initial in (area, second_area)
     assert list(field.queryset) == [area, second_area]
 
 

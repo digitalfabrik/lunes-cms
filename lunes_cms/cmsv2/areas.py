@@ -62,6 +62,28 @@ def is_area_admin(user: "User") -> bool:
     return administered_areas(user).exists()
 
 
+def default_area(user: "User") -> Area:
+    """
+    The area new content of the given user is put into, see #1061.
+
+    An administrator of a single area creates content in that area. A
+    superuser, an administrator of several areas and anybody else create
+    content of the main app catalog by default — unless they administer
+    several areas but not the main app, in which case it is the first of
+    their own areas, since they cannot pick any other.
+
+    :param user: The user who creates the content
+    :return: The default area of the content
+    """
+    main_app_area = Area.objects.get(is_main_app=True)
+    if getattr(user, "is_superuser", False):
+        return main_app_area
+    areas = list(administered_areas(user))
+    if len(areas) == 1 or (areas and main_app_area not in areas):
+        return areas[0]
+    return main_app_area
+
+
 def scope_jobs(queryset: "QuerySet[Job]", user: "User") -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the given user may see.
