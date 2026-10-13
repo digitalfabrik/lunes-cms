@@ -58,7 +58,7 @@ def backfill_alternative_words(apps, schema_editor):
     ):
         words_by_v1_id[v1_id].append(word_id)
     if not words_by_v1_id:
-        logger.info("No words migrated from v1 need their alternative words back.")
+        logger.info("No words were migrated from v1, so no alternative words to restore.")
         return
 
     alternatives_by_word = defaultdict(set)
