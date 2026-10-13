@@ -24,6 +24,28 @@ created elsewhere, so an import only generates audio for its own rows. The work
 is idempotent (already-populated rows are skipped) and isolates failures per
 row, so a single failing word does not block the rest.
 
+AI-generated marking
+====================
+
+Art. 50 of the EU AI Act requires synthetic audio to be marked in a
+machine-readable format. The duty falls on the provider of the generating AI
+system, so whether Lunes counts as one is a legal question; the marking is
+written so that either way the clips carry it. Every clip generated through
+OpenAI TTS (words and example sentences, admin view and CSV-import worker
+alike) gets the marking from ``mark_as_ai_generated()`` right after loudness
+normalization. It is the same XMP packet the image marking embeds (IPTC
+``DigitalSourceType`` ``trainedAlgorithmicMedia``), stored as the XMP
+specification prescribes for MP3: in an ID3v2 ``PRIV`` frame owned by ``XMP``.
+The audio stream is copied, not re-encoded.
+
+ffmpeg keeps the frame when ``Word.convert_audio()`` re-encodes word audio
+afterwards, so the marking is written once, at generation. Anything that
+rewrites the file without carrying its tags over strips the marking.
+
+Only clips generated from now on are marked. Existing clips are not
+backfilled, and no field records which clips are AI-generated (unlike
+``image_source`` for images). Audio uploaded by editors is left untouched.
+
 Configuration
 =============
 
