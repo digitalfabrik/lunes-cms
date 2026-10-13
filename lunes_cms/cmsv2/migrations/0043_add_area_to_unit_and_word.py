@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0041_unitwordrelation_image_source_word_image_source"),
+        ("cmsv2", "0042_backfill_alternative_words_from_v1"),
     ]
 
     operations = [

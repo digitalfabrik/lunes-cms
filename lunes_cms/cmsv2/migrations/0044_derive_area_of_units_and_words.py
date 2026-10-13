@@ -133,7 +133,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("cmsv2", "0042_add_area_to_unit_and_word"),
+        ("cmsv2", "0043_add_area_to_unit_and_word"),
     ]
 
     operations = [
