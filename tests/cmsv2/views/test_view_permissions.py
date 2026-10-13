@@ -231,17 +231,17 @@ def _area_content(name: str, area: Area | None) -> AreaContent:
     Build a tree of content belonging to the given area, or the main app area
     for ``None`` — every job has to belong to one now (#1016).
 
-    The word is linked to the unit and created by somebody else, so its area is
-    derived from the unit rather than from the creator exception.
+    The word is created by somebody else, so it is visible through its area
+    alone rather than through who created it.
     """
-    job = Job.objects.create(
-        name=f"{name} job", area=area or Area.objects.get(is_main_app=True)
-    )
-    unit = Unit.objects.create(title=f"{name} unit")
+    area = area or Area.objects.get(is_main_app=True)
+    job = Job.objects.create(name=f"{name} job", area=area)
+    unit = Unit.objects.create(title=f"{name} unit", area=area)
     unit.jobs.add(job)
     word = Word.objects.create(
         word=f"{name} word",
         singular_article=1,
+        area=area,
         created_by_user=User.objects.create_user(f"author-of-{name}"),
     )
     return AreaContent(

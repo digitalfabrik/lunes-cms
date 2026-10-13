@@ -4,13 +4,15 @@ from datetime import date
 from typing import TYPE_CHECKING
 
 from django.db.models import QuerySet
+from django.forms import ModelForm
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
-from lunes_cms.cmsv2.admins.base import BaseAdmin
+from lunes_cms.cmsv2.admins.area_content_admin import AreaContentAdmin
+from lunes_cms.cmsv2.admins.area_filters import AreaListFilter
 from lunes_cms.cmsv2.admins.word_filters import (
     HasCompleteExampleSentenceFilter,
     HasImageFilter,
@@ -24,7 +26,7 @@ from lunes_cms.cmsv2.admins.word_inlines import (
     format_html_lazy,
     UnitInline,
 )
-from lunes_cms.cmsv2.areas import area_of_word, scope_words
+from lunes_cms.cmsv2.areas import scope_words, validate_word_area
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.static import CheckStatus
@@ -42,7 +44,34 @@ if TYPE_CHECKING:
     from django.utils.functional import _StrOrPromise
 
 
-class WordAdmin(BaseAdmin):
+class WordAdminForm(ModelForm):
+    """
+    Form for the Word model that keeps a word inside a single area.
+    """
+
+    class Meta:
+        """
+        Meta class of the word form
+        """
+
+        model = Word
+        fields = "__all__"
+
+    def clean_area(self) -> Area | None:
+        """
+        Reject moving a word that is used in units of its current area.
+
+        A word can only be used in units of its own area, so it has to be
+        moved together with its units, see
+        :func:`~lunes_cms.cmsv2.areas.validate_word_area`.
+        """
+        area = self.cleaned_data["area"]
+        if area != self.instance.area:
+            validate_word_area(self.instance, area)
+        return area
+
+
+class WordAdmin(AreaContentAdmin):
     """
     Admin interface for the Word model.
 
@@ -51,6 +80,7 @@ class WordAdmin(BaseAdmin):
     It includes custom display methods for showing and managing assets.
     """
 
+    form = WordAdminForm
     fieldsets = (
         (
             format_html_lazy("<h2>{}</h2>", _("Word Information")),
@@ -62,6 +92,7 @@ class WordAdmin(BaseAdmin):
                     "word",
                     "plural_article",
                     "plural",
+                    "area",
                     "migrated_status",
                 )
             },
@@ -141,13 +172,14 @@ class WordAdmin(BaseAdmin):
         "image_check_status",
         HasImageFilter,
         ImageSourceFilter,
+        ("area", AreaListFilter),
         JobDropdownFilter,
         UnitDropdownFilter,
         HasCompleteExampleSentenceFilter,
         MigratedFilter,
         "created_by",
     ]
-    list_select_related = ["created_by", "created_by_user"]
+    list_select_related = ["area", "created_by", "created_by_user"]
     list_per_page = 25
 
     class Media:
@@ -175,28 +207,8 @@ class WordAdmin(BaseAdmin):
         css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Word]:
-        """
-        Restrict the words to the area of the user and prefetch the units
-        and jobs the "area" column derives from (#1007).
-        """
-        return scope_words(
-            super().get_queryset(request).prefetch_related("units__jobs__area"),
-            request.user,
-        )
-
-    def area(self, obj: Word) -> Area | None:
-        """
-        The area of the word, derived from the units it is linked to.
-
-        Args:
-            obj: The word object
-
-        Returns:
-            Area or None: The area of the word, or None for main app content
-        """
-        return area_of_word(obj)
-
-    area.short_description = _("area")  # type: ignore[attr-defined]
+        """Restrict the words to the area of the user"""
+        return scope_words(super().get_queryset(request), request.user)
 
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,

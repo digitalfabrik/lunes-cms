@@ -7,7 +7,6 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from ..areas import area_of_unit, area_of_word
 from ..feedback_filter import filter_feedback_by_creator_and_area
 from ..models import Area, Feedback, Job, Unit, Word
 from .feedback_area_filter import FeedbackAreaListFilter
@@ -43,7 +42,7 @@ class FeedbackAdmin(admin.ModelAdmin):
     def area(self, obj: Feedback) -> str:
         """
         The area of the job, unit or word the feedback refers to, for display
-        in the list view. Empty for a unit or word not yet linked to any job.
+        in the list view. Empty for a unit or word without an area.
         For an entry whose job, unit or word has since been deleted —
         ``content_object`` is a generic foreign key, not a real one, so
         deleting it does not delete or protect this feedback entry — this
@@ -57,9 +56,9 @@ class FeedbackAdmin(admin.ModelAdmin):
         if model_name == "job":
             area = cast(Job, content_object).area
         elif model_name == "unit":
-            area = area_of_unit(cast(Unit, content_object))
+            area = cast(Unit, content_object).area
         else:
-            area = area_of_word(cast(Word, content_object))
+            area = cast(Word, content_object).area
         return str(area) if area else ""
 
     area.short_description = _("area")  # type: ignore[attr-defined]

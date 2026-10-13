@@ -722,14 +722,18 @@ msgstr "Clients"
 msgid "created at"
 msgstr "Erstellt"
 
+#: cmsv2/admins/area_filters.py cmsv2/areas.py
+msgid "no area"
+msgstr "kein Bereich"
+
 #: cmsv2/admins/feedback_admin.py cmsv2/models/feedback.py
 msgid "No longer available"
 msgstr "Nicht mehr verfügbar"
 
 #: cmsv2/admins/feedback_admin.py cmsv2/admins/feedback_area_filter.py
-#: cmsv2/admins/unit_admin.py cmsv2/admins/word_admin.py cmsv2/models/area.py
-#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
-#: cmsv2/models/job.py
+#: cmsv2/models/area.py cmsv2/models/area_access_token.py
+#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/models/word.py
 msgid "area"
 msgstr "Bereich"
 
@@ -1133,8 +1137,13 @@ msgstr ""
 "kann nicht auch in Bereich „%(new_area)s“ verwendet werden."
 
 #: cmsv2/areas.py
-msgid "no area"
-msgstr "kein Bereich"
+#, python-format
+msgid ""
+"The job \"%(job)s\" belongs to area \"%(job_area)s\", but this unit belongs "
+"to area \"%(unit_area)s\"."
+msgstr ""
+"Der Beruf „%(job)s“ gehört zum Bereich „%(job_area)s“, diese Einheit aber "
+"zum Bereich „%(unit_area)s“."
 
 #: cmsv2/areas.py
 msgid ""
@@ -1147,32 +1156,38 @@ msgstr ""
 #: cmsv2/areas.py
 #, python-format
 msgid ""
-"The word \"%(word)s\" is already used in another area, so this unit cannot "
-"be assigned to these jobs."
+"The word \"%(word)s\" is also used in other units, so this unit cannot be "
+"moved into area \"%(area)s\"."
 msgstr ""
-"Die Vokabel „%(word)s“ wird bereits in einem anderen Bereich verwendet, "
-"daher kann diese Einheit diesen Berufen nicht zugeordnet werden."
+"Die Vokabel „%(word)s“ wird auch in anderen Einheiten verwendet, daher kann "
+"diese Einheit nicht in den Bereich „%(area)s“ verschoben werden."
 
 #: cmsv2/areas.py
 #, python-format
 msgid ""
-"The unit \"%(unit)s\" is also assigned to %(jobs)s. A unit of a job that "
-"belongs to an area must not be assigned to any other job, so this job cannot "
-"be moved into an area."
+"The word is used in the unit \"%(unit)s\" of area \"%(unit_area)s\" and "
+"therefore has to belong to that area."
 msgstr ""
-"Die Einheit „%(unit)s“ ist auch %(jobs)s zugeordnet. Eine Einheit eines "
-"Berufs, der zu einem Bereich gehört, darf keinem weiteren Beruf zugeordnet "
-"werden, daher kann dieser Beruf nicht in einen Bereich verschoben werden."
+"Die Vokabel wird in der Einheit „%(unit)s“ des Bereichs „%(unit_area)s“ "
+"verwendet und muss daher zu diesem Bereich gehören."
 
 #: cmsv2/areas.py
 #, python-format
 msgid ""
-"The word \"%(word)s\" is also used outside of this job. All words of an area "
-"belong to that area alone, so this job cannot be moved into an area."
+"The unit \"%(unit)s\" is also assigned to %(jobs)s, so this job cannot be "
+"moved into area \"%(area)s\"."
 msgstr ""
-"Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet. Alle "
-"Vokabeln eines Bereichs gehören allein zu diesem Bereich, daher kann dieser "
-"Beruf nicht in einen Bereich verschoben werden."
+"Die Einheit „%(unit)s“ ist auch %(jobs)s zugeordnet, daher kann dieser Beruf "
+"nicht in den Bereich „%(area)s“ verschoben werden."
+
+#: cmsv2/areas.py
+#, python-format
+msgid ""
+"The word \"%(word)s\" is also used outside of this job, so this job cannot "
+"be moved into area \"%(area)s\"."
+msgstr ""
+"Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet, daher "
+"kann dieser Beruf nicht in den Bereich „%(area)s“ verschoben werden."
 
 #: cmsv2/models/area.py
 msgid "Shown on landing page."
@@ -1518,6 +1533,15 @@ msgstr "Einheit-Wort Beziehung"
 msgid "unit"
 msgstr "Einheit"
 
+#: cmsv2/models/unit.py
+msgid ""
+"Units of an area are only visible to the administrators of that area. A unit "
+"can only be assigned to jobs of its own area."
+msgstr ""
+"Einheiten eines Bereichs sind nur für die Administratoren dieses Bereichs "
+"sichtbar. Eine Einheit kann nur Berufen des eigenen Bereichs zugeordnet "
+"werden."
+
 #: cmsv2/models/word.py
 msgid "pronunciation"
 msgstr "Aussprache"
@@ -1535,6 +1559,15 @@ msgstr ""
 #: cmsv2/models/word.py
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
+
+#: cmsv2/models/word.py
+msgid ""
+"Words of an area are only visible to the administrators of that area. A word "
+"can only be used in units of its own area."
+msgstr ""
+"Vokabeln eines Bereichs sind nur für die Administratoren dieses Bereichs "
+"sichtbar. Eine Vokabel kann nur in Einheiten des eigenen Bereichs verwendet "
+"werden."
 
 #: cmsv2/models/word.py
 msgid "Words"
@@ -2037,6 +2070,34 @@ msgstr "Prüfung wurde gespeichert"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#, python-format
+#~ msgid ""
+#~ "The word \"%(word)s\" is already used in another area, so this unit "
+#~ "cannot be assigned to these jobs."
+#~ msgstr ""
+#~ "Die Vokabel „%(word)s“ wird bereits in einem anderen Bereich verwendet, "
+#~ "daher kann diese Einheit diesen Berufen nicht zugeordnet werden."
+
+#, python-format
+#~ msgid ""
+#~ "The unit \"%(unit)s\" is also assigned to %(jobs)s. A unit of a job that "
+#~ "belongs to an area must not be assigned to any other job, so this job "
+#~ "cannot be moved into an area."
+#~ msgstr ""
+#~ "Die Einheit „%(unit)s“ ist auch %(jobs)s zugeordnet. Eine Einheit eines "
+#~ "Berufs, der zu einem Bereich gehört, darf keinem weiteren Beruf "
+#~ "zugeordnet werden, daher kann dieser Beruf nicht in einen Bereich "
+#~ "verschoben werden."
+
+#, python-format
+#~ msgid ""
+#~ "The word \"%(word)s\" is also used outside of this job. All words of an "
+#~ "area belong to that area alone, so this job cannot be moved into an area."
+#~ msgstr ""
+#~ "Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet. Alle "
+#~ "Vokabeln eines Bereichs gehören allein zu diesem Bereich, daher kann "
+#~ "dieser Beruf nicht in einen Bereich verschoben werden."
 
 #~ msgid "Unit or Job"
 #~ msgstr "Einheit oder Job"

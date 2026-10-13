@@ -130,12 +130,12 @@ def test_pronunciation_defaults_to_empty() -> None:
 
 
 def test_text_for_audio_generation_respells_the_term_but_keeps_the_article() -> None:
-    word = Word(word="Baiser", singular_article=3, pronunciation="Bessee")
+    word = Word(word="Baiser", singular_article=3, pronunciation="Bessee", area=None)
 
     assert word.text_for_audio_generation() == "das Bessee"
 
 
 def test_text_for_audio_generation_uses_the_spelling_without_a_variant() -> None:
-    word = Word(word="Hammer", singular_article=1)
+    word = Word(word="Hammer", singular_article=1, area=None)
 
     assert word.text_for_audio_generation() == "der Hammer"

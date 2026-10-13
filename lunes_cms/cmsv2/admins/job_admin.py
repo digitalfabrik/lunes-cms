@@ -6,7 +6,6 @@ from typing import Any, Iterable, Iterator, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
-from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
@@ -19,22 +18,21 @@ from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
 from ..areas import (
-    administered_areas,
+    move_job_to_area,
     scope_jobs,
     validate_job_area,
     validate_unit_jobs,
 )
 from ..models import Area, Job, Unit, Word
 from ..utils import make_safe_filename
+from .area_content_admin import AreaContentAdmin
 from .area_filters import AreaListFilter
-from .base import BaseAdmin
 from .word_export_resource import WordExportResource
 
 if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
     from django.contrib.admin.views.main import ChangeList
-    from django.db.models import Field, ForeignKey, Model
-    from django.forms import ModelChoiceField
+    from django.forms import BaseFormSet
     from django.utils.functional import _StrOrPromise
 
 
@@ -53,11 +51,12 @@ class JobAdminForm(ModelForm):
 
     def clean_area(self) -> Area | None:
         """
-        Reject moving a job into an area while it shares content.
+        Reject moving a job into another area while it shares content.
 
-        A job whose units belong to other jobs as well, or whose words are used
-        outside of it, would drag main app content into the area. Untangling
-        that is a content decision, so the save is refused instead.
+        The units and words of a job move along with it, so a job whose units
+        belong to other jobs as well, or whose words are used outside of it,
+        would drag that content into the area. Untangling that is a content
+        decision, so the save is refused instead.
         """
         area = self.cleaned_data["area"]
         if area != self.instance.area:
@@ -69,10 +68,14 @@ class UnitJobInlineFormSet(BaseInlineFormSet):
     """
     Formset that keeps the units of a job inside a single area.
 
-    A unit of a job that belongs to an area must not be assigned to any other
-    job, so adding an already used unit to such a job has to be rejected here —
-    the constraint spans the many-to-many relation and can neither be expressed
-    in the database nor checked in ``Unit.clean()``.
+    A unit can only be assigned to jobs of its own area, and a unit of a job
+    that belongs to a partner area must not be assigned to any other job, so
+    adding such a unit has to be rejected here — the constraint spans the
+    many-to-many relation and can neither be expressed in the database nor
+    checked in ``Unit.clean()``. Rows that were saved already and still link
+    the same unit are not checked again: when the job is moved into another
+    area, its units are moved along (see
+    :func:`~lunes_cms.cmsv2.areas.move_job_to_area`).
     """
 
     def clean(self) -> None:
@@ -84,10 +87,12 @@ class UnitJobInlineFormSet(BaseInlineFormSet):
             unit = form.cleaned_data.get("unit")
             if not unit:
                 continue
+            if form.instance.pk and "unit" not in form.changed_data:
+                continue
             other_jobs = (
                 list(unit.jobs.exclude(pk=job.pk)) if job.pk else list(unit.jobs.all())
             )
-            validate_unit_jobs(unit, [job, *other_jobs])
+            validate_unit_jobs([job, *other_jobs], unit.area)
 
 
 class UnitInline(admin.TabularInline):
@@ -208,7 +213,7 @@ class ArchivedFilter(admin.SimpleListFilter):
             }
 
 
-class JobAdmin(BaseAdmin):
+class JobAdmin(AreaContentAdmin):
     """
     Admin interface for the Job model.
 
@@ -283,126 +288,20 @@ class JobAdmin(BaseAdmin):
             super().get_queryset(request).prefetch_related("units"), request.user
         )
 
-    def get_readonly_fields(
-        self, request: HttpRequest, obj: Job | None = None
-    ) -> list[str]:
-        """
-        Only superusers may move a job between areas.
-
-        An area administrator who administers several areas still has to pick
-        one when creating a job, so the field stays editable on the add form —
-        limited to their own areas, see :meth:`formfield_for_foreignkey`.
-        """
-        readonly_fields = list(super().get_readonly_fields(request, obj))
-        if request.user.is_superuser:
-            return readonly_fields
-        if obj is None and len(administered_areas(request.user)) > 1:
-            return readonly_fields
-        return [*readonly_fields, "area"]
-
-    def get_form(
+    def save_related(
         self,
         request: HttpRequest,
-        obj: Job | None = None,
-        change: bool = False,
-        **kwargs: Any,
-    ) -> type["ModelForm[Any]"]:
-        """
-        Preselect the area of a single-area administrator on the add form.
-
-        The field is read-only for them (see :meth:`get_readonly_fields`) and
-        so displays the instance's own ``area``, which for a brand new job is
-        the model's default (the main app area) rather than the
-        administrator's own — unlike ``formfield_for_foreignkey``'s
-        ``initial``, which is never consulted for a read-only field.
-        """
-        form = super().get_form(request, obj, change, **kwargs)
-        if obj is not None or request.user.is_superuser:
-            return form
-        areas = administered_areas(request.user)
-        own_area = areas.first() if len(areas) <= 1 else None
-        if own_area is None:
-            return form
-
-        class PreselectedAreaForm(form):  # type: ignore[misc,valid-type]
-            """``form``, with a fresh instance already pointed at the area."""
-
-            def __init__(self, *args: Any, **inner_kwargs: Any) -> None:
-                super().__init__(*args, **inner_kwargs)
-                self.instance.area = own_area
-
-        return PreselectedAreaForm
-
-    def formfield_for_foreignkey(
-        self,
-        db_field: "ForeignKey[Any, Any]",
-        request: HttpRequest,
-        **kwargs: Any,
-    ) -> "ModelChoiceField[Any] | None":
-        """
-        Offer an area administrator only the areas they administer.
-
-        The area is preselected and cannot be emptied, so a job created by an
-        area administrator never ends up in the wrong area by accident. A
-        user who administers several areas, including possibly the main app,
-        still has to pick one.
-        """
-        if db_field.name == "area" and not request.user.is_superuser:
-            areas = administered_areas(request.user)
-            if areas.exists():
-                kwargs["queryset"] = areas
-                kwargs["required"] = True
-                kwargs["initial"] = areas.first()
-                kwargs["empty_label"] = None
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def formfield_for_dbfield(
-        self, db_field: "Field[Any, Any]", request: HttpRequest, **kwargs: Any
-    ) -> Any:
-        """
-        Switch off the add/change/delete/view-related icons of the area field.
-
-        ``formfield_for_foreignkey`` builds the plain field; the base
-        implementation of this method is what wraps it with those icons
-        afterwards, so it is only here, once that wrapping has happened,
-        that they can be turned back off. Managing an entire area from a
-        job's edit form is a shortcut nobody needs here, and a confusing (in
-        the delete case, dangerous) one to leave lying around; the area
-        change and list pages are one click away regardless.
-        """
-        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
-        widget = getattr(formfield, "widget", None)
-        if db_field.name == "area" and isinstance(widget, RelatedFieldWidgetWrapper):
-            widget.can_add_related = False
-            widget.can_change_related = False
-            widget.can_delete_related = False
-            widget.can_view_related = False
-        return formfield
-
-    def save_model(
-        self,
-        request: HttpRequest,
-        obj: Job,
-        form: "ModelForm[Model]",
+        form: "ModelForm[Job]",
+        formsets: "list[BaseFormSet[Any]]",
         change: bool,
     ) -> None:
         """
-        Put a job a single-area administrator creates into their area.
-
-        Administrators of a single area never see the field — it is
-        read-only for them, see :meth:`get_readonly_fields` — so their area
-        never reaches the form. It is filled in here instead, the same way
-        ``created_by`` is. A brand new job already defaults to the main app
-        area (see :func:`~lunes_cms.cmsv2.models.job.default_area_id`), so
-        this only has an effect when the administrator's own area differs
-        from that default.
+        Move the units and words of a job along when the job was moved into
+        another area, see :func:`~lunes_cms.cmsv2.areas.move_job_to_area`.
         """
-        if not change and not request.user.is_superuser:
-            areas = administered_areas(request.user)
-            own_area = areas.first()
-            if len(areas) <= 1 and own_area is not None:
-                obj.area = own_area
-        super().save_model(request, obj, form, change)
+        super().save_related(request, form, formsets, change)
+        if change and "area" in form.changed_data:
+            move_job_to_area(form.instance)
 
     def related_units(self, obj: Job) -> str:
         """

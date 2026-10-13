@@ -56,10 +56,8 @@ class FeedbackAreaListFilter(admin.SimpleListFilter):
         word_type_id = ContentType.objects.get(app_label="cmsv2", model="word").id
 
         job_ids = Job.objects.filter(area=area).values_list("id", flat=True)
-        unit_ids = Unit.objects.filter(jobs__area=area).values_list("id", flat=True)
-        word_ids = Word.objects.filter(units__jobs__area=area).values_list(
-            "id", flat=True
-        )
+        unit_ids = Unit.objects.filter(area=area).values_list("id", flat=True)
+        word_ids = Word.objects.filter(area=area).values_list("id", flat=True)
 
         return queryset.filter(
             Q(content_type=job_type_id, object_id__in=job_ids)
