@@ -15,29 +15,11 @@ from pathlib import Path
 from PIL import Image
 
 from .ai_label import LABEL_MARGIN_RATIO, LABEL_PATH, LABEL_WIDTH_RATIO
+from .xmp import build_xmp_packet, DIGITAL_SOURCE_TYPE_URI
 
 WEBP_QUALITY = 95
 
-DIGITAL_SOURCE_TYPE_URI = (
-    "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
-)
-
-XMP_PACKET = f"""<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/">
- <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <rdf:Description rdf:about=""
-    xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    Iptc4xmpExt:DigitalSourceType="{DIGITAL_SOURCE_TYPE_URI}">
-   <dc:description>
-    <rdf:Alt>
-     <rdf:li xml:lang="x-default">AI-generated image</rdf:li>
-    </rdf:Alt>
-   </dc:description>
-  </rdf:Description>
- </rdf:RDF>
-</x:xmpmeta>
-<?xpacket end="w"?>""".encode("utf-8")
+XMP_PACKET = build_xmp_packet("AI-generated image").encode("utf-8")
 
 
 def _has_marking(image: Image.Image) -> bool:

@@ -18,6 +18,14 @@ from lunes_cms.cmsv2.services import audio_generation
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
 
+@pytest.fixture(autouse=True)
+def marker() -> Generator[mock.MagicMock, None, None]:
+    with mock.patch.object(
+        audio_generation, "mark_as_ai_generated", side_effect=lambda data: data
+    ) as patched:
+        yield patched
+
+
 @pytest.fixture
 def fast_worker(transactional_db: None) -> Generator[None, None, None]:
     """
@@ -515,3 +523,37 @@ def test_drain_uses_pronunciation_for_word_and_sentence_audio(
 
     assert word_call.call_args.args[0] == "der Bessee"
     assert sentence_call.call_args.args == ("Ich backe ein Baiser.", word)
+
+
+class TestGeneratedAudioIsMarked:
+    @pytest.fixture(autouse=True)
+    def pipeline(self, marker: mock.MagicMock) -> Generator[None, None, None]:
+        client = mock.MagicMock()
+        client.audio.speech.create.return_value.iter_bytes.return_value = [b"raw"]
+        marker.side_effect = None
+        marker.return_value = b"marked"
+        with (
+            mock.patch.object(
+                audio_generation, "get_openai_client", return_value=client
+            ),
+            mock.patch.object(
+                audio_generation, "normalize_loudness", return_value=b"normalized"
+            ),
+        ):
+            yield
+
+    @pytest.mark.parametrize(
+        "generate",
+        [
+            lambda: audio_generation.openai_word_audio_bytes("der Hammer"),
+            lambda: audio_generation.openai_sentence_audio_bytes(
+                "Das ist ein Hammer.", Word(word="Hammer", pronunciation="")
+            ),
+        ],
+        ids=["word", "sentence"],
+    )
+    def test_audio_is_marked_after_normalization(
+        self, generate: Callable[[], bytes], marker: mock.MagicMock
+    ) -> None:
+        assert generate() == b"marked"
+        marker.assert_called_once_with(b"normalized")

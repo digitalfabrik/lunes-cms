@@ -36,6 +36,7 @@ from lunes_cms.core.audio import normalize_loudness
 
 from ..models import Word
 from ..utils import get_openai_client, make_safe_filename, OpenAIConfigurationError
+from .audio_marking import mark_as_ai_generated
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,23 @@ def apply_pronunciation(text: str, word: str, pronunciation: str) -> tuple[str, 
     return text, (f'Pronounce "{word}" and its inflected forms as "{pronunciation}".')
 
 
+def _synthesize(text: str, instructions: str) -> bytes:
+    """
+    Run OpenAI TTS, normalize the loudness and mark the clip as AI-generated.
+    """
+    client = get_openai_client()
+    response = client.audio.speech.create(
+        model=settings.OPENAI_TTS_MODEL,
+        voice=settings.OPENAI_TTS_VOICE,
+        input=text,
+        instructions=instructions,
+    )
+    audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
+    return mark_as_ai_generated(
+        normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
+    )
+
+
 def openai_word_audio_bytes(text: str) -> bytes:
     """
     Generate mp3 bytes for a single word/term via OpenAI TTS.
@@ -91,15 +109,7 @@ def openai_word_audio_bytes(text: str) -> bytes:
     pronunciation instruction prevents that. Requires an instruction-capable
     model (e.g. gpt-4o-mini-tts).
     """
-    client = get_openai_client()
-    response = client.audio.speech.create(
-        model=settings.OPENAI_TTS_MODEL,
-        voice=settings.OPENAI_TTS_VOICE,
-        input=text,
-        instructions=GERMAN_PRONUNCIATION_INSTRUCTION,
-    )
-    audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
-    return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
+    return _synthesize(text, GERMAN_PRONUNCIATION_INSTRUCTION)
 
 
 def openai_sentence_audio_bytes(sentence: str, word: Word) -> bytes:
@@ -123,15 +133,7 @@ def openai_sentence_audio_bytes(sentence: str, word: Word) -> bytes:
         for part in (GERMAN_PRONUNCIATION_INSTRUCTION, intonation, pronunciation_hint)
         if part
     )
-    client = get_openai_client()
-    response = client.audio.speech.create(
-        model=settings.OPENAI_TTS_MODEL,
-        voice=settings.OPENAI_TTS_VOICE,
-        input=spoken_sentence,
-        instructions=instruction,
-    )
-    audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
-    return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
+    return _synthesize(spoken_sentence, instruction)
 
 
 def _generate_for_word(word: Word) -> None:
