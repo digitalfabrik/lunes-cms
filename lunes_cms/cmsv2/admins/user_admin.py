@@ -1,16 +1,24 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
+import smtplib
 from typing import Any
 
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.db.models import QuerySet
 from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.models.area import Area
@@ -19,7 +27,11 @@ from lunes_cms.cmsv2.models.review import Review
 
 class LunesUserCreationForm(AdminUserCreationForm):
     """
-    User creation form that requires an email address.
+    User creation form that only asks for a username and an email address.
+
+    The admin never picks a password: the account is created with an
+    unusable password and the user sets their own through the link in the
+    invitation email :meth:`LunesUserAdmin.send_mail` sends.
     """
 
     class Meta(AdminUserCreationForm.Meta):
@@ -33,6 +45,14 @@ class LunesUserCreationForm(AdminUserCreationForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.fields["email"].required = True
+        for name in ("usable_password", "password1", "password2"):
+            del self.fields[name]
+
+    def validate_passwords(  # pylint: disable=unused-argument
+        self, *args: Any, **kwargs: Any
+    ) -> None:
+        # Makes ``set_password_and_save`` call ``set_unusable_password``.
+        self.cleaned_data["set_usable_password"] = False
 
 
 class LunesUserChangeForm(UserChangeForm):
@@ -120,17 +140,12 @@ class LunesUserAdmin(DjangoUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": (
-                    "username",
-                    "email",
-                    "usable_password",
-                    "password1",
-                    "password2",
-                ),
+                "fields": ("username", "email"),
             },
         ),
     )
     inlines = [*DjangoUserAdmin.inlines, UserReviewInline]
+    actions = ["resend_invitation"]
 
     def get_form(  # type: ignore[override]
         self, request: HttpRequest, obj: User | None = None, **kwargs: Any
@@ -166,6 +181,96 @@ class LunesUserAdmin(DjangoUserAdmin):
                 self.fields["administered_areas"].disabled = True
 
         return ReadOnlyAreasForm
+
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: User,
+        form: ModelForm[Any],
+        change: bool,
+    ) -> None:
+        """
+        Notify a newly created user by email once their account is saved.
+        """
+        super().save_model(request, obj, form, change)
+        if not change and not self.send_mail(request, obj):
+            messages.warning(
+                request,
+                gettext(
+                    "The account was created, but the email with the link to "
+                    "set the password could not be sent to {email}."
+                ).format(email=obj.email),
+            )
+
+    @admin.action(description=_("Resend invitation email"), permissions=["change"])
+    def resend_invitation(self, request: HttpRequest, queryset: QuerySet[User]) -> None:
+        """
+        Send the invitation email again, with a fresh link, to the selected
+        users who have not set a password yet.
+
+        Users who already have a password are skipped: for them the
+        invitation text would be wrong, and they can use "forgot password"
+        instead, which ignores accounts without a usable password. Users
+        without an email address are skipped as well.
+        """
+        users = list(queryset)
+        invited = [
+            user for user in users if user.email and not user.has_usable_password()
+        ]
+        sent = sum(self.send_mail(request, user) for user in invited)
+        if sent:
+            messages.success(
+                request,
+                _("%(count)d invitation email(s) have been sent.") % {"count": sent},
+            )
+        if failed := len(invited) - sent:
+            messages.error(
+                request,
+                _("%(count)d invitation email(s) could not be sent.")
+                % {"count": failed},
+            )
+        if skipped := len(users) - len(invited):
+            messages.warning(
+                request,
+                _(
+                    "%(count)d user(s) were skipped because they already set a "
+                    "password or have no email address."
+                )
+                % {"count": skipped},
+            )
+
+    def send_mail(self, request: HttpRequest, user: User) -> bool:
+        """
+        Send the account creation notification to ``user`` with a link to
+        set their password, and return whether that worked.
+
+        The link points to the regular password reset confirmation page, so
+        it expires after :setting:`django:PASSWORD_RESET_TIMEOUT` and stops
+        working once the password has been set. The mail goes out through
+        the configured :setting:`django:EMAIL_BACKEND`.
+        """
+        set_password_url = request.build_absolute_uri(
+            reverse(
+                "password_reset_confirm",
+                kwargs={
+                    "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "token": default_token_generator.make_token(user),
+                },
+            )
+        )
+        subject = gettext("Your Lunes CMS account has been created")
+        message = gettext(
+            "Hello {username},\n\n"
+            "an account has been created for you in the Lunes CMS.\n"
+            "Please set your password using the following link:\n\n"
+            "{url}\n\n"
+            "Your username is: {username}"
+        ).format(username=user.get_username(), url=set_password_url)
+        try:
+            send_mail(subject, message, None, [user.email])
+        except (smtplib.SMTPException, OSError):
+            return False
+        return True
 
     def save_formset(
         self,
