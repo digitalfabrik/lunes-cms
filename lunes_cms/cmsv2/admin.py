@@ -7,13 +7,14 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.http import HttpRequest
 
 from .admins import (
     AreaAdmin,
     FeedbackAdmin,
     JobAdmin,
+    LunesGroupAdmin,
     LunesUserAdmin,
     ReviewAdmin,
     UnitAdmin,
@@ -45,6 +46,8 @@ admin.site.register(UnitWordRelation, UnitWordRelationAdmin)
 admin.site.register(Word, WordAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
+admin.site.unregister(Group)
+admin.site.register(Group, LunesGroupAdmin)
 admin.site.unregister(User)
 admin.site.register(User, LunesUserAdmin)
 admin.site.login_form = AuthenticationForm
