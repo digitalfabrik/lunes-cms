@@ -155,6 +155,46 @@
     background: #6588f2;
 }
 
+.selector {
+    width: 100%;
+}
+
+.selector ul.selector-chooser {
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.selector ul.selector-chooser button {
+    width: 2.5rem;
+    margin: 4px 0;
+    padding: 4px 0;
+    font-size: 0;
+}
+
+.selector ul.selector-chooser button::before {
+    font-size: 1rem;
+}
+
+.selector ul.selector-chooser .selector-add::before {
+    content: "\2192";
+}
+
+.selector ul.selector-chooser .selector-remove::before {
+    content: "\2190";
+}
+
+.form-group:has(.selector) > .row {
+    flex-direction: column;
+}
+
+.form-group:has(.selector) > .row > [class*="col-"] {
+    max-width: 100%;
+    flex: 0 0 auto;
+    width: 100%;
+}
+
 .content-main .card-header {
     background-color: #6588f2;
 }
