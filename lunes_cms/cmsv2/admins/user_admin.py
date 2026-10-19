@@ -13,6 +13,7 @@ from django.forms import BaseModelFormSet, ModelForm
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
+from lunes_cms.cmsv2.admins.permission_labels import PermissionLabelMixin
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.review import Review
 
@@ -94,7 +95,7 @@ class UserReviewInline(admin.TabularInline):
         return request.user.is_superuser
 
 
-class LunesUserAdmin(DjangoUserAdmin):
+class LunesUserAdmin(PermissionLabelMixin, DjangoUserAdmin):
     """
     User admin extended with a Review inline so admins can grant
     per-word review access to individual users.
