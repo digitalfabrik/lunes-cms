@@ -395,7 +395,8 @@ def import_words_from_csv(dataset: Dataset, job: Job, user: User) -> ImportSumma
     collected in the summary's errors rather than aborting the rest.
     """
     summary = ImportSummary()
-    creator_fields = _creator_fields_for_user(user)
+    # The units and words of a job belong to the area of that job.
+    creator_fields = {**_creator_fields_for_user(user), "area": job.area}
     units = UnitResolver(job, creator_fields)
 
     for row_number, raw_row in enumerate(dataset.dict, start=HEADER_ROW + 1):

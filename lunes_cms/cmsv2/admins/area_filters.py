@@ -4,19 +4,40 @@ from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
 from django.http import HttpRequest
+from django.utils.html import escape
+from django.utils.translation import gettext_lazy as _
 
 from ..areas import administered_areas, visible_jobs
 from ..models import Area
 
 if TYPE_CHECKING:
-    from django.db.models import Field
+    from django.db.models import Field, Model
     from django.utils.functional import _StrPromise
 
 
 class AreaListFilter(admin.RelatedFieldListFilter):
     """
-    Filter for the area of a job that only offers the areas the user may see.
+    Filter for the area of a job, unit or word that only offers the areas the
+    user may see.
     """
+
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+        self,
+        field: "Field[Any, Any]",
+        request: HttpRequest,
+        params: dict[str, list[str]],
+        model: type[Model],
+        model_admin: admin.ModelAdmin[Any],
+        field_path: str,
+    ) -> None:
+        self.is_superuser = request.user.is_superuser
+        super().__init__(field, request, params, model, model_admin, field_path)
+        self.empty_value_display = escape(_("no area"))
+
+    @property
+    def include_empty_choice(self) -> bool:
+        """Offer the content without an area to superusers only."""
+        return self.is_superuser and super().include_empty_choice
 
     def field_choices(
         self,

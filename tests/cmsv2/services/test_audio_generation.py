@@ -316,7 +316,7 @@ def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
         ),
     ):
         audio_generation.openai_sentence_audio_bytes(
-            "Ist das eine Robinie?", Word(word="Robinie")
+            "Ist das eine Robinie?", Word(word="Robinie", area=None)
         )
 
     instructions = fake_client.audio.speech.create.call_args.kwargs["instructions"]
@@ -330,7 +330,7 @@ def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
         (audio_generation.openai_word_audio_bytes, ("der Apfel",)),
         (
             audio_generation.openai_sentence_audio_bytes,
-            ("Das ist ein Apfel.", Word(word="Apfel")),
+            ("Das ist ein Apfel.", Word(word="Apfel", area=None)),
         ),
     ],
 )
@@ -478,7 +478,7 @@ def test_sentence_audio_applies_the_pronunciation_variant(
         ),
     ):
         audio_generation.openai_sentence_audio_bytes(
-            sentence, Word(word="Baiser", pronunciation="Bessee")
+            sentence, Word(word="Baiser", pronunciation="Bessee", area=None)
         )
 
     create_kwargs = fake_client.audio.speech.create.call_args.kwargs

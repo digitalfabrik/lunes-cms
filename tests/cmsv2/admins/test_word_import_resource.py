@@ -24,7 +24,7 @@ from lunes_cms.cmsv2.admins.word_import_resource import (
     RowResult,
     validate_header_structure,
 )
-from lunes_cms.cmsv2.models import Unit, Word
+from lunes_cms.cmsv2.models import Area, Unit, Word
 from lunes_cms.cmsv2.models.job import Job
 
 # ---------------------------------------------------------------------------
@@ -283,6 +283,22 @@ def test_import_with_german_headers(job: Job, user: User) -> None:
     errors = import_words_from_csv(ds, job, user).errors
     assert errors == []
     assert _job_words(job).count() == 2
+
+
+@pytest.mark.django_db
+def test_import_puts_units_and_words_into_the_area_of_the_job(user: User) -> None:
+    """The units and words of a job belong to the area of that job (#1061)."""
+    area = Area.objects.create(name="Kolping")
+    job = Job.objects.create(name="Area job", area=area)
+    ds = _make_dataset(
+        ["Einheit", "Vokabel", "Artikel"], [["Werkzeug", "Hammer", "der"]]
+    )
+
+    errors = import_words_from_csv(ds, job, user).errors
+
+    assert errors == []
+    assert _job_words(job).get(word="Hammer").area == area
+    assert Unit.objects.get(title="Werkzeug", jobs=job).area == area
 
 
 @pytest.mark.django_db

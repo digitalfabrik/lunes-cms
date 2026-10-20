@@ -14,9 +14,10 @@ class Area(models.Model):
     """
     Model representing a dedicated content area of a part organization.
 
-    An area owns its jobs and, transitively, the units and words of those jobs.
-    Only the administrators of an area (and superusers) can see and change its
-    content. Jobs without an area are main app content and belong to no area.
+    An area owns its jobs, units and words, each of which stores its area in
+    a foreign key of its own. Only the administrators of an area (and
+    superusers) can see and change its content. The main app catalog is the
+    one area with ``is_main_app=True``.
     """
 
     name = models.CharField(max_length=255, unique=True, verbose_name=_("area"))
