@@ -60,6 +60,7 @@ const initFeedbackDialog = (): void => {
     const subtitleElement = dialog.querySelector<HTMLElement>("#dialog-hint")!
     const submitLabelElement = dialog.querySelector<HTMLElement>("#dialog__submit-label")!
     const reasonSelect = dialog.querySelector<HTMLSelectElement>("select[name='reason']")!
+    const commentField = dialog.querySelector<HTMLTextAreaElement>("textarea[name='comment']")!
     const reasonStatuses = reasonSelect.dataset.statuses!.split(" ")
 
     const showReasonsFor = (status: string): void => {
@@ -84,6 +85,7 @@ const initFeedbackDialog = (): void => {
         titleElement.textContent = label
         subtitleElement.textContent = subtitle
         submitLabelElement.textContent = submitText
+        commentField.value = ""
         showReasonsFor(status)
 
         // lets the stylesheet colour the dialog for this decision
