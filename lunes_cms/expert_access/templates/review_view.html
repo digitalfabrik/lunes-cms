@@ -160,7 +160,20 @@
                         {% translate "Comment" %} <span class="field__required" aria-hidden="true">*</span>
                     </label>
                     {{ form.comment }}
+                    <p class="field__hint" id="comment-character-count" aria-live="polite">0/120</p>
                 </div>
+                <script>
+                    (() => {
+                        const commentField = document.getElementById("{{ form.comment.id_for_label }}");
+                        const counter = document.getElementById("comment-character-count");
+                        if (!commentField || !counter) return;
+                        const updateCounter = () => {
+                            counter.textContent = `${commentField.value.length}/120`;
+                        };
+                        commentField.addEventListener("input", updateCounter);
+                        updateCounter();
+                    })();
+                </script>
                 <div class="dialog__actions">
                     <button type="button" data-dialog-close class="button button--cancel">
                         {% translate "Cancel" %}
