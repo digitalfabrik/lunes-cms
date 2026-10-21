@@ -304,7 +304,7 @@ def test_openai_image_bytes_requests_webp_from_openai(
     assert kwargs["output_compression"] == 85
 
 
-def test_openai_image_bytes_passes_the_label_as_reference_image() -> None:
+def test_openai_image_bytes_passes_the_label_as_reference_image(db: None) -> None:
     client = _fake_openai_client()
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):

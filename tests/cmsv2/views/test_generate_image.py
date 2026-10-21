@@ -28,7 +28,7 @@ def fake_openai(tmp_path: Path) -> Generator[None, None, None]:
     of the real media directory.
     """
     client = mock.MagicMock()
-    client.images.generate.return_value.data = [
+    client.images.edit.return_value.data = [
         mock.MagicMock(b64_json=base64.b64encode(b"webp").decode())
     ]
     with (

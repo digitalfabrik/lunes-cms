@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0038_create_main_app_area_and_make_required"),
+        ("cmsv2", "0044_derive_area_of_units_and_words"),
     ]
 
     operations = [
