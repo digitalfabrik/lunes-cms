@@ -10,5 +10,5 @@ require_installed
 
 # Run black
 echo "Starting code formatting with black..." | print_info
-black "lunes_cms/".
+black .
 echo "✔ Code formatting finished" | print_success
