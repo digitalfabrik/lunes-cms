@@ -576,7 +576,8 @@ msgstr ""
 
 #: cms/templates/admin/delete_confirmation.html
 #: cms/templates/admin/delete_selected_confirmation.html
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
 #: cmsv2/templates/admin/csv_form.html
 #: cmsv2/templates/admin/generate_audio_base.html
 #: cmsv2/templates/admin/generate_image_base.html
@@ -834,6 +835,10 @@ msgid "%(count)d job(s) have been restored successfully."
 msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 
 #: cmsv2/admins/job_admin.py
+msgid "Assign selected jobs to user"
+msgstr "Ausgewählte Berufe zuweisen"
+
+#: cmsv2/admins/job_admin.py
 msgid "Import"
 msgstr "Import"
 
@@ -916,16 +921,8 @@ msgstr ""
 "Einheiten wurden übersprungen, da sie bereits veröffentlicht waren"
 
 #: cmsv2/admins/unit_admin.py
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign selected units to user"
 msgstr "Ausgewählte Einheiten zuweisen"
-
-#: cmsv2/admins/unit_admin.py
-#, python-format
-msgid "Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned)."
-msgstr ""
-"%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
-"zugewiesen)."
 
 #: cmsv2/admins/user_admin.py
 msgid "areas"
@@ -970,6 +967,17 @@ msgstr "Audio"
 #: cmsv2/admins/word_admin.py
 msgid "Example Sentence"
 msgstr "Beispielsatz"
+
+#: cmsv2/admins/word_admin.py
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "Assign selected words to user"
+msgstr "Ausgewählte Vokabeln zuweisen"
+
+#: cmsv2/admins/word_admin.py
+#, python-format
+msgid "%(count)d word(s) were skipped, because they do not belong to any unit."
+msgstr ""
+"%(count)d Vokabel(n) wurden übersprungen, da sie zu keiner Einheit gehören."
 
 #: cmsv2/admins/word_admin.py
 msgid "Will be spoken:"
@@ -1093,7 +1101,6 @@ msgid "Plural"
 msgstr "Plural"
 
 #: cmsv2/admins/word_export_resource.py cmsv2/models/unit.py
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Units"
 msgstr "Einheit"
 
@@ -1583,6 +1590,10 @@ msgid "Review"
 msgstr "Vokabelprüfung"
 
 #: cmsv2/models/review.py
+msgid "Reviews"
+msgstr "Vokabelprüfungen"
+
+#: cmsv2/models/review.py
 msgid "Can review assigned reviews"
 msgstr "Kann zugewiesene Prüfungen bearbeiten"
 
@@ -1813,7 +1824,7 @@ msgstr ""
 "sichtbar. Eine Vokabel kann nur in Einheiten des eigenen Bereichs verwendet "
 "werden."
 
-#: cmsv2/models/word.py
+#: cmsv2/models/word.py cmsv2/templates/admin/cmsv2/assign_words_to_user.html
 msgid "Words"
 msgstr "Vokabel"
 
@@ -1835,9 +1846,50 @@ msgstr ""
 msgid "New content to review"
 msgstr "Neue Inhalte zur Prüfung"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/reviews.py
+#, python-format
+msgid "Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned)."
+msgstr ""
+"%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
+"zugewiesen)."
+
+#: cmsv2/templates/admin/cmsv2/assign_jobs_to_user.html
+#, python-format
+msgid "You are about to assign %(counter)s job to a single user."
+msgid_plural "You are about to assign %(counter)s jobs to a single user."
+msgstr[0] "Du bist dabei, %(counter)s Beruf einer Person zuzuweisen."
+msgstr[1] "Du bist dabei, %(counter)s Berufe einer Person zuzuweisen."
+
+#: cmsv2/templates/admin/cmsv2/assign_jobs_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "Words already assigned to this user will be skipped."
+msgstr ""
+"Vokabeln, die dieser Person bereits zugewiesen sind, werden übersprungen."
+
+#: cmsv2/templates/admin/cmsv2/assign_jobs_to_user.html
+msgid "Selected jobs"
+msgstr "Ausgewählte Berufe"
+
+#: cmsv2/templates/admin/cmsv2/assign_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
 msgid "Assign to user"
 msgstr "An nutzende Person zuweisen"
+
+#: cmsv2/templates/admin/cmsv2/assign_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "User"
+msgstr "Nutzende Person"
+
+#: cmsv2/templates/admin/cmsv2/assign_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "Assign"
+msgstr "Zuweisen"
+
+#: cmsv2/templates/admin/cmsv2/assign_to_user.html
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 #, python-format
@@ -1845,10 +1897,6 @@ msgid "You are about to assign %(counter)s unit to a single user."
 msgid_plural "You are about to assign %(counter)s units to a single user."
 msgstr[0] "Du bist dabei, %(counter)s Einheit einer Person zuzuweisen."
 msgstr[1] "Du bist dabei, %(counter)s Einheiten einer Person zuzuweisen."
-
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-msgid "User"
-msgstr "Nutzende Person"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Units already assigned to this user will be skipped."
@@ -1859,14 +1907,25 @@ msgstr ""
 msgid "Selected units"
 msgstr "Ausgewählte Einheiten"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-msgid "Assign"
-msgstr "Zuweisen"
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+#, python-format
+msgid "You are about to assign %(counter)s word to a single user."
+msgid_plural "You are about to assign %(counter)s words to a single user."
+msgstr[0] "Du bist dabei, %(counter)s Vokabel einer Person zuzuweisen."
+msgstr[1] "Du bist dabei, %(counter)s Vokabeln einer Person zuzuweisen."
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
-msgid "Cancel"
-msgstr "Abbrechen"
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "Choose units"
+msgstr "Einheiten auswählen"
+
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "Choose for each word the unit in which it should be reviewed."
+msgstr ""
+"Wähle für jede Vokabel die Einheit aus, in der sie überprüft werden soll."
+
+#: cmsv2/templates/admin/cmsv2/assign_words_to_user.html
+msgid "These words do not belong to any unit and will be skipped:"
+msgstr "Diese Vokabeln gehören zu keiner Einheit und werden übersprungen:"
 
 #: cmsv2/templates/admin/cmsv2/import_csv_button.html
 #: cmsv2/templates/admin/csv_form.html

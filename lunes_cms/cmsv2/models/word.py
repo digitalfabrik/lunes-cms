@@ -392,6 +392,15 @@ class Word(models.Model):
         """
         return SingularArticle(self.singular_article).label
 
+    @property
+    def as_str_with_article(self) -> str:
+        """
+        :return: The word with the article as text
+        """
+        if self.singular_article == SingularArticle.NONE:
+            return self.word
+        return f"{self.singular_article_as_text} {self.word}"
+
     def __str__(self) -> str:
         """
         Returns a string representation of the Word instance, which is its actual word.
