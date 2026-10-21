@@ -740,9 +740,9 @@ msgid "No longer available"
 msgstr "Nicht mehr verfügbar"
 
 #: cmsv2/admins/feedback_admin.py cmsv2/admins/feedback_area_filter.py
-#: cmsv2/models/area.py cmsv2/models/area_access_token.py
-#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/unit.py
-#: cmsv2/models/word.py
+#: cmsv2/models/ai_generation.py cmsv2/models/area.py
+#: cmsv2/models/area_access_token.py cmsv2/models/area_code.py
+#: cmsv2/models/job.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "area"
 msgstr "Bereich"
 
@@ -882,7 +882,7 @@ msgstr ""
 "%(new)d Vokabeln wurden an %(user)s zugewiesen (%(skipped)d waren bereits "
 "zugewiesen)."
 
-#: cmsv2/admins/user_admin.py cmsv2/models/ai_generation.py
+#: cmsv2/admins/user_admin.py
 msgid "areas"
 msgstr "Bereiche"
 
@@ -1189,11 +1189,9 @@ msgstr ""
 
 #: cmsv2/models/ai_generation.py
 msgid ""
-"The areas administered by the user who requested the generation, can be "
-"empty."
+"The area of the content that was generated, can be empty if the area is "
+"deleted."
 msgstr ""
-"Die Bereiche der Person, die die Generierung angefordert hat, "
-"können leer sein"
 
 #: cmsv2/models/ai_generation.py
 msgid "generation event"
@@ -2085,6 +2083,13 @@ msgstr ""
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid ""
+#~ "The areas administered by the user who requested the generation, can be "
+#~ "empty."
+#~ msgstr ""
+#~ "Die Bereiche der Person, die die Generierung angefordert hat, können leer "
+#~ "sein"
 
 #~ msgid "Unit or Job"
 #~ msgstr "Einheit oder Job"

@@ -406,7 +406,6 @@ class Unit(models.Model):
     area = models.ForeignKey(
         Area,
         on_delete=models.PROTECT,
-        null=True,
         default=default_area_id,
         related_name="units",
         verbose_name=_("area"),
