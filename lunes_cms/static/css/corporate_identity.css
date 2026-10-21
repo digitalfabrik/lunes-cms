@@ -480,6 +480,14 @@ fieldset.module {
     background-color: #3F6BEE;
 }
 
+.app-cmsv2 select.form-control:disabled {
+    appearance: none;
+    background-image: none!important;
+    background-color: var(--bs-secondary-bg);
+    opacity: 1;
+    cursor: not-allowed;
+}
+
 @media (prefers-color-scheme: dark) {
     .app-cmsv2 .card {
         background-color: #282838;
