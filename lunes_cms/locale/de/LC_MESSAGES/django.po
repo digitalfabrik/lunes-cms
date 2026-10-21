@@ -665,11 +665,11 @@ msgstr[1] "und %(remaining)s weitere Objekte werden gelöscht"
 
 #: cms/templates/admin/includes/legal_links.html core/utils.py
 msgid "Privacy policy"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #: cms/templates/admin/includes/legal_links.html core/utils.py
 msgid "Imprint"
-msgstr ""
+msgstr "Impressum"
 
 #: cms/templates/admin/object_delete_summary.html
 msgid "Summary"
@@ -733,7 +733,7 @@ msgstr "Erstellt"
 
 #: cmsv2/admins/area_filters.py cmsv2/areas.py
 msgid "no area"
-msgstr ""
+msgstr "kein Bereich"
 
 #: cmsv2/admins/feedback_admin.py cmsv2/models/feedback.py
 msgid "No longer available"
@@ -834,15 +834,15 @@ msgstr "Import"
 
 #: cmsv2/admins/review_admin.py
 msgid "Meta information"
-msgstr ""
+msgstr "Meta-Informationen"
 
 #: cmsv2/admins/review_admin.py
 msgid "word and article"
-msgstr ""
+msgstr "Wort und Artikel"
 
 #: cmsv2/admins/review_admin.py
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: cmsv2/admins/review_admin.py
 msgid "Reviewer"
@@ -855,7 +855,7 @@ msgstr "Berufe"
 
 #: cmsv2/admins/review_admin.py
 msgid "Creator"
-msgstr ""
+msgstr "Ersteller:in"
 
 #: cmsv2/admins/unit_admin.py
 msgid "Release all selected units"
@@ -1063,7 +1063,7 @@ msgstr "Hat Bild"
 
 #: cmsv2/admins/word_filters.py
 msgid "Image source"
-msgstr ""
+msgstr "Bildquelle"
 
 #: cmsv2/admins/word_filters.py cmsv2/models/job.py
 #: cmsv2/views/import_csv_view.py
@@ -1143,6 +1143,8 @@ msgid ""
 "The word \"%(word)s\" already belongs to area \"%(existing_area)s\" and "
 "cannot also be used in area \"%(new_area)s\"."
 msgstr ""
+"Die Vokabel „%(word)s“ gehört bereits zu Bereich „%(existing_area)s“ und "
+"kann nicht auch in Bereich „%(new_area)s“ verwendet werden."
 
 #: cmsv2/areas.py
 #, python-format
@@ -1150,6 +1152,8 @@ msgid ""
 "The job \"%(job)s\" belongs to area \"%(job_area)s\", but this unit belongs "
 "to area \"%(unit_area)s\"."
 msgstr ""
+"Der Beruf „%(job)s“ gehört zum Bereich „%(job_area)s“, diese Einheit aber "
+"zum Bereich „%(unit_area)s“."
 
 #: cmsv2/areas.py
 msgid ""
@@ -1165,6 +1169,8 @@ msgid ""
 "The word \"%(word)s\" is also used in other units, so this unit cannot be "
 "moved into area \"%(area)s\"."
 msgstr ""
+"Die Vokabel „%(word)s“ wird auch in anderen Einheiten verwendet, daher kann "
+"diese Einheit nicht in den Bereich „%(area)s“ verschoben werden."
 
 #: cmsv2/areas.py
 #, python-format
@@ -1172,6 +1178,8 @@ msgid ""
 "The word is used in the unit \"%(unit)s\" of area \"%(unit_area)s\" and "
 "therefore has to belong to that area."
 msgstr ""
+"Die Vokabel wird in der Einheit „%(unit)s“ des Bereichs „%(unit_area)s“ "
+"verwendet und muss daher zu diesem Bereich gehören."
 
 #: cmsv2/areas.py
 #, python-format
@@ -1179,6 +1187,8 @@ msgid ""
 "The unit \"%(unit)s\" is also assigned to %(jobs)s, so this job cannot be "
 "moved into area \"%(area)s\"."
 msgstr ""
+"Die Einheit „%(unit)s“ ist auch %(jobs)s zugeordnet, daher kann dieser Beruf "
+"nicht in den Bereich „%(area)s“ verschoben werden."
 
 #: cmsv2/areas.py
 #, python-format
@@ -1186,24 +1196,28 @@ msgid ""
 "The word \"%(word)s\" is also used outside of this job, so this job cannot "
 "be moved into area \"%(area)s\"."
 msgstr ""
+"Die Vokabel „%(word)s“ wird auch außerhalb dieses Berufs verwendet, daher "
+"kann dieser Beruf nicht in den Bereich „%(area)s“ verschoben werden."
 
 #: cmsv2/models/ai_generation.py
 msgid ""
 "The area of the content that was generated, can be empty if the area is "
 "deleted."
 msgstr ""
+"Der Bereich des generierten Inhalts, kann leer sein, wenn der Bereich "
+"gelöscht wurde."
 
 #: cmsv2/models/ai_generation.py
 msgid "generation event"
-msgstr ""
+msgstr "Generierungsereignis"
 
 #: cmsv2/models/ai_generation.py
 msgid "AI generation"
-msgstr ""
+msgstr "KI-Generierung"
 
 #: cmsv2/models/ai_generation.py
 msgid "AI generations"
-msgstr ""
+msgstr "KI-Generierungen"
 
 #: cmsv2/models/area.py
 msgid "Shown on landing page."
@@ -1318,11 +1332,12 @@ msgstr "Bereichscodes"
 
 #: cmsv2/models/job.py
 msgid "expert reviewed"
-msgstr ""
+msgstr "fachlich geprüft"
 
 #: cmsv2/models/job.py
 msgid "Whether external experts have approved the content of this job."
 msgstr ""
+"Gibt an, ob externe Expert:innen den Inhalt dieses Berufs freigegeben haben."
 
 #: cmsv2/models/job.py
 msgid "archived"
@@ -1395,15 +1410,15 @@ msgstr "Prüfstatus"
 
 #: cmsv2/models/review.py
 msgid "review priority"
-msgstr ""
+msgstr "Prüfpriorität"
 
 #: cmsv2/models/review.py core/settings.py
 msgid "Review"
-msgstr "Begutachtung"
+msgstr "Vokabelprüfung"
 
 #: cmsv2/models/review.py
 msgid "Can review assigned reviews"
-msgstr ""
+msgstr "Kann zugewiesene Prüfungen bearbeiten"
 
 #: cmsv2/models/static.py
 msgid "Confirmed"
@@ -1415,23 +1430,23 @@ msgstr "Nicht geprüft"
 
 #: cmsv2/models/static.py
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: cmsv2/models/static.py
 msgid "Uploaded"
-msgstr ""
+msgstr "Hochgeladen"
 
 #: cmsv2/models/static.py
 msgid "AI-generated without label"
-msgstr ""
+msgstr "KI-generiert ohne Kennzeichnung"
 
 #: cmsv2/models/static.py
 msgid "AI-generated with label"
-msgstr ""
+msgstr "KI-generiert mit Kennzeichnung"
 
 #: cmsv2/models/static.py
 msgid "AI-generated, labeled afterwards"
-msgstr ""
+msgstr "KI-generiert, nachträglich gekennzeichnet"
 
 #: cmsv2/models/static.py
 msgid "Pending Review"
@@ -1455,51 +1470,51 @@ msgstr "Nicht beurteilbar"
 
 #: cmsv2/models/static.py
 msgid "Content error"
-msgstr ""
+msgstr "Fachlicher Fehler"
 
 #: cmsv2/models/static.py
 msgid "Missing information"
-msgstr ""
+msgstr "Fehlende Information"
 
 #: cmsv2/models/static.py
 msgid "Wrong word"
-msgstr ""
+msgstr "Falsche Vokabel"
 
 #: cmsv2/models/static.py
 msgid "Bad image quality"
-msgstr ""
+msgstr "Bildqualität mangelhaft"
 
 #: cmsv2/models/static.py
 msgid "Bad audio quality"
-msgstr ""
+msgstr "Audioqualität mangelhaft"
 
 #: cmsv2/models/static.py
 msgid "Other"
-msgstr ""
+msgstr "Sonstiges"
 
 #: cmsv2/models/static.py
 msgid "Word is not relevant"
-msgstr ""
+msgstr "Vokabel nicht relevant"
 
 #: cmsv2/models/static.py
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplikat vorhanden"
 
 #: cmsv2/models/static.py
 msgid "Outside my area of expertise"
-msgstr ""
+msgstr "Außerhalb meines Fachbereichs"
 
 #: cmsv2/models/static.py
 msgid "Not enough context"
-msgstr ""
+msgstr "Zu wenig Kontext"
 
 #: cmsv2/models/static.py
 msgid "The word is too generic"
-msgstr ""
+msgstr "Vokabel zu generisch"
 
 #: cmsv2/models/static.py
 msgid "In review"
-msgstr "Liegt zur Begutachtung vor"
+msgstr "In Prüfung"
 
 #: cmsv2/models/static.py
 msgid "Completed"
@@ -1507,15 +1522,15 @@ msgstr "abgeschlossen"
 
 #: cmsv2/models/static.py
 msgid "Word audio"
-msgstr ""
+msgstr "Vokabel-Audio"
 
 #: cmsv2/models/static.py
 msgid "Example sentence audio"
-msgstr ""
+msgstr "Beispielsatz-Audio"
 
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "image source"
-msgstr ""
+msgstr "Bildquelle"
 
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio"
@@ -1561,6 +1576,9 @@ msgid ""
 "Units of an area are only visible to the administrators of that area. A unit "
 "can only be assigned to jobs of its own area."
 msgstr ""
+"Einheiten eines Bereichs sind nur für die Administratoren dieses Bereichs "
+"sichtbar. Eine Einheit kann nur Berufen des eigenen Bereichs zugeordnet "
+"werden."
 
 #: cmsv2/models/word.py
 msgid "pronunciation"
@@ -1585,6 +1603,9 @@ msgid ""
 "Words of an area are only visible to the administrators of that area. A word "
 "can only be used in units of its own area."
 msgstr ""
+"Vokabeln eines Bereichs sind nur für die Administratoren dieses Bereichs "
+"sichtbar. Eine Vokabel kann nur in Einheiten des eigenen Bereichs verwendet "
+"werden."
 
 #: cmsv2/models/word.py
 msgid "Words"
@@ -1702,7 +1723,7 @@ msgstr "Beispielsatz gespeichert."
 
 #: cmsv2/views/generate_image.py
 msgid "No area_id provided."
-msgstr "Keine area_id angegeben"
+msgstr "Keine area_id übergeben."
 
 #: cmsv2/views/generate_image.py
 msgid "Area not found"
@@ -1727,6 +1748,10 @@ msgid ""
 "\"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Beispielsatz\" and "
 "\"Aussprache\"."
 msgstr ""
+"Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie muss die Spalten "
+"\"Vokabel\" und \"Einheit\" enthalten, optional zusätzlich \"Wortart\", "
+"\"Singularartikel\", \"Plural\", \"Pluralartikel\", \"Beispielsatz\" und "
+"\"Aussprache\"."
 
 #: cmsv2/views/import_csv_view.py
 #, python-format
@@ -1945,162 +1970,152 @@ msgstr "Willkommen bei der Vokabelverwaltung von Lunes!"
 
 #: expert_access/apps.py
 msgid "expert access"
-msgstr ""
+msgstr "Zugang für Expert:innen"
 
 #: expert_access/templates/_base.html
 msgid "Expert access"
-msgstr ""
+msgstr "Zugang für Expert:innen"
 
 #: expert_access/templates/_base.html
 msgid "Lunes vocabulary review"
-msgstr ""
+msgstr "Lunes-Vokabelprüfung"
 
 #: expert_access/templates/_base.html
 msgid "Admin site"
-msgstr ""
+msgstr "Admin-Seite"
 
 #: expert_access/templates/_base.html
 #: expert_access/templates/password_change.html
 #: expert_access/templates/password_change_done.html
 msgid "Change password"
-msgstr ""
+msgstr "Passwort ändern"
 
 #: expert_access/templates/_base.html
 msgid "Log out"
-msgstr ""
+msgstr "Abmelden"
 
 #: expert_access/templates/password_change_done.html
 msgid "Your password was changed."
-msgstr ""
+msgstr "Dein Passwort wurde geändert."
 
 #: expert_access/templates/password_change_done.html
 msgid "Homepage"
-msgstr ""
+msgstr "Startseite"
 
 #: expert_access/templates/review_view.html
 msgid "Hello"
-msgstr ""
+msgstr "Hallo"
 
 #: expert_access/templates/review_view.html
 #, python-format
 msgid "%(counter)s open review"
 msgid_plural "%(counter)s open reviews"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(counter)s offene Prüfung"
+msgstr[1] "%(counter)s offene Prüfungen"
 
 #: expert_access/templates/review_view.html
 msgid "Word currently under review"
-msgstr ""
+msgstr "Aktuell zu prüfende Vokabel"
 
 #: expert_access/templates/review_view.html
 msgid "At the moment there is no word type for this word."
-msgstr ""
+msgstr "Der Vokabel wurde noch keine Wortart zugewiesen."
 
 #: expert_access/templates/review_view.html
 msgid "There is no image for this word yet."
-msgstr ""
+msgstr "Der Vokabel wurde noch kein Bild zugewiesen."
 
 #: expert_access/templates/review_view.html
 msgid "Play word"
-msgstr ""
+msgstr "Vokabel abspielen"
 
 #: expert_access/templates/review_view.html
 msgid "There is no audio for this word yet."
-msgstr ""
+msgstr "Der Vokabel wurde noch kein Audio zugewiesen."
 
 #: expert_access/templates/review_view.html
 msgid "Approve"
-msgstr ""
+msgstr "Freigeben"
 
 #: expert_access/templates/review_view.html
 msgid "Propose change"
-msgstr ""
+msgstr "Änderung vorschlagen"
 
 #: expert_access/templates/review_view.html
 msgid "The vocabulary item will be returned to an admin for review"
-msgstr ""
+msgstr "Die Vokabel wird zur Überarbeitung an eine:n Admin zurückgegeben"
 
 #: expert_access/templates/review_view.html
 msgid "Request change"
-msgstr ""
+msgstr "Änderung vorschlagen"
 
 #: expert_access/templates/review_view.html
 msgid "Reject vocabulary item"
-msgstr ""
+msgstr "Vokabel ablehnen"
 
 #: expert_access/templates/review_view.html
 msgid "The vocabulary item will be rejected"
-msgstr ""
+msgstr "Die Vokabel wird abgelehnt"
 
 #: expert_access/templates/review_view.html
 msgid "Reject"
-msgstr ""
+msgstr "Ablehnen"
 
 #: expert_access/templates/review_view.html
 msgid "Mark as not assessable"
-msgstr ""
+msgstr "Als nicht beurteilbar markieren"
 
 #: expert_access/templates/review_view.html
 msgid "The vocabulary item will be marked as not-assessable"
-msgstr ""
+msgstr "Die Vokabel wird als fachlich nicht beurteilbar zurückgegeben"
 
 #: expert_access/templates/review_view.html
 msgid "Mark"
-msgstr ""
+msgstr "Markieren"
 
 #: expert_access/templates/review_view.html
 msgid "Show previous vocabulary item"
-msgstr ""
+msgstr "Vorherige Vokabel anzeigen"
 
 #: expert_access/templates/review_view.html
 msgid "Show next vocabulary item"
-msgstr ""
+msgstr "Nächste Vokabel anzeigen"
 
 #: expert_access/templates/review_view.html
 msgid "Reason"
-msgstr ""
+msgstr "Grund"
 
 #: expert_access/templates/review_view.html
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: expert_access/templates/review_view.html
 msgid "Currently there are no words to check"
-msgstr ""
+msgstr "Momentan gibt es keine Vokabeln zur Prüfung"
 
 #: expert_access/views/review_view.py
 msgid "Please select a reason"
-msgstr ""
+msgstr "Bitte einen Grund auswählen"
 
 #: expert_access/views/review_view.py
 msgid "This reason cannot be given for this decision."
-msgstr ""
+msgstr "Dieser Grund ist für diese Aktion invalid."
 
 #: expert_access/views/review_view.py
 msgid "Review was skipped"
-msgstr ""
+msgstr "Prüfung wurde übersprungen"
 
 #: expert_access/views/review_view.py
 msgid "Previous review was selected"
-msgstr ""
+msgstr "Vorherige Vokabel wurde ausgewählt"
 
 #: expert_access/views/review_view.py
 msgid "Review was saved"
-msgstr ""
+msgstr "Prüfung wurde gespeichert"
 
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
-
-#~ msgid ""
-#~ "The areas administered by the user who requested the generation, can be "
-#~ "empty."
-#~ msgstr ""
-#~ "Die Bereiche der Person, die die Generierung angefordert hat, können leer "
-#~ "sein"
-
-#~ msgid "Unit or Job"
-#~ msgstr "Einheit oder Job"
 
 #, python-format
 #~ msgid ""
@@ -2130,6 +2145,9 @@ msgstr "Hilfe"
 #~ "Vokabeln eines Bereichs gehören allein zu diesem Bereich, daher kann "
 #~ "dieser Beruf nicht in einen Bereich verschoben werden."
 
+#~ msgid "Unit or Job"
+#~ msgstr "Einheit oder Job"
+
 #, python-format
 #~ msgid ""
 #~ "The word \"%(word)s\" belongs to another area and cannot be used in this "
@@ -2139,6 +2157,13 @@ msgstr "Hilfe"
 #~ "Einheit nicht verwendet werden."
 
 #~ msgid ""
+#~ "Jobs of an area are only visible to the administrators of that area. Jobs "
+#~ "without an area belong to the main app."
+#~ msgstr ""
+#~ "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
+#~ "sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
+
+#~ msgid ""
 #~ "The file must be UTF-8 encoded and comma-separated. It should contain the "
 #~ "columns \"Einheit\", \"Artikel\", \"Vokabel\" and \"Beispielsatz\", "
 #~ "optionally also \"Aussprache\"."
@@ -2146,13 +2171,6 @@ msgstr "Hilfe"
 #~ "Die Datei muss UTF-8-kodiert und kommagetrennt sein. Sie sollte die "
 #~ "Spalten \"Einheit\", \"Artikel\", \"Vokabel\" und \"Beispielsatz\" "
 #~ "enthalten, optional zusätzlich \"Aussprache\"."
-
-#~ msgid ""
-#~ "Jobs of an area are only visible to the administrators of that area. Jobs "
-#~ "without an area belong to the main app."
-#~ msgstr ""
-#~ "Berufe eines Bereichs sind nur für die Administratoren dieses Bereichs "
-#~ "sichtbar. Berufe ohne Bereich gehören zur Haupt-App."
 
 #~ msgid ""
 #~ "Deleting a code also withdraws the access of every client that redeemed "
