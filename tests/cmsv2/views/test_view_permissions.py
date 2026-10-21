@@ -156,6 +156,32 @@ def test_image_generation_accepts_either_content_permission(
     )
 
 
+def test_image_generation_rejects_a_foreign_area(
+    sweep_client: PermissionClient,
+) -> None:
+    """A generation cannot be recorded for an area the user does not administer."""
+    foreign_area = Area.objects.create(name="Foreign")
+
+    response = sweep_client.post(
+        reverse("cmsv2:generate_image_via_openai"),
+        {"word_text": "Hammer", "area_id": foreign_area.pk},
+    )
+
+    assert response.status_code == 404
+
+
+@pytest.mark.parametrize(("area_id", "status_code"), [("", 400), ("abc", 404)])
+def test_image_generation_requires_a_valid_area(
+    sweep_client: PermissionClient, area_id: str, status_code: int
+) -> None:
+    response = sweep_client.post(
+        reverse("cmsv2:generate_image_via_openai"),
+        {"word_text": "Hammer", "area_id": area_id},
+    )
+
+    assert response.status_code == status_code
+
+
 def test_csv_import_denies_user_without_add_permission(
     client_with_permissions: Callable[..., Client],
 ) -> None:

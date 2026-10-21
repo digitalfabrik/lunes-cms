@@ -25,7 +25,6 @@ import logging
 import re
 import threading
 import time
-from typing import Iterable
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -84,7 +83,7 @@ def apply_pronunciation(text: str, word: str, pronunciation: str) -> tuple[str, 
     return text, (f'Pronounce "{word}" and its inflected forms as "{pronunciation}".')
 
 
-def openai_word_audio_bytes(text: str, areas: Iterable[Area]) -> bytes:
+def openai_word_audio_bytes(text: str, area: Area) -> bytes:
     """
     Generate mp3 bytes for a single word/term via OpenAI TTS.
 
@@ -93,8 +92,7 @@ def openai_word_audio_bytes(text: str, areas: Iterable[Area]) -> bytes:
     pronunciation instruction prevents that. Requires an instruction-capable
     model (e.g. gpt-4o-mini-tts).
 
-    The generation is recorded for ``areas``, the areas administered by the
-    requesting user.
+    The generation is recorded for ``area``, the area of the word.
     """
     client = get_openai_client()
     response = client.audio.speech.create(
@@ -103,22 +101,19 @@ def openai_word_audio_bytes(text: str, areas: Iterable[Area]) -> bytes:
         input=text,
         instructions=GERMAN_PRONUNCIATION_INSTRUCTION,
     )
-    AIGeneration.record(AIGenerationEvent.WORD_AUDIO, areas)
+    AIGeneration.record(AIGenerationEvent.WORD_AUDIO, area)
     audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
     return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
 
-def openai_sentence_audio_bytes(
-    sentence: str, word: Word, areas: Iterable[Area]
-) -> bytes:
+def openai_sentence_audio_bytes(sentence: str, word: Word, area: Area) -> bytes:
     """
     Generate mp3 bytes for an example sentence via OpenAI TTS.
 
     Pins pronunciation to German (shared with single-word audio) and adds an
     intonation hint from the sentence ending so questions sound like questions.
 
-    The generation is recorded for ``areas``, the areas administered by the
-    requesting user.
+    The generation is recorded for ``area``, the area of the content the sentence belongs to.
     """
     if sentence.strip().endswith("?"):
         intonation = "Read it as a question with rising intonation."
@@ -141,12 +136,12 @@ def openai_sentence_audio_bytes(
         input=spoken_sentence,
         instructions=instruction,
     )
-    AIGeneration.record(AIGenerationEvent.EXAMPLE_SENTENCE_AUDIO, areas)
+    AIGeneration.record(AIGenerationEvent.EXAMPLE_SENTENCE_AUDIO, area)
     audio_bytes = b"".join(response.iter_bytes(chunk_size=4096))
     return normalize_loudness(audio_bytes, settings.OPENAI_TTS_LOUDNESS_LUFS)
 
 
-def _generate_for_word(word: Word, areas: Iterable[Area]) -> None:
+def _generate_for_word(word: Word) -> None:
     """
     Generate any missing audio for a single Word and save it to the FileField.
 
@@ -155,7 +150,7 @@ def _generate_for_word(word: Word, areas: Iterable[Area]) -> None:
     between them, holding no lock.
     """
     if not word.audio:
-        data = openai_word_audio_bytes(word.text_for_audio_generation(), areas)
+        data = openai_word_audio_bytes(word.text_for_audio_generation(), word.area)
         word.audio.save(
             f"{make_safe_filename(word.word)}.mp3",
             ContentFile(data),
@@ -163,7 +158,7 @@ def _generate_for_word(word: Word, areas: Iterable[Area]) -> None:
         logger.info("Generated word audio for word_id=%s (%s)", word.pk, word.word)
 
     if word.example_sentence and not word.example_sentence_audio:
-        data = openai_sentence_audio_bytes(word.example_sentence, word, areas)
+        data = openai_sentence_audio_bytes(word.example_sentence, word, word.area)
         word.example_sentence_audio_regenerated = True
         word.example_sentence_audio.save(
             f"{make_safe_filename(word.word)}_example_sentence.mp3",
@@ -186,16 +181,13 @@ def _pending_filter(word_ids: list[int] | None = None) -> Q:
 
 
 def drain_pending_audio(
-    word_ids: list[int] | None, areas: Iterable[Area], throttle_seconds: float = 1.0
+    word_ids: list[int] | None, throttle_seconds: float = 1.0
 ) -> None:
     """
     Process Words that need audio, one at a time, until none remain.
 
     ``word_ids`` restricts the drain to those Word rows (the ones a CSV
     import just created). Without it the whole table is scanned.
-
-    ``areas`` are the areas administered by the importing user, which every
-    generation of the batch is recorded for.
 
     Single-flight within the process: if another thread already holds the
     drain lock this call returns immediately (that thread will pick up
@@ -238,7 +230,7 @@ def drain_pending_audio(
             if word is None:
                 return
             try:
-                _generate_for_word(word, areas)
+                _generate_for_word(word)
             except OpenAIConfigurationError:
                 logger.warning("OpenAI not configured — audio worker exiting")
                 return

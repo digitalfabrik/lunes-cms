@@ -52,15 +52,6 @@ def area(db: None) -> Area:
     return Area.objects.create(name="Kolping")
 
 
-@pytest.fixture
-def main_app_area(db: None) -> Area:
-    """
-    The main app area, seeded by migration 0038 into every database, this
-    test one included — so it is fetched here rather than created again.
-    """
-    return Area.objects.get(is_main_app=True)
-
-
 @pytest.mark.django_db
 def test_administered_areas_and_is_area_admin(area: Area) -> None:
     """An area administrator is recognized by the areas they are listed in."""

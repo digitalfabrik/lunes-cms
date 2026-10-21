@@ -48,15 +48,14 @@ def test_prompt_contains_unit_when_given() -> None:
     assert "im Rahmen des Berufs Tischler und der Lerneinheit Werkzeuge" in prompt
 
 
-@pytest.mark.django_db
-def test_generation_uses_text_model_and_returns_sentence() -> None:
+def test_generation_uses_text_model_and_returns_sentence(main_app_area: Area) -> None:
     fake_client = _fake_openai_client()
 
     with mock.patch.object(
         sentence_generation, "get_openai_client", return_value=fake_client
     ):
         sentence = sentence_generation.openai_example_sentence(
-            "Hammer", "Tischler", areas=[]
+            "Hammer", "Tischler", area=main_app_area
         )
 
     assert sentence == "Der Hammer liegt auf der Werkbank."
@@ -73,43 +72,49 @@ def test_generation_uses_text_model_and_returns_sentence() -> None:
         ("  Der Hammer ist schwer.  ", "Der Hammer ist schwer."),
     ],
 )
-@pytest.mark.django_db
-def test_generation_strips_quotes_and_whitespace(raw: str, expected: str) -> None:
+def test_generation_strips_quotes_and_whitespace(
+    raw: str, expected: str, main_app_area: Area
+) -> None:
     fake_client = _fake_openai_client(content=raw)
 
     with mock.patch.object(
         sentence_generation, "get_openai_client", return_value=fake_client
     ):
         assert (
-            sentence_generation.openai_example_sentence("Hammer", "Tischler", areas=[])
+            sentence_generation.openai_example_sentence(
+                "Hammer", "Tischler", area=main_app_area
+            )
             == expected
         )
 
 
 @pytest.mark.parametrize("content", [None, "", '""'])
-@pytest.mark.django_db
-def test_generation_raises_on_empty_response(content: str | None) -> None:
+def test_generation_raises_on_empty_response(
+    content: str | None, main_app_area: Area
+) -> None:
     fake_client = _fake_openai_client(content=content)
 
     with mock.patch.object(
         sentence_generation, "get_openai_client", return_value=fake_client
     ):
         with pytest.raises(ValueError):
-            sentence_generation.openai_example_sentence("Hammer", "Tischler", areas=[])
+            sentence_generation.openai_example_sentence(
+                "Hammer", "Tischler", area=main_app_area
+            )
 
 
 @pytest.mark.django_db
-def test_generation_is_recorded_for_the_given_areas() -> None:
-    areas = [Area.objects.create(name="Kolping"), Area.objects.create(name="Caritas")]
+def test_generation_is_recorded_for_the_given_area() -> None:
+    area = Area.objects.create(name="Testarea")
 
     with mock.patch.object(
         sentence_generation, "get_openai_client", return_value=_fake_openai_client()
     ):
-        sentence_generation.openai_example_sentence("Hammer", "Tischler", areas=areas)
+        sentence_generation.openai_example_sentence("Hammer", "Tischler", area=area)
 
     generation = AIGeneration.objects.get()
     assert generation.generation_event == AIGenerationEvent.EXAMPLE_SENTENCE
-    assert set(generation.areas.all()) == set(areas)
+    assert generation.area == area
 
 
 # ---------------------------------------------------------------------------
@@ -138,7 +143,6 @@ def fast_worker(transactional_db: None) -> Generator[None, None, None]:
 def _run_drain(
     word_ids: list[int] | None = None,
     job_title: str | None = None,
-    areas: list[Area] | None = None,
 ) -> None:
     """
     Run the worker in a thread, like it runs in production.
@@ -154,7 +158,6 @@ def _run_drain(
             "word_ids": word_ids,
             "throttle_seconds": 0,
             "job_title": job_title,
-            "areas": areas or [],
         },
     )
     thread.start()
@@ -217,21 +220,21 @@ def test_drain_passes_unit_title_to_generation(fast_worker: None) -> None:
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_records_the_generation_for_the_given_areas(
+def test_drain_records_the_generation_for_the_area_of_the_word(
     fast_worker: None,
 ) -> None:
     AIGeneration.objects.all().delete()
-    area = Area.objects.create(name="Kolping")
-    word = _make_word(word="Hammer")
+    area = Area.objects.create(name="Testarea")
+    word = _make_word(word="Hammer", area=area)
 
     with mock.patch.object(
         sentence_generation, "get_openai_client", return_value=_fake_openai_client()
     ):
-        _run_drain(word_ids=[word.pk], job_title="Tischler", areas=[area])
+        _run_drain(word_ids=[word.pk], job_title="Tischler")
 
     generation = AIGeneration.objects.get()
     assert generation.generation_event == AIGenerationEvent.EXAMPLE_SENTENCE
-    assert list(generation.areas.all()) == [area]
+    assert generation.area == area
 
 
 @pytest.mark.django_db(transaction=True)
@@ -291,7 +294,7 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     succeeding = _make_word(word="Säge")
 
     def maybe_fail(
-        word: str, _job: str, _unit: str | None = None, *, areas: list[Area]
+        word: str, _job: str, _unit: str | None = None, *, area: Area
     ) -> str:
         if word == "Schraubenzieher":
             raise ValueError("simulated openai 5xx")

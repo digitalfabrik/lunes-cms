@@ -38,39 +38,47 @@ def fake_openai(tmp_path: Path) -> Generator[None, None, None]:
         yield
 
 
-def _generate(client: Client) -> None:
+def _generate(client: Client, area_id: int) -> None:
     response = client.post(
-        reverse("cmsv2:generate_image_via_openai"), {"word_text": "Hammer"}
+        reverse("cmsv2:generate_image_via_openai"),
+        {"word_text": "Hammer", "area_id": area_id},
     )
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_generation_is_recorded_for_the_areas_of_the_user(
+def test_generation_is_recorded_for_the_given_area(
     client: Client, fake_openai: None
 ) -> None:
-    areas = [Area.objects.create(name="Kolping"), Area.objects.create(name="Caritas")]
-    Area.objects.create(name="Diakonie")
-    user = get_user_model().objects.create_user(username="kolping", is_staff=True)
+    area = Area.objects.create(name="Testarea")
+    user = get_user_model().objects.create_user(username="testarea-admin", is_staff=True)
     user.user_permissions.add(Permission.objects.get(codename="change_word"))
-    for area in areas:
-        area.admins.add(user)
+    area.admins.add(user)
     client.force_login(user)
 
-    _generate(client)
+    _generate(client, area.pk)
 
     generation = AIGeneration.objects.get()
     assert generation.generation_event == AIGenerationEvent.IMAGE
-    assert set(generation.areas.all()) == set(areas)
+    assert generation.area == area
 
 
 @pytest.mark.django_db
-def test_generation_of_a_main_app_user_has_no_areas(
+def test_superuser_may_generate_for_any_area(
     admin_client: Client, fake_openai: None
 ) -> None:
-    Area.objects.create(name="Kolping")
+    area = Area.objects.create(name="Testarea")
 
-    _generate(admin_client)
+    _generate(admin_client, area.pk)
 
-    generation = AIGeneration.objects.get()
-    assert not generation.areas.exists()
+    assert AIGeneration.objects.get().area == area
+
+
+@pytest.mark.django_db
+def test_generation_requires_an_area(admin_client: Client, fake_openai: None) -> None:
+    response = admin_client.post(
+        reverse("cmsv2:generate_image_via_openai"), {"word_text": "Hammer"}
+    )
+
+    assert response.status_code == 400
+    assert not AIGeneration.objects.exists()

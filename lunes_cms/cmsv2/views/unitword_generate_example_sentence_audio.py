@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from lunes_cms.cmsv2.areas import administered_areas, visible_unit_word_relations
+from lunes_cms.cmsv2.areas import visible_unit_word_relations
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.audio_generation import openai_sentence_audio_bytes
 from lunes_cms.cmsv2.utils import (
@@ -89,7 +89,7 @@ def unitword_generate_example_sentence_audio_via_openai(
         audio_bytes = openai_sentence_audio_bytes(
             example_sentence_text,
             unitword_instance.word,
-            administered_areas(request.user),
+            unitword_instance.area,
         )
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"

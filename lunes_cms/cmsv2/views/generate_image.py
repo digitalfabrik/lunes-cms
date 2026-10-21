@@ -9,7 +9,8 @@ from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from lunes_cms.cmsv2.areas import administered_areas
+from lunes_cms.cmsv2.areas import accessible_areas
+from lunes_cms.cmsv2.models import Area
 from lunes_cms.cmsv2.services.image_generation import (
     build_image_prompt,
     GENERATED_IMAGE_EXTENSION,
@@ -18,7 +19,7 @@ from lunes_cms.cmsv2.services.image_generation import (
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
 
-from .decorators import require_any_permission_json
+from .decorators import json_not_found, require_any_permission_json
 
 logger = logging.getLogger(__name__)
 
@@ -47,14 +48,26 @@ def generate_image_via_openai(request: HttpRequest) -> JsonResponse:
     """
     AJAX endpoint to generate image using OpenAI and save it temporarily.
     Returns the URL/path to the temporary file.
+
+    The generation is recorded for the area posted as ``area_id``, the area of
+    the content the image is generated for.
     """
+
+    area_id = request.POST.get("area_id")
+    if not area_id:
+        return JsonResponse({"error": _("No area_id provided.")}, status=400)
+    areas = accessible_areas(request.user)
+    try:
+        area = areas.get(pk=area_id)
+    except (Area.DoesNotExist, ValueError):
+        return json_not_found(_("Area not found"))
 
     prompt = _prompt_from_request(request)
     if prompt is None:
         return JsonResponse({"error": _("No word_text provided.")}, status=400)
 
     try:
-        image_data = openai_image_bytes(prompt, administered_areas(request.user))
+        image_data = openai_image_bytes(prompt, area)
 
         os.makedirs(settings.TEMP_IMAGE_DIR, exist_ok=True)
 

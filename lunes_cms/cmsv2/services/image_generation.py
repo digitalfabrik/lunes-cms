@@ -17,7 +17,6 @@ import base64
 import logging
 import threading
 import time
-from typing import Iterable
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -105,7 +104,7 @@ def build_image_prompt(
     return prompt
 
 
-def openai_image_bytes(prompt: str, areas: Iterable[Area]) -> bytes:
+def openai_image_bytes(prompt: str, area: Area) -> bytes:
     """
     Call the OpenAI image edit API once, with the AI-disclosure label as the
     reference image, and return the raw bytes of the result.
@@ -115,8 +114,8 @@ def openai_image_bytes(prompt: str, areas: Iterable[Area]) -> bytes:
     the provenance markings OpenAI embeds (C2PA manifest, watermark) stay
     intact — a re-encode would strip them.
 
-    The generation is recorded for ``areas``, the areas administered by the
-    requesting user.
+    The generation is recorded for ``area``, the area of the content the
+    image is generated for.
     """
     client = get_openai_client()
     ai_label = (LABEL_PATH.name, LABEL_PATH.read_bytes(), "image/png")
@@ -132,22 +131,22 @@ def openai_image_bytes(prompt: str, areas: Iterable[Area]) -> bytes:
         output_compression=settings.OPENAI_IMAGE_OUTPUT_COMPRESSION,
         n=1,
     )
-    AIGeneration.record(AIGenerationEvent.IMAGE, areas)
+    AIGeneration.record(AIGenerationEvent.IMAGE, area)
     return base64.b64decode(response.data[0].b64_json)
 
 
 def openai_word_image_bytes(
-    word: Word, areas: Iterable[Area], job_title: str | None = None
+    word: Word, area: Area, job_title: str | None = None
 ) -> bytes:
     """
     Generate image bytes for a single word via the OpenAI image API.
+
+    The generation is recorded for ``area``, the area of the word.
     """
-    return openai_image_bytes(build_image_prompt(word.word, job_title=job_title), areas)
+    return openai_image_bytes(build_image_prompt(word.word, job_title=job_title), area)
 
 
-def _generate_for_word_image(
-    word: Word, areas: Iterable[Area], job_title: str | None = None
-) -> None:
+def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
     """
     Generate a missing image for a single Word and save it to the ImageField.
 
@@ -158,7 +157,7 @@ def _generate_for_word_image(
     other image in the system.
     """
     if not word.image:
-        data = openai_word_image_bytes(word, areas, job_title=job_title)
+        data = openai_word_image_bytes(word, word.area, job_title=job_title)
         word.image.save(
             f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
         )
@@ -177,7 +176,6 @@ def drain_pending_images(
     word_ids: list[int] | None = None,
     throttle_seconds: float = 1.0,
     job_title: str | None = None,
-    areas: Iterable[Area] = (),
 ) -> None:
     """
     Process Words that need an image, one at a time, until none remain.
@@ -188,9 +186,6 @@ def drain_pending_images(
     ``job_title`` adds the importing job to every prompt in the batch. A CSV
     import always targets a single job, unlike already saved words which can
     belong to several jobs.
-
-    ``areas`` are the areas administered by the importing user, which every
-    generation of the batch is recorded for.
 
     Single-flight within the process: if another thread already holds the
     drain lock this call returns immediately.
@@ -219,7 +214,7 @@ def drain_pending_images(
             if word is None:
                 return
             try:
-                _generate_for_word_image(word, areas, job_title=job_title)
+                _generate_for_word_image(word, job_title=job_title)
             except OpenAIConfigurationError:
                 logger.warning("OpenAI not configured — image worker exiting")
                 return

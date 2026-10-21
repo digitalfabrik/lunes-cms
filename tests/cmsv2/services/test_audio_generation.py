@@ -37,9 +37,7 @@ def fast_worker(transactional_db: None) -> Generator[None, None, None]:
         yield
 
 
-def _run_drain(
-    word_ids: list[int] | None = None, areas: list[Area] | None = None
-) -> None:
+def _run_drain(word_ids: list[int] | None = None) -> None:
     """
     Run the worker in a thread, like it runs in production.
 
@@ -50,7 +48,7 @@ def _run_drain(
     """
     thread = threading.Thread(
         target=audio_generation.drain_pending_audio,
-        kwargs={"word_ids": word_ids, "throttle_seconds": 0, "areas": areas or []},
+        kwargs={"word_ids": word_ids, "throttle_seconds": 0},
     )
     thread.start()
     thread.join(timeout=10)
@@ -105,12 +103,14 @@ def test_drain_generates_sentence_audio_when_example_present(fast_worker: None) 
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_records_the_generations_for_the_given_areas(
+def test_drain_records_the_generations_for_the_area_of_the_word(
     fast_worker: None,
 ) -> None:
     AIGeneration.objects.all().delete()
-    areas = [Area.objects.create(name="Kolping"), Area.objects.create(name="Caritas")]
-    word = _make_word(word="Hammer", example_sentence="Der Hammer ist schwer.")
+    area = Area.objects.create(name="Testarea")
+    word = _make_word(
+        word="Hammer", example_sentence="Der Hammer ist schwer.", area=area
+    )
 
     with (
         mock.patch.object(
@@ -120,15 +120,15 @@ def test_drain_records_the_generations_for_the_given_areas(
             audio_generation, "normalize_loudness", side_effect=lambda data, _lufs: data
         ),
     ):
-        _run_drain(word_ids=[word.pk], areas=areas)
+        _run_drain(word_ids=[word.pk])
 
-    generations = AIGeneration.objects.prefetch_related("areas")
+    generations = AIGeneration.objects.all()
     assert sorted(generation.generation_event for generation in generations) == [
         AIGenerationEvent.EXAMPLE_SENTENCE_AUDIO,
         AIGenerationEvent.WORD_AUDIO,
     ]
     for generation in generations:
-        assert set(generation.areas.all()) == set(areas)
+        assert generation.area == area
 
 
 @pytest.mark.django_db(transaction=True)
@@ -156,7 +156,7 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(text: str, _areas: list[Area]) -> bytes:
+    def maybe_fail(text: str, _area: Area) -> bytes:
         if "Schraubenzieher" in text:
             raise ValueError("simulated openai 5xx")
         return b"ok-mp3"
@@ -304,8 +304,7 @@ def _fake_openai_client(audio_bytes: bytes = b"raw-mp3") -> mock.Mock:
     return fake_client
 
 
-@pytest.mark.django_db
-def test_word_audio_pins_pronunciation_to_german() -> None:
+def test_word_audio_pins_pronunciation_to_german(main_app_area: Area) -> None:
     """
     A single word has no sentence context, so the model otherwise reads German
     terms with the wrong accent. The TTS call must pass the German-pronunciation
@@ -321,7 +320,7 @@ def test_word_audio_pins_pronunciation_to_german() -> None:
             audio_generation, "normalize_loudness", side_effect=lambda data, _lufs: data
         ),
     ):
-        audio_generation.openai_word_audio_bytes("die Robinie", [])
+        audio_generation.openai_word_audio_bytes("die Robinie", main_app_area)
 
     create_kwargs = fake_client.audio.speech.create.call_args.kwargs
     assert create_kwargs["input"] == "die Robinie"
@@ -331,8 +330,9 @@ def test_word_audio_pins_pronunciation_to_german() -> None:
     )
 
 
-@pytest.mark.django_db
-def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
+def test_sentence_audio_reuses_german_instruction_with_intonation(
+    main_app_area: Area,
+) -> None:
     """
     Sentence audio shares the single German-pronunciation instruction and only
     adds an intonation hint, rather than duplicating the pronunciation wording.
@@ -348,7 +348,7 @@ def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
         ),
     ):
         audio_generation.openai_sentence_audio_bytes(
-            "Ist das eine Robinie?", Word(word="Robinie", area=None), []
+            "Ist das eine Robinie?", Word(word="Robinie"), main_app_area
         )
 
     instructions = fake_client.audio.speech.create.call_args.kwargs["instructions"]
@@ -357,18 +357,19 @@ def test_sentence_audio_reuses_german_instruction_with_intonation() -> None:
 
 
 @pytest.mark.parametrize(
-    "generate, args",
+    "generate, make_args",
     [
-        (audio_generation.openai_word_audio_bytes, ("der Apfel", [])),
+        (audio_generation.openai_word_audio_bytes, lambda area: ("der Apfel", area)),
         (
             audio_generation.openai_sentence_audio_bytes,
-            ("Das ist ein Apfel.", Word(word="Apfel", area=None), []),
+            lambda area: ("Das ist ein Apfel.", Word(word="Apfel", area=area), area),
         ),
     ],
 )
-@pytest.mark.django_db
 def test_generated_audio_is_loudness_normalized(
-    generate: Callable[..., bytes], args: tuple[Any, ...]
+    generate: Callable[..., bytes],
+    make_args: Callable[[Area], tuple[Any, ...]],
+    main_app_area: Area,
 ) -> None:
     """
     Word and sentence audio come back from the model at different levels, so
@@ -384,7 +385,7 @@ def test_generated_audio_is_loudness_normalized(
             audio_generation, "normalize_loudness", return_value=b"normalized-mp3"
         ) as normalize,
     ):
-        result = generate(*args)
+        result = generate(*make_args(main_app_area))
 
     assert result == b"normalized-mp3"
     assert normalize.call_args.args[0] == b"raw-mp3"
@@ -497,9 +498,8 @@ def test_apply_pronunciation_is_a_noop_without_a_variant(
         ("Die Baisers sind fertig.", "Die Baisers sind fertig.", 'as "Bessee"'),
     ],
 )
-@pytest.mark.django_db
 def test_sentence_audio_applies_the_pronunciation_variant(
-    sentence: str, expected_input: str, expected_hint: str
+    sentence: str, expected_input: str, expected_hint: str, main_app_area: Area
 ) -> None:
     fake_client = _fake_openai_client()
 
@@ -512,7 +512,7 @@ def test_sentence_audio_applies_the_pronunciation_variant(
         ),
     ):
         audio_generation.openai_sentence_audio_bytes(
-            sentence, Word(word="Baiser", pronunciation="Bessee", area=None), []
+            sentence, Word(word="Baiser", pronunciation="Bessee"), main_app_area
         )
 
     create_kwargs = fake_client.audio.speech.create.call_args.kwargs
@@ -548,4 +548,4 @@ def test_drain_uses_pronunciation_for_word_and_sentence_audio(
         _run_drain()
 
     assert word_call.call_args.args[0] == "der Bessee"
-    assert sentence_call.call_args.args == ("Ich backe ein Baiser.", word, [])
+    assert sentence_call.call_args.args == ("Ich backe ein Baiser.", word, word.area)

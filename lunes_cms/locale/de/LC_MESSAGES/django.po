@@ -1701,6 +1701,14 @@ msgid "Example sentence saved."
 msgstr "Beispielsatz gespeichert."
 
 #: cmsv2/views/generate_image.py
+msgid "No area_id provided."
+msgstr "Keine area_id angegeben"
+
+#: cmsv2/views/generate_image.py
+msgid "Area not found"
+msgstr "Bereich nicht gefunden"
+
+#: cmsv2/views/generate_image.py
 msgid "No word_text provided."
 msgstr "Kein Worttext übergeben."
 

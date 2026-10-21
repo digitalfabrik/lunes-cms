@@ -8,12 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from openai import OpenAIError
 
-from lunes_cms.cmsv2.areas import (
-    administered_areas,
-    visible_unit_word_relations,
-    visible_words,
-)
-from lunes_cms.cmsv2.models import Job, Word
+from lunes_cms.cmsv2.areas import visible_unit_word_relations, visible_words
+from lunes_cms.cmsv2.models import Area, Job, Word
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.services.sentence_generation import openai_example_sentence
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
@@ -22,13 +18,15 @@ from .decorators import json_not_found, require_any_permission_json
 
 
 def _generate_sentence_response(
-    request: HttpRequest,
+    area: Area,
     word: str,
     job_names: list[str],
     unit_title: Optional[str] = None,
 ) -> JsonResponse:
     """
     Run the OpenAI generation and wrap the result/errors in a JsonResponse.
+
+    ``area`` is the area of the content the sentence is generated for.
     """
     if not job_names:
         return JsonResponse(
@@ -45,7 +43,7 @@ def _generate_sentence_response(
             word,
             ", ".join(job_names),
             unit_title,
-            areas=administered_areas(request.user),
+            area=area,
         )
     except OpenAIConfigurationError as e:
         return JsonResponse({"error": str(e)}, status=503)
@@ -85,7 +83,9 @@ def word_generate_example_sentence_via_openai(
         .order_by("name")
         .values_list("name", flat=True)
     )
-    return _generate_sentence_response(request, word_instance.word, job_names)
+    return _generate_sentence_response(
+        word_instance.area, word_instance.word, job_names
+    )
 
 
 @login_required
@@ -108,7 +108,7 @@ def unitword_generate_example_sentence_via_openai(
         return json_not_found(_("Unit-Word relation not found"))
     job_names = list(relation.unit.jobs.order_by("name").values_list("name", flat=True))
     return _generate_sentence_response(
-        request, relation.word.word, job_names, relation.unit.title
+        relation.area, relation.word.word, job_names, relation.unit.title
     )
 
 

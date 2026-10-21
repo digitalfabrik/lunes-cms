@@ -12,7 +12,6 @@ own audio in the same import.
 import logging
 import threading
 import time
-from typing import Iterable
 
 from django.conf import settings
 from django.db import connection
@@ -59,7 +58,11 @@ def build_example_sentence_prompt(word: str, job: str, unit: str | None = None) 
 
 
 def openai_example_sentence(
-    word: str, job: str, unit: str | None = None, *, areas: Iterable[Area]
+    word: str,
+    job: str,
+    unit: str | None = None,
+    *,
+    area: Area,
 ) -> str:
     """
     Generate a single example sentence for a vocabulary term via OpenAI.
@@ -68,7 +71,7 @@ def openai_example_sentence(
         word: The vocabulary term the sentence is about
         job: The job (or comma-separated jobs) providing the professional context
         unit: Optional title of the learning unit for unit<>word relations
-        areas: The areas administered by the requesting user, which the generation is recorded for
+        area: The area of the content for which the example sentence is generated
 
     Returns:
         str: The generated example sentence
@@ -86,7 +89,7 @@ def openai_example_sentence(
             }
         ],
     )
-    AIGeneration.record(AIGenerationEvent.EXAMPLE_SENTENCE, areas)
+    AIGeneration.record(AIGenerationEvent.EXAMPLE_SENTENCE, area)
     sentence = (response.choices[0].message.content or "").strip()
     # The prompt asks for the bare sentence, but strip stray quotes anyway.
     sentence = sentence.strip("\"'„“‚‘»«").strip()
@@ -114,9 +117,7 @@ def _job_context_for_word(word: Word, job_title: str | None) -> str:
     return ", ".join(job_names)
 
 
-def _generate_for_word_sentence(
-    word: Word, areas: Iterable[Area], job_title: str | None = None
-) -> bool:
+def _generate_for_word_sentence(word: Word, job_title: str | None = None) -> bool:
     """
     Generate and save a missing example sentence for a single Word.
 
@@ -134,7 +135,7 @@ def _generate_for_word_sentence(
         )
         return False
     unit_title = word.units.values_list("title", flat=True).first()
-    sentence = openai_example_sentence(word.word, job, unit_title, areas=areas)
+    sentence = openai_example_sentence(word.word, job, unit_title, area=word.area)
     word.example_sentence = sentence
     # ``Word.save()`` flips ``example_sentence_check_status`` to NOT_CHECKED when
     # the sentence changes, so it must be in ``update_fields`` to be persisted.
@@ -154,15 +155,12 @@ def drain_pending_sentences(
     word_ids: list[int] | None = None,
     throttle_seconds: float = 1.0,
     job_title: str | None = None,
-    areas: Iterable[Area] = (),
 ) -> None:
     """
     Process Words that need an example sentence, one at a time, until none remain.
 
     ``word_ids`` restricts the drain to those Word rows (the ones a CSV import
     just created). ``job_title`` supplies the single job a CSV import targets.
-    ``areas`` are the areas administered by the importing user, which every
-    generation of the batch is recorded for.
 
     Mirrors the audio/image drains: single-flight within the process, per-row
     failure isolation, and a back-off on rate limits. Triggered from
@@ -189,9 +187,7 @@ def drain_pending_sentences(
             if word is None:
                 return
             try:
-                generated = _generate_for_word_sentence(
-                    word, areas, job_title=job_title
-                )
+                generated = _generate_for_word_sentence(word, job_title=job_title)
             except OpenAIConfigurationError:
                 logger.warning("OpenAI not configured — sentence worker exiting")
                 return
