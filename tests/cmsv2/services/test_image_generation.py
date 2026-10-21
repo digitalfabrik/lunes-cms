@@ -139,9 +139,7 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(
-        word: Word, _area: Area, job_title: str | None = None
-    ) -> bytes:
+    def maybe_fail(word: Word, _area: Area, job_title: str | None = None) -> bytes:
         if word.word == "Schraubenzieher":
             raise ValueError("simulated openai 5xx")
         return b"ok-png"
@@ -353,6 +351,4 @@ def test_drain_passes_job_title_to_image_generation(fast_worker: None) -> None:
         thread.join(timeout=10)
         assert not thread.is_alive()
 
-    image_call.assert_called_once_with(
-        imported, imported.area, job_title="Tischler/in"
-    )
+    image_call.assert_called_once_with(imported, imported.area, job_title="Tischler/in")

@@ -51,7 +51,9 @@ def test_generation_is_recorded_for_the_given_area(
     client: Client, fake_openai: None
 ) -> None:
     area = Area.objects.create(name="Testarea")
-    user = get_user_model().objects.create_user(username="testarea-admin", is_staff=True)
+    user = get_user_model().objects.create_user(
+        username="testarea-admin", is_staff=True
+    )
     user.user_permissions.add(Permission.objects.get(codename="change_word"))
     area.admins.add(user)
     client.force_login(user)

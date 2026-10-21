@@ -64,9 +64,7 @@ def test_word_endpoint_joins_multiple_jobs(
         response = admin_client.post(url)
 
     assert response.status_code == 200
-    generate.assert_called_once_with(
-        "Hammer", "Maler, Tischler", None, area=word.area
-    )
+    generate.assert_called_once_with("Hammer", "Maler, Tischler", None, area=word.area)
 
 
 def test_word_endpoint_requires_job(admin_client: Client, db: None) -> None:
