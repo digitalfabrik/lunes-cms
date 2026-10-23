@@ -223,7 +223,10 @@ class Command(BaseCommand):
             # A UnitWordRelation has its own sentence but uses the pronunciation
             # helper of the word
             word = instance.word if isinstance(instance, UnitWordRelation) else instance
-            audio_content = openai_sentence_audio_bytes(example_sentence, word)
+            # A command has no requesting user, so no areas to record.
+            audio_content = openai_sentence_audio_bytes(
+                example_sentence, word, instance.area
+            )
 
             content_file = ContentFile(audio_content, name=filename)
 

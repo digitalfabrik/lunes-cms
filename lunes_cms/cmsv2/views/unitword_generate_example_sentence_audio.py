@@ -87,7 +87,9 @@ def unitword_generate_example_sentence_audio_via_openai(
 
     try:
         audio_bytes = openai_sentence_audio_bytes(
-            example_sentence_text, unitword_instance.word
+            example_sentence_text,
+            unitword_instance.word,
+            unitword_instance.area,
         )
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"

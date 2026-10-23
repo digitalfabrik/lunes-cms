@@ -51,7 +51,9 @@ def word_generate_example_sentence_audio_via_openai(
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
-        audio_bytes = openai_sentence_audio_bytes(example_sentence_text, word)
+        audio_bytes = openai_sentence_audio_bytes(
+            example_sentence_text, word, word.area
+        )
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)

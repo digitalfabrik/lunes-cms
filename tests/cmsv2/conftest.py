@@ -26,6 +26,15 @@ def bypass_audio_conversion() -> Generator[None, None, None]:
 
 
 @pytest.fixture
+def main_app_area(db: None) -> Area:
+    """
+    The main app area, seeded by migration 0038 into every database, this
+    test one included — so it is fetched here rather than created again.
+    """
+    return Area.objects.get(is_main_app=True)
+
+
+@pytest.fixture
 def client_with_permissions(db: None) -> Callable[..., PermissionClient]:
     """
     Build a client logged in as a user whose group grants exactly the given

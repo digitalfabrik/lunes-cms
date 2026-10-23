@@ -24,8 +24,8 @@ from django.db import connection
 from django.db.models import Q
 from openai import RateLimitError
 
-from ..models import Word
-from ..models.static import ImageSource
+from ..models import AIGeneration, Area, Word
+from ..models.static import AIGenerationEvent, ImageSource
 from ..utils import get_openai_client, OpenAIConfigurationError
 from .ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
 
@@ -104,7 +104,7 @@ def build_image_prompt(
     return prompt
 
 
-def openai_image_bytes(prompt: str) -> bytes:
+def openai_image_bytes(prompt: str, area: Area) -> bytes:
     """
     Call the OpenAI image edit API once, with the AI-disclosure label as the
     reference image, and return the raw bytes of the result.
@@ -113,6 +113,9 @@ def openai_image_bytes(prompt: str) -> bytes:
     is byte-for-byte OpenAI's own output. Nothing re-encodes it afterwards, and
     the provenance markings OpenAI embeds (C2PA manifest, watermark) stay
     intact — a re-encode would strip them.
+
+    The generation is recorded for ``area``, the area of the content the
+    image is generated for.
     """
     client = get_openai_client()
     ai_label = (LABEL_PATH.name, LABEL_PATH.read_bytes(), "image/png")
@@ -128,14 +131,19 @@ def openai_image_bytes(prompt: str) -> bytes:
         output_compression=settings.OPENAI_IMAGE_OUTPUT_COMPRESSION,
         n=1,
     )
+    AIGeneration.record(AIGenerationEvent.IMAGE, area)
     return base64.b64decode(response.data[0].b64_json)
 
 
-def openai_word_image_bytes(word: Word, job_title: str | None = None) -> bytes:
+def openai_word_image_bytes(
+    word: Word, area: Area, job_title: str | None = None
+) -> bytes:
     """
     Generate image bytes for a single word via the OpenAI image API.
+
+    The generation is recorded for ``area``, the area of the word.
     """
-    return openai_image_bytes(build_image_prompt(word.word, job_title=job_title))
+    return openai_image_bytes(build_image_prompt(word.word, job_title=job_title), area)
 
 
 def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
@@ -149,7 +157,7 @@ def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
     other image in the system.
     """
     if not word.image:
-        data = openai_word_image_bytes(word, job_title=job_title)
+        data = openai_word_image_bytes(word, word.area, job_title=job_title)
         word.image.save(
             f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
         )

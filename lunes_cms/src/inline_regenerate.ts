@@ -23,8 +23,9 @@ function _initRegenerateWidget(widget: HTMLElement): void {
     const textField = widget.dataset.textField
     const textValue = widget.dataset.text ?? ""
     const storeField = widget.dataset.storeField ?? "temp_audio_filename"
+    const areaId = widget.dataset.areaId
 
-    if (!generateUrl || !storeUrl || !textField) {
+    if (!generateUrl || !storeUrl || !textField || !areaId) {
         return
     }
 
@@ -95,6 +96,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
 
         const formData = new FormData()
         formData.append(textField, textValue)
+        formData.append("area_id", areaId)
         if (assetType === "image" && additionalInfo) {
             formData.append("additional_info", additionalInfo.value)
         }

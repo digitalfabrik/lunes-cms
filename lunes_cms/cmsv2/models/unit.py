@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
@@ -113,6 +114,14 @@ class UnitWordRelation(models.Model):
         return get_image_tag(self.image)
 
     image_tag.short_description = ""  # type: ignore[attr-defined]
+
+    @cached_property
+    def area(self) -> Area:
+        """
+        Returns:
+            Area: The area of this relation
+        """
+        return self.unit.area
 
     def clean(self) -> None:
         """
@@ -406,7 +415,6 @@ class Unit(models.Model):
     area = models.ForeignKey(
         Area,
         on_delete=models.PROTECT,
-        null=True,
         default=default_area_id,
         related_name="units",
         verbose_name=_("area"),

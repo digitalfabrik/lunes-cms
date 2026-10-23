@@ -213,6 +213,7 @@ class WordAdmin(AreaContentAdmin):
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,
         *,
+        area_id: int,
         asset_type: str,
         generate_url: str,
         store_url: str,
@@ -234,6 +235,9 @@ class WordAdmin(AreaContentAdmin):
         discard it and keep the current one.
 
         ``spoken_text`` is shown above the buttons as a reminder to save first.
+
+        ``area_id`` is the area of the word, posted along so that endpoints not
+        bound to an object can record the generation for it.
         """
         spoken_text_html: _StrOrPromise = ""
         if spoken_text:
@@ -263,7 +267,7 @@ class WordAdmin(AreaContentAdmin):
             '<div class="inline-regenerate" data-asset-type="{asset_type}" '
             'data-generate-url="{generate_url}" data-store-url="{store_url}" '
             'data-text-field="{text_field}" data-text="{text_value}" '
-            'data-store-field="{store_field}">'
+            'data-store-field="{store_field}" data-area-id="{area_id}">'
             '<div class="regen-compare">'
             '<div class="regen-col regen-current">'
             '<div class="regen-col-label">{current_label}</div>'
@@ -294,6 +298,7 @@ class WordAdmin(AreaContentAdmin):
             text_field=text_field,
             text_value=text_value,
             store_field=store_field,
+            area_id=area_id,
             current_label=_("Current"),
             new_label=_("New"),
             empty_label=_("Not generated yet"),
@@ -326,6 +331,7 @@ class WordAdmin(AreaContentAdmin):
         else:
             current_preview = _("No audio yet.")
         return self._render_regenerate_widget(
+            area_id=obj.area.id,
             asset_type="audio",
             generate_url=reverse("cmsv2:word_generate_audio_via_openai", args=[obj.pk]),
             store_url=reverse(
@@ -406,6 +412,7 @@ class WordAdmin(AreaContentAdmin):
         else:
             current_preview = _("No audio yet.")
         return self._render_regenerate_widget(
+            area_id=obj.area.id,
             asset_type="audio",
             generate_url=reverse(
                 "cmsv2:word_generate_example_sentence_audio_via_openai", args=[obj.pk]
@@ -492,6 +499,7 @@ class WordAdmin(AreaContentAdmin):
         else:
             current_preview = _("No image yet.")
         return self._render_regenerate_widget(
+            area_id=obj.area.id,
             asset_type="image",
             generate_url=reverse("cmsv2:generate_image_via_openai"),
             store_url=reverse(

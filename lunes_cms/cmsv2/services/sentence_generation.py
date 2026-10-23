@@ -18,7 +18,8 @@ from django.db import connection
 from django.db.models import Q
 from openai import RateLimitError
 
-from ..models import Job, Word
+from ..models import AIGeneration, Area, Job, Word
+from ..models.static import AIGenerationEvent
 from ..utils import get_openai_client, OpenAIConfigurationError
 
 logger = logging.getLogger(__name__)
@@ -56,7 +57,13 @@ def build_example_sentence_prompt(word: str, job: str, unit: str | None = None) 
     )
 
 
-def openai_example_sentence(word: str, job: str, unit: str | None = None) -> str:
+def openai_example_sentence(
+    word: str,
+    job: str,
+    unit: str | None = None,
+    *,
+    area: Area,
+) -> str:
     """
     Generate a single example sentence for a vocabulary term via OpenAI.
 
@@ -64,6 +71,7 @@ def openai_example_sentence(word: str, job: str, unit: str | None = None) -> str
         word: The vocabulary term the sentence is about
         job: The job (or comma-separated jobs) providing the professional context
         unit: Optional title of the learning unit for unit<>word relations
+        area: The area of the content for which the example sentence is generated
 
     Returns:
         str: The generated example sentence
@@ -81,6 +89,7 @@ def openai_example_sentence(word: str, job: str, unit: str | None = None) -> str
             }
         ],
     )
+    AIGeneration.record(AIGenerationEvent.EXAMPLE_SENTENCE, area)
     sentence = (response.choices[0].message.content or "").strip()
     # The prompt asks for the bare sentence, but strip stray quotes anyway.
     sentence = sentence.strip("\"'„“‚‘»«").strip()
@@ -126,7 +135,7 @@ def _generate_for_word_sentence(word: Word, job_title: str | None = None) -> boo
         )
         return False
     unit_title = word.units.values_list("title", flat=True).first()
-    sentence = openai_example_sentence(word.word, job, unit_title)
+    sentence = openai_example_sentence(word.word, job, unit_title, area=word.area)
     word.example_sentence = sentence
     # ``Word.save()`` flips ``example_sentence_check_status`` to NOT_CHECKED when
     # the sentence changes, so it must be in ``update_fields`` to be persisted.

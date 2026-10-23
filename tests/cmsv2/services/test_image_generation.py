@@ -139,7 +139,7 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(word: Word, job_title: str | None = None) -> bytes:
+    def maybe_fail(word: Word, _area: Area, job_title: str | None = None) -> bytes:
         if word.word == "Schraubenzieher":
             raise ValueError("simulated openai 5xx")
         return b"ok-png"
@@ -284,7 +284,7 @@ def test_build_image_prompt_exempts_the_label_from_the_text_ban() -> None:
 
 
 def test_openai_image_bytes_requests_webp_from_openai(
-    settings: Settings,
+    settings: Settings, main_app_area: Area
 ) -> None:
     """
     Asking OpenAI for the final format means we never re-encode, so its C2PA
@@ -294,18 +294,22 @@ def test_openai_image_bytes_requests_webp_from_openai(
     client = _fake_openai_client()
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):
-        assert image_generation.openai_image_bytes("prompt") == b"webp-bytes"
+        assert image_generation.openai_image_bytes("prompt", main_app_area) == (
+            b"webp-bytes"
+        )
 
     kwargs = client.images.edit.call_args.kwargs
     assert kwargs["output_format"] == "webp"
     assert kwargs["output_compression"] == 85
 
 
-def test_openai_image_bytes_passes_the_label_as_reference_image() -> None:
+def test_openai_image_bytes_passes_the_label_as_reference_image(
+    main_app_area: Area,
+) -> None:
     client = _fake_openai_client()
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):
-        image_generation.openai_image_bytes("prompt")
+        image_generation.openai_image_bytes("prompt", main_app_area)
 
     filename, content, content_type = client.images.edit.call_args.kwargs["image"]
     assert filename == LABEL_PATH.name
@@ -347,4 +351,4 @@ def test_drain_passes_job_title_to_image_generation(fast_worker: None) -> None:
         thread.join(timeout=10)
         assert not thread.is_alive()
 
-    image_call.assert_called_once_with(mock.ANY, job_title="Tischler/in")
+    image_call.assert_called_once_with(imported, imported.area, job_title="Tischler/in")
