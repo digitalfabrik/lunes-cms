@@ -160,6 +160,7 @@ def test_admin_methods_render_inline_regenerate_widget(db: None) -> None:
     assert 'data-asset-type="image"' in image_html
     assert "regen-additional-info" in image_html
     assert reverse("cmsv2:generate_image_via_openai") in image_html
+    assert f'data-area-id="{word.area_id}"' in image_html
 
     sentence_html = str(word_admin.example_sentence_audio_generate(word))
     assert 'data-text-field="example_sentence_text"' in sentence_html

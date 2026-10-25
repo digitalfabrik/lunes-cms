@@ -7,7 +7,10 @@ processing happens.
 
 from __future__ import annotations
 
+from collections.abc import Generator
+from importlib import import_module
 from typing import Any
+from unittest import mock
 
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -15,6 +18,21 @@ from django.test import Client
 from django.urls import reverse
 
 from lunes_cms.cmsv2.models import Job, Word
+
+# Imported via ``import_module`` so the patch targets the module, whatever
+# ``lunes_cms.cmsv2.views`` re-exports under the same name.
+import_csv_view = import_module("lunes_cms.cmsv2.views.import_csv_view")
+
+
+@pytest.fixture(autouse=True)
+def _no_asset_generation() -> Generator[mock.Mock, None, None]:
+    """
+    A successful import starts a thread that generates the assets of the new
+    words. With its own database connection it would run into the lock the
+    transaction of the test holds, so it is stubbed out here.
+    """
+    with mock.patch.object(import_csv_view, "_generate_word_assets") as generate:
+        yield generate
 
 
 def _upload(content: str) -> SimpleUploadedFile:

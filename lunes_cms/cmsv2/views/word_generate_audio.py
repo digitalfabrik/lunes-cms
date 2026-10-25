@@ -46,7 +46,7 @@ def word_generate_audio_via_openai(request: HttpRequest, word_id: int) -> JsonRe
     os.makedirs(settings.TEMP_AUDIO_DIR, exist_ok=True)
 
     try:
-        audio_bytes = openai_word_audio_bytes(word_text)
+        audio_bytes = openai_word_audio_bytes(word_text, word.area)
 
         temp_filename = f"temp_audio_{uuid.uuid4().hex}.mp3"
         temp_filepath = os.path.join(settings.TEMP_AUDIO_DIR, temp_filename)

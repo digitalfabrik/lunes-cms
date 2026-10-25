@@ -52,15 +52,6 @@ def area(db: None) -> Area:
     return Area.objects.create(name="Kolping")
 
 
-@pytest.fixture
-def main_app_area(db: None) -> Area:
-    """
-    The main app area, seeded by migration 0038 into every database, this
-    test one included — so it is fetched here rather than created again.
-    """
-    return Area.objects.get(is_main_app=True)
-
-
 @pytest.mark.django_db
 def test_administered_areas_and_is_area_admin(area: Area) -> None:
     """An area administrator is recognized by the areas they are listed in."""
@@ -163,7 +154,6 @@ def test_scope_units_per_user_kind(area: Area, main_app_area: Area) -> None:
     main_unit = _unit_with_job(
         "Main unit", Job.objects.create(name="M", area=main_app_area)
     )
-    unassigned_unit = Unit.objects.create(title="Unassigned unit", area=None)
 
     superuser = _user("root", is_superuser=True)
     admin_user = _user("area-admin")
@@ -172,7 +162,7 @@ def test_scope_units_per_user_kind(area: Area, main_app_area: Area) -> None:
     main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
-    assert {area_unit, jobless_area_unit, main_unit, unassigned_unit} <= set(
+    assert {area_unit, jobless_area_unit, main_unit} <= set(
         scope_units(Unit.objects.all(), superuser)
     )
     assert set(scope_units(Unit.objects.all(), admin_user)) == {
@@ -182,22 +172,19 @@ def test_scope_units_per_user_kind(area: Area, main_app_area: Area) -> None:
     main_app_units = set(scope_units(Unit.objects.all(), main_app_admin))
     assert main_unit in main_app_units
     assert area_unit not in main_app_units
-    assert unassigned_unit not in main_app_units
     assert set(scope_units(Unit.objects.all(), plain_user)) == set()
 
 
 @pytest.mark.django_db
 def test_scope_words_per_user_kind(area: Area, main_app_area: Area) -> None:
     """
-    Words are scoped by their own area, whether or not they are used in a unit
-    yet, and a word without an area is visible to superusers only.
+    Words are scoped by their own area, whether or not they are used in a unit yet.
     """
     area_unit = _unit_with_job("Area unit", Job.objects.create(name="A", area=area))
     area_word = _word("Bereichswort", area=area)
     UnitWordRelation.objects.create(unit=area_unit, word=area_word)
     unlinked_area_word = _word("Frisch", area=area)
     main_word = _word("Hauptwort", area=main_app_area)
-    unassigned_word = _word("Herrenlos", area=None)
 
     superuser = _user("root", is_superuser=True)
     admin_user = _user("area-admin")
@@ -206,7 +193,7 @@ def test_scope_words_per_user_kind(area: Area, main_app_area: Area) -> None:
     main_app_area.admins.add(main_app_admin)
     plain_user = _user("plain")
 
-    assert {area_word, unlinked_area_word, main_word, unassigned_word} <= set(
+    assert {area_word, unlinked_area_word, main_word} <= set(
         scope_words(Word.objects.all(), superuser)
     )
     assert set(scope_words(Word.objects.all(), admin_user)) == {
@@ -216,7 +203,6 @@ def test_scope_words_per_user_kind(area: Area, main_app_area: Area) -> None:
     main_app_words = set(scope_words(Word.objects.all(), main_app_admin))
     assert main_word in main_app_words
     assert area_word not in main_app_words
-    assert unassigned_word not in main_app_words
     assert set(scope_words(Word.objects.all(), plain_user)) == set()
 
 
@@ -257,21 +243,6 @@ def test_unlinked_content_is_shared_by_all_administrators_of_its_area(
 
     assert word in scope_words(Word.objects.all(), colleague)
     assert unit in scope_units(Unit.objects.all(), colleague)
-
-
-@pytest.mark.django_db
-def test_content_without_an_area_is_hidden_even_from_its_creator(area: Area) -> None:
-    """
-    Content that could not be assigned an area is left to the superusers to
-    assign, so not even the area administrator who created it sees it.
-    """
-    author = _user("author")
-    area.admins.add(author)
-    _word("Herrenlos", area=None, created_by_user=author)
-    Unit.objects.create(title="Herrenlos", area=None, created_by_user=author)
-
-    assert not scope_words(Word.objects.all(), author).exists()
-    assert not scope_units(Unit.objects.all(), author).exists()
 
 
 @pytest.mark.django_db
@@ -436,7 +407,6 @@ def test_validate_word_area_allows_an_unlinked_word(
 ) -> None:
     """A word that is not used in any unit may be moved freely."""
     validate_word_area(_word("Hammer", area=main_app_area), area)
-    validate_word_area(_word("Herrenlos", area=None), area)
 
 
 @pytest.mark.django_db
@@ -458,15 +428,6 @@ def test_validate_relation_area_rejects_word_of_another_area(area: Area) -> None
 
     with pytest.raises(ValidationError):
         validate_relation_area(own_unit, _word("Hammer", area=other_area))
-
-
-@pytest.mark.django_db
-def test_validate_relation_area_rejects_word_without_an_area(area: Area) -> None:
-    """A word without an area has to be assigned one before it can be used."""
-    unit = Unit.objects.create(title="Unit", area=area)
-
-    with pytest.raises(ValidationError):
-        validate_relation_area(unit, _word("Herrenlos", area=None))
 
 
 @pytest.mark.django_db
