@@ -11,7 +11,8 @@ from pathlib import Path
 import pytest
 from django.apps import apps
 
-from lunes_cms.cms.models import AlternativeWord as V1AlternativeWord, Document
+from lunes_cms.cms.models import AlternativeWord as V1AlternativeWord
+from lunes_cms.cms.models import Document
 from lunes_cms.cmsv2 import migrations as cmsv2_migrations
 from lunes_cms.cmsv2.models import AlternativeWord, Word
 
