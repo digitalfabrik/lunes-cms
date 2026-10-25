@@ -26,6 +26,7 @@ from .static import (
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
+    image_upload_warning_html,
     ImageSource,
     resolve_image_source,
 )
@@ -344,6 +345,7 @@ class UnitWordRelation(models.Model):
                 <span class="unitword-image-delete">×</span>
             </button>
             <input type="file" class="unitword-image-file-input" style="display: none;" accept="image/*">
+            {image_upload_warning_html()}
         </div>
         """
 

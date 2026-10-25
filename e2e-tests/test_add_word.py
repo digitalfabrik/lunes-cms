@@ -97,7 +97,7 @@ def test_add_word(
     page.set_input_files("[name=image]", str(ASSETS_DIR / "tester.png"))
     with document.step(
         "Image hochladen",
-        description='Laden Sie unter **„Bilder"** ein Bild hoch.',
+        description='Laden Sie unter **„Bilder"** ein Bild hoch. Laden Sie keine Fotos hoch, auf denen eine reale Person erkennbar ist (z. B. am Gesicht). Körperteile ohne erkennbare Merkmale sind in Ordnung - darauf weist auch das Warnsymbol unter dem Feld hin, wenn Sie mit der Maus darauf zeigen.',
     ):
         pass
 

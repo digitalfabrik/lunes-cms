@@ -1450,6 +1450,14 @@ msgid "AI-generated, labeled afterwards"
 msgstr "KI-generiert, nachträglich gekennzeichnet"
 
 #: cmsv2/models/static.py
+msgid ""
+"Please do not upload photos in which a real person can be recognized (e.g. "
+"by their face). Body parts without identifying features are fine."
+msgstr ""
+"Bitte keine Fotos hochladen, auf denen eine reale Person erkennbar ist (z. "
+"B. am Gesicht). Körperteile ohne erkennbare Merkmale sind in Ordnung."
+
+#: cmsv2/models/static.py
 msgid "Pending Review"
 msgstr "Freigabe ausstehend"
 
