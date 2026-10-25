@@ -161,6 +161,14 @@ class CannotBeAssessedReason(models.TextChoices):
     OTHER = "OTHER", _("Other")
 
 
+class NotificationType(models.TextChoices):
+    """Possible types of internal notifications, see #1038"""
+
+    REVIEW_COMPLETED = "REVIEW_COMPLETED", _("Expert finished a review")
+    MANY_REJECTIONS = "MANY_REJECTIONS", _("Expert flagged many words")
+    SLOW_EXPERT = "SLOW_EXPERT", _("Expert is behind on reviews")
+
+
 class ProgressStatus(models.TextChoices):
     """Possible states for the progress of a review"""
 

@@ -15,6 +15,7 @@ from ..cmsv2.feedback_filter import (
     filter_feedback_by_creator_and_area as filter_feedbackv2_by_creator_and_area,
 )
 from ..cmsv2.models import Feedback as FeedbackV2
+from ..cmsv2.models import Notification
 
 
 def legal_links_processor(  # pylint: disable=unused-argument
@@ -75,3 +76,23 @@ def feedbackv2_processor(request: HttpRequest) -> dict[str, Any]:
         )
 
     return {"unread_feedbackv2_count": unread_feedback_entries.count()}
+
+
+def notification_processor(request: HttpRequest) -> dict[str, Any]:
+    """
+    This context processor injects the number of unread notifications of the current user
+    into the template context.
+
+    :param request: The current http request
+    :type request: ~django.http.HttpRequest
+
+    :return: The template context containing the number of unread notifications
+    :rtype: dict
+    """
+    if not request.user.is_authenticated:
+        return {"unread_notification_count": 0}
+    return {
+        "unread_notification_count": Notification.objects.filter(
+            recipient=request.user, read_at=None
+        ).count()
+    }

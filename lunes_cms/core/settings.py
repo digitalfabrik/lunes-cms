@@ -224,6 +224,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "lunes_cms.core.context_processors.feedback_processor",
                 "lunes_cms.core.context_processors.feedbackv2_processor",
+                "lunes_cms.core.context_processors.notification_processor",
                 "lunes_cms.core.context_processors.legal_links_processor",
             ],
         },
@@ -465,6 +466,22 @@ EMAIL_USE_TLS = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_TLS", "True")
 EMAIL_USE_SSL = bool(strtobool(os.environ.get("LUNES_CMS_EMAIL_USE_SSL", "False")))
 
 
+##########
+# REVIEW #
+##########
+
+#: The number of words of a unit an expert has to reject or request changes for
+#: until staff is notified about it (see #1038)
+REVIEW_REJECTION_ALERT_THRESHOLD = int(
+    os.environ.get("LUNES_CMS_REVIEW_REJECTION_ALERT_THRESHOLD", 5)
+)
+
+#: The number of days after which a pending review counts as overdue, so that
+#: staff is notified about the expert by the ``notify_slow_experts`` command
+#: (see #1038)
+REVIEW_SLOW_EXPERT_DAYS = int(os.environ.get("LUNES_CMS_REVIEW_SLOW_EXPERT_DAYS", 14))
+
+
 ###########
 # LOGGING #
 ###########
@@ -662,6 +679,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Word": "fab fa-amilia",
         "cmsv2.Review": "fas fa-user-check",
         "cmsv2.Feedback": "fas fa-comment",
+        "cmsv2.Notification": "fas fa-bell",
     },
     "site_version": _cms_version,
     # Legal links in the user menu. Only rendered if the respective URL is configured.

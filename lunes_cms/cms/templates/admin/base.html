@@ -44,5 +44,17 @@
             // Fix position of counter when sidebar is collapsed
             feedbackv2NavItem.find("p").width("auto");
         }
+
+        // Same for the unread notifications of the current user
+        let unread_notification_count = {{ unread_notification_count|default:0 }};
+        let notificationNavItem = $("#jazzy-sidebar a.nav-link[href$='/admin/cmsv2/notification/']");
+        if (notificationNavItem && unread_notification_count > 0) {
+            let counterSpan = $(document.createElement("span"));
+            counterSpan.text(unread_notification_count);
+            counterSpan.addClass("position-absolute text-center rounded-circle bg-danger ml-2 px-1");
+            counterSpan.css("min-width", "22.5px");
+            notificationNavItem.append(counterSpan);
+            notificationNavItem.find("p").width("auto");
+        }
     </script>
 {% endblock %}

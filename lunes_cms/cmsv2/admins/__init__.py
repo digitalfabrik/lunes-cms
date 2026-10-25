@@ -1,6 +1,7 @@
 from .area_admin import AreaAdmin
 from .feedback_admin import FeedbackAdmin
 from .job_admin import JobAdmin
+from .notification_admin import NotificationAdmin
 from .permission_labels import LunesGroupAdmin
 from .review_admin import ReviewAdmin
 from .unit_admin import UnitAdmin, UnitWordRelationAdmin
@@ -15,6 +16,7 @@ __all__ = [
     "UnitWordRelationAdmin",
     "FeedbackAdmin",
     "ReviewAdmin",
+    "NotificationAdmin",
     "LunesUserAdmin",
     "LunesGroupAdmin",
 ]

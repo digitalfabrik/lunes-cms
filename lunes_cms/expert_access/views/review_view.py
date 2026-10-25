@@ -11,6 +11,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from lunes_cms.cmsv2.internal_notifications import notify_review_submitted
 from lunes_cms.cmsv2.models import Review
 from lunes_cms.cmsv2.models.static import (
     CannotBeAssessedReason,
@@ -156,7 +157,7 @@ def review(request: HttpRequest) -> HttpResponse:
 
         form = ReviewForm(request.POST, instance=instance)
         if form.is_valid():
-            form.save()
+            notify_review_submitted(form.save())
             messages.success(request, _("Review was saved"))
             return redirect("expert_access:review")
 
