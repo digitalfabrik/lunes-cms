@@ -46,7 +46,7 @@ dependencies = [
 	"drf-spectacular==0.30.0",
 	"ipython==9.17.1",
 	"openai==3.19.2",
-	"pillow==12.3.0",
+	"pillow==13.0.0",
 	"psycopg2==2.9.13",
 	"requests==2.34.2",
 ]
