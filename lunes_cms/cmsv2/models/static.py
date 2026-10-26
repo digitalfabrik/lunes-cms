@@ -31,12 +31,12 @@ class PluralArticle(models.IntegerChoices):
 class WordType(models.TextChoices):
     """Possible word types"""
 
-    NOUN = "Nomen", "Substantiv"
-    VERB = "Verb", "Verb"
-    ADJECTIVE = "Adjektiv", "Adjektiv"
-    NUMERAL = "Numeral", "Numeral"
-    PRONOUN = "Pronomen", "Pronomen"
-    ADVERB = "Adverb", "Adverb"
+    NOUN = "Nomen", _("Noun")
+    VERB = "Verb", _("Verb")
+    ADJECTIVE = "Adjektiv", _("Adjective")
+    NUMERAL = "Numeral", _("Numeral")
+    PRONOUN = "Pronomen", _("Pronoun")
+    ADVERB = "Adverb", _("Adverb")
 
 
 class GrammaticalGenders(models.IntegerChoices):

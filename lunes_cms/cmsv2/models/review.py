@@ -91,8 +91,8 @@ class Review(models.Model):
 
     @property
     def word_type(self) -> str:
-        """Returns the word type of a reviewed word"""
-        return self.unit_word.word.word_type
+        """Returns the human-readable word type of a reviewed word"""
+        return self.unit_word.word.get_word_type_display()
 
     word_type.fget.short_description = _("Word type")  # type: ignore[attr-defined]
 
