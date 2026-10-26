@@ -3,14 +3,14 @@
  "dataLicense": "CC0-1.0",
  "SPDXID": "SPDXRef-DOCUMENT",
  "name": "lunes-cms",
- "documentNamespace": "https://anchore.com/syft/dir/lunes-cms-497a2187-55a1-44c1-a68f-f37116dec43a",
+ "documentNamespace": "https://anchore.com/syft/dir/lunes-cms-60b6a9e6-e9e6-4725-915b-91e688dd9f19",
  "creationInfo": {
   "licenseListVersion": "3.29",
   "creators": [
    "Organization: Anchore, Inc",
    "Tool: syft-1.55.0"
   ],
-  "created": "2026-10-23T12:19:48Z"
+  "created": "2026-10-26T12:39:23Z"
  },
  "packages": [
   {
@@ -3566,13 +3566,13 @@
   },
   {
    "name": "black",
-   "SPDXID": "SPDXRef-Package-python-black-70142df08821cb21",
-   "versionInfo": "26.5.1",
+   "SPDXID": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "versionInfo": "26.10.1",
    "supplier": "Person: Łukasz Langa (lukasz@langa.pl)",
    "originator": "Person: Łukasz Langa (lukasz@langa.pl)",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/black-26.5.1.dist-info/METADATA, /.venv/lib/python3.11/site-packages/black-26.5.1.dist-info/RECORD",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/black-26.10.1.dist-info/METADATA, /.venv/lib/python3.11/site-packages/black-26.10.1.dist-info/RECORD",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "MIT",
    "copyrightText": "NOASSERTION",
@@ -3580,19 +3580,19 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:black:26.5.1:*:*:*:*:python:*:*"
+     "referenceLocator": "cpe:2.3:a:python:black:26.10.1:*:*:*:*:python:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/black@26.5.1"
+     "referenceLocator": "pkg:pypi/black@26.10.1"
     }
    ]
   },
   {
    "name": "black",
-   "SPDXID": "SPDXRef-Package-python-black-7c6418d832be87ee",
-   "versionInfo": "26.5.1",
+   "SPDXID": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
+   "versionInfo": "26.10.1",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -3604,12 +3604,12 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:black:26.5.1:*:*:*:*:python:*:*"
+     "referenceLocator": "cpe:2.3:a:python:black:26.10.1:*:*:*:*:python:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/black@26.5.1"
+     "referenceLocator": "pkg:pypi/black@26.10.1"
     }
    ]
   },
@@ -4022,13 +4022,13 @@
   },
   {
    "name": "certifi",
-   "SPDXID": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
-   "versionInfo": "2026.7.22",
+   "SPDXID": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
+   "versionInfo": "2026.10.19",
    "supplier": "Person: Kenneth Reitz (me@kennethreitz.com)",
    "originator": "Person: Kenneth Reitz (me@kennethreitz.com)",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/certifi-2026.7.22.dist-info/METADATA, /.venv/lib/python3.11/site-packages/certifi-2026.7.22.dist-info/RECORD, /.venv/lib/python3.11/site-packages/certifi-2026.7.22.dist-info/top_level.txt",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/certifi-2026.10.19.dist-info/METADATA, /.venv/lib/python3.11/site-packages/certifi-2026.10.19.dist-info/RECORD, /.venv/lib/python3.11/site-packages/certifi-2026.10.19.dist-info/top_level.txt",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "MPL-2.0",
    "copyrightText": "NOASSERTION",
@@ -4036,19 +4036,19 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:certifi:certifi:2026.7.22:*:*:*:*:python:*:*"
+     "referenceLocator": "cpe:2.3:a:certifi:certifi:2026.10.19:*:*:*:*:python:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/certifi@2026.7.22"
+     "referenceLocator": "pkg:pypi/certifi@2026.10.19"
     }
    ]
   },
   {
    "name": "certifi",
-   "SPDXID": "SPDXRef-Package-python-certifi-94f96c9665535457",
-   "versionInfo": "2026.7.22",
+   "SPDXID": "SPDXRef-Package-python-certifi-3e4e9a914f555798",
+   "versionInfo": "2026.10.19",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -4060,12 +4060,12 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:certifi:certifi:2026.7.22:*:*:*:*:python:*:*"
+     "referenceLocator": "cpe:2.3:a:certifi:certifi:2026.10.19:*:*:*:*:python:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/certifi@2026.7.22"
+     "referenceLocator": "pkg:pypi/certifi@2026.10.19"
     }
    ]
   },
@@ -11326,13 +11326,13 @@
   },
   {
    "name": "djangorestframework",
-   "SPDXID": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "versionInfo": "3.18.1",
+   "SPDXID": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
+   "versionInfo": "3.18.2",
    "supplier": "Person: Tom Christie (tom@tomchristie.com)",
    "originator": "Person: Tom Christie (tom@tomchristie.com)",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/djangorestframework-3.18.1.dist-info/METADATA, /.venv/lib/python3.11/site-packages/djangorestframework-3.18.1.dist-info/RECORD, /.venv/lib/python3.11/site-packages/djangorestframework-3.18.1.dist-info/top_level.txt",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/djangorestframework-3.18.2.dist-info/METADATA, /.venv/lib/python3.11/site-packages/djangorestframework-3.18.2.dist-info/RECORD, /.venv/lib/python3.11/site-packages/djangorestframework-3.18.2.dist-info/top_level.txt",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "BSD-3-Clause",
    "copyrightText": "NOASSERTION",
@@ -11340,134 +11340,134 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom_project:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom_project:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom_project:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom_project:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tomproject:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tomproject:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tomproject:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tomproject:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:djangorestframework:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:djangorestframework:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:djangorestframework:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:djangorestframework:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-djangorestframework:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-djangorestframework:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_djangorestframework:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_djangorestframework:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom_project:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom_project:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom-christie-\\<tom:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom-christie-\\<tom:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom-christie-\\<tom:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom-christie-\\<tom:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tomproject:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tomproject:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:djangorestframework:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:djangorestframework:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom-christie-\\<tom:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom-christie-\\<tom:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:tom_christie_\\<tom:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/djangorestframework@3.18.1"
+     "referenceLocator": "pkg:pypi/djangorestframework@3.18.2"
     }
    ]
   },
   {
    "name": "djangorestframework",
-   "SPDXID": "SPDXRef-Package-python-djangorestframework-a03747dead536367",
-   "versionInfo": "3.18.1",
+   "SPDXID": "SPDXRef-Package-python-djangorestframework-cf49a8f8650df31f",
+   "versionInfo": "3.18.2",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -11479,67 +11479,67 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-djangorestframework:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_djangorestframework:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:djangorestframework:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:djangorestframework:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:djangorestframework:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:djangorestframework:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-djangorestframework:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-djangorestframework:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_djangorestframework:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_djangorestframework:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:djangorestframework:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:djangorestframework:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:djangorestframework:3.18.1:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:djangorestframework:3.18.2:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/djangorestframework@3.18.1"
+     "referenceLocator": "pkg:pypi/djangorestframework@3.18.2"
     }
    ]
   },
@@ -12671,12 +12671,12 @@
   },
   {
    "name": "filelock",
-   "SPDXID": "SPDXRef-Package-python-filelock-11153628c47853aa",
-   "versionInfo": "3.32.0",
+   "SPDXID": "SPDXRef-Package-python-filelock-b20a70299b246978",
+   "versionInfo": "4.2.1",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/filelock-3.32.0.dist-info/METADATA, /.venv/lib/python3.11/site-packages/filelock-3.32.0.dist-info/RECORD",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/filelock-4.2.1.dist-info/METADATA, /.venv/lib/python3.11/site-packages/filelock-4.2.1.dist-info/RECORD",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "MIT",
    "copyrightText": "NOASSERTION",
@@ -12684,74 +12684,74 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-filelock:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-filelock:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-filelock:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-filelock:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_filelock:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_filelock:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_filelock:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_filelock:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:filelock:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:filelock:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:filelock:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:filelock:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-filelock:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-filelock:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_filelock:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_filelock:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:filelock:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:filelock:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/filelock@3.32.0"
+     "referenceLocator": "pkg:pypi/filelock@4.2.1"
     }
    ]
   },
   {
    "name": "filelock",
-   "SPDXID": "SPDXRef-Package-python-filelock-cb44e1e96aaa788a",
-   "versionInfo": "3.32.0",
+   "SPDXID": "SPDXRef-Package-python-filelock-4c8609a33c93e798",
+   "versionInfo": "4.2.1",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -12763,67 +12763,67 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-filelock:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-filelock:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-filelock:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-filelock:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_filelock:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_filelock:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_filelock:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_filelock:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:filelock:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:filelock:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:filelock:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:filelock:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-filelock:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-filelock:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_filelock:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_filelock:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:filelock:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:filelock:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:filelock:3.32.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:filelock:4.2.1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/filelock@3.32.0"
+     "referenceLocator": "pkg:pypi/filelock@4.2.1"
     }
    ]
   },
@@ -20519,12 +20519,12 @@
   },
   {
    "name": "lunes-cms",
-   "SPDXID": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "versionInfo": "2026.10.3.dev31+gae21e0b2a",
+   "SPDXID": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "versionInfo": "2026.10.4.dev19+g75feb90f1",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/METADATA, /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/RECORD, /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/direct_url.json, /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/top_level.txt",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/METADATA, /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/RECORD, /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/direct_url.json, /.venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/top_level.txt",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "Apache-2.0",
    "copyrightText": "NOASSERTION",
@@ -20532,167 +20532,167 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes-cms:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes_cms:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:python-lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:python-lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:python_lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:python_lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-lunes:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-lunes:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_lunes:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_lunes:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes-cms:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes_cms:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:lunes-cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:lunes-cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:lunes:lunes_cms:2026.10.3.dev31\\+gae21e0b2a:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:lunes:lunes_cms:2026.10.4.dev19\\+g75feb90f1:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/lunes-cms@2026.10.3.dev31%2Bgae21e0b2a"
+     "referenceLocator": "pkg:pypi/lunes-cms@2026.10.4.dev19%2Bg75feb90f1"
     }
    ]
   },
@@ -25343,13 +25343,13 @@
   },
   {
    "name": "packaging",
-   "SPDXID": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "versionInfo": "26.2",
+   "SPDXID": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "versionInfo": "26.3",
    "supplier": "Person: Donald Stufft (donald@stufft.io)",
    "originator": "Person: Donald Stufft (donald@stufft.io)",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/packaging-26.2.dist-info/METADATA, /.venv/lib/python3.11/site-packages/packaging-26.2.dist-info/RECORD",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/packaging-26.3.dist-info/METADATA, /.venv/lib/python3.11/site-packages/packaging-26.3.dist-info/RECORD",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "(Apache-2.0 OR BSD-2-Clause)",
    "copyrightText": "NOASSERTION",
@@ -25357,134 +25357,134 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald_project:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald_project:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald_project:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald_project:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donaldproject:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donaldproject:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donaldproject:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donaldproject:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald_project:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald_project:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald-stufft-\\<donald:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald-stufft-\\<donald:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald-stufft-\\<donald:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald-stufft-\\<donald:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donaldproject:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donaldproject:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-packaging:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-packaging:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-packaging:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-packaging:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_packaging:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_packaging:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_packaging:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_packaging:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald-stufft-\\<donald:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald-stufft-\\<donald:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:donald_stufft_\\<donald:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:packaging:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:packaging:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:packaging:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:packaging:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-packaging:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-packaging:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_packaging:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_packaging:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:packaging:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:packaging:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/packaging@26.2"
+     "referenceLocator": "pkg:pypi/packaging@26.3"
     }
    ]
   },
   {
    "name": "packaging",
-   "SPDXID": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "versionInfo": "26.2",
+   "SPDXID": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "versionInfo": "26.3",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -25496,67 +25496,67 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-packaging:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-packaging:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-packaging:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-packaging:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_packaging:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_packaging:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_packaging:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_packaging:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:packaging:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:packaging:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:packaging:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:packaging:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-packaging:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-packaging:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_packaging:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_packaging:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:packaging:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:packaging:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:packaging:26.2:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:packaging:26.3:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/packaging@26.2"
+     "referenceLocator": "pkg:pypi/packaging@26.3"
     }
    ]
   },
@@ -26358,13 +26358,13 @@
   },
   {
    "name": "pillow",
-   "SPDXID": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "versionInfo": "12.3.0",
+   "SPDXID": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "versionInfo": "13.0.0",
    "supplier": "Person: Jeffrey 'Alex' Clark (aclark@aclark.net)",
    "originator": "Person: Jeffrey 'Alex' Clark (aclark@aclark.net)",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/pillow-12.3.0.dist-info/METADATA, /.venv/lib/python3.11/site-packages/pillow-12.3.0.dist-info/RECORD, /.venv/lib/python3.11/site-packages/pillow-12.3.0.dist-info/top_level.txt",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/pillow-13.0.0.dist-info/METADATA, /.venv/lib/python3.11/site-packages/pillow-13.0.0.dist-info/RECORD, /.venv/lib/python3.11/site-packages/pillow-13.0.0.dist-info/top_level.txt",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "MIT-CMU",
    "copyrightText": "NOASSERTION",
@@ -26372,134 +26372,134 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark_project:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark_project:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark_project:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark_project:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclarkproject:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclarkproject:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclarkproject:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclarkproject:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark_project:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark_project:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey-\\'alex\\'-clark-\\<aclark:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey-\\'alex\\'-clark-\\<aclark:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey-\\'alex\\'-clark-\\<aclark:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey-\\'alex\\'-clark-\\<aclark:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclarkproject:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclarkproject:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey-\\'alex\\'-clark-\\<aclark:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey-\\'alex\\'-clark-\\<aclark:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:jeffrey_\\'alex\\'_clark_\\<aclark:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-pillow:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-pillow:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-pillow:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-pillow:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_pillow:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_pillow:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_pillow:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_pillow:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:pillow:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:pillow:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:pillow:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:pillow:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-pillow:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-pillow:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_pillow:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_pillow:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:pillow:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:pillow:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/pillow@12.3.0"
+     "referenceLocator": "pkg:pypi/pillow@13.0.0"
     }
    ]
   },
   {
    "name": "pillow",
-   "SPDXID": "SPDXRef-Package-python-pillow-7b22e673e90253dd",
-   "versionInfo": "12.3.0",
+   "SPDXID": "SPDXRef-Package-python-pillow-4775781fbec3bffe",
+   "versionInfo": "13.0.0",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -26511,67 +26511,67 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-pillow:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-pillow:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-pillow:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-pillow:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_pillow:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_pillow:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_pillow:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_pillow:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:pillow:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:pillow:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:pillow:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:pillow:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-pillow:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-pillow:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_pillow:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_pillow:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:pillow:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:pillow:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:pillow:12.3.0:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:pillow:13.0.0:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/pillow@12.3.0"
+     "referenceLocator": "pkg:pypi/pillow@13.0.0"
     }
    ]
   },
@@ -28653,7 +28653,7 @@
   },
   {
    "name": "psycopg2",
-   "SPDXID": "SPDXRef-Package-python-psycopg2-c8c4c6c2b31cd78c",
+   "SPDXID": "SPDXRef-Package-python-psycopg2-23c3457c50462d37",
    "versionInfo": "2.9.13",
    "supplier": "Person: Federico Di Gregorio (fog@initd.org)",
    "originator": "Person: Federico Di Gregorio (fog@initd.org)",
@@ -49702,12 +49702,12 @@
   },
   {
    "name": "virtualenv",
-   "SPDXID": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "versionInfo": "21.7.13",
+   "SPDXID": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "versionInfo": "21.14.13",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
-   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/virtualenv-21.7.13.dist-info/METADATA, /.venv/lib/python3.11/site-packages/virtualenv-21.7.13.dist-info/RECORD",
+   "sourceInfo": "acquired package info from installed python package manifest file: /.venv/lib/python3.11/site-packages/virtualenv-21.14.13.dist-info/METADATA, /.venv/lib/python3.11/site-packages/virtualenv-21.14.13.dist-info/RECORD",
    "licenseConcluded": "NOASSERTION",
    "licenseDeclared": "MIT",
    "copyrightText": "NOASSERTION",
@@ -49715,74 +49715,74 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-virtualenv:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-virtualenv:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-virtualenv:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-virtualenv:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_virtualenv:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_virtualenv:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_virtualenv:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_virtualenv:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-virtualenv:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-virtualenv:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_virtualenv:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_virtualenv:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:virtualenv:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:virtualenv:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:virtualenv:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:virtualenv:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:virtualenv:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:virtualenv:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/virtualenv@21.7.13"
+     "referenceLocator": "pkg:pypi/virtualenv@21.14.13"
     }
    ]
   },
   {
    "name": "virtualenv",
-   "SPDXID": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
-   "versionInfo": "21.7.13",
+   "SPDXID": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
+   "versionInfo": "21.14.13",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -49794,67 +49794,67 @@
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-virtualenv:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-virtualenv:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-virtualenv:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-virtualenv:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_virtualenv:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_virtualenv:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_virtualenv:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_virtualenv:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python-virtualenv:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python-virtualenv:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python_virtualenv:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python_virtualenv:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:virtualenv:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:virtualenv:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:virtualenv:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:virtualenv:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python-virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python-virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:python_virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:python_virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:virtualenv:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:virtualenv:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "SECURITY",
      "referenceType": "cpe23Type",
-     "referenceLocator": "cpe:2.3:a:python:virtualenv:21.7.13:*:*:*:*:*:*:*"
+     "referenceLocator": "cpe:2.3:a:python:virtualenv:21.14.13:*:*:*:*:*:*:*"
     },
     {
      "referenceCategory": "PACKAGE-MANAGER",
      "referenceType": "purl",
-     "referenceLocator": "pkg:pypi/virtualenv@21.7.13"
+     "referenceLocator": "pkg:pypi/virtualenv@21.14.13"
     }
    ]
   },
@@ -50597,7 +50597,7 @@
   {
    "name": "lunes-cms",
    "SPDXID": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "versionInfo": "2026.10.3",
+   "versionInfo": "2026.10.4",
    "supplier": "NOASSERTION",
    "downloadLocation": "NOASSERTION",
    "filesAnalyzed": false,
@@ -50654,8 +50654,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/30fcd23745efe32ce681__mypyc.cpython-311-x86_64-linux-gnu.so",
-   "SPDXID": "SPDXRef-File-...30fcd23745efe32ce681--mypyc.cpython-311-x86-64-linux-gnu.so-9987f3872676e98d",
+   "fileName": ".venv/lib/python3.11/site-packages/85cae5375ceb5d1ca6c6__mypyc.cpython-311-x86_64-linux-gnu.so",
+   "SPDXID": "SPDXRef-File-...85cae5375ceb5d1ca6c6--mypyc.cpython-311-x86-64-linux-gnu.so-70dd04e4e1a95eda",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -51406,19 +51406,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/black-26.5.1.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...black-26.5.1.dist-info-METADATA-537e759a25267ade",
+   "fileName": ".venv/lib/python3.11/site-packages/black-26.10.1.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...black-26.10.1.dist-info-METADATA-a2a0cf608edb7f6d",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "2ed861b81184903db63038b8e3bf4b537237ed59"
+     "checksumValue": "f5b960d65b973a30ec22aeabd281841f4f3daf4a"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "9c05b65024e316dba3c0b2ba10a19bfd2dff39ee95a4d2260a2be5e7a55b62ef"
+     "checksumValue": "089d3059ed0304369f3460397d2aa2e62f7caf8ab4845ce91f89188985b1b587"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -51428,19 +51428,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/black-26.5.1.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...black-26.5.1.dist-info-RECORD-859a39b5343c7336",
+   "fileName": ".venv/lib/python3.11/site-packages/black-26.10.1.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...black-26.10.1.dist-info-RECORD-6f0c05e1d444e278",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "82cd5a030c84a3122dfd902e9d94784d41497fd2"
+     "checksumValue": "2c9392735c0f8b83ab7e6849a5ce6b1b44dd94ab"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "37dbe4bcc8fb898e314c82f45712737d9449ef3926f6cd416b981ddc28fb73ab"
+     "checksumValue": "81b5db0b8d7c7a85d81bba49a6ecf7c4ed1890f43c1ffc5cb6221d48fed3b483"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -51995,19 +51995,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/certifi-2026.7.22.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...certifi-2026.7.22.dist-info-METADATA-982e6624ffa5a1f6",
+   "fileName": ".venv/lib/python3.11/site-packages/certifi-2026.10.19.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...certifi-2026.10.19.dist-info-METADATA-af575c0bf5a1bea5",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "c9632acf9c1257edf392a9f598bcd38d38d1c9aa"
+     "checksumValue": "892628be00ff9d42b926f8dd57d08920aed5fd84"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "ef5af1638fbb23676ac3c5777dfcfc2cd9c348fe4172ed5ba3d277655b248090"
+     "checksumValue": "a5c0be3a42daeef0edfaf58e6ea5b7550f3e4e8eb35420f72e902df9bcf00f5c"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -52017,19 +52017,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/certifi-2026.7.22.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...certifi-2026.7.22.dist-info-RECORD-6b1f2caca98b5405",
+   "fileName": ".venv/lib/python3.11/site-packages/certifi-2026.10.19.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...certifi-2026.10.19.dist-info-RECORD-969184239affdd56",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "1d05a29c976f24ae9eb95716b6a94a013f8eabfb"
+     "checksumValue": "d8ebf4ae04ebbe26daa354cf790ddc56f5600e86"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "cff9d243744c96445494c29abee3d592d0a6955d5504f4fbe034dce7aaf38490"
+     "checksumValue": "f4c1c8f6821d02df60a121d954fe0b944d4af8c7bc79d7b45b38eba13adb3284"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -52039,8 +52039,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/certifi-2026.7.22.dist-info/top_level.txt",
-   "SPDXID": "SPDXRef-File-...top-level.txt-484fa55b92b18f92",
+   "fileName": ".venv/lib/python3.11/site-packages/certifi-2026.10.19.dist-info/top_level.txt",
+   "SPDXID": "SPDXRef-File-...top-level.txt-1b1d58f4ee2d3349",
    "fileTypes": [
     "TEXT"
    ],
@@ -53293,19 +53293,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/djangorestframework-3.18.1.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...METADATA-97e8eaff5e1b8ac7",
+   "fileName": ".venv/lib/python3.11/site-packages/djangorestframework-3.18.2.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...METADATA-ae54eb3d4cb02506",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "3a6286be8bc8446d59a592dbfef7d1b120c7f658"
+     "checksumValue": "f4f6f71f28f6a01aad3b64f40d7cc32970700f9d"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "6e3b73488aeaa7c5413dc095f3da68c36add2a1f6130f39d102421108ea61790"
+     "checksumValue": "2d67e4832b5486ba146770f811efc4f51b3d32a51861a72a5ab511749e56843e"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -53315,19 +53315,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/djangorestframework-3.18.1.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...RECORD-0ac295dfa1b4c8dd",
+   "fileName": ".venv/lib/python3.11/site-packages/djangorestframework-3.18.2.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...RECORD-6fbc221996a71209",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "26a1ade236e8e1db1fe1aa6cd6c9bd8c57e252a2"
+     "checksumValue": "029a0b0ff2db22031325950ec2b46a55d99e4935"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "9c92e4fa68f6f3bf8ec86fc9d858534092882ab55ded9d84102300db8960fa9f"
+     "checksumValue": "a880d463ee406fc10403c86b6743bc525d5aeb67450e0cfac265464993eb6b12"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -53337,8 +53337,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/djangorestframework-3.18.1.dist-info/top_level.txt",
-   "SPDXID": "SPDXRef-File-...top-level.txt-81d9e3cdb4025dd8",
+   "fileName": ".venv/lib/python3.11/site-packages/djangorestframework-3.18.2.dist-info/top_level.txt",
+   "SPDXID": "SPDXRef-File-...top-level.txt-80cc593a462a5f55",
    "fileTypes": [
     "TEXT"
    ],
@@ -53594,19 +53594,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/filelock-3.32.0.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...filelock-3.32.0.dist-info-METADATA-5e7720e2ee5dfdd6",
+   "fileName": ".venv/lib/python3.11/site-packages/filelock-4.2.1.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...filelock-4.2.1.dist-info-METADATA-45881794968218a7",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "dc884d5bc982549b9b827ef803d95e1e9e7e8ea7"
+     "checksumValue": "f094ac8addd1fb2ddadc48e8b98a2b9a7be56a62"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "d964d7bb976411acbc7b7641476c55193c33b919956fdc8a183c0733cd2db660"
+     "checksumValue": "bfaf7126025d4e55327f6d9497b754e469b5ce54224d46e6118150dd13598037"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -53616,19 +53616,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/filelock-3.32.0.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...filelock-3.32.0.dist-info-RECORD-ca21aa9245b5ca49",
+   "fileName": ".venv/lib/python3.11/site-packages/filelock-4.2.1.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...filelock-4.2.1.dist-info-RECORD-5cc91ce9052b3aa8",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "02029f19a6412890e97c96390f8317ae430ce9db"
+     "checksumValue": "e5ca6c0771cd8fbd67499bce4bc1689f3bc8e79d"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "06c4143494d0ffb564110cc9d8e5c9f537f6d9daa6a52ffe9a2946abc81a1846"
+     "checksumValue": "bb3f61b0053aa0b49869c2131d16416b2ceb247bde403c1d36df41bce4ebacc0"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -55877,19 +55877,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...METADATA-81ab354c59d8f3d8",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...METADATA-d5a15e1078ff5476",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "4e47457cf70b4132050b696082b0cc83c25c5168"
+     "checksumValue": "230a4eaf2a1592874decd5524ab202de2cc563df"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "5b77bd5c5f671a7793daac0be3866bd5d05d5fb2ebfd832164c10d5a0e1be906"
+     "checksumValue": "3f77dabe12ef7a012c0d7d45cc54811c8aa64440a974442902c606ced8e7f13a"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -55899,19 +55899,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...RECORD-3f0fe7d50a827ea1",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...RECORD-9144227c31103d5f",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "5dc984847e32d11f03f2653a24a945da134658d0"
+     "checksumValue": "ccf7109bfa57dfc40028d2366b8fb97cd390ccc7"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "28f7f0320a98e56e964cc12075468948f0dae14beb78bd54d10e3d3c695a837c"
+     "checksumValue": "dceb5c018e847e64da17886e774874099147fdec091cd560a050afe8a514cd3a"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -55921,8 +55921,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/direct_url.json",
-   "SPDXID": "SPDXRef-File-...direct-url.json-bbecbebd9723f061",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/direct_url.json",
+   "SPDXID": "SPDXRef-File-...direct-url.json-3ff36e060a809227",
    "fileTypes": [
     "APPLICATION"
    ],
@@ -55943,8 +55943,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.3.dev31+gae21e0b2a.dist-info/top_level.txt",
-   "SPDXID": "SPDXRef-File-...top-level.txt-1c7791f78e107356",
+   "fileName": ".venv/lib/python3.11/site-packages/lunes_cms-2026.10.4.dev19+g75feb90f1.dist-info/top_level.txt",
+   "SPDXID": "SPDXRef-File-...top-level.txt-c9cfd9449f9969d2",
    "fileTypes": [
     "TEXT"
    ],
@@ -60017,19 +60017,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/packaging-26.2.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...packaging-26.2.dist-info-METADATA-472fa8afd76b92b5",
+   "fileName": ".venv/lib/python3.11/site-packages/packaging-26.3.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...packaging-26.3.dist-info-METADATA-b49030e194fc0d49",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "c4e54da3e7aeb0a3da164c9aec796dcb9005137b"
+     "checksumValue": "bfab4082ca00cad0a8dee224dc23ea675d4abbb6"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "4f9cbcd7933415a4793f7767c98a2b6a512c823fc81c87337815705f230ecabf"
+     "checksumValue": "70fdb89fc4d4a9a043bf7372b8972bcc883fddff34ab55e9cf80d73875384763"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -60039,19 +60039,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/packaging-26.2.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...packaging-26.2.dist-info-RECORD-1caf0235af784f57",
+   "fileName": ".venv/lib/python3.11/site-packages/packaging-26.3.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...packaging-26.3.dist-info-RECORD-3e45a8888af931be",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "281b3c1c2c187a3daf8d1854e6d88cf790adae1e"
+     "checksumValue": "debe46ed5d08ef707fac8d8134d40b1ccb712bf0"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "34a791dcc687723f1d7601aa68319f6d51aa00e44d85818995dd33a1b7c5a49c"
+     "checksumValue": "1b8655965b0d83e9a067fd7f84b977bd1e117e0fb9f2874b2572781bdc9e2147"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -60237,19 +60237,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow-12.3.0.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...pillow-12.3.0.dist-info-METADATA-2e4e391e7f422695",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow-13.0.0.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...pillow-13.0.0.dist-info-METADATA-528e0cb34a8b5008",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "d570eb48531bd76488b5c82acd97891d285c20b2"
+     "checksumValue": "cc576f3b63fa92ceddaa98e82cb5e3ae1e468583"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "8fc07146cab33ef7582361dab6eac596d340b03ec648f18217da7894f73838c8"
+     "checksumValue": "dba7fdfe24e302f46bae562f55d66cc367c0618abae9894a1ebec93dc8f0e511"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -60259,19 +60259,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow-12.3.0.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...pillow-12.3.0.dist-info-RECORD-a061f873ac879f3e",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow-13.0.0.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...pillow-13.0.0.dist-info-RECORD-90a6403cfeb1cc3f",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "889b0549d54477415e78d62d8984ab508416d1e7"
+     "checksumValue": "0adde04a82a21818fcc3e62af37ca1d7ade83cb4"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "5a4ef0821e336e7c3e31e4a20a016802ab0187ea2da0f3644747f8cd8426dab3"
+     "checksumValue": "76ec3ae6b42bb64e7fcefd7aff51bc86e145342ded7441d026d6c7979824f99f"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -60281,8 +60281,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow-12.3.0.dist-info/top_level.txt",
-   "SPDXID": "SPDXRef-File-...pillow-12.3.0.dist-info-top-level.txt-0500739cd8ac84b1",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow-13.0.0.dist-info/top_level.txt",
+   "SPDXID": "SPDXRef-File-...pillow-13.0.0.dist-info-top-level.txt-415c4f9cb64eb8a4",
    "fileTypes": [
     "TEXT"
    ],
@@ -60318,8 +60318,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libavif-8a7f9d56.so.16.4.2",
-   "SPDXID": "SPDXRef-File-...pillow.libs-libavif-8a7f9d56.so.16.4.2-d3e8bbefe0faecb4",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libavif-c6062d5f.so.16.4.2",
+   "SPDXID": "SPDXRef-File-...pillow.libs-libavif-c6062d5f.so.16.4.2-1dab6a6498797d1a",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60363,8 +60363,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libfreetype-9fc94c80.so.6.20.6",
-   "SPDXID": "SPDXRef-File-...libfreetype-9fc94c80.so.6.20.6-2cf1334fba7a7a42",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libfreetype-57f805ba.so.6.20.6",
+   "SPDXID": "SPDXRef-File-...libfreetype-57f805ba.so.6.20.6-7cd43b00c6281767",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60378,8 +60378,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libharfbuzz-172d1f63.so.0.61421.0",
-   "SPDXID": "SPDXRef-File-...libharfbuzz-172d1f63.so.0.61421.0-55597c1b6b1f352a",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libharfbuzz-fb49c9fc.so.0.61450.0",
+   "SPDXID": "SPDXRef-File-...libharfbuzz-fb49c9fc.so.0.61450.0-2ef0b4649281c2f6",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60393,8 +60393,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libjpeg-31e2ca52.so.62.4.0",
-   "SPDXID": "SPDXRef-File-...pillow.libs-libjpeg-31e2ca52.so.62.4.0-b240994ecd3e6269",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libjpeg-6dc8d115.so.62.4.0",
+   "SPDXID": "SPDXRef-File-...pillow.libs-libjpeg-6dc8d115.so.62.4.0-54bde9fb1821540d",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60408,8 +60408,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/liblcms2-dade1fbf.so.2.0.19",
-   "SPDXID": "SPDXRef-File-...liblcms2-dade1fbf.so.2.0.19-2768e92284cbcd54",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/liblcms2-88eaba2f.so.2.0.19",
+   "SPDXID": "SPDXRef-File-...liblcms2-88eaba2f.so.2.0.19-ca13f9221cca67bc",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60423,8 +60423,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/liblzma-2be87c3e.so.5.8.3",
-   "SPDXID": "SPDXRef-File-...pillow.libs-liblzma-2be87c3e.so.5.8.3-c4779cd35cfbf9b7",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/liblzma-de26b416.so.5.8.4",
+   "SPDXID": "SPDXRef-File-...pillow.libs-liblzma-de26b416.so.5.8.4-d4cf3a759358473f",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60438,8 +60438,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libopenjp2-b07f72ad.so.2.5.4",
-   "SPDXID": "SPDXRef-File-...libopenjp2-b07f72ad.so.2.5.4-c5099e7f52d43cfd",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libopenjp2-e530e1bf.so.2.5.4",
+   "SPDXID": "SPDXRef-File-...libopenjp2-e530e1bf.so.2.5.4-fdde17655c0c4404",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60453,8 +60453,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libpng16-abb096d5.so.16.58.0",
-   "SPDXID": "SPDXRef-File-...libpng16-abb096d5.so.16.58.0-9125454cc8a80a39",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libpng16-1d1ba958.so.16.58.0",
+   "SPDXID": "SPDXRef-File-...libpng16-1d1ba958.so.16.58.0-bb49266a9f5185ea",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60483,8 +60483,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libtiff-fc87e79d.so.6.2.0",
-   "SPDXID": "SPDXRef-File-...pillow.libs-libtiff-fc87e79d.so.6.2.0-d11d983f20bb6788",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libtiff-20b7e810.so.6.3.0",
+   "SPDXID": "SPDXRef-File-...pillow.libs-libtiff-20b7e810.so.6.3.0-167ac5df929c87a1",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60543,8 +60543,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libxcb-ad31f5a3.so.1.1.0",
-   "SPDXID": "SPDXRef-File-...pillow.libs-libxcb-ad31f5a3.so.1.1.0-5746df2c33d194e1",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libxcb-9065bb12.so.1.1.0",
+   "SPDXID": "SPDXRef-File-...pillow.libs-libxcb-9065bb12.so.1.1.0-691a26bed605131f",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -60558,8 +60558,8 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libzstd-44be1190.so.1.5.7",
-   "SPDXID": "SPDXRef-File-...pillow.libs-libzstd-44be1190.so.1.5.7-ef3c9e88d5c17bd8",
+   "fileName": ".venv/lib/python3.11/site-packages/pillow.libs/libzstd-40ad5e7e.so.1.5.7",
+   "SPDXID": "SPDXRef-File-...pillow.libs-libzstd-40ad5e7e.so.1.5.7-fcfd274a685b327d",
    "checksums": [
     {
      "algorithm": "SHA1",
@@ -61036,11 +61036,11 @@
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "f3f51470fb05a40ebf9bf440c0c3e0ff685089b4"
+     "checksumValue": "97c902c2c04e7d90e51f474246982e932a72ea81"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "60909bec256950b3fea3ba166581a7fa1b5ac0e4112fa351665034eaae790746"
+     "checksumValue": "f2704f245ae110f53c2479a7706e6bebf4cf5e7596c294c8afdca14e000490ce"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -64293,19 +64293,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/virtualenv-21.7.13.dist-info/METADATA",
-   "SPDXID": "SPDXRef-File-...virtualenv-21.7.13.dist-info-METADATA-62763715d69b82ce",
+   "fileName": ".venv/lib/python3.11/site-packages/virtualenv-21.14.13.dist-info/METADATA",
+   "SPDXID": "SPDXRef-File-...virtualenv-21.14.13.dist-info-METADATA-744be212ffe058fc",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "ac1bb42a7f97ccebda8026614bad7d946e9a53f6"
+     "checksumValue": "69473a13cf4fdf3d3500403d0644f7f28c250f71"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "a1bda14f94d71ee5344482e145edf3dc9bc7cd6fd41bb51c782b1341cac50778"
+     "checksumValue": "04bde9388cb7cc849a66229330fa04a83052f86e653ea4a9ee71da387f850a19"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -64315,19 +64315,19 @@
    "copyrightText": "NOASSERTION"
   },
   {
-   "fileName": ".venv/lib/python3.11/site-packages/virtualenv-21.7.13.dist-info/RECORD",
-   "SPDXID": "SPDXRef-File-...virtualenv-21.7.13.dist-info-RECORD-7effcfa5f5a72821",
+   "fileName": ".venv/lib/python3.11/site-packages/virtualenv-21.14.13.dist-info/RECORD",
+   "SPDXID": "SPDXRef-File-...virtualenv-21.14.13.dist-info-RECORD-027b6a8dcf3486cf",
    "fileTypes": [
     "TEXT"
    ],
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "b3f124a79d87ddb6b3d97ceebf9635cf2a4361f5"
+     "checksumValue": "5675bcd9a781d22029e555af234836d1fcee55d3"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "104aca3eb2dd50cb2ea35ff96e9d8597792bcaf39ccfc8ea10de49406ad0d5ae"
+     "checksumValue": "3079d3b07f428741ebf996eb6b4e758c3f2aadab98c5b6d6abfbefeee0993061"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -64728,11 +64728,11 @@
    "checksums": [
     {
      "algorithm": "SHA1",
-     "checksumValue": "5f39fde220954065634add3e06ebeda33ab7e536"
+     "checksumValue": "facf9e8cfede6d1a5a2560aa82ba4a2edeb534d5"
     },
     {
      "algorithm": "SHA256",
-     "checksumValue": "3babbf3d9ec678b3c1d6e7ea9088648d05027284471258b7fb38f231666b761e"
+     "checksumValue": "721ecfd1101a417f3e11186e47596ab88a4ef7aaedab0de6e8e3c28c72146b89"
     }
    ],
    "licenseConcluded": "NOASSERTION",
@@ -64807,7 +64807,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytokens-032c35a09c3394b1",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -64832,11 +64832,6 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-build-071b59ffd50885e7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-build-071b59ffd50885e7",
    "relatedSpdxElement": "SPDXRef-Package-python-pytokens-1a34540cacca5db5",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -64856,6 +64851,11 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-build-071b59ffd50885e7",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-devhelp-081953a275293a13",
    "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
    "relationshipType": "DEPENDENCY_OF"
@@ -64867,7 +64867,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-python-discovery-092f872f764e937f",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -64927,7 +64927,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-bumpver-0b62f033483990c7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -64962,37 +64962,17 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-last-updated-by-git-0f665042942d2485",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-sphinx-last-updated-by-git-0f665042942d2485",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-sphinx-last-updated-by-git-0f665042942d2485",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-pylint-runner-1017d6f340d26319",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relatedSpdxElement": "SPDXRef-Package-python-build-071b59ffd50885e7",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relatedSpdxElement": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relatedSpdxElement": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65006,33 +64986,18 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-filelock-11153628c47853aa",
-   "relatedSpdxElement": "SPDXRef-Package-python-python-discovery-092f872f764e937f",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-filelock-11153628c47853aa",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-filelock-11153628c47853aa",
-   "relatedSpdxElement": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-annotated-types-124fbbb81c38496a",
    "relatedSpdxElement": "SPDXRef-Package-python-pydantic-ecad4847668fc6ad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-mptt-149f944063398f49",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-mptt-149f944063398f49",
-   "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65137,12 +65102,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-160a46f304127d5d",
-   "relatedSpdxElement": "SPDXRef-Package-python-keyring-8e3b8317c33d0628",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-160a46f304127d5d",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
+   "relatedSpdxElement": "SPDXRef-Package-python-keyring-8e3b8317c33d0628",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65232,12 +65197,32 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytokens-1a34540cacca5db5",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relatedSpdxElement": "SPDXRef-Package-python-build-071b59ffd50885e7",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relatedSpdxElement": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relatedSpdxElement": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65276,6 +65261,16 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
+   "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-dill-1f907e7760a7ff05",
    "relatedSpdxElement": "SPDXRef-Package-python-pylint-4cd9d769b7af77ac",
    "relationshipType": "DEPENDENCY_OF"
@@ -65302,17 +65297,17 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
    "relatedSpdxElement": "SPDXRef-Package-python-annotated-types-124fbbb81c38496a",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
    "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65352,11 +65347,6 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
    "relatedSpdxElement": "SPDXRef-Package-python-mypy-7a42007bba06651f",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -65383,6 +65373,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
    "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-typing-extensions-224899bba5a5de0e",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65438,6 +65433,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-execnet-2296799613f21757",
    "relatedSpdxElement": "SPDXRef-Package-python-pytest-xdist-b3bc935a97f38518",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-23c3457c50462d37",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65526,41 +65526,6 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-mkdocs-21833d86f39c6b32",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-sphinx-840f623c0b5e544d",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-build-d1a2d42e4c11571c",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-pytest-e0acd3476fd15318",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-twine-f2dd40de2ec539cd",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-Package-python-wheel-fb5a87938d295b02",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-watchdog-31cb57ac930889b5",
    "relatedSpdxElement": "SPDXRef-Package-python-mkdocs-21833d86f39c6b32",
    "relationshipType": "DEPENDENCY_OF"
@@ -65577,7 +65542,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pathspec-31ed8c86465387ee",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65593,16 +65558,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-docutils-32332743fe9e9d3a",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinx-rtd-theme-b9823501157b3d19",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
-   "relatedSpdxElement": "SPDXRef-Package-python-requests-455be117670001e0",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
-   "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65627,12 +65582,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-platformdirs-3519e67423b21d35",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-platformdirs-3519e67423b21d35",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65722,12 +65677,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-click-3cb9f30ab697bae0",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
+   "relatedSpdxElement": "SPDXRef-Package-python-httpx2-8d791ea85e5a55ca",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-click-3cb9f30ab697bae0",
-   "relatedSpdxElement": "SPDXRef-Package-python-httpx2-8d791ea85e5a55ca",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65766,8 +65721,13 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-certifi-3e4e9a914f555798",
+   "relatedSpdxElement": "SPDXRef-Package-python-requests-5e4c748b35d8546f",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-django-debug-toolbar-3ef7fda5626b38d1",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65788,6 +65748,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
    "relatedSpdxElement": "SPDXRef-Package-python-mypy-7a42007bba06651f",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65842,11 +65807,6 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-requests-455be117670001e0",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-requests-455be117670001e0",
    "relatedSpdxElement": "SPDXRef-Package-python-pytest-160a46f304127d5d",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -65858,6 +65818,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-requests-455be117670001e0",
    "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-requests-455be117670001e0",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65886,6 +65851,11 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-pillow-4775781fbec3bffe",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-pycparser-47e0332f27d742c5",
    "relatedSpdxElement": "SPDXRef-Package-python-cffi-8e10096199c994ab",
    "relationshipType": "DEPENDENCY_OF"
@@ -65907,11 +65877,6 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-wheel-48f3a454bfcd36c7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-wheel-48f3a454bfcd36c7",
    "relatedSpdxElement": "SPDXRef-Package-python-pytokens-1a34540cacca5db5",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -65926,6 +65891,11 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-wheel-48f3a454bfcd36c7",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-applehelp-49279d06129c4747",
    "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
    "relationshipType": "DEPENDENCY_OF"
@@ -65937,12 +65907,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-django-49c38b8e1a86f101",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -65962,7 +65927,22 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
    "relatedSpdxElement": "SPDXRef-Package-python-execnet-dd47e06e14f303b5",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-filelock-4c8609a33c93e798",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-filelock-4c8609a33c93e798",
+   "relatedSpdxElement": "SPDXRef-Package-python-python-discovery-e7c51ba71949c77e",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66037,7 +66017,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66072,22 +66052,22 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
    "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
    "relatedSpdxElement": "SPDXRef-Package-python-asttokens-a605573ef29fb3f8",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66098,6 +66078,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-pure-eval-59b8f51f7c31c3c1",
    "relatedSpdxElement": "SPDXRef-Package-python-stack-data-a988f16cc06011c5",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66117,12 +66102,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pathspec-5dc6a86353c51fce",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
+   "relatedSpdxElement": "SPDXRef-Package-python-mypy-7a42007bba06651f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pathspec-5dc6a86353c51fce",
-   "relatedSpdxElement": "SPDXRef-Package-python-mypy-7a42007bba06651f",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66176,16 +66161,6 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-anyio-63696f5d2396ad02",
    "relatedSpdxElement": "SPDXRef-Package-python-httpx2-8d791ea85e5a55ca",
    "relationshipType": "DEPENDENCY_OF"
@@ -66198,11 +66173,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-anyio-63696f5d2396ad02",
    "relatedSpdxElement": "SPDXRef-Package-python-httpcore2-dfb9dda74c10db6c",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66222,7 +66192,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66307,7 +66282,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-extensions-66f6e679dd0b4090",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66322,7 +66297,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pyjwt-6a4005dbfe13495e",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66376,33 +66351,8 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-Package-python-pytokens-1a34540cacca5db5",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-Package-python-diff-match-patch-35137cadeeae69d3",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66423,6 +66373,46 @@
   {
    "spdxElementId": "SPDXRef-Package-python-wcwidth-74518c81b3cd5bf8",
    "relatedSpdxElement": "SPDXRef-Package-python-prompt-toolkit-59203d166f1efd2e",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-mkdocs-21833d86f39c6b32",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-sphinx-840f623c0b5e544d",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-build-d1a2d42e4c11571c",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-pytest-e0acd3476fd15318",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-twine-f2dd40de2ec539cd",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
+   "relatedSpdxElement": "SPDXRef-Package-python-wheel-fb5a87938d295b02",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66462,12 +66452,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-isort-7829498b7b2970f3",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-pylint-4cd9d769b7af77ac",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-isort-7829498b7b2970f3",
-   "relatedSpdxElement": "SPDXRef-Package-python-pylint-4cd9d769b7af77ac",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66478,11 +66468,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-7a42007bba06651f",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-devhelp-081953a275293a13",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-mypy-7a42007bba06651f",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66527,6 +66512,11 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-7a42007bba06651f",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-mypy-7a42007bba06651f",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-htmlhelp-ca89688e25b23977",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -66543,11 +66533,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-7a42007bba06651f",
    "relatedSpdxElement": "SPDXRef-Package-python-asgiref-fefd98382488bcae",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pillow-7b22e673e90253dd",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66592,7 +66577,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-coverage-7b85772dce3d1d33",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66603,11 +66588,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-coverage-7b85772dce3d1d33",
    "relatedSpdxElement": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-7c6418d832be87ee",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66662,17 +66642,17 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-colorama-7e4afe00640d85e0",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-colorama-7e4afe00640d85e0",
    "relatedSpdxElement": "SPDXRef-Package-python-isort-7829498b7b2970f3",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-colorama-7e4afe00640d85e0",
    "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-colorama-7e4afe00640d85e0",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66801,13 +66781,18 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-click-871ec3d7e6563235",
    "relatedSpdxElement": "SPDXRef-Package-python-mkdocs-21833d86f39c6b32",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-click-871ec3d7e6563235",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66842,7 +66827,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-shellcheck-py-8aea03b12a798333",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66858,11 +66843,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-jeepney-8bf5014a7b487cdc",
    "relatedSpdxElement": "SPDXRef-Package-python-keyring-f9bc8b8c2011deb0",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-sphinx-rtd-theme-8c075cbccbb658cb",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66888,6 +66868,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-rtd-theme-8c075cbccbb658cb",
    "relatedSpdxElement": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-sphinx-rtd-theme-8c075cbccbb658cb",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -66947,11 +66932,6 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-8d881dee608fde33",
-   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-a03747dead536367",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-django-8d881dee608fde33",
    "relatedSpdxElement": "SPDXRef-Package-python-django-debug-toolbar-b061a9b2ef59ef2e",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -66963,6 +66943,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-django-8d881dee608fde33",
    "relatedSpdxElement": "SPDXRef-Package-python-django-jazzmin-c06cda72f6bff763",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-django-8d881dee608fde33",
+   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-cf49a8f8650df31f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67018,11 +67003,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-tzdata-93f09030728e85b0",
    "relatedSpdxElement": "SPDXRef-Package-python-django-8d881dee608fde33",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-certifi-94f96c9665535457",
-   "relatedSpdxElement": "SPDXRef-Package-python-requests-5e4c748b35d8546f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67087,7 +67067,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-openai-99c111b7d7a7b59e",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67161,26 +67141,6 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-a03747dead536367",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-a03747dead536367",
-   "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-bede18f4db34cae3",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
-   "relatedSpdxElement": "SPDXRef-Package-python-pre-commit-63c877553bbcca31",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-types-pyyaml-a312f4cb000bd1ac",
    "relatedSpdxElement": "SPDXRef-Package-python-django-stubs-6ebd49a6329a2ae4",
    "relationshipType": "DEPENDENCY_OF"
@@ -67242,12 +67202,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-distlib-acfe43042dbf1f2d",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-stubs-ad92cf553e817fef",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67276,6 +67236,21 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-filelock-b20a70299b246978",
+   "relatedSpdxElement": "SPDXRef-Package-python-python-discovery-092f872f764e937f",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-filelock-b20a70299b246978",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-filelock-b20a70299b246978",
+   "relatedSpdxElement": "SPDXRef-Package-python-pytest-xdist-597e46be12f876bc",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-mdurl-b39f305e1dc44272",
    "relatedSpdxElement": "SPDXRef-Package-python-markdown-it-py-3d57632154e54f21",
    "relationshipType": "DEPENDENCY_OF"
@@ -67287,12 +67262,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
-   "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-196a7e5897332f15",
+   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67312,11 +67287,6 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
-   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
    "relatedSpdxElement": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -67328,6 +67298,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
    "relatedSpdxElement": "SPDXRef-Package-python-pylint-django-b5011ff09bd7676d",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-django-b49e6eacf057b31d",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67362,7 +67337,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pylint-django-b5011ff09bd7676d",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67401,61 +67376,6 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-build-071b59ffd50885e7",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-pytest-160a46f304127d5d",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-wheel-48f3a454bfcd36c7",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-importlib-metadata-6db75fcbd9fd9fce",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-Package-python-twine-eef9f56ce5cfbc29",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-django-jazzmin-c06cda72f6bff763",
    "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
    "relationshipType": "DEPENDENCY_OF"
@@ -67468,6 +67388,31 @@
   {
    "spdxElementId": "SPDXRef-Package-python-toml-c24f2d7ec37a6aa5",
    "relatedSpdxElement": "SPDXRef-Package-python-bumpver-0b62f033483990c7",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-Package-python-pytokens-1a34540cacca5db5",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-Package-python-diff-match-patch-35137cadeeae69d3",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67511,13 +67456,8 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-c8c4c6c2b31cd78c",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-distlib-c9a1ccc11c3a8f3a",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67556,16 +67496,6 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-filelock-cb44e1e96aaa788a",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-filelock-cb44e1e96aaa788a",
-   "relatedSpdxElement": "SPDXRef-Package-python-python-discovery-e7c51ba71949c77e",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-types-pyyaml-cb72b97d5104590b",
    "relatedSpdxElement": "SPDXRef-Package-python-django-stubs-ad92cf553e817fef",
    "relationshipType": "DEPENDENCY_OF"
@@ -67578,6 +67508,16 @@
   {
    "spdxElementId": "SPDXRef-Package-python-nh3-ce8fb54ec4088f7d",
    "relatedSpdxElement": "SPDXRef-Package-python-readme-renderer-4e53086d47c9365a",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-cf49a8f8650df31f",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-3de52a5425a022e0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-cf49a8f8650df31f",
+   "relatedSpdxElement": "SPDXRef-Package-python-drf-spectacular-bede18f4db34cae3",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67601,13 +67541,68 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-tablib-d34995d4c9f8b487",
-   "relatedSpdxElement": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-build-071b59ffd50885e7",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-pytest-160a46f304127d5d",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-psutil-3fd82ed2c43ae1d0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-wheel-48f3a454bfcd36c7",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-ipython-63bef76e5328d4a7",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-importlib-metadata-6db75fcbd9fd9fce",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-Package-python-twine-eef9f56ce5cfbc29",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-tablib-d34995d4c9f8b487",
+   "relatedSpdxElement": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67642,12 +67637,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
-   "relatedSpdxElement": "SPDXRef-Package-python-keyring-8e3b8317c33d0628",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
+   "relatedSpdxElement": "SPDXRef-Package-python-keyring-8e3b8317c33d0628",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67658,6 +67653,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
    "relatedSpdxElement": "SPDXRef-Package-python-jaraco-classes-af32001ae26e6cbd",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-pytest-cov-d364316f1691bac4",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67682,17 +67682,17 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-extensions-d42e1373252ce1a8",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-mypy-extensions-d42e1373252ce1a8",
    "relatedSpdxElement": "SPDXRef-Package-python-isort-7829498b7b2970f3",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-mypy-extensions-d42e1373252ce1a8",
    "relatedSpdxElement": "SPDXRef-Package-python-mypy-7a42007bba06651f",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-mypy-extensions-d42e1373252ce1a8",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67771,6 +67771,11 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
+   "relatedSpdxElement": "SPDXRef-Package-python-pre-commit-63c877553bbcca31",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-snowballstemmer-df51efa28d66942b",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinx-840f623c0b5e544d",
    "relationshipType": "DEPENDENCY_OF"
@@ -67793,11 +67798,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-devhelp-081953a275293a13",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67872,6 +67872,11 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinx-rtd-theme-8c075cbccbb658cb",
    "relationshipType": "DEPENDENCY_OF"
   },
@@ -67882,12 +67887,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
+   "relatedSpdxElement": "SPDXRef-Package-python-jaraco-classes-af32001ae26e6cbd",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-sphinx-e054c487f57502a7",
-   "relatedSpdxElement": "SPDXRef-Package-python-jaraco-classes-af32001ae26e6cbd",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -67992,7 +67997,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-qr-code-e3acac1cf9d1a634",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68052,7 +68057,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-python-discovery-e7c51ba71949c77e",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68092,12 +68097,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-icdiff-ec0140b74afe8f37",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
    "spdxElementId": "SPDXRef-Package-python-pytest-icdiff-ec0140b74afe8f37",
-   "relatedSpdxElement": "SPDXRef-Package-python-sphinxcontrib-django-5303475dc3ff9e5a",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68112,7 +68117,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-platformdirs-ed9e49ad50d1e477",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68122,12 +68127,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-platformdirs-ed9e49ad50d1e477",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relationshipType": "DEPENDENCY_OF"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-twine-eef9f56ce5cfbc29",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68143,6 +68143,11 @@
   {
    "spdxElementId": "SPDXRef-Package-python-twine-eef9f56ce5cfbc29",
    "relatedSpdxElement": "SPDXRef-Package-python-sphinx-rtd-theme-8c075cbccbb658cb",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-twine-eef9f56ce5cfbc29",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68296,6 +68301,16 @@
    "relationshipType": "DEPENDENCY_OF"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
+   "relatedSpdxElement": "SPDXRef-Package-python-requests-455be117670001e0",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
+   "relatedSpdxElement": "SPDXRef-Package-python-jedi-c1360dd0ca660a2b",
+   "relationshipType": "DEPENDENCY_OF"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-django-stubs-ext-fae357a9aa18b280",
    "relatedSpdxElement": "SPDXRef-Package-python-django-stubs-ad92cf553e817fef",
    "relationshipType": "DEPENDENCY_OF"
@@ -68327,7 +68342,7 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-django-jazzmin-fc8c0c3d513aed51",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "DEPENDENCY_OF"
   },
   {
@@ -68457,30 +68472,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-1c7791f78e107356",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relatedSpdxElement": "SPDXRef-File-...RECORD-3f0fe7d50a827ea1",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relatedSpdxElement": "SPDXRef-File-...METADATA-81ab354c59d8f3d8",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
-   "relatedSpdxElement": "SPDXRef-File-...direct-url.json-bbecbebd9723f061",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-github-action-oven-sh-setup-bun-0a1e24d31740d2db",
    "relatedSpdxElement": "SPDXRef-File-....github-workflows-test.yml-7827409a2fbc37c2",
    "relationshipType": "OTHER",
@@ -68601,18 +68592,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relatedSpdxElement": "SPDXRef-File-...virtualenv-21.7.13.dist-info-METADATA-62763715d69b82ce",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
-   "relatedSpdxElement": "SPDXRef-File-...virtualenv-21.7.13.dist-info-RECORD-7effcfa5f5a72821",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-serializinghtml-10de88d0ba0d17d8",
    "relatedSpdxElement": "SPDXRef-File-...RECORD-247bba8923249649",
    "relationshipType": "OTHER",
@@ -68621,18 +68600,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-serializinghtml-10de88d0ba0d17d8",
    "relatedSpdxElement": "SPDXRef-File-...METADATA-e7a4bb3953dee9b5",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-filelock-11153628c47853aa",
-   "relatedSpdxElement": "SPDXRef-File-...filelock-3.32.0.dist-info-METADATA-5e7720e2ee5dfdd6",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-filelock-11153628c47853aa",
-   "relatedSpdxElement": "SPDXRef-File-...filelock-3.32.0.dist-info-RECORD-ca21aa9245b5ca49",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -68727,6 +68694,18 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relatedSpdxElement": "SPDXRef-File-...virtualenv-21.14.13.dist-info-RECORD-027b6a8dcf3486cf",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
+   "relatedSpdxElement": "SPDXRef-File-...virtualenv-21.14.13.dist-info-METADATA-744be212ffe058fc",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-paginate-1a580b3e86fdaf23",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
@@ -68795,6 +68774,24 @@
   {
    "spdxElementId": "SPDXRef-Package-python-sphinxcontrib-django-1daa3baf0bc3a76b",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
+   "relatedSpdxElement": "SPDXRef-File-...RECORD-6fbc221996a71209",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
+   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-80cc593a462a5f55",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
+   "relatedSpdxElement": "SPDXRef-File-...METADATA-ae54eb3d4cb02506",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -68879,6 +68876,24 @@
   {
    "spdxElementId": "SPDXRef-Package-python-execnet-2296799613f21757",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-23c3457c50462d37",
+   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.13.dist-info-RECORD-165dde4f5bdd020a",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-23c3457c50462d37",
+   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.13.dist-info-METADATA-c6728f608e9ea681",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-psycopg2-23c3457c50462d37",
+   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-ef422a6d21655f81",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -69009,12 +69024,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-watchdog-31cb57ac930889b5",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
@@ -69029,24 +69038,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-docutils-32332743fe9e9d3a",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
-   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-484fa55b92b18f92",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
-   "relatedSpdxElement": "SPDXRef-File-...certifi-2026.7.22.dist-info-RECORD-6b1f2caca98b5405",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
-   "relatedSpdxElement": "SPDXRef-File-...certifi-2026.7.22.dist-info-METADATA-982e6624ffa5a1f6",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -69231,6 +69222,12 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-certifi-3e4e9a914f555798",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-github-action-actions-checkout-3ed42ee9671fc9f1",
    "relatedSpdxElement": "SPDXRef-File-....github-workflows-test.yml-bec6dd40312e8320",
    "relationshipType": "OTHER",
@@ -69369,6 +69366,12 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-pillow-4775781fbec3bffe",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-pycparser-47e0332f27d742c5",
    "relatedSpdxElement": "SPDXRef-File-...pycparser-3.0.dist-info-top-level.txt-55ba99b5f3ee8ebe",
    "relationshipType": "OTHER",
@@ -69473,6 +69476,12 @@
   {
    "spdxElementId": "SPDXRef-Package-python-pre-commit-4b05bd0013105896",
    "relatedSpdxElement": "SPDXRef-File-...top-level.txt-eade43137cb50eab",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-filelock-4c8609a33c93e798",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -69633,6 +69642,12 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-github-action-actions-setup-node-5b08d3aac31e1bb2",
    "relatedSpdxElement": "SPDXRef-File-....github-workflows-update-prettier.yml-1186a7f27a476bf2",
    "relationshipType": "OTHER",
@@ -69689,24 +69704,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-nodeenv-60d7660a217884a1",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "relatedSpdxElement": "SPDXRef-File-...RECORD-0ac295dfa1b4c8dd",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-81d9e3cdb4025dd8",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
-   "relatedSpdxElement": "SPDXRef-File-...METADATA-97e8eaff5e1b8ac7",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -69951,18 +69948,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-File-...black-26.5.1.dist-info-METADATA-537e759a25267ade",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-70142df08821cb21",
-   "relatedSpdxElement": "SPDXRef-File-...black-26.5.1.dist-info-RECORD-859a39b5343c7336",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-django-import-export-70e383d44fbf95e8",
    "relatedSpdxElement": "SPDXRef-File-...top-level.txt-0a09401c00c5bc4f",
    "relationshipType": "OTHER",
@@ -70012,6 +69997,12 @@
   },
   {
    "spdxElementId": "SPDXRef-Package-python-wcwidth-74518c81b3cd5bf8",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
@@ -70077,12 +70068,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-pillow-7b22e673e90253dd",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-coverage-7b85772dce3d1d33",
    "relatedSpdxElement": "SPDXRef-File-...coverage-7.15.2.dist-info-RECORD-955d26dac49d771b",
    "relationshipType": "OTHER",
@@ -70097,12 +70082,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-coverage-7b85772dce3d1d33",
    "relatedSpdxElement": "SPDXRef-File-...top-level.txt-b3db5d77e34370b8",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-black-7c6418d832be87ee",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -70193,6 +70172,24 @@
   {
    "spdxElementId": "SPDXRef-Package-python-typing-extensions-8697592fb3d58f85",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "relatedSpdxElement": "SPDXRef-File-...pillow-13.0.0.dist-info-top-level.txt-415c4f9cb64eb8a4",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "relatedSpdxElement": "SPDXRef-File-...pillow-13.0.0.dist-info-METADATA-528e0cb34a8b5008",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-pillow-86a6440668416006",
+   "relatedSpdxElement": "SPDXRef-File-...pillow-13.0.0.dist-info-RECORD-90a6403cfeb1cc3f",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -70419,12 +70416,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-certifi-94f96c9665535457",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-binary-Simple-Launcher-95e3bc9fb07f8e70",
    "relatedSpdxElement": "SPDXRef-File-...site-packages-distlib-w64.exe-5f4265451a903356",
    "relationshipType": "OTHER",
@@ -70553,36 +70544,6 @@
   {
    "spdxElementId": "SPDXRef-Package-python-ast-serialize-9fc44d5cd7343f9e",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-djangorestframework-a03747dead536367",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "relatedSpdxElement": "SPDXRef-File-...pillow-12.3.0.dist-info-top-level.txt-0500739cd8ac84b1",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "relatedSpdxElement": "SPDXRef-File-...pillow-12.3.0.dist-info-METADATA-2e4e391e7f422695",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
-   "relatedSpdxElement": "SPDXRef-File-...pillow-12.3.0.dist-info-RECORD-a061f873ac879f3e",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -70767,6 +70728,18 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-filelock-b20a70299b246978",
+   "relatedSpdxElement": "SPDXRef-File-...filelock-4.2.1.dist-info-METADATA-45881794968218a7",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-filelock-b20a70299b246978",
+   "relatedSpdxElement": "SPDXRef-File-...filelock-4.2.1.dist-info-RECORD-5cc91ce9052b3aa8",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-mdurl-b39f305e1dc44272",
    "relatedSpdxElement": "SPDXRef-File-...mdurl-0.1.2.dist-info-METADATA-35e11bd6d83ec535",
    "relationshipType": "OTHER",
@@ -70827,6 +70800,30 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relatedSpdxElement": "SPDXRef-File-...direct-url.json-3ff36e060a809227",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relatedSpdxElement": "SPDXRef-File-...RECORD-9144227c31103d5f",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-c9cfd9449f9969d2",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
+   "relatedSpdxElement": "SPDXRef-File-...METADATA-d5a15e1078ff5476",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-github-action-actions-setup-node-b75c15d85c85427b",
    "relatedSpdxElement": "SPDXRef-File-....github-workflows-ci.yml-028eca2d2f3019fc",
    "relationshipType": "OTHER",
@@ -70881,18 +70878,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-File-...packaging-26.2.dist-info-RECORD-1caf0235af784f57",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
-   "relatedSpdxElement": "SPDXRef-File-...packaging-26.2.dist-info-METADATA-472fa8afd76b92b5",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-django-jazzmin-c06cda72f6bff763",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
@@ -70931,6 +70916,18 @@
   {
    "spdxElementId": "SPDXRef-Package-python-toml-c24f2d7ec37a6aa5",
    "relatedSpdxElement": "SPDXRef-File-...toml-0.10.2.dist-info-top-level.txt-ea2e9bdd064c47f2",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-File-...black-26.10.1.dist-info-RECORD-6f0c05e1d444e278",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-black-c26175b9a1fdd664",
+   "relatedSpdxElement": "SPDXRef-File-...black-26.10.1.dist-info-METADATA-a2a0cf608edb7f6d",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -70995,24 +70992,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-c8c4c6c2b31cd78c",
-   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.13.dist-info-RECORD-165dde4f5bdd020a",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-c8c4c6c2b31cd78c",
-   "relatedSpdxElement": "SPDXRef-File-...psycopg2-2.9.13.dist-info-METADATA-c6728f608e9ea681",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
-   "spdxElementId": "SPDXRef-Package-python-psycopg2-c8c4c6c2b31cd78c",
-   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-ef422a6d21655f81",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-distlib-c9a1ccc11c3a8f3a",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
@@ -71067,12 +71046,6 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
-   "spdxElementId": "SPDXRef-Package-python-filelock-cb44e1e96aaa788a",
-   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
-   "relationshipType": "OTHER",
-   "comment": "evident-by: indicates the package's existence is evident by the given file"
-  },
-  {
    "spdxElementId": "SPDXRef-Package-python-types-pyyaml-cb72b97d5104590b",
    "relatedSpdxElement": "SPDXRef-File-...top-level.txt-1f0b46bb4c8523e0",
    "relationshipType": "OTHER",
@@ -71109,6 +71082,12 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-djangorestframework-cf49a8f8650df31f",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-tomli-cfd8aa930c639916",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
@@ -71129,6 +71108,18 @@
   {
    "spdxElementId": "SPDXRef-Package-python-build-d1a2d42e4c11571c",
    "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-File-...packaging-26.3.dist-info-RECORD-3e45a8888af931be",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
+   "relatedSpdxElement": "SPDXRef-File-...packaging-26.3.dist-info-METADATA-b49030e194fc0d49",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -71291,6 +71282,12 @@
   {
    "spdxElementId": "SPDXRef-Package-python-pyproject-hooks-decea5e46a2f3d7f",
    "relatedSpdxElement": "SPDXRef-File-...pyproject-hooks-1.2.0.dist-info-RECORD-e8df49c9c6d5bb43",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
+   "relatedSpdxElement": "SPDXRef-File-uv.lock-3717ae13dd3eb744",
    "relationshipType": "OTHER",
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
@@ -71763,6 +71760,24 @@
    "comment": "evident-by: indicates the package's existence is evident by the given file"
   },
   {
+   "spdxElementId": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
+   "relatedSpdxElement": "SPDXRef-File-...top-level.txt-1b1d58f4ee2d3349",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
+   "relatedSpdxElement": "SPDXRef-File-...certifi-2026.10.19.dist-info-RECORD-969184239affdd56",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
+   "spdxElementId": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
+   "relatedSpdxElement": "SPDXRef-File-...certifi-2026.10.19.dist-info-METADATA-af575c0bf5a1bea5",
+   "relationshipType": "OTHER",
+   "comment": "evident-by: indicates the package's existence is evident by the given file"
+  },
+  {
    "spdxElementId": "SPDXRef-Package-python-django-stubs-ext-fae357a9aa18b280",
    "relatedSpdxElement": "SPDXRef-File-...METADATA-00238c40bfa184f1",
    "relationshipType": "OTHER",
@@ -72086,12 +72101,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-70142df08821cb21",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-c26175b9a1fdd664",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-black-7c6418d832be87ee",
+   "relatedSpdxElement": "SPDXRef-Package-python-black-5a39dbb536c5d2eb",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72116,12 +72131,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-certifi-33aa0a28b5fe1bc6",
+   "relatedSpdxElement": "SPDXRef-Package-python-certifi-f9eb44f6f9cfe59b",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-certifi-94f96c9665535457",
+   "relatedSpdxElement": "SPDXRef-Package-python-certifi-3e4e9a914f555798",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72326,12 +72341,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-611e1d49ec370506",
+   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-1e391e0087dc123b",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-a03747dead536367",
+   "relatedSpdxElement": "SPDXRef-Package-python-djangorestframework-cf49a8f8650df31f",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72376,12 +72391,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-filelock-11153628c47853aa",
+   "relatedSpdxElement": "SPDXRef-Package-python-filelock-b20a70299b246978",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-filelock-cb44e1e96aaa788a",
+   "relatedSpdxElement": "SPDXRef-Package-python-filelock-4c8609a33c93e798",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72666,7 +72681,7 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-09eb2928517a1904",
+   "relatedSpdxElement": "SPDXRef-Package-python-lunes-cms-b63001bfc8ab5fad",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72821,12 +72836,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-packaging-c03bbf815e67a109",
+   "relatedSpdxElement": "SPDXRef-Package-python-packaging-d2f955dd35d140e3",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-packaging-314a78db5c85fd3d",
+   "relatedSpdxElement": "SPDXRef-Package-python-packaging-7493e2b3859b0162",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72866,12 +72881,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-a1bfa66cf6a9d0da",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-86a6440668416006",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-pillow-7b22e673e90253dd",
+   "relatedSpdxElement": "SPDXRef-Package-python-pillow-4775781fbec3bffe",
    "relationshipType": "CONTAINS"
   },
   {
@@ -72951,7 +72966,7 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-psycopg2-c8c4c6c2b31cd78c",
+   "relatedSpdxElement": "SPDXRef-Package-python-psycopg2-23c3457c50462d37",
    "relationshipType": "CONTAINS"
   },
   {
@@ -73591,12 +73606,12 @@
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-10b6acd21a89f355",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-1a3c60e526aab10f",
    "relationshipType": "CONTAINS"
   },
   {
    "spdxElementId": "SPDXRef-DocumentRoot-Directory-lunes-cms",
-   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-a1bb22b23f890b9f",
+   "relatedSpdxElement": "SPDXRef-Package-python-virtualenv-df330042a34a3dd5",
    "relationshipType": "CONTAINS"
   },
   {
