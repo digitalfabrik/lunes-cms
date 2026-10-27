@@ -5,6 +5,9 @@ import os
 from django.contrib.auth.models import AnonymousUser, User
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
+from django.utils.functional import lazy
+from django.utils.html import format_html
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
@@ -91,6 +94,32 @@ def resolve_image_source(
     if image_updated:
         return ImageSource.UPLOADED
     return current
+
+
+#: Shown next to every control that uploads a vocabulary image (#1085)
+IMAGE_UPLOAD_WARNING = _(
+    "Please do not upload photos in which a real person can be recognized (e.g. "
+    "by their face). Body parts without identifying features are fine."
+)
+
+
+def image_upload_warning_html() -> SafeString:
+    """
+    Render :data:`IMAGE_UPLOAD_WARNING` as a warning sign which shows the
+    warning on hover, so it does not take up much space next to the controls.
+
+    :return: The warning as HTML
+    """
+    return format_html(
+        '<span class="image-upload-warning" title="{}" aria-label="{}" role="img">'
+        "⚠️</span>",
+        IMAGE_UPLOAD_WARNING,
+        IMAGE_UPLOAD_WARNING,
+    )
+
+
+#: :func:`image_upload_warning_html` for places that are set up at import time
+image_upload_warning_html_lazy = lazy(image_upload_warning_html, SafeString)
 
 
 class ReviewStatus(models.TextChoices):

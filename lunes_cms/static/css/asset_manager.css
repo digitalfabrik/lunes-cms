@@ -305,3 +305,9 @@
 #alternative_words-group td.field-action_buttons p {
     margin: 0;
 }
+
+.image-upload-warning {
+    align-self: center;
+    margin-left: 5px;
+    cursor: help;
+}

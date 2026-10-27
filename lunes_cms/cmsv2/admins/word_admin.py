@@ -30,7 +30,10 @@ from lunes_cms.cmsv2.admins.word_inlines import (
 from lunes_cms.cmsv2.areas import scope_words, validate_word_area
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.area import Area
-from lunes_cms.cmsv2.models.static import CheckStatus
+from lunes_cms.cmsv2.models.static import (
+    CheckStatus,
+    image_upload_warning_html_lazy,
+)
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.notifications import notify_words_added
 from lunes_cms.cmsv2.utils import (
@@ -58,6 +61,7 @@ class WordAdminForm(ModelForm):
 
         model = Word
         fields = "__all__"
+        help_texts = {"image": image_upload_warning_html_lazy()}
 
     def clean_area(self) -> Area | None:
         """
@@ -803,7 +807,9 @@ class WordAdmin(AreaContentAdmin):
 
         return html
 
-    list_image.short_description = _("Image")  # type: ignore[attr-defined]
+    list_image.short_description = format_html_lazy(  # type: ignore[attr-defined]
+        "{} {}", _("Image"), image_upload_warning_html_lazy()
+    )
 
     def singular_article_display(self, obj: Word) -> str:
         """
