@@ -99,7 +99,7 @@ def test_generate_word_audio_and_image(
         page.unroute("**/words/*/generate-audio-via-openai")
         page.unroute(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}")
         page.unroute("**/store-generated-audio-permanently")
-        page.unroute("**/words/generate-image-via-openai")
+        page.unroute("**/words/*/generate-image-via-openai")
         page.unroute(f"**/temp_image/{_MOCK_IMAGE_FILENAME}")
         page.unroute("**/store-generated-image-permanently")
 
@@ -127,7 +127,7 @@ def test_generate_word_audio_and_image(
     page.route("**/words/*/generate-audio-via-openai", _fulfill_generate_audio)
     page.route(f"**/temp_audio/{_MOCK_AUDIO_FILENAME}", _fulfill_mock_audio_file)
     page.route("**/store-generated-audio-permanently", _fulfill_store_success)
-    page.route("**/words/generate-image-via-openai", _fulfill_generate_image)
+    page.route("**/words/*/generate-image-via-openai", _fulfill_generate_image)
     page.route(f"**/temp_image/{_MOCK_IMAGE_FILENAME}", _fulfill_mock_image_file)
     page.route("**/store-generated-image-permanently", _fulfill_store_success)
 

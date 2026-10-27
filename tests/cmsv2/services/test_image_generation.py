@@ -15,7 +15,7 @@ import pytest
 from django.core.files.base import ContentFile
 from pytest_django import Settings
 
-from lunes_cms.cmsv2.models import Area, Word
+from lunes_cms.cmsv2.models import Area, Job, Unit, UnitWordRelation, Word
 from lunes_cms.cmsv2.models import word as word_module
 from lunes_cms.cmsv2.models.static import ImageSource
 from lunes_cms.cmsv2.services import image_generation
@@ -91,7 +91,7 @@ def test_drain_generates_image_for_word_missing_image(fast_worker: None) -> None
     word = _make_word(word="Hammer")
 
     with mock.patch.object(
-        image_generation, "openai_word_image_bytes", return_value=b"fake-png"
+        image_generation, "openai_image_bytes", return_value=b"fake-png"
     ) as image_call:
         _run_drain()
 
@@ -107,7 +107,7 @@ def test_drain_stores_image_under_standard_path(fast_worker: None) -> None:
     word = _make_word(word="Säge & Co")
 
     with mock.patch.object(
-        image_generation, "openai_word_image_bytes", return_value=b"fake-png"
+        image_generation, "openai_image_bytes", return_value=b"fake-png"
     ):
         _run_drain()
 
@@ -128,7 +128,7 @@ def test_drain_is_idempotent_for_already_generated_words(fast_worker: None) -> N
     word.image.save("hammer.png", ContentFile(b"existing"))
     word.refresh_from_db()
 
-    with mock.patch.object(image_generation, "openai_word_image_bytes") as image_call:
+    with mock.patch.object(image_generation, "openai_image_bytes") as image_call:
         _run_drain()
 
     assert image_call.call_count == 0
@@ -139,13 +139,13 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(word: Word, _area: Area, job_title: str | None = None) -> bytes:
-        if word.word == "Schraubenzieher":
+    def maybe_fail(prompt: str, _area: Area) -> bytes:
+        if "Schraubenzieher" in prompt:
             raise ValueError("simulated openai 5xx")
         return b"ok-png"
 
     with mock.patch.object(
-        image_generation, "openai_word_image_bytes", side_effect=maybe_fail
+        image_generation, "openai_image_bytes", side_effect=maybe_fail
     ):
         _run_drain()
 
@@ -161,7 +161,7 @@ def test_drain_exits_quietly_when_openai_not_configured(fast_worker: None) -> No
 
     with mock.patch.object(
         image_generation,
-        "openai_word_image_bytes",
+        "openai_image_bytes",
         side_effect=OpenAIConfigurationError("missing key"),
     ):
         # Should return without raising.
@@ -172,7 +172,7 @@ def test_drain_exits_quietly_when_openai_not_configured(fast_worker: None) -> No
 def test_drain_skips_words_with_empty_word(fast_worker: None) -> None:
     Word.objects.create(word="", singular_article=0)
 
-    with mock.patch.object(image_generation, "openai_word_image_bytes") as image_call:
+    with mock.patch.object(image_generation, "openai_image_bytes") as image_call:
         _run_drain()
 
     assert image_call.call_count == 0
@@ -184,7 +184,7 @@ def test_drain_does_not_repick_a_failed_row(fast_worker: None) -> None:
 
     with mock.patch.object(
         image_generation,
-        "openai_word_image_bytes",
+        "openai_image_bytes",
         side_effect=ValueError("boom"),
     ) as image_call:
         _run_drain()
@@ -201,7 +201,7 @@ def test_drain_only_processes_given_word_ids(fast_worker: None) -> None:
     other = _make_word(word="Säge")
 
     with mock.patch.object(
-        image_generation, "openai_word_image_bytes", return_value=b"png"
+        image_generation, "openai_image_bytes", return_value=b"png"
     ) as image_call:
         _run_drain(word_ids=[imported.pk])
 
@@ -218,9 +218,7 @@ def test_drain_is_single_flight(fast_worker: None) -> None:
 
     image_generation._drain_lock.acquire()  # pylint: disable=protected-access
     try:
-        with mock.patch.object(
-            image_generation, "openai_word_image_bytes"
-        ) as image_call:
+        with mock.patch.object(image_generation, "openai_image_bytes") as image_call:
             # Lock already held -> should return immediately, doing nothing.
             _run_drain()
         assert image_call.call_count == 0
@@ -333,22 +331,122 @@ def test_build_image_prompt_allows_text_when_requested() -> None:
 
 
 @pytest.mark.django_db(transaction=True)
-def test_drain_passes_job_title_to_image_generation(fast_worker: None) -> None:
+def test_drain_passes_the_import_job_and_its_unit_to_the_prompt(
+    fast_worker: None,
+) -> None:
     imported = _make_word(word="Hammer")
+    job = Job.objects.create(name="Tischler/in")
+    unit = Unit.objects.create(title="Werkzeuge")
+    unit.jobs.add(job)
+    UnitWordRelation.objects.create(unit=unit, word=imported)
 
     with mock.patch.object(
-        image_generation, "openai_word_image_bytes", return_value=b"png"
+        image_generation, "openai_image_bytes", return_value=b"png"
     ) as image_call:
         thread = threading.Thread(
             target=image_generation.drain_pending_images,
-            kwargs={
-                "word_ids": [imported.pk],
-                "throttle_seconds": 0,
-                "job_title": "Tischler/in",
-            },
+            kwargs={"word_ids": [imported.pk], "throttle_seconds": 0, "job": job},
         )
         thread.start()
         thread.join(timeout=10)
         assert not thread.is_alive()
 
-    image_call.assert_called_once_with(imported, imported.area, job_title="Tischler/in")
+    prompt = image_call.call_args.args[0]
+    assert "Beruflicher Kontext: Tischler/in." in prompt
+    assert "Thematischer Kontext: Werkzeuge." in prompt
+
+
+def _word_in_units(*units: tuple[str, list[str]]) -> Word:
+    """
+    Create a word in the given units, each given as its title and job names.
+    """
+    word = _make_word(word="Schlüssel")
+    for title, job_names in units:
+        unit = Unit.objects.create(title=title)
+        for name in job_names:
+            unit.jobs.add(Job.objects.get_or_create(name=name)[0])
+        UnitWordRelation.objects.create(unit=unit, word=word)
+    return word
+
+
+@pytest.mark.django_db
+def test_context_uses_the_only_unit_and_its_only_job() -> None:
+    word = _word_in_units(("Werkzeuge", ["Tischler/in"]))
+
+    context = image_generation.image_prompt_context(word)
+
+    assert context == image_generation.ImagePromptContext(
+        word="Schlüssel", unit_title="Werkzeuge", job_title="Tischler/in"
+    )
+
+
+@pytest.mark.django_db
+def test_context_is_empty_for_a_word_without_units() -> None:
+    context = image_generation.image_prompt_context(_make_word(word="Schlüssel"))
+
+    assert context.unit_title is None
+    assert context.job_title is None
+
+
+@pytest.mark.django_db
+def test_context_keeps_a_job_shared_by_several_units() -> None:
+    word = _word_in_units(
+        ("Werkzeuge", ["Tischler/in"]), ("Schließanlagen", ["Tischler/in"])
+    )
+
+    context = image_generation.image_prompt_context(word)
+
+    assert context.unit_title is None
+    assert context.job_title == "Tischler/in"
+
+
+@pytest.mark.django_db
+def test_context_leaves_out_several_jobs_instead_of_listing_them() -> None:
+    word = _word_in_units(("Schlösser", ["Tischler/in", "Hausmeister/in"]))
+
+    context = image_generation.image_prompt_context(word)
+
+    assert context.unit_title == "Schlösser"
+    assert context.job_title is None
+
+
+@pytest.mark.django_db
+def test_context_prefers_the_given_unit() -> None:
+    word = _word_in_units(
+        ("Werkzeuge", ["Tischler/in"]), ("Schließanlagen", ["Hausmeister/in"])
+    )
+    unit = Unit.objects.get(title="Schließanlagen")
+
+    context = image_generation.image_prompt_context(word, unit=unit)
+
+    assert context.unit_title == "Schließanlagen"
+    assert context.job_title == "Hausmeister/in"
+
+
+@pytest.mark.django_db
+def test_context_picks_the_unit_within_the_given_job() -> None:
+    word = _word_in_units(
+        ("Werkzeuge", ["Tischler/in"]), ("Schließanlagen", ["Hausmeister/in"])
+    )
+    job = Job.objects.get(name="Tischler/in")
+
+    context = image_generation.image_prompt_context(word, job=job)
+
+    assert context.unit_title == "Werkzeuge"
+    assert context.job_title == "Tischler/in"
+
+
+@pytest.mark.django_db
+def test_build_word_image_prompt_includes_the_resolved_context() -> None:
+    word = _word_in_units(("Werkzeuge", ["Tischler/in"]))
+
+    prompt = image_generation.build_word_image_prompt(
+        word, additional_info="aus Metall"
+    )
+
+    assert prompt == image_generation.build_image_prompt(
+        "Schlüssel",
+        unit_title="Werkzeuge",
+        additional_info="aus Metall",
+        job_title="Tischler/in",
+    )

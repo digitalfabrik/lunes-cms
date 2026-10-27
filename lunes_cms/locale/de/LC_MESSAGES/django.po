@@ -1763,7 +1763,7 @@ msgstr ""
 msgid "Example sentence generated!"
 msgstr "Beispielsatz erzeugt!"
 
-#: cmsv2/views/generate_example_sentence.py
+#: cmsv2/views/generate_example_sentence.py cmsv2/views/generate_image.py
 #: cmsv2/views/save_alternative_word.py cmsv2/views/update_word_audio.py
 #: cmsv2/views/update_word_audio_check_status.py
 #: cmsv2/views/update_word_image.py
@@ -1774,7 +1774,7 @@ msgstr "Beispielsatz erzeugt!"
 msgid "Word not found"
 msgstr "Wort nicht gefunden"
 
-#: cmsv2/views/generate_example_sentence.py
+#: cmsv2/views/generate_example_sentence.py cmsv2/views/generate_image.py
 #: cmsv2/views/unitword_generate_example_sentence_audio.py
 #: cmsv2/views/update_unitword_image.py
 #: cmsv2/views/update_unitword_image_check_status.py
@@ -1788,18 +1788,6 @@ msgstr "Kein Beispielsatz übergeben."
 #: cmsv2/views/generate_example_sentence.py
 msgid "Example sentence saved."
 msgstr "Beispielsatz gespeichert."
-
-#: cmsv2/views/generate_image.py
-msgid "No area_id provided."
-msgstr "Keine area_id übergeben."
-
-#: cmsv2/views/generate_image.py
-msgid "Area not found"
-msgstr "Bereich nicht gefunden"
-
-#: cmsv2/views/generate_image.py
-msgid "No word_text provided."
-msgstr "Kein Worttext übergeben."
 
 #: cmsv2/views/generate_image.py
 msgid "Image generated!"
@@ -2184,6 +2172,15 @@ msgstr "Prüfung wurde gespeichert"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "No area_id provided."
+#~ msgstr "Keine area_id übergeben."
+
+#~ msgid "Area not found"
+#~ msgstr "Bereich nicht gefunden"
+
+#~ msgid "No word_text provided."
+#~ msgstr "Kein Worttext übergeben."
 
 #, python-format
 #~ msgid ""

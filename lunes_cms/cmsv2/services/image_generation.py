@@ -17,6 +17,7 @@ import base64
 import logging
 import threading
 import time
+from dataclasses import dataclass
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -24,7 +25,7 @@ from django.db import connection
 from django.db.models import Q
 from openai import RateLimitError
 
-from ..models import AIGeneration, Area, Word
+from ..models import AIGeneration, Area, Job, Unit, Word
 from ..models.static import AIGenerationEvent, ImageSource
 from ..utils import get_openai_client, OpenAIConfigurationError
 from .ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
@@ -70,8 +71,10 @@ def build_image_prompt(
     allow_text_in_image: bool = False,
 ) -> str:
     """
-    Build the German image-generation prompt shared by the on-demand admin
-    view and the background import drain.
+    Build the German image-generation prompt from plain text.
+
+    Callers generating an image for a word go through
+    :func:`build_word_image_prompt`, which resolves the context to pass here.
 
     Most vocabulary items look wrong with any text/numbers/logos in the
     picture (issue #918), so that's banned by default. Some items (a receipt,
@@ -135,18 +138,76 @@ def openai_image_bytes(prompt: str, area: Area) -> bytes:
     return base64.b64decode(response.data[0].b64_json)
 
 
-def openai_word_image_bytes(
-    word: Word, area: Area, job_title: str | None = None
-) -> bytes:
+@dataclass(frozen=True)
+class ImagePromptContext:
     """
-    Generate image bytes for a single word via the OpenAI image API.
-
-    The generation is recorded for ``area``, the area of the word.
+    The content an image prompt is built from: the word, plus the unit and the
+    job it is shown in when those are unambiguous.
     """
-    return openai_image_bytes(build_image_prompt(word.word, job_title=job_title), area)
+
+    word: str
+    unit_title: str | None
+    job_title: str | None
 
 
-def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
+def image_prompt_context(
+    word: Word, *, unit: Unit | None = None, job: Job | None = None
+) -> ImagePromptContext:
+    """
+    Resolve the unit and job an image prompt for ``word`` mentions.
+
+    Callers pass what they know: a unit<>word relation knows its unit, a CSV
+    import its job. Whatever is missing is derived from the word's units, but
+    only when that leaves exactly one candidate. A picture has to show one
+    concrete thing, so several jobs are left out instead of listed (#824).
+    Fetching 2 (LIMIT 2) is enough to tell "exactly one" from "more than one".
+    """
+    if unit is None:
+        units = word.units.all()
+        if job is not None:
+            units = units.filter(jobs=job)
+        unit_candidates = list(units[:2])
+        unit = unit_candidates[0] if len(unit_candidates) == 1 else None
+    if job is None:
+        jobs = (
+            unit.jobs.all()
+            if unit is not None
+            else Job.objects.filter(units__words=word).distinct()
+        )
+        job_candidates = list(jobs[:2])
+        job = job_candidates[0] if len(job_candidates) == 1 else None
+    return ImagePromptContext(
+        word=word.word,
+        unit_title=unit.title if unit is not None else None,
+        job_title=job.name if job is not None else None,
+    )
+
+
+def build_word_image_prompt(
+    word: Word,
+    *,
+    unit: Unit | None = None,
+    job: Job | None = None,
+    additional_info: str | None = None,
+    allow_text_in_image: bool = False,
+) -> str:
+    """
+    Build the image prompt for ``word``, the one entry point for every place
+    that generates a word image, so they all send the same context.
+
+    See :func:`image_prompt_context` for how ``unit`` and ``job`` are resolved.
+    """
+    context = image_prompt_context(word, unit=unit, job=job)
+    return build_image_prompt(
+        context.word,
+        unit_title=context.unit_title,
+        additional_info=additional_info,
+        job_title=context.job_title,
+        allow_text_in_image=allow_text_in_image,
+    )
+
+
+def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
     """
     Generate a missing image for a single Word and save it to the ImageField.
 
@@ -157,7 +218,7 @@ def _generate_for_word_image(word: Word, job_title: str | None = None) -> None:
     other image in the system.
     """
     if not word.image:
-        data = openai_word_image_bytes(word, word.area, job_title=job_title)
+        data = openai_image_bytes(build_word_image_prompt(word, job=job), word.area)
         word.image.save(
             f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
         )
@@ -175,7 +236,7 @@ def _pending_filter(word_ids: list[int] | None = None) -> Q:
 def drain_pending_images(
     word_ids: list[int] | None = None,
     throttle_seconds: float = 1.0,
-    job_title: str | None = None,
+    job: Job | None = None,
 ) -> None:
     """
     Process Words that need an image, one at a time, until none remain.
@@ -183,9 +244,9 @@ def drain_pending_images(
     ``word_ids`` restricts the drain to those Word rows (the ones a CSV
     import just created). Without it the whole table is scanned.
 
-    ``job_title`` adds the importing job to every prompt in the batch. A CSV
-    import always targets a single job, unlike already saved words which can
-    belong to several jobs.
+    ``job`` is the importing job. A CSV import always targets a single job,
+    unlike already saved words which can belong to several jobs, and it also
+    picks the word's unit within that job for the prompt.
 
     Single-flight within the process: if another thread already holds the
     drain lock this call returns immediately.
@@ -214,7 +275,7 @@ def drain_pending_images(
             if word is None:
                 return
             try:
-                _generate_for_word_image(word, job_title=job_title)
+                _generate_for_word_image(word, job=job)
             except OpenAIConfigurationError:
                 logger.warning("OpenAI not configured — image worker exiting")
                 return
