@@ -1,9 +1,9 @@
 {% load i18n %}{% autoescape off %}{% blocktrans with name=expert.get_full_name|default:expert.username %}Hello {{ name }},{% endblocktrans %}
-
+{% for intro, items in sections %}
 {{ intro }}
 {% for item in items %}
 - {{ item }}{% endfor %}
-
+{% endfor %}
 {% trans "You can review them here:" %} {{ review_url }}
 
 {% trans "Thank you for your support!" %}

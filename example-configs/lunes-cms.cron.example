@@ -5,8 +5,13 @@
 # is stamped with ``aggregated_at``), so the cadence can be tightened or
 # loosened without risk of double-counting; daily is the natural granularity
 # because the InfluxDB summaries are keyed by UTC day.
+#
+# Send the experts their weekly digest of new content to review every Monday;
+# the actual time is set in the Salt repository. Content added since the last
+# run is announced in the next one.
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 15 2 * * *  lunes  /usr/local/bin/lunes-cms-cli aggregate_analytics >> /var/log/lunes-cms/aggregate.log 2>&1
+0 9 * * 1   lunes  /usr/local/bin/lunes-cms-cli send_expert_digest --language de >> /var/log/lunes-cms/expert-digest.log 2>&1
