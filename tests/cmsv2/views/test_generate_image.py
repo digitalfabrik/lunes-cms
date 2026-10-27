@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import re
 from collections.abc import Generator
 from importlib import import_module
 from pathlib import Path
@@ -117,3 +118,58 @@ def test_unitword_endpoint_uses_the_unit_of_the_relation(
     assert response.status_code == 200
     assert "Thematischer Kontext: Werkzeuge." in image_call.call_args.args[0]
     assert "Beruflicher Kontext: Tischler/in." in image_call.call_args.args[0]
+
+
+@pytest.mark.django_db
+def test_word_prompt_preview_follows_the_editor_hints(admin_client: Client) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    response = admin_client.post(
+        reverse("cmsv2:word_image_prompt_preview", args=[word.pk]),
+        {"additional_info": "mit Holzgriff"},
+    )
+
+    assert response.json() == {
+        "prompt": image_generation.build_word_image_prompt(
+            word, additional_info="mit Holzgriff"
+        )
+    }
+    assert not AIGeneration.objects.exists()
+
+
+@pytest.mark.django_db
+def test_unitword_prompt_preview_uses_the_unit_of_the_relation(
+    admin_client: Client,
+) -> None:
+    unitword = _content(Area.objects.create(name="Testarea"))
+    other_unit = Unit.objects.create(title="Baustelle", area=unitword.unit.area)
+    UnitWordRelation.objects.create(unit=other_unit, word=unitword.word)
+
+    response = admin_client.post(
+        reverse("cmsv2:unitword_image_prompt_preview", args=[unitword.pk])
+    )
+
+    assert "Thematischer Kontext: Werkzeuge." in response.json()["prompt"]
+
+
+@pytest.mark.django_db
+def test_unitword_page_explains_the_prompt(admin_client: Client) -> None:
+    unitword = _content(Area.objects.create(name="Testarea"))
+
+    response = admin_client.get(
+        reverse("cmsv2:unitword_generate_image", args=[unitword.pk])
+    )
+
+    content = response.content.decode()
+    assert 'class="image-prompt-info"' in content
+    assert reverse("cmsv2:unitword_image_prompt_preview", args=[unitword.pk]) in content
+    assert "Thematischer Kontext: Werkzeuge." in content
+    # The generate url block spans several lines after djlint, so it has to
+    # end up in a template literal: a "..." string with a newline is a syntax
+    # error that leaves the button dead.
+    generate_url = reverse(
+        "cmsv2:unitword_generate_image_via_openai", args=[unitword.pk]
+    )
+    assert re.search(
+        rf"generateUrl: `\s*{re.escape(generate_url)}\s*`\.trim\(\)", content
+    )

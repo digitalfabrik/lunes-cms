@@ -148,7 +148,7 @@ msgid "singular article"
 msgstr "Singular-Artikel"
 
 #: cms/admins/document_resource.py cmsv2/admins/word_export_resource.py
-#: cmsv2/models/word.py
+#: cmsv2/models/word.py cmsv2/templates/admin/image_prompt_info.html
 msgid "Word"
 msgstr "Vokabel"
 
@@ -1067,11 +1067,12 @@ msgid "Image source"
 msgstr "Bildquelle"
 
 #: cmsv2/admins/word_filters.py cmsv2/models/job.py
-#: cmsv2/views/import_csv_view.py
+#: cmsv2/templates/admin/image_prompt_info.html cmsv2/views/import_csv_view.py
 msgid "Job"
 msgstr "Beruf"
 
 #: cmsv2/admins/word_filters.py cmsv2/models/review.py cmsv2/models/unit.py
+#: cmsv2/templates/admin/image_prompt_info.html
 msgid "Unit"
 msgstr "Einheit"
 
@@ -1705,12 +1706,42 @@ msgid "Save and import words"
 msgstr "Sichern und Wörter importieren"
 
 #: cmsv2/templates/admin/csv_form.html
+msgid "Image generation"
+msgstr "Bild-Generierung"
+
+#: cmsv2/templates/admin/csv_form.html
 msgid "Start import"
 msgstr "Import starten"
 
 #: cmsv2/templates/admin/generate_audio_base.html
 msgid "Generate Audio"
 msgstr "Audio generieren"
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid ""
+"The image is generated from the prompt below. Besides the word, it names the "
+"unit and the job the word is used in, so that the image shows the meaning "
+"that fits the job. Unit and job are only included if they are unambiguous: "
+"if the word is in several units, or the unit in several jobs, they are left "
+"out."
+msgstr ""
+"Das Bild wird aus dem unten stehenden Prompt erzeugt. Neben dem Wort nennt "
+"er die Einheit und den Beruf, in denen das Wort verwendet wird, damit das "
+"Bild die Bedeutung zeigt, die zum Beruf passt. Einheit und Beruf werden nur "
+"aufgenommen, wenn sie eindeutig sind: Steht das Wort in mehreren Einheiten "
+"oder die Einheit in mehreren Berufen, werden sie weggelassen."
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid "In that case, describe the intended meaning under “Additional info”."
+msgstr "Beschreibe die gemeinte Bedeutung dann unter „Zusätzliche Infos“."
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid "not included (none or several)"
+msgstr "nicht enthalten (keine oder mehrere)"
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid "Prompt preview"
+msgstr "Prompt-Vorschau"
 
 #: cmsv2/templates/cmsv2/emails/expert_notification.txt
 #, python-format
@@ -1846,6 +1877,27 @@ msgstr ""
 #: cmsv2/views/import_csv_view.py
 msgid "The file contains no entries. Nothing was imported."
 msgstr "Die Datei enthält keine Einträge. Es wurde nichts importiert."
+
+#: cmsv2/views/import_csv_view.py
+msgid "[word]"
+msgstr "[Vokabel]"
+
+#: cmsv2/views/import_csv_view.py
+msgid "[unit]"
+msgstr "[Einheit]"
+
+#: cmsv2/views/import_csv_view.py
+msgid "[selected job]"
+msgstr "[ausgewählter Beruf]"
+
+#: cmsv2/views/import_csv_view.py
+msgid ""
+"For every imported word, the unit from its row and the selected job are "
+"used. A word listed in several units of the job gets no unit."
+msgstr ""
+"Für jede importierte Vokabel werden die Einheit aus ihrer Zeile und der "
+"ausgewählte Beruf verwendet. Steht eine Vokabel in mehreren Einheiten des "
+"Berufs, wird keine Einheit aufgenommen."
 
 #: cmsv2/views/import_csv_view.py
 msgid "CSV import for vocabulary"

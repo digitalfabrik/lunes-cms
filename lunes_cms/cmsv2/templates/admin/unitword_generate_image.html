@@ -17,6 +17,9 @@
         <strong>Unit Title:</strong> {{ unitword_instance.unit.title }}
     </div>
 {% endblock %}
+{% block prompt_info %}
+    {{ prompt_info }}
+{% endblock %}
 {% block store_url %}
     {% url "cmsv2:unitword_store_generated_image_permanently" unitword_instance.pk %}
 {% endblock %}

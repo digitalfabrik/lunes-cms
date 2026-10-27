@@ -7,7 +7,9 @@ from .generate_example_sentence import (
 )
 from .generate_image import (
     unitword_generate_image_via_openai,
+    unitword_image_prompt_preview,
     word_generate_image_via_openai,
+    word_image_prompt_preview,
 )
 from .import_csv_view import import_from_csv
 from .save_alternative_word import save_alternative_word
@@ -43,7 +45,9 @@ __all__ = [
     "save_alternative_word",
     "import_from_csv",
     "unitword_generate_image_via_openai",
+    "unitword_image_prompt_preview",
     "word_generate_image_via_openai",
+    "word_image_prompt_preview",
     "unitword_generate_image",
     "unitword_store_generated_image_permanently",
     "unitword_generate_example_sentence_audio",

@@ -9,11 +9,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from tablib import Dataset
 from tablib.exceptions import InvalidDimensions
 
+from ..admins.image_prompt_info import render_image_prompt_info
 from ..admins.word_import_resource import (
     import_words_from_csv,
     ImportSummary,
@@ -22,7 +24,7 @@ from ..admins.word_import_resource import (
 from ..areas import visible_jobs
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
-from ..services.image_generation import drain_pending_images
+from ..services.image_generation import drain_pending_images, ImagePromptContext
 from ..services.sentence_generation import drain_pending_sentences
 
 
@@ -128,6 +130,24 @@ def _report_dataset_issue(request: HttpRequest, data: Dataset) -> bool:
     return False
 
 
+def _image_prompt_info(job: Job | None) -> SafeString:
+    """
+    The image prompt explanation for the import, with placeholders for what
+    only the CSV file tells.
+    """
+    return render_image_prompt_info(
+        ImagePromptContext(
+            word=str(_("[word]")),
+            unit_title=str(_("[unit]")),
+            job_title=job.name if job else str(_("[selected job]")),
+        ),
+        note=_(
+            "For every imported word, the unit from its row and the selected job "
+            "are used. A word listed in several units of the job gets no unit."
+        ),
+    )
+
+
 def _build_context(
     request: HttpRequest, form: ImportCSVForm, job: Job | None, job_id: int | None
 ) -> dict:
@@ -145,6 +165,7 @@ def _build_context(
         "job": job,
         "title": _("CSV import for vocabulary"),
         "import_csv_url": import_url,
+        "image_prompt_info": _image_prompt_info(job),
     }
 
 

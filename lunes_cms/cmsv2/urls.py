@@ -35,6 +35,11 @@ urlpatterns = [
         name="word_generate_image_via_openai",
     ),
     path(
+        "words/<int:word_id>/image-prompt-preview",
+        views.word_image_prompt_preview,
+        name="word_image_prompt_preview",
+    ),
+    path(
         "words/<int:word_id>/store-generated-audio-permanently",
         views.word_store_generated_audio_permanently,
         name="word_store_generated_audio_permanently",
@@ -108,6 +113,11 @@ urlpatterns = [
         "unitwordrelations/<int:unitword_id>/generate-image-via-openai",
         views.unitword_generate_image_via_openai,
         name="unitword_generate_image_via_openai",
+    ),
+    path(
+        "unitwordrelations/<int:unitword_id>/image-prompt-preview",
+        views.unitword_image_prompt_preview,
+        name="unitword_image_prompt_preview",
     ),
     path(
         "unitwordrelations/<int:unitword_id>/store-generated-image-permanently/",

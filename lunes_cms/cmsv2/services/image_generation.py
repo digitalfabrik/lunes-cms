@@ -149,6 +149,20 @@ class ImagePromptContext:
     unit_title: str | None
     job_title: str | None
 
+    def prompt(
+        self, additional_info: str | None = None, allow_text_in_image: bool = False
+    ) -> str:
+        """
+        Build the image prompt for this context.
+        """
+        return build_image_prompt(
+            self.word,
+            unit_title=self.unit_title,
+            additional_info=additional_info,
+            job_title=self.job_title,
+            allow_text_in_image=allow_text_in_image,
+        )
+
 
 def image_prompt_context(
     word: Word, *, unit: Unit | None = None, job: Job | None = None
@@ -197,13 +211,8 @@ def build_word_image_prompt(
 
     See :func:`image_prompt_context` for how ``unit`` and ``job`` are resolved.
     """
-    context = image_prompt_context(word, unit=unit, job=job)
-    return build_image_prompt(
-        context.word,
-        unit_title=context.unit_title,
-        additional_info=additional_info,
-        job_title=context.job_title,
-        allow_text_in_image=allow_text_in_image,
+    return image_prompt_context(word, unit=unit, job=job).prompt(
+        additional_info, allow_text_in_image
     )
 
 

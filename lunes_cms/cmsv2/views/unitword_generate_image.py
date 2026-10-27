@@ -8,10 +8,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.files.base import ContentFile
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from lunes_cms.cmsv2.admins.image_prompt_info import render_image_prompt_info
 from lunes_cms.cmsv2.areas import visible_unit_word_relations
 from lunes_cms.cmsv2.models.static import ImageSource
+from lunes_cms.cmsv2.services.image_generation import image_prompt_context
 from lunes_cms.cmsv2.utils import replace_file, safe_temp_path
 from lunes_cms.core import settings
 
@@ -33,6 +36,14 @@ def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpRespo
     context.update(
         {
             "unitword_instance": unitword_instance,
+            "prompt_info": render_image_prompt_info(
+                image_prompt_context(
+                    unitword_instance.word, unit=unitword_instance.unit
+                ),
+                preview_url=reverse(
+                    "cmsv2:unitword_image_prompt_preview", args=[unitword_instance.pk]
+                ),
+            ),
             "temp_image_url": None,
         }
     )

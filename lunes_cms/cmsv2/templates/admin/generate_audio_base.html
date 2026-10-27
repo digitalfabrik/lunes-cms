@@ -52,8 +52,8 @@
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const config = {
-            generateUrl: "{% block generate_url %}{% endblock %}",
-            textFieldName: "{% block text_field_name %}text{% endblock %}",
+            generateUrl: `{% block generate_url %}{% endblock %}`.trim(),
+            textFieldName: `{% block text_field_name %}text{% endblock %}`.trim(),
             textValue: {% block text_value %}"{{ text }}"{% endblock %},
         }
 
