@@ -1422,6 +1422,30 @@ msgid "Can review assigned reviews"
 msgstr "Kann zugewiesene Prüfungen bearbeiten"
 
 #: cmsv2/models/static.py
+msgid "Noun"
+msgstr "Substantiv"
+
+#: cmsv2/models/static.py
+msgid "Verb"
+msgstr "Verb"
+
+#: cmsv2/models/static.py
+msgid "Adjective"
+msgstr "Adjektiv"
+
+#: cmsv2/models/static.py
+msgid "Numeral"
+msgstr "Numeral"
+
+#: cmsv2/models/static.py
+msgid "Pronoun"
+msgstr "Pronomen"
+
+#: cmsv2/models/static.py
+msgid "Adverb"
+msgstr "Adverb"
+
+#: cmsv2/models/static.py
 msgid "Confirmed"
 msgstr "Bestätigt"
 

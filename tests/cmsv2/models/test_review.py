@@ -7,9 +7,10 @@ from __future__ import annotations
 import pytest
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
-from django.utils import timezone
+from django.utils import timezone, translation
 
 from lunes_cms.cmsv2.models import Review, Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models.static import WordType
 
 
 def _create_unit_word() -> UnitWordRelation:
@@ -69,3 +70,16 @@ def test_progress_status_reflects_completed_at() -> None:
     review.completed_at = timezone.now()
 
     assert review.progress_status == "COMPLETED"
+
+
+@pytest.mark.django_db
+def test_word_type_returns_display_label() -> None:
+    """The review admin must show the translated label, not the stored value ("Nomen")."""
+    unit_word = _create_unit_word()
+    unit_word.word.word_type = WordType.NOUN
+    unit_word.word.save()
+    reviewer = get_user_model().objects.create_user(username="reviewer")
+    review = Review.objects.create(unit_word=unit_word, reviewer=reviewer)
+
+    with translation.override("en"):
+        assert review.word_type == "Noun"
