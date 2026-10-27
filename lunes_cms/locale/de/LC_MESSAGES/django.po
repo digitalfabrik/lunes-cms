@@ -1222,20 +1222,53 @@ msgid "AI generations"
 msgstr "KI-Generierungen"
 
 #: cmsv2/models/area.py
-msgid "Shown on landing page."
-msgstr "Angezeigt auf der Landingsseite."
+msgid "The main logo, shown in the center of the header in the app."
+msgstr "Das Hauptlogo, das in der Mitte der Kopfzeile der App angezeigt wird."
+
+#: cmsv2/models/area.py
+msgid "secondary logo"
+msgstr "Zweites Logo"
+
+#: cmsv2/models/area.py
+msgid "A second logo, shown at the side of the header in the app."
+msgstr ""
+"Ein zweites Logo, das seitlich in der Kopfzeile der App angezeigt wird."
 
 #: cmsv2/models/area.py
 msgid "primary color"
 msgstr "Primärfarbe"
 
 #: cmsv2/models/area.py
-msgid "A hex color e.g. #000000 for black."
-msgstr "Ein Hex-Farbcode, z. B. #000000 für Schwarz."
+msgid ""
+"Background color of the header in the app and of the area label on jobs. A "
+"hex color e.g. #000000 for black."
+msgstr ""
+"Hintergrundfarbe der Kopfzeile in der App und der Bereichsbezeichnung bei "
+"Berufen. Ein Hex-Farbcode, z. B. #000000 für Schwarz."
 
 #: cmsv2/models/area.py
-msgid "secondary color"
-msgstr "Sekundärfarbe"
+msgid "learning color"
+msgstr "Lernfarbe"
+
+#: cmsv2/models/area.py
+msgid ""
+"Background color of the card to learn words in the app. A hex color e.g. "
+"#000000 for black."
+msgstr ""
+"Hintergrundfarbe der Karte zum Vokabeln lernen in der App. Ein Hex-Farbcode, "
+"z. B. #000000 für Schwarz."
+
+#: cmsv2/models/area.py
+msgid "training color"
+msgstr "Trainingsfarbe"
+
+#: cmsv2/models/area.py
+msgid ""
+"Background color of the card to train words in the app. A hex color e.g. "
+"#000000 for black."
+msgstr ""
+"Hintergrundfarbe der Karte zum Vokabeln trainieren in der App. Ein Hex-"
+"Farbcode, z. B. #000000 für Schwarz."
 
 #: cmsv2/models/area.py
 msgid "additional information"

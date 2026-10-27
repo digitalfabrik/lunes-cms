@@ -22,9 +22,12 @@ def default_area_id() -> int:
     script — should not have to think about areas at all, so content it
     creates lands in the shared main app catalog unless told otherwise.
 
+    Only the primary key is selected, because migrations use this as a field
+    default and run it before later migrations have added columns to the area.
+
     :return: The primary key of the one area with ``is_main_app=True``
     """
-    return Area.objects.get(is_main_app=True).pk
+    return Area.objects.values_list("pk", flat=True).get(is_main_app=True)
 
 
 class Job(models.Model):
