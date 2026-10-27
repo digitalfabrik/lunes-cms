@@ -15,13 +15,18 @@
         {% trans "Generate Image" %}
     {% endblock %}
 {% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/image_prompt_info.css' %}">
+{% endblock %}
 {% block content %}
     <div id="content-main">
-        <div class="module">
+        <div class="module" data-prompt-scope>
             {% block image_info %}{% endblock %}
+            {% block prompt_info %}{% endblock %}
             <div style="margin-top: 16px;">
                 <label>
-                    <input id="prompt-allow-text" type="checkbox">
+                    <input id="prompt-allow-text" class="prompt-allow-text" type="checkbox">
                     {% translate "Allow text/numbers in the image (e.g. for a receipt or a clock face)" %}
                 </label>
             </div>
@@ -29,7 +34,10 @@
                 <label for="prompt-additional-info">
                     <strong>Additional Info (optional):</strong>
                 </label>
-                <input id="prompt-additional-info" type="text" style="width: 100%" />
+                <input id="prompt-additional-info"
+                       class="prompt-additional-info"
+                       type="text"
+                       style="width: 100%" />
             </div>
             <div class="form-row">
                 <button type="button" class="btn btn-primary" id="generate_button">Generate Image</button>
@@ -63,10 +71,11 @@
 {% block extrajs %}
     <script src="{% static 'js/csrf.js' %}"></script>
     <script src="{% static 'js/generate_image.js' %}"></script>
+    <script src="{% static 'js/image_prompt_preview.js' %}"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const config = {
-            generateUrl: "{% block generate_url %}{% endblock %}",
+            generateUrl: `{% block generate_url %}{% endblock %}`.trim(),
             formDataBuilder: {% block form_data_builder %}null{% endblock %}
         }
 

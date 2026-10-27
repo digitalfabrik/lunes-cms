@@ -13,6 +13,10 @@
         <li class="breadcrumb-item active">{% trans "Import CSV" %}</li>
     </ol>
 {% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/image_prompt_info.css' %}">
+{% endblock %}
 {% block content_title %}
     {% trans "Import CSV" %}
 {% endblock %}
@@ -42,6 +46,12 @@
                                 </div>
                             {% endfor %}
                         </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{% trans "Image generation" %}</h3>
+                        </div>
+                        <div class="card-body">{{ image_prompt_info }}</div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-3">

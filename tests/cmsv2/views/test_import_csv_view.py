@@ -175,3 +175,14 @@ def test_second_import_reports_the_extended_unit(
 
     messages = [str(m) for m in response.context["messages"]]
     assert any("existing unit was extended" in m for m in messages)
+
+
+@pytest.mark.django_db()
+def test_form_explains_the_image_prompt_with_the_job(
+    admin_client: Client, job: Job
+) -> None:
+    response = admin_client.get(reverse("cmsv2:import_csv_for_job", args=[job.pk]))
+
+    content = response.content.decode()
+    assert 'class="image-prompt-info"' in content
+    assert "Beruflicher Kontext: Test Job." in content

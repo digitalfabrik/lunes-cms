@@ -1,0 +1,39 @@
+{% load i18n %}
+<div class="image-prompt-info"
+     {% if preview_url %}data-preview-url="{{ preview_url }}"{% endif %}>
+    <p class="image-prompt-explanation">
+        {% blocktranslate trimmed %}
+            The image is generated from the prompt below. Besides the word, it names the unit and the job the word is used in, so that the image shows the meaning that fits the job. Unit and job are only included if they are unambiguous: if the word is in several units, or the unit in several jobs, they are left out.
+        {% endblocktranslate %}
+        {% if preview_url %}
+            {% translate "In that case, describe the intended meaning under “Additional info”." %}
+        {% endif %}
+        {% if note %}{{ note }}{% endif %}
+    </p>
+    <dl class="image-prompt-context">
+        <dt>{% translate "Word" %}</dt>
+        <dd>
+            {{ word }}
+        </dd>
+        <dt>{% translate "Unit" %}</dt>
+        <dd>
+            {% if unit_title %}
+                {{ unit_title }}
+            {% else %}
+                <em>{% translate "not included (none or several)" %}</em>
+            {% endif %}
+        </dd>
+        <dt>{% translate "Job" %}</dt>
+        <dd>
+            {% if job_title %}
+                {{ job_title }}
+            {% else %}
+                <em>{% translate "not included (none or several)" %}</em>
+            {% endif %}
+        </dd>
+    </dl>
+    <details class="image-prompt-details" open>
+        <summary>{% translate "Prompt preview" %}</summary>
+        <pre class="image-prompt-preview">{{ prompt }}</pre>
+    </details>
+</div>

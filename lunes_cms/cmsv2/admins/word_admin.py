@@ -14,6 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 from lunes_cms.cmsv2.admins.area_content_admin import AreaContentAdmin
 from lunes_cms.cmsv2.admins.area_filters import AreaListFilter
+from lunes_cms.cmsv2.admins.image_prompt_info import render_image_prompt_info
 from lunes_cms.cmsv2.admins.word_filters import (
     HasCompleteExampleSentenceFilter,
     HasImageFilter,
@@ -36,6 +37,7 @@ from lunes_cms.cmsv2.models.static import (
 )
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.notifications import notify_words_added
+from lunes_cms.cmsv2.services.image_generation import image_prompt_context
 from lunes_cms.cmsv2.utils import (
     cache_busted_url,
     example_sentence_generate_html,
@@ -208,9 +210,16 @@ class WordAdmin(AreaContentAdmin):
             "js/image_check_status_update.js",
             "js/generate_example_sentence.js",
             "js/inline_regenerate.js",
+            "js/image_prompt_preview.js",
             "js/alternative_word_actions.js",
         ]
-        css = {"all": ["css/asset_manager.css", "css/audio_player.css"]}
+        css = {
+            "all": [
+                "css/asset_manager.css",
+                "css/audio_player.css",
+                "css/image_prompt_info.css",
+            ]
+        }
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Word]:
         """
@@ -251,7 +260,6 @@ class WordAdmin(AreaContentAdmin):
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,
         *,
-        area_id: int,
         asset_type: str,
         generate_url: str,
         store_url: str,
@@ -263,6 +271,7 @@ class WordAdmin(AreaContentAdmin):
         regenerate_label: _StrOrPromise,
         with_additional_info: bool = False,
         spoken_text: str = "",
+        prompt_info: _StrOrPromise = "",
     ) -> SafeString:
         """
         Render an inline (re)generation widget for the change page.
@@ -274,8 +283,8 @@ class WordAdmin(AreaContentAdmin):
 
         ``spoken_text`` is shown above the buttons as a reminder to save first.
 
-        ``area_id`` is the area of the word, posted along so that endpoints not
-        bound to an object can record the generation for it.
+        ``prompt_info`` explains what goes into the generation prompt; its
+        preview follows the additional info inputs of the widget.
         """
         spoken_text_html: _StrOrPromise = ""
         if spoken_text:
@@ -289,11 +298,11 @@ class WordAdmin(AreaContentAdmin):
         if with_additional_info:
             additional_info_html = format_html(
                 '<div class="regen-allow-text-row">'
-                '<label><input type="checkbox" class="regen-allow-text"> {}</label>'
+                '<label><input type="checkbox" class="regen-allow-text prompt-allow-text"> {}</label>'
                 "</div>"
                 '<div class="regen-additional-info-row">'
                 "<label>{} "
-                '<input type="text" class="regen-additional-info"></label>'
+                '<input type="text" class="regen-additional-info prompt-additional-info"></label>'
                 "</div>",
                 _(
                     "Allow text/numbers in the image (e.g. for a receipt or a clock face)"
@@ -305,7 +314,7 @@ class WordAdmin(AreaContentAdmin):
             '<div class="inline-regenerate" data-asset-type="{asset_type}" '
             'data-generate-url="{generate_url}" data-store-url="{store_url}" '
             'data-text-field="{text_field}" data-text="{text_value}" '
-            'data-store-field="{store_field}" data-area-id="{area_id}">'
+            'data-store-field="{store_field}" data-prompt-scope>'
             '<div class="regen-compare">'
             '<div class="regen-col regen-current">'
             '<div class="regen-col-label">{current_label}</div>'
@@ -318,6 +327,7 @@ class WordAdmin(AreaContentAdmin):
             "</div>"
             "</div>"
             "{spoken_text_html}"
+            "{prompt_info}"
             "{additional_info_html}"
             '<div class="regen-toolbar">'
             '<button type="button" class="btn btn-primary btn-sm regen-generate-btn" '
@@ -336,12 +346,12 @@ class WordAdmin(AreaContentAdmin):
             text_field=text_field,
             text_value=text_value,
             store_field=store_field,
-            area_id=area_id,
             current_label=_("Current"),
             new_label=_("New"),
             empty_label=_("Not generated yet"),
             current_preview=current_preview,
             spoken_text_html=spoken_text_html,
+            prompt_info=prompt_info,
             additional_info_html=additional_info_html,
             generate_label=generate_label,
             regenerate_label=regenerate_label,
@@ -369,7 +379,6 @@ class WordAdmin(AreaContentAdmin):
         else:
             current_preview = _("No audio yet.")
         return self._render_regenerate_widget(
-            area_id=obj.area.id,
             asset_type="audio",
             generate_url=reverse("cmsv2:word_generate_audio_via_openai", args=[obj.pk]),
             store_url=reverse(
@@ -450,7 +459,6 @@ class WordAdmin(AreaContentAdmin):
         else:
             current_preview = _("No audio yet.")
         return self._render_regenerate_widget(
-            area_id=obj.area.id,
             asset_type="audio",
             generate_url=reverse(
                 "cmsv2:word_generate_example_sentence_audio_via_openai", args=[obj.pk]
@@ -537,9 +545,8 @@ class WordAdmin(AreaContentAdmin):
         else:
             current_preview = _("No image yet.")
         return self._render_regenerate_widget(
-            area_id=obj.area.id,
             asset_type="image",
-            generate_url=reverse("cmsv2:generate_image_via_openai"),
+            generate_url=reverse("cmsv2:word_generate_image_via_openai", args=[obj.pk]),
             store_url=reverse(
                 "cmsv2:word_store_generated_image_permanently", args=[obj.pk]
             ),
@@ -550,6 +557,10 @@ class WordAdmin(AreaContentAdmin):
             generate_label=_("Generate image"),
             regenerate_label=_("Regenerate image"),
             with_additional_info=True,
+            prompt_info=render_image_prompt_info(
+                image_prompt_context(obj),
+                preview_url=reverse("cmsv2:word_image_prompt_preview", args=[obj.pk]),
+            ),
         )
 
     image_generate.short_description = _("Image Generation")  # type: ignore[attr-defined]

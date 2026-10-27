@@ -9,11 +9,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from tablib import Dataset
 from tablib.exceptions import InvalidDimensions
 
+from ..admins.image_prompt_info import render_image_prompt_info
 from ..admins.word_import_resource import (
     import_words_from_csv,
     ImportSummary,
@@ -22,7 +24,7 @@ from ..admins.word_import_resource import (
 from ..areas import visible_jobs
 from ..models import Job
 from ..services.audio_generation import drain_pending_audio
-from ..services.image_generation import drain_pending_images
+from ..services.image_generation import drain_pending_images, ImagePromptContext
 from ..services.sentence_generation import drain_pending_sentences
 
 
@@ -95,7 +97,7 @@ def _build_success_message(summary: ImportSummary) -> str:
     return " ".join(sentences)
 
 
-def _generate_word_assets(word_ids: list[int], job_title: str) -> None:
+def _generate_word_assets(word_ids: list[int], job: Job) -> None:
     """
     Generates the missing assets for the imported words, in a thread.
 
@@ -104,9 +106,9 @@ def _generate_word_assets(word_ids: list[int], job_title: str) -> None:
     so concurrent ones would write back stale in-memory copies and clobber
     each other's file fields, re-triggering generation.
     """
-    drain_pending_sentences(word_ids, job_title=job_title)
+    drain_pending_sentences(word_ids, job_title=job.name)
     drain_pending_audio(word_ids)
-    drain_pending_images(word_ids, job_title=job_title)
+    drain_pending_images(word_ids, job=job)
 
 
 def _report_dataset_issue(request: HttpRequest, data: Dataset) -> bool:
@@ -128,6 +130,24 @@ def _report_dataset_issue(request: HttpRequest, data: Dataset) -> bool:
     return False
 
 
+def _image_prompt_info(job: Job | None) -> SafeString:
+    """
+    The image prompt explanation for the import, with placeholders for what
+    only the CSV file tells.
+    """
+    return render_image_prompt_info(
+        ImagePromptContext(
+            word=str(_("[word]")),
+            unit_title=str(_("[unit]")),
+            job_title=job.name if job else str(_("[selected job]")),
+        ),
+        note=_(
+            "For every imported word, the unit from its row and the selected job "
+            "are used. A word listed in several units of the job gets no unit."
+        ),
+    )
+
+
 def _build_context(
     request: HttpRequest, form: ImportCSVForm, job: Job | None, job_id: int | None
 ) -> dict:
@@ -145,6 +165,7 @@ def _build_context(
         "job": job,
         "title": _("CSV import for vocabulary"),
         "import_csv_url": import_url,
+        "image_prompt_info": _image_prompt_info(job),
     }
 
 
@@ -207,7 +228,7 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
         if summary.imported_word_ids:
             threading.Thread(
                 target=_generate_word_assets,
-                args=(summary.imported_word_ids, selected_job.name),
+                args=(summary.imported_word_ids, selected_job),
                 daemon=True,
             ).start()
         return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))

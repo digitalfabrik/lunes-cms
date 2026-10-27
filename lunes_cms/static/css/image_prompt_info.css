@@ -1,0 +1,45 @@
+.image-prompt-info {
+    margin: 12px 0;
+    font-size: 0.9em;
+}
+
+.image-prompt-explanation {
+    margin: 0 0 8px;
+}
+
+.image-prompt-context {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 2px 12px;
+    margin: 0 0 8px;
+}
+
+.image-prompt-context dt {
+    font-weight: 600;
+}
+
+.image-prompt-context dd {
+    margin: 0;
+}
+
+.image-prompt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.image-prompt-preview {
+    margin: 6px 0 0;
+    padding: 8px 10px;
+    max-height: 16em;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.95em;
+    border: 1px solid rgba(127, 127, 127, 0.35);
+    border-radius: 4px;
+    background: rgba(127, 127, 127, 0.08);
+}
+
+.image-prompt-preview.is-stale {
+    opacity: 0.6;
+}

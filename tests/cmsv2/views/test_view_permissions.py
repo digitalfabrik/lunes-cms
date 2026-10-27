@@ -143,43 +143,14 @@ def test_unit_icon_endpoint_denies_user_without_unit_permission(
     assert response.status_code == 403
 
 
-def test_image_generation_accepts_either_content_permission(
+def test_unitword_image_generation_denies_word_only_permission(
     client_with_permissions: Callable[..., Client],
+    unitword: UnitWordRelation,
 ) -> None:
-    """The shared image generation endpoint serves word and unit-word editors."""
-    url = reverse("cmsv2:generate_image_via_openai")
+    """Generating a unit-specific image needs the unit-word permission."""
+    url = reverse("cmsv2:unitword_generate_image_via_openai", args=[unitword.pk])
 
-    assert client_with_permissions("view_word").post(url).status_code == 403
-    assert client_with_permissions("change_word").post(url).status_code != 403
-    assert (
-        client_with_permissions("change_unitwordrelation").post(url).status_code != 403
-    )
-
-
-def test_image_generation_rejects_a_foreign_area(
-    sweep_client: PermissionClient,
-) -> None:
-    """A generation cannot be recorded for an area the user does not administer."""
-    foreign_area = Area.objects.create(name="Foreign")
-
-    response = sweep_client.post(
-        reverse("cmsv2:generate_image_via_openai"),
-        {"word_text": "Hammer", "area_id": foreign_area.pk},
-    )
-
-    assert response.status_code == 404
-
-
-@pytest.mark.parametrize(("area_id", "status_code"), [("", 400), ("abc", 404)])
-def test_image_generation_requires_a_valid_area(
-    sweep_client: PermissionClient, area_id: str, status_code: int
-) -> None:
-    response = sweep_client.post(
-        reverse("cmsv2:generate_image_via_openai"),
-        {"word_text": "Hammer", "area_id": area_id},
-    )
-
-    assert response.status_code == status_code
+    assert client_with_permissions("change_word").post(url).status_code == 403
 
 
 def test_csv_import_denies_user_without_add_permission(
@@ -217,7 +188,6 @@ def test_every_endpoint_enforces_csrf(db: None) -> None:
 
 _ENDPOINTS_WITHOUT_URL_OBJECT = {
     "import_csv",
-    "generate_image_via_openai",
     "save_alternative_word",
 }
 

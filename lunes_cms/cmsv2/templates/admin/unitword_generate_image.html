@@ -17,18 +17,16 @@
         <strong>Unit Title:</strong> {{ unitword_instance.unit.title }}
     </div>
 {% endblock %}
+{% block prompt_info %}
+    {{ prompt_info }}
+{% endblock %}
 {% block store_url %}
     {% url "cmsv2:unitword_store_generated_image_permanently" unitword_instance.pk %}
 {% endblock %}
 {% block store_button_text %}Store to Image Field{% endblock %}
 {% block generate_url %}
-    {% url "cmsv2:generate_image_via_openai" %}
+    {% url "cmsv2:unitword_generate_image_via_openai" unitword_instance.pk %}
 {% endblock %}
 {% block form_data_builder %}
-    function(formData) {
-    formData.append("word_text", "{{ unitword_instance.word.word }}")
-    formData.append("unit_title", "{{ unitword_instance.unit.title }}")
-    formData.append("area_id", "{{ unitword_instance.unit.area_id }}")
-    {% if job_title %}formData.append("job_title", "{{ job_title }}"){% endif %}
-    }
+    null
 {% endblock %}
