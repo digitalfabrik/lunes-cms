@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     """
 
     dependencies = [
-        ("cmsv2", "0046_make_area_required"),
+        ("cmsv2", "0048_area_header_branding"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

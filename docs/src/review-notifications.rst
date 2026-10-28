@@ -2,10 +2,11 @@
 Review notifications
 ********************
 
-Staff is notified inside the CMS about the review work of experts (see #1038).
-The notifications are listed under *Notifications* in the admin, every user
-only sees their own, and they can be marked as read or unread. A notification
-sent to several users is stored once per user.
+In addition to the emails experts receive about new content to review, staff
+is notified about the review work of experts inside the CMS (see #1038). These
+internal notifications are listed under *Notifications* in the admin, every
+user only sees their own, and they can be marked as read or unread. A
+notification sent to several users is stored once per user.
 
 The recipients are the users who assigned the reviews in question. If the
 assigning user of a review is unknown (e.g. deleted), all superusers are
