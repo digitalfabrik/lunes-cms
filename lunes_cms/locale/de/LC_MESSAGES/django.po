@@ -1993,6 +1993,7 @@ msgstr "Beispielsatz erzeugt!"
 #: cmsv2/views/generate_example_sentence.py cmsv2/views/generate_image.py
 #: cmsv2/views/save_alternative_word.py cmsv2/views/update_word_audio.py
 #: cmsv2/views/update_word_audio_check_status.py
+#: cmsv2/views/update_word_example_sentence_audio.py
 #: cmsv2/views/update_word_example_sentence_check_status.py
 #: cmsv2/views/update_word_image.py
 #: cmsv2/views/update_word_image_check_status.py
@@ -2175,6 +2176,7 @@ msgstr "Kein Symbol zum Löschen vorhanden"
 
 #: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
 #: cmsv2/views/update_unitword_image.py cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_example_sentence_audio.py
 #: cmsv2/views/update_word_image.py
 msgid "Invalid action"
 msgstr "Ungültige Aktion"
@@ -2209,18 +2211,22 @@ msgid "Unit-Word image check status updated successfully"
 msgstr "Prüfstatus des Bildes in der Lerneinheit aktualisiert"
 
 #: cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_example_sentence_audio.py
 msgid "No audio file provided"
 msgstr "Keine Audiodatei übergeben"
 
 #: cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_example_sentence_audio.py
 msgid "Audio added successfully"
 msgstr "Audiodatei hinzugefügt"
 
 #: cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_example_sentence_audio.py
 msgid "Audio deleted successfully"
 msgstr "Audiodatei gelöscht"
 
 #: cmsv2/views/update_word_audio.py
+#: cmsv2/views/update_word_example_sentence_audio.py
 msgid "No audio file to delete"
 msgstr "Keine Audiodatei zum Löschen vorhanden"
 
@@ -2231,6 +2237,10 @@ msgstr "Kein Prüfstatus für die Audiodatei übergeben"
 #: cmsv2/views/update_word_audio_check_status.py
 msgid "Audio check status updated successfully"
 msgstr "Prüfstatus der Audiodatei aktualisiert"
+
+#: cmsv2/views/update_word_example_sentence_audio.py
+msgid "The word has no example sentence"
+msgstr "Das Wort hat keinen Beispielsatz"
 
 #: cmsv2/views/update_word_example_sentence_check_status.py
 msgid "No example sentence check status provided"

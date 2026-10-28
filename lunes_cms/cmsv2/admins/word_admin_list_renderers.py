@@ -307,20 +307,28 @@ class WordAdminListRenderersMixin:
             </div>
             """
 
-        controls_html = f"""
-        <div class="example-sentence-audio-controls" data-word-id="{obj.id}">
-            <button disabled type="button" class="add-example-sentence-audio-btn" style="display: {'none' if obj.example_sentence_audio else 'inline-flex'};">
-                <span class="example-sentence-audio-add">+</span>
-            </button>
-            <button disabled type="button" class="replace-example-sentence-audio-btn" style="display: {'inline-flex' if obj.example_sentence_audio else 'none'};">
-                <span class="example-sentence-audio-replace">↻</span>
-            </button>
-            <button disabled type="button" class="delete-example-sentence-audio-btn" style="display: {'inline-flex' if obj.example_sentence_audio else 'none'};">
-                <span class="example-sentence-audio-delete">×</span>
-            </button>
-            <input type="file" class="example-sentence-audio-file-input" style="display: none;" accept="audio/*">
-        </div>
-        """
+        controls_html = ""
+        if obj.example_sentence:
+            update_url = reverse(
+                "cmsv2:update_word_example_sentence_audio", args=[obj.id]
+            )
+            add_title = _("Add audio")
+            upload_title = _("Upload audio")
+            delete_title = _("Delete audio")
+            controls_html = f"""
+            <div class="example-sentence-audio-controls" data-word-id="{obj.id}" data-update-url="{update_url}">
+                <button type="button" class="add-example-sentence-audio-btn" style="display: {'none' if obj.example_sentence_audio else 'inline-flex'};" title="{add_title}">
+                    <span class="audio-add">+</span>
+                </button>
+                <button type="button" class="replace-example-sentence-audio-btn" style="display: {'inline-flex' if obj.example_sentence_audio else 'none'};" title="{upload_title}">
+                    <span class="audio-replace"><i class="fas fa-upload"></i></span>
+                </button>
+                <button type="button" class="delete-example-sentence-audio-btn" style="display: {'inline-flex' if obj.example_sentence_audio else 'none'};" title="{delete_title}">
+                    <span class="audio-delete">×</span>
+                </button>
+                <input type="file" class="example-sentence-audio-file-input" style="display: none;" accept="audio/*">
+            </div>
+            """
 
         return f'<div class="word-example-sentence-audio-container py-2">{audio_html}{controls_html}</div>'
 

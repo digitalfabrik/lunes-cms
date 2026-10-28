@@ -193,6 +193,7 @@ class WordAdmin(
             "js/unitword_image_asset_config.js",
             "js/asset_manager.js",
             "js/word_audio_asset_config.js",
+            "js/word_example_sentence_audio_asset_config.js",
             "js/audio_asset_manager.js",
             "js/audio_player.js",
             "js/audio_check_status_update.js",

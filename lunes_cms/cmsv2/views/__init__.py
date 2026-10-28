@@ -28,6 +28,7 @@ from .update_unitword_image import update_unitword_image
 from .update_unitword_image_check_status import update_unitword_image_check_status
 from .update_word_audio import update_word_audio
 from .update_word_audio_check_status import update_word_audio_check_status
+from .update_word_example_sentence_audio import update_word_example_sentence_audio
 from .update_word_example_sentence_check_status import (
     update_word_example_sentence_check_status,
 )
@@ -64,6 +65,7 @@ __all__ = [
     "update_unitword_image_check_status",
     "update_word_audio",
     "update_word_audio_check_status",
+    "update_word_example_sentence_audio",
     "update_word_example_sentence_check_status",
     "update_word_image",
     "update_word_image_check_status",
