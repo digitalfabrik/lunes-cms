@@ -6,11 +6,17 @@ the word changelist.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 import pytest
 from django.contrib import admin
 from django.core.files.base import ContentFile
+from django.db import connection
+from django.test.client import Client
+from django.test.utils import CaptureQueriesContext
+from django.urls import reverse
 from pytest_django import Settings
 
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
@@ -141,3 +147,55 @@ def test_list_example_sentence_hides_audio_player_without_audio(
 
     assert "audio-player-container" not in html
     assert "add-example-sentence-audio-btn" in html
+
+
+def test_list_example_sentence_runs_no_queries(
+    db: None, word_admin: WordAdmin, django_assert_num_queries: Callable[..., Any]
+) -> None:
+    """The column must not slow down the changelist with queries per row."""
+    words = [
+        Word.objects.create(
+            word=f"Hammer {index}",
+            singular_article=1,
+            example_sentence="Der Hammer ist schwer und liegt in der Werkzeugkiste.",
+        )
+        for index in range(WordAdmin.list_per_page)
+    ]
+
+    with django_assert_num_queries(0):
+        for word in words:
+            word_admin.list_example_sentence(word)
+
+
+def test_example_sentence_column_adds_no_queries_to_the_changelist(
+    db: None, admin_client: Client, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    for index in range(5):
+        word = Word.objects.create(
+            word=f"Hammer {index}",
+            singular_article=1,
+            example_sentence="Der Hammer ist schwer.",
+        )
+        word.example_sentence_audio.save(
+            f"sentence-{index}.mp3", ContentFile(b"audio-bytes"), save=True
+        )
+    url = reverse("admin:cmsv2_word_changelist")
+
+    def count_queries() -> int:
+        with CaptureQueriesContext(connection) as queries:
+            response = admin_client.get(url)
+        assert response.status_code == 200
+        return len(queries)
+
+    with_column = count_queries()
+    monkeypatch.setattr(
+        WordAdmin,
+        "list_display",
+        tuple(
+            column
+            for column in WordAdmin.list_display
+            if column != "list_example_sentence"
+        ),
+    )
+
+    assert with_column == count_queries()
