@@ -127,9 +127,9 @@
 .audio-replace,
 .unitword-image-replace {
     font-size: 14px;
+    color: #007bff;
 }
 
-.unitword-image-replace,
 .example-sentence-edit {
     font-size: 16px;
     color: #007bff;
@@ -289,12 +289,12 @@
 }
 
 /* Example sentence truncation with expandable "more" */
-.example-sentence-details {
-    display: inline;
+.field-list_example_sentence {
+    min-width: 250px;
+    max-width: 350px;
 }
 
 .example-sentence-summary {
-    display: inline;
     cursor: pointer;
     list-style: none;
 }
