@@ -200,6 +200,7 @@ class WordAdmin(
             "js/image_check_status_update.js",
             "js/example_sentence_check_status_update.js",
             "js/example_sentence_edit.js",
+            "js/example_sentence_audio_regenerate.js",
             "js/generate_example_sentence.js",
             "js/inline_regenerate.js",
             "js/image_prompt_preview.js",

@@ -56,7 +56,10 @@
 .save-alternative-word-btn,
 .delete-alternative-word-btn,
 .save-example-sentence-btn,
-.cancel-example-sentence-btn {
+.cancel-example-sentence-btn,
+.regenerate-example-sentence-audio-btn,
+.keep-example-sentence-audio-btn,
+.discard-example-sentence-audio-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -96,7 +99,9 @@
 .add-example-sentence-btn:hover,
 .edit-example-sentence-btn:hover,
 .replace-example-sentence-btn:hover,
-.save-example-sentence-btn:hover {
+.save-example-sentence-btn:hover,
+.regenerate-example-sentence-audio-btn:hover,
+.keep-example-sentence-audio-btn:hover {
     background-color: #e8e8e8;
 }
 
@@ -108,7 +113,8 @@
 .delete-unitword-image-btn:hover,
 .delete-alternative-word-btn:hover,
 .delete-example-sentence-btn:hover,
-.cancel-example-sentence-btn:hover {
+.cancel-example-sentence-btn:hover,
+.discard-example-sentence-audio-btn:hover {
     background-color: #ffeeee;
 }
 
@@ -165,6 +171,20 @@
     font-family: inherit;
     font-size: 0.9em;
     resize: vertical;
+}
+
+.word-example-sentence-audio-container {
+    flex-wrap: wrap;
+}
+
+.example-sentence-audio-regen {
+    flex-basis: 100%;
+    margin-top: 8px;
+}
+
+.example-sentence-audio-regen-player {
+    display: block;
+    max-width: 220px;
 }
 
 .example-sentence-edit-controls {

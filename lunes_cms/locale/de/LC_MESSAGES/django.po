@@ -1003,11 +1003,13 @@ msgstr "Aktuell"
 msgid "Not generated yet"
 msgstr "Noch nicht generiert"
 
-#: cmsv2/admins/word_admin_asset_widgets.py cmsv2/utils.py
+#: cmsv2/admins/word_admin_asset_widgets.py
+#: cmsv2/admins/word_admin_list_renderers.py cmsv2/utils.py
 msgid "Keep new"
 msgstr "Neues übernehmen"
 
-#: cmsv2/admins/word_admin_asset_widgets.py cmsv2/utils.py
+#: cmsv2/admins/word_admin_asset_widgets.py
+#: cmsv2/admins/word_admin_list_renderers.py cmsv2/utils.py
 msgid "Discard new"
 msgstr "Neues verwerfen"
 
@@ -1020,6 +1022,7 @@ msgid "No audio yet."
 msgstr "Noch kein Audio."
 
 #: cmsv2/admins/word_admin_asset_widgets.py
+#: cmsv2/admins/word_admin_list_renderers.py
 msgid "Generate audio"
 msgstr "Audio generieren"
 
