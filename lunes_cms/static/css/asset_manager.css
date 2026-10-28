@@ -93,7 +93,9 @@
 .replace-unitword-image-btn:hover,
 .add-alternative-word-btn:hover,
 .save-alternative-word-btn:hover,
+.add-example-sentence-btn:hover,
 .edit-example-sentence-btn:hover,
+.replace-example-sentence-btn:hover,
 .save-example-sentence-btn:hover {
     background-color: #e8e8e8;
 }
@@ -105,6 +107,7 @@
 .delete-example-sentence-audio-btn:hover,
 .delete-unitword-image-btn:hover,
 .delete-alternative-word-btn:hover,
+.delete-example-sentence-btn:hover,
 .cancel-example-sentence-btn:hover {
     background-color: #ffeeee;
 }
@@ -116,6 +119,7 @@
 .unitword-image-add,
 .alternative-word-add,
 .alternative-word-save,
+.example-sentence-add,
 .example-sentence-save {
     font-size: 16px;
     font-weight: bold;
@@ -130,7 +134,8 @@
     color: #007bff;
 }
 
-.example-sentence-edit {
+.example-sentence-edit,
+.example-sentence-replace {
     font-size: 16px;
     color: #007bff;
 }
@@ -141,6 +146,7 @@
 .audio-delete,
 .unitword-image-delete,
 .alternative-word-delete,
+.example-sentence-delete,
 .example-sentence-cancel {
     font-size: 16px;
     font-weight: bold;

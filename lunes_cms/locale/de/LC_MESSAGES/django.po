@@ -1083,6 +1083,32 @@ msgstr "Audio löschen"
 msgid "more"
 msgstr "mehr"
 
+#: cmsv2/admins/word_admin_list_renderers.py
+msgid "Add example sentence"
+msgstr "Beispielsatz hinzufügen"
+
+#: cmsv2/admins/word_admin_list_renderers.py
+msgid "Edit example sentence"
+msgstr "Beispielsatz bearbeiten"
+
+#: cmsv2/admins/word_admin_list_renderers.py cmsv2/utils.py
+msgid "Generate example sentence"
+msgstr "Beispielsatz generieren"
+
+#: cmsv2/admins/word_admin_list_renderers.py
+msgid "Delete example sentence"
+msgstr "Beispielsatz löschen"
+
+#: cmsv2/admins/word_admin_list_renderers.py
+msgid "Save example sentence"
+msgstr "Beispielsatz speichern"
+
+#: cmsv2/admins/word_admin_list_renderers.py
+#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
+#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
+msgid "Cancel"
+msgstr "Abbrechen"
+
 #: cmsv2/admins/word_admin_list_renderers.py cmsv2/models/unit.py
 msgid "Add image"
 msgstr "Bild hinzufügen"
@@ -1870,11 +1896,6 @@ msgstr "Ausgewählte Einheiten"
 msgid "Assign"
 msgstr "Zuweisen"
 
-#: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
-#: cmsv2/templates/admin/csv_form.html expert_access/templates/review_view.html
-msgid "Cancel"
-msgstr "Abbrechen"
-
 #: cmsv2/templates/admin/cmsv2/import_csv_button.html
 #: cmsv2/templates/admin/csv_form.html
 msgid "Import CSV"
@@ -1938,10 +1959,6 @@ msgstr "Vielen Dank für Ihre Unterstützung!"
 #: cmsv2/templates/cmsv2/emails/expert_notification.txt
 msgid "Your Lunes team"
 msgstr "Ihr Lunes-Team"
-
-#: cmsv2/utils.py
-msgid "Generate example sentence"
-msgstr "Beispielsatz generieren"
 
 #: cmsv2/utils.py
 msgid "Regenerate example sentence"

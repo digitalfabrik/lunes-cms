@@ -29,7 +29,7 @@ def media_root(settings: Settings, tmp_path: Path) -> None:
     settings.MEDIA_ROOT = str(tmp_path)
 
 
-def test_list_example_sentence_hides_controls_without_sentence(
+def test_list_example_sentence_offers_adding_without_sentence(
     db: None, word_admin: WordAdmin
 ) -> None:
     word = Word.objects.create(word="Hammer", singular_article=1)
@@ -38,7 +38,31 @@ def test_list_example_sentence_hides_controls_without_sentence(
 
     assert "example-sentence-check-status-select" not in html
     assert "example-sentence-hover-container" not in html
-    assert 'class="example-sentence-edit-form" style="display: none;"' not in html
+    assert 'class="add-example-sentence-btn" style="display: inline-flex;"' in html
+    assert 'class="edit-example-sentence-btn" style="display: none;"' in html
+    assert 'class="delete-example-sentence-btn" style="display: none;"' in html
+    assert 'class="example-sentence-edit-form" style="display: none;"' in html
+
+
+def test_list_example_sentence_points_controls_at_the_endpoints(
+    db: None, word_admin: WordAdmin
+) -> None:
+    word = Word.objects.create(
+        word="Hammer", singular_article=1, example_sentence="Der Hammer ist schwer."
+    )
+
+    html = str(word_admin.list_example_sentence(word))
+
+    assert 'class="add-example-sentence-btn" style="display: none;"' in html
+    assert 'class="delete-example-sentence-btn" style="display: inline-flex;"' in html
+    assert (
+        f'data-generate-url="/en/admin/cmsv2/words/{word.pk}/generate-example-sentence-via-openai"'
+        in html
+    )
+    assert (
+        f'data-store-url="/en/admin/cmsv2/words/{word.pk}/store-generated-example-sentence"'
+        in html
+    )
 
 
 def test_list_example_sentence_shows_text_and_status_for_short_sentence(

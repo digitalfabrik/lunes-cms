@@ -189,45 +189,15 @@ class WordAdminListRenderersMixin:
             else ""
         )
 
-        controls_html = f"""
-        <div class="example-sentence-controls" data-word-id="{obj.id}">
-            <button type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
-                <span class="example-sentence-edit">✎</span>
-            </button>
-            <button disabled type="button" class="replace-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
-                <span class="example-sentence-replace">↻</span>
-            </button>
-            <button disabled type="button" class="delete-example-sentence-btn" style="display: {'inline-flex' if obj.example_sentence else 'none'};">
-                <span class="example-sentence-delete">×</span>
-            </button>
-            <input type="file" class="example-sentence-file-input" style="display: none;" accept="example_sentence/*">
-        </div>
-        """
-
+        store_url = reverse(
+            "cmsv2:word_store_generated_example_sentence", args=[obj.id]
+        )
         display_html = f"""
         <div class="example-sentence-display">
-            {example_sentence_html}{controls_html}
+            {example_sentence_html}{self._generate_example_sentence_controls(obj, store_url)}
         </div>
         """
-
-        edit_form_html = ""
-        if obj.example_sentence:
-            store_url = reverse(
-                "cmsv2:word_store_generated_example_sentence", args=[obj.id]
-            )
-            edit_form_html = f"""
-            <div class="example-sentence-edit-form" style="display: none;">
-                <textarea class="example-sentence-textarea" rows="3" data-original-value="{escape(obj.example_sentence)}">{escape(obj.example_sentence)}</textarea>
-                <div class="example-sentence-edit-controls">
-                    <button type="button" class="save-example-sentence-btn" data-store-url="{store_url}">
-                        <span class="example-sentence-save">✓</span>
-                    </button>
-                    <button type="button" class="cancel-example-sentence-btn">
-                        <span class="example-sentence-cancel">×</span>
-                    </button>
-                </div>
-            </div>
-            """
+        edit_form_html = self._generate_example_sentence_edit_form(obj, store_url)
 
         word_options = ""
         for value, display in CheckStatus.choices:
@@ -248,6 +218,67 @@ class WordAdminListRenderersMixin:
             html += word_example_sentence_check_status_html
 
         return html
+
+    def _generate_example_sentence_controls(self, obj: Word, store_url: str) -> str:
+        """Generate HTML for the add, edit, generate and delete buttons of the
+        word's example sentence.
+
+        Args:
+            obj: The word object
+            store_url: The URL that stores an edited or deleted sentence
+
+        Returns:
+            str: HTML markup for the example sentence buttons"""
+        has_sentence = bool(obj.example_sentence)
+        generate_url = reverse(
+            "cmsv2:word_generate_example_sentence_via_openai", args=[obj.id]
+        )
+        add_title = _("Add example sentence")
+        edit_title = _("Edit example sentence")
+        generate_title = _("Generate example sentence")
+        delete_title = _("Delete example sentence")
+        return f"""
+        <div class="example-sentence-controls" data-word-id="{obj.id}" data-store-url="{store_url}" data-generate-url="{generate_url}">
+            <button type="button" class="add-example-sentence-btn" style="display: {'none' if has_sentence else 'inline-flex'};" title="{add_title}">
+                <span class="example-sentence-add">+</span>
+            </button>
+            <button type="button" class="edit-example-sentence-btn" style="display: {'inline-flex' if has_sentence else 'none'};" title="{edit_title}">
+                <span class="example-sentence-edit">✎</span>
+            </button>
+            <button type="button" class="replace-example-sentence-btn" title="{generate_title}">
+                <span class="example-sentence-replace">↻</span>
+            </button>
+            <button type="button" class="delete-example-sentence-btn" style="display: {'inline-flex' if has_sentence else 'none'};" title="{delete_title}">
+                <span class="example-sentence-delete">×</span>
+            </button>
+        </div>
+        """
+
+    def _generate_example_sentence_edit_form(self, obj: Word, store_url: str) -> str:
+        """Generate HTML for the hidden form that edits the word's example sentence.
+
+        Args:
+            obj: The word object
+            store_url: The URL that stores the edited sentence
+
+        Returns:
+            str: HTML markup for the example sentence edit form"""
+        sentence = escape(obj.example_sentence)
+        save_title = _("Save example sentence")
+        cancel_title = _("Cancel")
+        return f"""
+        <div class="example-sentence-edit-form" style="display: none;">
+            <textarea class="example-sentence-textarea" rows="3" data-original-value="{sentence}">{sentence}</textarea>
+            <div class="example-sentence-edit-controls">
+                <button type="button" class="save-example-sentence-btn" data-store-url="{store_url}" title="{save_title}">
+                    <span class="example-sentence-save">✓</span>
+                </button>
+                <button type="button" class="cancel-example-sentence-btn" title="{cancel_title}">
+                    <span class="example-sentence-cancel">×</span>
+                </button>
+            </div>
+        </div>
+        """
 
     def _generate_word_example_sentence_audio_container(self, obj: Word) -> str:
         """Generate HTML for the word's example sentence audio container.
