@@ -234,8 +234,11 @@ class WordAdminListRenderersMixin:
             selected = "selected" if obj.example_sentence_check_status == value else ""
             word_options += f'<option value="{value}" {selected}>{display}</option>'
 
+        check_status_url = reverse(
+            "cmsv2:update_word_example_sentence_check_status", args=[obj.id]
+        )
         word_example_sentence_check_status_html = f"""
-        <select name="example_sentence_check_status_{obj.id}" data-word-id="{obj.id}" class="example-sentence-check-status-select" style="margin-top: 8px;">
+        <select name="example_sentence_check_status_{obj.id}" data-word-id="{obj.id}" data-url="{check_status_url}" class="example-sentence-check-status-select" style="margin-top: 8px;">
             {word_options}
         </select>
         """

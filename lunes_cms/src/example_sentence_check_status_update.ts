@@ -10,20 +10,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     exampleSentenceCheckStatusSelects.forEach(function (select) {
         select.addEventListener("change", function () {
-            const wordId = select.getAttribute("data-word-id")
-            const csrftoken = window.getCookie("csrftoken")
+            const url = select.dataset.url
+            if (!url) {
+                return
+            }
 
             const formData = new FormData()
             formData.append("example_sentence_check_status", select.value)
 
-            fetch(`/en/admin/cmsv2/words/${wordId}/update-example-sentence-check-status/`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRFToken": csrftoken ?? "",
-                },
-                credentials: "same-origin",
-            })
+            window
+                .postWithCsrf(url, formData)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "success") {

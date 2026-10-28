@@ -65,17 +65,10 @@ function _handleSave(button: HTMLButtonElement): void {
     const formData = new FormData()
     formData.append("example_sentence", textarea.value)
 
-    fetch(storeUrl, {
-        method: "POST",
-        body: formData,
-        credentials: "same-origin",
-        headers: {
-            "X-CSRFToken": window.getCookie("csrftoken") ?? "",
-            "X-Requested-With": "XMLHttpRequest",
-        },
-    })
+    window
+        .postWithCsrf(storeUrl, formData)
         .then(async (response) => {
-            const data = (await response.json()) as { status?: string; message?: string }
+            const data = await window.readJsonBody(response)
             if (!response.ok || data.status !== "success") {
                 throw new Error(data.message ?? `HTTP error! status: ${response.status}`)
             }
