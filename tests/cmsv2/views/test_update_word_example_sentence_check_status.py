@@ -1,20 +1,21 @@
 """
 Tests for the ``update_word_example_sentence_check_status`` endpoint (#823).
 
-Covers success/error responses and, since the view used to be wrongly
-``@csrf_exempt`` on top of ``@staff_member_required`` (a security bug fixed on
-this branch), that it now enforces both authentication and CSRF protection
-like its sibling check-status endpoints.
+Covers success/error responses and that the view enforces authentication,
+the change permission, the area of the user and CSRF protection like its
+sibling check-status endpoints.
 """
 
 from __future__ import annotations
+
+from collections.abc import Callable
 
 import pytest
 from django.contrib.auth import get_user_model
 from django.test.client import Client
 from django.urls import reverse
 
-from lunes_cms.cmsv2.models import Word
+from lunes_cms.cmsv2.models import Area, Word
 from lunes_cms.cmsv2.models.static import CheckStatus
 
 
@@ -81,20 +82,50 @@ def test_anonymous_user_is_redirected_to_login(word: Word) -> None:
 
 
 @pytest.mark.django_db
-def test_non_staff_user_is_redirected_to_login(word: Word) -> None:
-    non_staff = get_user_model().objects.create_user(
-        username="non-staff-823", is_staff=False
+def test_rejects_unknown_check_status(admin_client: Client, word: Word) -> None:
+    response = admin_client.post(
+        _url(word), {"example_sentence_check_status": "NOT_A_STATUS"}
     )
-    client = Client()
-    client.force_login(non_staff)
 
-    response = client.post(
+    assert response.status_code == 400
+    assert response.json()["status"] == "error"
+    word.refresh_from_db()
+    assert word.example_sentence_check_status == CheckStatus.NOT_CHECKED
+
+
+@pytest.mark.django_db
+def test_denies_user_without_change_permission(
+    client_with_permissions: Callable[..., Client], word: Word
+) -> None:
+    response = client_with_permissions("view_word").post(
         _url(word), {"example_sentence_check_status": CheckStatus.CONFIRMED}
     )
 
-    assert response.status_code == 302
+    assert response.status_code == 403
+    assert response.json()["status"] == "error"
     word.refresh_from_db()
     assert word.example_sentence_check_status == CheckStatus.NOT_CHECKED
+
+
+@pytest.mark.django_db
+def test_hides_word_outside_the_area_of_the_user(
+    client_with_permissions: Callable[..., Client],
+) -> None:
+    foreign_word = Word.objects.create(
+        word="Zange",
+        singular_article=2,
+        example_sentence="Die Zange liegt im Koffer.",
+        area=Area.objects.create(name="Foreign"),
+    )
+
+    response = client_with_permissions("change_word").post(
+        _url(foreign_word), {"example_sentence_check_status": CheckStatus.CONFIRMED}
+    )
+
+    assert response.status_code == 404
+    assert response.json()["status"] == "error"
+    foreign_word.refresh_from_db()
+    assert foreign_word.example_sentence_check_status == CheckStatus.NOT_CHECKED
 
 
 @pytest.mark.django_db
