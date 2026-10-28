@@ -25,21 +25,43 @@ class Area(models.Model):
         upload_to=upload_area_logos,
         blank=True,
         verbose_name=_("logo"),
-        help_text=_("Shown on landing page."),
+        help_text=_("The main logo, shown in the center of the header in the app."),
+    )
+    secondary_logo = models.ImageField(
+        upload_to=upload_area_logos,
+        blank=True,
+        verbose_name=_("secondary logo"),
+        help_text=_("A second logo, shown at the side of the header in the app."),
     )
     primary_color = models.CharField(
         max_length=7,
         blank=True,
         validators=[validate_hex_color],
         verbose_name=_("primary color"),
-        help_text=_("A hex color e.g. #000000 for black."),
+        help_text=_(
+            "Background color of the header in the app and of the area label on "
+            "jobs. A hex color e.g. #000000 for black."
+        ),
     )
-    secondary_color = models.CharField(
+    learning_color = models.CharField(
         max_length=7,
         blank=True,
         validators=[validate_hex_color],
-        verbose_name=_("secondary color"),
-        help_text=_("A hex color e.g. #000000 for black."),
+        verbose_name=_("learning color"),
+        help_text=_(
+            "Background color of the card to learn words in the app. "
+            "A hex color e.g. #000000 for black."
+        ),
+    )
+    training_color = models.CharField(
+        max_length=7,
+        blank=True,
+        validators=[validate_hex_color],
+        verbose_name=_("training color"),
+        help_text=_(
+            "Background color of the card to train words in the app. "
+            "A hex color e.g. #000000 for black."
+        ),
     )
     additional_information = models.TextField(
         blank=True,
@@ -77,6 +99,17 @@ class Area(models.Model):
         return get_image_tag(self.logo, width=75)
 
     logo_tag.short_description = ""  # type: ignore[attr-defined]
+
+    def secondary_logo_tag(self) -> SafeString:
+        """
+        Generate a small thumbnail of the area's secondary logo for the admin form.
+
+        Returns:
+            SafeString: HTML markup showing the secondary logo, or nothing if there is none
+        """
+        return get_image_tag(self.secondary_logo, width=75)
+
+    secondary_logo_tag.short_description = ""  # type: ignore[attr-defined]
 
     def __str__(self) -> str:
         return str(self.name)

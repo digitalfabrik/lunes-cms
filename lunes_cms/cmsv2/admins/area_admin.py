@@ -83,13 +83,16 @@ class AreaAdmin(admin.ModelAdmin):
         "name",
         "logo",
         "logo_tag",
+        "secondary_logo",
+        "secondary_logo_tag",
         "primary_color",
-        "secondary_color",
+        "learning_color",
+        "training_color",
         "additional_information",
         "additional_information_url",
         "admins",
     ]
-    readonly_fields = ["logo_tag"]
+    readonly_fields = ["logo_tag", "secondary_logo_tag"]
     filter_horizontal = ["admins"]
     inlines = [AreaCodeInline, AreaAccessTokenInline]
     search_fields = ["name"]

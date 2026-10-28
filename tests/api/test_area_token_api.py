@@ -127,8 +127,10 @@ def test_registration_returns_a_token_and_the_area(area):
         "id": area.area.pk,
         "name": "Kolping",
         "logo": None,
+        "secondary_logo": None,
         "primary_color": "",
-        "secondary_color": "",
+        "learning_color": "",
+        "training_color": "",
         "additional_information": "",
         "additional_information_url": "",
     }
@@ -139,7 +141,8 @@ def test_registration_returns_a_token_and_the_area(area):
 def test_registration_returns_the_branding_of_the_area(area):
     """The branding set on an area is served alongside it on registration."""
     area.area.primary_color = "#990000"
-    area.area.secondary_color = "#FFFFFF"
+    area.area.learning_color = "#007DBE"
+    area.area.training_color = "#027B91"
     area.area.additional_information = "Free text about this area."
     area.area.additional_information_url = "https://example.com/info"
     area.area.save()
@@ -149,24 +152,32 @@ def test_registration_returns_the_branding_of_the_area(area):
     assert response.status_code == 201
     body = response.json()["area"]
     assert body["primary_color"] == "#990000"
+    assert body["learning_color"] == "#007DBE"
+    assert body["training_color"] == "#027B91"
     assert body["additional_information"] == "Free text about this area."
     assert body["additional_information_url"] == "https://example.com/info"
-    assert body["secondary_color"] == "#FFFFFF"
 
 
 @pytest.mark.django_db()
-def test_registration_returns_the_logo_as_an_absolute_url(area, settings, tmp_path):
-    """The logo is served as an absolute URL, not a bare storage path."""
+@pytest.mark.parametrize("logo_field", ["logo", "secondary_logo"])
+def test_registration_returns_the_logos_as_absolute_urls(
+    area, settings, tmp_path, logo_field
+):
+    """Both logos are served as absolute URLs, not bare storage paths."""
     settings.MEDIA_ROOT = tmp_path
     buf = io.BytesIO()
     Image.new("RGB", (4, 4), "red").save(buf, format="PNG")
-    area.area.logo = SimpleUploadedFile("logo.png", buf.getvalue(), "image/png")
+    setattr(
+        area.area,
+        logo_field,
+        SimpleUploadedFile("logo.png", buf.getvalue(), "image/png"),
+    )
     area.area.save()
 
     response = register()
 
     assert response.status_code == 201
-    logo_url = response.json()["area"]["logo"]
+    logo_url = response.json()["area"][logo_field]
     assert logo_url.startswith("http")
     assert logo_url.endswith(".png")
 
@@ -270,8 +281,10 @@ def test_info_returns_the_area_without_a_token(area):
             "id": area.area.pk,
             "name": "Kolping",
             "logo": None,
+            "secondary_logo": None,
             "primary_color": "",
-            "secondary_color": "",
+            "learning_color": "",
+            "training_color": "",
             "additional_information": "",
             "additional_information_url": "",
         }
