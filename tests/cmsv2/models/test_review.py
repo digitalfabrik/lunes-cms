@@ -83,3 +83,24 @@ def test_word_type_returns_display_label() -> None:
 
     with translation.override("en"):
         assert review.word_type == "Noun"
+
+
+@pytest.mark.django_db
+def test_image_prefers_unit_word_image() -> None:
+    """A review shows the image the word has in the reviewed unit."""
+    unit_word = _create_unit_word()
+    unit_word.word.image.name = "images/word.png"
+    unit_word.image.name = "images/unit_word.png"
+    review = Review(unit_word=unit_word)
+
+    assert review.image.name == "images/unit_word.png"
+
+
+@pytest.mark.django_db
+def test_image_falls_back_to_word_image() -> None:
+    """Without a unit-specific image, a review shows the word's own image."""
+    unit_word = _create_unit_word()
+    unit_word.word.image.name = "images/word.png"
+    review = Review(unit_word=unit_word)
+
+    assert review.image.name == "images/word.png"
