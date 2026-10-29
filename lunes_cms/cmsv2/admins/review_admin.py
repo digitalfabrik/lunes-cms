@@ -8,6 +8,7 @@ from lunes_cms.cmsv2.models.static import (
     get_color_by_review_status,
     get_initials_of_user,
 )
+from lunes_cms.cmsv2.utils import get_image_tag
 
 
 class ReviewAdmin(BaseAdmin):
@@ -28,7 +29,7 @@ class ReviewAdmin(BaseAdmin):
                     "unit",
                     "review_status",
                     "jobs",
-                    "image",
+                    "review_image",
                     "audio",
                 ],
             },
@@ -52,7 +53,7 @@ class ReviewAdmin(BaseAdmin):
         "word_type",
         "unit",
         "jobs",
-        "image",
+        "review_image",
         "audio",
         "creator",
         "reviewer",
@@ -75,6 +76,12 @@ class ReviewAdmin(BaseAdmin):
         return format_html("<b>{}</b><br>{}", word.word, word.singular_article_as_text)
 
     word_and_article.short_description = _("word and article")  # type: ignore[attr-defined]
+
+    def review_image(self, obj: Review) -> SafeString:
+        """Returns the image of the reviewed word as an image tag"""
+        return get_image_tag(obj.image)
+
+    review_image.short_description = _("Image")  # type: ignore[attr-defined]
 
     def styled_review_status(self, obj: Review) -> SafeString:
         """Returns the styled review status"""

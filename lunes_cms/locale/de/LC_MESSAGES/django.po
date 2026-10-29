@@ -841,6 +841,11 @@ msgstr "Meta-Informationen"
 msgid "word and article"
 msgstr "Wort und Artikel"
 
+#: cmsv2/admins/review_admin.py cmsv2/admins/word_admin.py
+#: cmsv2/models/review.py cmsv2/models/static.py cmsv2/models/unit.py
+msgid "Image"
+msgstr "Bilder"
+
 #: cmsv2/admins/review_admin.py
 msgid "Status"
 msgstr "Status"
@@ -922,11 +927,6 @@ msgstr "Aussprache"
 #: cmsv2/admins/word_admin.py cmsv2/models/review.py
 msgid "Audio"
 msgstr "Audio"
-
-#: cmsv2/admins/word_admin.py cmsv2/models/review.py cmsv2/models/static.py
-#: cmsv2/models/unit.py
-msgid "Image"
-msgstr "Bilder"
 
 #: cmsv2/admins/word_admin.py
 msgid "Example Sentence"
