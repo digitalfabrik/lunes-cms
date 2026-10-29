@@ -844,7 +844,7 @@ msgstr "Wort und Artikel"
 #: cmsv2/admins/review_admin.py cmsv2/admins/word_admin.py
 #: cmsv2/models/review.py cmsv2/models/static.py cmsv2/models/unit.py
 msgid "Image"
-msgstr "Bilder"
+msgstr "Bild"
 
 #: cmsv2/admins/review_admin.py
 msgid "Status"
