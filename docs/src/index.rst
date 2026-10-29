@@ -39,6 +39,7 @@ Basic Concepts
     image-generation
     analytics
     example-sentence-generation
+    review-notifications
 
 * :doc:`internationalization`: Internationalization (i18n)
 * :doc:`documentation`: Documentation (Sphinx)
@@ -47,6 +48,7 @@ Basic Concepts
 * :doc:`image-generation`: OpenAI image generation for vocabulary
 * :doc:`analytics`: Analytics
 * :doc:`example-sentence-generation`: OpenAI example sentence generation for vocabulary
+* :doc:`review-notifications`: Internal notifications about the review work of experts
 
 Deployment
 ==========

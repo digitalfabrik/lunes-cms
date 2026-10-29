@@ -193,6 +193,7 @@ msgid "Training Sets"
 msgstr "Module"
 
 #: cms/admins/feedback_admin.py cmsv2/admins/feedback_admin.py
+#: cmsv2/admins/notification_admin.py
 msgid "Mark as read"
 msgstr "Als gelesen markieren"
 
@@ -202,6 +203,7 @@ msgstr ""
 "Die ausgewählten Feedback-Einträge wurden erfolgreich als gelesen markiert."
 
 #: cms/admins/feedback_admin.py cmsv2/admins/feedback_admin.py
+#: cmsv2/admins/notification_admin.py
 msgid "Mark as unread"
 msgstr "Als ungelesen markieren"
 
@@ -727,7 +729,8 @@ msgstr "Clients"
 #: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
 #: cmsv2/admins/unit_admin.py cmsv2/models/ai_generation.py
 #: cmsv2/models/area.py cmsv2/models/area_access_token.py
-#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/unit.py
+#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/notification.py
+#: cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -832,6 +835,41 @@ msgstr "%(count)d Beruf(e) wurden erfolgreich wiederhergestellt."
 #: cmsv2/admins/job_admin.py
 msgid "Import"
 msgstr "Import"
+
+#: cmsv2/admins/notification_admin.py
+msgid "read status"
+msgstr "Lesestatus"
+
+#: cmsv2/admins/notification_admin.py
+msgid "Unread"
+msgstr "Ungelesen"
+
+#: cmsv2/admins/notification_admin.py
+msgid "Read"
+msgstr "Gelesen"
+
+#: cmsv2/admins/notification_admin.py
+msgid "read"
+msgstr "gelesen"
+
+#: cmsv2/admins/notification_admin.py
+msgid "reviews"
+msgstr "Prüfungen"
+
+#: cmsv2/admins/notification_admin.py
+#, python-format
+msgid "Show reviews of %(expert)s"
+msgstr "Prüfungen von %(expert)s anzeigen"
+
+#: cmsv2/admins/notification_admin.py
+#, python-format
+msgid "Marked %(count)d notification(s) as read."
+msgstr "%(count)d Benachrichtigung(en) als gelesen markiert."
+
+#: cmsv2/admins/notification_admin.py
+#, python-format
+msgid "Marked %(count)d notification(s) as unread."
+msgstr "%(count)d Benachrichtigung(en) als ungelesen markiert."
 
 #: cmsv2/admins/review_admin.py
 msgid "Meta information"
@@ -1419,6 +1457,69 @@ msgstr "Icon löschen"
 msgid "Icon"
 msgstr "Icon"
 
+#: cmsv2/models/notification.py
+msgid "recipient"
+msgstr "Empfänger:in"
+
+#: cmsv2/models/notification.py
+msgid "notification type"
+msgstr "Benachrichtigungsart"
+
+#: cmsv2/models/notification.py
+msgid "expert"
+msgstr "Expert:in"
+
+#: cmsv2/models/notification.py
+msgid "The expert whose review work the notification is about"
+msgstr "Die Expert:in, um deren Prüfungen es in der Benachrichtigung geht"
+
+#: cmsv2/models/notification.py cmsv2/models/unit.py
+msgid "unit"
+msgstr "Einheit"
+
+#: cmsv2/models/notification.py
+msgid "count"
+msgstr "Anzahl"
+
+#: cmsv2/models/notification.py
+msgid "The number of flagged or overdue reviews"
+msgstr "Die Anzahl der beanstandeten oder überfälligen Prüfungen"
+
+#: cmsv2/models/notification.py
+msgid "read at"
+msgstr "gelesen am"
+
+#: cmsv2/models/notification.py
+msgid "a deleted unit"
+msgstr "einer gelöschten Einheit"
+
+#: cmsv2/models/notification.py
+#, python-format
+msgid "%(expert)s has finished the review of %(unit)s."
+msgstr "%(expert)s hat die Prüfung von %(unit)s abgeschlossen."
+
+#: cmsv2/models/notification.py
+#, python-format
+msgid "%(expert)s has flagged %(count)d words of %(unit)s as wrong."
+msgstr "%(expert)s hat %(count)d Wörter von %(unit)s als fehlerhaft markiert."
+
+#: cmsv2/models/notification.py
+#, python-format
+msgid ""
+"%(expert)s has %(count)d reviews which are pending for more than %(days)d "
+"days."
+msgstr ""
+"%(expert)s hat %(count)d Prüfungen, die seit mehr als %(days)d Tagen offen "
+"sind."
+
+#: cmsv2/models/notification.py
+msgid "notification"
+msgstr "Benachrichtigung"
+
+#: cmsv2/models/notification.py
+msgid "notifications"
+msgstr "Benachrichtigungen"
+
 #: cmsv2/models/review.py
 msgid "reviewer"
 msgstr "Kontrolleur:in"
@@ -1580,6 +1681,18 @@ msgid "The word is too generic"
 msgstr "Vokabel zu generisch"
 
 #: cmsv2/models/static.py
+msgid "Expert finished a review"
+msgstr "Expert:in hat eine Prüfung abgeschlossen"
+
+#: cmsv2/models/static.py
+msgid "Expert flagged many words"
+msgstr "Expert:in hat viele Wörter beanstandet"
+
+#: cmsv2/models/static.py
+msgid "Expert is behind on reviews"
+msgstr "Expert:in ist mit Prüfungen im Rückstand"
+
+#: cmsv2/models/static.py
 msgid "In review"
 msgstr "In Prüfung"
 
@@ -1633,10 +1746,6 @@ msgstr "Beispielsatz generieren"
 #: cmsv2/models/unit.py
 msgid "Unit-Word Relation"
 msgstr "Einheit-Wort Beziehung"
-
-#: cmsv2/models/unit.py
-msgid "unit"
-msgstr "Einheit"
 
 #: cmsv2/models/unit.py
 msgid ""
