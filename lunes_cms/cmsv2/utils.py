@@ -242,7 +242,11 @@ def replace_file(
     assert content.name is not None
     old_name = field_file.name
     field_file.save(content.name, content, save=save)
-    if old_name and old_name != field_file.name:
+    # Saving the instance can move the file once more (Word.convert_audio()
+    # re-encodes audio back to "<word>.mp3", the name of the file it replaces),
+    # so compare with the name the instance ended up with, not this FieldFile's.
+    new_name = getattr(field_file.instance, field_file.field.name).name
+    if old_name and old_name != new_name:
         field_file.storage.delete(old_name)
 
 

@@ -4,6 +4,7 @@ UNRELEASED
 * [ [#1009](https://github.com/digitalfabrik/lunes-cms/issues/1009) ] 1009: Serve the content of an area via the API
 * [ [#650](https://github.com/digitalfabrik/lunes-cms/issues/650) ] 650: Notify experts about new content to review
 * [ [#1078](https://github.com/digitalfabrik/lunes-cms/issues/1078) ] 1078: Show translated word types instead of "Nomen" in review admin
+* [ [#1100](https://github.com/digitalfabrik/lunes-cms/issues/1100) ] 1100: Keep regenerated word audio when it replaces an existing audio
 
 
 2026.6.1
