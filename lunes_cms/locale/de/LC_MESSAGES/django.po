@@ -398,7 +398,8 @@ msgid "word type"
 msgstr "Wortart"
 
 #: cms/models/document.py cmsv2/models/alternative_word.py
-#: cmsv2/models/review.py cmsv2/models/unit.py cmsv2/models/word.py
+#: cmsv2/models/pending_notification.py cmsv2/models/review.py
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "word"
 msgstr "Wort"
 
@@ -730,7 +731,7 @@ msgstr "Clients"
 #: cmsv2/admins/unit_admin.py cmsv2/models/ai_generation.py
 #: cmsv2/models/area.py cmsv2/models/area_access_token.py
 #: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/notification.py
-#: cmsv2/models/unit.py
+#: cmsv2/models/pending_notification.py cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -1461,11 +1462,11 @@ msgstr "Icon"
 msgid "recipient"
 msgstr "Empfänger:in"
 
-#: cmsv2/models/notification.py
+#: cmsv2/models/notification.py cmsv2/models/pending_notification.py
 msgid "notification type"
 msgstr "Benachrichtigungsart"
 
-#: cmsv2/models/notification.py
+#: cmsv2/models/notification.py cmsv2/models/pending_notification.py
 msgid "expert"
 msgstr "Expert:in"
 
@@ -1473,7 +1474,8 @@ msgstr "Expert:in"
 msgid "The expert whose review work the notification is about"
 msgstr "Die Expert:in, um deren Prüfungen es in der Benachrichtigung geht"
 
-#: cmsv2/models/notification.py cmsv2/models/unit.py
+#: cmsv2/models/notification.py cmsv2/models/pending_notification.py
+#: cmsv2/models/unit.py
 msgid "unit"
 msgstr "Einheit"
 
@@ -1519,6 +1521,34 @@ msgstr "Benachrichtigung"
 #: cmsv2/models/notification.py
 msgid "notifications"
 msgstr "Benachrichtigungen"
+
+#: cmsv2/models/pending_notification.py
+msgid "Unit assigned"
+msgstr "Einheit zugewiesen"
+
+#: cmsv2/models/pending_notification.py
+msgid "Word added"
+msgstr "Wort hinzugefügt"
+
+#: cmsv2/models/pending_notification.py
+msgid "Image added"
+msgstr "Bild hinzugefügt"
+
+#: cmsv2/models/pending_notification.py
+msgid "The assigned unit"
+msgstr "Die zugewiesene Einheit"
+
+#: cmsv2/models/pending_notification.py
+msgid "The added word or the word with the new image"
+msgstr "Das hinzugefügte Wort oder das Wort mit dem neuen Bild"
+
+#: cmsv2/models/pending_notification.py
+msgid "pending notification"
+msgstr "ausstehende Benachrichtigung"
+
+#: cmsv2/models/pending_notification.py
+msgid "pending notifications"
+msgstr "ausstehende Benachrichtigungen"
 
 #: cmsv2/models/review.py
 msgid "reviewer"
@@ -1788,30 +1818,22 @@ msgid "Words"
 msgstr "Vokabel"
 
 #: cmsv2/notifications.py
-msgid "New units to review"
-msgstr "Neue Einheiten zur Prüfung"
-
-#: cmsv2/notifications.py
 msgid "The following units were assigned to you for review:"
 msgstr "Die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"
-
-#: cmsv2/notifications.py
-msgid "New words to review"
-msgstr "Neue Wörter zur Prüfung"
 
 #: cmsv2/notifications.py
 msgid "The following words were added to units you review:"
 msgstr "Die folgenden Wörter wurden zu Einheiten hinzugefügt, die Sie prüfen:"
 
 #: cmsv2/notifications.py
-msgid "New image to review"
-msgstr "Neues Bild zur Prüfung"
+msgid "New images were added to the following words of units you review:"
+msgstr ""
+"Zu den folgenden Wörtern von Einheiten, die Sie prüfen, wurden neue Bilder "
+"hinzugefügt:"
 
 #: cmsv2/notifications.py
-msgid "A new image was added to a word of a unit you review:"
-msgstr ""
-"Zu einem Wort einer Einheit, die Sie prüfen, wurde ein neues Bild "
-"hinzugefügt:"
+msgid "New content to review"
+msgstr "Neue Inhalte zur Prüfung"
 
 #: cmsv2/templates/admin/cmsv2/assign_units_to_user.html
 msgid "Assign to user"
@@ -2383,6 +2405,20 @@ msgstr "Hilfe"
 
 #~ msgid "No word_text provided."
 #~ msgstr "Kein Worttext übergeben."
+
+#~ msgid "New units to review"
+#~ msgstr "Neue Einheiten zur Prüfung"
+
+#~ msgid "New words to review"
+#~ msgstr "Neue Wörter zur Prüfung"
+
+#~ msgid "New image to review"
+#~ msgstr "Neues Bild zur Prüfung"
+
+#~ msgid "A new image was added to a word of a unit you review:"
+#~ msgstr ""
+#~ "Zu einem Wort einer Einheit, die Sie prüfen, wurde ein neues Bild "
+#~ "hinzugefügt:"
 
 #, python-format
 #~ msgid ""

@@ -1,14 +1,16 @@
 """
-Tests for the email notifications of experts (#650).
+Tests for the email notifications of experts (#650, #1094).
 
 An expert of a unit is a user with a review assignment for a word of that
-unit. Experts are told by email about units assigned to them, words added to
-their units and new images of the words of their units.
+unit. Experts are told about units assigned to them, words added to their
+units and new images of the words of their units in one digest per run of
+``send_expert_digest``.
 """
 
 from __future__ import annotations
 
 from collections.abc import Generator
+from io import StringIO
 from pathlib import Path
 from unittest import mock
 
@@ -19,20 +21,30 @@ from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
 from django.http import HttpRequest
 from django.test import RequestFactory
 from django.urls import reverse
+from django.utils import translation
 from pytest_django import Settings
 from tablib import Dataset
 
 from lunes_cms.cmsv2.admins.unit_admin import UnitAdmin
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
 from lunes_cms.cmsv2.admins.word_import_resource import import_words_from_csv
-from lunes_cms.cmsv2.models import Job, Review, Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models import (
+    Job,
+    PendingNotification,
+    Review,
+    Unit,
+    UnitWordRelation,
+    Word,
+)
 from lunes_cms.cmsv2.notifications import (
     notify_image_added,
     notify_units_assigned,
     notify_words_added,
+    send_digests,
 )
 
 pytestmark = pytest.mark.django_db
@@ -42,19 +54,6 @@ pytestmark = pytest.mark.django_db
 def base_url(settings: Settings, tmp_path: Path) -> None:
     settings.BASE_URL = "https://cms.example.com"
     settings.MEDIA_ROOT = str(tmp_path)
-
-
-@pytest.fixture(autouse=True)
-def run_on_commit() -> Generator[None, None, None]:
-    """
-    Notifications are sent on commit, which the transaction of a test never
-    does, so send them right away instead.
-    """
-    with mock.patch(
-        "lunes_cms.cmsv2.notifications.transaction.on_commit",
-        side_effect=lambda callback: callback(),
-    ):
-        yield
 
 
 @pytest.fixture
@@ -81,10 +80,10 @@ def unit(expert: User) -> Unit:
     return unit
 
 
-def test_units_assigned_mail_lists_the_units(expert: User) -> None:
-    unit = Unit.objects.create(title="Werkzeug")
-
+def test_units_assigned_mail_lists_the_units(unit: Unit, expert: User) -> None:
     notify_units_assigned(expert, [unit, unit])
+
+    send_digests()
 
     assert len(mail.outbox) == 1
     message = mail.outbox[0]
@@ -98,6 +97,8 @@ def test_units_assigned_mail_lists_the_units(expert: User) -> None:
 def test_units_assigned_by_the_expert_themselves_send_no_mail(expert: User) -> None:
     notify_units_assigned(expert, [Unit.objects.create(title="A")], assigned_by=expert)
 
+    send_digests()
+
     assert not mail.outbox
 
 
@@ -105,6 +106,8 @@ def test_expert_without_email_gets_no_mail() -> None:
     expert = get_user_model().objects.create_user(username="no-mail")
 
     notify_units_assigned(expert, [Unit.objects.create(title="A")])
+
+    send_digests()
 
     assert not mail.outbox
 
@@ -126,6 +129,8 @@ def test_words_added_notify_only_the_experts_of_the_unit(
     )
     notify_words_added([relation])
 
+    send_digests()
+
     assert [message.to for message in mail.outbox] == [["expert@example.com"]]
     assert "Säge (Werkzeug)" in mail.outbox[0].body
 
@@ -139,6 +144,8 @@ def test_words_added_by_the_expert_themselves_send_no_mail(
 
     notify_words_added([relation], added_by=expert)
 
+    send_digests()
+
     assert not mail.outbox
 
 
@@ -150,16 +157,98 @@ def test_words_added_to_a_unit_without_experts_send_no_mail() -> None:
 
     notify_words_added([relation])
 
+    send_digests()
+
     assert not mail.outbox
 
 
-def test_failing_mail_server_does_not_raise(unit: Unit) -> None:
-    relation = unit.unit_word_relations.get()
+def test_failing_mail_server_keeps_the_notifications(unit: Unit) -> None:
+    notify_image_added(unit.unit_word_relations.get())
 
     with mock.patch(
         "lunes_cms.cmsv2.notifications.send_mail", side_effect=OSError("down")
     ):
-        notify_image_added(relation)
+        assert send_digests() == 0
+
+    assert PendingNotification.objects.count() == 1
+    assert send_digests() == 1
+    assert not PendingNotification.objects.exists()
+
+
+def test_digest_groups_all_notifications_in_one_mail(unit: Unit, expert: User) -> None:
+    hammer = unit.unit_word_relations.get()
+    saw = UnitWordRelation.objects.create(
+        unit=unit, word=Word.objects.create(word="Säge", singular_article=2)
+    )
+    notify_units_assigned(expert, [unit])
+    notify_words_added([saw])
+    notify_words_added([saw])
+    notify_image_added(hammer)
+    notify_image_added(hammer)
+    notify_image_added(saw)
+
+    assert send_digests() == 1
+
+    assert len(mail.outbox) == 1
+    message = mail.outbox[0]
+    assert message.subject == "New content to review"
+    body = message.body
+    assert body.index("assigned to you") < body.index("Werkzeug")
+    assert body.index("were added to units") < body.index("Säge (Werkzeug)")
+    assert body.index("New images") < body.index("Hammer (Werkzeug)")
+    # Listed once each, the image of the new word not at all
+    assert body.count("Säge (Werkzeug)") == 1
+    assert body.count("Hammer (Werkzeug)") == 1
+    assert not PendingNotification.objects.exists()
+
+
+def test_digest_is_sent_only_once(unit: Unit) -> None:
+    notify_image_added(unit.unit_word_relations.get())
+
+    assert send_digests() == 1
+    assert send_digests() == 0
+    assert len(mail.outbox) == 1
+
+
+def test_digest_drops_deleted_content(unit: Unit, expert: User) -> None:
+    relation = UnitWordRelation.objects.create(
+        unit=unit, word=Word.objects.create(word="Säge", singular_article=2)
+    )
+    notify_words_added([relation])
+    relation.word.delete()
+
+    assert send_digests() == 0
+    assert not mail.outbox
+    assert not PendingNotification.objects.exists()
+
+
+def test_digest_drops_units_the_expert_no_longer_reviews(
+    unit: Unit, expert: User
+) -> None:
+    notify_units_assigned(expert, [unit])
+    Review.objects.filter(reviewer=expert).delete()
+
+    assert send_digests() == 0
+    assert not mail.outbox
+    assert not PendingNotification.objects.exists()
+
+
+def test_digest_is_sent_in_the_given_language() -> None:
+    # Checks the active language instead of the German text, so the test does
+    # not depend on compiled translation catalogs being present.
+    languages: list[str | None] = []
+
+    def fake_send_digests() -> int:
+        languages.append(translation.get_language())
+        return 0
+
+    with mock.patch(
+        "lunes_cms.cmsv2.management.commands.send_expert_digest.send_digests",
+        side_effect=fake_send_digests,
+    ):
+        call_command("send_expert_digest", "--language", "de", stdout=StringIO())
+
+    assert languages == ["de"]
 
 
 #
@@ -183,6 +272,8 @@ def test_assign_to_user_notifies_the_expert(unit: Unit, superuser: User) -> None
 
     UnitAdmin(Unit, admin.site).assign_to_user(request, Unit.objects.filter(pk=unit.pk))
 
+    send_digests()
+
     assert [message.to for message in mail.outbox] == [["new@example.com"]]
     assert "Werkzeug" in mail.outbox[0].body
 
@@ -194,6 +285,8 @@ def test_assign_to_user_sends_no_mail_when_nothing_is_new(
     request.user = superuser
 
     UnitAdmin(Unit, admin.site).assign_to_user(request, Unit.objects.filter(pk=unit.pk))
+
+    send_digests()
 
     assert not mail.outbox
 
@@ -212,6 +305,8 @@ def test_inline_words_notify_the_experts(
     model_admin = admin_class(Unit if admin_class is UnitAdmin else Word, admin.site)
     model_admin.save_formset(request, mock.MagicMock(), formset, change=True)
 
+    send_digests()
+
     assert [message.to for message in mail.outbox] == [["expert@example.com"]]
     assert "Säge (Werkzeug)" in mail.outbox[0].body
 
@@ -224,6 +319,8 @@ def test_csv_import_notifies_the_experts_once(unit: Unit, superuser: User) -> No
     dataset.append(["Werkzeug", "Zange", "die"])
 
     import_words_from_csv(dataset, job, superuser)
+
+    send_digests()
 
     assert len(mail.outbox) == 1
     assert "Säge (Werkzeug)" in mail.outbox[0].body
@@ -249,6 +346,8 @@ def test_new_image_notifies_the_experts(unit: Unit) -> None:
     relation.image = _image()
     relation.save()
 
+    send_digests()
+
     assert [message.to for message in mail.outbox] == [["expert@example.com"]]
     assert "Hammer (Werkzeug)" in mail.outbox[0].body
 
@@ -258,12 +357,15 @@ def test_unchanged_or_removed_image_sends_no_mail(unit: Unit) -> None:
     relation = unit.unit_word_relations.get()
     relation.image = _image()
     relation.save()
+    send_digests()
     mail.outbox.clear()
 
     relation.example_sentence = "Der Hammer ist schwer."
     relation.save()
     relation.image = None
     relation.save()
+
+    send_digests()
 
     assert not mail.outbox
 
@@ -275,5 +377,7 @@ def test_new_relation_with_image_sends_no_image_mail(unit: Unit) -> None:
         word=Word.objects.create(word="Säge", singular_article=2),
         image=_image(),
     )
+
+    send_digests()
 
     assert not mail.outbox
