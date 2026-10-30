@@ -105,8 +105,11 @@ class Review(models.Model):
 
     @property
     def image(self) -> ImageFieldFile:
-        """Returns the image of the word being reviewed"""
-        return self.unit_word.word.image
+        """
+        Returns the image shown for the reviewed word in its unit, falling back
+        to the word's own image if the unit has none
+        """
+        return self.unit_word.image or self.unit_word.word.image
 
     image.fget.short_description = _("Image")  # type: ignore[attr-defined]
 
