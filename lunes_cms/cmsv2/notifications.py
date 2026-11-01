@@ -210,15 +210,15 @@ def _send_digest(expert: User, notifications: list[PendingNotification]) -> bool
         for notification_type, intro in (
             (
                 NotificationType.UNIT_ASSIGNED,
-                _("The following units were assigned to you for review:"),
+                _("the following units were assigned to you for review:"),
             ),
             (
                 NotificationType.WORD_ADDED,
-                _("The following words were added to units you review:"),
+                _("the following words were added to units you review:"),
             ),
             (
                 NotificationType.IMAGE_ADDED,
-                _("New images were added to the following words of units you review:"),
+                _("new images were added to the following words of units you review:"),
             ),
         )
         if items[notification_type]
