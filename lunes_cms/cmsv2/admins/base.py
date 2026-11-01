@@ -4,7 +4,9 @@ from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin
 from django.forms import ModelForm
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+
+from .readonly_links import PermittedAdminForm
 
 if TYPE_CHECKING:
     # Only used in the type hint below. Importing it for real would make
@@ -22,6 +24,15 @@ class BaseAdmin(admin.ModelAdmin):
     created_by_user field to the requesting user, and set creator_is_admin
     based on whether the user is a superuser.
     """
+
+    def render_change_form(
+        self, request: HttpRequest, context: dict[str, Any], *args: Any, **kwargs: Any
+    ) -> HttpResponse:
+        """
+        Only link the related objects of read-only fields the user may view.
+        """
+        context["adminform"] = PermittedAdminForm(context["adminform"], request)
+        return super().render_change_form(request, context, *args, **kwargs)
 
     def save_model(
         self,
