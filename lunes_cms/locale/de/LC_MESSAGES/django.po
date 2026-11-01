@@ -1819,11 +1819,11 @@ msgstr "Vokabel"
 
 #: cmsv2/notifications.py
 msgid "The following units were assigned to you for review:"
-msgstr "Die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"
+msgstr "die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"
 
 #: cmsv2/notifications.py
 msgid "The following words were added to units you review:"
-msgstr "Die folgenden Wörter wurden zu Einheiten hinzugefügt, die Sie prüfen:"
+msgstr "die folgenden Wörter wurden zu Einheiten hinzugefügt, die Sie prüfen:"
 
 #: cmsv2/notifications.py
 msgid "New images were added to the following words of units you review:"
