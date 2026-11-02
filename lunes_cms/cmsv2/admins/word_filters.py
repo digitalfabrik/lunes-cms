@@ -122,6 +122,13 @@ class UnitDropdownFilter(admin.SimpleListFilter):
             units = units.filter(jobs__id=job_id).distinct()
         return [(str(unit.pk), unit.title) for unit in units]
 
+    def has_output(self) -> bool:
+        """
+        Keep the filter in place when the selected job has no units, instead
+        of letting it disappear like a filter without any options does.
+        """
+        return True
+
     def queryset(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> QuerySet[Word] | None:
