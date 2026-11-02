@@ -5,6 +5,7 @@ UNRELEASED
 * [ [#650](https://github.com/digitalfabrik/lunes-cms/issues/650) ] 650: Notify experts about new content to review
 * [ [#1078](https://github.com/digitalfabrik/lunes-cms/issues/1078) ] 1078: Show translated word types instead of "Nomen" in review admin
 * [ [#1100](https://github.com/digitalfabrik/lunes-cms/issues/1100) ] 1100: Keep regenerated word audio when it replaces an existing audio
+* [ [#1071](https://github.com/digitalfabrik/lunes-cms/issues/1071) ] 1071: Keep the unit filter visible when the selected job has no units
 
 
 2026.6.1
