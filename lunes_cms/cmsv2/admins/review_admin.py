@@ -31,6 +31,8 @@ class ReviewAdmin(BaseAdmin):
                     "jobs",
                     "review_image",
                     "audio",
+                    "reason",
+                    "comment",
                 ],
             },
         ),
