@@ -63,6 +63,14 @@ AI_LABEL_PROMPT = (
 )
 
 
+DIVERSITY_PROMPT = (
+    " Wenn Personen zu sehen sind, zeige vielfältige Menschen: unterschiedlichen"
+    " Geschlechts (auch nicht-binäre Personen), unterschiedlicher Hautfarbe und"
+    " Herkunft (auch Schwarze Menschen und People of Color) und unterschiedlichen"
+    " Alters, ohne Stereotype."
+)
+
+
 def build_image_prompt(
     word_text: str,
     unit_title: str | None = None,
@@ -96,6 +104,7 @@ def build_image_prompt(
         " Nur das zentrale Motiv ist zu sehen, vor einem neutralen weißen Hintergrund,"
         " ohne zusätzliche Objekte. Fotorealistisch, keine Illustration, kein Rendering."
     )
+    prompt += DIVERSITY_PROMPT
     if additional_info:
         prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
     if not allow_text_in_image:
