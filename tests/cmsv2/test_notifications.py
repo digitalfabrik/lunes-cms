@@ -195,7 +195,7 @@ def test_digest_groups_all_notifications_in_one_mail(unit: Unit, expert: User) -
     body = message.body
     assert body.index("assigned to you") < body.index("Werkzeug")
     assert body.index("were added to units") < body.index("Säge (Werkzeug)")
-    assert body.index("new images") < body.index("Hammer (Werkzeug)")
+    assert body.index("New images") < body.index("Hammer (Werkzeug)")
     # Listed once each, the image of the new word not at all
     assert body.count("Säge (Werkzeug)") == 1
     assert body.count("Hammer (Werkzeug)") == 1

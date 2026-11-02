@@ -1818,16 +1818,17 @@ msgid "Words"
 msgstr "Vokabel"
 
 #: cmsv2/notifications.py
-msgid "the following units were assigned to you for review:"
+msgid "The following units were assigned to you for review:"
 msgstr "die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"
 
 #: cmsv2/notifications.py
-msgid "the following words were added to units you review:"
+msgid "The following words were added to units you review:"
 msgstr "die folgenden Wörter wurden zu Einheiten hinzugefügt, die Sie prüfen:"
 
 #: cmsv2/notifications.py
-msgid "new images were added to the following words of units you review:"
-msgstr "zu den folgenden Wörtern von Einheiten, die Sie prüfen, wurden neue Bilder "
+msgid "New images were added to the following words of units you review:"
+msgstr ""
+"Zu den folgenden Wörtern von Einheiten, die Sie prüfen, wurden neue Bilder "
 "hinzugefügt:"
 
 #: cmsv2/notifications.py
@@ -2396,16 +2397,16 @@ msgstr "Prüfung wurde gespeichert"
 msgid "help"
 msgstr "Hilfe"
 
-#~ msgid "The following units were assigned to you for review:"
+#~ msgid "the following units were assigned to you for review:"
 #~ msgstr "die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"
 
-#~ msgid "The following words were added to units you review:"
+#~ msgid "the following words were added to units you review:"
 #~ msgstr ""
 #~ "die folgenden Wörter wurden zu Einheiten hinzugefügt, die Sie prüfen:"
 
-#~ msgid "New images were added to the following words of units you review:"
+#~ msgid "new images were added to the following words of units you review:"
 #~ msgstr ""
-#~ "Zu den folgenden Wörtern von Einheiten, die Sie prüfen, wurden neue "
+#~ "zu den folgenden Wörtern von Einheiten, die Sie prüfen, wurden neue "
 #~ "Bilder hinzugefügt:"
 
 #~ msgid "No area_id provided."
