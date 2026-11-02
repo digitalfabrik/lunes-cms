@@ -61,7 +61,13 @@ const initFeedbackDialog = (): void => {
     const submitLabelElement = dialog.querySelector<HTMLElement>("#dialog__submit-label")!
     const reasonSelect = dialog.querySelector<HTMLSelectElement>("select[name='reason']")!
     const commentField = dialog.querySelector<HTMLTextAreaElement>("textarea[name='comment']")!
+    const commentCounter = dialog.querySelector<HTMLElement>("#comment-character-count")!
     const reasonStatuses = reasonSelect.dataset.statuses!.split(" ")
+
+    const updateCommentCounter = (): void => {
+        commentCounter.textContent = `${commentField.value.length}/${commentField.maxLength}`
+    }
+    commentField.addEventListener("input", updateCommentCounter)
 
     const showReasonsFor = (status: string): void => {
         reasonSelect.value = ""
@@ -86,6 +92,7 @@ const initFeedbackDialog = (): void => {
         subtitleElement.textContent = subtitle
         submitLabelElement.textContent = submitText
         commentField.value = ""
+        updateCommentCounter()
         showReasonsFor(status)
 
         // lets the stylesheet colour the dialog for this decision
