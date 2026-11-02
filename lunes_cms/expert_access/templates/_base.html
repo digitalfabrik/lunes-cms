@@ -20,7 +20,7 @@
     <body>
         <header>
             <img src="{% static 'images/logo.svg' %}" alt="Lunes">
-            <span class="header__title">{% translate "Lunes vocabulary review" %}</span>
+            <h1 class="header__title">{% translate "Lunes vocabulary review" %}</h1>
             {% if user.is_superuser %}
                 <a class="header__admin" href="{% url 'admin:index' %}">
                     {% translate "Admin site" %}
