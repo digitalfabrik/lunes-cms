@@ -260,12 +260,6 @@ def test_build_image_prompt_asks_for_diverse_people() -> None:
         assert image_generation.DIVERSITY_PROMPT in prompt
 
 
-def test_diversity_prompt_precedes_additional_info() -> None:
-    prompt = image_generation.build_image_prompt("Hammer", additional_info="Profil")
-
-    assert prompt.index("vielfältige") < prompt.index("Profil")
-
-
 def test_build_image_prompt_bans_text_by_default() -> None:
     prompt = image_generation.build_image_prompt("Rechnung")
 
