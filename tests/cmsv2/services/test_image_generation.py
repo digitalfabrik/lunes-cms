@@ -252,6 +252,14 @@ def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     assert "Tischler/in" in enriched
 
 
+def test_build_image_prompt_asks_for_diverse_people() -> None:
+    for prompt in (
+        image_generation.build_image_prompt("Bäcker/in"),
+        image_generation.build_image_prompt("Rechnung", allow_text_in_image=True),
+    ):
+        assert image_generation.DIVERSITY_PROMPT in prompt
+
+
 def test_build_image_prompt_bans_text_by_default() -> None:
     prompt = image_generation.build_image_prompt("Rechnung")
 
