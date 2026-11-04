@@ -265,16 +265,11 @@ class UnitAdmin(AreaContentAdmin):
         self, request: HttpRequest, action_location: "ActionLocation | None" = None
     ) -> dict[str, Any]:
         """
-        Only offer the bulk actions to superusers.
-
-        Both ``bulk_release`` and ``assign_to_user`` act across areas and are
-        restricted to superusers in their own body already; hiding them here
-        as well keeps a non-superuser from seeing an action in the dropdown
-        that immediately denies them.
+        Only offer ``assign_to_user`` to superusers, so a non-superuser does
+        not see an action in the dropdown that immediately denies them.
         """
         actions = super().get_actions(request)
         if not request.user.is_authenticated or not request.user.is_superuser:
-            actions.pop("bulk_release", None)
             actions.pop("assign_to_user", None)
         return actions
 
@@ -316,15 +311,16 @@ class UnitAdmin(AreaContentAdmin):
         if change and "area" in form.changed_data:
             move_unit_to_area(form.instance)
 
-    @admin.action(description=_("Release all selected units"))
+    @admin.action(description=_("Release all selected units"), permissions=["change"])
     def bulk_release(self, request: HttpRequest, queryset: QuerySet[Unit]) -> None:
         """
-        Bulk action to release selected units in one go. Superusers only, see
-        :meth:`get_actions`.
+        Bulk action to release selected units in one go. Available to everybody
+        who may change units, limited to the units of their areas.
         """
-        if not request.user.is_authenticated or not request.user.is_superuser:
+        if not self.has_change_permission(request):
             raise PermissionDenied
 
+        queryset = scope_units(queryset, request.user)
         units_skipped = queryset.filter(released=True).count()
         released_unit_count = queryset.filter(released=False).update(released=True)
 

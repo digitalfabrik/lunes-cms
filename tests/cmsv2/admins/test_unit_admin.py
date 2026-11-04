@@ -9,17 +9,20 @@ the action stays superuser-only.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import pytest
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.test import RequestFactory
 
 from lunes_cms.cmsv2.admins.unit_admin import UnitAdmin
-from lunes_cms.cmsv2.models import Review, Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models import Area, Review, Unit, UnitWordRelation, Word
+from tests.cmsv2.helpers import PermissionClient
 
 
 @pytest.fixture
@@ -130,30 +133,6 @@ def test_assign_to_user_denies_anonymous_user(
         unit_admin.assign_to_user(request, Unit.objects.none())
 
 
-#
-# ``bulk_release`` and the dropdown of bulk actions (#1023 follow-up): both
-# "Release all selected units" and "Assign selected units to user" act across
-# areas and are meant for superusers only, not just in their own body but
-# already hidden from the action dropdown for anybody else.
-#
-
-
-def test_bulk_release_denies_a_non_superuser(
-    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
-) -> None:
-    unit = Unit.objects.create(title="Unit A", released=False)
-    editor = get_user_model().objects.create_user(username="editor")
-
-    request = _post_request(request_factory, {})
-    request.user = editor
-
-    with pytest.raises(PermissionDenied):
-        unit_admin.bulk_release(request, Unit.objects.filter(pk=unit.pk))
-
-    unit.refresh_from_db()
-    assert unit.released is False
-
-
 def test_bulk_release_allows_a_superuser(
     db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
 ) -> None:
@@ -202,6 +181,78 @@ def test_bulk_actions_are_hidden_from_a_non_superuser(
 
     assert "bulk_release" not in actions
     assert "assign_to_user" not in actions
+
+
+def test_bulk_release_is_offered_to_a_user_who_may_change_units(
+    unit_admin: UnitAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+) -> None:
+    request = request_factory.get("/")
+    request.user = client_with_permissions("change_unit").user
+
+    actions = unit_admin.get_actions(request)
+
+    assert "bulk_release" in actions
+    assert "assign_to_user" not in actions
+
+
+def test_bulk_release_allows_an_area_admin_within_their_area(
+    unit_admin: UnitAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+    main_app_area: Area,
+) -> None:
+    other_area = Area.objects.create(name="Area B")
+    own_unit = Unit.objects.create(title="Unit A", area=main_app_area, released=False)
+    foreign_unit = Unit.objects.create(title="Unit B", area=other_area, released=False)
+
+    request = _post_request(request_factory, {})
+    request.user = client_with_permissions("change_unit").user
+
+    unit_admin.bulk_release(
+        request, Unit.objects.filter(pk__in=[own_unit.pk, foreign_unit.pk])
+    )
+
+    own_unit.refresh_from_db()
+    foreign_unit.refresh_from_db()
+    assert own_unit.released is True
+    assert foreign_unit.released is False
+
+
+def test_bulk_release_denies_an_area_admin_without_change_permission(
+    unit_admin: UnitAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+    main_app_area: Area,
+) -> None:
+    unit = Unit.objects.create(title="Unit A", area=main_app_area, released=False)
+    request = _post_request(request_factory, {})
+    request.user = client_with_permissions().user
+
+    with pytest.raises(PermissionDenied):
+        unit_admin.bulk_release(request, Unit.objects.filter(pk=unit.pk))
+
+    unit.refresh_from_db()
+    assert unit.released is False
+
+
+def test_bulk_release_releases_nothing_for_a_user_without_an_area(
+    db: None,
+    unit_admin: UnitAdmin,
+    request_factory: RequestFactory,
+    main_app_area: Area,
+) -> None:
+    unit = Unit.objects.create(title="Unit A", area=main_app_area, released=False)
+    user = get_user_model().objects.create_user(username="no_area")
+    user.user_permissions.add(Permission.objects.get(codename="change_unit"))
+    request = _post_request(request_factory, {})
+    request.user = get_user_model().objects.get(pk=user.pk)
+
+    unit_admin.bulk_release(request, Unit.objects.filter(pk=unit.pk))
+
+    unit.refresh_from_db()
+    assert unit.released is False
 
 
 def test_bulk_actions_are_offered_to_a_superuser(
