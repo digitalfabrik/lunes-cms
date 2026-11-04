@@ -96,6 +96,21 @@ def default_area(user: "User") -> Area:
     return main_app_area
 
 
+def scope_areas(queryset: "QuerySet[Area]", user: "User") -> "QuerySet[Area]":
+    """
+    Restrict an area queryset to what the given user may see.
+
+    Superusers see every area, everybody else only the areas they administer.
+
+    :param queryset: The area queryset to restrict
+    :param user: The user the queryset is restricted to
+    :return: The restricted queryset
+    """
+    if getattr(user, "is_superuser", False):
+        return queryset
+    return queryset.filter(pk__in=administered_areas(user))
+
+
 def scope_jobs(queryset: "QuerySet[Job]", user: "User") -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the given user may see.

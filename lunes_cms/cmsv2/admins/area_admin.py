@@ -8,6 +8,7 @@ from django.db.models import Count, Field, Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
+from ..areas import scope_areas
 from ..models import Area, AreaAccessToken, AreaCode
 
 
@@ -75,8 +76,11 @@ class AreaAdmin(admin.ModelAdmin):
     """
     Admin interface for the Area model.
 
-    Areas are created and assigned by superusers only, because assigning an
-    area decides who may see and change the content below it.
+    Superusers manage every area. An area's administrators manage that area
+    only, and only with the model permission for it (``view_area`` or
+    ``change_area``). Everything about it is theirs to edit except its name
+    and administrators, which decide who sees its content and stay with the
+    superusers, as do creating and deleting areas.
     """
 
     fields = [
@@ -117,9 +121,20 @@ class AreaAdmin(admin.ModelAdmin):
             formfield.widget.attrs["style"] = "width: 100%"
         return formfield
 
+    def _may_access(self, request: HttpRequest, area: Area | None) -> bool:
+        """
+        Whether the user may access the given area, or any area if there is none.
+        """
+        if request.user.is_superuser:
+            return True
+        areas = scope_areas(Area.objects.all(), request.user)
+        if area is not None:
+            areas = areas.filter(pk=area.pk)
+        return areas.exists()
+
     def get_queryset(self, request: HttpRequest) -> QuerySet[Area]:
-        """Annotate the job and code counts and prefetch the administrators."""
-        return (
+        """Annotate the counts, and leave an area administrator their own areas."""
+        queryset = (
             super()
             .get_queryset(request)
             .annotate(job_count=Count("jobs", distinct=True))
@@ -133,14 +148,35 @@ class AreaAdmin(admin.ModelAdmin):
             )
             .prefetch_related("admins")
         )
+        return scope_areas(queryset, request.user)
+
+    def get_readonly_fields(
+        self, request: HttpRequest, obj: Area | None = None
+    ) -> list[str]:
+        """
+        The name and the administrators of an area are left to superusers.
+
+        The administrators decide who may see and change the content of the
+        area, so an area administrator must not be able to hand that out.
+        """
+        readonly_fields = list(super().get_readonly_fields(request, obj))
+        if request.user.is_superuser:
+            return readonly_fields
+        return [*readonly_fields, "name", "admins"]
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        return request.user.is_superuser
+        return self.has_view_permission(request)
 
     def has_view_permission(
         self, request: HttpRequest, obj: Area | None = None
     ) -> bool:
-        return request.user.is_superuser
+        """
+        Superusers see every area, area administrators with the permission
+        see the areas they administer.
+        """
+        return super().has_view_permission(request, obj) and self._may_access(
+            request, obj
+        )
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return request.user.is_superuser
@@ -148,15 +184,21 @@ class AreaAdmin(admin.ModelAdmin):
     def has_change_permission(
         self, request: HttpRequest, obj: Area | None = None
     ) -> bool:
-        return request.user.is_superuser
+        """
+        Superusers change every area, area administrators with the permission
+        change the areas they administer.
+        """
+        return super().has_change_permission(request, obj) and self._may_access(
+            request, obj
+        )
 
     def has_delete_permission(
         self, request: HttpRequest, obj: Area | None = None
     ) -> bool:
         """
-        The main app area must always exist, since :mod:`..areas` relies on it
-        to decide who may see and change the content that belongs to no area,
-        so it may not be deleted even by a superuser.
+        The main app area must always exist, since new content and clients
+        without an access token default to it, so it may not be deleted even
+        by a superuser.
         """
         if obj is not None and obj.is_main_app:
             return False
