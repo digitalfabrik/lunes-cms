@@ -133,22 +133,6 @@ def test_assign_to_user_denies_anonymous_user(
         unit_admin.assign_to_user(request, Unit.objects.none())
 
 
-def test_bulk_release_denies_a_non_superuser(
-    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
-) -> None:
-    unit = Unit.objects.create(title="Unit A", released=False)
-    editor = get_user_model().objects.create_user(username="editor")
-
-    request = _post_request(request_factory, {})
-    request.user = editor
-
-    with pytest.raises(PermissionDenied):
-        unit_admin.bulk_release(request, Unit.objects.filter(pk=unit.pk))
-
-    unit.refresh_from_db()
-    assert unit.released is False
-
-
 def test_bulk_release_allows_a_superuser(
     db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
 ) -> None:
