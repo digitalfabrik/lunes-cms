@@ -755,10 +755,10 @@ def test_area_admin_can_add_a_unit_with_a_word_of_the_own_area(
     assert Unit.objects.filter(title="New unit", jobs=area_job).exists()
 
 
-def test_area_admin_is_restricted_to_superusers(
+def test_area_admin_denies_users_without_area_or_permission(
     db: None, request_factory: RequestFactory
 ) -> None:
-    """Areas decide who sees what, so only superusers may manage them."""
+    """A user who administers no area gets nothing, a superuser gets everything."""
     area_admin = AreaAdmin(Area, admin.site)
     plain_request = _get_request(request_factory, _user("plain"))
     superuser_request = _get_request(request_factory, _user("root", is_superuser=True))

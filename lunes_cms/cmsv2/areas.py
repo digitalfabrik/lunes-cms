@@ -111,6 +111,22 @@ def scope_areas(queryset: "QuerySet[Area]", user: "User") -> "QuerySet[Area]":
     return queryset.filter(pk__in=administered_areas(user))
 
 
+def may_access_area(user: "User", area: Area | None = None) -> bool:
+    """
+    Whether the given user may see the given area, or any area if there is none.
+
+    :param user: The user who wants to access the area
+    :param area: The area to check, or ``None`` to check for any area at all
+    :return: Whether the user may access the area
+    """
+    if getattr(user, "is_superuser", False):
+        return True
+    areas = administered_areas(user)
+    if area is not None:
+        areas = areas.filter(pk=area.pk)
+    return areas.exists()
+
+
 def scope_jobs(queryset: "QuerySet[Job]", user: "User") -> "QuerySet[Job]":
     """
     Restrict a job queryset to what the given user may see.

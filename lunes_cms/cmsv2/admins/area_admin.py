@@ -8,7 +8,7 @@ from django.db.models import Count, Field, Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from ..areas import scope_areas
+from ..areas import may_access_area, scope_areas
 from ..models import Area, AreaAccessToken, AreaCode
 
 
@@ -121,17 +121,6 @@ class AreaAdmin(admin.ModelAdmin):
             formfield.widget.attrs["style"] = "width: 100%"
         return formfield
 
-    def _may_access(self, request: HttpRequest, area: Area | None) -> bool:
-        """
-        Whether the user may access the given area, or any area if there is none.
-        """
-        if request.user.is_superuser:
-            return True
-        areas = scope_areas(Area.objects.all(), request.user)
-        if area is not None:
-            areas = areas.filter(pk=area.pk)
-        return areas.exists()
-
     def get_queryset(self, request: HttpRequest) -> QuerySet[Area]:
         """Annotate the counts, and leave an area administrator their own areas."""
         queryset = (
@@ -174,8 +163,8 @@ class AreaAdmin(admin.ModelAdmin):
         Superusers see every area, area administrators with the permission
         see the areas they administer.
         """
-        return super().has_view_permission(request, obj) and self._may_access(
-            request, obj
+        return super().has_view_permission(request, obj) and may_access_area(
+            request.user, obj
         )
 
     def has_add_permission(self, request: HttpRequest) -> bool:
@@ -188,8 +177,8 @@ class AreaAdmin(admin.ModelAdmin):
         Superusers change every area, area administrators with the permission
         change the areas they administer.
         """
-        return super().has_change_permission(request, obj) and self._may_access(
-            request, obj
+        return super().has_change_permission(request, obj) and may_access_area(
+            request.user, obj
         )
 
     def has_delete_permission(
