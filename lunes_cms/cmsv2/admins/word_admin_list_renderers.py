@@ -164,12 +164,14 @@ class WordAdminListRenderersMixin:
 
         truncated = escape(sentence[:truncate_at])
         full = escape(sentence)
+        # Outside the f-string, so older xgettext versions extract it.
+        more_label = _("more")
         return f"""<div class="example-sentence-hover-container py-2">
             <details class="example-sentence-details">
                 <summary class="example-sentence-summary">
                     <span class="example-sentence-truncated">{truncated}&hellip;</span>
                     <span class="example-sentence-full">{full}</span>
-                    <span class="example-sentence-more">{_("more")}</span>
+                    <span class="example-sentence-more">{more_label}</span>
                 </summary>
             </details>
         </div>"""
