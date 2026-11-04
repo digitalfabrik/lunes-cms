@@ -14,7 +14,7 @@ interface Window {
     postWithCsrf: (url: string, body?: FormData) => Promise<Response>
     readJsonBody: (response: Response) => Promise<JsonBody>
     assetManagerConfigs?: AssetManagerConfig[]
-    audioAssetManagerConfig?: AudioAssetManagerConfig
+    audioAssetManagerConfigs?: AudioAssetManagerConfig[]
     initAudioGenerator: (config: AudioGeneratorConfig) => void
     initImageGenerator: (config: ImageGeneratorConfig) => void
     document_overlay: (event: MouseEvent & { target: HTMLSelectElement }) => void

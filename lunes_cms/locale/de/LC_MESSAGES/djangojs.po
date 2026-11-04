@@ -81,3 +81,7 @@ msgstr "Beispielsatz neu generieren"
 #: lunes_cms/static/js/generate_example_sentence.js
 msgid "Generate example sentence"
 msgstr "Beispielsatz generieren"
+
+#: lunes_cms/static/js/example_sentence_edit.js
+msgid "Are you sure you want to delete this example sentence?"
+msgstr "Möchtest du diesen Beispielsatz wirklich löschen?"
