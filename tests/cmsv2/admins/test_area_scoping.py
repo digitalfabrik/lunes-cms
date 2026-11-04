@@ -31,7 +31,15 @@ from lunes_cms.cmsv2.admins.unit_admin import (
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin, WordAdminForm
 from lunes_cms.cmsv2.admins.word_inlines import UnitInlineFormSet
 from lunes_cms.cmsv2.areas import administered_areas
-from lunes_cms.cmsv2.models import Area, AreaCode, Feedback, Job, Unit, Word
+from lunes_cms.cmsv2.models import (
+    Area,
+    AreaAccessToken,
+    AreaCode,
+    Feedback,
+    Job,
+    Unit,
+    Word,
+)
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 
 
@@ -747,10 +755,10 @@ def test_area_admin_can_add_a_unit_with_a_word_of_the_own_area(
     assert Unit.objects.filter(title="New unit", jobs=area_job).exists()
 
 
-def test_area_admin_is_restricted_to_superusers(
+def test_area_admin_denies_users_without_area_or_permission(
     db: None, request_factory: RequestFactory
 ) -> None:
-    """Areas decide who sees what, so only superusers may manage them."""
+    """A user who administers no area gets nothing, a superuser gets everything."""
     area_admin = AreaAdmin(Area, admin.site)
     plain_request = _get_request(request_factory, _user("plain"))
     superuser_request = _get_request(request_factory, _user("root", is_superuser=True))
@@ -762,6 +770,214 @@ def test_area_admin_is_restricted_to_superusers(
     assert area_admin.has_delete_permission(plain_request) is False
     assert area_admin.has_module_permission(superuser_request) is True
     assert area_admin.has_change_permission(superuser_request) is True
+
+
+def _area_manager(username: str, *areas: Area, codenames: tuple[str, ...]) -> User:
+    """An administrator of the given areas holding the given area permissions."""
+    user = _user(username, is_staff=True, password="secret")
+    for area in areas:
+        area.admins.add(user)
+    user.user_permissions.add(
+        *Permission.objects.filter(
+            content_type__app_label="cmsv2", codename__in=codenames
+        )
+    )
+    return user
+
+
+def _area_form_data(**overrides: str) -> dict[str, str]:
+    """The POST data of an area change form with every inline left untouched."""
+    return {
+        "primary_color": "",
+        "learning_color": "",
+        "training_color": "",
+        "additional_information": "",
+        "additional_information_url": "",
+        "codes-TOTAL_FORMS": "0",
+        "codes-INITIAL_FORMS": "0",
+        "codes-MIN_NUM_FORMS": "0",
+        "codes-MAX_NUM_FORMS": "1000",
+        "access_tokens-TOTAL_FORMS": "0",
+        "access_tokens-INITIAL_FORMS": "0",
+        "access_tokens-MIN_NUM_FORMS": "0",
+        "access_tokens-MAX_NUM_FORMS": "0",
+        **overrides,
+    }
+
+
+def test_area_admin_with_permission_manages_only_their_own_area(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """The permission alone is not enough, the user has to administer the area too."""
+    other = Area.objects.create(name="Telc")
+    area_admin = AreaAdmin(Area, admin.site)
+    manager = _area_manager("manager", area, codenames=("view_area", "change_area"))
+    request = _get_request(request_factory, manager)
+
+    assert area_admin.has_module_permission(request) is True
+    assert area_admin.has_view_permission(request, area) is True
+    assert area_admin.has_change_permission(request, area) is True
+    assert area_admin.has_view_permission(request, other) is False
+    assert area_admin.has_change_permission(request, other) is False
+    assert set(area_admin.get_queryset(request)) == {area}
+
+
+def test_area_admin_without_permission_sees_no_area(area: Area, client: Client) -> None:
+    """Administering an area grants no permission on the areas by itself."""
+    client.force_login(_area_manager("bare", area, codenames=()))
+
+    assert client.get("/en/admin/cmsv2/area/").status_code == 403
+    assert client.get(f"/en/admin/cmsv2/area/{area.pk}/change/").status_code == 403
+
+
+def test_user_with_permission_but_no_area_sees_no_area(
+    area: Area, client: Client
+) -> None:
+    """The permission without an area to administer shows nothing."""
+    client.force_login(_area_manager("nowhere", codenames=("view_area", "change_area")))
+
+    assert client.get("/en/admin/cmsv2/area/").status_code == 403
+    assert client.get(f"/en/admin/cmsv2/area/{area.pk}/change/").status_code == 403
+
+
+def test_area_admin_cannot_add_or_delete_areas(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """Creating and deleting areas stays with the superusers."""
+    area_admin = AreaAdmin(Area, admin.site)
+    manager = _area_manager(
+        "manager",
+        area,
+        codenames=("view_area", "change_area", "add_area", "delete_area"),
+    )
+    request = _get_request(request_factory, manager)
+
+    assert area_admin.has_add_permission(request) is False
+    assert area_admin.has_delete_permission(request, area) is False
+
+
+def test_area_admin_cannot_change_name_or_administrators(
+    area: Area, request_factory: RequestFactory
+) -> None:
+    """Both stay with the superusers, everything else is open to the area admin."""
+    area_admin = AreaAdmin(Area, admin.site)
+    manager = _area_manager("manager", area, codenames=("view_area", "change_area"))
+    superuser = _user("root", is_superuser=True)
+
+    readonly = area_admin.get_readonly_fields(
+        _get_request(request_factory, manager), area
+    )
+    assert {"name", "admins"} <= set(readonly)
+    assert "primary_color" not in readonly
+    assert "name" not in area_admin.get_readonly_fields(
+        _get_request(request_factory, superuser), area
+    )
+
+
+def test_area_admin_edits_their_own_area_through_the_admin(
+    area: Area, client: Client
+) -> None:
+    """Colors and codes are saved, the name and the administrators are not."""
+    other = Area.objects.create(name="Telc")
+    manager = _area_manager(
+        "manager",
+        area,
+        codenames=(
+            "view_area",
+            "change_area",
+            "view_areacode",
+            "add_areacode",
+            "change_areacode",
+            "delete_areacode",
+            "view_areaaccesstoken",
+        ),
+    )
+    client.force_login(manager)
+    url = f"/en/admin/cmsv2/area/{area.pk}/change/"
+
+    assert client.get(url).status_code == 200
+    assert client.get(f"/en/admin/cmsv2/area/{other.pk}/change/").status_code == 302
+
+    response = client.post(
+        url,
+        _area_form_data(
+            name="Hijacked",
+            primary_color="#112233",
+            **{
+                "codes-TOTAL_FORMS": "1",
+                "codes-0-id": "",
+                "codes-0-area": str(area.pk),
+                "codes-0-code": "KOLPING9",
+            },
+        ),
+    )
+
+    assert response.status_code == 302, response.content
+    area.refresh_from_db()
+    assert area.name == "Kolping"
+    assert area.primary_color == "#112233"
+    assert list(area.admins.all()) == [manager]
+    assert AreaCode.objects.filter(area=area, code="KOLPING9").exists()
+
+
+def test_area_admin_revokes_tokens_of_their_own_area_only(
+    area: Area, client: Client
+) -> None:
+    """The tokens inline is the one place an area admin can write to a token."""
+    other = Area.objects.create(name="Telc")
+    own_token, _ = AreaAccessToken.issue(
+        AreaCode.objects.create(area=area, code="OWNCODE1")
+    )
+    other_token, _ = AreaAccessToken.issue(
+        AreaCode.objects.create(area=other, code="OTHERCODE1")
+    )
+    manager = _area_manager(
+        "manager",
+        area,
+        codenames=(
+            "view_area",
+            "change_area",
+            "view_areaaccesstoken",
+            "change_areaaccesstoken",
+        ),
+    )
+    client.force_login(manager)
+
+    def revoke(target: Area, token: AreaAccessToken) -> None:
+        client.post(
+            f"/en/admin/cmsv2/area/{target.pk}/change/",
+            _area_form_data(
+                **{
+                    "access_tokens-TOTAL_FORMS": "1",
+                    "access_tokens-INITIAL_FORMS": "1",
+                    "access_tokens-0-id": str(token.pk),
+                    "access_tokens-0-area": str(target.pk),
+                    "access_tokens-0-revoked": "on",
+                }
+            ),
+        )
+
+    revoke(other, other_token)
+    other_token.refresh_from_db()
+    assert other_token.revoked is False
+
+    revoke(area, own_token)
+    own_token.refresh_from_db()
+    assert own_token.revoked is True
+
+
+def test_area_list_shows_an_area_admin_only_their_own_areas(
+    area: Area, client: Client
+) -> None:
+    """The list is the same page for everybody, narrowed to the user's areas."""
+    Area.objects.create(name="Telc")
+    manager = _area_manager("manager", area, codenames=("view_area",))
+    client.force_login(manager)
+
+    response = client.get("/en/admin/cmsv2/area/")
+
+    assert response.status_code == 200
+    assert set(response.context["cl"].queryset) == {area}
 
 
 def test_main_app_area_cannot_be_deleted_even_by_a_superuser(
