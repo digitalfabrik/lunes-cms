@@ -26,9 +26,9 @@ from lunes_cms.cmsv2.areas import (
     validate_unit_jobs,
     visible_jobs,
 )
-from lunes_cms.cmsv2.models.review import Review
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
-from lunes_cms.cmsv2.notifications import notify_units_assigned, notify_words_added
+from lunes_cms.cmsv2.notifications import notify_words_added
+from lunes_cms.cmsv2.reviews import assign_reviews
 
 if TYPE_CHECKING:
     from django.contrib.admin.options import ActionLocation
@@ -340,21 +340,21 @@ class UnitAdmin(AreaContentAdmin):
         self, request: HttpRequest, queryset: QuerySet[Unit]
     ) -> HttpResponse | None:
         """
-        Bulk-create Reviews linking every unit-word relation of each selected
-        unit to a chosen user. Superusers only. Relations already assigned to
-        the target user are silently skipped via the (unit_word, reviewer)
-        unique constraint.
+        Assign every unit-word relation of each selected unit to a chosen user
+        for review. Superusers only.
         """
         if not request.user.is_authenticated or not request.user.is_superuser:
             raise PermissionDenied
 
         if "apply" not in request.POST:
+            # pylint: disable=protected-access
             return TemplateResponse(
                 request,
                 "admin/cmsv2/assign_units_to_user.html",
                 {
                     **self.admin_site.each_context(request),
-                    "units": queryset,
+                    "opts": self.model._meta,
+                    "objects": queryset,
                     "users": User.objects.order_by("username"),
                     "action": "assign_to_user",
                     "selected_action": queryset.values_list("pk", flat=True),
@@ -362,35 +362,10 @@ class UnitAdmin(AreaContentAdmin):
                 },
             )
 
-        user = get_object_or_404(User, pk=request.POST["user"])
-        unit_words = UnitWordRelation.objects.filter(unit__in=queryset).select_related(
-            "unit"
-        )
-        unit_word_ids_assigned_to_user = set(
-            Review.objects.filter(reviewer=user, unit_word__in=unit_words).values_list(
-                "unit_word_id", flat=True
-            )
-        )
-        to_create = [
-            Review(unit_word=unit_word, reviewer=user, assigned_by=request.user)
-            for unit_word in unit_words
-            if unit_word.pk not in unit_word_ids_assigned_to_user
-        ]
-        Review.objects.bulk_create(to_create, ignore_conflicts=True)
-        notify_units_assigned(
-            user,
-            (review.unit_word.unit for review in to_create),
-            assigned_by=request.user,
-        )
-        self.message_user(
-            request,
-            _("Assigned %(new)d word(s) to %(user)s (%(skipped)d already assigned).")
-            % {
-                "new": len(to_create),
-                "skipped": len(unit_word_ids_assigned_to_user),
-                "user": user,
-            },
-        )
+        reviewer = get_object_or_404(User, pk=request.POST["user"])
+        unit_words = UnitWordRelation.objects.filter(unit__in=queryset)
+        message = assign_reviews(unit_words, reviewer=reviewer, assigner=request.user)
+        self.message_user(request, message)
         return None
 
     def related_jobs(self, obj: Unit) -> str:

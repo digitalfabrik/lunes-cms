@@ -1,0 +1,15 @@
+{% extends "admin/cmsv2/assign_to_user.html" %}
+{% load i18n %}
+{% block intro %}
+    {% blocktrans trimmed count counter=objects|length %}
+        You are about to assign {{ counter }} job to a single user.
+    {% plural %}
+        You are about to assign {{ counter }} jobs to a single user.
+    {% endblocktrans %}
+{% endblock %}
+{% block skip_hint %}
+    {% trans "Words already assigned to this user will be skipped." %}
+{% endblock %}
+{% block selected_summary %}
+    {% trans "Selected jobs" %}
+{% endblock %}

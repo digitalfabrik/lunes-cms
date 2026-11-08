@@ -131,5 +131,5 @@ class Review(models.Model):
             )
         ]
         verbose_name = _("Review")
-        verbose_name_plural = _("Review")
+        verbose_name_plural = _("Reviews")
         permissions = [("can_review", _("Can review assigned reviews"))]

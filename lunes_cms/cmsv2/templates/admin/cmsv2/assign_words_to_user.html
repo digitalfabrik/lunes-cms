@@ -1,0 +1,98 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+{% block title %}
+    {% trans "Assign selected words to user" %}
+{% endblock %}
+{% block bodyclass %}{{ block.super }} app-cmsv2{% endblock %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'admin:cmsv2_word_changelist' %}">{% trans 'Words' %}</a></li>
+        <li class="breadcrumb-item active">{% trans "Assign to user" %}</li>
+    </ol>
+{% endblock %}
+{% block content_title %}
+    {% trans "Assign selected words to user" %}
+{% endblock %}
+{% block content %}
+    <div id="content-main" class="col-12">
+        <form method="post" action="">
+            {% csrf_token %}
+            {% for pk in selected_action %}
+                <input type="hidden" name="_selected_action" value="{{ pk }}">
+            {% endfor %}
+            <input type="hidden" name="action" value="{{ action }}">
+            <input type="hidden" name="apply" value="1">
+            <div class="row">
+                <div class="col-12 col-lg-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>
+                                {% blocktrans trimmed count counter=words|length %}
+                                    You are about to assign {{ counter }} word to a single user.
+                                {% plural %}
+                                    You are about to assign {{ counter }} words to a single user.
+                                {% endblocktrans %}
+                            </p>
+                            <div class="form-group">
+                                <label for="id_user">{% trans "User" %}</label>
+                                <select name="user" id="id_user" class="form-control" required>
+                                    <option value="">--------</option>
+                                    {% for user in users %}
+                                        <option value="{{ user.pk }}">{{ user.username }}{% if user.get_full_name %} ({{ user.get_full_name }}){% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="form-text text-muted">{% trans "Words already assigned to this user will be skipped." %}</small>
+                            </div>
+
+                            <h5>{% trans "Choose units" %}</h5>
+                            <p>{% trans "Choose for each word the unit in which it should be reviewed." %}</p>
+                            {% for word in words %}
+                                <div class="form-group">
+                                    <label for="id_unit_word_{{ word.pk }}">{{ word.as_str_with_article }}</label>
+                                    <select name="unit_word_{{ word.pk }}"
+                                            id="id_unit_word_{{ word.pk }}"
+                                            class="form-control"
+                                            {% if word.available_review_relations|length == 1 %}disabled {% endif %}
+                                            required>
+                                        {% if word.available_review_relations|length > 1 %}
+                                            <option value="">--------</option>
+                                        {% endif %}
+                                        {% for unit_word in word.available_review_relations %}
+                                            <option value="{{ unit_word.pk }}">{{ unit_word.unit }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endfor %}
+
+                            {% if words_without_unit %}
+                                <div class="alert alert-warning">
+                                    {% trans "These words do not belong to any unit and will be skipped:" %}
+                                    <ul class="mb-0">
+                                        {% for word in words_without_unit %}
+                                            <li>{{ word }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <div class="{{ jazzmin_ui.actions_classes }}">
+                        <div class="form-group">
+                            <button type="submit"
+                                    class="btn {{ jazzmin_ui.button_classes.success }} form-control">
+                                {% trans "Assign" %}
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <a href="{% url 'admin:cmsv2_word_changelist' %}"
+                               class="btn {{ jazzmin_ui.button_classes.danger }} form-control">{% trans "Cancel" %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

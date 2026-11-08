@@ -3,10 +3,15 @@ from __future__ import absolute_import, annotations, unicode_literals
 from datetime import date
 from typing import Any, TYPE_CHECKING
 
+from django.contrib import admin, messages
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe, SafeString
@@ -35,8 +40,9 @@ from lunes_cms.cmsv2.models.static import (
     CheckStatus,
     image_upload_warning_html_lazy,
 )
-from lunes_cms.cmsv2.models.unit import UnitWordRelation
+from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.notifications import notify_words_added
+from lunes_cms.cmsv2.reviews import assign_reviews, available_units_per_word
 from lunes_cms.cmsv2.services.image_generation import image_prompt_context
 from lunes_cms.cmsv2.utils import (
     cache_busted_url,
@@ -47,6 +53,8 @@ from lunes_cms.cmsv2.utils import (
 from lunes_cms.core import settings
 
 if TYPE_CHECKING:
+    from django.contrib.admin.options import ActionLocation
+
     # `_StrOrPromise` only exists in django-stubs, not at runtime.
     from django.utils.functional import _StrOrPromise
 
@@ -189,6 +197,7 @@ class WordAdmin(AreaContentAdmin):
     ]
     list_select_related = ["area", "created_by", "created_by_user"]
     list_per_page = 25
+    actions = ["assign_to_user"]
 
     class Media:
         """
@@ -256,6 +265,77 @@ class WordAdmin(AreaContentAdmin):
         return obj.area
 
     area.short_description = _("area")  # type: ignore[attr-defined]
+
+    def get_actions(  # pylint: disable=unused-argument
+        self, request: HttpRequest, action_location: "ActionLocation | None" = None
+    ) -> dict[str, Any]:
+        """
+        Only offer ``assign_to_user`` to superusers
+        """
+        actions = super().get_actions(request)
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            actions.pop("assign_to_user", None)
+        return actions
+
+    @admin.action(description=_("Assign selected words to user"))
+    def assign_to_user(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> HttpResponse | None:
+        """
+        Bulk-create Reviews of the selected words for a chosen user.
+        Superusers only.
+
+        First, the user is redirected to a page to selected unit for the selected words, such
+        that unit word relations can be assigned for review.
+        """
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            raise PermissionDenied
+
+        words, words_without_unit = available_units_per_word(
+            queryset, limit_units_to=Unit.objects.all()
+        )
+
+        if "apply" not in request.POST:
+            return TemplateResponse(
+                request,
+                "admin/cmsv2/assign_words_to_user.html",
+                {
+                    **self.admin_site.each_context(request),
+                    "words": words,
+                    "words_without_unit": words_without_unit,
+                    "users": User.objects.order_by("username"),
+                    "action": "assign_to_user",
+                    "selected_action": queryset.values_list("pk", flat=True),
+                    "title": _("Assign selected words to user"),
+                },
+            )
+
+        user = get_object_or_404(User, pk=request.POST["user"])
+        selected_relation_ids = [
+            request.POST.get(
+                f"unit_word_{word.pk}", word.available_review_relations[0].pk
+            )
+            for word in words
+        ]
+        selected_relations = UnitWordRelation.objects.filter(
+            pk__in=selected_relation_ids
+        )
+
+        message = assign_reviews(
+            selected_relations, reviewer=user, assigner=request.user
+        )
+        self.message_user(request, message)
+
+        if words_without_unit:
+            self.message_user(
+                request,
+                _(
+                    "%(count)d word(s) were skipped, because they do not belong to any unit."
+                )
+                % {"count": len(words_without_unit)},
+                messages.WARNING,
+            )
+        return None
 
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments
         self,
@@ -475,7 +555,9 @@ class WordAdmin(AreaContentAdmin):
             regenerate_label=_("Regenerate audio"),
         )
 
-    example_sentence_audio_generate.short_description = _("Example Sentence Audio Generation")  # type: ignore[attr-defined]
+    example_sentence_audio_generate.short_description = _(  # type: ignore[attr-defined]
+        "Example Sentence Audio Generation"
+    )
 
     def example_sentence_audio_player(self, obj: Word) -> _StrOrPromise:
         """
