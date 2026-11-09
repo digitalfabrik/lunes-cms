@@ -13,7 +13,6 @@
     /* text */
     --text: #EEF0F3;
     --text-muted: #A8B1BD;
-    --text-faint: #A7B2BD;
 
     /* accents */
     --brand: #445FFF;
@@ -262,7 +261,7 @@ main {
 .word__article {
     font-size: 1.25rem;
     font-weight: 400;
-    color: var(--text-faint);
+    color: var(--text-muted);
 }
 
 .word-meta {
@@ -272,7 +271,7 @@ main {
 }
 
 .word-meta__separator {
-    color: var(--text-faint);
+    color: var(--text-muted);
     margin: 0 0.2rem;
 }
 
@@ -301,7 +300,7 @@ main {
 }
 
 .media__tile--empty {
-    color: var(--text-faint);
+    color: var(--text-muted);
     font-style: italic;
 }
 
@@ -540,7 +539,7 @@ select:focus-visible {
 }
 
 .dialog textarea::placeholder {
-    color: var(--text-faint);
+    color: var(--text-muted);
 }
 
 .dialog__actions {
