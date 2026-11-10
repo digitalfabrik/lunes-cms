@@ -1,4 +1,5 @@
-window.audioAssetManagerConfig = {
+window.audioAssetManagerConfigs = window.audioAssetManagerConfigs || []
+window.audioAssetManagerConfigs.push({
     entityType: "word",
     assetType: "audio",
     containerClass: "word-audio-container",
@@ -18,4 +19,4 @@ window.audioAssetManagerConfig = {
         delete: "An error occurred while deleting the audio",
     },
     urlResponseKey: "audio_url",
-}
+})
