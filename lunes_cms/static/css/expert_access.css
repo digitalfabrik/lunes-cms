@@ -3,10 +3,10 @@
     color-scheme: dark;
 
     /* surfaces */
-    --bg: #343A41;
-    --surface: #3F464F;
-    --surface-sunken: #2B3038;
-    --header-bg: #2B3038; 
+    --bg: #2B3038;
+    --surface: #343A41;
+    --surface-sunken: #22262F;
+    --header-bg: #22262F;
     --border: #FFFFFF17;
     --border-secondary: #8F9BAA;
 
