@@ -5,16 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bildschatz – Die offene Bilddatenbank für Wörter</title>
 <meta name="description" content="Bildschatz ist die offene Bilddatenbank für Wörter. Gib ein Wort ein und finde passende, frei nutzbare Bilder.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+{% load static %}
+<link rel="preload" href="{% static 'fonts/source-sans-3/SourceSans3VF-Upright.ttf.woff2' %}" as="font" type="font/woff2" crossorigin>
+<style>
+  /* Source Sans 3 by Adobe, self-hosted, SIL Open Font License 1.1 (see LICENSE.md next to the font file) */
+  @font-face{
+    font-family:'Source Sans 3';
+    font-style:normal;
+    font-weight:200 900;
+    font-display:swap;
+    src:url("{% static 'fonts/source-sans-3/SourceSans3VF-Upright.ttf.woff2' %}") format("woff2");
+  }
+</style>
 {% verbatim %}
 <style>
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; }
   body{
     background:#070C22;
-    font-family:'DM Sans',sans-serif;
+    font-family:'Source Sans 3',sans-serif;
     color:#EAECF7;
     min-height:100vh;
     background-image:radial-gradient(1200px 700px at 50% -10%, #12204F 0%, #0A1230 45%, #070C22 100%);
@@ -34,7 +43,7 @@
 
   /* ---------- pills / buttons ---------- */
   .bs-pill{
-    border:none; border-radius:999px; font-family:'DM Sans',sans-serif;
+    border:none; border-radius:999px; font-family:'Source Sans 3',sans-serif;
     font-size:14px; font-weight:600; padding:9px 16px; cursor:pointer;
     background:#5A6CF3; color:#fff;
   }
@@ -51,7 +60,7 @@
   .bs-logo-dots{ display:flex; gap:8px; justify-content:center; margin-bottom:26px; }
   .bs-logo-dots > div{ width:14px; height:14px; border-radius:4px; }
   .bs-title{
-    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-family:'Source Sans 3',sans-serif; font-weight:700;
     font-size:clamp(44px, 12vw, 72px); line-height:1; letter-spacing:-.02em; margin:0 0 14px;
   }
   .bs-title span{ color:#5A6CF3; }
@@ -85,7 +94,7 @@
   .bs-brand{ display:flex; align-items:center; gap:9px; cursor:pointer; flex:none; }
   .bs-brand-dots{ display:flex; gap:4px; }
   .bs-brand-dots > div{ width:9px; height:9px; border-radius:2px; }
-  .bs-brand-name{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; letter-spacing:-.01em; }
+  .bs-brand-name{ font-family:'Source Sans 3',sans-serif; font-weight:700; font-size:21px; letter-spacing:-.01em; }
   .bs-brand-name span{ color:#5A6CF3; }
   .bs-header-search-wrap{ position:relative; flex:1; min-width:200px; max-width:560px; display:flex; }
   .bs-header-search{
@@ -103,7 +112,7 @@
 
   .bs-results-body{ max-width:1080px; margin:0 auto; padding:36px 32px 100px; }
   .bs-count-row{ display:flex; align-items:baseline; gap:12px; margin-bottom:32px; flex-wrap:wrap; }
-  .bs-count-row h2{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(22px,6vw,30px); margin:0; letter-spacing:-.01em; }
+  .bs-count-row h2{ font-family:'Source Sans 3',sans-serif; font-weight:600; font-size:clamp(22px,6vw,30px); margin:0; letter-spacing:-.01em; }
   .bs-count-sub{ font-size:16px; color:#8B93B8; }
   .bs-count-sub span{ color:#93A0FF; font-weight:600; }
 
@@ -117,7 +126,7 @@
     margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,.07);
   }
   .bs-word-article{ font-size:14px; color:#5A628C; font-weight:500; }
-  .bs-word-head h3{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:24px; margin:0; }
+  .bs-word-head h3{ font-family:'Source Sans 3',sans-serif; font-weight:600; font-size:24px; margin:0; }
   .bs-word-count{
     margin-left:auto; font-size:13px; font-weight:600; color:#93A0FF;
     padding:4px 12px; border-radius:999px; background:rgba(90,108,243,.14);
@@ -154,7 +163,7 @@
   }
   .bs-modal-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:18px; }
   .bs-modal-article{ font-size:13px; color:#5A628C; }
-  .bs-modal-label{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; }
+  .bs-modal-label{ font-family:'Source Sans 3',sans-serif; font-weight:600; font-size:22px; }
   .bs-modal-close{
     margin-left:auto; width:32px; height:32px; border-radius:8px;
     border:1px solid rgba(255,255,255,.12); background:transparent;
