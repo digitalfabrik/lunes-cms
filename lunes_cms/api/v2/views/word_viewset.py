@@ -1,22 +1,28 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
+from django.contrib.auth import get_user
 from django.db.models import Prefetch, QuerySet
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from ....bildschatz.access import may_use_bildschatz
 from ....cmsv2.areas import published_units, published_words
 from ....cmsv2.models import Unit, Word
 from ....cmsv2.models.unit import UnitWordRelation
 from ..matomo_tracking import matomo_tracking
 from ..serializers import WordSerializer
 from .area_scoped_mixin import AreaScopedMixin
+
+if TYPE_CHECKING:
+    from django.contrib.auth.base_user import AbstractBaseUser
+    from django.contrib.auth.models import AnonymousUser
 
 #: The minimum length a ``search`` term has to have
 MIN_SEARCH_LENGTH = 3
@@ -34,7 +40,8 @@ MIN_SEARCH_LENGTH = 3
                 "(at least 3 characters, otherwise the request is rejected with "
                 "HTTP 400). When given, all public images of a word are returned, "
                 "including the images defined on its released unit relations (not "
-                "only the word's default image)."
+                "only the word's default image). Until Bildschatz is released to the "
+                "public, searching requires a login to the CMS (HTTP 403 otherwise)."
             ),
         )
     ]
@@ -50,7 +57,9 @@ class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     term contains the given string (case-insensitive). The term has to be at least
     three characters long, otherwise the request is rejected with HTTP 400. When
     searching, the returned images include the images defined on the word's released
-    unit relations in addition to the word's default image.
+    unit relations in addition to the word's default image. Until Bildschatz is
+    released to the public, searching requires a login to the CMS, otherwise the
+    request is rejected with HTTP 403.
     """
 
     serializer_class = WordSerializer
@@ -65,6 +74,21 @@ class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
     def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Retrieve a single word with Matomo tracking."""
         return super().retrieve(request, *args, **kwargs)
+
+    def _session_user(self) -> AbstractBaseUser | AnonymousUser:
+        """
+        The user logged in to the CMS in this browser session.
+
+        The API itself only knows area tokens, but the Bildschatz website calls it
+        from the same site, so the session cookie of a CMS login comes along. The
+        user is read from the session rather than from the request, because the
+        REST framework replaces the user of the request with the result of its own
+        authentication.
+
+        :return: The logged in user, or an anonymous user
+        """
+        # pylint: disable=protected-access
+        return get_user(self.request._request)
 
     def get_queryset(self) -> QuerySet[Word]:
         """
@@ -91,6 +115,10 @@ class WordViewSet(AreaScopedMixin, viewsets.ModelViewSet):
 
         search = self.request.query_params.get("search")
         if search is not None:
+            if not may_use_bildschatz(self._session_user()):
+                raise PermissionDenied(
+                    _("Searching words requires a login to the CMS.")
+                )
             search = search.strip()
             if len(search) < MIN_SEARCH_LENGTH:
                 raise ValidationError(

@@ -7,8 +7,10 @@ from __future__ import annotations
 from collections.abc import Iterator
 
 import pytest
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.db import transaction
+from django.test import Client
 from pytest_django.plugin import DjangoDbBlocker
 
 
@@ -31,3 +33,19 @@ def load_test_data(
         call_command("loaddata", "test_data")
         yield
         transaction.set_rollback(True)
+
+
+@pytest.fixture(name="logged_in_client")
+def fixture_logged_in_client(db: None) -> Client:
+    """
+    A client that is logged in to the CMS as a staff user
+
+    :param db: The fixture providing database access
+    :type db: :fixture:`db`
+    """
+    user = get_user_model().objects.create_user(
+        username="logged-in-tester", password="secret", is_staff=True
+    )
+    client = Client()
+    client.force_login(user)
+    return client
