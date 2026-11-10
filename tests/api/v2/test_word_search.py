@@ -98,3 +98,12 @@ def test_search_returns_every_public_image_of_a_word(
     for word in logged_in_client.get(WORDS_ENDPOINT, {"search": "schraube"}).json():
         assert word["images"], f"word {word['word']} should have at least one image"
         assert len(word["images"]) >= len(default_images.get(word["id"], []))
+
+
+@pytest.mark.django_db
+def test_ai_generated_images_are_a_subset_of_the_images(
+    load_test_data: None, logged_in_client: Client
+) -> None:
+    """Every word lists its AI-generated images, all of which are among its images."""
+    for word in logged_in_client.get(WORDS_ENDPOINT, {"search": "schraube"}).json():
+        assert set(word["ai_generated_images"]) <= set(word["images"])

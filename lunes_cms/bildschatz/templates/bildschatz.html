@@ -129,6 +129,10 @@
   .bs-state .bs-state-text{ font-size:18px; color:#8B93B8; }
 
   .bs-word-list{ display:flex; flex-direction:column; gap:44px; }
+  .bs-ai-note{
+    margin:56px 0 0; padding:16px 20px; border-radius:12px; font-size:14px; line-height:1.5;
+    color:#8B93B8; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  }
   .bs-word-head{
     display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
     margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,.07);
@@ -146,7 +150,7 @@
     position:relative; aspect-ratio:4/3; border-radius:14px; overflow:hidden;
     cursor:pointer; border:1px solid rgba(255,255,255,.09); background:#0A1230;
   }
-  .bs-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .bs-card img{ width:100%; height:100%; object-fit:contain; display:block; }
   .bs-card-dim{
     position:absolute; left:10px; bottom:10px; font-family:monospace; font-size:11px;
     color:#B9C2FF; background:rgba(7,12,34,.6); padding:3px 8px; border-radius:6px;
@@ -259,6 +263,11 @@
       <span class="bs-count-sub" id="bs-count-sub"></span>
     </div>
     <div id="bs-word-list" class="bs-word-list"></div>
+    <p class="bs-ai-note">
+      Einige Bilder wurden mit KI erstellt. Du erkennst sie am Kennzeichen „AI GENERATED“ der EU;
+      zusätzlich sind sie maschinenlesbar markiert. Bitte entferne diese Kennzeichnung nicht,
+      wenn du die Bilder weiterverwendest.
+    </p>
   </div>
 </div>
 
@@ -519,13 +528,21 @@
     return section;
   }
 
+  function isAiGenerated(word, url) {
+    return (word.ai_generated_images || []).indexOf(url) !== -1;
+  }
+
+  function imageAlt(word, url) {
+    return (isAiGenerated(word, url) ? "KI-generiertes Bild: " : "Bild: ") + word.word;
+  }
+
   function renderCard(word, url) {
     var card = document.createElement("div");
     card.className = "bs-card";
 
     var img = document.createElement("img");
     img.loading = "lazy";
-    img.alt = word.word;
+    img.alt = imageAlt(word, url);
     img.src = url;
 
     var dim = document.createElement("div");
@@ -562,7 +579,7 @@
     els.modalArticle.textContent = word.article || "";
     els.modalLabel.textContent = word.word;
     els.modalImgEl.src = url;
-    els.modalImgEl.alt = word.word;
+    els.modalImgEl.alt = imageAlt(word, url);
     els.overlay.classList.remove("bs-hidden");
   }
 

@@ -21,6 +21,11 @@ class WordSerializer(serializers.ModelSerializer):
     images = serializers.ListSerializer(
         child=serializers.ImageField(), source="images_for_api"
     )
+    ai_generated_images = serializers.ListSerializer(
+        child=serializers.ImageField(),
+        source="ai_generated_images_for_api",
+        help_text="The images of 'images' that are AI-generated",
+    )
     example_sentence = serializers.SerializerMethodField()
     example_sentence_audio = serializers.SerializerMethodField()
     migrated = serializers.SerializerMethodField()
@@ -72,6 +77,7 @@ class WordSerializer(serializers.ModelSerializer):
             "pronunciation",
             "alternative_words",
             "images",
+            "ai_generated_images",
             "audio",
             "example_sentence",
             "example_sentence_audio",

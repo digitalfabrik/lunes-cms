@@ -23,6 +23,7 @@ from ..validators import (
 from .area import Area
 from .job import default_area_id
 from .static import (
+    AI_IMAGE_SOURCES,
     CheckStatus,
     convert_image_to_webp,
     convert_umlaute_audio,
@@ -375,12 +376,32 @@ class Word(models.Model):
         Returns:
             list[str]: A list of images that belong to this word.
         """
+        return [image for image, _source in self._images_and_sources_for_api()]
+
+    def ai_generated_images_for_api(self) -> list[ImageFieldFile]:
+        """
+        Returns the images of :meth:`images_for_api` that are AI-generated, so that
+        clients can disclose them as such (EU AI Act Art. 50, issue #936).
+
+        Returns:
+            list[str]: A list of the AI-generated images of this word.
+        """
+        return [
+            image
+            for image, source in self._images_and_sources_for_api()
+            if source in AI_IMAGE_SOURCES
+        ]
+
+    def _images_and_sources_for_api(self) -> list[tuple[ImageFieldFile, str]]:
+        """
+        The images of :meth:`images_for_api`, each with its image source.
+        """
         images = [
-            relation.image
+            (relation.image, relation.image_source)
             for relation in getattr(self, "unit_word_relations_of_job", [])
         ]
         if self.image_check_status == CheckStatus.CONFIRMED:
-            images.append(self.image)
+            images.append((self.image, self.image_source))
 
         return images
 

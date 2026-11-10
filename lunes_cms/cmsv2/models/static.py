@@ -72,6 +72,12 @@ class ImageSource(models.TextChoices):
     AI_MARKED = "AI_MARKED", _("AI-generated, labeled afterwards")
 
 
+#: The image sources of AI-generated images, whether they carry the label or not
+AI_IMAGE_SOURCES = frozenset(
+    (ImageSource.AI_UNLABELED, ImageSource.AI_LABELED, ImageSource.AI_MARKED)
+)
+
+
 def resolve_image_source(
     current: str, has_image: bool, image_updated: bool, explicit: str | None
 ) -> str:
