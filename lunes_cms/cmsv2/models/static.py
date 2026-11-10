@@ -289,6 +289,22 @@ def is_reviewer(user: User | AnonymousUser) -> bool:
     return user.has_perm("cmsv2.can_review")
 
 
+def is_only_reviewer(user: User | AnonymousUser) -> bool:
+    """
+    Check if reviewing is the only thing the user may do, e.g. because
+    they are only in the group of the experts. Such users have no use for
+    the admin dashboard.
+
+    :param user: the user to check
+    :return: whether the review permission is the only permission of the user
+    """
+    return (
+        user.is_active
+        and not user.is_superuser
+        and user.get_all_permissions() == {"cmsv2.can_review"}
+    )
+
+
 def get_color_by_review_status(review_status: str) -> str:
     """
     Get css class name for review status

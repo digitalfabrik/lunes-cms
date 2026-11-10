@@ -5,10 +5,13 @@ specify autocomplete_fields, search_fields and nested modules
 
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from django.contrib import admin
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 
 from .admins import (
     AreaAdmin,
@@ -32,6 +35,7 @@ from .models import (
     UnitWordRelation,
     Word,
 )
+from .models.static import is_only_reviewer
 
 
 # pylint: disable=unused-argument
@@ -48,6 +52,31 @@ def has_permission(self: admin.AdminSite, request: HttpRequest) -> bool:
 
 
 admin.AdminSite.has_permission = has_permission  # type: ignore[method-assign]
+
+_admin_index = admin.AdminSite.index
+
+
+def index(
+    self: admin.AdminSite,
+    request: HttpRequest,
+    extra_context: dict[str, Any] | None = None,
+) -> HttpResponse:
+    """
+    Show the admin dashboard, except to users who may only review: they are
+    sent to their review view instead, e.g. right after logging in.
+
+    :param self: A handle to the :class:`admin.AdminSite`
+    :param request: current user request
+    :param extra_context: additional context for the template of the dashboard
+
+    :return: the dashboard or the redirect to the review view
+    """
+    if is_only_reviewer(request.user):
+        return redirect("expert_access:index")
+    return _admin_index(self, request, extra_context)
+
+
+admin.AdminSite.index = index  # type: ignore[method-assign]
 
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Job, JobAdmin)
