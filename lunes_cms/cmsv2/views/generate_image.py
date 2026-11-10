@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from lunes_cms.cmsv2.areas import visible_unit_word_relations, visible_words
-from lunes_cms.cmsv2.models import UnitWordRelation, Word
+from lunes_cms.cmsv2.models import ImagePrompt, UnitWordRelation, Word
 from lunes_cms.cmsv2.services.image_generation import (
     build_word_image_prompt,
     GENERATED_IMAGE_EXTENSION,
@@ -29,10 +29,14 @@ logger = logging.getLogger(__name__)
 
 
 def _prompt_from_request(
-    request: HttpRequest, word: Word, unit: Unit | None = None
+    request: HttpRequest,
+    word: Word,
+    unit: Unit | None = None,
+    image_prompt: ImagePrompt | None = None,
 ) -> str:
     """
-    Builds the image prompt for ``word``.
+    Builds the image prompt for ``word``, from the default stored prompt
+    unless ``image_prompt`` is given.
 
     The prompt context (unit, job) is resolved from the database by
     ``build_word_image_prompt``; the request only contributes the editor's own
@@ -43,6 +47,7 @@ def _prompt_from_request(
         unit=unit,
         additional_info=request.POST.get("additional_info"),
         allow_text_in_image=request.POST.get("allow_text_in_image") == "true",
+        image_prompt=image_prompt,
     )
 
 
@@ -52,12 +57,15 @@ def _generate_temp_image(
     """
     Generates an image for ``word`` and saves it temporarily.
 
-    The generation is recorded for the word's area.
+    The generation is recorded for the word's area, and the stored prompt
+    is marked as used.
     """
-    prompt = _prompt_from_request(request, word, unit)
+    image_prompt = ImagePrompt.get_default()
+    prompt = _prompt_from_request(request, word, unit, image_prompt)
 
     try:
         image_data = openai_image_bytes(prompt, word.area)
+        image_prompt.mark_used()
 
         os.makedirs(settings.TEMP_IMAGE_DIR, exist_ok=True)
 

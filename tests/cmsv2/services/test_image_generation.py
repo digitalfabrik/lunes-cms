@@ -15,7 +15,14 @@ import pytest
 from django.core.files.base import ContentFile
 from pytest_django import Settings
 
-from lunes_cms.cmsv2.models import Area, Job, Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models import (
+    Area,
+    ImagePrompt,
+    Job,
+    Unit,
+    UnitWordRelation,
+    Word,
+)
 from lunes_cms.cmsv2.models import word as word_module
 from lunes_cms.cmsv2.models.static import ImageSource
 from lunes_cms.cmsv2.services import image_generation
@@ -100,6 +107,21 @@ def test_drain_generates_image_for_word_missing_image(fast_worker: None) -> None
     assert word.image.read() == b"fake-png"
     assert word.image_source == ImageSource.AI_LABELED
     assert image_call.call_count == 1
+    assert ImagePrompt.get_default().is_used
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_leaves_the_prompt_unused_if_generation_fails(
+    fast_worker: None,
+) -> None:
+    _make_word(word="Hammer")
+
+    with mock.patch.object(
+        image_generation, "openai_image_bytes", side_effect=ValueError("boom")
+    ):
+        _run_drain()
+
+    assert not ImagePrompt.get_default().is_used
 
 
 @pytest.mark.django_db(transaction=True)
@@ -234,6 +256,7 @@ def _fake_openai_client() -> mock.MagicMock:
     return client
 
 
+@pytest.mark.django_db
 def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     bare = image_generation.build_image_prompt("Hammer")
     # Quotes around the the word make it more likely to have the word printed in the image
@@ -252,21 +275,91 @@ def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     assert "Tischler/in" in enriched
 
 
-@pytest.mark.skip(reason="Diversity prompt temporarily disabled, see #1526")
-def test_build_image_prompt_asks_for_diverse_people() -> None:
-    for prompt in (
-        image_generation.build_image_prompt("Bäcker/in"),
-        image_generation.build_image_prompt("Rechnung", allow_text_in_image=True),
-    ):
-        assert image_generation.DIVERSITY_PROMPT in prompt
+def _legacy_build_image_prompt(
+    word_text: str,
+    unit_title: str | None = None,
+    additional_info: str | None = None,
+    job_title: str | None = None,
+    allow_text_in_image: bool = False,
+) -> str:
+    """
+    ``build_image_prompt`` as it was before the prompt moved into the
+    database (#1143), to check the migrated default renders the same.
+    """
+    prompt = (
+        f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
+    )
+    if job_title:
+        prompt += f" Beruflicher Kontext: {job_title}."
+    if unit_title:
+        prompt += f" Thematischer Kontext: {unit_title}."
+    prompt += (
+        " Nur das zentrale Motiv ist zu sehen, vor einem neutralen weißen Hintergrund,"
+        " ohne zusätzliche Objekte. Fotorealistisch, keine Illustration, kein Rendering."
+    )
+    if additional_info:
+        prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
+    if not allow_text_in_image:
+        prompt += (
+            " Außer der unten beschriebenen Kennzeichnung enthält das Bild keinerlei"
+            " Text, Buchstaben, Zahlen, Beschriftungen, Untertitel oder Logos."
+        )
+    prompt += image_generation.AI_LABEL_PROMPT
+    return prompt
 
 
+@pytest.mark.django_db
+@pytest.mark.parametrize("job_title", [None, "", "Tischler/in"])
+@pytest.mark.parametrize("unit_title", [None, "", "Werkzeuge & Maschinen"])
+@pytest.mark.parametrize("additional_info", [None, "", "Profilansicht <seitlich>"])
+@pytest.mark.parametrize("allow_text_in_image", [False, True])
+def test_the_migrated_default_prompt_renders_the_previous_prompt(
+    job_title: str | None,
+    unit_title: str | None,
+    additional_info: str | None,
+    allow_text_in_image: bool,
+) -> None:
+    kwargs: dict[str, Any] = {
+        "unit_title": unit_title,
+        "additional_info": additional_info,
+        "job_title": job_title,
+        "allow_text_in_image": allow_text_in_image,
+    }
+
+    assert image_generation.build_image_prompt(
+        'Säge & "Hammer"', **kwargs
+    ) == _legacy_build_image_prompt('Säge & "Hammer"', **kwargs)
+
+
+@pytest.mark.django_db
+def test_build_image_prompt_renders_the_given_prompt() -> None:
+    other = ImagePrompt.objects.create(name="Skizze", prompt="Eine Skizze: {{ word }}.")
+
+    prompt = image_generation.build_image_prompt("Hammer", image_prompt=other)
+
+    assert prompt.startswith("Eine Skizze: Hammer.")
+    assert prompt.endswith(image_generation.AI_LABEL_PROMPT)
+
+
+@pytest.mark.django_db
+def test_build_image_prompt_renders_the_default_prompt() -> None:
+    ImagePrompt.objects.create(
+        name="Skizze", prompt="Eine Skizze: {{ word }}.", is_default=True
+    )
+
+    assert image_generation.build_image_prompt("Hammer").startswith(
+        "Eine Skizze: Hammer."
+    )
+
+
+@pytest.mark.django_db
 def test_build_image_prompt_bans_text_by_default() -> None:
     prompt = image_generation.build_image_prompt("Rechnung")
 
     assert "keinerlei Text" in prompt
 
 
+@pytest.mark.django_db
 def test_build_image_prompt_always_requests_the_ai_label() -> None:
     """EU AI Act Art. 50 (issue #936): every generated image carries the label."""
     for prompt in (
@@ -283,6 +376,7 @@ def test_the_label_prompt_names_the_label_width() -> None:
     )
 
 
+@pytest.mark.django_db
 def test_build_image_prompt_exempts_the_label_from_the_text_ban() -> None:
     """The ban and the label instruction would otherwise contradict each other."""
     prompt = image_generation.build_image_prompt("Rechnung")
@@ -331,6 +425,7 @@ def test_generated_image_extension_matches_the_generated_format() -> None:
     assert image_generation.GENERATED_IMAGE_EXTENSION == ".webp"
 
 
+@pytest.mark.django_db
 def test_build_image_prompt_allows_text_when_requested() -> None:
     """Issue #918: items like a receipt need text/numbers to look right."""
     prompt = image_generation.build_image_prompt("Rechnung", allow_text_in_image=True)

@@ -681,6 +681,7 @@ JAZZMIN_SETTINGS = {
         "cmsv2.Review": "fas fa-user-check",
         "cmsv2.Feedback": "fas fa-comment",
         "cmsv2.Notification": "fas fa-bell",
+        "cmsv2.ImagePrompt": "fas fa-pen-fancy",
     },
     "site_version": _cms_version,
     # Legal links in the user menu. Only rendered if the respective URL is configured.

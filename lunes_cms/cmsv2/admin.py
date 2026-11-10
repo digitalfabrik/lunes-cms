@@ -13,6 +13,7 @@ from django.http import HttpRequest
 from .admins import (
     AreaAdmin,
     FeedbackAdmin,
+    ImagePromptAdmin,
     JobAdmin,
     LunesGroupAdmin,
     LunesUserAdmin,
@@ -25,6 +26,7 @@ from .admins import (
 from .models import (
     Area,
     Feedback,
+    ImagePrompt,
     Job,
     Notification,
     Review,
@@ -57,6 +59,7 @@ admin.site.register(Word, WordAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(Notification, NotificationAdmin)
+admin.site.register(ImagePrompt, ImagePromptAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, LunesGroupAdmin)
 admin.site.unregister(User)
