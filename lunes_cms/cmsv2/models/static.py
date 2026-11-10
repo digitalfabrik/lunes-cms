@@ -295,6 +295,13 @@ def is_reviewer(user: User | AnonymousUser) -> bool:
     return user.has_perm("cmsv2.can_review")
 
 
+def should_redirect_to_expert_view(user: User | AnonymousUser) -> bool:
+    """
+    Whether the user should be redirected to expert view.
+    """
+    return not user.is_superuser and is_reviewer(user)
+
+
 def get_color_by_review_status(review_status: str) -> str:
     """
     Get css class name for review status
