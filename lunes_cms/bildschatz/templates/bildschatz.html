@@ -78,6 +78,14 @@
   }
   .bs-searchbar .bs-pill{ font-size:16px; padding:13px 28px; flex:none; }
 
+  /* ---------- clear button ---------- */
+  .bs-clear{
+    flex:none; display:flex; align-items:center; justify-content:center;
+    width:28px; height:28px; padding:0; border:none; border-radius:50%;
+    background:rgba(255,255,255,.08); color:#8B93B8; cursor:pointer;
+  }
+  .bs-clear:hover{ background:rgba(255,255,255,.16); color:#EAECF7; }
+
   /* ---------- validation ---------- */
   .bs-invalid{ border-color:#F26B5E !important; }
   .bs-hint{ font-size:14px; color:#F26B5E; }
@@ -216,6 +224,7 @@
     <div class="bs-searchbar" id="bs-home-bar">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex:none; opacity:.6;"><circle cx="11" cy="11" r="7" stroke="#93A0FF" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#93A0FF" stroke-width="2" stroke-linecap="round"/></svg>
       <input id="bs-home-input" placeholder="Suche ein Wort …" autocomplete="off" minlength="3" />
+      <button type="button" id="bs-home-clear" class="bs-clear bs-hidden" aria-label="Suchbegriff löschen" title="Suchbegriff löschen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
       <button id="bs-home-go" class="bs-pill">Suchen</button>
     </div>
     <div id="bs-home-hint" class="bs-hint bs-home-hint bs-hidden">Bitte gib mindestens 3 Zeichen ein.</div>
@@ -237,6 +246,7 @@
       <div class="bs-header-search" id="bs-results-bar">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none; opacity:.55;"><circle cx="11" cy="11" r="7" stroke="#93A0FF" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#93A0FF" stroke-width="2" stroke-linecap="round"/></svg>
         <input id="bs-results-input" autocomplete="off" minlength="3" />
+        <button type="button" id="bs-results-clear" class="bs-clear bs-hidden" aria-label="Suchbegriff löschen" title="Suchbegriff löschen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
         <button id="bs-results-go" class="bs-pill">Suchen</button>
       </div>
       <div id="bs-results-hint" class="bs-results-hint bs-hidden">Bitte gib mindestens 3 Zeichen ein.</div>
@@ -290,11 +300,13 @@
     homeInput: document.getElementById("bs-home-input"),
     homeGo: document.getElementById("bs-home-go"),
     homeHint: document.getElementById("bs-home-hint"),
+    homeClear: document.getElementById("bs-home-clear"),
     results: document.getElementById("bs-results"),
     resultsBar: document.getElementById("bs-results-bar"),
     resultsInput: document.getElementById("bs-results-input"),
     resultsGo: document.getElementById("bs-results-go"),
     resultsHint: document.getElementById("bs-results-hint"),
+    resultsClear: document.getElementById("bs-results-clear"),
     brand: document.getElementById("bs-brand"),
     count: document.getElementById("bs-count"),
     countSub: document.getElementById("bs-count-sub"),
@@ -362,6 +374,20 @@
     if (hint) hint.classList.toggle("bs-hidden", !show);
   }
 
+  function updateClear(input, button) {
+    button.classList.toggle("bs-hidden", input.value === "");
+  }
+
+  function setupClear(input, button, bar, hint) {
+    input.addEventListener("input", function () { updateClear(input, button); });
+    button.addEventListener("click", function () {
+      input.value = "";
+      updateClear(input, button);
+      toggleHint(bar, hint, false);
+      input.focus();
+    });
+  }
+
   function clearHints() {
     toggleHint(els.homeBar, els.homeHint, false);
     toggleHint(els.resultsBar, els.resultsHint, false);
@@ -398,6 +424,7 @@
     els.home.classList.remove("bs-hidden");
     els.results.classList.add("bs-hidden");
     els.homeInput.value = "";
+    updateClear(els.homeInput, els.homeClear);
     els.homeInput.focus();
   }
 
@@ -406,6 +433,7 @@
     els.home.classList.add("bs-hidden");
     els.results.classList.remove("bs-hidden");
     els.resultsInput.value = q;
+    updateClear(els.resultsInput, els.resultsClear);
     fetchResults(q);
   }
 
@@ -559,6 +587,8 @@
     if (isValidTerm(els.resultsInput.value)) toggleHint(els.resultsBar, els.resultsHint, false);
   });
   els.brand.addEventListener("click", goHome);
+  setupClear(els.homeInput, els.homeClear, els.homeBar, els.homeHint);
+  setupClear(els.resultsInput, els.resultsClear, els.resultsBar, els.resultsHint);
 
   els.overlay.addEventListener("click", closeModal);
   els.modal.addEventListener("click", function (e) { e.stopPropagation(); });
