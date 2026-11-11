@@ -1597,6 +1597,9 @@ msgstr "Vokabelprüfungen"
 msgid "Can review assigned reviews"
 msgstr "Kann zugewiesene Prüfungen bearbeiten"
 
+msgid "Can assign reviews to users"
+msgstr "Kann Prüfungen zuweisen"
+
 #: cmsv2/models/static.py
 msgid "Noun"
 msgstr "Substantiv"

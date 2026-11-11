@@ -5,7 +5,8 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     """
-    Fixes an incorrect plural form of the Review model.
+    Fixes an incorrect plural form of the Review model and adds the permission
+    to assign reviews.
     """
 
     dependencies = [
@@ -16,7 +17,10 @@ class Migration(migrations.Migration):
         migrations.AlterModelOptions(
             name="review",
             options={
-                "permissions": [("can_review", "Can review assigned reviews")],
+                "permissions": [
+                    ("can_review", "Can review assigned reviews"),
+                    ("can_assign_reviews", "Can assign reviews to users"),
+                ],
                 "verbose_name": "Review",
                 "verbose_name_plural": "Reviews",
             },

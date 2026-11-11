@@ -4,7 +4,8 @@ Tests for the ``assign_to_user`` bulk action on UnitAdmin (#644).
 Covers the refactor that moved review assignment from the Unit level to the
 unit-word level: a word shared by several selected units is reviewed once per
 unit it belongs to, already-assigned unit-word relations must be skipped, and
-the action stays superuser-only.
+the action requires the ``can_assign_reviews`` permission and is limited to the area
+of the user.
 """
 
 from __future__ import annotations
@@ -111,26 +112,53 @@ def test_assign_to_user_sets_assigned_by_to_acting_admin(
     assert review.assigned_by == admin_user
 
 
-def test_assign_to_user_denies_non_superuser(
+def test_assign_to_user_is_hidden_from_an_anonymous_user(
     db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
 ) -> None:
-    non_superuser = get_user_model().objects.create_user(username="editor")
-
-    request = _post_request(request_factory, {"apply": "1"})
-    request.user = non_superuser
-
-    with pytest.raises(PermissionDenied):
-        unit_admin.assign_to_user(request, Unit.objects.none())
-
-
-def test_assign_to_user_denies_anonymous_user(
-    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
-) -> None:
-    request = _post_request(request_factory, {"apply": "1"})
+    request = request_factory.get("/")
     request.user = AnonymousUser()
 
-    with pytest.raises(PermissionDenied):
-        unit_admin.assign_to_user(request, Unit.objects.none())
+    assert "assign_to_user" not in unit_admin.get_actions(request)
+
+
+def test_assign_to_user_is_offered_to_a_user_who_may_assign(
+    unit_admin: UnitAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+) -> None:
+    request = request_factory.get("/")
+    request.user = client_with_permissions("can_assign_reviews").user
+
+    assert "assign_to_user" in unit_admin.get_actions(request)
+
+
+def test_assign_to_user_only_assigns_units_of_the_area_of_the_user(
+    unit_admin: UnitAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+    main_app_area: Area,
+) -> None:
+    other_area = Area.objects.create(name="Area B")
+    own_unit = Unit.objects.create(title="Unit A", area=main_app_area)
+    foreign_unit = Unit.objects.create(title="Unit B", area=other_area)
+    own_unit_word = UnitWordRelation.objects.create(
+        unit=own_unit,
+        word=Word.objects.create(word="Hammer", singular_article=1, area=main_app_area),
+    )
+    UnitWordRelation.objects.create(
+        unit=foreign_unit,
+        word=Word.objects.create(word="Zange", singular_article=2, area=other_area),
+    )
+    target_user = get_user_model().objects.create_user(username="reviewer")
+
+    request = _post_request(request_factory, {"apply": "1", "user": target_user.pk})
+    request.user = client_with_permissions("can_assign_reviews").user
+
+    unit_admin.assign_to_user(
+        request, Unit.objects.filter(pk__in=[own_unit.pk, foreign_unit.pk])
+    )
+
+    assert [review.unit_word for review in Review.objects.all()] == [own_unit_word]
 
 
 def test_bulk_release_allows_a_superuser(

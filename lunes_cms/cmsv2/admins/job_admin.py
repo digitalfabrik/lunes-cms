@@ -7,7 +7,6 @@ from zipfile import ZipFile
 
 from django.contrib import admin, messages
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
@@ -25,9 +24,10 @@ from ..areas import (
     scope_jobs,
     validate_job_area,
     validate_unit_jobs,
+    visible_unit_word_relations,
 )
-from ..models import Area, Job, Unit, UnitWordRelation, Word
-from ..reviews import assign_reviews
+from ..models import Area, Job, Unit, Word
+from ..reviews import assign_reviews, may_assign_reviews
 from ..utils import make_safe_filename
 from .area_content_admin import AreaContentAdmin
 from .area_filters import AreaListFilter
@@ -35,7 +35,6 @@ from .word_export_resource import WordExportResource
 
 if TYPE_CHECKING:
     from django.contrib.admin.filters import _ListFilterChoices
-    from django.contrib.admin.options import ActionLocation
     from django.contrib.admin.views.main import ChangeList
     from django.forms import BaseFormSet
     from django.utils.functional import _StrOrPromise
@@ -299,16 +298,9 @@ class JobAdmin(AreaContentAdmin):
             super().get_queryset(request).prefetch_related("units"), request.user
         )
 
-    def get_actions(  # pylint: disable=unused-argument
-        self, request: HttpRequest, action_location: "ActionLocation | None" = None
-    ) -> dict[str, Any]:
-        """
-        Only offer ``assign_to_user`` to superusers
-        """
-        actions = super().get_actions(request)
-        if not request.user.is_authenticated or not request.user.is_superuser:
-            actions.pop("assign_to_user", None)
-        return actions
+    def has_assign_permission(self, request: HttpRequest) -> bool:
+        """Whether the user may assign jobs to other users for review"""
+        return may_assign_reviews(request.user)
 
     def save_related(
         self,
@@ -468,17 +460,16 @@ class JobAdmin(AreaContentAdmin):
             _("%(count)d job(s) have been restored successfully.") % {"count": updated},
         )
 
-    @admin.action(description=_("Assign selected jobs to user"))
+    @admin.action(description=_("Assign selected jobs to user"), permissions=["assign"])
     def assign_to_user(
         self, request: HttpRequest, queryset: QuerySet[Job]
     ) -> HttpResponse | None:
         """
         Assign every unit-word relation of the units of each selected job to a
-        chosen user for review. Superusers only.
+        chosen user for review. Only the jobs and relations visible to the user
+        are considered.
         """
-        if not request.user.is_authenticated or not request.user.is_superuser:
-            raise PermissionDenied
-
+        queryset = scope_jobs(queryset, request.user)
         if "apply" not in request.POST:
             return TemplateResponse(
                 request,
@@ -495,7 +486,11 @@ class JobAdmin(AreaContentAdmin):
             )
 
         reviewer = get_object_or_404(User, pk=request.POST["user"])
-        unit_words = UnitWordRelation.objects.filter(unit__jobs__in=queryset).distinct()
+        unit_words = (
+            visible_unit_word_relations(request.user)
+            .filter(unit__jobs__in=queryset)
+            .distinct()
+        )
         message = assign_reviews(unit_words, reviewer=reviewer, assigner=request.user)
         self.message_user(request, message)
         return None

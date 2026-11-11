@@ -8,18 +8,20 @@ view archived jobs (issue #890), and the ``assign_to_user`` bulk action.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import pytest
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.template.response import TemplateResponse
 from django.test import RequestFactory
 
 from lunes_cms.cmsv2.admins.job_admin import ArchivedFilter, JobAdmin
-from lunes_cms.cmsv2.models import Job, Review, Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models import Area, Job, Review, Unit, UnitWordRelation, Word
+from tests.cmsv2.helpers import PermissionClient
 
 
 @pytest.fixture
@@ -160,7 +162,8 @@ def test_archived_filter_default_choice_is_active(
 
 #
 # ``assign_to_user``: assigns every unit word of the units of the selected
-# jobs to a reviewer. Superusers only.
+# jobs to a reviewer. Requires the ``can_assign_reviews`` permission and is limited to
+# the area of the user.
 #
 
 
@@ -266,24 +269,13 @@ def test_assign_to_user_asks_for_the_reviewer_first(
     assert not Review.objects.exists()
 
 
-def test_assign_to_user_denies_non_superuser(
+def test_assign_to_user_is_hidden_from_an_anonymous_user(
     db: None, job_admin: JobAdmin, request_factory: RequestFactory
 ) -> None:
-    request = _post_request(request_factory, {"apply": "1"})
-    request.user = get_user_model().objects.create_user(username="editor")
-
-    with pytest.raises(PermissionDenied):
-        job_admin.assign_to_user(request, Job.objects.none())
-
-
-def test_assign_to_user_denies_anonymous_user(
-    db: None, job_admin: JobAdmin, request_factory: RequestFactory
-) -> None:
-    request = _post_request(request_factory, {"apply": "1"})
+    request = request_factory.get("/")
     request.user = AnonymousUser()
 
-    with pytest.raises(PermissionDenied):
-        job_admin.assign_to_user(request, Job.objects.none())
+    assert "assign_to_user" not in job_admin.get_actions(request)
 
 
 def test_assign_to_user_is_hidden_from_a_non_superuser(
@@ -302,3 +294,47 @@ def test_assign_to_user_is_offered_to_a_superuser(
     request.user = admin_user
 
     assert "assign_to_user" in job_admin.get_actions(request)
+
+
+def test_assign_to_user_is_offered_to_a_user_who_may_assign(
+    job_admin: JobAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+) -> None:
+    request = request_factory.get("/")
+    request.user = client_with_permissions("can_assign_reviews").user
+
+    assert "assign_to_user" in job_admin.get_actions(request)
+
+
+def test_assign_to_user_only_assigns_jobs_of_the_area_of_the_user(
+    job_admin: JobAdmin,
+    request_factory: RequestFactory,
+    client_with_permissions: Callable[..., PermissionClient],
+    reviewer: User,
+    main_app_area: Area,
+) -> None:
+    other_area = Area.objects.create(name="Area B")
+    own_job = Job.objects.create(name="Bäcker/-in", area=main_app_area)
+    foreign_job = Job.objects.create(name="Koch/Köchin", area=other_area)
+    own_unit = Unit.objects.create(title="Unit A", area=main_app_area)
+    own_unit.jobs.add(own_job)
+    foreign_unit = Unit.objects.create(title="Unit B", area=other_area)
+    foreign_unit.jobs.add(foreign_job)
+    own_unit_word = UnitWordRelation.objects.create(
+        unit=own_unit,
+        word=Word.objects.create(word="Ofen", singular_article=1, area=main_app_area),
+    )
+    UnitWordRelation.objects.create(
+        unit=foreign_unit,
+        word=Word.objects.create(word="Topf", singular_article=1, area=other_area),
+    )
+
+    request = _post_request(request_factory, {"apply": "1", "user": reviewer.pk})
+    request.user = client_with_permissions("can_assign_reviews").user
+
+    job_admin.assign_to_user(
+        request, Job.objects.filter(pk__in=[own_job.pk, foreign_job.pk])
+    )
+
+    assert [review.unit_word for review in Review.objects.all()] == [own_unit_word]

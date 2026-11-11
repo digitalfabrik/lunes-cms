@@ -18,6 +18,13 @@ if TYPE_CHECKING:
     from django_stubs_ext import WithAnnotations
 
 
+def may_assign_reviews(user: User | AnonymousUser) -> bool:
+    """
+    Whether the given user may assign reviews to other users.
+    """
+    return user.has_perm("cmsv2.can_assign_reviews")
+
+
 class ReviewRelations(TypedDict):
     """
     The relations prefetched by :func:`available_units_per_word`.

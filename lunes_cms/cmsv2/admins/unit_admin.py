@@ -25,13 +25,13 @@ from lunes_cms.cmsv2.areas import (
     validate_unit_area,
     validate_unit_jobs,
     visible_jobs,
+    visible_unit_word_relations,
 )
 from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
 from lunes_cms.cmsv2.notifications import notify_words_added
-from lunes_cms.cmsv2.reviews import assign_reviews
+from lunes_cms.cmsv2.reviews import assign_reviews, may_assign_reviews
 
 if TYPE_CHECKING:
-    from django.contrib.admin.options import ActionLocation
     from django.db.models import ManyToManyField
     from django.forms import BaseFormSet
     from django.utils.functional import _StrOrPromise
@@ -261,17 +261,9 @@ class UnitAdmin(AreaContentAdmin):
             super().get_queryset(request).prefetch_related("jobs"), request.user
         )
 
-    def get_actions(  # pylint: disable=unused-argument
-        self, request: HttpRequest, action_location: "ActionLocation | None" = None
-    ) -> dict[str, Any]:
-        """
-        Only offer ``assign_to_user`` to superusers, so a non-superuser does
-        not see an action in the dropdown that immediately denies them.
-        """
-        actions = super().get_actions(request)
-        if not request.user.is_authenticated or not request.user.is_superuser:
-            actions.pop("assign_to_user", None)
-        return actions
+    def has_assign_permission(self, request: HttpRequest) -> bool:
+        """Whether the user may assign units to other users for review"""
+        return may_assign_reviews(request.user)
 
     def formfield_for_manytomany(
         self,
@@ -335,17 +327,17 @@ class UnitAdmin(AreaContentAdmin):
             },
         )
 
-    @admin.action(description=_("Assign selected units to user"))
+    @admin.action(
+        description=_("Assign selected units to user"), permissions=["assign"]
+    )
     def assign_to_user(
         self, request: HttpRequest, queryset: QuerySet[Unit]
     ) -> HttpResponse | None:
         """
         Assign every unit-word relation of each selected unit to a chosen user
-        for review. Superusers only.
+        for review. Only the units and relations visible to the user are considered.
         """
-        if not request.user.is_authenticated or not request.user.is_superuser:
-            raise PermissionDenied
-
+        queryset = scope_units(queryset, request.user)
         if "apply" not in request.POST:
             return TemplateResponse(
                 request,
@@ -362,7 +354,7 @@ class UnitAdmin(AreaContentAdmin):
             )
 
         reviewer = get_object_or_404(User, pk=request.POST["user"])
-        unit_words = UnitWordRelation.objects.filter(unit__in=queryset)
+        unit_words = visible_unit_word_relations(request.user).filter(unit__in=queryset)
         message = assign_reviews(unit_words, reviewer=reviewer, assigner=request.user)
         self.message_user(request, message)
         return None

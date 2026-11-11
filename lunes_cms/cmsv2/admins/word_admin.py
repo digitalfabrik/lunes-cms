@@ -5,7 +5,6 @@ from typing import Any, TYPE_CHECKING
 
 from django.contrib import admin, messages
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
@@ -33,16 +32,25 @@ from lunes_cms.cmsv2.admins.word_inlines import (
     format_html_lazy,
     UnitInline,
 )
-from lunes_cms.cmsv2.areas import scope_words, validate_word_area
+from lunes_cms.cmsv2.areas import (
+    scope_words,
+    validate_word_area,
+    visible_unit_word_relations,
+    visible_units,
+)
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.static import (
     CheckStatus,
     image_upload_warning_html_lazy,
 )
-from lunes_cms.cmsv2.models.unit import Unit, UnitWordRelation
+from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.notifications import notify_words_added
-from lunes_cms.cmsv2.reviews import assign_reviews, available_units_per_word
+from lunes_cms.cmsv2.reviews import (
+    assign_reviews,
+    available_units_per_word,
+    may_assign_reviews,
+)
 from lunes_cms.cmsv2.services.image_generation import image_prompt_context
 from lunes_cms.cmsv2.utils import (
     cache_busted_url,
@@ -53,8 +61,6 @@ from lunes_cms.cmsv2.utils import (
 from lunes_cms.core import settings
 
 if TYPE_CHECKING:
-    from django.contrib.admin.options import ActionLocation
-
     # `_StrOrPromise` only exists in django-stubs, not at runtime.
     from django.utils.functional import _StrOrPromise
 
@@ -266,24 +272,19 @@ class WordAdmin(AreaContentAdmin):
 
     area.short_description = _("area")  # type: ignore[attr-defined]
 
-    def get_actions(  # pylint: disable=unused-argument
-        self, request: HttpRequest, action_location: "ActionLocation | None" = None
-    ) -> dict[str, Any]:
-        """
-        Only offer ``assign_to_user`` to superusers
-        """
-        actions = super().get_actions(request)
-        if not request.user.is_authenticated or not request.user.is_superuser:
-            actions.pop("assign_to_user", None)
-        return actions
+    def has_assign_permission(self, request: HttpRequest) -> bool:
+        """Whether the user may assign words to other users for review"""
+        return may_assign_reviews(request.user)
 
-    @admin.action(description=_("Assign selected words to user"))
+    @admin.action(
+        description=_("Assign selected words to user"), permissions=["assign"]
+    )
     def assign_to_user(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> HttpResponse | None:
         """
         Bulk-create Reviews of the selected words for a chosen user.
-        Superusers only.
+        Only the words, units and unit word relations visible to the user are considered.
 
         First, the user is redirected to a page to selected unit for the selected words, such
         that unit word relations can be assigned for review.
@@ -303,11 +304,9 @@ class WordAdmin(AreaContentAdmin):
                     messages.WARNING,
                 )
 
-        if not request.user.is_authenticated or not request.user.is_superuser:
-            raise PermissionDenied
-
+        queryset = scope_words(queryset, request.user)
         words, words_without_unit = available_units_per_word(
-            queryset, limit_units_to=Unit.objects.all()
+            queryset, limit_units_to=visible_units(request.user)
         )
 
         if "apply" not in request.POST:
@@ -332,7 +331,7 @@ class WordAdmin(AreaContentAdmin):
             )
             for word in words
         ]
-        selected_relations = UnitWordRelation.objects.filter(
+        selected_relations = visible_unit_word_relations(request.user).filter(
             pk__in=selected_relation_ids
         )
 
