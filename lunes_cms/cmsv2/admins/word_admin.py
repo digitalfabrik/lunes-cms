@@ -288,6 +288,21 @@ class WordAdmin(AreaContentAdmin):
         First, the user is redirected to a page to selected unit for the selected words, such
         that unit word relations can be assigned for review.
         """
+
+        def send_message(msg: _StrOrPromise, num_words_without_unit: int) -> None:
+            """Messages the user that the assignment was successful."""
+            self.message_user(request, msg)
+
+            if num_words_without_unit > 0:
+                self.message_user(
+                    request,
+                    _(
+                        "%(count)d word(s) were skipped, because they do not belong to any unit."
+                    )
+                    % {"count": num_words_without_unit},
+                    messages.WARNING,
+                )
+
         if not request.user.is_authenticated or not request.user.is_superuser:
             raise PermissionDenied
 
@@ -324,17 +339,7 @@ class WordAdmin(AreaContentAdmin):
         message = assign_reviews(
             selected_relations, reviewer=user, assigner=request.user
         )
-        self.message_user(request, message)
-
-        if words_without_unit:
-            self.message_user(
-                request,
-                _(
-                    "%(count)d word(s) were skipped, because they do not belong to any unit."
-                )
-                % {"count": len(words_without_unit)},
-                messages.WARNING,
-            )
+        send_message(message, len(words_without_unit))
         return None
 
     def _render_regenerate_widget(  # pylint: disable=too-many-arguments

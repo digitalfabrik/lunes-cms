@@ -347,13 +347,12 @@ class UnitAdmin(AreaContentAdmin):
             raise PermissionDenied
 
         if "apply" not in request.POST:
-            # pylint: disable=protected-access
             return TemplateResponse(
                 request,
                 "admin/cmsv2/assign_units_to_user.html",
                 {
                     **self.admin_site.each_context(request),
-                    "opts": self.model._meta,
+                    "opts": self.opts,
                     "objects": queryset,
                     "users": User.objects.order_by("username"),
                     "action": "assign_to_user",
