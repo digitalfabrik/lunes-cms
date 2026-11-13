@@ -36,7 +36,7 @@ def test_only_reviewer_is_redirected_to_review_view() -> None:
     response = client.get(reverse("admin:index"))
 
     assert response.status_code == 302
-    assert response.url == reverse("expert_access:index")
+    assert response["Location"] == reverse("expert_access:index")
 
 
 def test_reviewer_with_further_permissions_sees_dashboard() -> None:
@@ -73,8 +73,8 @@ def test_login_of_only_reviewer_ends_in_review_view() -> None:
         },
     )
     assert response.status_code == 302
-    assert response.url == reverse("admin:index")
+    assert response["Location"] == reverse("admin:index")
 
-    response = client.get(response.url)
+    response = client.get(response["Location"])
     assert response.status_code == 302
-    assert response.url == reverse("expert_access:index")
+    assert response["Location"] == reverse("expert_access:index")

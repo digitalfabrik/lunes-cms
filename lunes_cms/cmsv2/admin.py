@@ -76,7 +76,7 @@ def index(
     return _admin_index(self, request, extra_context)
 
 
-admin.AdminSite.index = index  # type: ignore[method-assign]
+admin.AdminSite.index = index  # type: ignore[method-assign, assignment]
 
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Job, JobAdmin)
