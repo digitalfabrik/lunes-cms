@@ -4,7 +4,7 @@
 
     /* surfaces */
     --bg: #2B3038;
-    --surface: #343A41;
+    --surface: #32383E;
     --surface-sunken: #22262F;
     --header-bg: #22262F;
     --border: #FFFFFF17;
@@ -17,8 +17,8 @@
     /* accents */
     --brand: #445FFF;
     --primary: #7F9BFF;
-    --success-bg: #397022;
-    --success-bg-hover: #418026;
+    --success-bg: #418026;
+    --success-bg-hover: #51A02E;
     --success-text: #ffffff;
     --danger: #FF7372;
     /* the dialogs colour their hint and submit button per decision */
