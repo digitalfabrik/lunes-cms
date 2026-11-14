@@ -6,6 +6,7 @@ from django.contrib import admin, messages
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import AnonymousUser
+from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -43,12 +44,20 @@ class ImportCSVForm(forms.Form):
     )
 
     def __init__(
-        self, *args: Any, user: AbstractBaseUser | AnonymousUser, **kwargs: Any
+        self,
+        *args: Any,
+        user: AbstractBaseUser | AnonymousUser,
+        fixed_job: Job | None,
+        **kwargs: Any,
     ) -> None:
+        if fixed_job:
+            kwargs.setdefault("initial", {})["job"] = fixed_job
         super().__init__(*args, **kwargs)
         self.fields["job"].queryset = visible_jobs(  # type: ignore[attr-defined]
             user
         ).order_by("name")
+        if fixed_job:
+            self.fields["job"].widget = forms.HiddenInput()
 
     csv_file = forms.FileField(
         label=_("Select CSV file"),
@@ -148,15 +157,13 @@ def _image_prompt_info(job: Job | None) -> SafeString:
     )
 
 
-def _build_context(
-    request: HttpRequest, form: ImportCSVForm, job: Job | None, job_id: int | None
-) -> dict:
+def _build_context(request: HttpRequest, form: ImportCSVForm, job: Job | None) -> dict:
     """
-    Method to build the context for the admin view.
+    Builds the template context for the CSV import page.
     """
     import_url = (
-        reverse("cmsv2:import_csv_for_job", args=[job_id])
-        if job_id
+        reverse("cmsv2:import_csv_for_job", args=[job.pk])
+        if job
         else reverse("cmsv2:import_csv")
     )
     return {
@@ -169,7 +176,61 @@ def _build_context(
     }
 
 
-# pylint: disable=too-many-return-statements
+def _try_run_import(request: HttpRequest, file: UploadedFile, job: Job) -> bool:
+    """
+    Imports the file for the given job, reports errors and warnings to the user,
+    and returns whether the import was successful.
+    """
+    try:
+        data = Dataset()
+        data.load(file.read().decode("utf-8-sig"), format="csv")
+
+        if _report_dataset_issue(request, data):
+            return False
+
+        # request.user is `User | AnonymousUser`, but this view is only
+        # reachable by authenticated users.
+        summary = import_words_from_csv(
+            data, job, request.user  # type: ignore[arg-type]
+        )
+    except InvalidDimensions:
+        messages.error(
+            request,
+            _(
+                "Import failed. The size of the column or row doesn't fit the table dimensions. Please adjust your table and try again."
+            ),
+        )
+        return False
+    except UnicodeDecodeError:
+        messages.error(
+            request,
+            _(
+                "Import failed. The CSV file must be UTF-8 encoded. Please save it with UTF-8 encoding and try again."
+            ),
+        )
+        return False
+    except (AttributeError, IndexError, TypeError, ValueError) as e:
+        messages.error(request, _("Import failed: %(e)s") % {"e": e})
+        return False
+
+    if summary.errors:
+        error_summary = " | ".join(summary.errors[:5])
+        messages.warning(
+            request,
+            _("Import completed with warnings: %(summary)s")
+            % {"summary": error_summary},
+        )
+    else:
+        messages.success(request, _build_success_message(summary))
+    if summary.imported_word_ids:
+        threading.Thread(
+            target=_generate_word_assets,
+            args=(summary.imported_word_ids, job),
+            daemon=True,
+        ).start()
+    return True
+
+
 @login_required
 @permission_required(("cmsv2.add_word", "cmsv2.add_unit"), raise_exception=True)
 def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResponse:
@@ -178,87 +239,14 @@ def import_from_csv(request: HttpRequest, job_id: int | None = None) -> HttpResp
     """
     job = get_object_or_404(visible_jobs(request.user), pk=job_id) if job_id else None
 
-    if request.method != "POST":
-        initial = {"job": job} if job else {}
-        form = ImportCSVForm(initial=initial, user=request.user)
-        if job:
-            form.fields["job"].widget = forms.HiddenInput()
-        return render(
-            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
-        )
+    form = ImportCSVForm(
+        request.POST or None, request.FILES or None, user=request.user, fixed_job=job
+    )
+    if form.is_valid():
+        csv_file = form.cleaned_data["csv_file"]
+        selected_job = form.cleaned_data["job"]
 
-    form = ImportCSVForm(request.POST, request.FILES, user=request.user)
-    if job:
-        form.fields["job"].widget = forms.HiddenInput()
+        if _try_run_import(request, csv_file, selected_job):
+            return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))
 
-    if not form.is_valid():
-        return render(
-            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
-        )
-
-    csv_file = form.cleaned_data["csv_file"]
-    selected_job = form.cleaned_data["job"]
-    try:
-        data = Dataset()
-        data.load(csv_file.read().decode("utf-8-sig"), format="csv")
-
-        if _report_dataset_issue(request, data):
-            return render(
-                request,
-                "admin/csv_form.html",
-                _build_context(request, form, job, job_id),
-            )
-
-        # request.user is `User | AnonymousUser`, but this view is only
-        # reachable by authenticated users.
-        summary = import_words_from_csv(
-            data, selected_job, request.user  # type: ignore[arg-type]
-        )
-
-        if summary.errors:
-            error_summary = " | ".join(summary.errors[:5])
-            messages.warning(
-                request,
-                _("Import completed with warnings: %(summary)s")
-                % {"summary": error_summary},
-            )
-        else:
-            messages.success(request, _build_success_message(summary))
-
-        if summary.imported_word_ids:
-            threading.Thread(
-                target=_generate_word_assets,
-                args=(summary.imported_word_ids, selected_job),
-                daemon=True,
-            ).start()
-        return redirect(reverse("admin:cmsv2_job_change", args=[selected_job.pk]))
-
-    except InvalidDimensions:
-        messages.error(
-            request,
-            _(
-                "Import failed. The size of the column or row doesn't fit the table dimensions. Please adjust your table and try again."
-            ),
-        )
-        return render(
-            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
-        )
-    except UnicodeDecodeError:
-        messages.error(
-            request,
-            _(
-                "Import failed. The CSV file must be UTF-8 encoded. Please save it with UTF-8 encoding and try again."
-            ),
-        )
-        return render(
-            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
-        )
-    except (AttributeError, IndexError, TypeError, ValueError) as e:
-        messages.error(
-            request,
-            _("Import failed: %(e)s") % {"e": e},
-        )
-
-        return render(
-            request, "admin/csv_form.html", _build_context(request, form, job, job_id)
-        )
+    return render(request, "admin/csv_form.html", _build_context(request, form, job))
