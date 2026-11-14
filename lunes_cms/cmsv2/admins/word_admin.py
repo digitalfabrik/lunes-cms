@@ -1,12 +1,16 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
 from datetime import date
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
+from django.contrib import admin, messages
+from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext_lazy as _
 
@@ -29,12 +33,25 @@ from lunes_cms.cmsv2.admins.word_inlines import (
     format_html_lazy,
     UnitInline,
 )
-from lunes_cms.cmsv2.areas import scope_words, validate_word_area
+from lunes_cms.cmsv2.areas import (
+    scope_words,
+    validate_word_area,
+    visible_unit_word_relations,
+    visible_units,
+)
 from lunes_cms.cmsv2.models import Word
 from lunes_cms.cmsv2.models.area import Area
 from lunes_cms.cmsv2.models.static import image_upload_warning_html_lazy
 from lunes_cms.cmsv2.models.unit import UnitWordRelation
 from lunes_cms.cmsv2.notifications import notify_words_added
+from lunes_cms.cmsv2.reviews import (
+    assign_reviews,
+    available_units_per_word,
+    may_assign_reviews,
+)
+
+if TYPE_CHECKING:
+    from django.utils.functional import _StrOrPromise
 
 
 class WordAdminForm(ModelForm):
@@ -178,6 +195,7 @@ class WordAdmin(
     ]
     list_select_related = ["area", "created_by", "created_by_user"]
     list_per_page = 25
+    actions = ["assign_to_user"]
 
     class Media:
         """
@@ -249,6 +267,75 @@ class WordAdmin(
         return obj.area
 
     area.short_description = _("area")  # type: ignore[attr-defined]
+
+    def has_assign_permission(self, request: HttpRequest) -> bool:
+        """Whether the user may assign words to other users for review"""
+        return may_assign_reviews(request.user)
+
+    @admin.action(
+        description=_("Assign selected words to user"), permissions=["assign"]
+    )
+    def assign_to_user(
+        self, request: HttpRequest, queryset: QuerySet[Word]
+    ) -> HttpResponse | None:
+        """
+        Bulk-create Reviews of the selected words for a chosen user.
+        Only the words, units and unit word relations visible to the user are considered.
+
+        First, the user is redirected to a page to selected unit for the selected words, such
+        that unit word relations can be assigned for review.
+        """
+
+        def send_message(msg: _StrOrPromise, num_words_without_unit: int) -> None:
+            """Messages the user that the assignment was successful."""
+            self.message_user(request, msg)
+
+            if num_words_without_unit > 0:
+                self.message_user(
+                    request,
+                    _(
+                        "%(count)d word(s) were skipped, because they do not belong to any unit."
+                    )
+                    % {"count": num_words_without_unit},
+                    messages.WARNING,
+                )
+
+        queryset = scope_words(queryset, request.user)
+        words, words_without_unit = available_units_per_word(
+            queryset, limit_units_to=visible_units(request.user)
+        )
+
+        if "apply" not in request.POST:
+            return TemplateResponse(
+                request,
+                "admin/cmsv2/assign_words_to_user.html",
+                {
+                    **self.admin_site.each_context(request),
+                    "words": words,
+                    "words_without_unit": words_without_unit,
+                    "users": User.objects.order_by("username"),
+                    "action": "assign_to_user",
+                    "selected_action": queryset.values_list("pk", flat=True),
+                    "title": _("Assign selected words to user"),
+                },
+            )
+
+        user = get_object_or_404(User, pk=request.POST["user"])
+        selected_relation_ids = [
+            request.POST.get(
+                f"unit_word_{word.pk}", word.available_review_relations[0].pk
+            )
+            for word in words
+        ]
+        selected_relations = visible_unit_word_relations(request.user).filter(
+            pk__in=selected_relation_ids
+        )
+
+        message = assign_reviews(
+            selected_relations, reviewer=user, assigner=request.user
+        )
+        send_message(message, len(words_without_unit))
+        return None
 
     def creator_group(self, obj: Word) -> str | None:
         """

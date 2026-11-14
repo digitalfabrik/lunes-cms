@@ -6,11 +6,13 @@ from typing import Any, Iterable, Iterator, TYPE_CHECKING
 from zipfile import ZipFile
 
 from django.contrib import admin, messages
+from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
+from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe, SafeString
@@ -22,8 +24,10 @@ from ..areas import (
     scope_jobs,
     validate_job_area,
     validate_unit_jobs,
+    visible_unit_word_relations,
 )
 from ..models import Area, Job, Unit, Word
+from ..reviews import assign_reviews, may_assign_reviews
 from ..utils import make_safe_filename
 from .area_content_admin import AreaContentAdmin
 from .area_filters import AreaListFilter
@@ -265,7 +269,13 @@ class JobAdmin(AreaContentAdmin):
         ("area", AreaListFilter),
     ]
     list_select_related = ["area", "created_by", "created_by_user"]
-    actions = ["export_to_csv", "duplicate_jobs", "archive_jobs", "restore_jobs"]
+    actions = [
+        "export_to_csv",
+        "duplicate_jobs",
+        "archive_jobs",
+        "restore_jobs",
+        "assign_to_user",
+    ]
     list_per_page = 25
     ordering = ["name"]
     change_list_template = "admin/cmsv2/import_csv_button.html"
@@ -287,6 +297,10 @@ class JobAdmin(AreaContentAdmin):
         return scope_jobs(
             super().get_queryset(request).prefetch_related("units"), request.user
         )
+
+    def has_assign_permission(self, request: HttpRequest) -> bool:
+        """Whether the user may assign jobs to other users for review"""
+        return may_assign_reviews(request.user)
 
     def save_related(
         self,
@@ -445,6 +459,41 @@ class JobAdmin(AreaContentAdmin):
             request,
             _("%(count)d job(s) have been restored successfully.") % {"count": updated},
         )
+
+    @admin.action(description=_("Assign selected jobs to user"), permissions=["assign"])
+    def assign_to_user(
+        self, request: HttpRequest, queryset: QuerySet[Job]
+    ) -> HttpResponse | None:
+        """
+        Assign every unit-word relation of the units of each selected job to a
+        chosen user for review. Only the jobs and relations visible to the user
+        are considered.
+        """
+        queryset = scope_jobs(queryset, request.user)
+        if "apply" not in request.POST:
+            return TemplateResponse(
+                request,
+                "admin/cmsv2/assign_jobs_to_user.html",
+                {
+                    **self.admin_site.each_context(request),
+                    "opts": self.opts,
+                    "objects": queryset,
+                    "users": User.objects.order_by("username"),
+                    "action": "assign_to_user",
+                    "selected_action": queryset.values_list("pk", flat=True),
+                    "title": _("Assign selected jobs to user"),
+                },
+            )
+
+        reviewer = get_object_or_404(User, pk=request.POST["user"])
+        unit_words = (
+            visible_unit_word_relations(request.user)
+            .filter(unit__jobs__in=queryset)
+            .distinct()
+        )
+        message = assign_reviews(unit_words, reviewer=reviewer, assigner=request.user)
+        self.message_user(request, message)
+        return None
 
     def response_add(
         self,
