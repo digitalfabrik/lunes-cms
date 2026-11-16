@@ -3,23 +3,22 @@
     color-scheme: dark;
 
     /* surfaces */
-    --bg: #343A41;
-    --surface: #3F464F;
-    --surface-sunken: #2B3038;
-    --header-bg: #2B3038;
+    --bg: #2B3038;
+    --surface: #32383E;
+    --surface-sunken: #22262F;
+    --header-bg: #22262F;
     --border: #FFFFFF17;
     --border-secondary: #8F9BAA;
 
     /* text */
     --text: #EEF0F3;
-    --text-muted: #939FAE;
-    --text-faint: #6B7C8F;
+    --text-muted: #ABB4BF;
 
     /* accents */
     --brand: #445FFF;
     --primary: #7F9BFF;
-    --success-bg: #397022;
-    --success-bg-hover: #418026;
+    --success-bg: #418026;
+    --success-bg-hover: #51A02E;
     --success-text: #ffffff;
     --danger: #FF7372;
     /* the dialogs colour their hint and submit button per decision */
@@ -262,7 +261,7 @@ main {
 .word__article {
     font-size: 1.25rem;
     font-weight: 400;
-    color: var(--text-faint);
+    color: var(--text-muted);
 }
 
 .word-meta {
@@ -272,7 +271,7 @@ main {
 }
 
 .word-meta__separator {
-    color: var(--text-faint);
+    color: var(--text-muted);
     margin: 0 0.2rem;
 }
 
@@ -301,7 +300,7 @@ main {
 }
 
 .media__tile--empty {
-    color: var(--text-faint);
+    color: var(--text-muted);
     font-style: italic;
 }
 
@@ -540,7 +539,7 @@ select:focus-visible {
 }
 
 .dialog textarea::placeholder {
-    color: var(--text-faint);
+    color: var(--text-muted);
 }
 
 .dialog__actions {
