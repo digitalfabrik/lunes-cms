@@ -57,6 +57,24 @@ def test_superuser_sees_dashboard() -> None:
     assert response.status_code == 200
 
 
+@pytest.mark.parametrize(
+    "codenames, expected_url_name",
+    [
+        (("can_review",), "expert_access:index"),
+        (("can_review", "view_word"), "admin:index"),
+    ],
+)
+def test_root_url_redirects_like_admin_index(
+    codenames: tuple[str, ...], expected_url_name: str
+) -> None:
+    client = PermissionClient(_user_in_group_with(*codenames))
+
+    response = client.get("/")
+
+    assert response.status_code == 302
+    assert response["Location"] == reverse(expected_url_name)
+
+
 def test_login_of_only_reviewer_ends_in_review_view() -> None:
     user = _user_in_group_with("can_review")
     user.set_password("password")
