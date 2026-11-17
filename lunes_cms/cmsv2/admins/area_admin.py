@@ -92,8 +92,11 @@ class AreaAdmin(admin.ModelAdmin):
         "primary_color",
         "learning_color",
         "training_color",
+        "landing_page_logo_color",
+        "additional_information_title",
         "additional_information",
         "additional_information_url",
+        "additional_information_url_label",
         "admins",
     ]
     readonly_fields = ["logo_tag", "secondary_logo_tag"]

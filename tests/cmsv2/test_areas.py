@@ -647,7 +647,12 @@ def test_codes_are_deleted_with_their_area(area: Area) -> None:
 # Branding: the logos and hex colors that decorate an area's content in the app.
 #
 
-COLOR_FIELDS = ["primary_color", "learning_color", "training_color"]
+COLOR_FIELDS = [
+    "primary_color",
+    "learning_color",
+    "training_color",
+    "landing_page_logo_color",
+]
 
 
 @pytest.mark.django_db
@@ -660,8 +665,11 @@ def test_branding_fields_are_optional(area: Area) -> None:
     assert area.primary_color == ""
     assert area.learning_color == ""
     assert area.training_color == ""
+    assert area.landing_page_logo_color == ""
+    assert area.additional_information_title == ""
     assert area.additional_information == ""
     assert area.additional_information_url == ""
+    assert area.additional_information_url_label == ""
 
 
 @pytest.mark.django_db
