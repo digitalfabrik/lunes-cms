@@ -1436,6 +1436,16 @@ msgstr "Haupt-App"
 msgid "Marks the one area for the main app catalog"
 msgstr "Kennzeichnet den einen Bereich für die Haupt-App"
 
+#: cmsv2/models/area.py
+msgid "landing page area"
+msgstr "Bereich der Landingpage"
+
+#: cmsv2/models/area.py
+msgid ""
+"Marks the one area whose branding is shown on the activation landing page"
+msgstr ""
+"Kennzeichnet den Bereich, dessen Design auf der Landing Page verwendet wird"
+
 #: cmsv2/models/area.py cmsv2/models/area_code.py cmsv2/models/job.py
 #: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "modified at"

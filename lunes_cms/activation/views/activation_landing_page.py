@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 from lunes_cms.cmsv2.models import Area
 
@@ -25,7 +25,7 @@ def activation_landing_page(request: HttpRequest, code: str) -> HttpResponse:
         the custom scheme deeplink
     :return: The rendered landing page
     """
-    area = Area.objects.get(name=settings.LANDING_PAGE_AREA_NAME)
+    area = get_object_or_404(Area, is_landing_page_area=True)
     context = {
         "deeplink_url": f"lunes:lunes.app{settings.APP_LINK_PATH_PREFIX}/{code}",
         "code": code,

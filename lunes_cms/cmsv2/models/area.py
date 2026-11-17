@@ -119,6 +119,13 @@ class Area(models.Model):
         verbose_name=_("main app"),
         help_text=_("Marks the one area for the main app catalog"),
     )
+    is_landing_page_area = models.BooleanField(
+        default=False,
+        verbose_name=_("landing page area"),
+        help_text=_(
+            "Marks the one area whose branding is shown on the activation landing page"
+        ),
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
@@ -160,5 +167,10 @@ class Area(models.Model):
                 fields=["is_main_app"],
                 condition=models.Q(is_main_app=True),
                 name="unique_main_app_area",
+            ),
+            models.UniqueConstraint(
+                fields=["is_landing_page_area"],
+                condition=models.Q(is_landing_page_area=True),
+                name="unique_landing_page_area",
             ),
         ]

@@ -93,6 +93,7 @@ class AreaAdmin(admin.ModelAdmin):
         "learning_color",
         "training_color",
         "landing_page_logo_color",
+        "is_landing_page_area",
         "additional_information_title",
         "additional_information",
         "additional_information_url",
@@ -146,15 +147,17 @@ class AreaAdmin(admin.ModelAdmin):
         self, request: HttpRequest, obj: Area | None = None
     ) -> list[str]:
         """
-        The name and the administrators of an area are left to superusers.
+        The name, the administrators and the landing page choice of an area
+        are left to superusers.
 
         The administrators decide who may see and change the content of the
-        area, so an area administrator must not be able to hand that out.
+        area, so an area administrator must not be able to hand that out. The
+        landing page is shared by all areas, so no single area may claim it.
         """
         readonly_fields = list(super().get_readonly_fields(request, obj))
         if request.user.is_superuser:
             return readonly_fields
-        return [*readonly_fields, "name", "admins"]
+        return [*readonly_fields, "name", "admins", "is_landing_page_area"]
 
     def has_module_permission(self, request: HttpRequest) -> bool:
         return self.has_view_permission(request)

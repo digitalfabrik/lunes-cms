@@ -18,6 +18,18 @@ import pytest
 from django.test import Client
 from django.urls import reverse
 
+from lunes_cms.cmsv2.models import Area
+
+
+@pytest.fixture(autouse=True)
+def landing_page_area(db: None) -> Area:
+    """The area whose branding the landing page shows."""
+    return Area.objects.create(
+        name="telc",
+        is_landing_page_area=True,
+        secondary_logo="area_logos/telc.svg",
+    )
+
 
 @pytest.mark.django_db()
 def test_activation_landing_page_reachable_without_login(client: Client) -> None:
@@ -54,6 +66,21 @@ def test_activation_landing_page_redirects_without_trailing_slash(
 
     assert response.status_code == 200
     assert response.redirect_chain == [("/activation/dashk21/", 301)]
+
+
+@pytest.mark.django_db()
+def test_activation_landing_page_not_found_without_landing_page_area(
+    client: Client, landing_page_area: Area
+) -> None:
+    """Without a marked area there is no branding to show, so there is no page."""
+    landing_page_area.is_landing_page_area = False
+    landing_page_area.save()
+
+    response = client.get(
+        reverse("activation-landing-page", kwargs={"code": "dashk21"})
+    )
+
+    assert response.status_code == 404
 
 
 @pytest.mark.django_db()
