@@ -1367,12 +1367,46 @@ msgstr ""
 "Farbcode, z. B. #000000 für Schwarz."
 
 #: cmsv2/models/area.py
+msgid "additional information title"
+msgstr "Überschrift der zusätzlichen Informationen"
+
+#: cmsv2/models/area.py
+msgid ""
+"Heading of the note shown below the learning and training cards in the app."
+msgstr ""
+"Überschrift des Hinweises unter den Karten zum Lernen und Trainieren in der "
+"App."
+
+#: cmsv2/models/area.py
 msgid "additional information"
 msgstr "Zusätzliche Informationen"
 
 #: cmsv2/models/area.py
+msgid ""
+"Text of the note shown below the learning and training cards in the app. The "
+"note is only shown if this is filled in."
+msgstr ""
+"Text des Hinweises unter den Karten zum Lernen und Trainieren in der App. "
+"Der Hinweis wird nur angezeigt, wenn dieses Feld ausgefüllt ist."
+
+#: cmsv2/models/area.py
 msgid "additional information URL"
 msgstr "URL für zusätzliche Informationen"
+
+#: cmsv2/models/area.py
+msgid "Link shown as a button below the note in the app."
+msgstr "Link, der in der App als Button unter dem Hinweis angezeigt wird."
+
+#: cmsv2/models/area.py
+msgid "additional information URL label"
+msgstr "Beschriftung der URL für zusätzliche Informationen"
+
+#: cmsv2/models/area.py
+msgid ""
+"Label of the button that opens the link. If empty, a generic label is shown."
+msgstr ""
+"Beschriftung des Buttons, der den Link öffnet. Ist sie leer, wird eine "
+"allgemeine Beschriftung angezeigt."
 
 #: cmsv2/models/area.py
 msgid ""

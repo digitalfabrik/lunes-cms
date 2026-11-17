@@ -131,8 +131,10 @@ def test_registration_returns_a_token_and_the_area(area):
         "primary_color": "",
         "learning_color": "",
         "training_color": "",
+        "additional_information_title": "",
         "additional_information": "",
         "additional_information_url": "",
+        "additional_information_url_label": "",
     }
     assert AreaAccessToken.objects.count() == 1
 
@@ -143,8 +145,10 @@ def test_registration_returns_the_branding_of_the_area(area):
     area.area.primary_color = "#990000"
     area.area.learning_color = "#007DBE"
     area.area.training_color = "#027B91"
+    area.area.additional_information_title = "About this area"
     area.area.additional_information = "Free text about this area."
     area.area.additional_information_url = "https://example.com/info"
+    area.area.additional_information_url_label = "Learn more"
     area.area.save()
 
     response = register()
@@ -154,8 +158,10 @@ def test_registration_returns_the_branding_of_the_area(area):
     assert body["primary_color"] == "#990000"
     assert body["learning_color"] == "#007DBE"
     assert body["training_color"] == "#027B91"
+    assert body["additional_information_title"] == "About this area"
     assert body["additional_information"] == "Free text about this area."
     assert body["additional_information_url"] == "https://example.com/info"
+    assert body["additional_information_url_label"] == "Learn more"
 
 
 @pytest.mark.django_db()
@@ -285,8 +291,10 @@ def test_info_returns_the_area_without_a_token(area):
             "primary_color": "",
             "learning_color": "",
             "training_color": "",
+            "additional_information_title": "",
             "additional_information": "",
             "additional_information_url": "",
+            "additional_information_url_label": "",
         }
     }
     assert "token" not in body
@@ -296,16 +304,20 @@ def test_info_returns_the_area_without_a_token(area):
 @pytest.mark.django_db()
 def test_info_returns_the_additional_information_of_the_area(area):
     """Additional information set on an area is served alongside it via info."""
+    area.area.additional_information_title = "About this area"
     area.area.additional_information = "Free text about this area."
     area.area.additional_information_url = "https://example.com/info"
+    area.area.additional_information_url_label = "Learn more"
     area.area.save()
 
     response = info()
 
     assert response.status_code == 200
     body = response.json()["area"]
+    assert body["additional_information_title"] == "About this area"
     assert body["additional_information"] == "Free text about this area."
     assert body["additional_information_url"] == "https://example.com/info"
+    assert body["additional_information_url_label"] == "Learn more"
 
 
 @pytest.mark.django_db()

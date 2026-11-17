@@ -24,8 +24,10 @@ class AreaSerializer(serializers.ModelSerializer):
             "primary_color",
             "learning_color",
             "training_color",
+            "additional_information_title",
             "additional_information",
             "additional_information_url",
+            "additional_information_url_label",
         )
 
 

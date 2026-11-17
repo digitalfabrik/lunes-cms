@@ -660,8 +660,10 @@ def test_branding_fields_are_optional(area: Area) -> None:
     assert area.primary_color == ""
     assert area.learning_color == ""
     assert area.training_color == ""
+    assert area.additional_information_title == ""
     assert area.additional_information == ""
     assert area.additional_information_url == ""
+    assert area.additional_information_url_label == ""
 
 
 @pytest.mark.django_db

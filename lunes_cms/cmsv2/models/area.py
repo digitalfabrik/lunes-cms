@@ -63,13 +63,34 @@ class Area(models.Model):
             "A hex color e.g. #000000 for black."
         ),
     )
+    additional_information_title = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("additional information title"),
+        help_text=_(
+            "Heading of the note shown below the learning and training cards in the app."
+        ),
+    )
     additional_information = models.TextField(
         blank=True,
         verbose_name=_("additional information"),
+        help_text=_(
+            "Text of the note shown below the learning and training cards in the app. "
+            "The note is only shown if this is filled in."
+        ),
     )
     additional_information_url = models.URLField(
         blank=True,
         verbose_name=_("additional information URL"),
+        help_text=_("Link shown as a button below the note in the app."),
+    )
+    additional_information_url_label = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("additional information URL label"),
+        help_text=_(
+            "Label of the button that opens the link. If empty, a generic label is shown."
+        ),
     )
     admins = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
