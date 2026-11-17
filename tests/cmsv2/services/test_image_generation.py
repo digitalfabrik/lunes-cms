@@ -252,6 +252,7 @@ def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     assert "Tischler/in" in enriched
 
 
+@pytest.mark.skip(reason="Diversity prompt temporarily disabled, see #1526")
 def test_build_image_prompt_asks_for_diverse_people() -> None:
     for prompt in (
         image_generation.build_image_prompt("Bäcker/in"),
