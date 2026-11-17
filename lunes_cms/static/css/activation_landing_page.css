@@ -21,12 +21,34 @@ body {
     text-align: left;
 }
 
-.lunes-logo {
+.activation-page .logo-row {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.activation-page .logo-row > * {
+    flex: 0 1 auto;
+    max-width: 50%;
+}
+
+.activation-page .logo-row img {
     display: block;
-    width: 220px;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
+    height: 60px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.filter-definitions {
+    position: absolute;
+}
+
+.colored-logo {
+    filter: url(#logo-color);
 }
 
 .store-badges {

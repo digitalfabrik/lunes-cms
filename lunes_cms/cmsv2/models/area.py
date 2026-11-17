@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
@@ -27,9 +28,10 @@ class Area(models.Model):
         verbose_name=_("logo"),
         help_text=_("The main logo, shown in the center of the header in the app."),
     )
-    secondary_logo = models.ImageField(
+    secondary_logo = models.FileField(
         upload_to=upload_area_logos,
         blank=True,
+        validators=[FileExtensionValidator(["svg"])],
         verbose_name=_("secondary logo"),
         help_text=_("A second logo, shown at the side of the header in the app."),
     )
