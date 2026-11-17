@@ -2181,11 +2181,6 @@ msgid "CSV import for vocabulary"
 msgstr "CSV Import für Vokabeln"
 
 #: cmsv2/views/import_csv_view.py
-#, python-format
-msgid "Import completed with warnings: %(summary)s"
-msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
-
-#: cmsv2/views/import_csv_view.py
 msgid ""
 "Import failed. The size of the column or row doesn't fit the table "
 "dimensions. Please adjust your table and try again."
@@ -2205,6 +2200,11 @@ msgstr ""
 #, python-format
 msgid "Import failed: %(e)s"
 msgstr "Import fehlgeschlagen: %(e)s"
+
+#: cmsv2/views/import_csv_view.py
+#, python-format
+msgid "Import completed with warnings: %(summary)s"
+msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
 #: cmsv2/views/save_alternative_word.py
 msgid "No word id provided"
