@@ -63,6 +63,16 @@ class Area(models.Model):
             "A hex color e.g. #000000 for black."
         ),
     )
+    landing_page_logo_color = models.CharField(
+        max_length=7,
+        blank=True,
+        validators=[validate_hex_color],
+        verbose_name=_("landing page logo color"),
+        help_text=_(
+            "Color of the logo on the activation landing page. "
+            "A hex color e.g. #000000 for black."
+        ),
+    )
     additional_information_title = models.CharField(
         max_length=255,
         blank=True,

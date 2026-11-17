@@ -1367,6 +1367,18 @@ msgstr ""
 "Farbcode, z. B. #000000 für Schwarz."
 
 #: cmsv2/models/area.py
+msgid "landing page logo color"
+msgstr "Logofarbe der Landingpage"
+
+#: cmsv2/models/area.py
+msgid ""
+"Color of the logo on the activation landing page. A hex color e.g. #000000 "
+"for black."
+msgstr ""
+"Farbe des Logos auf der Landingpage zur Aktivierung. Ein Hex-Farbcode, z. B. "
+"#000000 für Schwarz."
+
+#: cmsv2/models/area.py
 msgid "additional information title"
 msgstr "Überschrift der zusätzlichen Informationen"
 

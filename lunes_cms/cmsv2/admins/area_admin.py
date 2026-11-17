@@ -92,6 +92,7 @@ class AreaAdmin(admin.ModelAdmin):
         "primary_color",
         "learning_color",
         "training_color",
+        "landing_page_logo_color",
         "additional_information_title",
         "additional_information",
         "additional_information_url",
