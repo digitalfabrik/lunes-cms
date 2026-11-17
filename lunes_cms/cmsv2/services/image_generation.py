@@ -104,7 +104,7 @@ def build_image_prompt(
         " Nur das zentrale Motiv ist zu sehen, vor einem neutralen weißen Hintergrund,"
         " ohne zusätzliche Objekte. Fotorealistisch, keine Illustration, kein Rendering."
     )
-    prompt += DIVERSITY_PROMPT
+    # prompt += DIVERSITY_PROMPT
     if additional_info:
         prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
     if not allow_text_in_image:
