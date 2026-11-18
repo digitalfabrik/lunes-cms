@@ -14,7 +14,10 @@ from django.views.decorators.http import require_POST
 from lunes_cms.cmsv2.admins.image_prompt_info import render_image_prompt_info
 from lunes_cms.cmsv2.areas import visible_unit_word_relations
 from lunes_cms.cmsv2.models.static import ImageSource
-from lunes_cms.cmsv2.services.image_generation import image_prompt_context
+from lunes_cms.cmsv2.services.image_generation import (
+    image_prompt_context,
+    read_generation_record,
+)
 from lunes_cms.cmsv2.utils import replace_file, safe_temp_path
 from lunes_cms.core import settings
 
@@ -43,6 +46,7 @@ def unitword_generate_image(request: HttpRequest, unitword_id: int) -> HttpRespo
                 preview_url=reverse(
                     "cmsv2:unitword_image_prompt_preview", args=[unitword_instance.pk]
                 ),
+                word=unitword_instance.word,
             ),
             "temp_image_url": None,
         }
@@ -72,7 +76,7 @@ def unitword_store_generated_image_permanently(
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
     temp_filepath = safe_temp_path(settings.TEMP_IMAGE_DIR, temp_filename)
-    if not temp_filepath:
+    if not temp_filepath or temp_filepath.endswith(".json"):
         return redirect("admin:cmsv2_word_change", object_id=unitword_instance.word.pk)
 
     try:
@@ -86,6 +90,9 @@ def unitword_store_generated_image_permanently(
                 name=f'{unitword_instance.word.word.replace(" ", "_")}-{unitword_instance.unit.title.replace(" ", "_")}{suffix}',
             )
             replace_file(unitword_instance.image, content_file, save=False)
+            unitword_instance.image_prompt, unitword_instance.image_model = (
+                read_generation_record(temp_filepath)
+            )
             unitword_instance.save(image_source=ImageSource.AI_LABELED)
 
         os.remove(temp_filepath)

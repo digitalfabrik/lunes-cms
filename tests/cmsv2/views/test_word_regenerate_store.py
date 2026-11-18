@@ -19,8 +19,12 @@ from django.urls import reverse
 from PIL import Image
 
 from lunes_cms.cmsv2.admins.word_admin import WordAdmin
-from lunes_cms.cmsv2.models import Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models import ImagePrompt, Unit, UnitWordRelation, Word
 from lunes_cms.cmsv2.models.static import CheckStatus, ImageSource
+from lunes_cms.cmsv2.services.image_generation import (
+    generation_record_path,
+    write_generation_record,
+)
 from lunes_cms.cmsv2.utils import is_ajax
 
 
@@ -378,3 +382,86 @@ def test_store_unitword_image_replaces_the_previous_file_and_resets_check_status
     assert relation.image.storage.exists(new_name)
     assert not relation.image.storage.exists(old_name)
     assert relation.image_check_status == CheckStatus.NOT_CHECKED
+
+
+def test_store_image_keeps_the_prompt_and_model_it_was_generated_with(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
+    temp_image_dir, _ = media_dirs
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    temp_path = temp_image_dir / "temp_image_new.webp"
+    temp_path.write_bytes(_webp_bytes())
+    prompt = ImagePrompt.get_default()
+    write_generation_record(str(temp_path), prompt, "image-model")
+
+    admin_client.post(
+        reverse("cmsv2:word_store_generated_image_permanently", args=[word.pk]),
+        {"temp_filename": temp_path.name},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    word.refresh_from_db()
+    assert word.image_prompt == prompt
+    assert word.image_model == "image-model"
+    assert not Path(generation_record_path(str(temp_path))).exists()
+
+
+def test_store_unitword_image_keeps_the_prompt_and_model_it_was_generated_with(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
+    temp_image_dir, _ = media_dirs
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    relation = UnitWordRelation.objects.create(
+        unit=Unit.objects.create(title="Werkzeuge"), word=word
+    )
+    temp_path = temp_image_dir / "temp_image_new.webp"
+    temp_path.write_bytes(_webp_bytes())
+    prompt = ImagePrompt.get_default()
+    write_generation_record(str(temp_path), prompt, "image-model")
+
+    admin_client.post(
+        reverse("cmsv2:unitword_store_generated_image_permanently", args=[relation.pk]),
+        {"temp_filename": temp_path.name},
+    )
+
+    relation.refresh_from_db()
+    assert relation.image_prompt == prompt
+    assert relation.image_model == "image-model"
+
+
+def test_store_image_without_a_record_stores_no_prompt(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
+    temp_image_dir, _ = media_dirs
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    (temp_image_dir / "temp_image_new.webp").write_bytes(_webp_bytes())
+
+    admin_client.post(
+        reverse("cmsv2:word_store_generated_image_permanently", args=[word.pk]),
+        {"temp_filename": "temp_image_new.webp"},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    word.refresh_from_db()
+    assert word.image
+    assert word.image_prompt is None
+    assert word.image_model == ""
+
+
+def test_store_image_refuses_a_generation_record_as_image(
+    admin_client: Client, db: None, media_dirs: tuple[Path, Path]
+) -> None:
+    temp_image_dir, _ = media_dirs
+    word = Word.objects.create(word="Hammer", singular_article=1)
+    temp_path = temp_image_dir / "temp_image_new.webp"
+    write_generation_record(str(temp_path), ImagePrompt.get_default(), "model")
+
+    response = admin_client.post(
+        reverse("cmsv2:word_store_generated_image_permanently", args=[word.pk]),
+        {"temp_filename": Path(generation_record_path(str(temp_path))).name},
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+
+    assert response.status_code == 400
+    word.refresh_from_db()
+    assert not word.image

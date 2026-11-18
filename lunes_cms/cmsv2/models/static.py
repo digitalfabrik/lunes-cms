@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.db import models
@@ -12,6 +13,10 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from ..utils import create_resource_path, make_safe_filename
+
+if TYPE_CHECKING:
+    from .unit import UnitWordRelation
+    from .word import Word
 
 
 class SingularArticle(models.IntegerChoices):
@@ -100,6 +105,21 @@ def resolve_image_source(
     if image_updated:
         return ImageSource.UPLOADED
     return current
+
+
+def clear_image_generation(instance: Word | UnitWordRelation) -> None:
+    """
+    Forget the prompt and model a Word's or UnitWordRelation's image was
+    generated with (#1145), because the image was removed or replaced by one
+    that wasn't generated.
+
+    Code that stores a generated image sets both and passes ``image_source``
+    to ``save()``, which keeps them.
+
+    :param instance: The Word or UnitWordRelation that is about to be saved
+    """
+    instance.image_prompt = None
+    instance.image_model = ""
 
 
 #: Shown next to every control that uploads a vocabulary image (#1085)

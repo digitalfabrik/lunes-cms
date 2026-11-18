@@ -43,3 +43,17 @@
 .image-prompt-preview.is-stale {
     opacity: 0.6;
 }
+
+.image-prompt-show-people {
+    margin: 0 0 8px;
+}
+
+.image-prompt-show-people label {
+    font-weight: 600;
+    margin: 0;
+}
+
+.image-prompt-show-people-help {
+    margin: 2px 0 8px;
+    opacity: 0.8;
+}

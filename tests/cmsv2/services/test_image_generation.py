@@ -25,7 +25,7 @@ from lunes_cms.cmsv2.models import (
 )
 from lunes_cms.cmsv2.models import word as word_module
 from lunes_cms.cmsv2.models.static import ImageSource
-from lunes_cms.cmsv2.services import image_generation
+from lunes_cms.cmsv2.services import image_generation, show_people
 from lunes_cms.cmsv2.services.ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 
@@ -108,6 +108,50 @@ def test_drain_generates_image_for_word_missing_image(fast_worker: None) -> None
     assert word.image_source == ImageSource.AI_LABELED
     assert image_call.call_count == 1
     assert ImagePrompt.get_default().is_used
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_records_the_prompt_and_model_of_the_image(
+    fast_worker: None, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODEL = "image-model"
+    word = _make_word(word="Hammer")
+
+    with mock.patch.object(image_generation, "openai_image_bytes", return_value=b"x"):
+        _run_drain()
+
+    word.refresh_from_db()
+    assert word.image_prompt == ImagePrompt.get_default()
+    assert word.image_model == "image-model"
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_classifies_the_word_for_a_show_people_prompt(
+    fast_worker: None,
+) -> None:
+    ImagePrompt.objects.create(
+        name="Mit Personen",
+        supports_show_people=True,
+        prompt_with_people="MIT {{ word }}",
+        prompt_without_people="OHNE {{ word }}",
+        is_default=True,
+    )
+    word = _make_word(word="Beratung")
+
+    with (
+        mock.patch.object(
+            show_people, "classify_show_people", return_value=True
+        ) as classify,
+        mock.patch.object(
+            image_generation, "openai_image_bytes", return_value=b"x"
+        ) as image_call,
+    ):
+        _run_drain()
+
+    assert classify.call_count == 1
+    assert image_call.call_args.args[0].startswith("MIT Beratung")
+    word.refresh_from_db()
+    assert word.show_people is True
 
 
 @pytest.mark.django_db(transaction=True)

@@ -101,6 +101,12 @@ function _initRegenerateWidget(widget: HTMLElement): void {
         if (assetType === "image" && allowText) {
             formData.append("allow_text_in_image", allowText.checked ? "true" : "false")
         }
+        if (assetType === "image") {
+            window.appendShowPeople(
+                formData,
+                widget.querySelector<HTMLInputElement>(".prompt-show-people"),
+            )
+        }
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         window

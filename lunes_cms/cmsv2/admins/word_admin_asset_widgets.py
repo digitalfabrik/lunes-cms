@@ -332,6 +332,7 @@ class WordAdminAssetWidgetsMixin:
             prompt_info=render_image_prompt_info(
                 image_prompt_context(obj),
                 preview_url=reverse("cmsv2:word_image_prompt_preview", args=[obj.pk]),
+                word=obj,
             ),
         )
 

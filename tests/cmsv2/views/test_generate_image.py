@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.test import Client
 from django.urls import reverse
+from pytest_django import Settings
 
 from lunes_cms.cmsv2.models import (
     AIGeneration,
@@ -23,7 +24,7 @@ from lunes_cms.cmsv2.models import (
     Word,
 )
 from lunes_cms.cmsv2.models.static import AIGenerationEvent
-from lunes_cms.cmsv2.services import image_generation
+from lunes_cms.cmsv2.services import image_generation, show_people
 
 # Imported via ``import_module`` so the patch targets the module, whatever
 # ``lunes_cms.cmsv2.views`` re-exports under the same name.
@@ -168,7 +169,8 @@ def test_word_prompt_preview_follows_the_editor_hints(admin_client: Client) -> N
     assert response.json() == {
         "prompt": image_generation.build_word_image_prompt(
             word, additional_info="mit Holzgriff"
-        )
+        ),
+        "show_people": None,
     }
     assert not AIGeneration.objects.exists()
 
@@ -208,4 +210,204 @@ def test_unitword_page_explains_the_prompt(admin_client: Client) -> None:
     )
     assert re.search(
         rf"generateUrl: `\s*{re.escape(generate_url)}\s*`\.trim\(\)", content
+    )
+
+
+def _people_prompt() -> ImagePrompt:
+    """
+    Make a prompt with show-people variants that are easy to tell apart the
+    default prompt.
+    """
+    return ImagePrompt.objects.create(
+        name="Mit Personen",
+        supports_show_people=True,
+        prompt_with_people="MIT {{ word }}",
+        prompt_without_people="OHNE {{ word }}",
+        is_default=True,
+    )
+
+
+@pytest.mark.django_db
+def test_the_preview_classifies_an_undecided_word(admin_client: Client) -> None:
+    _people_prompt()
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    with mock.patch.object(
+        show_people, "classify_show_people", return_value=True
+    ) as classify:
+        response = admin_client.post(
+            reverse("cmsv2:word_image_prompt_preview", args=[word.pk])
+        )
+
+    assert classify.call_count == 1
+    assert response.json()["show_people"] is True
+    assert response.json()["prompt"].startswith("MIT Hammer")
+    word.refresh_from_db()
+    assert word.show_people is True
+
+
+@pytest.mark.django_db
+def test_the_preview_follows_the_toggle_without_storing_it(
+    admin_client: Client,
+) -> None:
+    _people_prompt()
+    word = _content(Area.objects.create(name="Testarea")).word
+    Word.objects.filter(pk=word.pk).update(show_people=True)
+
+    response = admin_client.post(
+        reverse("cmsv2:word_image_prompt_preview", args=[word.pk]),
+        {"show_people": "false"},
+    )
+
+    assert response.json()["prompt"].startswith("OHNE Hammer")
+    assert response.json()["show_people"] is False
+    word.refresh_from_db()
+    assert word.show_people is True
+    assert not word.show_people_overridden
+
+
+@pytest.mark.django_db
+def test_the_preview_leaves_the_toggle_undecided_if_classifying_fails(
+    admin_client: Client,
+) -> None:
+    _people_prompt()
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    with mock.patch.object(
+        show_people, "classify_show_people", side_effect=ValueError("bad")
+    ):
+        response = admin_client.post(
+            reverse("cmsv2:word_image_prompt_preview", args=[word.pk])
+        )
+
+    assert response.json()["show_people"] is None
+    assert response.json()["prompt"].startswith("OHNE Hammer")
+
+
+@pytest.mark.django_db
+def test_generating_stores_the_toggle_of_the_editor(
+    admin_client: Client, fake_openai: None
+) -> None:
+    _people_prompt()
+    word = _content(Area.objects.create(name="Testarea")).word
+    Word.objects.filter(pk=word.pk).update(show_people=True)
+
+    with mock.patch.object(
+        generate_image, "openai_image_bytes", return_value=b"webp"
+    ) as image_call:
+        admin_client.post(
+            reverse("cmsv2:word_generate_image_via_openai", args=[word.pk]),
+            {"show_people": "false"},
+        )
+
+    assert image_call.call_args.args[0].startswith("OHNE Hammer")
+    word.refresh_from_db()
+    assert word.show_people is False
+    assert word.show_people_overridden
+
+
+@pytest.mark.django_db
+def test_the_unitword_generation_uses_the_decision_of_the_word(
+    admin_client: Client, fake_openai: None
+) -> None:
+    _people_prompt()
+    unitword = _content(Area.objects.create(name="Testarea"))
+    Word.objects.filter(pk=unitword.word.pk).update(show_people=True)
+
+    with mock.patch.object(
+        generate_image, "openai_image_bytes", return_value=b"webp"
+    ) as image_call:
+        admin_client.post(
+            reverse("cmsv2:unitword_generate_image_via_openai", args=[unitword.pk])
+        )
+
+    assert image_call.call_args.args[0].startswith("MIT Hammer")
+
+
+@pytest.mark.django_db
+def test_the_toggle_is_ignored_for_a_prompt_without_variants(
+    admin_client: Client, fake_openai: None
+) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    admin_client.post(
+        reverse("cmsv2:word_generate_image_via_openai", args=[word.pk]),
+        {"show_people": "true"},
+    )
+
+    word.refresh_from_db()
+    assert word.show_people is None
+    assert not word.show_people_overridden
+
+
+@pytest.mark.django_db
+def test_generating_records_the_prompt_and_model_next_to_the_temporary_image(
+    admin_client: Client, fake_openai: None, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODEL = "image-model"
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    response = admin_client.post(
+        reverse("cmsv2:word_generate_image_via_openai", args=[word.pk])
+    )
+
+    temp_path = Path(generate_image.settings.TEMP_IMAGE_DIR) / (
+        response.json()["temp_image_filename"]
+    )
+    assert image_generation.read_generation_record(str(temp_path)) == (
+        ImagePrompt.get_default(),
+        "image-model",
+    )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("show_people_value", "toggle"),
+    [
+        (True, r'class="prompt-show-people"\s+checked\s*>'),
+        (False, r'class="prompt-show-people"\s*>'),
+        (None, r'class="prompt-show-people"\s+data-undecided\s*>'),
+    ],
+)
+def test_the_unitword_page_shows_the_toggle_for_a_people_prompt(
+    admin_client: Client, show_people_value: bool | None, toggle: str
+) -> None:
+    _people_prompt()
+    unitword = _content(Area.objects.create(name="Testarea"))
+    Word.objects.filter(pk=unitword.word.pk).update(show_people=show_people_value)
+
+    response = admin_client.get(
+        reverse("cmsv2:unitword_generate_image", args=[unitword.pk])
+    )
+
+    assert re.search(toggle, response.content.decode())
+
+
+@pytest.mark.django_db
+def test_the_unitword_page_has_no_toggle_for_a_prompt_without_variants(
+    admin_client: Client,
+) -> None:
+    unitword = _content(Area.objects.create(name="Testarea"))
+
+    response = admin_client.get(
+        reverse("cmsv2:unitword_generate_image", args=[unitword.pk])
+    )
+
+    assert "prompt-show-people" not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_rendering_the_page_never_classifies(admin_client: Client) -> None:
+    _people_prompt()
+    unitword = _content(Area.objects.create(name="Testarea"))
+
+    with mock.patch.object(show_people, "classify_show_people") as classify:
+        admin_client.get(reverse("cmsv2:unitword_generate_image", args=[unitword.pk]))
+        response = admin_client.get(
+            reverse("admin:cmsv2_word_change", args=[unitword.word.pk])
+        )
+
+    classify.assert_not_called()
+    assert re.search(
+        r'class="prompt-show-people"\s+data-undecided\s*>', response.content.decode()
     )

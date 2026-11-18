@@ -45,6 +45,10 @@ window.initImageGenerator = function (config: ImageGeneratorConfig): void {
         formData.append("additional_info", inputElement.value)
         const allowTextElement = document.getElementById("prompt-allow-text") as HTMLInputElement
         formData.append("allow_text_in_image", allowTextElement.checked ? "true" : "false")
+        window.appendShowPeople(
+            formData,
+            document.querySelector<HTMLInputElement>(".prompt-show-people"),
+        )
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         window

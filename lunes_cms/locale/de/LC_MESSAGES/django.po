@@ -1638,7 +1638,7 @@ msgstr ""
 "Wann der Prompt zum ersten Mal zur Bildgenerierung verwendet wurde. Ab dann "
 "kann sein Text nicht mehr geändert, sondern nur noch kopiert werden."
 
-#: cmsv2/models/image_prompt.py
+#: cmsv2/models/image_prompt.py cmsv2/models/unit.py cmsv2/models/word.py
 msgid "image prompt"
 msgstr "Bild-Prompt"
 
@@ -2027,6 +2027,18 @@ msgid "image source"
 msgstr "Bildquelle"
 
 #: cmsv2/models/unit.py cmsv2/models/word.py
+msgid "The prompt the image was generated with."
+msgstr "Der Prompt, mit dem das Bild generiert wurde."
+
+#: cmsv2/models/unit.py cmsv2/models/word.py
+msgid "image model"
+msgstr "Bildmodell"
+
+#: cmsv2/models/unit.py cmsv2/models/word.py
+msgid "The model the image was generated with."
+msgstr "Das Modell, mit dem das Bild generiert wurde."
+
+#: cmsv2/models/unit.py cmsv2/models/word.py
 msgid "example sentence audio"
 msgstr "Beispielsatz Audio"
 
@@ -2087,6 +2099,30 @@ msgstr ""
 #: cmsv2/models/word.py
 msgid "audio checked identifier"
 msgstr "Audio Checked Identifier"
+
+#: cmsv2/models/word.py
+msgid "show people"
+msgstr "Personen anzeigen"
+
+#: cmsv2/models/word.py
+msgid ""
+"Whether generated images of the word show people. Empty until it has been "
+"decided."
+msgstr ""
+"Ob generierte Bilder des Wortes Personen zeigen. Leer, solange es noch nicht "
+"entschieden wurde."
+
+#: cmsv2/models/word.py
+msgid "show people set by an editor"
+msgstr "Personen anzeigen von Redaktion festgelegt"
+
+#: cmsv2/models/word.py
+msgid ""
+"Whether an editor has set show people instead of keeping the automatic "
+"decision."
+msgstr ""
+"Ob jemand aus der Redaktion „Personen anzeigen“ selbst festgelegt hat, statt "
+"die automatische Entscheidung zu übernehmen."
 
 #: cmsv2/models/word.py
 msgid ""
@@ -2236,6 +2272,28 @@ msgstr "Beschreibe die gemeinte Bedeutung dann unter „Zusätzliche Infos“."
 #: cmsv2/templates/admin/image_prompt_info.html
 msgid "not included (none or several)"
 msgstr "nicht enthalten (keine oder mehrere)"
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid "Show people in the image"
+msgstr "Personen im Bild zeigen"
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid ""
+"Whether the image shows people is decided automatically for every word. "
+"Change it if the decision doesn't fit; the change is stored with the next "
+"generated image."
+msgstr ""
+"Ob das Bild Personen zeigt, wird für jedes Wort automatisch entschieden. "
+"Ändere es, wenn die Entscheidung nicht passt; die Änderung wird mit dem "
+"nächsten generierten Bild gespeichert."
+
+#: cmsv2/templates/admin/image_prompt_info.html
+msgid ""
+"Whether the image shows people is decided automatically for every word. The "
+"preview shows the variant without people."
+msgstr ""
+"Ob das Bild Personen zeigt, wird für jedes Wort automatisch entschieden. Die "
+"Vorschau zeigt die Variante ohne Personen."
 
 #: cmsv2/templates/admin/image_prompt_info.html
 msgid "Prompt preview"
