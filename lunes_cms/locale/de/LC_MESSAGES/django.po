@@ -559,7 +559,7 @@ msgstr "API-Key"
 msgid "API Keys"
 msgstr "API-Keys"
 
-#: cms/models/sponsor.py
+#: cms/models/sponsor.py cmsv2/models/image_prompt.py
 msgid "name"
 msgstr "Name"
 
@@ -744,8 +744,9 @@ msgstr "Clients"
 #: cmsv2/admins/area_admin.py cmsv2/admins/job_admin.py
 #: cmsv2/admins/unit_admin.py cmsv2/models/ai_generation.py
 #: cmsv2/models/area.py cmsv2/models/area_access_token.py
-#: cmsv2/models/area_code.py cmsv2/models/job.py cmsv2/models/notification.py
-#: cmsv2/models/pending_notification.py cmsv2/models/unit.py
+#: cmsv2/models/area_code.py cmsv2/models/image_prompt.py cmsv2/models/job.py
+#: cmsv2/models/notification.py cmsv2/models/pending_notification.py
+#: cmsv2/models/unit.py
 msgid "created at"
 msgstr "Erstellt"
 
@@ -764,6 +765,50 @@ msgstr "Nicht mehr verfügbar"
 #: cmsv2/models/word.py
 msgid "area"
 msgstr "Bereich"
+
+#: cmsv2/admins/image_prompt_admin.py
+msgid ""
+"Prompts use the Django template language. Available variables: word, job, "
+"unit and additional_info. All but word can be empty, so put the parts using "
+"them in an if block, for example:"
+msgstr ""
+"Prompts verwenden die Django-Template-Sprache. Verfügbare Variablen: word, "
+"job, unit und additional_info. Alle außer word können leer sein, daher "
+"gehören die Teile, die sie verwenden, in einen if-Block, zum Beispiel:"
+
+#: cmsv2/admins/image_prompt_admin.py
+msgid ""
+"The ban on text in the image and the instruction for the AI label are "
+"appended automatically. They are in German, so write prompts in German as "
+"well."
+msgstr ""
+"Das Verbot von Text im Bild und die Anweisung für die KI-Kennzeichnung "
+"werden automatisch angehängt. Sie sind auf Deutsch, daher müssen auch die "
+"Prompts auf Deutsch geschrieben sein."
+
+#: cmsv2/admins/image_prompt_admin.py
+msgid ""
+"This prompt has already been used to generate images, so its text can't be "
+"changed any more. Copy it in the list to make changes."
+msgstr ""
+"Dieser Prompt wurde bereits zur Bildgenerierung verwendet, daher kann sein "
+"Text nicht mehr geändert werden. Kopiere ihn in der Liste, um Änderungen "
+"vorzunehmen."
+
+#: cmsv2/admins/image_prompt_admin.py
+msgid "Prompt"
+msgstr "Prompt"
+
+#: cmsv2/admins/image_prompt_admin.py
+msgid "Copy selected prompts"
+msgstr "Ausgewählte Prompts kopieren"
+
+#: cmsv2/admins/image_prompt_admin.py
+#, python-format
+msgid "%(count)d prompt was copied."
+msgid_plural "%(count)d prompts were copied."
+msgstr[0] "%(count)d Prompt wurde kopiert."
+msgstr[1] "%(count)d Prompts wurden kopiert."
 
 #: cmsv2/admins/job_admin.py cmsv2/admins/unit_admin.py
 #: cmsv2/admins/word_filters.py
@@ -1506,6 +1551,134 @@ msgstr "Bereichscode"
 #: cmsv2/models/area_code.py
 msgid "Area codes"
 msgstr "Bereichscodes"
+
+#: cmsv2/models/image_prompt.py
+#, python-format
+msgid ""
+"Unknown variables: %(unknown)s. Available variables: word, job, unit and "
+"additional_info."
+msgstr ""
+"Unbekannte Variablen: %(unknown)s. Verfügbare Variablen: word, job, unit und "
+"additional_info."
+
+#: cmsv2/models/image_prompt.py
+#, python-format
+msgid "The prompt has to contain the word: %(variable)s"
+msgstr "Der Prompt muss das Wort enthalten: %(variable)s"
+
+#: cmsv2/models/image_prompt.py
+msgid "supports show people"
+msgstr "unterstützt Personen anzeigen"
+
+#: cmsv2/models/image_prompt.py
+msgid ""
+"Whether the prompt has separate variants for images with and without people "
+"instead of a single prompt."
+msgstr ""
+"Ob der Prompt statt eines einzelnen Prompts getrennte Varianten für Bilder "
+"mit und ohne Personen hat."
+
+#: cmsv2/models/image_prompt.py
+msgid "prompt"
+msgstr "Prompt"
+
+#: cmsv2/models/image_prompt.py
+msgid "Used if the prompt doesn't support show people."
+msgstr "Wird verwendet, wenn der Prompt Personen anzeigen nicht unterstützt."
+
+#: cmsv2/models/image_prompt.py
+msgid "prompt with people"
+msgstr "Prompt mit Personen"
+
+#: cmsv2/models/image_prompt.py
+msgid "Used for words that are shown with people."
+msgstr "Wird für Wörter verwendet, die mit Personen dargestellt werden."
+
+#: cmsv2/models/image_prompt.py
+msgid "prompt without people"
+msgstr "Prompt ohne Personen"
+
+#: cmsv2/models/image_prompt.py
+msgid "Used for words that are shown without people."
+msgstr "Wird für Wörter verwendet, die ohne Personen dargestellt werden."
+
+#: cmsv2/models/image_prompt.py
+msgid "default"
+msgstr "Standard"
+
+#: cmsv2/models/image_prompt.py
+msgid ""
+"The prompt used unless another one is selected. Making a prompt the default "
+"removes the mark from the previous default."
+msgstr ""
+"Der Prompt, der verwendet wird, wenn kein anderer ausgewählt ist. Wird ein "
+"Prompt zum Standard, verliert der bisherige Standard diese Markierung."
+
+#: cmsv2/models/image_prompt.py
+msgid "active"
+msgstr "aktiv"
+
+#: cmsv2/models/image_prompt.py
+msgid ""
+"Inactive prompts are not offered for selection. The default prompt can't be "
+"deactivated."
+msgstr ""
+"Inaktive Prompts werden nicht zur Auswahl angeboten. Der Standard-Prompt "
+"kann nicht deaktiviert werden."
+
+#: cmsv2/models/image_prompt.py
+msgid "first used at"
+msgstr "zuerst verwendet am"
+
+#: cmsv2/models/image_prompt.py
+msgid ""
+"When the prompt was first used to generate an image. From then on its text "
+"can't be changed any more, only copied."
+msgstr ""
+"Wann der Prompt zum ersten Mal zur Bildgenerierung verwendet wurde. Ab dann "
+"kann sein Text nicht mehr geändert, sondern nur noch kopiert werden."
+
+#: cmsv2/models/image_prompt.py
+msgid "image prompt"
+msgstr "Bild-Prompt"
+
+#: cmsv2/models/image_prompt.py
+msgid "image prompts"
+msgstr "Bild-Prompts"
+
+#: cmsv2/models/image_prompt.py
+msgid "This field is required."
+msgstr "Dieses Feld ist zwingend erforderlich."
+
+#: cmsv2/models/image_prompt.py
+#, python-format
+msgid "The prompt is not a valid template: %(error)s"
+msgstr "Der Prompt ist kein gültiges Template: %(error)s"
+
+#: cmsv2/models/image_prompt.py
+msgid "The default prompt can't be deactivated."
+msgstr "Der Standard-Prompt kann nicht deaktiviert werden."
+
+#: cmsv2/models/image_prompt.py
+msgid ""
+"There always has to be a default prompt. Make another prompt the default "
+"instead."
+msgstr ""
+"Es muss immer einen Standard-Prompt geben. Mache stattdessen einen anderen "
+"Prompt zum Standard."
+
+#: cmsv2/models/image_prompt.py
+msgid ""
+"The prompt has already been used to generate images, so its text can't be "
+"changed any more. Copy it instead."
+msgstr ""
+"Der Prompt wurde bereits zur Bildgenerierung verwendet, daher kann sein Text "
+"nicht mehr geändert werden. Kopiere ihn stattdessen."
+
+#: cmsv2/models/image_prompt.py
+#, python-format
+msgid "Copy of %(name)s"
+msgstr "Kopie von %(name)s"
 
 #: cmsv2/models/job.py
 msgid "expert reviewed"

@@ -25,7 +25,7 @@ from django.db import connection
 from django.db.models import Q
 from openai import RateLimitError
 
-from ..models import AIGeneration, Area, Job, Unit, Word
+from ..models import AIGeneration, Area, ImagePrompt, Job, Unit, Word
 from ..models.static import AIGenerationEvent, ImageSource
 from ..utils import get_openai_client, OpenAIConfigurationError
 from .ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
@@ -63,55 +63,47 @@ AI_LABEL_PROMPT = (
 )
 
 
-DIVERSITY_PROMPT = (
-    " Wenn Personen zu sehen sind, zeige vielfältige Menschen: unterschiedlichen"
-    " Geschlechts (auch nicht-binäre Personen), unterschiedlicher Hautfarbe und"
-    " Herkunft (auch Schwarze Menschen und People of Color) und unterschiedlichen"
-    " Alters, ohne Stereotype."
+#: Ban on text in the image, appended unless an editor allows text. It
+#: exempts the AI label, or the two instructions would contradict each other.
+TEXT_BAN_PROMPT = (
+    " Außer der unten beschriebenen Kennzeichnung enthält das Bild keinerlei"
+    " Text, Buchstaben, Zahlen, Beschriftungen, Untertitel oder Logos."
 )
 
 
-def build_image_prompt(
+def build_image_prompt(  # pylint: disable=too-many-arguments
     word_text: str,
     unit_title: str | None = None,
     additional_info: str | None = None,
     job_title: str | None = None,
     allow_text_in_image: bool = False,
+    *,
+    image_prompt: ImagePrompt | None = None,
 ) -> str:
     """
-    Build the German image-generation prompt from plain text.
+    Build the image-generation prompt from plain text.
 
     Callers generating an image for a word go through
     :func:`build_word_image_prompt`, which resolves the context to pass here.
 
-    Most vocabulary items look wrong with any text/numbers/logos in the
-    picture (issue #918), so that's banned by default. Some items (a receipt,
-    a clock face, a calendar) are inherently defined by the text/numbers on
-    them, so ``allow_text_in_image`` lets an editor lift the ban for those.
+    ``image_prompt`` is the stored prompt to render, the default one if
+    ``None`` (#1143). Code appends the parts no stored prompt may drop:
 
-    Every prompt ends with ``AI_LABEL_PROMPT``, the AI-disclosure label — the
-    text ban has to exempt it explicitly, or the two instructions contradict
-    each other.
+    Most vocabulary items look wrong with any text/numbers/logos in the
+    picture (issue #918), so ``TEXT_BAN_PROMPT`` bans that by default. Some
+    items (a receipt, a clock face, a calendar) are inherently defined by the
+    text/numbers on them, so ``allow_text_in_image`` lets an editor lift the
+    ban for those.
+
+    Every prompt ends with ``AI_LABEL_PROMPT``, the AI-disclosure label.
     """
-    prompt = (
-        f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
+    if image_prompt is None:
+        image_prompt = ImagePrompt.get_default()
+    prompt = image_prompt.render(
+        word_text, job=job_title, unit=unit_title, additional_info=additional_info
     )
-    if job_title:
-        prompt += f" Beruflicher Kontext: {job_title}."
-    if unit_title:
-        prompt += f" Thematischer Kontext: {unit_title}."
-    prompt += (
-        " Nur das zentrale Motiv ist zu sehen, vor einem neutralen weißen Hintergrund,"
-        " ohne zusätzliche Objekte. Fotorealistisch, keine Illustration, kein Rendering."
-    )
-    # prompt += DIVERSITY_PROMPT
-    if additional_info:
-        prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
     if not allow_text_in_image:
-        prompt += (
-            " Außer der unten beschriebenen Kennzeichnung enthält das Bild keinerlei"
-            " Text, Buchstaben, Zahlen, Beschriftungen, Untertitel oder Logos."
-        )
+        prompt += TEXT_BAN_PROMPT
     prompt += AI_LABEL_PROMPT
     return prompt
 
@@ -159,10 +151,14 @@ class ImagePromptContext:
     job_title: str | None
 
     def prompt(
-        self, additional_info: str | None = None, allow_text_in_image: bool = False
+        self,
+        additional_info: str | None = None,
+        allow_text_in_image: bool = False,
+        image_prompt: ImagePrompt | None = None,
     ) -> str:
         """
-        Build the image prompt for this context.
+        Build the image prompt for this context, from the default prompt
+        unless ``image_prompt`` is given.
         """
         return build_image_prompt(
             self.word,
@@ -170,6 +166,7 @@ class ImagePromptContext:
             additional_info=additional_info,
             job_title=self.job_title,
             allow_text_in_image=allow_text_in_image,
+            image_prompt=image_prompt,
         )
 
 
@@ -206,22 +203,25 @@ def image_prompt_context(
     )
 
 
-def build_word_image_prompt(
+def build_word_image_prompt(  # pylint: disable=too-many-arguments
     word: Word,
     *,
     unit: Unit | None = None,
     job: Job | None = None,
     additional_info: str | None = None,
     allow_text_in_image: bool = False,
+    image_prompt: ImagePrompt | None = None,
 ) -> str:
     """
     Build the image prompt for ``word``, the one entry point for every place
     that generates a word image, so they all send the same context.
 
     See :func:`image_prompt_context` for how ``unit`` and ``job`` are resolved.
+    ``image_prompt`` is the stored prompt to render, the default one if
+    ``None``.
     """
     return image_prompt_context(word, unit=unit, job=job).prompt(
-        additional_info, allow_text_in_image
+        additional_info, allow_text_in_image, image_prompt
     )
 
 
@@ -236,7 +236,12 @@ def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
     other image in the system.
     """
     if not word.image:
-        data = openai_image_bytes(build_word_image_prompt(word, job=job), word.area)
+        image_prompt = ImagePrompt.get_default()
+        data = openai_image_bytes(
+            build_word_image_prompt(word, job=job, image_prompt=image_prompt),
+            word.area,
+        )
+        image_prompt.mark_used()
         word.image.save(
             f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
         )

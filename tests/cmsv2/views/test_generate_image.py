@@ -16,6 +16,7 @@ from django.urls import reverse
 from lunes_cms.cmsv2.models import (
     AIGeneration,
     Area,
+    ImagePrompt,
     Job,
     Unit,
     UnitWordRelation,
@@ -118,6 +119,41 @@ def test_unitword_endpoint_uses_the_unit_of_the_relation(
     assert response.status_code == 200
     assert "Thematischer Kontext: Werkzeuge." in image_call.call_args.args[0]
     assert "Beruflicher Kontext: Tischler/in." in image_call.call_args.args[0]
+
+
+@pytest.mark.django_db
+def test_generating_an_image_locks_the_default_prompt(
+    admin_client: Client, fake_openai: None
+) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    admin_client.post(reverse("cmsv2:word_generate_image_via_openai", args=[word.pk]))
+
+    assert ImagePrompt.get_default().is_used
+
+
+@pytest.mark.django_db
+def test_a_failed_generation_leaves_the_prompt_unlocked(admin_client: Client) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    with mock.patch.object(
+        generate_image, "openai_image_bytes", side_effect=ValueError("boom")
+    ):
+        response = admin_client.post(
+            reverse("cmsv2:word_generate_image_via_openai", args=[word.pk])
+        )
+
+    assert response.status_code == 500
+    assert not ImagePrompt.get_default().is_used
+
+
+@pytest.mark.django_db
+def test_the_prompt_preview_leaves_the_prompt_unlocked(admin_client: Client) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    admin_client.post(reverse("cmsv2:word_image_prompt_preview", args=[word.pk]))
+
+    assert not ImagePrompt.get_default().is_used
 
 
 @pytest.mark.django_db

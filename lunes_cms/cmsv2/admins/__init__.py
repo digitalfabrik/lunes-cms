@@ -1,5 +1,6 @@
 from .area_admin import AreaAdmin
 from .feedback_admin import FeedbackAdmin
+from .image_prompt_admin import ImagePromptAdmin
 from .job_admin import JobAdmin
 from .notification_admin import NotificationAdmin
 from .permission_labels import LunesGroupAdmin
@@ -15,6 +16,7 @@ __all__ = [
     "UnitAdmin",
     "UnitWordRelationAdmin",
     "FeedbackAdmin",
+    "ImagePromptAdmin",
     "ReviewAdmin",
     "NotificationAdmin",
     "LunesUserAdmin",

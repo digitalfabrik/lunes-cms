@@ -4,6 +4,7 @@ from .area import Area
 from .area_access_token import AreaAccessToken
 from .area_code import AreaCode
 from .feedback import Feedback
+from .image_prompt import ImagePrompt
 from .job import Job
 from .notification import Notification
 from .pending_notification import NotificationType, PendingNotification
