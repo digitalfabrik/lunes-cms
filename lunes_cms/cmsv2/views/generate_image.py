@@ -15,8 +15,12 @@ from lunes_cms.cmsv2.models import ImagePrompt, UnitWordRelation, Word
 from lunes_cms.cmsv2.services.image_generation import (
     build_word_image_prompt,
     GENERATED_IMAGE_EXTENSION,
+    image_model,
+    image_prompt_context,
     openai_image_bytes,
+    write_generation_record,
 )
+from lunes_cms.cmsv2.services.show_people import resolve_show_people, set_show_people
 from lunes_cms.cmsv2.utils import OpenAIConfigurationError
 from lunes_cms.core import settings
 
@@ -28,11 +32,23 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _requested_show_people(request: HttpRequest) -> bool | None:
+    """
+    Whether the editor's show-people toggle asks for people, or ``None`` if
+    the request leaves it to the word's stored decision.
+    """
+    value = request.POST.get("show_people")
+    if value in ("true", "false"):
+        return value == "true"
+    return None
+
+
 def _prompt_from_request(
     request: HttpRequest,
     word: Word,
     unit: Unit | None = None,
     image_prompt: ImagePrompt | None = None,
+    show_people: bool | None = None,
 ) -> str:
     """
     Builds the image prompt for ``word``, from the default stored prompt
@@ -40,7 +56,8 @@ def _prompt_from_request(
 
     The prompt context (unit, job) is resolved from the database by
     ``build_word_image_prompt``; the request only contributes the editor's own
-    hints.
+    hints. ``show_people`` picks the variant of a show-people prompt; without
+    it the word's stored decision is used (see ``resolve_show_people``).
     """
     return build_word_image_prompt(
         word,
@@ -48,6 +65,40 @@ def _prompt_from_request(
         additional_info=request.POST.get("additional_info"),
         allow_text_in_image=request.POST.get("allow_text_in_image") == "true",
         image_prompt=image_prompt,
+        show_people=show_people,
+    )
+
+
+def _prompt_preview(
+    request: HttpRequest, word: Word, unit: Unit | None = None
+) -> JsonResponse:
+    """
+    The prompt a generation would send, and whether it shows people.
+
+    The editor's toggle is followed but not stored, since it is only stored
+    once an image is generated. Without it, a word that has no decision yet
+    is classified, so the toggle can show the result. ``show_people`` is
+    ``None`` if the prompt has no show-people variants, or if classifying
+    failed, so the toggle stays undecided and the next generation tries
+    again.
+    """
+    image_prompt = ImagePrompt.get_default()
+    requested = _requested_show_people(request)
+    show_people = (
+        requested
+        if requested is not None
+        else resolve_show_people(
+            word, image_prompt, image_prompt_context(word, unit=unit)
+        )
+    )
+    decision = requested if requested is not None else word.show_people
+    return JsonResponse(
+        {
+            "prompt": _prompt_from_request(
+                request, word, unit, image_prompt, show_people
+            ),
+            "show_people": decision if image_prompt.supports_show_people else None,
+        }
     )
 
 
@@ -58,9 +109,16 @@ def _generate_temp_image(
     Generates an image for ``word`` and saves it temporarily.
 
     The generation is recorded for the word's area, and the stored prompt
-    is marked as used.
+    is marked as used. The prompt and model are recorded next to the
+    temporary file, so storing the image can keep them.
+
+    If the editor changed the show-people toggle, the new choice is stored
+    on the word (#1145).
     """
     image_prompt = ImagePrompt.get_default()
+    requested = _requested_show_people(request)
+    if requested is not None and image_prompt.supports_show_people:
+        set_show_people(word, requested)
     prompt = _prompt_from_request(request, word, unit, image_prompt)
 
     try:
@@ -77,6 +135,7 @@ def _generate_temp_image(
 
         with open(temp_filepath, "wb") as f:
             f.write(image_data)
+        write_generation_record(temp_filepath, image_prompt, image_model())
 
         temp_image_url = os.path.join(settings.MEDIA_URL, "temp_image", temp_filename)
 
@@ -140,7 +199,7 @@ def word_image_prompt_preview(request: HttpRequest, word_id: int) -> JsonRespons
     word = _word_or_none(request, word_id)
     if word is None:
         return json_not_found(_("Word not found"))
-    return JsonResponse({"prompt": _prompt_from_request(request, word)})
+    return _prompt_preview(request, word)
 
 
 @login_required
@@ -172,6 +231,4 @@ def unitword_image_prompt_preview(
     unitword = _unitword_or_none(request, unitword_id)
     if unitword is None:
         return json_not_found(_("Unit-Word relation not found"))
-    return JsonResponse(
-        {"prompt": _prompt_from_request(request, unitword.word, unitword.unit)}
-    )
+    return _prompt_preview(request, unitword.word, unitword.unit)

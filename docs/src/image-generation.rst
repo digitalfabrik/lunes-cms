@@ -94,6 +94,37 @@ the command again picks up only the images that are still unlabeled, and an
 image that already carries the XMP packet is never marked a second time, but it
 is still recorded as *labeled afterwards*.
 
+Showing people
+==============
+
+An image prompt that supports show people has two variants, one with and one
+without people (#1143). Image models tend to draw people as soon as a prompt
+mentions them, so which variant a word gets is decided before the prompt is
+built, not inside it (#1145):
+
+* A small text model (``LUNES_CMS_OPENAI_CLASSIFIER_MODEL``) decides once per
+  word whether its image shows people, from the word and the job and unit the
+  prompt names. The instruction is ``CLASSIFIER_INSTRUCTION`` in
+  ``cmsv2/services/show_people.py``. The result is stored in
+  ``Word.show_people``.
+* The classifier only runs for a prompt that supports show people, and only for
+  a word without a stored decision. If it fails, the word gets the variant
+  without people and nothing is stored, so the next generation tries again.
+* On the word page and the unit-word page, a toggle shows the stored decision
+  and the prompt preview shows the variant that will be sent. A word without a
+  decision is classified when the preview loads. An editor's change is stored
+  with the next generated image and sets ``Word.show_people_overridden``.
+* The CSV import classifies each word in its background worker, outside any
+  transaction, right before generating the image.
+
+The decision is stored per word, so a word's unit images use it too.
+
+Every generated image stores the prompt and model it was made with
+(``image_prompt`` and ``image_model`` on ``Word`` and ``UnitWordRelation``).
+Until an editor keeps a manually generated image, both are recorded in a JSON
+file next to the temporary image. Uploading or removing an image clears them,
+and images from before this change have neither.
+
 Background worker
 =================
 
@@ -132,3 +163,6 @@ Configure via environment variables:
    * - ``LUNES_CMS_OPENAI_IMAGE_OUTPUT_COMPRESSION``
      - ``85``
      - Compression level (0-100) OpenAI applies to the generated WebP
+   * - ``LUNES_CMS_OPENAI_CLASSIFIER_MODEL``
+     - ``gpt-4.1-mini``
+     - Text model that decides whether a word's image shows people

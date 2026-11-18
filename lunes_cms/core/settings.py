@@ -79,6 +79,12 @@ OPENAI_IMAGE_OUTPUT_COMPRESSION = int(
 #: OpenAI model used for text generation (e.g. example sentences)
 OPENAI_TEXT_MODEL = os.environ.get("LUNES_CMS_OPENAI_TEXT_MODEL", "gpt-4.1")
 
+#: Small OpenAI text model that decides whether a word's image shows people,
+#: for image prompts that support show people (#1145)
+OPENAI_CLASSIFIER_MODEL = os.environ.get(
+    "LUNES_CMS_OPENAI_CLASSIFIER_MODEL", "gpt-4.1-mini"
+)
+
 ####################
 # APP DEEP LINKING #
 ####################

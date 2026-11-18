@@ -23,6 +23,7 @@ from .area import Area
 from .job import default_area_id, Job
 from .static import (
     CheckStatus,
+    clear_image_generation,
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
@@ -68,6 +69,23 @@ class UnitWordRelation(models.Model):
         default=ImageSource.UNKNOWN,
         editable=False,
         verbose_name=_("image source"),
+    )
+    image_prompt = models.ForeignKey(
+        "ImagePrompt",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        editable=False,
+        related_name="unit_word_relations",
+        verbose_name=_("image prompt"),
+        help_text=_("The prompt the image was generated with."),
+    )
+    image_model = models.CharField(
+        max_length=255,
+        blank=True,
+        editable=False,
+        verbose_name=_("image model"),
+        help_text=_("The model the image was generated with."),
     )
     example_sentence = models.TextField(verbose_name=_("example sentence"), blank=True)
     example_sentence_audio = models.FileField(
@@ -191,6 +209,8 @@ class UnitWordRelation(models.Model):
         self.image_source = resolve_image_source(
             self.image_source, bool(self.image), bool(image_updated), image_source
         )
+        if not self.image or (image_updated and image_source is None):
+            clear_image_generation(self)
 
         if not self.example_sentence or not self.example_sentence.strip():
             self.example_sentence_check_status = CheckStatus.NOT_CHECKED

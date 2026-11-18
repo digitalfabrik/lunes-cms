@@ -2,14 +2,28 @@
 //
 // The prompt is built on the server (services/image_generation.py), so the
 // preview asks the server for it whenever the editor changes the additional
-// info or the text option next to it. The inputs are looked up in the closest
-// element marked with data-prompt-scope.
+// info, the text option or the show-people toggle next to it. The inputs are
+// looked up in the closest element marked with data-prompt-scope.
+//
+// A show-people toggle marked data-undecided belongs to a word that hasn't
+// been classified yet. Its value isn't sent, so the server classifies the word
+// and the answer sets the toggle.
 
 type PromptPreviewResponse = {
     prompt?: string
+    show_people?: boolean | null
 }
 
 const PREVIEW_DELAY_MS = 300
+
+// Send the editor's show-people choice with a preview or generation request.
+// Nothing is sent while the word is undecided, so the server decides.
+// Also used by generate_image.ts and inline_regenerate.ts.
+window.appendShowPeople = function (formData: FormData, toggle: HTMLInputElement | null): void {
+    if (toggle && toggle.dataset.undecided === undefined) {
+        formData.append("show_people", toggle.checked ? "true" : "false")
+    }
+}
 
 function _initPromptPreview(info: HTMLElement): void {
     const previewUrl = info.dataset.previewUrl
@@ -20,6 +34,7 @@ function _initPromptPreview(info: HTMLElement): void {
     }
     const additionalInfo = scope.querySelector<HTMLInputElement>(".prompt-additional-info")
     const allowText = scope.querySelector<HTMLInputElement>(".prompt-allow-text")
+    const showPeople = scope.querySelector<HTMLInputElement>(".prompt-show-people")
 
     let timer: number | undefined
     let latestRequest = 0
@@ -29,6 +44,7 @@ function _initPromptPreview(info: HTMLElement): void {
         const formData = new FormData()
         formData.append("additional_info", additionalInfo?.value ?? "")
         formData.append("allow_text_in_image", allowText?.checked ? "true" : "false")
+        window.appendShowPeople(formData, showPeople)
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         window
@@ -38,8 +54,19 @@ function _initPromptPreview(info: HTMLElement): void {
             )
             .then((data) => {
                 // Ignore answers overtaken by a newer request.
-                if (request === latestRequest && data.prompt) {
+                if (request !== latestRequest) {
+                    return
+                }
+                if (data.prompt) {
                     preview.textContent = data.prompt
+                }
+                if (
+                    showPeople &&
+                    showPeople.dataset.undecided !== undefined &&
+                    typeof data.show_people === "boolean"
+                ) {
+                    showPeople.checked = data.show_people
+                    delete showPeople.dataset.undecided
                 }
             })
             .catch(() => {
@@ -60,6 +87,13 @@ function _initPromptPreview(info: HTMLElement): void {
 
     additionalInfo?.addEventListener("input", scheduleRefresh)
     allowText?.addEventListener("change", scheduleRefresh)
+    showPeople?.addEventListener("change", () => {
+        delete showPeople.dataset.undecided
+        scheduleRefresh()
+    })
+    if (showPeople?.dataset.undecided !== undefined) {
+        refresh()
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

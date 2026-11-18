@@ -25,6 +25,7 @@ from .job import default_area_id
 from .static import (
     AI_IMAGE_SOURCES,
     CheckStatus,
+    clear_image_generation,
     convert_image_to_webp,
     convert_umlaute_audio,
     convert_umlaute_images,
@@ -172,6 +173,42 @@ class Word(models.Model):
         editable=False,
         verbose_name=_("image source"),
     )
+    image_prompt = models.ForeignKey(
+        "ImagePrompt",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        editable=False,
+        related_name="words",
+        verbose_name=_("image prompt"),
+        help_text=_("The prompt the image was generated with."),
+    )
+    image_model = models.CharField(
+        max_length=255,
+        blank=True,
+        editable=False,
+        verbose_name=_("image model"),
+        help_text=_("The model the image was generated with."),
+    )
+    show_people = models.BooleanField(
+        null=True,
+        blank=True,
+        editable=False,
+        verbose_name=_("show people"),
+        help_text=_(
+            "Whether generated images of the word show people. Empty until it "
+            "has been decided."
+        ),
+    )
+    show_people_overridden = models.BooleanField(
+        default=False,
+        editable=False,
+        verbose_name=_("show people set by an editor"),
+        help_text=_(
+            "Whether an editor has set show people instead of keeping the "
+            "automatic decision."
+        ),
+    )
     v1_id = models.IntegerField(null=True, blank=True, editable=False)
     area = models.ForeignKey(
         Area,
@@ -244,6 +281,8 @@ class Word(models.Model):
         self.image_source = resolve_image_source(
             self.image_source, bool(self.image), image_updated, image_source
         )
+        if not self.image or (image_updated and image_source is None):
+            clear_image_generation(self)
 
         if self._pronunciation_changed(previous_word):
             self._flag_stale_audio_for_review()

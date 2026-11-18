@@ -13,6 +13,7 @@ interface Window {
     getCookie: (name: string) => string | null
     postWithCsrf: (url: string, body?: FormData) => Promise<Response>
     readJsonBody: (response: Response) => Promise<JsonBody>
+    appendShowPeople: (formData: FormData, toggle: HTMLInputElement | null) => void
     assetManagerConfigs?: AssetManagerConfig[]
     audioAssetManagerConfigs?: AudioAssetManagerConfig[]
     initAudioGenerator: (config: AudioGeneratorConfig) => void

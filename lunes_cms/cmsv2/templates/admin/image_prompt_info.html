@@ -32,6 +32,30 @@
             {% endif %}
         </dd>
     </dl>
+    {% if supports_show_people %}
+        {% if show_people_toggle %}
+            <div class="image-prompt-show-people">
+                <label>
+                    <input type="checkbox"
+                           class="prompt-show-people"
+                           {% if show_people %}checked{% endif %}
+                           {% if show_people_undecided %}data-undecided{% endif %}>
+                    {% translate "Show people in the image" %}
+                </label>
+                <p class="image-prompt-show-people-help">
+                    {% blocktranslate trimmed %}
+                        Whether the image shows people is decided automatically for every word. Change it if the decision doesn't fit; the change is stored with the next generated image.
+                    {% endblocktranslate %}
+                </p>
+            </div>
+        {% else %}
+            <p class="image-prompt-show-people-help">
+                {% blocktranslate trimmed %}
+                    Whether the image shows people is decided automatically for every word. The preview shows the variant without people.
+                {% endblocktranslate %}
+            </p>
+        {% endif %}
+    {% endif %}
     <details class="image-prompt-details">
         <summary>{% translate "Prompt preview" %}</summary>
         <pre class="image-prompt-preview">{{ prompt }}</pre>

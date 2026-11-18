@@ -14,7 +14,9 @@ and audio generation can run concurrently.
 from __future__ import annotations
 
 import base64
+import json
 import logging
+import os
 import threading
 import time
 from dataclasses import dataclass
@@ -29,6 +31,7 @@ from ..models import AIGeneration, Area, ImagePrompt, Job, Unit, Word
 from ..models.static import AIGenerationEvent, ImageSource
 from ..utils import get_openai_client, OpenAIConfigurationError
 from .ai_label import LABEL_PATH, LABEL_WIDTH_RATIO
+from .show_people import resolve_show_people
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +82,7 @@ def build_image_prompt(  # pylint: disable=too-many-arguments
     allow_text_in_image: bool = False,
     *,
     image_prompt: ImagePrompt | None = None,
+    show_people: bool = False,
 ) -> str:
     """
     Build the image-generation prompt from plain text.
@@ -87,7 +91,9 @@ def build_image_prompt(  # pylint: disable=too-many-arguments
     :func:`build_word_image_prompt`, which resolves the context to pass here.
 
     ``image_prompt`` is the stored prompt to render, the default one if
-    ``None`` (#1143). Code appends the parts no stored prompt may drop:
+    ``None`` (#1143). ``show_people`` picks its variant if it has one with
+    and one without people (#1145). Code appends the parts no stored prompt
+    may drop:
 
     Most vocabulary items look wrong with any text/numbers/logos in the
     picture (issue #918), so ``TEXT_BAN_PROMPT`` bans that by default. Some
@@ -100,12 +106,24 @@ def build_image_prompt(  # pylint: disable=too-many-arguments
     if image_prompt is None:
         image_prompt = ImagePrompt.get_default()
     prompt = image_prompt.render(
-        word_text, job=job_title, unit=unit_title, additional_info=additional_info
+        word_text,
+        job=job_title,
+        unit=unit_title,
+        additional_info=additional_info,
+        show_people=show_people,
     )
     if not allow_text_in_image:
         prompt += TEXT_BAN_PROMPT
     prompt += AI_LABEL_PROMPT
     return prompt
+
+
+def image_model() -> str:
+    """
+    The model images are generated with, which is stored with every
+    generated image (#1145).
+    """
+    return settings.OPENAI_IMAGE_MODEL
 
 
 def openai_image_bytes(prompt: str, area: Area) -> bytes:
@@ -126,7 +144,7 @@ def openai_image_bytes(prompt: str, area: Area) -> bytes:
     # quality and output_format are env-configured str (LUNES_CMS_OPENAI_IMAGE_*),
     # which the SDK's overloads can't statically narrow to their Literal[...] type.
     response = client.images.edit(
-        model=settings.OPENAI_IMAGE_MODEL,
+        model=image_model(),
         image=ai_label,
         prompt=prompt,
         size="1024x1024",
@@ -155,6 +173,7 @@ class ImagePromptContext:
         additional_info: str | None = None,
         allow_text_in_image: bool = False,
         image_prompt: ImagePrompt | None = None,
+        show_people: bool = False,
     ) -> str:
         """
         Build the image prompt for this context, from the default prompt
@@ -167,6 +186,7 @@ class ImagePromptContext:
             job_title=self.job_title,
             allow_text_in_image=allow_text_in_image,
             image_prompt=image_prompt,
+            show_people=show_people,
         )
 
 
@@ -211,6 +231,7 @@ def build_word_image_prompt(  # pylint: disable=too-many-arguments
     additional_info: str | None = None,
     allow_text_in_image: bool = False,
     image_prompt: ImagePrompt | None = None,
+    show_people: bool | None = None,
 ) -> str:
     """
     Build the image prompt for ``word``, the one entry point for every place
@@ -219,10 +240,66 @@ def build_word_image_prompt(  # pylint: disable=too-many-arguments
     See :func:`image_prompt_context` for how ``unit`` and ``job`` are resolved.
     ``image_prompt`` is the stored prompt to render, the default one if
     ``None``.
+
+    ``show_people`` picks the variant of a prompt that supports show people.
+    If it is ``None``, the word's stored decision is used, and a word without
+    one is classified first (see :func:`resolve_show_people`), so this must
+    not run inside a transaction.
     """
-    return image_prompt_context(word, unit=unit, job=job).prompt(
-        additional_info, allow_text_in_image, image_prompt
+    if image_prompt is None:
+        image_prompt = ImagePrompt.get_default()
+    context = image_prompt_context(word, unit=unit, job=job)
+    if show_people is None:
+        show_people = resolve_show_people(word, image_prompt, context)
+    return context.prompt(
+        additional_info, allow_text_in_image, image_prompt, show_people
     )
+
+
+def generation_record_path(temp_image_path: str) -> str:
+    """
+    The file next to a temporarily stored generated image that records the
+    prompt and model it was generated with, until an editor stores it.
+    """
+    return f"{temp_image_path}.json"
+
+
+def write_generation_record(
+    temp_image_path: str, image_prompt: ImagePrompt, model: str
+) -> None:
+    """
+    Record which prompt and model a temporarily stored image was generated
+    with, see :func:`read_generation_record`.
+    """
+    with open(generation_record_path(temp_image_path), "w", encoding="utf-8") as f:
+        json.dump({"image_prompt": image_prompt.pk, "image_model": model}, f)
+
+
+def read_generation_record(temp_image_path: str) -> tuple[ImagePrompt | None, str]:
+    """
+    The prompt and model a temporarily stored image was generated with, and
+    remove their record.
+
+    Both are empty if nothing was recorded, e.g. for an image generated before
+    the record existed.
+    """
+    record_path = generation_record_path(temp_image_path)
+    try:
+        with open(record_path, encoding="utf-8") as f:
+            record = json.load(f)
+    except (OSError, ValueError):
+        return None, ""
+    os.remove(record_path)
+    if not isinstance(record, dict):
+        return None, ""
+    prompt_id = record.get("image_prompt")
+    image_prompt = (
+        ImagePrompt.objects.filter(pk=prompt_id).first()
+        if isinstance(prompt_id, int)
+        else None
+    )
+    model = record.get("image_model")
+    return image_prompt, model if isinstance(model, str) else ""
 
 
 def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
@@ -234,6 +311,10 @@ def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
     stay OpenAI's. The field defaults ``image_check_status`` to ``NOT_CHECKED``.
     The file name is the UUID the field's ``upload_to`` assigns — same as every
     other image in the system.
+
+    A word whose image prompt supports show people and that has no decision
+    yet is classified first (#1145); both OpenAI calls run outside any
+    transaction. The image records the prompt and model it was made with.
     """
     if not word.image:
         image_prompt = ImagePrompt.get_default()
@@ -242,6 +323,8 @@ def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
             word.area,
         )
         image_prompt.mark_used()
+        word.image_prompt = image_prompt
+        word.image_model = image_model()
         word.image.save(
             f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
         )
