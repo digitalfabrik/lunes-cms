@@ -11,7 +11,7 @@ from html import escape
 from typing import Any, Iterable, Optional, TYPE_CHECKING
 
 from django.core.files.base import ContentFile
-from django.db.models.fields.files import FieldFile, ImageFieldFile
+from django.db.models.fields.files import FieldFile
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
@@ -137,7 +137,7 @@ def cache_busted_url(file: FieldFile) -> str:
     return f"{file.url}?v={version}"
 
 
-def get_image_tag(image: ImageFieldFile, width: int = 330) -> SafeString:
+def get_image_tag(image: FieldFile, width: int = 330) -> SafeString:
     """
     Generate an HTML image tag for the given image.
 
@@ -153,7 +153,10 @@ def get_image_tag(image: ImageFieldFile, width: int = 330) -> SafeString:
         image
         and image.name
         and image.storage.exists(image.name)
-        and any(image.name.lower().endswith(ext) for ext in [".jpg", ".png", ".webp"])
+        and any(
+            image.name.lower().endswith(ext)
+            for ext in [".jpg", ".png", ".webp", ".svg"]
+        )
     ):
         src = escape(f"{settings.MEDIA_URL}{image}")
     html_cls = "" if src else 'class="hidden"'

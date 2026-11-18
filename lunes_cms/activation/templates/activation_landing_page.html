@@ -14,19 +14,37 @@
     </head>
     <body>
         <main class="activation-page">
-            <img class="mb-4 lunes-logo"
-                 src="{% static 'images/logo-lunes.svg' %}"
-                 alt="Lunes Logo"
-                 width="450"
-                 height="122">
-            <h1 class="h3 mb-3 font-weight-normal">Willkommen bei der LUNES APP</h1>
+            <svg class="filter-definitions" width="0" height="0" aria-hidden="true">
+                <filter id="logo-color" color-interpolation-filters="sRGB">
+                    <feFlood flood-color="{{ area.landing_page_logo_color|default:'#000000' }}"></feFlood>
+                    <feComposite in2="SourceAlpha" operator="in"></feComposite>
+                </filter>
+            </svg>
+
+            <div class="logo-row mb-4">
+                {% if area.secondary_logo %}
+                    <img class="colored-logo"
+                         src="{{ area.secondary_logo.url }}"
+                         alt="{{ area.name }} Logo">
+                {% endif %}
+                <img src="{% static 'images/logo-lunes.svg' %}"
+                     alt="Lunes Logo"
+                     width="450"
+                     height="122">
+            </div>
+
+            <h1 class="h3 mb-3 font-weight-normal">Willkommen im telc Bereich in LUNES!</h1>
+            <p class="mt-3">
+                Mit der telc Lehrwerksreihe <cite>Fach.Sprache</cite> lernen Sie Deutsch für Ihren Beruf.
+                Trainieren Sie den Fachwortschatz aus dem Lehrwerk in unserem telc Bereich in der App Lunes.
+            </p>
             <p class="mt-3 step-intro">
-                Sie wollen telc Inhalte in LUNES nutzen, dann gehen Sie wie folgt vor:
+                So starten Sie:
             </p>
             <ol class="manual-steps">
                 <li>
-                    Laden Sie sich die App <strong>Lunes</strong> im App- oder
-                    PlayStore auf Ihrem Smartphone herunter.
+                    Laden Sie die App <strong>Lunes</strong>
+                    aus dem App Store oder Google Play Store auf Ihr Smartphone herunter.
                     <div class="store-badges">
                         <a href="{{ ios_store_url }}" target="_blank" rel="noopener">
                             <img src="{% static 'images/app-store-badge.svg' %}"
@@ -38,14 +56,15 @@
                         </a>
                     </div>
                 </li>
-                <li>Klicken Sie auf den Button „Jetzt hinzufügen“.</li>
+                <li>Tippen Sie auf „Jetzt hinzufügen“.</li>
             </ol>
             <a class="btn btn-lg btn-primary btn-block"
                href="{{ deeplink_url }}"
                role="button">Jetzt hinzufügen</a>
             <p class="mt-4 step-intro">
-                Falls sich die LUNES App bei Ihnen nicht öffnet und der Inhalt
-                nicht hinzugefügt wurde, befolgen Sie folgende Schritte:
+                Der telc Bereich wird nicht hinzugefügt?
+                <br>
+                Geben Sie den Code direkt in der App ein:
             </p>
             <ol class="manual-steps">
                 <li>
@@ -60,9 +79,10 @@
                     </div>
                 </li>
                 <li>
-                    Öffnen Sie die <strong>Lunes</strong> App, tippen Sie oben
-                    rechts auf die drei Punkte (Menü) und wählen Sie „Code
-                    eingeben“. Fügen Sie dort den kopierten Code ein.
+                    Öffnen Sie die App und tippen Sie oben rechts auf die drei Punkte.
+                </li>
+                <li>
+                    Wählen Sie „Code eingeben“ und fügen Sie den Code ein.
                 </li>
             </ol>
         </main>

@@ -25,6 +25,8 @@ Area.objects.get(is_main_app=True).admins.add(
     get_user_model().objects.get(username='vanessa.vokabelverwalterin')
 )
 "
+# Copies the telc logo to the media files so that it can be referenced by the test data
+cp "${BASE_DIR}/sample-data/telc_logo.svg" "${PACKAGE_DIR}/media/areas/telc_logo.svg"
 # Restore test media files
 git restore --source origin/assets lunes_cms/media
 echo "✔ Imported test data" | print_success

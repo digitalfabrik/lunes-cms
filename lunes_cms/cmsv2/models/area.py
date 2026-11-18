@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
@@ -27,11 +28,14 @@ class Area(models.Model):
         verbose_name=_("logo"),
         help_text=_("The main logo, shown in the center of the header in the app."),
     )
-    secondary_logo = models.ImageField(
+    secondary_logo = models.FileField(
         upload_to=upload_area_logos,
         blank=True,
+        validators=[FileExtensionValidator(["svg"])],
         verbose_name=_("secondary logo"),
-        help_text=_("A second logo, shown at the side of the header in the app."),
+        help_text=_(
+            "A second logo, shown at the side of the header in the app and on the activation page, must be an svg."
+        ),
     )
     primary_color = models.CharField(
         max_length=7,
@@ -117,6 +121,13 @@ class Area(models.Model):
         verbose_name=_("main app"),
         help_text=_("Marks the one area for the main app catalog"),
     )
+    is_landing_page_area = models.BooleanField(
+        default=False,
+        verbose_name=_("landing page area"),
+        help_text=_(
+            "Marks the one area whose branding is shown on the activation landing page"
+        ),
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
     modified_at = models.DateTimeField(auto_now=True, verbose_name=_("modified at"))
 
@@ -158,5 +169,10 @@ class Area(models.Model):
                 fields=["is_main_app"],
                 condition=models.Q(is_main_app=True),
                 name="unique_main_app_area",
+            ),
+            models.UniqueConstraint(
+                fields=["is_landing_page_area"],
+                condition=models.Q(is_landing_page_area=True),
+                name="unique_landing_page_area",
             ),
         ]

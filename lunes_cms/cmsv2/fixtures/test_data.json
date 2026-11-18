@@ -45083,6 +45083,8 @@
     "pk": 9001,
     "fields": {
       "name": "Partner Musterstadt",
+      "is_landing_page_area": true,
+      "secondary_logo": "areas/telc_logo.svg",
       "admins": [["musterstadt.vokabelverwalterin"]],
       "created_at": "2026-09-21T00:00:00.000Z",
       "modified_at": "2026-09-21T00:00:00.000Z"

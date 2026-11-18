@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from lunes_cms.cmsv2.models import Area
 
 
 def activation_landing_page(request: HttpRequest, code: str) -> HttpResponse:
@@ -23,6 +25,7 @@ def activation_landing_page(request: HttpRequest, code: str) -> HttpResponse:
         the custom scheme deeplink
     :return: The rendered landing page
     """
+    area = get_object_or_404(Area, is_landing_page_area=True)
     context = {
         "deeplink_url": f"lunes:lunes.app{settings.APP_LINK_PATH_PREFIX}/{code}",
         "code": code,
@@ -31,5 +34,6 @@ def activation_landing_page(request: HttpRequest, code: str) -> HttpResponse:
             f"?id={settings.ANDROID_APP_PACKAGE_NAME}"
         ),
         "ios_store_url": "https://apps.apple.com/de/app/lunes/id1562834995",
+        "area": area,
     }
     return render(request, "activation_landing_page.html", context)
