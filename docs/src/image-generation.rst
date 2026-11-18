@@ -94,6 +94,17 @@ the command again picks up only the images that are still unlabeled, and an
 image that already carries the XMP packet is never marked a second time, but it
 is still recorded as *labeled afterwards*.
 
+Selecting the model and prompt
+==============================
+
+The word page, the unit-word page and the CSV import each have a dropdown for
+the model and one for the prompt (#1146). The models come from
+``LUNES_CMS_OPENAI_IMAGE_MODELS``, the prompts are the active image prompts.
+Both preselect the default: the first configured model and the default prompt.
+The prompt preview and the show-people toggle follow the selected prompt. The
+CSV import generates the images of all imported words with the model and prompt
+selected for the import.
+
 Showing people
 ==============
 
@@ -154,9 +165,10 @@ Configure via environment variables:
    * - ``LUNES_CMS_OPENAI_API_KEY``
      - –
      - OpenAI API key (required to enable image generation)
-   * - ``LUNES_CMS_OPENAI_IMAGE_MODEL``
+   * - ``LUNES_CMS_OPENAI_IMAGE_MODELS``
      - ``gpt-image-2.5-flare``
-     - Model used for word image generation
+     - Comma-separated models editors can generate word images with; the first
+       one is the default
    * - ``LUNES_CMS_OPENAI_IMAGE_QUALITY``
      - ``low``
      - Image quality tier (``low`` / ``medium`` / ``high``)

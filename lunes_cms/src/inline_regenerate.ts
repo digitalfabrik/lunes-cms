@@ -106,6 +106,7 @@ function _initRegenerateWidget(widget: HTMLElement): void {
                 formData,
                 widget.querySelector<HTMLInputElement>(".prompt-show-people"),
             )
+            window.appendImageSelection(formData, widget)
         }
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 

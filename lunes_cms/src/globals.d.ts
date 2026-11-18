@@ -14,6 +14,7 @@ interface Window {
     postWithCsrf: (url: string, body?: FormData) => Promise<Response>
     readJsonBody: (response: Response) => Promise<JsonBody>
     appendShowPeople: (formData: FormData, toggle: HTMLInputElement | null) => void
+    appendImageSelection: (formData: FormData, scope: ParentNode) => void
     assetManagerConfigs?: AssetManagerConfig[]
     audioAssetManagerConfigs?: AudioAssetManagerConfig[]
     initAudioGenerator: (config: AudioGeneratorConfig) => void

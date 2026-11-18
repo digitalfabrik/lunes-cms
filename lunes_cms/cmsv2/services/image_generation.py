@@ -118,15 +118,36 @@ def build_image_prompt(  # pylint: disable=too-many-arguments
     return prompt
 
 
-def image_model() -> str:
+def image_models() -> list[str]:
     """
-    The model images are generated with, which is stored with every
-    generated image (#1145).
+    The models editors can generate images with, the default one first
+    (``LUNES_CMS_OPENAI_IMAGE_MODELS``, #1146).
     """
-    return settings.OPENAI_IMAGE_MODEL
+    return list(settings.OPENAI_IMAGE_MODELS)
 
 
-def openai_image_bytes(prompt: str, area: Area) -> bytes:
+def default_image_model() -> str:
+    """
+    The model images are generated with unless another one is selected.
+    """
+    return image_models()[0]
+
+
+def image_model_or_default(model: str | None) -> str:
+    """
+    ``model`` if it is one of the configured :func:`image_models`, the default
+    model if it is empty.
+
+    :raises ValueError: if ``model`` isn't configured
+    """
+    if not model:
+        return default_image_model()
+    if model not in image_models():
+        raise ValueError(f"Unknown image model: {model!r}")
+    return model
+
+
+def openai_image_bytes(prompt: str, area: Area, model: str) -> bytes:
     """
     Call the OpenAI image edit API once, with the AI-disclosure label as the
     reference image, and return the raw bytes of the result.
@@ -137,14 +158,15 @@ def openai_image_bytes(prompt: str, area: Area) -> bytes:
     intact — a re-encode would strip them.
 
     The generation is recorded for ``area``, the area of the content the
-    image is generated for.
+    image is generated for. ``model`` is stored with the image (#1145), so
+    callers pass it instead of it being looked up here.
     """
     client = get_openai_client()
     ai_label = (LABEL_PATH.name, LABEL_PATH.read_bytes(), "image/png")
     # quality and output_format are env-configured str (LUNES_CMS_OPENAI_IMAGE_*),
     # which the SDK's overloads can't statically narrow to their Literal[...] type.
     response = client.images.edit(
-        model=image_model(),
+        model=model,
         image=ai_label,
         prompt=prompt,
         size="1024x1024",
@@ -302,7 +324,9 @@ def read_generation_record(temp_image_path: str) -> tuple[ImagePrompt | None, st
     return image_prompt, model if isinstance(model, str) else ""
 
 
-def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
+def _generate_for_word_image(
+    word: Word, image_prompt: ImagePrompt, model: str, job: Job | None = None
+) -> None:
     """
     Generate a missing image for a single Word and save it to the ImageField.
 
@@ -317,14 +341,14 @@ def _generate_for_word_image(word: Word, job: Job | None = None) -> None:
     transaction. The image records the prompt and model it was made with.
     """
     if not word.image:
-        image_prompt = ImagePrompt.get_default()
         data = openai_image_bytes(
             build_word_image_prompt(word, job=job, image_prompt=image_prompt),
             word.area,
+            model,
         )
         image_prompt.mark_used()
         word.image_prompt = image_prompt
-        word.image_model = image_model()
+        word.image_model = model
         word.image.save(
             f"image{GENERATED_IMAGE_EXTENSION}", ContentFile(data), save=False
         )
@@ -343,6 +367,9 @@ def drain_pending_images(
     word_ids: list[int] | None = None,
     throttle_seconds: float = 1.0,
     job: Job | None = None,
+    *,
+    image_prompt: ImagePrompt | None = None,
+    model: str | None = None,
 ) -> None:
     """
     Process Words that need an image, one at a time, until none remain.
@@ -353,6 +380,9 @@ def drain_pending_images(
     ``job`` is the importing job. A CSV import always targets a single job,
     unlike already saved words which can belong to several jobs, and it also
     picks the word's unit within that job for the prompt.
+
+    ``image_prompt`` and ``model`` are the ones the import selected, used for
+    every word (#1146). Without them the default prompt and model are used.
 
     Single-flight within the process: if another thread already holds the
     drain lock this call returns immediately.
@@ -365,6 +395,9 @@ def drain_pending_images(
         return
     failed_pks: set[int] = set()
     try:
+        if image_prompt is None:
+            image_prompt = ImagePrompt.get_default()
+        model = image_model_or_default(model)
         pending = Word.objects.filter(_pending_filter(word_ids)).count()
         logger.info(
             "Image drain starting: %s word(s) pending — "
@@ -381,7 +414,7 @@ def drain_pending_images(
             if word is None:
                 return
             try:
-                _generate_for_word_image(word, job=job)
+                _generate_for_word_image(word, image_prompt, model, job=job)
             except OpenAIConfigurationError:
                 logger.warning("OpenAI not configured — image worker exiting")
                 return

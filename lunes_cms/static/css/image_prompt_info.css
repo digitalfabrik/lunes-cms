@@ -57,3 +57,20 @@
     margin: 2px 0 8px;
     opacity: 0.8;
 }
+
+.image-prompt-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin: 0 0 8px;
+}
+
+.image-prompt-selection label {
+    font-weight: 600;
+    margin: 0;
+}
+
+.image-prompt-selection select {
+    display: block;
+    font-weight: normal;
+}

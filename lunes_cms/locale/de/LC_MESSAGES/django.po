@@ -796,6 +796,7 @@ msgstr ""
 "vorzunehmen."
 
 #: cmsv2/admins/image_prompt_admin.py
+#: cmsv2/templates/admin/image_prompt_info.html cmsv2/views/import_csv_view.py
 msgid "Prompt"
 msgstr "Prompt"
 
@@ -1602,7 +1603,8 @@ msgstr "Prompt ohne Personen"
 msgid "Used for words that are shown without people."
 msgstr "Wird für Wörter verwendet, die ohne Personen dargestellt werden."
 
-#: cmsv2/models/image_prompt.py
+#: cmsv2/models/image_prompt.py cmsv2/templates/admin/image_prompt_info.html
+#: cmsv2/views/import_csv_view.py
 msgid "default"
 msgstr "Standard"
 
@@ -2273,6 +2275,10 @@ msgstr "Beschreibe die gemeinte Bedeutung dann unter „Zusätzliche Infos“."
 msgid "not included (none or several)"
 msgstr "nicht enthalten (keine oder mehrere)"
 
+#: cmsv2/templates/admin/image_prompt_info.html cmsv2/views/import_csv_view.py
+msgid "Model"
+msgstr "Modell"
+
 #: cmsv2/templates/admin/image_prompt_info.html
 msgid "Show people in the image"
 msgstr "Personen im Bild zeigen"
@@ -2373,6 +2379,11 @@ msgstr "Kein Beispielsatz übergeben."
 #: cmsv2/views/generate_example_sentence.py
 msgid "Example sentence saved."
 msgstr "Beispielsatz gespeichert."
+
+#: cmsv2/views/generate_image.py
+msgid "The selected image prompt or model is not available."
+msgstr ""
+"Der ausgewählte Bild-Prompt oder das ausgewählte Modell ist nicht verfügbar."
 
 #: cmsv2/views/generate_image.py
 msgid "Image generated!"
@@ -2483,6 +2494,14 @@ msgstr "Import fehlgeschlagen: %(e)s"
 msgid "Import completed with warnings: %(summary)s"
 msgstr "Import mit folgenden Warnungen abgeschlossen: %(summary)s"
 
+#: cmsv2/views/import_csv_view.py cmsv2/views/update_job_icon.py
+msgid "Job not found"
+msgstr "Beruf nicht gefunden"
+
+#: cmsv2/views/import_csv_view.py
+msgid "The selected image prompt is not available."
+msgstr "Der ausgewählte Bild-Prompt ist nicht verfügbar."
+
 #: cmsv2/views/save_alternative_word.py
 msgid "No word id provided"
 msgstr "Keine Wort-ID übergeben"
@@ -2509,10 +2528,6 @@ msgstr "Kein Beispielsatztext übergeben."
 #: cmsv2/views/word_generate_example_sentence_audio.py
 msgid "Audio generated and saved temporarily!"
 msgstr "Audiodatei erzeugt und zwischengespeichert!"
-
-#: cmsv2/views/update_job_icon.py
-msgid "Job not found"
-msgstr "Beruf nicht gefunden"
 
 #: cmsv2/views/update_job_icon.py cmsv2/views/update_unit_icon.py
 msgid "No icon provided"
