@@ -106,11 +106,11 @@ def test_classify_rejects_unexpected_answers(content: str) -> None:
 
 @pytest.mark.django_db
 def test_a_prompt_without_variants_never_classifies(
-    classifier: mock.MagicMock,
+    classifier: mock.MagicMock, prompt_without_variants: ImagePrompt
 ) -> None:
     word = Word.objects.create(word="Beratung", singular_article=2)
 
-    decision = show_people.resolve_show_people(word, ImagePrompt.get_default(), CONTEXT)
+    decision = show_people.resolve_show_people(word, prompt_without_variants, CONTEXT)
 
     assert decision is False
     classifier.chat.completions.create.assert_not_called()

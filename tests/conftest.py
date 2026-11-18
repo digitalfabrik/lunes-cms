@@ -5,7 +5,7 @@ This module contains shared fixtures for pytest
 from __future__ import annotations
 
 import importlib
-from collections.abc import Iterator
+from typing import TYPE_CHECKING
 
 import pytest
 from django.contrib.auth import get_user_model
@@ -14,9 +14,21 @@ from django.db import transaction
 from django.test import Client
 from pytest_django.plugin import DjangoDbBlocker
 
-#: The migration that creates the default image prompt.
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+    from lunes_cms.cmsv2.models import ImagePrompt
+
+#: The migration that creates the first image prompt, a prompt without
+#: show-people variants.
 image_prompt_migration = importlib.import_module(
     "lunes_cms.cmsv2.migrations.0053_imageprompt"
+)
+
+#: The migration that adds the prompt with show-people variants and makes it
+#: the default (#1147).
+show_people_prompt_migration = importlib.import_module(
+    "lunes_cms.cmsv2.migrations.0055_show_people_image_prompt"
 )
 
 
@@ -60,8 +72,9 @@ def fixture_logged_in_client(db: None) -> Client:
 @pytest.fixture(autouse=True)
 def default_image_prompt(request: pytest.FixtureRequest) -> None:
     """
-    Make sure the default image prompt, seeded by migration 0051, exists in
-    every test that uses the database.
+    Make sure the image prompts seeded by migrations 0053 and 0055 exist in
+    every test that uses the database, the one with show-people variants as
+    the default.
 
     ``transaction=True`` tests flush every table afterwards, rows created by
     migrations included, and image generation can't build a prompt without a
@@ -81,9 +94,34 @@ def default_image_prompt(request: pytest.FixtureRequest) -> None:
                 break
         else:
             return
-    if not ImagePrompt.objects.filter(is_default=True).exists():
-        ImagePrompt.objects.create(
-            name=image_prompt_migration.INITIAL_PROMPT_NAME,
-            prompt=image_prompt_migration.INITIAL_PROMPT,
-            is_default=True,
-        )
+    if ImagePrompt.objects.filter(is_default=True).exists():
+        return
+    ImagePrompt.objects.get_or_create(
+        name=image_prompt_migration.INITIAL_PROMPT_NAME,
+        defaults={"prompt": image_prompt_migration.INITIAL_PROMPT},
+    )
+    ImagePrompt.objects.create(
+        name=show_people_prompt_migration.PROMPT_NAME,
+        supports_show_people=True,
+        prompt_with_people=show_people_prompt_migration.PROMPT_WITH_PEOPLE,
+        prompt_without_people=show_people_prompt_migration.PROMPT_WITHOUT_PEOPLE,
+        is_default=True,
+    )
+
+
+@pytest.fixture
+def prompt_without_variants(default_image_prompt: None) -> ImagePrompt:
+    """
+    Make the prompt without show-people variants that migration 0053 created
+    the default, for tests of prompts that never classify.
+
+    :param default_image_prompt: The fixture seeding the image prompts
+    :type default_image_prompt: :fixture:`default_image_prompt`
+    """
+    # pylint: disable=import-outside-toplevel
+    from lunes_cms.cmsv2.models import ImagePrompt
+
+    prompt = ImagePrompt.objects.get(name=image_prompt_migration.INITIAL_PROMPT_NAME)
+    prompt.is_default = True
+    prompt.save()
+    return prompt

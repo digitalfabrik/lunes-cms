@@ -395,11 +395,12 @@ def _legacy_build_image_prompt(
 @pytest.mark.parametrize("unit_title", [None, "", "Werkzeuge & Maschinen"])
 @pytest.mark.parametrize("additional_info", [None, "", "Profilansicht <seitlich>"])
 @pytest.mark.parametrize("allow_text_in_image", [False, True])
-def test_the_migrated_default_prompt_renders_the_previous_prompt(
+def test_the_migrated_initial_prompt_renders_the_previous_prompt(
     job_title: str | None,
     unit_title: str | None,
     additional_info: str | None,
     allow_text_in_image: bool,
+    prompt_without_variants: ImagePrompt,
 ) -> None:
     kwargs: dict[str, Any] = {
         "unit_title": unit_title,
