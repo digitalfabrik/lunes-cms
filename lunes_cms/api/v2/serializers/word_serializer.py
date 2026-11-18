@@ -82,4 +82,6 @@ class WordSerializer(serializers.ModelSerializer):
             "example_sentence",
             "example_sentence_audio",
             "migrated",
+            "plural",
+            "plural_article",
         )
