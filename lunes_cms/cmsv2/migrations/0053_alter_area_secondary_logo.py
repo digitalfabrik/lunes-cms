@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             name="secondary_logo",
             field=models.FileField(
                 blank=True,
-                help_text="A second logo, shown at the side of the header in the app.",
+                help_text="A second logo, shown at the side of the header in the app and on the activation page, must be an svg.",
                 upload_to=lunes_cms.cmsv2.models.static.upload_area_logos,
                 validators=[django.core.validators.FileExtensionValidator(["svg"])],
                 verbose_name="secondary logo",

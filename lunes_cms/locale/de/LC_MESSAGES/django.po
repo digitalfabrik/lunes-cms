@@ -1326,9 +1326,12 @@ msgid "secondary logo"
 msgstr "Zweites Logo"
 
 #: cmsv2/models/area.py
-msgid "A second logo, shown at the side of the header in the app."
+msgid ""
+"A second logo, shown at the side of the header in the app and on the "
+"activation page, must be an svg."
 msgstr ""
-"Ein zweites Logo, das seitlich in der Kopfzeile der App angezeigt wird."
+"Ein zweites Logo, das seitlich in der Kopfzeile der App und auf der "
+"Aktivierungsseite angezeigt wird, muss im SVG-Format sein."
 
 #: cmsv2/models/area.py
 msgid "primary color"
@@ -2578,6 +2581,10 @@ msgstr "Prüfung wurde gespeichert"
 #: help/apps.py
 msgid "help"
 msgstr "Hilfe"
+
+#~ msgid "A second logo, shown at the side of the header in the app."
+#~ msgstr ""
+#~ "Ein zweites Logo, das seitlich in der Kopfzeile der App angezeigt wird."
 
 #~ msgid "the following units were assigned to you for review:"
 #~ msgstr "die folgenden Einheiten wurden Ihnen zur Prüfung zugewiesen:"

@@ -33,7 +33,9 @@ class Area(models.Model):
         blank=True,
         validators=[FileExtensionValidator(["svg"])],
         verbose_name=_("secondary logo"),
-        help_text=_("A second logo, shown at the side of the header in the app."),
+        help_text=_(
+            "A second logo, shown at the side of the header in the app and on the activation page, must be an svg."
+        ),
     )
     primary_color = models.CharField(
         max_length=7,
