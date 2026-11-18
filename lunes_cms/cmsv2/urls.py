@@ -22,6 +22,16 @@ urlpatterns = [
         name="import_csv_for_job",
     ),
     path(
+        "jobs/import-csv/image-prompt-preview",
+        views.import_image_prompt_preview,
+        name="import_image_prompt_preview",
+    ),
+    path(
+        "jobs/<int:job_id>/import-csv/image-prompt-preview",
+        views.import_image_prompt_preview,
+        name="import_image_prompt_preview_for_job",
+    ),
+    path(
         "jobs/<int:job_id>/update-icon/", views.update_job_icon, name="update_job_icon"
     ),
     path(

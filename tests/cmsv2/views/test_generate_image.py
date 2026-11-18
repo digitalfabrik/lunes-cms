@@ -171,6 +171,7 @@ def test_word_prompt_preview_follows_the_editor_hints(admin_client: Client) -> N
             word, additional_info="mit Holzgriff"
         ),
         "show_people": None,
+        "supports_show_people": False,
     }
     assert not AIGeneration.objects.exists()
 
@@ -344,7 +345,7 @@ def test_the_toggle_is_ignored_for_a_prompt_without_variants(
 def test_generating_records_the_prompt_and_model_next_to_the_temporary_image(
     admin_client: Client, fake_openai: None, settings: Settings
 ) -> None:
-    settings.OPENAI_IMAGE_MODEL = "image-model"
+    settings.OPENAI_IMAGE_MODELS = ["image-model"]
     word = _content(Area.objects.create(name="Testarea")).word
 
     response = admin_client.post(
@@ -384,16 +385,23 @@ def test_the_unitword_page_shows_the_toggle_for_a_people_prompt(
 
 
 @pytest.mark.django_db
-def test_the_unitword_page_has_no_toggle_for_a_prompt_without_variants(
+def test_the_unitword_page_hides_the_toggle_for_a_prompt_without_variants(
     admin_client: Client,
 ) -> None:
+    """
+    The toggle is there, but hidden, so selecting a prompt with variants can
+    show it (#1146).
+    """
     unitword = _content(Area.objects.create(name="Testarea"))
 
     response = admin_client.get(
         reverse("cmsv2:unitword_generate_image", args=[unitword.pk])
     )
 
-    assert "prompt-show-people" not in response.content.decode()
+    assert re.search(
+        r'class="image-prompt-show-people-block"\s+hidden\s*>',
+        response.content.decode(),
+    )
 
 
 @pytest.mark.django_db
@@ -411,3 +419,151 @@ def test_rendering_the_page_never_classifies(admin_client: Client) -> None:
     assert re.search(
         r'class="prompt-show-people"\s+data-undecided\s*>', response.content.decode()
     )
+
+
+@pytest.mark.django_db
+def test_the_unitword_page_offers_the_models_and_the_active_prompts(
+    admin_client: Client, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODELS = ["model-a", "model-b"]
+    ImagePrompt.objects.create(name="Aktiv", prompt="A {{ word }}")
+    ImagePrompt.objects.create(name="Inaktiv", prompt="I {{ word }}", is_active=False)
+    unitword = _content(Area.objects.create(name="Testarea"))
+
+    response = admin_client.get(
+        reverse("cmsv2:unitword_generate_image", args=[unitword.pk])
+    )
+
+    content = response.content.decode()
+    assert '<option value="model-a">model-a</option>' in content
+    assert '<option value="model-b">model-b</option>' in content
+    assert "Aktiv" in content
+    assert "Inaktiv" not in content
+    default = ImagePrompt.get_default()
+    assert re.search(rf'<option value="{default.pk}"\s+selected\s*>', content)
+
+
+@pytest.mark.django_db
+def test_generating_uses_the_selected_prompt_and_model(
+    admin_client: Client, fake_openai: None, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODELS = ["model-a", "model-b"]
+    selected = ImagePrompt.objects.create(name="Gewählt", prompt="GEWÄHLT {{ word }}")
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    with mock.patch.object(
+        generate_image, "openai_image_bytes", return_value=b"webp"
+    ) as image_call:
+        response = admin_client.post(
+            reverse("cmsv2:word_generate_image_via_openai", args=[word.pk]),
+            {"image_prompt": selected.pk, "image_model": "model-b"},
+        )
+
+    prompt, _area, model = image_call.call_args.args
+    assert prompt.startswith("GEWÄHLT Hammer")
+    assert model == "model-b"
+    temp_path = Path(generate_image.settings.TEMP_IMAGE_DIR) / (
+        response.json()["temp_image_filename"]
+    )
+    assert image_generation.read_generation_record(str(temp_path)) == (
+        selected,
+        "model-b",
+    )
+    selected.refresh_from_db()
+    assert selected.is_used
+    assert not ImagePrompt.get_default().is_used
+
+
+@pytest.mark.django_db
+def test_generating_without_a_selection_uses_the_first_model(
+    admin_client: Client, fake_openai: None, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODELS = ["model-a", "model-b"]
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    with mock.patch.object(
+        generate_image, "openai_image_bytes", return_value=b"webp"
+    ) as image_call:
+        admin_client.post(
+            reverse("cmsv2:word_generate_image_via_openai", args=[word.pk])
+        )
+
+    assert image_call.call_args.args[2] == "model-a"
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "selection",
+    [
+        {"image_model": "unknown-model"},
+        {"image_prompt": "not-a-number"},
+        {"image_prompt": "999999"},
+        {"inactive": True},
+    ],
+)
+def test_generating_rejects_an_unavailable_selection(
+    admin_client: Client, fake_openai: None, selection: dict[str, object]
+) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+    if selection.pop("inactive", False):
+        inactive = ImagePrompt.objects.create(
+            name="Inaktiv", prompt="I {{ word }}", is_active=False
+        )
+        selection["image_prompt"] = inactive.pk
+
+    with mock.patch.object(generate_image, "openai_image_bytes") as image_call:
+        response = admin_client.post(
+            reverse("cmsv2:word_generate_image_via_openai", args=[word.pk]),
+            selection,
+        )
+
+    assert response.status_code == 400
+    assert "error" in response.json()
+    image_call.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_the_preview_follows_the_selected_prompt(admin_client: Client) -> None:
+    selected = ImagePrompt.objects.create(
+        name="Mit Personen",
+        supports_show_people=True,
+        prompt_with_people="MIT {{ word }}",
+        prompt_without_people="OHNE {{ word }}",
+    )
+    unitword = _content(Area.objects.create(name="Testarea"))
+
+    with mock.patch.object(show_people, "classify_show_people", return_value=True):
+        response = admin_client.post(
+            reverse("cmsv2:unitword_image_prompt_preview", args=[unitword.pk]),
+            {"image_prompt": selected.pk},
+        )
+
+    assert response.json()["prompt"].startswith("MIT Hammer")
+    assert response.json()["supports_show_people"] is True
+
+
+@pytest.mark.django_db
+def test_the_preview_reports_a_prompt_without_variants(admin_client: Client) -> None:
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    response = admin_client.post(
+        reverse("cmsv2:word_image_prompt_preview", args=[word.pk])
+    )
+
+    assert response.json()["supports_show_people"] is False
+    assert response.json()["show_people"] is None
+
+
+@pytest.mark.django_db
+def test_the_preview_rejects_an_inactive_prompt(admin_client: Client) -> None:
+    inactive = ImagePrompt.objects.create(
+        name="Inaktiv", prompt="I {{ word }}", is_active=False
+    )
+    word = _content(Area.objects.create(name="Testarea")).word
+
+    response = admin_client.post(
+        reverse("cmsv2:word_image_prompt_preview", args=[word.pk]),
+        {"image_prompt": inactive.pk},
+    )
+
+    assert response.status_code == 400

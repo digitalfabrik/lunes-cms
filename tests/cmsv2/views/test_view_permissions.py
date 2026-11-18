@@ -161,6 +161,18 @@ def test_csv_import_denies_user_without_add_permission(
     assert response.status_code == 403
 
 
+@pytest.mark.parametrize("permissions", [("add_word",), ("add_unit",)])
+def test_csv_import_preview_needs_both_add_permissions(
+    client_with_permissions: Callable[..., Client], permissions: tuple[str, ...]
+) -> None:
+    response = client_with_permissions(*permissions).post(
+        reverse("cmsv2:import_image_prompt_preview")
+    )
+
+    assert response.status_code == 403
+    assert response["Content-Type"] == "application/json"
+
+
 def test_every_endpoint_requires_login(client: Client) -> None:
     """No cmsv2 endpoint is reachable without logging in."""
     reachable = [
@@ -188,6 +200,7 @@ def test_every_endpoint_enforces_csrf(db: None) -> None:
 
 _ENDPOINTS_WITHOUT_URL_OBJECT = {
     "import_csv",
+    "import_image_prompt_preview",
     "save_alternative_word",
 }
 

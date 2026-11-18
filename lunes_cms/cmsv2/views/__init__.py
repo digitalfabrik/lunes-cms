@@ -11,7 +11,7 @@ from .generate_image import (
     word_generate_image_via_openai,
     word_image_prompt_preview,
 )
-from .import_csv_view import import_from_csv
+from .import_csv_view import import_from_csv, import_image_prompt_preview
 from .save_alternative_word import save_alternative_word
 from .unitword_generate_example_sentence_audio import (
     unitword_generate_example_sentence_audio,

@@ -17,6 +17,11 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/image_prompt_info.css' %}">
 {% endblock %}
+{% block extrahead %}
+    {{ block.super }}
+    <script src="{% static 'js/csrf.js' %}"></script>
+    <script src="{% static 'js/image_prompt_preview.js' %}"></script>
+{% endblock %}
 {% block content_title %}
     {% trans "Import CSV" %}
 {% endblock %}
@@ -24,13 +29,14 @@
     <div id="content-main" class="col-12">
         <form method="post"
               enctype="multipart/form-data"
-              action="{{ import_csv_url }}">
+              action="{{ import_csv_url }}"
+              data-prompt-scope>
             {% csrf_token %}
             <div class="row">
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-body">
-                            {% for field in form %}
+                            {% for field in form.import_fields %}
                                 <div class="form-group">
                                     {{ field.label_tag }}
                                     {% if forloop.first and job %}
@@ -51,7 +57,18 @@
                         <div class="card-header">
                             <h3 class="card-title">{% trans "Image generation" %}</h3>
                         </div>
-                        <div class="card-body">{{ image_prompt_info }}</div>
+                        <div class="card-body">
+                            {% for field in form.image_fields %}
+                                <div class="form-group">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% for error in field.errors %}
+                                        <div class="alert alert-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            {{ image_prompt_info }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-3">

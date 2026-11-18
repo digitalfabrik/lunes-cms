@@ -5,7 +5,7 @@
         {% blocktranslate trimmed %}
             The image is generated from the prompt below. Besides the word, it names the unit and the job the word is used in, so that the image shows the meaning that fits the job. Unit and job are only included if they are unambiguous: if the word is in several units, or the unit in several jobs, they are left out.
         {% endblocktranslate %}
-        {% if preview_url %}
+        {% if with_additional_info %}
             {% translate "In that case, describe the intended meaning under “Additional info”." %}
         {% endif %}
         {% if note %}{{ note }}{% endif %}
@@ -32,7 +32,32 @@
             {% endif %}
         </dd>
     </dl>
-    {% if supports_show_people %}
+    {% if with_selection %}
+        <div class="image-prompt-selection">
+            <label>
+                {% translate "Model" %}
+                <select class="prompt-image-model">
+                    {% for model in image_models %}<option value="{{ model }}">{{ model }}</option>{% endfor %}
+                </select>
+            </label>
+            <label>
+                {% translate "Prompt" %}
+                <select class="prompt-image-prompt">
+                    {% for option in image_prompts %}
+                        <option value="{{ option.pk }}"
+                                {% if option.pk == image_prompt.pk %}selected{% endif %}>
+                            {{ option.name }}
+                            {% if option.is_default %}
+                                ({% translate "default" %})
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    {% endif %}
+    <div class="image-prompt-show-people-block"
+         {% if not supports_show_people %}hidden{% endif %}>
         {% if show_people_toggle %}
             <div class="image-prompt-show-people">
                 <label>
@@ -55,7 +80,7 @@
                 {% endblocktranslate %}
             </p>
         {% endif %}
-    {% endif %}
+    </div>
     <details class="image-prompt-details">
         <summary>{% translate "Prompt preview" %}</summary>
         <pre class="image-prompt-preview">{{ prompt }}</pre>

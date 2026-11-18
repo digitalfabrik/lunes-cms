@@ -15,7 +15,7 @@ from lunes_cms.cmsv2.models import ImagePrompt, UnitWordRelation, Word
 from lunes_cms.cmsv2.services.image_generation import (
     build_word_image_prompt,
     GENERATED_IMAGE_EXTENSION,
-    image_model,
+    image_model_or_default,
     image_prompt_context,
     openai_image_bytes,
     write_generation_record,
@@ -41,6 +41,17 @@ def _requested_show_people(request: HttpRequest) -> bool | None:
     if value in ("true", "false"):
         return value == "true"
     return None
+
+
+def _invalid_selection() -> JsonResponse:
+    """
+    The answer for a selected prompt or model that isn't available (#1146),
+    e.g. a prompt deactivated since the page was loaded.
+    """
+    return JsonResponse(
+        {"error": str(_("The selected image prompt or model is not available."))},
+        status=400,
+    )
 
 
 def _prompt_from_request(
@@ -75,14 +86,18 @@ def _prompt_preview(
     """
     The prompt a generation would send, and whether it shows people.
 
-    The editor's toggle is followed but not stored, since it is only stored
-    once an image is generated. Without it, a word that has no decision yet
-    is classified, so the toggle can show the result. ``show_people`` is
-    ``None`` if the prompt has no show-people variants, or if classifying
-    failed, so the toggle stays undecided and the next generation tries
-    again.
+    The preview follows the prompt the editor selected. The editor's toggle
+    is followed but not stored, since it is only stored once an image is
+    generated. Without it, a word that has no decision yet is classified, so
+    the toggle can show the result. ``show_people`` is ``None`` if the prompt
+    has no show-people variants, or if classifying failed, so the toggle
+    stays undecided and the next generation tries again.
+    ``supports_show_people`` tells the two apart.
     """
-    image_prompt = ImagePrompt.get_default()
+    try:
+        image_prompt = ImagePrompt.selected(request.POST.get("image_prompt"))
+    except ValueError:
+        return _invalid_selection()
     requested = _requested_show_people(request)
     show_people = (
         requested
@@ -98,6 +113,7 @@ def _prompt_preview(
                 request, word, unit, image_prompt, show_people
             ),
             "show_people": decision if image_prompt.supports_show_people else None,
+            "supports_show_people": image_prompt.supports_show_people,
         }
     )
 
@@ -106,7 +122,8 @@ def _generate_temp_image(
     request: HttpRequest, word: Word, unit: Unit | None = None
 ) -> JsonResponse:
     """
-    Generates an image for ``word`` and saves it temporarily.
+    Generates an image for ``word`` with the prompt and model the editor
+    selected (#1146), and saves it temporarily.
 
     The generation is recorded for the word's area, and the stored prompt
     is marked as used. The prompt and model are recorded next to the
@@ -115,14 +132,18 @@ def _generate_temp_image(
     If the editor changed the show-people toggle, the new choice is stored
     on the word (#1145).
     """
-    image_prompt = ImagePrompt.get_default()
+    try:
+        image_prompt = ImagePrompt.selected(request.POST.get("image_prompt"))
+        model = image_model_or_default(request.POST.get("image_model"))
+    except ValueError:
+        return _invalid_selection()
     requested = _requested_show_people(request)
     if requested is not None and image_prompt.supports_show_people:
         set_show_people(word, requested)
     prompt = _prompt_from_request(request, word, unit, image_prompt)
 
     try:
-        image_data = openai_image_bytes(prompt, word.area)
+        image_data = openai_image_bytes(prompt, word.area, model)
         image_prompt.mark_used()
 
         os.makedirs(settings.TEMP_IMAGE_DIR, exist_ok=True)
@@ -135,7 +156,7 @@ def _generate_temp_image(
 
         with open(temp_filepath, "wb") as f:
             f.write(image_data)
-        write_generation_record(temp_filepath, image_prompt, image_model())
+        write_generation_record(temp_filepath, image_prompt, model)
 
         temp_image_url = os.path.join(settings.MEDIA_URL, "temp_image", temp_filename)
 

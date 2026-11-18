@@ -269,3 +269,35 @@ def test_copy_creates_an_editable_duplicate_with_a_free_name() -> None:
     assert not first.is_default
     assert first.is_active
     assert not first.is_used
+
+
+@pytest.mark.django_db
+def test_selectable_lists_the_active_prompts_default_first() -> None:
+    default = ImagePrompt.get_default()
+    active = _prompt(name="A aktiv")
+    _prompt(name="B inaktiv", is_active=False)
+
+    assert list(ImagePrompt.selectable()) == [default, active]
+
+
+@pytest.mark.django_db
+def test_selected_falls_back_to_the_default() -> None:
+    assert ImagePrompt.selected(None) == ImagePrompt.get_default()
+    assert ImagePrompt.selected("") == ImagePrompt.get_default()
+
+
+@pytest.mark.django_db
+def test_selected_finds_an_active_prompt() -> None:
+    active = _prompt()
+
+    assert ImagePrompt.selected(str(active.pk)) == active
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("prompt_id", ["abc", "999999", "inactive"])
+def test_selected_rejects_unavailable_prompts(prompt_id: str) -> None:
+    if prompt_id == "inactive":
+        prompt_id = str(_prompt(is_active=False).pk)
+
+    with pytest.raises(ValueError):
+        ImagePrompt.selected(prompt_id)

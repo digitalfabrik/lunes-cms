@@ -66,7 +66,7 @@ def fast_worker(
         yield
 
 
-def _run_drain(word_ids: list[int] | None = None) -> None:
+def _run_drain(word_ids: list[int] | None = None, **kwargs: Any) -> None:
     """
     Run the worker in a thread, like it runs in production.
 
@@ -77,7 +77,7 @@ def _run_drain(word_ids: list[int] | None = None) -> None:
     """
     thread = threading.Thread(
         target=image_generation.drain_pending_images,
-        kwargs={"word_ids": word_ids, "throttle_seconds": 0},
+        kwargs={"word_ids": word_ids, "throttle_seconds": 0, **kwargs},
     )
     thread.start()
     thread.join(timeout=10)
@@ -114,7 +114,7 @@ def test_drain_generates_image_for_word_missing_image(fast_worker: None) -> None
 def test_drain_records_the_prompt_and_model_of_the_image(
     fast_worker: None, settings: Settings
 ) -> None:
-    settings.OPENAI_IMAGE_MODEL = "image-model"
+    settings.OPENAI_IMAGE_MODELS = ["image-model"]
     word = _make_word(word="Hammer")
 
     with mock.patch.object(image_generation, "openai_image_bytes", return_value=b"x"):
@@ -123,6 +123,44 @@ def test_drain_records_the_prompt_and_model_of_the_image(
     word.refresh_from_db()
     assert word.image_prompt == ImagePrompt.get_default()
     assert word.image_model == "image-model"
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_uses_the_selected_prompt_and_model(
+    fast_worker: None, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODELS = ["model-a", "model-b"]
+    selected = ImagePrompt.objects.create(name="Gewählt", prompt="GEWÄHLT {{ word }}")
+    word = _make_word(word="Hammer")
+
+    with mock.patch.object(
+        image_generation, "openai_image_bytes", return_value=b"x"
+    ) as image_call:
+        _run_drain(image_prompt=selected, model="model-b")
+
+    prompt, _area, model = image_call.call_args.args
+    assert prompt.startswith("GEWÄHLT Hammer")
+    assert model == "model-b"
+    word.refresh_from_db()
+    assert word.image_prompt == selected
+    assert word.image_model == "model-b"
+    selected.refresh_from_db()
+    assert selected.is_used
+
+
+@pytest.mark.django_db(transaction=True)
+def test_drain_defaults_to_the_first_model(
+    fast_worker: None, settings: Settings
+) -> None:
+    settings.OPENAI_IMAGE_MODELS = ["model-a", "model-b"]
+    _make_word(word="Hammer")
+
+    with mock.patch.object(
+        image_generation, "openai_image_bytes", return_value=b"x"
+    ) as image_call:
+        _run_drain()
+
+    assert image_call.call_args.args[2] == "model-a"
 
 
 @pytest.mark.django_db(transaction=True)
@@ -205,7 +243,7 @@ def test_drain_isolates_failures_per_row(fast_worker: None) -> None:
     failing = _make_word(word="Schraubenzieher")
     succeeding = _make_word(word="Säge")
 
-    def maybe_fail(prompt: str, _area: Area) -> bytes:
+    def maybe_fail(prompt: str, _area: Area, _model: str) -> bytes:
         if "Schraubenzieher" in prompt:
             raise ValueError("simulated openai 5xx")
         return b"ok-png"
@@ -439,9 +477,9 @@ def test_openai_image_bytes_requests_webp_from_openai(
     client = _fake_openai_client()
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):
-        assert image_generation.openai_image_bytes("prompt", main_app_area) == (
-            b"webp-bytes"
-        )
+        assert image_generation.openai_image_bytes(
+            "prompt", main_app_area, "image-model"
+        ) == (b"webp-bytes")
 
     kwargs = client.images.edit.call_args.kwargs
     assert kwargs["output_format"] == "webp"
@@ -454,7 +492,7 @@ def test_openai_image_bytes_passes_the_label_as_reference_image(
     client = _fake_openai_client()
 
     with mock.patch.object(image_generation, "get_openai_client", return_value=client):
-        image_generation.openai_image_bytes("prompt", main_app_area)
+        image_generation.openai_image_bytes("prompt", main_app_area, "image-model")
 
     filename, content, content_type = client.images.edit.call_args.kwargs["image"]
     assert filename == LABEL_PATH.name
@@ -598,3 +636,22 @@ def test_build_word_image_prompt_includes_the_resolved_context() -> None:
         additional_info="aus Metall",
         job_title="Tischler/in",
     )
+
+
+def test_openai_image_bytes_requests_the_given_model(main_app_area: Area) -> None:
+    client = _fake_openai_client()
+
+    with mock.patch.object(image_generation, "get_openai_client", return_value=client):
+        image_generation.openai_image_bytes("prompt", main_app_area, "model-b")
+
+    assert client.images.edit.call_args.kwargs["model"] == "model-b"
+
+
+def test_image_model_or_default(settings: Settings) -> None:
+    settings.OPENAI_IMAGE_MODELS = ["model-a", "model-b"]
+
+    assert image_generation.image_model_or_default(None) == "model-a"
+    assert image_generation.image_model_or_default("") == "model-a"
+    assert image_generation.image_model_or_default("model-b") == "model-b"
+    with pytest.raises(ValueError):
+        image_generation.image_model_or_default("unknown-model")

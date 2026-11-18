@@ -49,6 +49,7 @@ window.initImageGenerator = function (config: ImageGeneratorConfig): void {
             formData,
             document.querySelector<HTMLInputElement>(".prompt-show-people"),
         )
+        window.appendImageSelection(formData, document)
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         window

@@ -230,6 +230,30 @@ class ImagePrompt(models.Model):
         """
         return cls.objects.get(is_default=True)
 
+    @classmethod
+    def selectable(cls) -> models.QuerySet[ImagePrompt]:
+        """
+        The prompts editors can choose from when generating images: the active
+        ones, the default first (#1146).
+        """
+        return cls.objects.filter(is_active=True).order_by("-is_default", "name")
+
+    @classmethod
+    def selected(cls, prompt_id: str | None) -> ImagePrompt:
+        """
+        The prompt an editor selected by its id, the default one if
+        ``prompt_id`` is empty. Only :meth:`selectable` prompts can be
+        selected.
+
+        :raises ValueError: if there is no selectable prompt with that id
+        """
+        if not prompt_id:
+            return cls.get_default()
+        try:
+            return cls.selectable().get(pk=int(prompt_id))
+        except (ValueError, cls.DoesNotExist):
+            raise ValueError(f"Unknown image prompt: {prompt_id!r}") from None
+
     @property
     def is_used(self) -> bool:
         """

@@ -2,8 +2,10 @@
 //
 // The prompt is built on the server (services/image_generation.py), so the
 // preview asks the server for it whenever the editor changes the additional
-// info, the text option or the show-people toggle next to it. The inputs are
-// looked up in the closest element marked with data-prompt-scope.
+// info, the text option, the selected prompt or the show-people toggle next to
+// it. The inputs are looked up in the closest element marked with
+// data-prompt-scope. The toggle is only shown for prompts that support show
+// people.
 //
 // A show-people toggle marked data-undecided belongs to a word that hasn't
 // been classified yet. Its value isn't sent, so the server classifies the word
@@ -12,6 +14,7 @@
 type PromptPreviewResponse = {
     prompt?: string
     show_people?: boolean | null
+    supports_show_people?: boolean
 }
 
 const PREVIEW_DELAY_MS = 300
@@ -25,6 +28,20 @@ window.appendShowPeople = function (formData: FormData, toggle: HTMLInputElement
     }
 }
 
+// Send the model and prompt the editor selected with a preview or generation
+// request. Nothing is sent for a dropdown the scope doesn't have, so the server
+// uses the default. Also used by generate_image.ts and inline_regenerate.ts.
+window.appendImageSelection = function (formData: FormData, scope: ParentNode): void {
+    const model = scope.querySelector<HTMLSelectElement>(".prompt-image-model")
+    const prompt = scope.querySelector<HTMLSelectElement>(".prompt-image-prompt")
+    if (model) {
+        formData.append("image_model", model.value)
+    }
+    if (prompt) {
+        formData.append("image_prompt", prompt.value)
+    }
+}
+
 function _initPromptPreview(info: HTMLElement): void {
     const previewUrl = info.dataset.previewUrl
     const preview = info.querySelector<HTMLElement>(".image-prompt-preview")
@@ -35,6 +52,8 @@ function _initPromptPreview(info: HTMLElement): void {
     const additionalInfo = scope.querySelector<HTMLInputElement>(".prompt-additional-info")
     const allowText = scope.querySelector<HTMLInputElement>(".prompt-allow-text")
     const showPeople = scope.querySelector<HTMLInputElement>(".prompt-show-people")
+    const showPeopleBlock = info.querySelector<HTMLElement>(".image-prompt-show-people-block")
+    const imagePrompt = scope.querySelector<HTMLSelectElement>(".prompt-image-prompt")
 
     let timer: number | undefined
     let latestRequest = 0
@@ -45,6 +64,7 @@ function _initPromptPreview(info: HTMLElement): void {
         formData.append("additional_info", additionalInfo?.value ?? "")
         formData.append("allow_text_in_image", allowText?.checked ? "true" : "false")
         window.appendShowPeople(formData, showPeople)
+        window.appendImageSelection(formData, scope)
         formData.append("csrfmiddlewaretoken", window.getCookie("csrftoken") ?? "")
 
         window
@@ -59,6 +79,9 @@ function _initPromptPreview(info: HTMLElement): void {
                 }
                 if (data.prompt) {
                     preview.textContent = data.prompt
+                }
+                if (showPeopleBlock && typeof data.supports_show_people === "boolean") {
+                    showPeopleBlock.hidden = !data.supports_show_people
                 }
                 if (
                     showPeople &&
@@ -87,11 +110,12 @@ function _initPromptPreview(info: HTMLElement): void {
 
     additionalInfo?.addEventListener("input", scheduleRefresh)
     allowText?.addEventListener("change", scheduleRefresh)
+    imagePrompt?.addEventListener("change", scheduleRefresh)
     showPeople?.addEventListener("change", () => {
         delete showPeople.dataset.undecided
         scheduleRefresh()
     })
-    if (showPeople?.dataset.undecided !== undefined) {
+    if (showPeople?.dataset.undecided !== undefined && !showPeopleBlock?.hidden) {
         refresh()
     }
 }
