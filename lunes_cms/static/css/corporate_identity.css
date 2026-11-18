@@ -199,7 +199,7 @@
     background-color: #6588f2;
 }
 
-.main-footer {
+.app-footer {
     border-top: 0;
 }
 
@@ -249,7 +249,7 @@
         color: #8ba6fa;
     }
 
-    .main-footer,
+    .app-footer,
     .accent-navy .btn-link:hover,
     .accent-navy .nav-tabs .nav-link:hover,
     .accent-navy a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn):hover {
