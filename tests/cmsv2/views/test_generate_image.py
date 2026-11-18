@@ -158,7 +158,9 @@ def test_the_prompt_preview_leaves_the_prompt_unlocked(admin_client: Client) -> 
 
 
 @pytest.mark.django_db
-def test_word_prompt_preview_follows_the_editor_hints(admin_client: Client) -> None:
+def test_word_prompt_preview_follows_the_editor_hints(
+    admin_client: Client, prompt_without_variants: ImagePrompt
+) -> None:
     word = _content(Area.objects.create(name="Testarea")).word
 
     response = admin_client.post(
@@ -327,7 +329,7 @@ def test_the_unitword_generation_uses_the_decision_of_the_word(
 
 @pytest.mark.django_db
 def test_the_toggle_is_ignored_for_a_prompt_without_variants(
-    admin_client: Client, fake_openai: None
+    admin_client: Client, fake_openai: None, prompt_without_variants: ImagePrompt
 ) -> None:
     word = _content(Area.objects.create(name="Testarea")).word
 
@@ -386,7 +388,7 @@ def test_the_unitword_page_shows_the_toggle_for_a_people_prompt(
 
 @pytest.mark.django_db
 def test_the_unitword_page_hides_the_toggle_for_a_prompt_without_variants(
-    admin_client: Client,
+    admin_client: Client, prompt_without_variants: ImagePrompt
 ) -> None:
     """
     The toggle is there, but hidden, so selecting a prompt with variants can
@@ -543,7 +545,9 @@ def test_the_preview_follows_the_selected_prompt(admin_client: Client) -> None:
 
 
 @pytest.mark.django_db
-def test_the_preview_reports_a_prompt_without_variants(admin_client: Client) -> None:
+def test_the_preview_reports_a_prompt_without_variants(
+    admin_client: Client, prompt_without_variants: ImagePrompt
+) -> None:
     word = _content(Area.objects.create(name="Testarea")).word
 
     response = admin_client.post(

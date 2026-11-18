@@ -218,6 +218,7 @@ def two_models(settings: Settings) -> None:
 def test_form_preselects_the_default_model_and_prompt(
     admin_client: Client, job: Job, two_models: None
 ) -> None:
+    ImagePrompt.objects.exclude(is_default=True).delete()
     ImagePrompt.objects.create(name="Inaktiv", prompt="I {{ word }}", is_active=False)
 
     response = admin_client.get(reverse("cmsv2:import_csv_for_job", args=[job.pk]))
@@ -322,7 +323,9 @@ def test_preview_follows_the_selected_prompt(admin_client: Client, job: Job) -> 
 
 
 @pytest.mark.django_db()
-def test_preview_without_a_job_uses_the_placeholder(admin_client: Client) -> None:
+def test_preview_without_a_job_uses_the_placeholder(
+    admin_client: Client, prompt_without_variants: ImagePrompt
+) -> None:
     response = admin_client.post(reverse("cmsv2:import_image_prompt_preview"))
 
     assert "[selected job]" in response.json()["prompt"]

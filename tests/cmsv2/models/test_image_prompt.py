@@ -26,12 +26,45 @@ def _errors(prompt: ImagePrompt) -> dict[str, list[str]]:
 
 
 @pytest.mark.django_db
-def test_the_migration_creates_an_unused_default() -> None:
+def test_the_migrations_create_an_unused_default_with_show_people_variants() -> None:
     default = ImagePrompt.get_default()
+    previous = ImagePrompt.objects.get(is_default=False)
 
     assert default.is_active
-    assert not default.supports_show_people
+    assert default.supports_show_people
     assert not default.is_used
+    assert previous.is_active
+    assert not previous.supports_show_people
+    assert not previous.is_used
+    default.full_clean()
+    previous.full_clean()
+
+
+@pytest.mark.django_db
+def test_the_show_people_variants_differ_only_in_the_people() -> None:
+    default = ImagePrompt.get_default()
+    kwargs: dict[str, Any] = {
+        "job": "Tischler/in",
+        "unit": "Werkzeuge",
+        "additional_info": "von oben",
+    }
+
+    with_people = default.render("Säge", show_people=True, **kwargs)
+    without_people = default.render("Säge", show_people=False, **kwargs)
+
+    for prompt in (with_people, without_people):
+        assert prompt.startswith(
+            "Ein realistisches, professionelles Foto, das eindeutig zeigt: Säge."
+            " Beruflicher Kontext: Tischler/in. Thematischer Kontext: Werkzeuge."
+        )
+        assert prompt.endswith(
+            "Fotorealistisch, keine Illustration, kein Rendering."
+            " Hinweise zur Bildgestaltung: von oben."
+        )
+    assert "höchstens zwei Personen" in with_people
+    assert "von Bild zu Bild" in with_people
+    assert "keine Menschen, keine Hände" in without_people
+    assert "Person" not in without_people
 
 
 @pytest.mark.django_db
@@ -273,6 +306,7 @@ def test_copy_creates_an_editable_duplicate_with_a_free_name() -> None:
 
 @pytest.mark.django_db
 def test_selectable_lists_the_active_prompts_default_first() -> None:
+    ImagePrompt.objects.exclude(is_default=True).delete()
     default = ImagePrompt.get_default()
     active = _prompt(name="A aktiv")
     _prompt(name="B inaktiv", is_active=False)
