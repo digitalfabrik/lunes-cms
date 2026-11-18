@@ -22,9 +22,11 @@
             </svg>
 
             <div class="logo-row mb-4">
-                <img class="colored-logo"
-                     src="{{ area.secondary_logo.url }}"
-                     alt="{{ area.name }} Logo">
+                {% if area.secondary_logo %}
+                    <img class="colored-logo"
+                         src="{{ area.secondary_logo.url }}"
+                         alt="{{ area.name }} Logo">
+                {% endif %}
                 <img src="{% static 'images/logo-lunes.svg' %}"
                      alt="Lunes Logo"
                      width="450"

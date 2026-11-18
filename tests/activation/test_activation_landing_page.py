@@ -42,6 +42,22 @@ def test_activation_landing_page_reachable_without_login(client: Client) -> None
 
 
 @pytest.mark.django_db()
+def test_activation_landing_page_renders_without_secondary_logo(
+    client: Client, landing_page_area: Area
+) -> None:
+    """The secondary logo is optional, so the page must render without it."""
+    landing_page_area.secondary_logo = ""
+    landing_page_area.save()
+
+    response = client.get(
+        reverse("activation-landing-page", kwargs={"code": "dashk21"})
+    )
+
+    assert response.status_code == 200
+    assert "colored-logo" not in response.content.decode()
+
+
+@pytest.mark.django_db()
 def test_activation_landing_page_contains_code_and_links(client: Client) -> None:
     """The page must surface the code (for manual entry in the app), a
     deeplink retry button and both store links."""
