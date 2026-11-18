@@ -119,6 +119,7 @@ def test_the_text_of_a_used_prompt_is_read_only(superuser_client: Client) -> Non
 def test_the_default_and_used_prompts_cant_be_deleted(
     superuser_client: Client,
 ) -> None:
+    ImagePrompt.objects.exclude(is_default=True).delete()
     default = ImagePrompt.get_default()
     used = ImagePrompt.objects.create(name="Benutzt", prompt="x")
     used.mark_used()

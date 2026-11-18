@@ -35,6 +35,44 @@ def test_the_migration_creates_an_unused_default() -> None:
 
 
 @pytest.mark.django_db
+def test_the_migrations_add_an_unused_prompt_with_show_people_variants() -> None:
+    prompt = ImagePrompt.objects.get(is_default=False)
+
+    assert prompt.is_active
+    assert prompt.supports_show_people
+    assert not prompt.is_used
+    assert prompt in ImagePrompt.selectable()
+    prompt.full_clean()
+
+
+@pytest.mark.django_db
+def test_the_show_people_variants_differ_only_in_the_people() -> None:
+    prompt = ImagePrompt.objects.get(supports_show_people=True)
+    kwargs: dict[str, Any] = {
+        "job": "Tischler/in",
+        "unit": "Werkzeuge",
+        "additional_info": "von oben",
+    }
+
+    with_people = prompt.render("Säge", show_people=True, **kwargs)
+    without_people = prompt.render("Säge", show_people=False, **kwargs)
+
+    for text in (with_people, without_people):
+        assert text.startswith(
+            "Ein realistisches, professionelles Foto, das eindeutig zeigt: Säge."
+            " Beruflicher Kontext: Tischler/in. Thematischer Kontext: Werkzeuge."
+        )
+        assert text.endswith(
+            "Fotorealistisch, keine Illustration, kein Rendering."
+            " Hinweise zur Bildgestaltung: von oben."
+        )
+    assert "höchstens zwei Personen" in with_people
+    assert "von Bild zu Bild" in with_people
+    assert "keine Menschen, keine Hände" in without_people
+    assert "Person" not in without_people
+
+
+@pytest.mark.django_db
 def test_render_fills_in_the_variables_without_escaping() -> None:
     prompt = _prompt(
         prompt=(
@@ -273,6 +311,7 @@ def test_copy_creates_an_editable_duplicate_with_a_free_name() -> None:
 
 @pytest.mark.django_db
 def test_selectable_lists_the_active_prompts_default_first() -> None:
+    ImagePrompt.objects.exclude(is_default=True).delete()
     default = ImagePrompt.get_default()
     active = _prompt(name="A aktiv")
     _prompt(name="B inaktiv", is_active=False)

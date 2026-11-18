@@ -130,6 +130,13 @@ built, not inside it (#1145):
 
 The decision is stored per word, so a word's unit images use it too.
 
+Migration 0055 adds the prompt "Prompt mit Personen-Varianten" as an option in
+the prompt dropdown (#1147); the default stays "Ursprünglicher Prompt". Its
+variant with people shows one or two people doing a typical action and lets
+age, gender and origin vary from image to image rather than within one image.
+Its variant without people excludes people, hands and other body parts
+explicitly.
+
 Every generated image stores the prompt and model it was made with
 (``image_prompt`` and ``image_model`` on ``Word`` and ``UnitWordRelation``).
 Until an editor keeps a manually generated image, both are recorded in a JSON

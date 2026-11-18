@@ -19,6 +19,11 @@ image_prompt_migration = importlib.import_module(
     "lunes_cms.cmsv2.migrations.0053_imageprompt"
 )
 
+#: The migration that adds the prompt with show-people variants (#1147).
+show_people_prompt_migration = importlib.import_module(
+    "lunes_cms.cmsv2.migrations.0055_show_people_image_prompt"
+)
+
 
 # pylint: disable=unused-argument
 @pytest.fixture(scope="module")
@@ -60,8 +65,8 @@ def fixture_logged_in_client(db: None) -> Client:
 @pytest.fixture(autouse=True)
 def default_image_prompt(request: pytest.FixtureRequest) -> None:
     """
-    Make sure the default image prompt, seeded by migration 0051, exists in
-    every test that uses the database.
+    Make sure the image prompts seeded by migrations 0053 (the default) and
+    0055 exist in every test that uses the database.
 
     ``transaction=True`` tests flush every table afterwards, rows created by
     migrations included, and image generation can't build a prompt without a
@@ -81,9 +86,20 @@ def default_image_prompt(request: pytest.FixtureRequest) -> None:
                 break
         else:
             return
-    if not ImagePrompt.objects.filter(is_default=True).exists():
-        ImagePrompt.objects.create(
-            name=image_prompt_migration.INITIAL_PROMPT_NAME,
-            prompt=image_prompt_migration.INITIAL_PROMPT,
-            is_default=True,
-        )
+    if ImagePrompt.objects.filter(is_default=True).exists():
+        return
+    ImagePrompt.objects.create(
+        name=image_prompt_migration.INITIAL_PROMPT_NAME,
+        prompt=image_prompt_migration.INITIAL_PROMPT,
+        is_default=True,
+    )
+    ImagePrompt.objects.get_or_create(
+        name=show_people_prompt_migration.PROMPT_NAME,
+        defaults={
+            "supports_show_people": True,
+            "prompt_with_people": show_people_prompt_migration.PROMPT_WITH_PEOPLE,
+            "prompt_without_people": (
+                show_people_prompt_migration.PROMPT_WITHOUT_PEOPLE
+            ),
+        },
+    )
