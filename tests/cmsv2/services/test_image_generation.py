@@ -252,12 +252,12 @@ def test_build_image_prompt_includes_word_and_optional_hints() -> None:
     assert "Tischler/in" in enriched
 
 
-@pytest.mark.skip(reason="Diversity prompt temporarily disabled, see #1526")
 def test_build_image_prompt_asks_for_diverse_people() -> None:
     for prompt in (
         image_generation.build_image_prompt("Bäcker/in"),
         image_generation.build_image_prompt("Rechnung", allow_text_in_image=True),
     ):
+        assert image_generation.NO_PEOPLE_PROMPT in prompt
         assert image_generation.DIVERSITY_PROMPT in prompt
 
 
@@ -361,8 +361,8 @@ def test_drain_passes_the_import_job_and_its_unit_to_the_prompt(
         assert not thread.is_alive()
 
     prompt = image_call.call_args.args[0]
-    assert "Beruflicher Kontext: Tischler/in." in prompt
-    assert "Thematischer Kontext: Werkzeuge." in prompt
+    assert f"{image_generation.CONTEXT_NOTE}: Tischler/in." in prompt
+    assert f"{image_generation.CONTEXT_NOTE}: Werkzeuge." in prompt
 
 
 def _word_in_units(*units: tuple[str, list[str]]) -> Word:

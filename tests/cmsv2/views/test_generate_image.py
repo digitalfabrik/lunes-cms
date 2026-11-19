@@ -97,7 +97,9 @@ def test_word_endpoint_sends_the_job_and_unit_of_the_word(
     assert image_call.call_args.args[0] == image_generation.build_word_image_prompt(
         word, additional_info="mit Holzgriff", allow_text_in_image=True
     )
-    assert "Beruflicher Kontext: Tischler/in." in image_call.call_args.args[0]
+    assert (
+        f"{image_generation.CONTEXT_NOTE}: Tischler/in." in image_call.call_args.args[0]
+    )
 
 
 @pytest.mark.django_db
@@ -116,8 +118,12 @@ def test_unitword_endpoint_uses_the_unit_of_the_relation(
         )
 
     assert response.status_code == 200
-    assert "Thematischer Kontext: Werkzeuge." in image_call.call_args.args[0]
-    assert "Beruflicher Kontext: Tischler/in." in image_call.call_args.args[0]
+    assert (
+        f"{image_generation.CONTEXT_NOTE}: Werkzeuge." in image_call.call_args.args[0]
+    )
+    assert (
+        f"{image_generation.CONTEXT_NOTE}: Tischler/in." in image_call.call_args.args[0]
+    )
 
 
 @pytest.mark.django_db
@@ -149,7 +155,7 @@ def test_unitword_prompt_preview_uses_the_unit_of_the_relation(
         reverse("cmsv2:unitword_image_prompt_preview", args=[unitword.pk])
     )
 
-    assert "Thematischer Kontext: Werkzeuge." in response.json()["prompt"]
+    assert f"{image_generation.CONTEXT_NOTE}: Werkzeuge." in response.json()["prompt"]
 
 
 @pytest.mark.django_db
@@ -163,7 +169,7 @@ def test_unitword_page_explains_the_prompt(admin_client: Client) -> None:
     content = response.content.decode()
     assert 'class="image-prompt-info"' in content
     assert reverse("cmsv2:unitword_image_prompt_preview", args=[unitword.pk]) in content
-    assert "Thematischer Kontext: Werkzeuge." in content
+    assert f"{image_generation.CONTEXT_NOTE}: Werkzeuge." in content
     # The generate url block spans several lines after djlint, so it has to
     # end up in a template literal: a "..." string with a newline is a syntax
     # error that leaves the button dead.

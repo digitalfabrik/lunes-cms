@@ -63,6 +63,15 @@ AI_LABEL_PROMPT = (
 )
 
 
+CONTEXT_NOTE = "(nur zur Einordnung, nicht abbilden)"
+
+NO_PEOPLE_PROMPT = (
+    " Es sind keine Menschen, Gesichter oder Hände abgebildet, es sei denn, die"
+    " Bedeutung des Wortes verlangt Menschen: wenn es eine Person, einen Körperteil"
+    " oder eine Tätigkeit oder Situation bezeichnet, die ohne Menschen nicht"
+    " darstellbar ist."
+)
+
 DIVERSITY_PROMPT = (
     " Wenn Personen zu sehen sind, zeige vielfältige Menschen: unterschiedlichen"
     " Geschlechts (auch nicht-binäre Personen), unterschiedlicher Hautfarbe und"
@@ -97,14 +106,15 @@ def build_image_prompt(
         f"Ein realistisches, professionelles Foto, das eindeutig zeigt: {word_text}."
     )
     if job_title:
-        prompt += f" Beruflicher Kontext: {job_title}."
+        prompt += f" Berufsfeld {CONTEXT_NOTE}: {job_title}."
     if unit_title:
-        prompt += f" Thematischer Kontext: {unit_title}."
+        prompt += f" Thema {CONTEXT_NOTE}: {unit_title}."
     prompt += (
         " Nur das zentrale Motiv ist zu sehen, vor einem neutralen weißen Hintergrund,"
         " ohne zusätzliche Objekte. Fotorealistisch, keine Illustration, kein Rendering."
     )
-    # prompt += DIVERSITY_PROMPT
+    prompt += NO_PEOPLE_PROMPT
+    prompt += DIVERSITY_PROMPT
     if additional_info:
         prompt += f" Hinweise zur Bildgestaltung: {additional_info}."
     if not allow_text_in_image:
