@@ -18,6 +18,7 @@ from django.test import Client
 from django.urls import reverse
 
 from lunes_cms.cmsv2.models import Job, Word
+from lunes_cms.cmsv2.services import image_generation
 
 # Imported via ``import_module`` so the patch targets the module, whatever
 # ``lunes_cms.cmsv2.views`` re-exports under the same name.
@@ -185,4 +186,4 @@ def test_form_explains_the_image_prompt_with_the_job(
 
     content = response.content.decode()
     assert 'class="image-prompt-info"' in content
-    assert "Beruflicher Kontext: Test Job." in content
+    assert f"{image_generation.CONTEXT_NOTE}: Test Job." in content
