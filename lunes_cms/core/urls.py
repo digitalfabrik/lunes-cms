@@ -30,15 +30,15 @@ from django.templatetags.static import static as get_static_url
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import RedirectView
 
-from ..cmsv2.models.static import is_reviewer
+from ..cmsv2.models.static import is_only_reviewer
 from .views import android_asset_links, apple_app_site_association
 
 
 class MainRedirectView(RedirectView):
     """
-    Sends users to the entry point matching their role: experts to their review
-    view, everyone else to the admin. Anonymous users are sent to the login
-    screen and back here afterwards.
+    Sends users to the entry point matching their role: users who may only
+    review to their review view, everyone else to the admin. Anonymous users
+    are sent to the login screen and back here afterwards.
     """
 
     permanent = False
@@ -52,7 +52,7 @@ class MainRedirectView(RedirectView):
         """
         if not self.request.user.is_authenticated:
             return redirect_to_login(self.request.get_full_path()).url
-        if not self.request.user.is_superuser and is_reviewer(self.request.user):
+        if is_only_reviewer(self.request.user):
             return reverse("expert_access:index")
         return reverse("admin:index")
 
