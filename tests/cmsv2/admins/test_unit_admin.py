@@ -19,10 +19,10 @@ from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
-from django.test import RequestFactory
+from django.test import Client, RequestFactory
 
 from lunes_cms.cmsv2.admins.unit_admin import UnitAdmin
-from lunes_cms.cmsv2.models import Area, Review, Unit, UnitWordRelation, Word
+from lunes_cms.cmsv2.models import Area, Job, Review, Unit, UnitWordRelation, Word
 from tests.cmsv2.helpers import PermissionClient
 
 
@@ -296,3 +296,46 @@ def test_bulk_actions_are_offered_to_a_superuser(
 
     assert "bulk_release" in actions
     assert "assign_to_user" in actions
+
+
+def test_popup_add_form_leaves_out_the_jobs(
+    db: None, unit_admin: UnitAdmin, request_factory: RequestFactory
+) -> None:
+    """The popup of the job inline only creates the unit, the job saves the relation."""
+    admin_user = get_user_model().objects.create_superuser(
+        username="admin", password="password"
+    )
+    popup_request = request_factory.get("/", {"_popup": "1"})
+    popup_request.user = admin_user
+    plain_request = request_factory.get("/")
+    plain_request.user = admin_user
+
+    assert "jobs" not in unit_admin.get_fields(popup_request)
+    assert "jobs" in unit_admin.get_fields(plain_request)
+
+
+def test_saving_the_popup_form_creates_no_job_relation(
+    db: None, client: Client
+) -> None:
+    """Saving a unit from the popup leaves the relation to the job to the job."""
+    get_user_model().objects.create_superuser(username="admin", password="password")
+    client.login(username="admin", password="password")
+    area = Area.objects.create(name="Kolping")
+    job = Job.objects.create(name="Baker", area=area)
+
+    response = client.post(
+        "/en/admin/cmsv2/unit/add/?_popup=1",
+        {
+            "title": "Dough",
+            "area": area.pk,
+            "jobs": [job.pk],
+            "description": "",
+            "_popup": "1",
+            "unit_word_relations-TOTAL_FORMS": "0",
+            "unit_word_relations-INITIAL_FORMS": "0",
+        },
+    )
+
+    assert response.status_code == 200
+    unit = Unit.objects.get(title="Dough")
+    assert not unit.jobs.exists()

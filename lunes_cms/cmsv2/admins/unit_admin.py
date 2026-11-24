@@ -4,6 +4,7 @@ from datetime import date
 from typing import Any, Iterable, TYPE_CHECKING
 
 from django.contrib import admin
+from django.contrib.admin.options import IS_POPUP_VAR
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import QuerySet
@@ -32,6 +33,7 @@ from lunes_cms.cmsv2.notifications import notify_words_added
 from lunes_cms.cmsv2.reviews import assign_reviews, may_assign_reviews
 
 if TYPE_CHECKING:
+    from django.contrib.admin.options import _FieldGroups
     from django.db.models import ManyToManyField
     from django.forms import BaseFormSet
     from django.utils.functional import _StrOrPromise
@@ -264,6 +266,18 @@ class UnitAdmin(AreaContentAdmin):
     def has_assign_permission(self, request: HttpRequest) -> bool:
         """Whether the user may assign units to other users for review"""
         return may_assign_reviews(request.user)
+
+    def get_fields(self, request: HttpRequest, obj: Unit | None = None) -> _FieldGroups:
+        """
+        Leave out the jobs when the unit is added from a popup.
+
+        The popup is opened from the job inline, where the relation to the job
+        is only saved together with the job, so the unit must not save it too.
+        """
+        fields = super().get_fields(request, obj)
+        if IS_POPUP_VAR in request.GET or IS_POPUP_VAR in request.POST:
+            return [field for field in fields if field != "jobs"]
+        return fields
 
     def formfield_for_manytomany(
         self,
