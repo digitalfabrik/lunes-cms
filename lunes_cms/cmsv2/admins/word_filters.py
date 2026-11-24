@@ -100,19 +100,6 @@ class UnitDropdownFilter(admin.SimpleListFilter):
     title = _("Unit")
     parameter_name = "unit"
 
-    def __init__(
-        self,
-        request: HttpRequest,
-        params: dict[str, list[str]],
-        model: type[Word],
-        model_admin: admin.ModelAdmin[Word],
-    ) -> None:
-        super().__init__(request, params, model, model_admin)
-        # Ignore a selected unit that does not belong to the selected job,
-        # e.g. because the job was changed after the unit had been selected.
-        if self.value() not in {key for key, _title in self.lookup_choices}:
-            self.used_parameters.pop(self.parameter_name, None)
-
     def lookups(
         self, request: HttpRequest, model_admin: admin.ModelAdmin[Word]
     ) -> Iterable[tuple[str, _StrOrPromise]]:
@@ -132,7 +119,8 @@ class UnitDropdownFilter(admin.SimpleListFilter):
     def queryset(
         self, request: HttpRequest, queryset: QuerySet[Word]
     ) -> QuerySet[Word] | None:
-        if value := self.value():
+        value = self.value()
+        if value in {key for key, _title in self.lookup_choices}:
             return queryset.filter(units__id=value).distinct()
         return queryset
 
