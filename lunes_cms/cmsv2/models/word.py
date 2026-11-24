@@ -414,6 +414,16 @@ class Word(models.Model):
         return SingularArticle(self.singular_article).label
 
     @property
+    def plural_article_as_text(self) -> str:
+        """
+        Returns:
+            str: The plural article of this word as text
+        """
+        if not self.plural_article:
+            return ""
+        return PluralArticle(self.plural_article).label
+
+    @property
     def as_str_with_article(self) -> str:
         """
         :return: The word with the article as text
