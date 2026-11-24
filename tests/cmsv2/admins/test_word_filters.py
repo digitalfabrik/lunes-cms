@@ -112,3 +112,16 @@ def test_unit_filter_ignores_a_unit_outside_of_the_selected_job(
     assert response.status_code == 200
     changelist = response.context["cl"]
     assert _words(changelist) == {"Teig"}
+
+
+def test_unit_filter_does_not_resubmit_an_ignored_unit(
+    superuser_client: Client, catalog: dict[str, Job | Unit | Word]
+) -> None:
+    """
+    The ignored unit must not be rendered as a hidden form field, otherwise
+    it would be submitted together with the newly selected unit and win.
+    """
+    response = superuser_client.get(
+        URL, {"job": catalog["baker"].pk, "unit": catalog["care"].pk}
+    )
+    assert 'type="hidden" name="unit"' not in response.content.decode()
