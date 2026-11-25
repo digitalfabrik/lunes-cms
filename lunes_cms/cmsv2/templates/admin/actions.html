@@ -1,0 +1,5 @@
+{% extends "admin/actions.html" %}
+
+{% block actions-form %}
+    {% for field in action_form %}<div class="d-inline-block">{{ field }}</div>{% endfor %}
+{% endblock %}
