@@ -18,6 +18,8 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
     word = serializers.CharField(source="word.word")
     article = serializers.CharField(source="word.singular_article_as_text")
     pronunciation = serializers.CharField(source="word.pronunciation")
+    plural = serializers.CharField(source="word.plural")
+    plural_article = serializers.CharField(source="word.plural_article")
     alternative_words = AlternativeWordSerializer(
         many=True, read_only=True, source="word.alternative_words"
     )
@@ -95,6 +97,8 @@ class UnitWordRelationSerializer(serializers.ModelSerializer):
             "word",
             "article",
             "pronunciation",
+            "plural",
+            "plural_article",
             "alternative_words",
             "images",
             "audio",
