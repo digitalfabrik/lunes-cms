@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
+from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timedelta, UTC
 from typing import Any, Mapping
@@ -65,9 +66,7 @@ class ContentLookup:
         """
         if job_id is None:
             return None
-        return escape_field_string(
-            self.job_names.get(int(job_id), f"unknown_{job_id}")
-        )
+        return escape_field_string(self.job_names.get(int(job_id), f"unknown_{job_id}"))
 
     def unit_name(self, unit_id: int | str | None) -> str | None:
         """
@@ -169,7 +168,7 @@ class JobSelectionAggregator(EventAggregator):
             ts = date_to_ns(stat["event_date"])
             lines.append(
                 f"lunes_job_selection,job_id={job_id},area_id={area_id}"
-                f" job_name=\"{job_name}\",area_name=\"{area_name}\""
+                f' job_name="{job_name}",area_name="{area_name}"'
                 f",selection_count={stat['selection_count']}i {ts}"
             )
             logger.info(
@@ -336,7 +335,7 @@ class ModuleDurationAggregator(EventAggregator):
             ts = date_to_ns(event["event_date"])
             lines.append(
                 f"lunes_module_duration,unit_id={unit_id},area_id={area_id},exercise_type={event['exercise_type']}"
-                f" unit_name=\"{unit_name}\",area_name=\"{area_name}\""
+                f' unit_name="{unit_name}",area_name="{area_name}"'
                 f",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
@@ -376,7 +375,7 @@ class ModuleDurationAggregator(EventAggregator):
             ts = date_to_ns(event["event_date"])
             lines.append(
                 f"lunes_module_duration,job_id={job_id},area_id={area_id},exercise_type={event['exercise_type']}"
-                f" job_name=\"{job_name}\",area_name=\"{area_name}\""
+                f' job_name="{job_name}",area_name="{area_name}"'
                 f",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
@@ -449,7 +448,7 @@ class DropoutAggregator(EventAggregator):
                 f",exercise_type={event['exercise_type']}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
-                f" unit_name=\"{unit_name}\",area_name=\"{area_name}\""
+                f' unit_name="{unit_name}",area_name="{area_name}"'
                 f",dropout_count={event['dropout_count']}i {ts}"
             )
             logger.info(
@@ -494,7 +493,7 @@ class DropoutAggregator(EventAggregator):
                 f",exercise_type={event['exercise_type']}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
-                f" job_name=\"{job_name}\",area_name=\"{area_name}\""
+                f' job_name="{job_name}",area_name="{area_name}"'
                 f",dropout_count={event['dropout_count']}i {ts}"
             )
             logger.info(
@@ -547,7 +546,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
             .values("event_date", "exercise_type", "unit_id", "session_id")
             .annotate(reps=Count("pk"))
         )
-        dist: dict[tuple, int] = {}
+        dist: Counter[tuple] = Counter()
         for row in per_session:
             unit_id = row["unit_id"]
             if content.unit_name(unit_id) is None:
@@ -555,8 +554,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
                     "exercise_repetition standard event has no unit_id, skipping"
                 )
                 continue
-            key = (row["event_date"], row["exercise_type"], unit_id, row["reps"])
-            dist[key] = dist.get(key, 0) + 1
+            dist[(row["event_date"], row["exercise_type"], unit_id, row["reps"])] += 1
         lines = []
         for (event_date, exercise_type, unit_id, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
@@ -593,7 +591,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
             .values("event_date", "exercise_type", "job_id", "session_id")
             .annotate(reps=Count("pk"))
         )
-        dist: dict[tuple, int] = {}
+        dist: Counter[tuple] = Counter()
         for row in per_session:
             job_id = row["job_id"]
             if content.job_name(job_id) is None:
@@ -601,8 +599,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
                     "exercise_repetition training event has no job_id, skipping"
                 )
                 continue
-            key = (row["event_date"], job_id, row["exercise_type"], row["reps"])
-            dist[key] = dist.get(key, 0) + 1
+            dist[(row["event_date"], job_id, row["exercise_type"], row["reps"])] += 1
         lines = []
         for (event_date, job_id, exercise_type, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
