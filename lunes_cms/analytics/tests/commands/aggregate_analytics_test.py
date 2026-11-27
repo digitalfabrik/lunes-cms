@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from lunes_cms.analytics.models import AnalyticsEvent
-from lunes_cms.cmsv2.models import Unit
+from lunes_cms.cmsv2.models import Area, Unit
 from lunes_cms.cmsv2.models.job import Job
 
 PATCH_PUSH = "lunes_cms.analytics.management.commands.aggregate_analytics.push_lines"
@@ -19,7 +19,8 @@ class JobSelectionAggregateTests(TestCase):
     """
 
     def setUp(self) -> None:
-        self.job1 = Job.objects.create(name="Job 1")
+        self.area = Area.objects.create(name="Kolping")
+        self.job1 = Job.objects.create(name="Job 1", area=self.area)
         self.job2 = Job.objects.create(name="Job 2")
 
     def _create_event(self, job_id: int, action: str, timestamp: str) -> AnalyticsEvent:
@@ -50,6 +51,18 @@ class JobSelectionAggregateTests(TestCase):
         self.assertIn(f"job_id={self.job1.id}", line)
         self.assertIn('job_name="Job 1"', line)
         self.assertIn("selection_count=1i", line)
+
+    def test_line_has_area_of_job(self) -> None:
+        """Test that the line is tagged with the area of the job"""
+        self._create_event(self.job1.id, "add", "2026-01-15T10:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
 
     def test_aggregates_multiple_days(self) -> None:
         """Test that events on different days create separate lines"""
@@ -118,8 +131,10 @@ class JobSelectionAggregateTests(TestCase):
         mock_push.assert_called_once()
         lines = mock_push.call_args[0][0]
         self.assertEqual(len(lines), 2)
-        self.assertTrue(any("job_id=99999" in l for l in lines))
-        self.assertTrue(any('job_name="unknown_99999"' in l for l in lines))
+        [unknown_line] = [l for l in lines if "job_id=99999" in l]
+        self.assertIn('job_name="unknown_99999"', unknown_line)
+        self.assertIn("area_id=unknown", unknown_line)
+        self.assertIn('area_name="unknown"', unknown_line)
 
     def test_only_removes_count(self) -> None:
         """Test aggregation with only remove actions gives negative count"""
@@ -195,6 +210,7 @@ class SessionAggregateTests(TestCase):
         mock_push.assert_called_once()
         [line] = mock_push.call_args[0][0]
         self.assertIn("lunes_sessions", line)
+        self.assertNotIn("area_id", line)
         self.assertIn("total_sessions=1i", line)
         self.assertIn("total_duration_seconds=30i", line)
 
@@ -393,8 +409,10 @@ class ModuleDurationAggregateTests(TestCase):
     """
 
     def setUp(self) -> None:
-        self.unit1 = Unit.objects.create(title="Unit 1")
+        self.area = Area.objects.create(name="Kolping")
+        self.unit1 = Unit.objects.create(title="Unit 1", area=self.area)
         self.unit2 = Unit.objects.create(title="Unit 2")
+        self.job = Job.objects.create(name="Job 1", area=self.area)
 
     def _create_standard_event(
         self, exercise_type: str, unit_id: int, timestamp: str, duration_seconds: int
@@ -454,6 +472,32 @@ class ModuleDurationAggregateTests(TestCase):
         self.assertIn("exercise_type=word_choice", line)
         self.assertIn("total_sessions=2i", line)
         self.assertIn("total_duration_seconds=150i", line)
+
+    def test_standard_line_has_area_of_unit(self) -> None:
+        """Test that a standard exercise line is tagged with the area of the unit"""
+        self._create_standard_event(
+            "word_choice", self.unit1.id, "2026-01-15T10:00:00", 60
+        )
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
+
+    def test_training_line_has_area_of_job(self) -> None:
+        """Test that a training exercise line is tagged with the area of the job"""
+        self._create_training_event("image", self.job.id, "2026-01-15T10:00:00", 60)
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
 
     def test_aggregates_multiple_days(self) -> None:
         """Test that events on different days create separate lines"""
@@ -561,6 +605,8 @@ class ModuleDurationAggregateTests(TestCase):
         [line] = mock_push.call_args[0][0]
         self.assertIn("job_id=5", line)
         self.assertIn('job_name="unknown_5"', line)
+        self.assertIn("area_id=unknown", line)
+        self.assertIn('area_name="unknown"', line)
         self.assertIn("exercise_type=image", line)
         self.assertIn("total_sessions=2i", line)
         self.assertIn("total_duration_seconds=200i", line)
@@ -617,6 +663,11 @@ class DropoutAggregateTests(TestCase):
     """
     Tests for exercise dropout event aggregation.
     """
+
+    def setUp(self) -> None:
+        self.area = Area.objects.create(name="Kolping")
+        self.unit = Unit.objects.create(title="Unit 1", area=self.area)
+        self.job = Job.objects.create(name="Job 1", area=self.area)
 
     def _create_standard_event(
         self,
@@ -700,6 +751,42 @@ class DropoutAggregateTests(TestCase):
         self.assertIn("position=3", line)
         self.assertIn("total=10", line)
         self.assertIn("dropout_count=2i", line)
+
+    def test_standard_line_has_area_of_unit(self) -> None:
+        """Test that a standard dropout line is tagged with the area of the unit"""
+        self._create_standard_event(
+            exercise_type="word_choice",
+            unit_id=self.unit.id,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
+
+    def test_training_line_has_area_of_job(self) -> None:
+        """Test that a training dropout line is tagged with the area of the job"""
+        self._create_training_event(
+            exercise_type="image",
+            job_id=self.job.id,
+            position=3,
+            total=10,
+            timestamp="2026-01-15T10:00:00",
+        )
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
 
     def test_aggregates_multiple_days(self) -> None:
         """Test that events on different days create separate lines"""
@@ -895,6 +982,8 @@ class DropoutAggregateTests(TestCase):
         [line] = mock_push.call_args[0][0]
         self.assertIn("job_id=5", line)
         self.assertIn('job_name="unknown_5"', line)
+        self.assertIn("area_id=unknown", line)
+        self.assertIn('area_name="unknown"', line)
         self.assertIn("exercise_type=image", line)
         self.assertIn("position=2", line)
         self.assertIn("total=8", line)
@@ -963,7 +1052,9 @@ class ExerciseRepetitionAggregateTests(TestCase):
     """
 
     def setUp(self) -> None:
-        self.job = Job.objects.create(name="Test Job")
+        self.area = Area.objects.create(name="Kolping")
+        self.job = Job.objects.create(name="Test Job", area=self.area)
+        self.unit = Unit.objects.create(title="Unit 1", area=self.area)
 
     def _create_standard_event(
         self, exercise_type: str, unit_id: int, timestamp: str
@@ -1075,10 +1166,24 @@ class ExerciseRepetitionAggregateTests(TestCase):
         self.assertIn("lunes_exercise_repetition", line)
         self.assertIn(f"job_id={self.job.id}", line)
         self.assertIn('job_name="Test Job"', line)
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
         self.assertIn("exercise_type=image", line)
         self.assertIn("repetitions_per_session=2", line)
         self.assertIn("session_count=1i", line)
         self.assertNotIn("session_id", line)
+
+    def test_standard_line_has_area_of_unit(self) -> None:
+        """A standard repetition line is tagged with the area of the unit"""
+        self._create_standard_event("word_choice", self.unit.id, "2026-01-15T10:00:00")
+
+        with patch(PATCH_PUSH) as mock_push:
+            with self.captureOnCommitCallbacks(execute=True):
+                call_command("aggregate_analytics")
+
+        [line] = mock_push.call_args[0][0]
+        self.assertIn(f"area_id={self.area.id}", line)
+        self.assertIn('area_name="Kolping"', line)
 
     def test_different_sessions_same_day_same_reps_are_bucketed(self) -> None:
         """Two sessions each doing 1 rep land in the same bucket: session_count=2"""
