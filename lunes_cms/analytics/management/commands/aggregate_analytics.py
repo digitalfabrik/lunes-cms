@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from datetime import datetime, timedelta, UTC
 from typing import Any, Mapping
 
@@ -13,13 +14,93 @@ from django.db.models.fields.json import KT
 from django.db.models.functions import Cast, TruncDate
 from django.utils import timezone
 
-from lunes_cms.analytics.influx import date_to_ns, push_lines, resolve_job, resolve_unit
+from lunes_cms.analytics.influx import date_to_ns, escape_field_string, push_lines
 from lunes_cms.analytics.models import AnalyticsEvent
 from lunes_cms.cmsv2.models import Job, Unit
 
 logger = logging.getLogger(__name__)
 
 RETENTION_DAYS = 90
+
+
+@dataclass(frozen=True)
+class ContentLookup:
+    """
+    The names and areas of all jobs and units, loaded once per aggregation run
+    and escaped for use in InfluxDB lines.
+    """
+
+    job_names: dict[int, str]
+    unit_names: dict[int, str]
+    job_areas: dict[int, tuple[int, str]]
+    unit_areas: dict[int, tuple[int, str]]
+
+    @classmethod
+    def load(cls) -> ContentLookup:
+        """
+        Load the names and areas of all jobs and units from the database.
+        """
+        return cls(
+            job_names=dict(Job.objects.values_list("id", "name")),
+            unit_names=dict(Unit.objects.values_list("id", "title")),
+            job_areas={
+                job_id: (area_id, area_name)
+                for job_id, area_id, area_name in Job.objects.values_list(
+                    "id", "area_id", "area__name"
+                )
+            },
+            unit_areas={
+                unit_id: (area_id, area_name)
+                for unit_id, area_id, area_name in Unit.objects.values_list(
+                    "id", "area_id", "area__name"
+                )
+            },
+        )
+
+    def job_name(self, job_id: int | str | None) -> str | None:
+        """
+        The escaped name of a job, for use as an InfluxDB string field value.
+
+        Returns None if job_id is None, or a fallback string if the job does not exist.
+        """
+        if job_id is None:
+            return None
+        return escape_field_string(
+            self.job_names.get(int(job_id), f"unknown_{job_id}")
+        )
+
+    def unit_name(self, unit_id: int | str | None) -> str | None:
+        """
+        The escaped title of a unit, for use as an InfluxDB string field value.
+
+        Returns None if unit_id is None, or a fallback string if the unit does not exist.
+        """
+        if unit_id is None:
+            return None
+        return escape_field_string(
+            self.unit_names.get(int(unit_id), f"unknown_{unit_id}")
+        )
+
+    def job_area(self, job_id: int | str) -> tuple[int | str, str]:
+        """
+        The id and the escaped name of the area of a job, for use as InfluxDB
+        tag and string field value. Both are ``unknown`` if the job does not exist.
+        """
+        return self._area(self.job_areas, job_id)
+
+    def unit_area(self, unit_id: int | str) -> tuple[int | str, str]:
+        """
+        The id and the escaped name of the area of a unit, for use as InfluxDB
+        tag and string field value. Both are ``unknown`` if the unit does not exist.
+        """
+        return self._area(self.unit_areas, unit_id)
+
+    @staticmethod
+    def _area(
+        content_areas: dict[int, tuple[int, str]], content_id: int | str
+    ) -> tuple[int | str, str]:
+        area_id, area_name = content_areas.get(int(content_id), ("unknown", "unknown"))
+        return area_id, escape_field_string(area_name)
 
 
 class EventAggregator(ABC):
@@ -37,8 +118,7 @@ class EventAggregator(ABC):
     def aggregate(
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> list[str]:
         """
         Aggregate the given events into InfluxDB line protocol strings and mark
@@ -65,8 +145,7 @@ class JobSelectionAggregator(EventAggregator):
     def aggregate(
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> list[str]:
         daily_stats = (
             events.annotate(job_id=KT("payload__job_id"))
@@ -82,14 +161,16 @@ class JobSelectionAggregator(EventAggregator):
         lines = []
         for stat in daily_stats:
             job_id = stat["job_id"]
-            job_name = resolve_job(job_id, job_names)
+            job_name = content.job_name(job_id)
             if job_name is None:
                 logger.warning("job_selected event has no job_id, skipping")
                 continue
+            area_id, area_name = content.job_area(job_id)
             ts = date_to_ns(stat["event_date"])
             lines.append(
-                f"lunes_job_selection,job_id={job_id}"
-                f" job_name=\"{job_name}\",selection_count={stat['selection_count']}i {ts}"
+                f"lunes_job_selection,job_id={job_id},area_id={area_id}"
+                f" job_name=\"{job_name}\",area_name=\"{area_name}\""
+                f",selection_count={stat['selection_count']}i {ts}"
             )
             logger.info(
                 "Queued job_selection line: job_id=%s date=%s count=%d",
@@ -124,8 +205,7 @@ class SessionAggregator(EventAggregator):
         cls,
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> list[str]:
         # Accumulate per-date totals in Python before building lines
         daily: dict[Any, tuple[int, int]] = (
@@ -211,8 +291,7 @@ class ModuleDurationAggregator(EventAggregator):
         cls,
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
@@ -220,15 +299,15 @@ class ModuleDurationAggregator(EventAggregator):
         training_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
-        lines = cls._standard_lines(standard_events, unit_names) + cls._training_lines(
-            training_events, job_names
+        lines = cls._standard_lines(standard_events, content) + cls._training_lines(
+            training_events, content
         )
         events.update(aggregated_at=aggregated_at)
         return lines
 
     @staticmethod
     def _standard_lines(
-        standard_events: QuerySet[AnalyticsEvent], unit_names: dict[int, str]
+        standard_events: QuerySet[AnalyticsEvent], content: ContentLookup
     ) -> list[str]:
         standard_aggregated = (
             standard_events.annotate(
@@ -247,16 +326,18 @@ class ModuleDurationAggregator(EventAggregator):
         lines = []
         for event in standard_aggregated:
             unit_id = event["unit_id"]
-            unit_name = resolve_unit(unit_id, unit_names)
+            unit_name = content.unit_name(unit_id)
             if unit_name is None:
                 logger.warning(
                     "module_duration standard event has no unit_id, skipping"
                 )
                 continue
+            area_id, area_name = content.unit_area(unit_id)
             ts = date_to_ns(event["event_date"])
             lines.append(
-                f"lunes_module_duration,unit_id={unit_id},exercise_type={event['exercise_type']}"
-                f" unit_name=\"{unit_name}\",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
+                f"lunes_module_duration,unit_id={unit_id},area_id={area_id},exercise_type={event['exercise_type']}"
+                f" unit_name=\"{unit_name}\",area_name=\"{area_name}\""
+                f",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
                 "Queued module_duration (standard) line: unit_id=%s exercise_type=%s date=%s",
@@ -268,7 +349,7 @@ class ModuleDurationAggregator(EventAggregator):
 
     @staticmethod
     def _training_lines(
-        training_events: QuerySet[AnalyticsEvent], job_names: dict[int, str]
+        training_events: QuerySet[AnalyticsEvent], content: ContentLookup
     ) -> list[str]:
         training_aggregated = (
             training_events.annotate(
@@ -287,14 +368,16 @@ class ModuleDurationAggregator(EventAggregator):
         lines = []
         for event in training_aggregated:
             job_id = event["job_id"]
-            job_name = resolve_job(job_id, job_names)
+            job_name = content.job_name(job_id)
             if job_name is None:
                 logger.warning("module_duration training event has no job_id, skipping")
                 continue
+            area_id, area_name = content.job_area(job_id)
             ts = date_to_ns(event["event_date"])
             lines.append(
-                f"lunes_module_duration,job_id={job_id},exercise_type={event['exercise_type']}"
-                f" job_name=\"{job_name}\",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
+                f"lunes_module_duration,job_id={job_id},area_id={area_id},exercise_type={event['exercise_type']}"
+                f" job_name=\"{job_name}\",area_name=\"{area_name}\""
+                f",total_sessions={event['total_sessions']}i,total_duration_seconds={event['total_duration_seconds']}i {ts}"
             )
             logger.info(
                 "Queued module_duration (training) line: job_id=%s exercise_type=%s date=%s",
@@ -318,8 +401,7 @@ class DropoutAggregator(EventAggregator):
         cls,
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
@@ -327,15 +409,15 @@ class DropoutAggregator(EventAggregator):
         training_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
-        lines = cls._standard_lines(standard_events, unit_names) + cls._training_lines(
-            training_events, job_names
+        lines = cls._standard_lines(standard_events, content) + cls._training_lines(
+            training_events, content
         )
         events.update(aggregated_at=aggregated_at)
         return lines
 
     @staticmethod
     def _standard_lines(
-        standard_events: QuerySet[AnalyticsEvent], unit_names: dict[int, str]
+        standard_events: QuerySet[AnalyticsEvent], content: ContentLookup
     ) -> list[str]:
         standard_aggregated = (
             standard_events.annotate(
@@ -354,18 +436,21 @@ class DropoutAggregator(EventAggregator):
         lines = []
         for event in standard_aggregated:
             unit_id = event["unit_id"]
-            unit_name = resolve_unit(unit_id, unit_names)
+            unit_name = content.unit_name(unit_id)
             if unit_name is None:
                 logger.warning("dropout standard event has no unit_id, skipping")
                 continue
+            area_id, area_name = content.unit_area(unit_id)
             ts = date_to_ns(event["event_date"])
             lines.append(
                 f"lunes_dropout"
                 f",unit_id={unit_id}"
+                f",area_id={area_id}"
                 f",exercise_type={event['exercise_type']}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
-                f" unit_name=\"{unit_name}\",dropout_count={event['dropout_count']}i {ts}"
+                f" unit_name=\"{unit_name}\",area_name=\"{area_name}\""
+                f",dropout_count={event['dropout_count']}i {ts}"
             )
             logger.info(
                 "Queued dropout (standard) line: unit_id=%s exercise_type=%s date=%s",
@@ -377,7 +462,7 @@ class DropoutAggregator(EventAggregator):
 
     @staticmethod
     def _training_lines(
-        training_events: QuerySet[AnalyticsEvent], job_names: dict[int, str]
+        training_events: QuerySet[AnalyticsEvent], content: ContentLookup
     ) -> list[str]:
         training_aggregated = (
             training_events.annotate(
@@ -396,18 +481,21 @@ class DropoutAggregator(EventAggregator):
         lines = []
         for event in training_aggregated:
             job_id = event["job_id"]
-            job_name = resolve_job(job_id, job_names)
+            job_name = content.job_name(job_id)
             if job_name is None:
                 logger.warning("dropout training event has no job_id, skipping")
                 continue
+            area_id, area_name = content.job_area(job_id)
             ts = date_to_ns(event["event_date"])
             lines.append(
                 f"lunes_dropout"
                 f",job_id={job_id}"
+                f",area_id={area_id}"
                 f",exercise_type={event['exercise_type']}"
                 f",position={event['payload__position']}"
                 f",total={event['payload__total']}"
-                f" job_name=\"{job_name}\",dropout_count={event['dropout_count']}i {ts}"
+                f" job_name=\"{job_name}\",area_name=\"{area_name}\""
+                f",dropout_count={event['dropout_count']}i {ts}"
             )
             logger.info(
                 "Queued dropout (training) line: job_id=%s exercise_type=%s date=%s",
@@ -432,8 +520,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
     def aggregate(
         events: QuerySet[AnalyticsEvent],
         aggregated_at: datetime,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> list[str]:
         standard_events = events.filter(
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.STANDARD
@@ -442,14 +529,14 @@ class ExerciseRepetitionAggregator(EventAggregator):
             payload__exercise_key__type=AnalyticsEvent.ExerciseKeyType.TRAINING
         )
         lines = ExerciseRepetitionAggregator._standard_lines(
-            standard_events, unit_names
-        ) + ExerciseRepetitionAggregator._training_lines(training_events, job_names)
+            standard_events, content
+        ) + ExerciseRepetitionAggregator._training_lines(training_events, content)
         events.update(aggregated_at=aggregated_at)
         return lines
 
     @staticmethod
     def _standard_lines(
-        standard_events: QuerySet[AnalyticsEvent], unit_names: dict[int, str]
+        standard_events: QuerySet[AnalyticsEvent], content: ContentLookup
     ) -> list[str]:
         per_session = (
             standard_events.annotate(
@@ -463,7 +550,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
         dist: dict[tuple, int] = {}
         for row in per_session:
             unit_id = row["unit_id"]
-            if resolve_unit(unit_id, unit_names) is None:
+            if content.unit_name(unit_id) is None:
                 logger.warning(
                     "exercise_repetition standard event has no unit_id, skipping"
                 )
@@ -473,13 +560,16 @@ class ExerciseRepetitionAggregator(EventAggregator):
         lines = []
         for (event_date, exercise_type, unit_id, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
-            unit_name = resolve_unit(unit_id, unit_names)
+            unit_name = content.unit_name(unit_id)
+            area_id, area_name = content.unit_area(unit_id)
             lines.append(
                 f"lunes_exercise_repetition"
                 f",unit_id={unit_id}"
+                f",area_id={area_id}"
                 f",exercise_type={exercise_type}"
                 f",repetitions_per_session={reps}"
-                f' unit_name="{unit_name}",session_count={session_count}i {ts}'
+                f' unit_name="{unit_name}",area_name="{area_name}"'
+                f",session_count={session_count}i {ts}"
             )
             logger.info(
                 "Queued exercise_repetition (standard) line: unit_id=%s exercise_type=%s reps=%d date=%s",
@@ -492,7 +582,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
 
     @staticmethod
     def _training_lines(
-        training_events: QuerySet[AnalyticsEvent], job_names: dict[int, str]
+        training_events: QuerySet[AnalyticsEvent], content: ContentLookup
     ) -> list[str]:
         per_session = (
             training_events.annotate(
@@ -506,7 +596,7 @@ class ExerciseRepetitionAggregator(EventAggregator):
         dist: dict[tuple, int] = {}
         for row in per_session:
             job_id = row["job_id"]
-            if resolve_job(job_id, job_names) is None:
+            if content.job_name(job_id) is None:
                 logger.warning(
                     "exercise_repetition training event has no job_id, skipping"
                 )
@@ -516,13 +606,16 @@ class ExerciseRepetitionAggregator(EventAggregator):
         lines = []
         for (event_date, job_id, exercise_type, reps), session_count in dist.items():
             ts = date_to_ns(event_date)
-            job_name = resolve_job(job_id, job_names)
+            job_name = content.job_name(job_id)
+            area_id, area_name = content.job_area(job_id)
             lines.append(
                 f"lunes_exercise_repetition"
                 f",job_id={job_id}"
+                f",area_id={area_id}"
                 f",exercise_type={exercise_type}"
                 f",repetitions_per_session={reps}"
-                f' job_name="{job_name}",session_count={session_count}i {ts}'
+                f' job_name="{job_name}",area_name="{area_name}"'
+                f",session_count={session_count}i {ts}"
             )
             logger.info(
                 "Queued exercise_repetition (training) line: job_id=%s exercise_type=%s reps=%d date=%s",
@@ -562,13 +655,10 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
         dry_run: bool = options["dry_run"]
-        job_names: dict[int, str] = dict(Job.objects.values_list("id", "name"))
-        unit_names: dict[int, str] = dict(Unit.objects.values_list("id", "title"))
+        content = ContentLookup.load()
         for aggregator_class in EVENT_AGGREGATORS:
             try:
-                self._aggregate_event_type(
-                    aggregator_class, dry_run, job_names, unit_names
-                )
+                self._aggregate_event_type(aggregator_class, dry_run, content)
             except Exception as exc:  # pylint: disable=broad-exception-caught
                 # The InfluxDB push (see push_lines) already logged the details;
                 # @transaction.atomic rolled back the aggregated_at markers for
@@ -622,8 +712,7 @@ class Command(BaseCommand):
         self,
         aggregator_class: type[EventAggregator],
         dry_run: bool,
-        job_names: dict[int, str],
-        unit_names: dict[int, str],
+        content: ContentLookup,
     ) -> None:
         event_types = aggregator_class.event_types
 
@@ -644,7 +733,7 @@ class Command(BaseCommand):
         ).annotate(event_date=TruncDate("timestamp", tzinfo=UTC))
 
         aggregated_at = timezone.now()
-        lines = aggregator_class.aggregate(events, aggregated_at, job_names, unit_names)
+        lines = aggregator_class.aggregate(events, aggregated_at, content)
 
         marked_count = AnalyticsEvent.objects.filter(
             event_type__in=event_types,
