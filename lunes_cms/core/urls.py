@@ -30,7 +30,7 @@ from django.templatetags.static import static as get_static_url
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import RedirectView
 
-from ..cmsv2.models.static import is_reviewer
+from ..cmsv2.models.static import should_redirect_to_expert_view
 from .views import android_asset_links, apple_app_site_association
 
 
@@ -52,7 +52,7 @@ class MainRedirectView(RedirectView):
         """
         if not self.request.user.is_authenticated:
             return redirect_to_login(self.request.get_full_path()).url
-        if not self.request.user.is_superuser and is_reviewer(self.request.user):
+        if should_redirect_to_expert_view(self.request.user):
             return reverse("expert_access:index")
         return reverse("admin:index")
 
